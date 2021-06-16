@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>scs.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<!-- beginning of fixed guide -->
+<div id='guide'><ul>
+<li><a href='#L15'><img class='icon' src='../icons/first.png' alt='[^]' /></a></li>
+<li><a href='#L142'><img class='icon' src='../icons/last.png' alt='[v]' /></a></li>
+<li><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a></li>
+<li><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a></li>
+<li><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a></li>
+<li class='standout'><span>scs.c</span></li>
+</ul></div>
+<!-- end of fixed guide -->
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/scs.c</h2>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L15'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L142'><img class='icon' src='../icons/last.png' alt='[last]' /></a><img class='icon' src='../icons/n_top.png' alt='[top]' /><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+1 scs.c'  /> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L15' title='Defined at 15.'>__scs_account</a></li>
+<li><a href='#L27' title='Defined at 27.'>__scs_alloc</a></li>
+<li><a href='#L46' title='Defined at 46.'>scs_alloc</a></li>
+<li><a href='#L65' title='Defined at 65.'>scs_free</a></li>
+<li><a href='#L84' title='Defined at 84.'>scs_cleanup</a></li>
+<li><a href='#L97' title='Defined at 97.'>scs_init</a></li>
+<li><a href='#L103' title='Defined at 103.'>scs_prepare</a></li>
+<li><a href='#L114' title='Defined at 114.'>scs_check_usage</a></li>
+<li><a href='#L142' title='Defined at 142.'>scs_release</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * Shadow Call Stack support.</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> *</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * Copyright (C) 2019 Google LLC</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> */</em>
+<a id='L7' name='L7'></a>   7 
+<a id='L8' name='L8'></a>   8 <em class='sharp'>#include</em> &lt;linux/cpuhotplug.h&gt;
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> &lt;linux/kasan.h&gt;
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;linux/mm.h&gt;
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;linux/scs.h&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;linux/vmalloc.h&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;linux/vmstat.h&gt;
+<a id='L14' name='L14'></a>  14 
+<a id='L15' name='L15'></a>  15 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../cgi-bin/global.cgi?pattern=__scs_account&amp;type=reference' title='Multiple referred from 2 places.'>__scs_account</a>(<strong class='reserved'>void</strong> *<a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>, <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=account&amp;type=symbol' title='Multiple used in 5 places.'>account</a>)
+     <em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><a href='#L27'><img class='icon' src='../icons/right.png' alt='[next]' /></a><img class='icon' src='../icons/n_first.png' alt='[first]' /><a href='#L142'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+15 scs.c'  /> */</em>
+<a id='L16' name='L16'></a>  16 <em class='brace'>{</em>
+<a id='L17' name='L17'></a>  17         <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=page&amp;type=symbol' title='Multiple used in 565 places.'>page</a> *<a href='../cgi-bin/global.cgi?pattern=scs_page&amp;type=symbol' title='Multiple used in 2 places.'>scs_page</a> = <a href='../cgi-bin/global.cgi?pattern=vmalloc_to_page&amp;type=symbol' title='Multiple used in 5 places.'>vmalloc_to_page</a>(<a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>);
+<a id='L18' name='L18'></a>  18 
+<a id='L19' name='L19'></a>  19         mod_node_page_state(page_pgdat(<a href='../cgi-bin/global.cgi?pattern=scs_page&amp;type=symbol' title='Multiple used in 2 places.'>scs_page</a>), NR_KERNEL_SCS_KB,
+<a id='L20' name='L20'></a>  20                             <a href='../cgi-bin/global.cgi?pattern=account&amp;type=symbol' title='Multiple used in 5 places.'>account</a> * (<a href='../cgi-bin/global.cgi?pattern=SCS_SIZE&amp;type=symbol' title='Multiple used in 5 places.'>SCS_SIZE</a> / SZ_1K));
+<a id='L21' name='L21'></a>  21 <em class='brace'>}</em>
+<a id='L22' name='L22'></a>  22 
+<a id='L23' name='L23'></a>  23 <em class='comment'>/* Matches NR_CACHED_STACKS for VMAP_STACK */</em>
+<a id='L24' name='L24'></a>  24 <em class='sharp'>#define</em> <a href='../cgi-bin/global.cgi?pattern=NR_CACHED_SCS&amp;type=reference' title='Multiple referred from 4 places.'>NR_CACHED_SCS</a> 2
+<a id='L25' name='L25'></a>  25 <strong class='reserved'>static</strong> <a href='../cgi-bin/global.cgi?pattern=DEFINE_PER_CPU&amp;type=symbol' title='Multiple used in 138 places.'>DEFINE_PER_CPU</a>(<strong class='reserved'>void</strong> *, <a href='../cgi-bin/global.cgi?pattern=scs_cache&amp;type=symbol' title='Multiple used in 4 places.'>scs_cache</a>[<a href='../S/366.html#L24' title='Defined at 24 in scs.c.'>NR_CACHED_SCS</a>]);
+<a id='L26' name='L26'></a>  26 
+<a id='L27' name='L27'></a>  27 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> *<a href='../S/366.html#L50' title='Referred from 50 in scs.c.'>__scs_alloc</a>(<strong class='reserved'>int</strong> <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>)
+     <em class='comment'>/* <a href='#L15'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L46'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L15'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L142'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+27 scs.c'  /> */</em>
+<a id='L28' name='L28'></a>  28 <em class='brace'>{</em>
+<a id='L29' name='L29'></a>  29         <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>;
+<a id='L30' name='L30'></a>  30         <strong class='reserved'>void</strong> *<a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>;
+<a id='L31' name='L31'></a>  31 
+<a id='L32' name='L32'></a>  32         <strong class='reserved'>for</strong> (<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a> = 0; <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a> &lt; <a href='../S/366.html#L24' title='Defined at 24 in scs.c.'>NR_CACHED_SCS</a>; <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>++) <em class='brace'>{</em>
+<a id='L33' name='L33'></a>  33                 <a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a> = <a href='../cgi-bin/global.cgi?pattern=this_cpu_xchg&amp;type=symbol' title='Multiple used in 2 places.'>this_cpu_xchg</a>(<a href='../cgi-bin/global.cgi?pattern=scs_cache&amp;type=symbol' title='Multiple used in 4 places.'>scs_cache</a>[<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>], <a href='../cgi-bin/global.cgi?pattern=NULL&amp;type=symbol' title='Multiple used in 3516 places.'>NULL</a>);
+<a id='L34' name='L34'></a>  34                 <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>) <em class='brace'>{</em>
+<a id='L35' name='L35'></a>  35                         kasan_unpoison_vmalloc(<a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>, <a href='../cgi-bin/global.cgi?pattern=SCS_SIZE&amp;type=symbol' title='Multiple used in 5 places.'>SCS_SIZE</a>);
+<a id='L36' name='L36'></a>  36                         <a href='../cgi-bin/global.cgi?pattern=memset&amp;type=symbol' title='Multiple used in 227 places.'>memset</a>(<a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>, 0, <a href='../cgi-bin/global.cgi?pattern=SCS_SIZE&amp;type=symbol' title='Multiple used in 5 places.'>SCS_SIZE</a>);
+<a id='L37' name='L37'></a>  37                         <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>;
+<a id='L38' name='L38'></a>  38                 <em class='brace'>}</em>
+<a id='L39' name='L39'></a>  39         <em class='brace'>}</em>
+<a id='L40' name='L40'></a>  40 
+<a id='L41' name='L41'></a>  41         <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=__vmalloc_node_range&amp;type=symbol' title='Multiple used in 4 places.'>__vmalloc_node_range</a>(<a href='../cgi-bin/global.cgi?pattern=SCS_SIZE&amp;type=symbol' title='Multiple used in 5 places.'>SCS_SIZE</a>, 1, <a href='../cgi-bin/global.cgi?pattern=VMALLOC_START&amp;type=symbol' title='Multiple used in 6 places.'>VMALLOC_START</a>, <a href='../cgi-bin/global.cgi?pattern=VMALLOC_END&amp;type=symbol' title='Multiple used in 6 places.'>VMALLOC_END</a>,
+<a id='L42' name='L42'></a>  42                                     GFP_SCS, <a href='../cgi-bin/global.cgi?pattern=PAGE_KERNEL&amp;type=symbol' title='Multiple used in 8 places.'>PAGE_KERNEL</a>, 0, <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>,
+<a id='L43' name='L43'></a>  43                                     <a href='../cgi-bin/global.cgi?pattern=__builtin_return_address&amp;type=symbol' title='Multiple used in 12 places.'>__builtin_return_address</a>(0));
+<a id='L44' name='L44'></a>  44 <em class='brace'>}</em>
+<a id='L45' name='L45'></a>  45 
+<a id='L46' name='L46'></a>  46 <strong class='reserved'>void</strong> *<a href='../S/366.html#L105' title='Referred from 105 in scs.c.'>scs_alloc</a>(<strong class='reserved'>int</strong> <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>)
+     <em class='comment'>/* <a href='#L27'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L65'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L15'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L142'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+46 scs.c'  /> */</em>
+<a id='L47' name='L47'></a>  47 <em class='brace'>{</em>
+<a id='L48' name='L48'></a>  48         <strong class='reserved'>void</strong> *<a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>;
+<a id='L49' name='L49'></a>  49 
+<a id='L50' name='L50'></a>  50         <a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a> = <a href='../S/366.html#L27' title='Defined at 27 in scs.c.'>__scs_alloc</a>(<a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>);
+<a id='L51' name='L51'></a>  51         <strong class='reserved'>if</strong> (!<a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>)
+<a id='L52' name='L52'></a>  52                 <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=NULL&amp;type=symbol' title='Multiple used in 3516 places.'>NULL</a>;
+<a id='L53' name='L53'></a>  53 
+<a id='L54' name='L54'></a>  54         *<a href='../cgi-bin/global.cgi?pattern=__scs_magic&amp;type=symbol' title='Multiple used in 2 places.'>__scs_magic</a>(<a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>) = SCS_END_MAGIC;
+<a id='L55' name='L55'></a>  55 
+<a id='L56' name='L56'></a>  56         <em class='comment'>/*</em>
+<a id='L57' name='L57'></a>  57 <em class='comment'>         * Poison the allocation to catch unintentional accesses to</em>
+<a id='L58' name='L58'></a>  58 <em class='comment'>         * the shadow stack when KASAN is enabled.</em>
+<a id='L59' name='L59'></a>  59 <em class='comment'>         */</em>
+<a id='L60' name='L60'></a>  60         kasan_poison_vmalloc(<a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>, <a href='../cgi-bin/global.cgi?pattern=SCS_SIZE&amp;type=symbol' title='Multiple used in 5 places.'>SCS_SIZE</a>);
+<a id='L61' name='L61'></a>  61         <a href='../S/366.html#L15' title='Defined at 15 in scs.c.'>__scs_account</a>(<a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>, 1);
+<a id='L62' name='L62'></a>  62         <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>;
+<a id='L63' name='L63'></a>  63 <em class='brace'>}</em>
+<a id='L64' name='L64'></a>  64 
+<a id='L65' name='L65'></a>  65 <strong class='reserved'>void</strong> <a href='../S/366.html#L152' title='Referred from 152 in scs.c.'>scs_free</a>(<strong class='reserved'>void</strong> *<a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>)
+     <em class='comment'>/* <a href='#L46'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L84'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L15'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L142'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+65 scs.c'  /> */</em>
+<a id='L66' name='L66'></a>  66 <em class='brace'>{</em>
+<a id='L67' name='L67'></a>  67         <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>;
+<a id='L68' name='L68'></a>  68 
+<a id='L69' name='L69'></a>  69         <a href='../S/366.html#L15' title='Defined at 15 in scs.c.'>__scs_account</a>(<a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>, -1);
+<a id='L70' name='L70'></a>  70 
+<a id='L71' name='L71'></a>  71         <em class='comment'>/*</em>
+<a id='L72' name='L72'></a>  72 <em class='comment'>         * We cannot sleep as this can be called in interrupt context,</em>
+<a id='L73' name='L73'></a>  73 <em class='comment'>         * so use this_cpu_cmpxchg to update the cache, and vfree_atomic</em>
+<a id='L74' name='L74'></a>  74 <em class='comment'>         * to free the stack.</em>
+<a id='L75' name='L75'></a>  75 <em class='comment'>         */</em>
+<a id='L76' name='L76'></a>  76 
+<a id='L77' name='L77'></a>  77         <strong class='reserved'>for</strong> (<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a> = 0; <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a> &lt; <a href='../S/366.html#L24' title='Defined at 24 in scs.c.'>NR_CACHED_SCS</a>; <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>++)
+<a id='L78' name='L78'></a>  78                 <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=this_cpu_cmpxchg&amp;type=symbol' title='Multiple used in 2 places.'>this_cpu_cmpxchg</a>(<a href='../cgi-bin/global.cgi?pattern=scs_cache&amp;type=symbol' title='Multiple used in 4 places.'>scs_cache</a>[<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>], 0, <a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>) == <a href='../cgi-bin/global.cgi?pattern=NULL&amp;type=symbol' title='Multiple used in 3516 places.'>NULL</a>)
+<a id='L79' name='L79'></a>  79                         <strong class='reserved'>return</strong>;
+<a id='L80' name='L80'></a>  80 
+<a id='L81' name='L81'></a>  81         <a href='../cgi-bin/global.cgi?pattern=vfree_atomic&amp;type=symbol' title='Multiple used in 2 places.'>vfree_atomic</a>(<a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>);
+<a id='L82' name='L82'></a>  82 <em class='brace'>}</em>
+<a id='L83' name='L83'></a>  83 
+<a id='L84' name='L84'></a>  84 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/366.html#L100' title='Referred from 100 in scs.c.'>scs_cleanup</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>)
+     <em class='comment'>/* <a href='#L65'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L97'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L15'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L142'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+84 scs.c'  /> */</em>
+<a id='L85' name='L85'></a>  85 <em class='brace'>{</em>
+<a id='L86' name='L86'></a>  86         <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>;
+<a id='L87' name='L87'></a>  87         <strong class='reserved'>void</strong> **<a href='../cgi-bin/global.cgi?pattern=cache&amp;type=symbol' title='Multiple used in 30 places.'>cache</a> = <a href='../cgi-bin/global.cgi?pattern=per_cpu_ptr&amp;type=symbol' title='Multiple used in 300 places.'>per_cpu_ptr</a>(<a href='../cgi-bin/global.cgi?pattern=scs_cache&amp;type=symbol' title='Multiple used in 4 places.'>scs_cache</a>, <a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>);
+<a id='L88' name='L88'></a>  88 
+<a id='L89' name='L89'></a>  89         <strong class='reserved'>for</strong> (<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a> = 0; <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a> &lt; <a href='../S/366.html#L24' title='Defined at 24 in scs.c.'>NR_CACHED_SCS</a>; <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>++) <em class='brace'>{</em>
+<a id='L90' name='L90'></a>  90                 <a href='../cgi-bin/global.cgi?pattern=vfree&amp;type=symbol' title='Multiple used in 37 places.'>vfree</a>(<a href='../cgi-bin/global.cgi?pattern=cache&amp;type=symbol' title='Multiple used in 30 places.'>cache</a>[<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>]);
+<a id='L91' name='L91'></a>  91                 <a href='../cgi-bin/global.cgi?pattern=cache&amp;type=symbol' title='Multiple used in 30 places.'>cache</a>[<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>] = <a href='../cgi-bin/global.cgi?pattern=NULL&amp;type=symbol' title='Multiple used in 3516 places.'>NULL</a>;
+<a id='L92' name='L92'></a>  92         <em class='brace'>}</em>
+<a id='L93' name='L93'></a>  93 
+<a id='L94' name='L94'></a>  94         <strong class='reserved'>return</strong> 0;
+<a id='L95' name='L95'></a>  95 <em class='brace'>}</em>
+<a id='L96' name='L96'></a>  96 
+<a id='L97' name='L97'></a>  97 <strong class='reserved'>void</strong> <a href='../cgi-bin/global.cgi?pattern=__init&amp;type=symbol' title='Multiple used in 557 places.'>__init</a> <a href='../S/48.html#L862' title='Referred from 862 in fork.c.'>scs_init</a>(<strong class='reserved'>void</strong>)
+     <em class='comment'>/* <a href='#L84'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L103'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L15'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L142'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+97 scs.c'  /> */</em>
+<a id='L98' name='L98'></a>  98 <em class='brace'>{</em>
+<a id='L99' name='L99'></a>  99         <a href='../cgi-bin/global.cgi?pattern=cpuhp_setup_state&amp;type=symbol' title='Multiple used in 5 places.'>cpuhp_setup_state</a>(<a href='../cgi-bin/global.cgi?pattern=CPUHP_BP_PREPARE_DYN&amp;type=symbol' title='Multiple used in 5 places.'>CPUHP_BP_PREPARE_DYN</a>, "scs:scs_cache", <a href='../cgi-bin/global.cgi?pattern=NULL&amp;type=symbol' title='Multiple used in 3516 places.'>NULL</a>,
+<a id='L100' name='L100'></a> 100                           <a href='../S/366.html#L84' title='Defined at 84 in scs.c.'>scs_cleanup</a>);
+<a id='L101' name='L101'></a> 101 <em class='brace'>}</em>
+<a id='L102' name='L102'></a> 102 
+<a id='L103' name='L103'></a> 103 <strong class='reserved'>int</strong> <a href='../S/48.html#L923' title='Referred from 923 in fork.c.'>scs_prepare</a>(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=task_struct&amp;type=symbol' title='Multiple used in 1729 places.'>task_struct</a> *<a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>, <strong class='reserved'>int</strong> <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>)
+     <em class='comment'>/* <a href='#L97'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L114'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L15'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L142'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+103 scs.c'  /> */</em>
+<a id='L104' name='L104'></a> 104 <em class='brace'>{</em>
+<a id='L105' name='L105'></a> 105         <strong class='reserved'>void</strong> *<a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a> = <a href='../S/366.html#L46' title='Defined at 46 in scs.c.'>scs_alloc</a>(<a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>);
+<a id='L106' name='L106'></a> 106 
+<a id='L107' name='L107'></a> 107         <strong class='reserved'>if</strong> (!<a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>)
+<a id='L108' name='L108'></a> 108                 <strong class='reserved'>return</strong> -<a href='../cgi-bin/global.cgi?pattern=ENOMEM&amp;type=symbol' title='Multiple used in 777 places.'>ENOMEM</a>;
+<a id='L109' name='L109'></a> 109 
+<a id='L110' name='L110'></a> 110         <a href='../cgi-bin/global.cgi?pattern=task_scs&amp;type=symbol' title='Multiple used in 3 places.'>task_scs</a>(<a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>) = task_scs_sp(<a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>) = <a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>;
+<a id='L111' name='L111'></a> 111         <strong class='reserved'>return</strong> 0;
+<a id='L112' name='L112'></a> 112 <em class='brace'>}</em>
+<a id='L113' name='L113'></a> 113 
+<a id='L114' name='L114'></a> 114 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/366.html#L151' title='Referred from 151 in scs.c.'>scs_check_usage</a>(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=task_struct&amp;type=symbol' title='Multiple used in 1729 places.'>task_struct</a> *<a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>)
+     <em class='comment'>/* <a href='#L103'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L142'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L15'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L142'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+114 scs.c'  /> */</em>
+<a id='L115' name='L115'></a> 115 <em class='brace'>{</em>
+<a id='L116' name='L116'></a> 116         <strong class='reserved'>static</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <a href='../cgi-bin/global.cgi?pattern=highest&amp;type=symbol' title='Multiple used in 3 places.'>highest</a>;
+<a id='L117' name='L117'></a> 117 
+<a id='L118' name='L118'></a> 118         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> *<a href='../cgi-bin/global.cgi?pattern=p&amp;type=symbol' title='Multiple used in 3890 places.'>p</a>, <a href='../cgi-bin/global.cgi?pattern=prev&amp;type=symbol' title='Multiple used in 467 places.'>prev</a>, <a href='../cgi-bin/global.cgi?pattern=curr&amp;type=symbol' title='Multiple used in 664 places.'>curr</a> = <a href='../cgi-bin/global.cgi?pattern=highest&amp;type=symbol' title='Multiple used in 3 places.'>highest</a>, <a href='../cgi-bin/global.cgi?pattern=used&amp;type=symbol' title='Multiple used in 20 places.'>used</a> = 0;
+<a id='L119' name='L119'></a> 119 
+<a id='L120' name='L120'></a> 120         <strong class='reserved'>if</strong> (!<a href='../cgi-bin/global.cgi?pattern=IS_ENABLED&amp;type=symbol' title='Multiple used in 230 places.'>IS_ENABLED</a>(<a href='../cgi-bin/global.cgi?pattern=CONFIG_DEBUG_STACK_USAGE&amp;type=symbol' title='Multiple used in 3 places.'>CONFIG_DEBUG_STACK_USAGE</a>))
+<a id='L121' name='L121'></a> 121                 <strong class='reserved'>return</strong>;
+<a id='L122' name='L122'></a> 122 
+<a id='L123' name='L123'></a> 123         <strong class='reserved'>for</strong> (<a href='../cgi-bin/global.cgi?pattern=p&amp;type=symbol' title='Multiple used in 3890 places.'>p</a> = <a href='../cgi-bin/global.cgi?pattern=task_scs&amp;type=symbol' title='Multiple used in 3 places.'>task_scs</a>(<a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>); <a href='../cgi-bin/global.cgi?pattern=p&amp;type=symbol' title='Multiple used in 3890 places.'>p</a> &lt; <a href='../cgi-bin/global.cgi?pattern=__scs_magic&amp;type=symbol' title='Multiple used in 2 places.'>__scs_magic</a>(<a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>); ++<a href='../cgi-bin/global.cgi?pattern=p&amp;type=symbol' title='Multiple used in 3890 places.'>p</a>) <em class='brace'>{</em>
+<a id='L124' name='L124'></a> 124                 <strong class='reserved'>if</strong> (!<a href='../cgi-bin/global.cgi?pattern=READ_ONCE_NOCHECK&amp;type=symbol' title='Multiple used in 4 places.'>READ_ONCE_NOCHECK</a>(*<a href='../cgi-bin/global.cgi?pattern=p&amp;type=symbol' title='Multiple used in 3890 places.'>p</a>))
+<a id='L125' name='L125'></a> 125                         <strong class='reserved'>break</strong>;
+<a id='L126' name='L126'></a> 126                 <a href='../cgi-bin/global.cgi?pattern=used&amp;type=symbol' title='Multiple used in 20 places.'>used</a> += <strong class='reserved'>sizeof</strong>(*<a href='../cgi-bin/global.cgi?pattern=p&amp;type=symbol' title='Multiple used in 3890 places.'>p</a>);
+<a id='L127' name='L127'></a> 127         <em class='brace'>}</em>
+<a id='L128' name='L128'></a> 128 
+<a id='L129' name='L129'></a> 129         <strong class='reserved'>while</strong> (<a href='../cgi-bin/global.cgi?pattern=used&amp;type=symbol' title='Multiple used in 20 places.'>used</a> &gt; <a href='../cgi-bin/global.cgi?pattern=curr&amp;type=symbol' title='Multiple used in 664 places.'>curr</a>) <em class='brace'>{</em>
+<a id='L130' name='L130'></a> 130                 <a href='../cgi-bin/global.cgi?pattern=prev&amp;type=symbol' title='Multiple used in 467 places.'>prev</a> = <a href='../cgi-bin/global.cgi?pattern=cmpxchg_relaxed&amp;type=symbol' title='Multiple used in 4 places.'>cmpxchg_relaxed</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=highest&amp;type=symbol' title='Multiple used in 3 places.'>highest</a>, <a href='../cgi-bin/global.cgi?pattern=curr&amp;type=symbol' title='Multiple used in 664 places.'>curr</a>, <a href='../cgi-bin/global.cgi?pattern=used&amp;type=symbol' title='Multiple used in 20 places.'>used</a>);
+<a id='L131' name='L131'></a> 131 
+<a id='L132' name='L132'></a> 132                 <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=prev&amp;type=symbol' title='Multiple used in 467 places.'>prev</a> == <a href='../cgi-bin/global.cgi?pattern=curr&amp;type=symbol' title='Multiple used in 664 places.'>curr</a>) <em class='brace'>{</em>
+<a id='L133' name='L133'></a> 133                         <a href='../cgi-bin/global.cgi?pattern=pr_info&amp;type=symbol' title='Multiple used in 304 places.'>pr_info</a>("%s (%d): highest shadow stack usage: %lu bytes\n",
+<a id='L134' name='L134'></a> 134                                 <a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=comm&amp;type=symbol' title='Multiple used in 175 places.'>comm</a>, <a href='../cgi-bin/global.cgi?pattern=task_pid_nr&amp;type=symbol' title='Multiple used in 52 places.'>task_pid_nr</a>(<a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>), <a href='../cgi-bin/global.cgi?pattern=used&amp;type=symbol' title='Multiple used in 20 places.'>used</a>);
+<a id='L135' name='L135'></a> 135                         <strong class='reserved'>break</strong>;
+<a id='L136' name='L136'></a> 136                 <em class='brace'>}</em>
+<a id='L137' name='L137'></a> 137 
+<a id='L138' name='L138'></a> 138                 <a href='../cgi-bin/global.cgi?pattern=curr&amp;type=symbol' title='Multiple used in 664 places.'>curr</a> = <a href='../cgi-bin/global.cgi?pattern=prev&amp;type=symbol' title='Multiple used in 467 places.'>prev</a>;
+<a id='L139' name='L139'></a> 139         <em class='brace'>}</em>
+<a id='L140' name='L140'></a> 140 <em class='brace'>}</em>
+<a id='L141' name='L141'></a> 141 
+<a id='L142' name='L142'></a> 142 <strong class='reserved'>void</strong> <a href='../S/48.html#L449' title='Referred from 449 in fork.c.'>scs_release</a>(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=task_struct&amp;type=symbol' title='Multiple used in 1729 places.'>task_struct</a> *<a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>)
+     <em class='comment'>/* <a href='#L114'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L15'><img class='icon' src='../icons/first.png' alt='[first]' /></a><img class='icon' src='../icons/n_last.png' alt='[last]' /><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+142 scs.c'  /> */</em>
+<a id='L143' name='L143'></a> 143 <em class='brace'>{</em>
+<a id='L144' name='L144'></a> 144         <strong class='reserved'>void</strong> *<a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a> = <a href='../cgi-bin/global.cgi?pattern=task_scs&amp;type=symbol' title='Multiple used in 3 places.'>task_scs</a>(<a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>);
+<a id='L145' name='L145'></a> 145 
+<a id='L146' name='L146'></a> 146         <strong class='reserved'>if</strong> (!<a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>)
+<a id='L147' name='L147'></a> 147                 <strong class='reserved'>return</strong>;
+<a id='L148' name='L148'></a> 148 
+<a id='L149' name='L149'></a> 149         <a href='../cgi-bin/global.cgi?pattern=WARN&amp;type=symbol' title='Multiple used in 85 places.'>WARN</a>(<a href='../cgi-bin/global.cgi?pattern=task_scs_end_corrupted&amp;type=symbol' title='Multiple used in 2 places.'>task_scs_end_corrupted</a>(<a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>),
+<a id='L150' name='L150'></a> 150              "corrupted shadow stack detected when freeing task\n");
+<a id='L151' name='L151'></a> 151         <a href='../S/366.html#L114' title='Defined at 114 in scs.c.'>scs_check_usage</a>(<a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>);
+<a id='L152' name='L152'></a> 152         <a href='../S/366.html#L65' title='Defined at 65 in scs.c.'>scs_free</a>(<a href='../cgi-bin/global.cgi?pattern=s&amp;type=symbol' title='Multiple used in 1424 places.'>s</a>);
+<a id='L153' name='L153'></a> 153 <em class='brace'>}</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L15'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L142'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><img class='icon' src='../icons/n_bottom.png' alt='[bottom]' /><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+153 scs.c'  /> */</em>
+</body>
+</html>

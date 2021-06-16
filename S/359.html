@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>irq/Kconfig</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<!-- beginning of fixed guide -->
+<div id='guide'><ul>
+<li><a href='#TOP'><img class='icon' src='../icons/first.png' alt='[^]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/last.png' alt='[v]' /></a></li>
+<li><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a></li>
+<li><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a></li>
+<li><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a></li>
+<li class='standout'><span><a href='../files/505.html'>irq</a>/Kconfig</span></li>
+</ul></div>
+<!-- end of fixed guide -->
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/505.html'>irq</a>/Kconfig</h2>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><img class='icon' src='../icons/n_first.png' alt='[first]' /><img class='icon' src='../icons/n_last.png' alt='[last]' /><img class='icon' src='../icons/n_top.png' alt='[top]' /><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+1 irq/Kconfig'  /> */</em>
+<hr />
+<pre>
+<a id='L1' name='L1'></a># SPDX-License-Identifier: GPL-2.0-only
+<a id='L2' name='L2'></a>menu "IRQ subsystem"
+<a id='L3' name='L3'></a># Options selectable by the architecture code
+<a id='L4' name='L4'></a>
+<a id='L5' name='L5'></a># Make sparse irq Kconfig switch below available
+<a id='L6' name='L6'></a>config MAY_HAVE_SPARSE_IRQ
+<a id='L7' name='L7'></a>       bool
+<a id='L8' name='L8'></a>
+<a id='L9' name='L9'></a># Legacy support, required for itanic
+<a id='L10' name='L10'></a>config GENERIC_IRQ_LEGACY
+<a id='L11' name='L11'></a>       bool
+<a id='L12' name='L12'></a>
+<a id='L13' name='L13'></a># Enable the generic irq autoprobe mechanism
+<a id='L14' name='L14'></a>config GENERIC_IRQ_PROBE
+<a id='L15' name='L15'></a>        bool
+<a id='L16' name='L16'></a>
+<a id='L17' name='L17'></a># Use the generic /proc/interrupts implementation
+<a id='L18' name='L18'></a>config GENERIC_IRQ_SHOW
+<a id='L19' name='L19'></a>       bool
+<a id='L20' name='L20'></a>
+<a id='L21' name='L21'></a># Print level/edge extra information
+<a id='L22' name='L22'></a>config GENERIC_IRQ_SHOW_LEVEL
+<a id='L23' name='L23'></a>       bool
+<a id='L24' name='L24'></a>
+<a id='L25' name='L25'></a># Supports effective affinity mask
+<a id='L26' name='L26'></a>config GENERIC_IRQ_EFFECTIVE_AFF_MASK
+<a id='L27' name='L27'></a>       bool
+<a id='L28' name='L28'></a>
+<a id='L29' name='L29'></a># Facility to allocate a hardware interrupt. This is legacy support
+<a id='L30' name='L30'></a># and should not be used in new code. Use irq domains instead.
+<a id='L31' name='L31'></a>config GENERIC_IRQ_LEGACY_ALLOC_HWIRQ
+<a id='L32' name='L32'></a>       bool
+<a id='L33' name='L33'></a>
+<a id='L34' name='L34'></a># Support for delayed migration from interrupt context
+<a id='L35' name='L35'></a>config GENERIC_PENDING_IRQ
+<a id='L36' name='L36'></a>        bool
+<a id='L37' name='L37'></a>
+<a id='L38' name='L38'></a># Support for generic irq migrating off cpu before the cpu is offline.
+<a id='L39' name='L39'></a>config GENERIC_IRQ_MIGRATION
+<a id='L40' name='L40'></a>        bool
+<a id='L41' name='L41'></a>
+<a id='L42' name='L42'></a># Alpha specific irq affinity mechanism
+<a id='L43' name='L43'></a>config AUTO_IRQ_AFFINITY
+<a id='L44' name='L44'></a>       bool
+<a id='L45' name='L45'></a>
+<a id='L46' name='L46'></a># Interrupt injection mechanism
+<a id='L47' name='L47'></a>config GENERIC_IRQ_INJECTION
+<a id='L48' name='L48'></a>        bool
+<a id='L49' name='L49'></a>
+<a id='L50' name='L50'></a># Tasklet based software resend for pending interrupts on enable_irq()
+<a id='L51' name='L51'></a>config HARDIRQS_SW_RESEND
+<a id='L52' name='L52'></a>       bool
+<a id='L53' name='L53'></a>
+<a id='L54' name='L54'></a># Edge style eoi based handler (cell)
+<a id='L55' name='L55'></a>config IRQ_EDGE_EOI_HANDLER
+<a id='L56' name='L56'></a>       bool
+<a id='L57' name='L57'></a>
+<a id='L58' name='L58'></a># Generic configurable interrupt chip implementation
+<a id='L59' name='L59'></a>config GENERIC_IRQ_CHIP
+<a id='L60' name='L60'></a>       bool
+<a id='L61' name='L61'></a>       select IRQ_DOMAIN
+<a id='L62' name='L62'></a>
+<a id='L63' name='L63'></a># Generic irq_domain hw &lt;--&gt; linux irq number translation
+<a id='L64' name='L64'></a>config IRQ_DOMAIN
+<a id='L65' name='L65'></a>        bool
+<a id='L66' name='L66'></a>
+<a id='L67' name='L67'></a># Support for simulated interrupts
+<a id='L68' name='L68'></a>config IRQ_SIM
+<a id='L69' name='L69'></a>        bool
+<a id='L70' name='L70'></a>        select IRQ_WORK
+<a id='L71' name='L71'></a>        select IRQ_DOMAIN
+<a id='L72' name='L72'></a>
+<a id='L73' name='L73'></a># Support for hierarchical irq domains
+<a id='L74' name='L74'></a>config IRQ_DOMAIN_HIERARCHY
+<a id='L75' name='L75'></a>        bool
+<a id='L76' name='L76'></a>        select IRQ_DOMAIN
+<a id='L77' name='L77'></a>
+<a id='L78' name='L78'></a># Support for hierarchical fasteoi+edge and fasteoi+level handlers
+<a id='L79' name='L79'></a>config IRQ_FASTEOI_HIERARCHY_HANDLERS
+<a id='L80' name='L80'></a>        bool
+<a id='L81' name='L81'></a>
+<a id='L82' name='L82'></a># Generic IRQ IPI support
+<a id='L83' name='L83'></a>config GENERIC_IRQ_IPI
+<a id='L84' name='L84'></a>        bool
+<a id='L85' name='L85'></a>        select IRQ_DOMAIN_HIERARCHY
+<a id='L86' name='L86'></a>
+<a id='L87' name='L87'></a># Generic MSI interrupt support
+<a id='L88' name='L88'></a>config GENERIC_MSI_IRQ
+<a id='L89' name='L89'></a>        bool
+<a id='L90' name='L90'></a>
+<a id='L91' name='L91'></a># Generic MSI hierarchical interrupt domain support
+<a id='L92' name='L92'></a>config GENERIC_MSI_IRQ_DOMAIN
+<a id='L93' name='L93'></a>        bool
+<a id='L94' name='L94'></a>        select IRQ_DOMAIN_HIERARCHY
+<a id='L95' name='L95'></a>        select GENERIC_MSI_IRQ
+<a id='L96' name='L96'></a>
+<a id='L97' name='L97'></a>config IRQ_MSI_IOMMU
+<a id='L98' name='L98'></a>        bool
+<a id='L99' name='L99'></a>
+<a id='L100' name='L100'></a>config HANDLE_DOMAIN_IRQ
+<a id='L101' name='L101'></a>        bool
+<a id='L102' name='L102'></a>
+<a id='L103' name='L103'></a>config IRQ_TIMINGS
+<a id='L104' name='L104'></a>        bool
+<a id='L105' name='L105'></a>
+<a id='L106' name='L106'></a>config GENERIC_IRQ_MATRIX_ALLOCATOR
+<a id='L107' name='L107'></a>        bool
+<a id='L108' name='L108'></a>
+<a id='L109' name='L109'></a>config GENERIC_IRQ_RESERVATION_MODE
+<a id='L110' name='L110'></a>        bool
+<a id='L111' name='L111'></a>
+<a id='L112' name='L112'></a># Support forced irq threading
+<a id='L113' name='L113'></a>config IRQ_FORCED_THREADING
+<a id='L114' name='L114'></a>       bool
+<a id='L115' name='L115'></a>
+<a id='L116' name='L116'></a>config SPARSE_IRQ
+<a id='L117' name='L117'></a>        bool "Support sparse irq numbering" if MAY_HAVE_SPARSE_IRQ
+<a id='L118' name='L118'></a>        help
+<a id='L119' name='L119'></a>
+<a id='L120' name='L120'></a>          Sparse irq numbering is useful for distro kernels that want
+<a id='L121' name='L121'></a>          to define a high CONFIG_NR_CPUS value but still want to have
+<a id='L122' name='L122'></a>          low kernel memory footprint on smaller machines.
+<a id='L123' name='L123'></a>
+<a id='L124' name='L124'></a>          ( Sparse irqs can also be beneficial on NUMA boxes, as they spread
+<a id='L125' name='L125'></a>            out the interrupt descriptors in a more NUMA-friendly way. )
+<a id='L126' name='L126'></a>
+<a id='L127' name='L127'></a>          If you don't know what to do here, say N.
+<a id='L128' name='L128'></a>
+<a id='L129' name='L129'></a>config GENERIC_IRQ_DEBUGFS
+<a id='L130' name='L130'></a>        bool "Expose irq internals in debugfs"
+<a id='L131' name='L131'></a>        depends on DEBUG_FS
+<a id='L132' name='L132'></a>        select GENERIC_IRQ_INJECTION
+<a id='L133' name='L133'></a>        default n
+<a id='L134' name='L134'></a>        help
+<a id='L135' name='L135'></a>
+<a id='L136' name='L136'></a>          Exposes internal state information through debugfs. Mostly for
+<a id='L137' name='L137'></a>          developers and debugging of hard to diagnose interrupt problems.
+<a id='L138' name='L138'></a>
+<a id='L139' name='L139'></a>          If you don't know what to do here, say N.
+<a id='L140' name='L140'></a>
+<a id='L141' name='L141'></a>endmenu
+<a id='L142' name='L142'></a>
+<a id='L143' name='L143'></a>config GENERIC_IRQ_MULTI_HANDLER
+<a id='L144' name='L144'></a>        bool
+<a id='L145' name='L145'></a>        help
+<a id='L146' name='L146'></a>          Allow to specify the low level IRQ handler at run time.
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><img class='icon' src='../icons/n_first.png' alt='[first]' /><img class='icon' src='../icons/n_last.png' alt='[last]' /><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><img class='icon' src='../icons/n_bottom.png' alt='[bottom]' /><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+146 irq/Kconfig'  /> */</em>
+</body>
+</html>

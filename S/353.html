@@ -1,0 +1,281 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>irq/cpuhotplug.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<!-- beginning of fixed guide -->
+<div id='guide'><ul>
+<li><a href='#L20'><img class='icon' src='../icons/first.png' alt='[^]' /></a></li>
+<li><a href='#L218'><img class='icon' src='../icons/last.png' alt='[v]' /></a></li>
+<li><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a></li>
+<li><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a></li>
+<li><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a></li>
+<li class='standout'><span><a href='../files/505.html'>irq</a>/cpuhotplug.c</span></li>
+</ul></div>
+<!-- end of fixed guide -->
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/505.html'>irq</a>/cpuhotplug.c</h2>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L20'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L218'><img class='icon' src='../icons/last.png' alt='[last]' /></a><img class='icon' src='../icons/n_top.png' alt='[top]' /><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+1 irq/cpuhotplug.c'  /> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L20' title='Defined at 20.'>irq_needs_fixup</a></li>
+<li><a href='#L53' title='Defined at 53.'>migrate_one_irq</a></li>
+<li><a href='#L155' title='Defined at 155.'>irq_migrate_all_off_this_cpu</a></li>
+<li><a href='#L175' title='Defined at 175.'>hk_should_isolate</a></li>
+<li><a href='#L189' title='Defined at 189.'>irq_restore_affinity_of_irq</a></li>
+<li><a href='#L218' title='Defined at 218.'>irq_affinity_online_cpu</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * Generic cpu hotunplug interrupt migration code copied from the</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> * arch/arm implementation</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> *</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> * Copyright (C) Russell King</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> *</em>
+<a id='L8' name='L8'></a>   8 <em class='comment'> * This program is free software; you can redistribute it and/or modify</em>
+<a id='L9' name='L9'></a>   9 <em class='comment'> * it under the terms of the GNU General Public License version 2 as</em>
+<a id='L10' name='L10'></a>  10 <em class='comment'> * published by the Free Software Foundation.</em>
+<a id='L11' name='L11'></a>  11 <em class='comment'> */</em>
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;linux/interrupt.h&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;linux/ratelimit.h&gt;
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> &lt;linux/irq.h&gt;
+<a id='L15' name='L15'></a>  15 <em class='sharp'>#include</em> &lt;linux/sched/isolation.h&gt;
+<a id='L16' name='L16'></a>  16 
+<a id='L17' name='L17'></a>  17 <em class='sharp'>#include</em> "<a href='356.html'>internals.h</a>"
+<a id='L18' name='L18'></a>  18 
+<a id='L19' name='L19'></a>  19 <em class='comment'>/* For !GENERIC_IRQ_EFFECTIVE_AFF_MASK this looks at general affinity mask */</em>
+<a id='L20' name='L20'></a>  20 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <a href='../cgi-bin/global.cgi?pattern=bool&amp;type=symbol' title='Multiple used in 2450 places.'>bool</a> <a href='../S/353.html#L81' title='Referred from 81 in irq/cpuhotplug.c.'>irq_needs_fixup</a>(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=irq_data&amp;type=symbol' title='Multiple used in 452 places.'>irq_data</a> *<a href='../cgi-bin/global.cgi?pattern=d&amp;type=symbol' title='Multiple used in 397 places.'>d</a>)
+     <em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><a href='#L53'><img class='icon' src='../icons/right.png' alt='[next]' /></a><img class='icon' src='../icons/n_first.png' alt='[first]' /><a href='#L218'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+20 irq/cpuhotplug.c'  /> */</em>
+<a id='L21' name='L21'></a>  21 <em class='brace'>{</em>
+<a id='L22' name='L22'></a>  22         <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=cpumask&amp;type=symbol' title='Multiple used in 394 places.'>cpumask</a> *<a href='../cgi-bin/global.cgi?pattern=m&amp;type=symbol' title='Multiple used in 1522 places.'>m</a> = <a href='../cgi-bin/global.cgi?pattern=irq_data_get_effective_affinity_mask&amp;type=symbol' title='Multiple used in 7 places.'>irq_data_get_effective_affinity_mask</a>(<a href='../cgi-bin/global.cgi?pattern=d&amp;type=symbol' title='Multiple used in 397 places.'>d</a>);
+<a id='L23' name='L23'></a>  23         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a> = <a href='../cgi-bin/global.cgi?pattern=smp_processor_id&amp;type=symbol' title='Multiple used in 196 places.'>smp_processor_id</a>();
+<a id='L24' name='L24'></a>  24 
+<a id='L25' name='L25'></a>  25 <em class='sharp'>#ifdef</em> <a href='../cgi-bin/global.cgi?pattern=CONFIG_GENERIC_IRQ_EFFECTIVE_AFF_MASK&amp;type=symbol' title='Multiple used in 10 places.'>CONFIG_GENERIC_IRQ_EFFECTIVE_AFF_MASK</a>
+<a id='L26' name='L26'></a>  26         <em class='comment'>/*</em>
+<a id='L27' name='L27'></a>  27 <em class='comment'>         * The cpumask_empty() check is a workaround for interrupt chips,</em>
+<a id='L28' name='L28'></a>  28 <em class='comment'>         * which do not implement effective affinity, but the architecture has</em>
+<a id='L29' name='L29'></a>  29 <em class='comment'>         * enabled the config switch. Use the general affinity mask instead.</em>
+<a id='L30' name='L30'></a>  30 <em class='comment'>         */</em>
+<a id='L31' name='L31'></a>  31         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=cpumask_empty&amp;type=symbol' title='Multiple used in 58 places.'>cpumask_empty</a>(<a href='../cgi-bin/global.cgi?pattern=m&amp;type=symbol' title='Multiple used in 1522 places.'>m</a>))
+<a id='L32' name='L32'></a>  32                 <a href='../cgi-bin/global.cgi?pattern=m&amp;type=symbol' title='Multiple used in 1522 places.'>m</a> = <a href='../cgi-bin/global.cgi?pattern=irq_data_get_affinity_mask&amp;type=symbol' title='Multiple used in 8 places.'>irq_data_get_affinity_mask</a>(<a href='../cgi-bin/global.cgi?pattern=d&amp;type=symbol' title='Multiple used in 397 places.'>d</a>);
+<a id='L33' name='L33'></a>  33 
+<a id='L34' name='L34'></a>  34         <em class='comment'>/*</em>
+<a id='L35' name='L35'></a>  35 <em class='comment'>         * Sanity check. If the mask is not empty when excluding the outgoing</em>
+<a id='L36' name='L36'></a>  36 <em class='comment'>         * CPU then it must contain at least one online CPU. The outgoing CPU</em>
+<a id='L37' name='L37'></a>  37 <em class='comment'>         * has been removed from the online mask already.</em>
+<a id='L38' name='L38'></a>  38 <em class='comment'>         */</em>
+<a id='L39' name='L39'></a>  39         <strong class='reserved'>if</strong> (cpumask_any_but(<a href='../cgi-bin/global.cgi?pattern=m&amp;type=symbol' title='Multiple used in 1522 places.'>m</a>, <a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>) &lt; <a href='../cgi-bin/global.cgi?pattern=nr_cpu_ids&amp;type=symbol' title='Multiple used in 107 places.'>nr_cpu_ids</a> &amp;&amp;
+<a id='L40' name='L40'></a>  40             <a href='../cgi-bin/global.cgi?pattern=cpumask_any_and&amp;type=symbol' title='Multiple used in 12 places.'>cpumask_any_and</a>(<a href='../cgi-bin/global.cgi?pattern=m&amp;type=symbol' title='Multiple used in 1522 places.'>m</a>, <a href='../cgi-bin/global.cgi?pattern=cpu_online_mask&amp;type=symbol' title='Multiple used in 61 places.'>cpu_online_mask</a>) &gt;= <a href='../cgi-bin/global.cgi?pattern=nr_cpu_ids&amp;type=symbol' title='Multiple used in 107 places.'>nr_cpu_ids</a>) <em class='brace'>{</em>
+<a id='L41' name='L41'></a>  41                 <em class='comment'>/*</em>
+<a id='L42' name='L42'></a>  42 <em class='comment'>                 * If this happens then there was a missed IRQ fixup at some</em>
+<a id='L43' name='L43'></a>  43 <em class='comment'>                 * point. Warn about it and enforce fixup.</em>
+<a id='L44' name='L44'></a>  44 <em class='comment'>                 */</em>
+<a id='L45' name='L45'></a>  45                 <a href='../cgi-bin/global.cgi?pattern=pr_debug&amp;type=symbol' title='Multiple used in 104 places.'>pr_debug</a>("Eff. affinity %*pbl of IRQ %u contains only offline CPUs after offlining CPU %u\n",
+<a id='L46' name='L46'></a>  46                         <a href='../cgi-bin/global.cgi?pattern=cpumask_pr_args&amp;type=symbol' title='Multiple used in 33 places.'>cpumask_pr_args</a>(<a href='../cgi-bin/global.cgi?pattern=m&amp;type=symbol' title='Multiple used in 1522 places.'>m</a>), <a href='../cgi-bin/global.cgi?pattern=d&amp;type=symbol' title='Multiple used in 397 places.'>d</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=irq&amp;type=symbol' title='Multiple used in 500 places.'>irq</a>, <a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>);
+<a id='L47' name='L47'></a>  47                 <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=true&amp;type=symbol' title='Multiple used in 1476 places.'>true</a>;
+<a id='L48' name='L48'></a>  48         <em class='brace'>}</em>
+<a id='L49' name='L49'></a>  49 <em class='sharp'>#endif</em>
+<a id='L50' name='L50'></a>  50         <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=cpumask_test_cpu&amp;type=symbol' title='Multiple used in 126 places.'>cpumask_test_cpu</a>(<a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>, <a href='../cgi-bin/global.cgi?pattern=m&amp;type=symbol' title='Multiple used in 1522 places.'>m</a>);
+<a id='L51' name='L51'></a>  51 <em class='brace'>}</em>
+<a id='L52' name='L52'></a>  52 
+<a id='L53' name='L53'></a>  53 <strong class='reserved'>static</strong> <a href='../cgi-bin/global.cgi?pattern=bool&amp;type=symbol' title='Multiple used in 2450 places.'>bool</a> <a href='../S/353.html#L165' title='Referred from 165 in irq/cpuhotplug.c.'>migrate_one_irq</a>(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=irq_desc&amp;type=symbol' title='Multiple used in 317 places.'>irq_desc</a> *<a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a>)
+     <em class='comment'>/* <a href='#L20'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L155'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L20'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L218'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+53 irq/cpuhotplug.c'  /> */</em>
+<a id='L54' name='L54'></a>  54 <em class='brace'>{</em>
+<a id='L55' name='L55'></a>  55         <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=irq_data&amp;type=symbol' title='Multiple used in 452 places.'>irq_data</a> *<a href='../cgi-bin/global.cgi?pattern=d&amp;type=symbol' title='Multiple used in 397 places.'>d</a> = <a href='../cgi-bin/global.cgi?pattern=irq_desc_get_irq_data&amp;type=symbol' title='Multiple used in 23 places.'>irq_desc_get_irq_data</a>(<a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a>);
+<a id='L56' name='L56'></a>  56         <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=irq_chip&amp;type=symbol' title='Multiple used in 43 places.'>irq_chip</a> *<a href='../cgi-bin/global.cgi?pattern=chip&amp;type=symbol' title='Multiple used in 260 places.'>chip</a> = <a href='../cgi-bin/global.cgi?pattern=irq_data_get_irq_chip&amp;type=symbol' title='Multiple used in 14 places.'>irq_data_get_irq_chip</a>(<a href='../cgi-bin/global.cgi?pattern=d&amp;type=symbol' title='Multiple used in 397 places.'>d</a>);
+<a id='L57' name='L57'></a>  57         <a href='../cgi-bin/global.cgi?pattern=bool&amp;type=symbol' title='Multiple used in 2450 places.'>bool</a> <a href='../cgi-bin/global.cgi?pattern=maskchip&amp;type=symbol' title='Multiple used in 3 places.'>maskchip</a> = !<a href='../cgi-bin/global.cgi?pattern=irq_can_move_pcntxt&amp;type=definitions' title='Multiple defined in 2 places.'>irq_can_move_pcntxt</a>(<a href='../cgi-bin/global.cgi?pattern=d&amp;type=symbol' title='Multiple used in 397 places.'>d</a>) &amp;&amp; !<a href='../cgi-bin/global.cgi?pattern=irqd_irq_masked&amp;type=symbol' title='Multiple used in 9 places.'>irqd_irq_masked</a>(<a href='../cgi-bin/global.cgi?pattern=d&amp;type=symbol' title='Multiple used in 397 places.'>d</a>);
+<a id='L58' name='L58'></a>  58         <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=cpumask&amp;type=symbol' title='Multiple used in 394 places.'>cpumask</a> *<a href='../cgi-bin/global.cgi?pattern=affinity&amp;type=symbol' title='Multiple used in 63 places.'>affinity</a>;
+<a id='L59' name='L59'></a>  59         <a href='../cgi-bin/global.cgi?pattern=bool&amp;type=symbol' title='Multiple used in 2450 places.'>bool</a> <a href='../cgi-bin/global.cgi?pattern=brokeaff&amp;type=symbol' title='Multiple used in 4 places.'>brokeaff</a> = <a href='../cgi-bin/global.cgi?pattern=false&amp;type=symbol' title='Multiple used in 1753 places.'>false</a>;
+<a id='L60' name='L60'></a>  60         <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=err&amp;type=symbol' title='Multiple used in 2902 places.'>err</a>;
+<a id='L61' name='L61'></a>  61 
+<a id='L62' name='L62'></a>  62         <em class='comment'>/*</em>
+<a id='L63' name='L63'></a>  63 <em class='comment'>         * IRQ chip might be already torn down, but the irq descriptor is</em>
+<a id='L64' name='L64'></a>  64 <em class='comment'>         * still in the radix tree. Also if the chip has no affinity setter,</em>
+<a id='L65' name='L65'></a>  65 <em class='comment'>         * nothing can be done here.</em>
+<a id='L66' name='L66'></a>  66 <em class='comment'>         */</em>
+<a id='L67' name='L67'></a>  67         <strong class='reserved'>if</strong> (!<a href='../cgi-bin/global.cgi?pattern=chip&amp;type=symbol' title='Multiple used in 260 places.'>chip</a> || !<a href='../cgi-bin/global.cgi?pattern=chip&amp;type=symbol' title='Multiple used in 260 places.'>chip</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=irq_set_affinity&amp;type=symbol' title='Multiple used in 15 places.'>irq_set_affinity</a>) <em class='brace'>{</em>
+<a id='L68' name='L68'></a>  68                 <a href='../cgi-bin/global.cgi?pattern=pr_debug&amp;type=symbol' title='Multiple used in 104 places.'>pr_debug</a>("IRQ %u: Unable to migrate away\n", <a href='../cgi-bin/global.cgi?pattern=d&amp;type=symbol' title='Multiple used in 397 places.'>d</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=irq&amp;type=symbol' title='Multiple used in 500 places.'>irq</a>);
+<a id='L69' name='L69'></a>  69                 <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=false&amp;type=symbol' title='Multiple used in 1753 places.'>false</a>;
+<a id='L70' name='L70'></a>  70         <em class='brace'>}</em>
+<a id='L71' name='L71'></a>  71 
+<a id='L72' name='L72'></a>  72         <em class='comment'>/*</em>
+<a id='L73' name='L73'></a>  73 <em class='comment'>         * No move required, if:</em>
+<a id='L74' name='L74'></a>  74 <em class='comment'>         * - Interrupt is per cpu</em>
+<a id='L75' name='L75'></a>  75 <em class='comment'>         * - Interrupt is not started</em>
+<a id='L76' name='L76'></a>  76 <em class='comment'>         * - Affinity mask does not include this CPU.</em>
+<a id='L77' name='L77'></a>  77 <em class='comment'>         *</em>
+<a id='L78' name='L78'></a>  78 <em class='comment'>         * Note: Do not check desc-&gt;action as this might be a chained</em>
+<a id='L79' name='L79'></a>  79 <em class='comment'>         * interrupt.</em>
+<a id='L80' name='L80'></a>  80 <em class='comment'>         */</em>
+<a id='L81' name='L81'></a>  81         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=irqd_is_per_cpu&amp;type=symbol' title='Multiple used in 2 places.'>irqd_is_per_cpu</a>(<a href='../cgi-bin/global.cgi?pattern=d&amp;type=symbol' title='Multiple used in 397 places.'>d</a>) || !<a href='../cgi-bin/global.cgi?pattern=irqd_is_started&amp;type=symbol' title='Multiple used in 3 places.'>irqd_is_started</a>(<a href='../cgi-bin/global.cgi?pattern=d&amp;type=symbol' title='Multiple used in 397 places.'>d</a>) || !<a href='../S/353.html#L20' title='Defined at 20 in irq/cpuhotplug.c.'>irq_needs_fixup</a>(<a href='../cgi-bin/global.cgi?pattern=d&amp;type=symbol' title='Multiple used in 397 places.'>d</a>)) <em class='brace'>{</em>
+<a id='L82' name='L82'></a>  82                 <em class='comment'>/*</em>
+<a id='L83' name='L83'></a>  83 <em class='comment'>                 * If an irq move is pending, abort it if the dying CPU is</em>
+<a id='L84' name='L84'></a>  84 <em class='comment'>                 * the sole target.</em>
+<a id='L85' name='L85'></a>  85 <em class='comment'>                 */</em>
+<a id='L86' name='L86'></a>  86                 <a href='../cgi-bin/global.cgi?pattern=irq_fixup_move_pending&amp;type=definitions' title='Multiple defined in 2 places.'>irq_fixup_move_pending</a>(<a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a>, <a href='../cgi-bin/global.cgi?pattern=false&amp;type=symbol' title='Multiple used in 1753 places.'>false</a>);
+<a id='L87' name='L87'></a>  87                 <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=false&amp;type=symbol' title='Multiple used in 1753 places.'>false</a>;
+<a id='L88' name='L88'></a>  88         <em class='brace'>}</em>
+<a id='L89' name='L89'></a>  89 
+<a id='L90' name='L90'></a>  90         <em class='comment'>/*</em>
+<a id='L91' name='L91'></a>  91 <em class='comment'>         * Complete an eventually pending irq move cleanup. If this</em>
+<a id='L92' name='L92'></a>  92 <em class='comment'>         * interrupt was moved in hard irq context, then the vectors need</em>
+<a id='L93' name='L93'></a>  93 <em class='comment'>         * to be cleaned up. It can't wait until this interrupt actually</em>
+<a id='L94' name='L94'></a>  94 <em class='comment'>         * happens and this CPU was involved.</em>
+<a id='L95' name='L95'></a>  95 <em class='comment'>         */</em>
+<a id='L96' name='L96'></a>  96         irq_force_complete_move(<a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a>);
+<a id='L97' name='L97'></a>  97 
+<a id='L98' name='L98'></a>  98         <em class='comment'>/*</em>
+<a id='L99' name='L99'></a>  99 <em class='comment'>         * If there is a setaffinity pending, then try to reuse the pending</em>
+<a id='L100' name='L100'></a> 100 <em class='comment'>         * mask, so the last change of the affinity does not get lost. If</em>
+<a id='L101' name='L101'></a> 101 <em class='comment'>         * there is no move pending or the pending mask does not contain</em>
+<a id='L102' name='L102'></a> 102 <em class='comment'>         * any online CPU, use the current affinity mask.</em>
+<a id='L103' name='L103'></a> 103 <em class='comment'>         */</em>
+<a id='L104' name='L104'></a> 104         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=irq_fixup_move_pending&amp;type=definitions' title='Multiple defined in 2 places.'>irq_fixup_move_pending</a>(<a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a>, <a href='../cgi-bin/global.cgi?pattern=true&amp;type=symbol' title='Multiple used in 1476 places.'>true</a>))
+<a id='L105' name='L105'></a> 105                 <a href='../cgi-bin/global.cgi?pattern=affinity&amp;type=symbol' title='Multiple used in 63 places.'>affinity</a> = <a href='../cgi-bin/global.cgi?pattern=irq_desc_get_pending_mask&amp;type=definitions' title='Multiple defined in 2 places.'>irq_desc_get_pending_mask</a>(<a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a>);
+<a id='L106' name='L106'></a> 106         <strong class='reserved'>else</strong>
+<a id='L107' name='L107'></a> 107                 <a href='../cgi-bin/global.cgi?pattern=affinity&amp;type=symbol' title='Multiple used in 63 places.'>affinity</a> = <a href='../cgi-bin/global.cgi?pattern=irq_data_get_affinity_mask&amp;type=symbol' title='Multiple used in 8 places.'>irq_data_get_affinity_mask</a>(<a href='../cgi-bin/global.cgi?pattern=d&amp;type=symbol' title='Multiple used in 397 places.'>d</a>);
+<a id='L108' name='L108'></a> 108 
+<a id='L109' name='L109'></a> 109         <em class='comment'>/* Mask the chip for interrupts which cannot move in process context */</em>
+<a id='L110' name='L110'></a> 110         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=maskchip&amp;type=symbol' title='Multiple used in 3 places.'>maskchip</a> &amp;&amp; <a href='../cgi-bin/global.cgi?pattern=chip&amp;type=symbol' title='Multiple used in 260 places.'>chip</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=irq_mask&amp;type=symbol' title='Multiple used in 11 places.'>irq_mask</a>)
+<a id='L111' name='L111'></a> 111                 <a href='../cgi-bin/global.cgi?pattern=chip&amp;type=symbol' title='Multiple used in 260 places.'>chip</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=irq_mask&amp;type=symbol' title='Multiple used in 11 places.'>irq_mask</a>(<a href='../cgi-bin/global.cgi?pattern=d&amp;type=symbol' title='Multiple used in 397 places.'>d</a>);
+<a id='L112' name='L112'></a> 112 
+<a id='L113' name='L113'></a> 113         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=cpumask_any_and&amp;type=symbol' title='Multiple used in 12 places.'>cpumask_any_and</a>(<a href='../cgi-bin/global.cgi?pattern=affinity&amp;type=symbol' title='Multiple used in 63 places.'>affinity</a>, <a href='../cgi-bin/global.cgi?pattern=cpu_online_mask&amp;type=symbol' title='Multiple used in 61 places.'>cpu_online_mask</a>) &gt;= <a href='../cgi-bin/global.cgi?pattern=nr_cpu_ids&amp;type=symbol' title='Multiple used in 107 places.'>nr_cpu_ids</a>) <em class='brace'>{</em>
+<a id='L114' name='L114'></a> 114                 <em class='comment'>/*</em>
+<a id='L115' name='L115'></a> 115 <em class='comment'>                 * If the interrupt is managed, then shut it down and leave</em>
+<a id='L116' name='L116'></a> 116 <em class='comment'>                 * the affinity untouched.</em>
+<a id='L117' name='L117'></a> 117 <em class='comment'>                 */</em>
+<a id='L118' name='L118'></a> 118                 <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=irqd_affinity_is_managed&amp;type=symbol' title='Multiple used in 7 places.'>irqd_affinity_is_managed</a>(<a href='../cgi-bin/global.cgi?pattern=d&amp;type=symbol' title='Multiple used in 397 places.'>d</a>)) <em class='brace'>{</em>
+<a id='L119' name='L119'></a> 119                         <a href='../S/356.html#L213' title='Defined at 213 in irq/internals.h.'>irqd_set_managed_shutdown</a>(<a href='../cgi-bin/global.cgi?pattern=d&amp;type=symbol' title='Multiple used in 397 places.'>d</a>);
+<a id='L120' name='L120'></a> 120                         <a href='../S/361.html#L321' title='Defined at 321 in irq/chip.c.'>irq_shutdown_and_deactivate</a>(<a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a>);
+<a id='L121' name='L121'></a> 121                         <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=false&amp;type=symbol' title='Multiple used in 1753 places.'>false</a>;
+<a id='L122' name='L122'></a> 122                 <em class='brace'>}</em>
+<a id='L123' name='L123'></a> 123                 <a href='../cgi-bin/global.cgi?pattern=affinity&amp;type=symbol' title='Multiple used in 63 places.'>affinity</a> = <a href='../cgi-bin/global.cgi?pattern=cpu_online_mask&amp;type=symbol' title='Multiple used in 61 places.'>cpu_online_mask</a>;
+<a id='L124' name='L124'></a> 124                 <a href='../cgi-bin/global.cgi?pattern=brokeaff&amp;type=symbol' title='Multiple used in 4 places.'>brokeaff</a> = <a href='../cgi-bin/global.cgi?pattern=true&amp;type=symbol' title='Multiple used in 1476 places.'>true</a>;
+<a id='L125' name='L125'></a> 125         <em class='brace'>}</em>
+<a id='L126' name='L126'></a> 126         <em class='comment'>/*</em>
+<a id='L127' name='L127'></a> 127 <em class='comment'>         * Do not set the force argument of irq_do_set_affinity() as this</em>
+<a id='L128' name='L128'></a> 128 <em class='comment'>         * disables the masking of offline CPUs from the supplied affinity</em>
+<a id='L129' name='L129'></a> 129 <em class='comment'>         * mask and therefore might keep/reassign the irq to the outgoing</em>
+<a id='L130' name='L130'></a> 130 <em class='comment'>         * CPU.</em>
+<a id='L131' name='L131'></a> 131 <em class='comment'>         */</em>
+<a id='L132' name='L132'></a> 132         <a href='../cgi-bin/global.cgi?pattern=err&amp;type=symbol' title='Multiple used in 2902 places.'>err</a> = <a href='../S/338.html#L221' title='Defined at 221 in irq/manage.c.'>irq_do_set_affinity</a>(<a href='../cgi-bin/global.cgi?pattern=d&amp;type=symbol' title='Multiple used in 397 places.'>d</a>, <a href='../cgi-bin/global.cgi?pattern=affinity&amp;type=symbol' title='Multiple used in 63 places.'>affinity</a>, <a href='../cgi-bin/global.cgi?pattern=false&amp;type=symbol' title='Multiple used in 1753 places.'>false</a>);
+<a id='L133' name='L133'></a> 133         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=err&amp;type=symbol' title='Multiple used in 2902 places.'>err</a>) <em class='brace'>{</em>
+<a id='L134' name='L134'></a> 134                 <a href='../cgi-bin/global.cgi?pattern=pr_warn_ratelimited&amp;type=symbol' title='Multiple used in 8 places.'>pr_warn_ratelimited</a>("IRQ%u: set affinity failed(%d).\n",
+<a id='L135' name='L135'></a> 135                                     <a href='../cgi-bin/global.cgi?pattern=d&amp;type=symbol' title='Multiple used in 397 places.'>d</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=irq&amp;type=symbol' title='Multiple used in 500 places.'>irq</a>, <a href='../cgi-bin/global.cgi?pattern=err&amp;type=symbol' title='Multiple used in 2902 places.'>err</a>);
+<a id='L136' name='L136'></a> 136                 <a href='../cgi-bin/global.cgi?pattern=brokeaff&amp;type=symbol' title='Multiple used in 4 places.'>brokeaff</a> = <a href='../cgi-bin/global.cgi?pattern=false&amp;type=symbol' title='Multiple used in 1753 places.'>false</a>;
+<a id='L137' name='L137'></a> 137         <em class='brace'>}</em>
+<a id='L138' name='L138'></a> 138 
+<a id='L139' name='L139'></a> 139         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=maskchip&amp;type=symbol' title='Multiple used in 3 places.'>maskchip</a> &amp;&amp; <a href='../cgi-bin/global.cgi?pattern=chip&amp;type=symbol' title='Multiple used in 260 places.'>chip</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=irq_unmask&amp;type=symbol' title='Multiple used in 11 places.'>irq_unmask</a>)
+<a id='L140' name='L140'></a> 140                 <a href='../cgi-bin/global.cgi?pattern=chip&amp;type=symbol' title='Multiple used in 260 places.'>chip</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=irq_unmask&amp;type=symbol' title='Multiple used in 11 places.'>irq_unmask</a>(<a href='../cgi-bin/global.cgi?pattern=d&amp;type=symbol' title='Multiple used in 397 places.'>d</a>);
+<a id='L141' name='L141'></a> 141 
+<a id='L142' name='L142'></a> 142         <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=brokeaff&amp;type=symbol' title='Multiple used in 4 places.'>brokeaff</a>;
+<a id='L143' name='L143'></a> 143 <em class='brace'>}</em>
+<a id='L144' name='L144'></a> 144 
+<a id='L145' name='L145'></a> 145 <em class='comment'>/**</em>
+<a id='L146' name='L146'></a> 146 <em class='comment'> * irq_migrate_all_off_this_cpu - Migrate irqs away from offline cpu</em>
+<a id='L147' name='L147'></a> 147 <em class='comment'> *</em>
+<a id='L148' name='L148'></a> 148 <em class='comment'> * The current CPU has been marked offline.  Migrate IRQs off this CPU.</em>
+<a id='L149' name='L149'></a> 149 <em class='comment'> * If the affinity settings do not allow other CPUs, force them onto any</em>
+<a id='L150' name='L150'></a> 150 <em class='comment'> * available CPU.</em>
+<a id='L151' name='L151'></a> 151 <em class='comment'> *</em>
+<a id='L152' name='L152'></a> 152 <em class='comment'> * Note: we must iterate over all IRQs, whether they have an attached</em>
+<a id='L153' name='L153'></a> 153 <em class='comment'> * action structure or not, as we need to get chained interrupts too.</em>
+<a id='L154' name='L154'></a> 154 <em class='comment'> */</em>
+<a id='L155' name='L155'></a> 155 <strong class='reserved'>void</strong> irq_migrate_all_off_this_cpu(<strong class='reserved'>void</strong>)
+     <em class='comment'>/* <a href='#L53'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L175'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L20'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L218'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+155 irq/cpuhotplug.c'  /> */</em>
+<a id='L156' name='L156'></a> 156 <em class='brace'>{</em>
+<a id='L157' name='L157'></a> 157         <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=irq_desc&amp;type=symbol' title='Multiple used in 317 places.'>irq_desc</a> *<a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a>;
+<a id='L158' name='L158'></a> 158         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=irq&amp;type=symbol' title='Multiple used in 500 places.'>irq</a>;
+<a id='L159' name='L159'></a> 159 
+<a id='L160' name='L160'></a> 160         <a href='../cgi-bin/global.cgi?pattern=for_each_active_irq&amp;type=symbol' title='Multiple used in 5 places.'>for_each_active_irq</a>(<a href='../cgi-bin/global.cgi?pattern=irq&amp;type=symbol' title='Multiple used in 500 places.'>irq</a>) <em class='brace'>{</em>
+<a id='L161' name='L161'></a> 161                 <a href='../cgi-bin/global.cgi?pattern=bool&amp;type=symbol' title='Multiple used in 2450 places.'>bool</a> <a href='../cgi-bin/global.cgi?pattern=affinity_broken&amp;type=symbol' title='Multiple used in 3 places.'>affinity_broken</a>;
+<a id='L162' name='L162'></a> 162 
+<a id='L163' name='L163'></a> 163                 <a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a> = <a href='../cgi-bin/global.cgi?pattern=irq_to_desc&amp;type=definitions' title='Multiple defined in 2 places.'>irq_to_desc</a>(<a href='../cgi-bin/global.cgi?pattern=irq&amp;type=symbol' title='Multiple used in 500 places.'>irq</a>);
+<a id='L164' name='L164'></a> 164                 <a href='../cgi-bin/global.cgi?pattern=raw_spin_lock&amp;type=symbol' title='Multiple used in 146 places.'>raw_spin_lock</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=lock&amp;type=symbol' title='Multiple used in 2041 places.'>lock</a>);
+<a id='L165' name='L165'></a> 165                 <a href='../cgi-bin/global.cgi?pattern=affinity_broken&amp;type=symbol' title='Multiple used in 3 places.'>affinity_broken</a> = <a href='../S/353.html#L53' title='Defined at 53 in irq/cpuhotplug.c.'>migrate_one_irq</a>(<a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a>);
+<a id='L166' name='L166'></a> 166                 <a href='../cgi-bin/global.cgi?pattern=raw_spin_unlock&amp;type=symbol' title='Multiple used in 178 places.'>raw_spin_unlock</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=lock&amp;type=symbol' title='Multiple used in 2041 places.'>lock</a>);
+<a id='L167' name='L167'></a> 167 
+<a id='L168' name='L168'></a> 168                 <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=affinity_broken&amp;type=symbol' title='Multiple used in 3 places.'>affinity_broken</a>) <em class='brace'>{</em>
+<a id='L169' name='L169'></a> 169                         pr_debug_ratelimited("IRQ %u: no longer affine to CPU%u\n",
+<a id='L170' name='L170'></a> 170                                             <a href='../cgi-bin/global.cgi?pattern=irq&amp;type=symbol' title='Multiple used in 500 places.'>irq</a>, <a href='../cgi-bin/global.cgi?pattern=smp_processor_id&amp;type=symbol' title='Multiple used in 196 places.'>smp_processor_id</a>());
+<a id='L171' name='L171'></a> 171                 <em class='brace'>}</em>
+<a id='L172' name='L172'></a> 172         <em class='brace'>}</em>
+<a id='L173' name='L173'></a> 173 <em class='brace'>}</em>
+<a id='L174' name='L174'></a> 174 
+<a id='L175' name='L175'></a> 175 <strong class='reserved'>static</strong> <a href='../cgi-bin/global.cgi?pattern=bool&amp;type=symbol' title='Multiple used in 2450 places.'>bool</a> <a href='../S/353.html#L210' title='Referred from 210 in irq/cpuhotplug.c.'>hk_should_isolate</a>(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=irq_data&amp;type=symbol' title='Multiple used in 452 places.'>irq_data</a> *<a href='../cgi-bin/global.cgi?pattern=data&amp;type=symbol' title='Multiple used in 2604 places.'>data</a>, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>)
+     <em class='comment'>/* <a href='#L155'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L189'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L20'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L218'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+175 irq/cpuhotplug.c'  /> */</em>
+<a id='L176' name='L176'></a> 176 <em class='brace'>{</em>
+<a id='L177' name='L177'></a> 177         <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=cpumask&amp;type=symbol' title='Multiple used in 394 places.'>cpumask</a> *<a href='../cgi-bin/global.cgi?pattern=hk_mask&amp;type=symbol' title='Multiple used in 7 places.'>hk_mask</a>;
+<a id='L178' name='L178'></a> 178 
+<a id='L179' name='L179'></a> 179         <strong class='reserved'>if</strong> (!<a href='../S/446.html#L17' title='Defined at 17 in sched/isolation.c.'>housekeeping_enabled</a>(<a href='../cgi-bin/global.cgi?pattern=HK_FLAG_MANAGED_IRQ&amp;type=symbol' title='Multiple used in 5 places.'>HK_FLAG_MANAGED_IRQ</a>))
+<a id='L180' name='L180'></a> 180                 <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=false&amp;type=symbol' title='Multiple used in 1753 places.'>false</a>;
+<a id='L181' name='L181'></a> 181 
+<a id='L182' name='L182'></a> 182         <a href='../cgi-bin/global.cgi?pattern=hk_mask&amp;type=symbol' title='Multiple used in 7 places.'>hk_mask</a> = <a href='../S/446.html#L40' title='Defined at 40 in sched/isolation.c.'>housekeeping_cpumask</a>(<a href='../cgi-bin/global.cgi?pattern=HK_FLAG_MANAGED_IRQ&amp;type=symbol' title='Multiple used in 5 places.'>HK_FLAG_MANAGED_IRQ</a>);
+<a id='L183' name='L183'></a> 183         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=cpumask_subset&amp;type=symbol' title='Multiple used in 25 places.'>cpumask_subset</a>(<a href='../cgi-bin/global.cgi?pattern=irq_data_get_effective_affinity_mask&amp;type=symbol' title='Multiple used in 7 places.'>irq_data_get_effective_affinity_mask</a>(<a href='../cgi-bin/global.cgi?pattern=data&amp;type=symbol' title='Multiple used in 2604 places.'>data</a>), <a href='../cgi-bin/global.cgi?pattern=hk_mask&amp;type=symbol' title='Multiple used in 7 places.'>hk_mask</a>))
+<a id='L184' name='L184'></a> 184                 <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=false&amp;type=symbol' title='Multiple used in 1753 places.'>false</a>;
+<a id='L185' name='L185'></a> 185 
+<a id='L186' name='L186'></a> 186         <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=cpumask_test_cpu&amp;type=symbol' title='Multiple used in 126 places.'>cpumask_test_cpu</a>(<a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>, <a href='../cgi-bin/global.cgi?pattern=hk_mask&amp;type=symbol' title='Multiple used in 7 places.'>hk_mask</a>);
+<a id='L187' name='L187'></a> 187 <em class='brace'>}</em>
+<a id='L188' name='L188'></a> 188 
+<a id='L189' name='L189'></a> 189 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/353.html#L227' title='Referred from 227 in irq/cpuhotplug.c.'>irq_restore_affinity_of_irq</a>(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=irq_desc&amp;type=symbol' title='Multiple used in 317 places.'>irq_desc</a> *<a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a>, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>)
+     <em class='comment'>/* <a href='#L175'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L218'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L20'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L218'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+189 irq/cpuhotplug.c'  /> */</em>
+<a id='L190' name='L190'></a> 190 <em class='brace'>{</em>
+<a id='L191' name='L191'></a> 191         <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=irq_data&amp;type=symbol' title='Multiple used in 452 places.'>irq_data</a> *<a href='../cgi-bin/global.cgi?pattern=data&amp;type=symbol' title='Multiple used in 2604 places.'>data</a> = <a href='../cgi-bin/global.cgi?pattern=irq_desc_get_irq_data&amp;type=symbol' title='Multiple used in 23 places.'>irq_desc_get_irq_data</a>(<a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a>);
+<a id='L192' name='L192'></a> 192         <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=cpumask&amp;type=symbol' title='Multiple used in 394 places.'>cpumask</a> *<a href='../cgi-bin/global.cgi?pattern=affinity&amp;type=symbol' title='Multiple used in 63 places.'>affinity</a> = <a href='../cgi-bin/global.cgi?pattern=irq_data_get_affinity_mask&amp;type=symbol' title='Multiple used in 8 places.'>irq_data_get_affinity_mask</a>(<a href='../cgi-bin/global.cgi?pattern=data&amp;type=symbol' title='Multiple used in 2604 places.'>data</a>);
+<a id='L193' name='L193'></a> 193 
+<a id='L194' name='L194'></a> 194         <strong class='reserved'>if</strong> (!<a href='../cgi-bin/global.cgi?pattern=irqd_affinity_is_managed&amp;type=symbol' title='Multiple used in 7 places.'>irqd_affinity_is_managed</a>(<a href='../cgi-bin/global.cgi?pattern=data&amp;type=symbol' title='Multiple used in 2604 places.'>data</a>) || !<a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=action&amp;type=symbol' title='Multiple used in 381 places.'>action</a> ||
+<a id='L195' name='L195'></a> 195             !<a href='../cgi-bin/global.cgi?pattern=irq_data_get_irq_chip&amp;type=symbol' title='Multiple used in 14 places.'>irq_data_get_irq_chip</a>(<a href='../cgi-bin/global.cgi?pattern=data&amp;type=symbol' title='Multiple used in 2604 places.'>data</a>) || !<a href='../cgi-bin/global.cgi?pattern=cpumask_test_cpu&amp;type=symbol' title='Multiple used in 126 places.'>cpumask_test_cpu</a>(<a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>, <a href='../cgi-bin/global.cgi?pattern=affinity&amp;type=symbol' title='Multiple used in 63 places.'>affinity</a>))
+<a id='L196' name='L196'></a> 196                 <strong class='reserved'>return</strong>;
+<a id='L197' name='L197'></a> 197 
+<a id='L198' name='L198'></a> 198         <strong class='reserved'>if</strong> (irqd_is_managed_and_shutdown(<a href='../cgi-bin/global.cgi?pattern=data&amp;type=symbol' title='Multiple used in 2604 places.'>data</a>)) <em class='brace'>{</em>
+<a id='L199' name='L199'></a> 199                 <a href='../S/361.html#L256' title='Defined at 256 in irq/chip.c.'>irq_startup</a>(<a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a>, <a href='../S/356.html#L74' title='Defined at 74 in irq/internals.h.'>IRQ_RESEND</a>, <a href='../S/356.html#L78' title='Defined at 78 in irq/internals.h.'>IRQ_START_COND</a>);
+<a id='L200' name='L200'></a> 200                 <strong class='reserved'>return</strong>;
+<a id='L201' name='L201'></a> 201         <em class='brace'>}</em>
+<a id='L202' name='L202'></a> 202 
+<a id='L203' name='L203'></a> 203         <em class='comment'>/*</em>
+<a id='L204' name='L204'></a> 204 <em class='comment'>         * If the interrupt can only be directed to a single target</em>
+<a id='L205' name='L205'></a> 205 <em class='comment'>         * CPU then it is already assigned to a CPU in the affinity</em>
+<a id='L206' name='L206'></a> 206 <em class='comment'>         * mask. No point in trying to move it around unless the</em>
+<a id='L207' name='L207'></a> 207 <em class='comment'>         * isolation mechanism requests to move it to an upcoming</em>
+<a id='L208' name='L208'></a> 208 <em class='comment'>         * housekeeping CPU.</em>
+<a id='L209' name='L209'></a> 209 <em class='comment'>         */</em>
+<a id='L210' name='L210'></a> 210         <strong class='reserved'>if</strong> (!irqd_is_single_target(<a href='../cgi-bin/global.cgi?pattern=data&amp;type=symbol' title='Multiple used in 2604 places.'>data</a>) || <a href='../S/353.html#L175' title='Defined at 175 in irq/cpuhotplug.c.'>hk_should_isolate</a>(<a href='../cgi-bin/global.cgi?pattern=data&amp;type=symbol' title='Multiple used in 2604 places.'>data</a>, <a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>))
+<a id='L211' name='L211'></a> 211                 <a href='../S/338.html#L342' title='Defined at 342 in irq/manage.c.'>irq_set_affinity_locked</a>(<a href='../cgi-bin/global.cgi?pattern=data&amp;type=symbol' title='Multiple used in 2604 places.'>data</a>, <a href='../cgi-bin/global.cgi?pattern=affinity&amp;type=symbol' title='Multiple used in 63 places.'>affinity</a>, <a href='../cgi-bin/global.cgi?pattern=false&amp;type=symbol' title='Multiple used in 1753 places.'>false</a>);
+<a id='L212' name='L212'></a> 212 <em class='brace'>}</em>
+<a id='L213' name='L213'></a> 213 
+<a id='L214' name='L214'></a> 214 <em class='comment'>/**</em>
+<a id='L215' name='L215'></a> 215 <em class='comment'> * irq_affinity_online_cpu - Restore affinity for managed interrupts</em>
+<a id='L216' name='L216'></a> 216 <em class='comment'> * @cpu:        Upcoming CPU for which interrupts should be restored</em>
+<a id='L217' name='L217'></a> 217 <em class='comment'> */</em>
+<a id='L218' name='L218'></a> 218 <strong class='reserved'>int</strong> <a href='../S/327.html#L1897' title='Referred from 1897 in cpu.c.'>irq_affinity_online_cpu</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>)
+     <em class='comment'>/* <a href='#L189'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L20'><img class='icon' src='../icons/first.png' alt='[first]' /></a><img class='icon' src='../icons/n_last.png' alt='[last]' /><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+218 irq/cpuhotplug.c'  /> */</em>
+<a id='L219' name='L219'></a> 219 <em class='brace'>{</em>
+<a id='L220' name='L220'></a> 220         <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=irq_desc&amp;type=symbol' title='Multiple used in 317 places.'>irq_desc</a> *<a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a>;
+<a id='L221' name='L221'></a> 221         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=irq&amp;type=symbol' title='Multiple used in 500 places.'>irq</a>;
+<a id='L222' name='L222'></a> 222 
+<a id='L223' name='L223'></a> 223         <a href='../S/343.html#L377' title='Defined at 377 in irq/irqdesc.c.'>irq_lock_sparse</a>();
+<a id='L224' name='L224'></a> 224         <a href='../cgi-bin/global.cgi?pattern=for_each_active_irq&amp;type=symbol' title='Multiple used in 5 places.'>for_each_active_irq</a>(<a href='../cgi-bin/global.cgi?pattern=irq&amp;type=symbol' title='Multiple used in 500 places.'>irq</a>) <em class='brace'>{</em>
+<a id='L225' name='L225'></a> 225                 <a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a> = <a href='../cgi-bin/global.cgi?pattern=irq_to_desc&amp;type=definitions' title='Multiple defined in 2 places.'>irq_to_desc</a>(<a href='../cgi-bin/global.cgi?pattern=irq&amp;type=symbol' title='Multiple used in 500 places.'>irq</a>);
+<a id='L226' name='L226'></a> 226                 <a href='../cgi-bin/global.cgi?pattern=raw_spin_lock_irq&amp;type=symbol' title='Multiple used in 109 places.'>raw_spin_lock_irq</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=lock&amp;type=symbol' title='Multiple used in 2041 places.'>lock</a>);
+<a id='L227' name='L227'></a> 227                 <a href='../S/353.html#L189' title='Defined at 189 in irq/cpuhotplug.c.'>irq_restore_affinity_of_irq</a>(<a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a>, <a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>);
+<a id='L228' name='L228'></a> 228                 <a href='../cgi-bin/global.cgi?pattern=raw_spin_unlock_irq&amp;type=symbol' title='Multiple used in 130 places.'>raw_spin_unlock_irq</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=desc&amp;type=symbol' title='Multiple used in 1597 places.'>desc</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=lock&amp;type=symbol' title='Multiple used in 2041 places.'>lock</a>);
+<a id='L229' name='L229'></a> 229         <em class='brace'>}</em>
+<a id='L230' name='L230'></a> 230         <a href='../S/343.html#L382' title='Defined at 382 in irq/irqdesc.c.'>irq_unlock_sparse</a>();
+<a id='L231' name='L231'></a> 231 
+<a id='L232' name='L232'></a> 232         <strong class='reserved'>return</strong> 0;
+<a id='L233' name='L233'></a> 233 <em class='brace'>}</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L20'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L218'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><img class='icon' src='../icons/n_bottom.png' alt='[bottom]' /><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+233 irq/cpuhotplug.c'  /> */</em>
+</body>
+</html>
