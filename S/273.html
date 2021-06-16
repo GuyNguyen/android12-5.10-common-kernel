@@ -1,0 +1,373 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>trace/trace_entries.h</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<!-- beginning of fixed guide -->
+<div id='guide'><ul>
+<li><a href='#TOP'><img class='icon' src='../icons/first.png' alt='[^]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/last.png' alt='[v]' /></a></li>
+<li><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a></li>
+<li><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a></li>
+<li><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a></li>
+<li class='standout'><span><a href='../files/514.html'>trace</a>/trace_entries.h</span></li>
+</ul></div>
+<!-- end of fixed guide -->
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/514.html'>trace</a>/trace_entries.h</h2>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><img class='icon' src='../icons/n_first.png' alt='[first]' /><img class='icon' src='../icons/n_last.png' alt='[last]' /><img class='icon' src='../icons/n_top.png' alt='[top]' /><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+1 trace/trace_entries.h'  /> */</em>
+<hr />
+<h2 class='header'><a href='../J/435.html' title='Multiple included from 5 places.'>INCLUDED FROM</a></h2>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * This file defines the trace event structures that go into the ring</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> * buffer directly. They are created via macros so that changes for them</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * appear in the format file. Using macros will automate this process.</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> *</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> * The macro used to create a ftrace data structure is:</em>
+<a id='L8' name='L8'></a>   8 <em class='comment'> *</em>
+<a id='L9' name='L9'></a>   9 <em class='comment'> * FTRACE_ENTRY( name, struct_name, id, structure, print )</em>
+<a id='L10' name='L10'></a>  10 <em class='comment'> *</em>
+<a id='L11' name='L11'></a>  11 <em class='comment'> * @name: the name used the event name, as well as the name of</em>
+<a id='L12' name='L12'></a>  12 <em class='comment'> *   the directory that holds the format file.</em>
+<a id='L13' name='L13'></a>  13 <em class='comment'> *</em>
+<a id='L14' name='L14'></a>  14 <em class='comment'> * @struct_name: the name of the structure that is created.</em>
+<a id='L15' name='L15'></a>  15 <em class='comment'> *</em>
+<a id='L16' name='L16'></a>  16 <em class='comment'> * @id: The event identifier that is used to detect what event</em>
+<a id='L17' name='L17'></a>  17 <em class='comment'> *    this is from the ring buffer.</em>
+<a id='L18' name='L18'></a>  18 <em class='comment'> *</em>
+<a id='L19' name='L19'></a>  19 <em class='comment'> * @structure: the structure layout</em>
+<a id='L20' name='L20'></a>  20 <em class='comment'> *</em>
+<a id='L21' name='L21'></a>  21 <em class='comment'> *  - __field(  type,   item    )</em>
+<a id='L22' name='L22'></a>  22 <em class='comment'> *        This is equivalent to declaring</em>
+<a id='L23' name='L23'></a>  23 <em class='comment'> *              type    item;</em>
+<a id='L24' name='L24'></a>  24 <em class='comment'> *        in the structure.</em>
+<a id='L25' name='L25'></a>  25 <em class='comment'> *  - __array(  type,   item,   size    )</em>
+<a id='L26' name='L26'></a>  26 <em class='comment'> *        This is equivalent to declaring</em>
+<a id='L27' name='L27'></a>  27 <em class='comment'> *              type    item[size];</em>
+<a id='L28' name='L28'></a>  28 <em class='comment'> *        in the structure.</em>
+<a id='L29' name='L29'></a>  29 <em class='comment'> *</em>
+<a id='L30' name='L30'></a>  30 <em class='comment'> *   * for structures within structures, the format of the internal</em>
+<a id='L31' name='L31'></a>  31 <em class='comment'> *      structure is laid out. This allows the internal structure</em>
+<a id='L32' name='L32'></a>  32 <em class='comment'> *      to be deciphered for the format file. Although these macros</em>
+<a id='L33' name='L33'></a>  33 <em class='comment'> *      may become out of sync with the internal structure, they</em>
+<a id='L34' name='L34'></a>  34 <em class='comment'> *      will create a compile error if it happens. Since the</em>
+<a id='L35' name='L35'></a>  35 <em class='comment'> *      internel structures are just tracing helpers, this is not</em>
+<a id='L36' name='L36'></a>  36 <em class='comment'> *      an issue.</em>
+<a id='L37' name='L37'></a>  37 <em class='comment'> *</em>
+<a id='L38' name='L38'></a>  38 <em class='comment'> *      When an internal structure is used, it should use:</em>
+<a id='L39' name='L39'></a>  39 <em class='comment'> *</em>
+<a id='L40' name='L40'></a>  40 <em class='comment'> *      __field_struct( type,   item    )</em>
+<a id='L41' name='L41'></a>  41 <em class='comment'> *</em>
+<a id='L42' name='L42'></a>  42 <em class='comment'> *      instead of __field. This will prevent it from being shown in</em>
+<a id='L43' name='L43'></a>  43 <em class='comment'> *      the output file. The fields in the structure should use.</em>
+<a id='L44' name='L44'></a>  44 <em class='comment'> *</em>
+<a id='L45' name='L45'></a>  45 <em class='comment'> *      __field_desc(   type,   container,      item            )</em>
+<a id='L46' name='L46'></a>  46 <em class='comment'> *      __array_desc(   type,   container,      item,   len     )</em>
+<a id='L47' name='L47'></a>  47 <em class='comment'> *</em>
+<a id='L48' name='L48'></a>  48 <em class='comment'> *      type, item and len are the same as __field and __array, but</em>
+<a id='L49' name='L49'></a>  49 <em class='comment'> *      container is added. This is the name of the item in</em>
+<a id='L50' name='L50'></a>  50 <em class='comment'> *      __field_struct that this is describing.</em>
+<a id='L51' name='L51'></a>  51 <em class='comment'> *</em>
+<a id='L52' name='L52'></a>  52 <em class='comment'> *</em>
+<a id='L53' name='L53'></a>  53 <em class='comment'> * @print: the print format shown to users in the format file.</em>
+<a id='L54' name='L54'></a>  54 <em class='comment'> */</em>
+<a id='L55' name='L55'></a>  55 
+<a id='L56' name='L56'></a>  56 <em class='comment'>/*</em>
+<a id='L57' name='L57'></a>  57 <em class='comment'> * Function trace entry - function address and parent function address:</em>
+<a id='L58' name='L58'></a>  58 <em class='comment'> */</em>
+<a id='L59' name='L59'></a>  59 <a href='../cgi-bin/global.cgi?pattern=FTRACE_ENTRY_REG&amp;type=definitions' title='Multiple defined in 6 places.'>FTRACE_ENTRY_REG</a>(<a href='../cgi-bin/global.cgi?pattern=function&amp;type=symbol' title='Multiple used in 38 places.'>function</a>, <a href='../cgi-bin/global.cgi?pattern=ftrace_entry&amp;type=symbol' title='Multiple used in 10 places.'>ftrace_entry</a>,
+<a id='L60' name='L60'></a>  60 
+<a id='L61' name='L61'></a>  61         <a href='../S/256.html#L32' title='Defined at 32 in trace/trace.h.'>TRACE_FN</a>,
+<a id='L62' name='L62'></a>  62 
+<a id='L63' name='L63'></a>  63         <a href='../cgi-bin/global.cgi?pattern=F_STRUCT&amp;type=definitions' title='Multiple defined in 4 places.'>F_STRUCT</a>(
+<a id='L64' name='L64'></a>  64                 <a href='../cgi-bin/global.cgi?pattern=__field_fn&amp;type=definitions' title='Multiple defined in 8 places.'>__field_fn</a>(     <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>,  <a href='../cgi-bin/global.cgi?pattern=ip&amp;type=symbol' title='Multiple used in 480 places.'>ip</a>              )
+<a id='L65' name='L65'></a>  65                 <a href='../cgi-bin/global.cgi?pattern=__field_fn&amp;type=definitions' title='Multiple defined in 8 places.'>__field_fn</a>(     <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>,  <a href='../cgi-bin/global.cgi?pattern=parent_ip&amp;type=symbol' title='Multiple used in 72 places.'>parent_ip</a>       )
+<a id='L66' name='L66'></a>  66         ),
+<a id='L67' name='L67'></a>  67 
+<a id='L68' name='L68'></a>  68         <a href='../cgi-bin/global.cgi?pattern=F_printk&amp;type=definitions' title='Multiple defined in 4 places.'>F_printk</a>(" %ps &lt;-- %ps",
+<a id='L69' name='L69'></a>  69                  (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=ip&amp;type=symbol' title='Multiple used in 480 places.'>ip</a>, (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=parent_ip&amp;type=symbol' title='Multiple used in 72 places.'>parent_ip</a>),
+<a id='L70' name='L70'></a>  70 
+<a id='L71' name='L71'></a>  71         <a href='../cgi-bin/global.cgi?pattern=perf_ftrace_event_register&amp;type=definitions' title='Multiple defined in 2 places.'>perf_ftrace_event_register</a>
+<a id='L72' name='L72'></a>  72 );
+<a id='L73' name='L73'></a>  73 
+<a id='L74' name='L74'></a>  74 <em class='comment'>/* Function call entry */</em>
+<a id='L75' name='L75'></a>  75 <a href='../cgi-bin/global.cgi?pattern=FTRACE_ENTRY_PACKED&amp;type=definitions' title='Multiple defined in 4 places.'>FTRACE_ENTRY_PACKED</a>(funcgraph_entry, <a href='../cgi-bin/global.cgi?pattern=ftrace_graph_ent_entry&amp;type=symbol' title='Multiple used in 10 places.'>ftrace_graph_ent_entry</a>,
+<a id='L76' name='L76'></a>  76 
+<a id='L77' name='L77'></a>  77         <a href='../S/256.html#L42' title='Defined at 42 in trace/trace.h.'>TRACE_GRAPH_ENT</a>,
+<a id='L78' name='L78'></a>  78 
+<a id='L79' name='L79'></a>  79         <a href='../cgi-bin/global.cgi?pattern=F_STRUCT&amp;type=definitions' title='Multiple defined in 4 places.'>F_STRUCT</a>(
+<a id='L80' name='L80'></a>  80                 <a href='../cgi-bin/global.cgi?pattern=__field_struct&amp;type=definitions' title='Multiple defined in 4 places.'>__field_struct</a>( <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=ftrace_graph_ent&amp;type=symbol' title='Multiple used in 19 places.'>ftrace_graph_ent</a>,        <a href='../cgi-bin/global.cgi?pattern=graph_ent&amp;type=symbol' title='Multiple used in 8 places.'>graph_ent</a>       )
+<a id='L81' name='L81'></a>  81                 <a href='../cgi-bin/global.cgi?pattern=__field_packed&amp;type=definitions' title='Multiple defined in 8 places.'>__field_packed</a>( <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>,  <a href='../cgi-bin/global.cgi?pattern=graph_ent&amp;type=symbol' title='Multiple used in 8 places.'>graph_ent</a>,      <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>            )
+<a id='L82' name='L82'></a>  82                 <a href='../cgi-bin/global.cgi?pattern=__field_packed&amp;type=definitions' title='Multiple defined in 8 places.'>__field_packed</a>( <strong class='reserved'>int</strong>,            <a href='../cgi-bin/global.cgi?pattern=graph_ent&amp;type=symbol' title='Multiple used in 8 places.'>graph_ent</a>,      <a href='../cgi-bin/global.cgi?pattern=depth&amp;type=symbol' title='Multiple used in 238 places.'>depth</a>           )
+<a id='L83' name='L83'></a>  83         ),
+<a id='L84' name='L84'></a>  84 
+<a id='L85' name='L85'></a>  85         <a href='../cgi-bin/global.cgi?pattern=F_printk&amp;type=definitions' title='Multiple defined in 4 places.'>F_printk</a>("--&gt; %ps (%d)", (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=depth&amp;type=symbol' title='Multiple used in 238 places.'>depth</a>)
+<a id='L86' name='L86'></a>  86 );
+<a id='L87' name='L87'></a>  87 
+<a id='L88' name='L88'></a>  88 <em class='comment'>/* Function return entry */</em>
+<a id='L89' name='L89'></a>  89 <a href='../cgi-bin/global.cgi?pattern=FTRACE_ENTRY_PACKED&amp;type=definitions' title='Multiple defined in 4 places.'>FTRACE_ENTRY_PACKED</a>(funcgraph_exit, <a href='../cgi-bin/global.cgi?pattern=ftrace_graph_ret_entry&amp;type=symbol' title='Multiple used in 9 places.'>ftrace_graph_ret_entry</a>,
+<a id='L90' name='L90'></a>  90 
+<a id='L91' name='L91'></a>  91         <a href='../S/256.html#L41' title='Defined at 41 in trace/trace.h.'>TRACE_GRAPH_RET</a>,
+<a id='L92' name='L92'></a>  92 
+<a id='L93' name='L93'></a>  93         <a href='../cgi-bin/global.cgi?pattern=F_STRUCT&amp;type=definitions' title='Multiple defined in 4 places.'>F_STRUCT</a>(
+<a id='L94' name='L94'></a>  94                 <a href='../cgi-bin/global.cgi?pattern=__field_struct&amp;type=definitions' title='Multiple defined in 4 places.'>__field_struct</a>( <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=ftrace_graph_ret&amp;type=symbol' title='Multiple used in 17 places.'>ftrace_graph_ret</a>,        <a href='../cgi-bin/global.cgi?pattern=ret&amp;type=symbol' title='Multiple used in 7615 places.'>ret</a>     )
+<a id='L95' name='L95'></a>  95                 <a href='../cgi-bin/global.cgi?pattern=__field_packed&amp;type=definitions' title='Multiple defined in 8 places.'>__field_packed</a>( <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>,  <a href='../cgi-bin/global.cgi?pattern=ret&amp;type=symbol' title='Multiple used in 7615 places.'>ret</a>,            <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>    )
+<a id='L96' name='L96'></a>  96                 <a href='../cgi-bin/global.cgi?pattern=__field_packed&amp;type=definitions' title='Multiple defined in 8 places.'>__field_packed</a>( <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>,  <a href='../cgi-bin/global.cgi?pattern=ret&amp;type=symbol' title='Multiple used in 7615 places.'>ret</a>,            <a href='../cgi-bin/global.cgi?pattern=overrun&amp;type=symbol' title='Multiple used in 35 places.'>overrun</a> )
+<a id='L97' name='L97'></a>  97                 <a href='../cgi-bin/global.cgi?pattern=__field_packed&amp;type=definitions' title='Multiple defined in 8 places.'>__field_packed</a>( <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <strong class='reserved'>long</strong>, <a href='../cgi-bin/global.cgi?pattern=ret&amp;type=symbol' title='Multiple used in 7615 places.'>ret</a>,        <a href='../cgi-bin/global.cgi?pattern=calltime&amp;type=symbol' title='Multiple used in 23 places.'>calltime</a>)
+<a id='L98' name='L98'></a>  98                 <a href='../cgi-bin/global.cgi?pattern=__field_packed&amp;type=definitions' title='Multiple defined in 8 places.'>__field_packed</a>( <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <strong class='reserved'>long</strong>, <a href='../cgi-bin/global.cgi?pattern=ret&amp;type=symbol' title='Multiple used in 7615 places.'>ret</a>,        <a href='../cgi-bin/global.cgi?pattern=rettime&amp;type=symbol' title='Multiple used in 11 places.'>rettime</a> )
+<a id='L99' name='L99'></a>  99                 <a href='../cgi-bin/global.cgi?pattern=__field_packed&amp;type=definitions' title='Multiple defined in 8 places.'>__field_packed</a>( <strong class='reserved'>int</strong>,            <a href='../cgi-bin/global.cgi?pattern=ret&amp;type=symbol' title='Multiple used in 7615 places.'>ret</a>,            <a href='../cgi-bin/global.cgi?pattern=depth&amp;type=symbol' title='Multiple used in 238 places.'>depth</a>   )
+<a id='L100' name='L100'></a> 100         ),
+<a id='L101' name='L101'></a> 101 
+<a id='L102' name='L102'></a> 102         <a href='../cgi-bin/global.cgi?pattern=F_printk&amp;type=definitions' title='Multiple defined in 4 places.'>F_printk</a>("&lt;-- %ps (%d) (start: %llx  end: %llx) over: %d",
+<a id='L103' name='L103'></a> 103                  (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=depth&amp;type=symbol' title='Multiple used in 238 places.'>depth</a>,
+<a id='L104' name='L104'></a> 104                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=calltime&amp;type=symbol' title='Multiple used in 23 places.'>calltime</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=rettime&amp;type=symbol' title='Multiple used in 11 places.'>rettime</a>,
+<a id='L105' name='L105'></a> 105                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=depth&amp;type=symbol' title='Multiple used in 238 places.'>depth</a>)
+<a id='L106' name='L106'></a> 106 );
+<a id='L107' name='L107'></a> 107 
+<a id='L108' name='L108'></a> 108 <em class='comment'>/*</em>
+<a id='L109' name='L109'></a> 109 <em class='comment'> * Context switch trace entry - which task (and prio) we switched from/to:</em>
+<a id='L110' name='L110'></a> 110 <em class='comment'> *</em>
+<a id='L111' name='L111'></a> 111 <em class='comment'> * This is used for both wakeup and context switches. We only want</em>
+<a id='L112' name='L112'></a> 112 <em class='comment'> * to create one structure, but we need two outputs for it.</em>
+<a id='L113' name='L113'></a> 113 <em class='comment'> */</em>
+<a id='L114' name='L114'></a> 114 <em class='sharp'>#define</em> <a href='../cgi-bin/global.cgi?pattern=FTRACE_CTX_FIELDS&amp;type=reference' title='Multiple referred from 2 places.'>FTRACE_CTX_FIELDS</a>                                       \
+<a id='L115' name='L115'></a> 115         <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>,   <a href='../cgi-bin/global.cgi?pattern=prev_pid&amp;type=symbol' title='Multiple used in 13 places.'>prev_pid</a>        )       \
+<a id='L116' name='L116'></a> 116         <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>,   <a href='../cgi-bin/global.cgi?pattern=next_pid&amp;type=symbol' title='Multiple used in 10 places.'>next_pid</a>        )       \
+<a id='L117' name='L117'></a> 117         <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>,   <a href='../cgi-bin/global.cgi?pattern=next_cpu&amp;type=symbol' title='Multiple used in 34 places.'>next_cpu</a>        )       \
+<a id='L118' name='L118'></a> 118         <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>unsigned</strong> <strong class='reserved'>char</strong>,  <a href='../cgi-bin/global.cgi?pattern=prev_prio&amp;type=symbol' title='Multiple used in 22 places.'>prev_prio</a>       )       \
+<a id='L119' name='L119'></a> 119         <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>unsigned</strong> <strong class='reserved'>char</strong>,  <a href='../cgi-bin/global.cgi?pattern=prev_state&amp;type=symbol' title='Multiple used in 56 places.'>prev_state</a>      )       \
+<a id='L120' name='L120'></a> 120         <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>unsigned</strong> <strong class='reserved'>char</strong>,  <a href='../cgi-bin/global.cgi?pattern=next_prio&amp;type=symbol' title='Multiple used in 9 places.'>next_prio</a>       )       \
+<a id='L121' name='L121'></a> 121         <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>unsigned</strong> <strong class='reserved'>char</strong>,  <a href='../cgi-bin/global.cgi?pattern=next_state&amp;type=symbol' title='Multiple used in 16 places.'>next_state</a>      )
+<a id='L122' name='L122'></a> 122 
+<a id='L123' name='L123'></a> 123 <a href='../cgi-bin/global.cgi?pattern=FTRACE_ENTRY&amp;type=definitions' title='Multiple defined in 10 places.'>FTRACE_ENTRY</a>(<a href='../S/441.html#L3950' title='Defined at 3950 in sched/core.c.'>context_switch</a>, <a href='../cgi-bin/global.cgi?pattern=ctx_switch_entry&amp;type=symbol' title='Multiple used in 9 places.'>ctx_switch_entry</a>,
+<a id='L124' name='L124'></a> 124 
+<a id='L125' name='L125'></a> 125         <a href='../S/256.html#L33' title='Defined at 33 in trace/trace.h.'>TRACE_CTX</a>,
+<a id='L126' name='L126'></a> 126 
+<a id='L127' name='L127'></a> 127         <a href='../cgi-bin/global.cgi?pattern=F_STRUCT&amp;type=definitions' title='Multiple defined in 4 places.'>F_STRUCT</a>(
+<a id='L128' name='L128'></a> 128                 <a href='../S/273.html#L114' title='Defined at 114 in trace/trace_entries.h.'>FTRACE_CTX_FIELDS</a>
+<a id='L129' name='L129'></a> 129         ),
+<a id='L130' name='L130'></a> 130 
+<a id='L131' name='L131'></a> 131         <a href='../cgi-bin/global.cgi?pattern=F_printk&amp;type=definitions' title='Multiple defined in 4 places.'>F_printk</a>("%u:%u:%u  ==&gt; %u:%u:%u [%03u]",
+<a id='L132' name='L132'></a> 132                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=prev_pid&amp;type=symbol' title='Multiple used in 13 places.'>prev_pid</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=prev_prio&amp;type=symbol' title='Multiple used in 22 places.'>prev_prio</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=prev_state&amp;type=symbol' title='Multiple used in 56 places.'>prev_state</a>,
+<a id='L133' name='L133'></a> 133                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=next_pid&amp;type=symbol' title='Multiple used in 10 places.'>next_pid</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=next_prio&amp;type=symbol' title='Multiple used in 9 places.'>next_prio</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=next_state&amp;type=symbol' title='Multiple used in 16 places.'>next_state</a>,
+<a id='L134' name='L134'></a> 134                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=next_cpu&amp;type=symbol' title='Multiple used in 34 places.'>next_cpu</a>)
+<a id='L135' name='L135'></a> 135 );
+<a id='L136' name='L136'></a> 136 
+<a id='L137' name='L137'></a> 137 <em class='comment'>/*</em>
+<a id='L138' name='L138'></a> 138 <em class='comment'> * FTRACE_ENTRY_DUP only creates the format file, it will not</em>
+<a id='L139' name='L139'></a> 139 <em class='comment'> *  create another structure.</em>
+<a id='L140' name='L140'></a> 140 <em class='comment'> */</em>
+<a id='L141' name='L141'></a> 141 <a href='../cgi-bin/global.cgi?pattern=FTRACE_ENTRY_DUP&amp;type=definitions' title='Multiple defined in 6 places.'>FTRACE_ENTRY_DUP</a>(<a href='../cgi-bin/global.cgi?pattern=wakeup&amp;type=symbol' title='Multiple used in 26 places.'>wakeup</a>, <a href='../cgi-bin/global.cgi?pattern=ctx_switch_entry&amp;type=symbol' title='Multiple used in 9 places.'>ctx_switch_entry</a>,
+<a id='L142' name='L142'></a> 142 
+<a id='L143' name='L143'></a> 143         <a href='../S/256.html#L34' title='Defined at 34 in trace/trace.h.'>TRACE_WAKE</a>,
+<a id='L144' name='L144'></a> 144 
+<a id='L145' name='L145'></a> 145         <a href='../cgi-bin/global.cgi?pattern=F_STRUCT&amp;type=definitions' title='Multiple defined in 4 places.'>F_STRUCT</a>(
+<a id='L146' name='L146'></a> 146                 <a href='../S/273.html#L114' title='Defined at 114 in trace/trace_entries.h.'>FTRACE_CTX_FIELDS</a>
+<a id='L147' name='L147'></a> 147         ),
+<a id='L148' name='L148'></a> 148 
+<a id='L149' name='L149'></a> 149         <a href='../cgi-bin/global.cgi?pattern=F_printk&amp;type=definitions' title='Multiple defined in 4 places.'>F_printk</a>("%u:%u:%u  ==+ %u:%u:%u [%03u]",
+<a id='L150' name='L150'></a> 150                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=prev_pid&amp;type=symbol' title='Multiple used in 13 places.'>prev_pid</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=prev_prio&amp;type=symbol' title='Multiple used in 22 places.'>prev_prio</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=prev_state&amp;type=symbol' title='Multiple used in 56 places.'>prev_state</a>,
+<a id='L151' name='L151'></a> 151                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=next_pid&amp;type=symbol' title='Multiple used in 10 places.'>next_pid</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=next_prio&amp;type=symbol' title='Multiple used in 9 places.'>next_prio</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=next_state&amp;type=symbol' title='Multiple used in 16 places.'>next_state</a>,
+<a id='L152' name='L152'></a> 152                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=next_cpu&amp;type=symbol' title='Multiple used in 34 places.'>next_cpu</a>)
+<a id='L153' name='L153'></a> 153 );
+<a id='L154' name='L154'></a> 154 
+<a id='L155' name='L155'></a> 155 <em class='comment'>/*</em>
+<a id='L156' name='L156'></a> 156 <em class='comment'> * Stack-trace entry:</em>
+<a id='L157' name='L157'></a> 157 <em class='comment'> */</em>
+<a id='L158' name='L158'></a> 158 
+<a id='L159' name='L159'></a> 159 <em class='sharp'>#define</em> <a href='../cgi-bin/global.cgi?pattern=FTRACE_STACK_ENTRIES&amp;type=reference' title='Multiple referred from 4 places.'>FTRACE_STACK_ENTRIES</a>    8
+<a id='L160' name='L160'></a> 160 
+<a id='L161' name='L161'></a> 161 <a href='../cgi-bin/global.cgi?pattern=FTRACE_ENTRY&amp;type=definitions' title='Multiple defined in 10 places.'>FTRACE_ENTRY</a>(kernel_stack, <a href='../cgi-bin/global.cgi?pattern=stack_entry&amp;type=symbol' title='Multiple used in 4 places.'>stack_entry</a>,
+<a id='L162' name='L162'></a> 162 
+<a id='L163' name='L163'></a> 163         <a href='../S/256.html#L35' title='Defined at 35 in trace/trace.h.'>TRACE_STACK</a>,
+<a id='L164' name='L164'></a> 164 
+<a id='L165' name='L165'></a> 165         <a href='../cgi-bin/global.cgi?pattern=F_STRUCT&amp;type=definitions' title='Multiple defined in 4 places.'>F_STRUCT</a>(
+<a id='L166' name='L166'></a> 166                 <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>int</strong>,            <a href='../cgi-bin/global.cgi?pattern=size&amp;type=symbol' title='Multiple used in 2197 places.'>size</a>    )
+<a id='L167' name='L167'></a> 167                 <a href='../cgi-bin/global.cgi?pattern=__array&amp;type=definitions' title='Multiple defined in 8 places.'>__array</a>(        <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>,  <a href='../cgi-bin/global.cgi?pattern=caller&amp;type=symbol' title='Multiple used in 60 places.'>caller</a>, <a href='../S/273.html#L159' title='Defined at 159 in trace/trace_entries.h.'>FTRACE_STACK_ENTRIES</a>    )
+<a id='L168' name='L168'></a> 168         ),
+<a id='L169' name='L169'></a> 169 
+<a id='L170' name='L170'></a> 170         <a href='../cgi-bin/global.cgi?pattern=F_printk&amp;type=definitions' title='Multiple defined in 4 places.'>F_printk</a>("\t=&gt; %ps\n\t=&gt; %ps\n\t=&gt; %ps\n"
+<a id='L171' name='L171'></a> 171                  "\t=&gt; %ps\n\t=&gt; %ps\n\t=&gt; %ps\n"
+<a id='L172' name='L172'></a> 172                  "\t=&gt; %ps\n\t=&gt; %ps\n",
+<a id='L173' name='L173'></a> 173                  (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=caller&amp;type=symbol' title='Multiple used in 60 places.'>caller</a>[0], (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=caller&amp;type=symbol' title='Multiple used in 60 places.'>caller</a>[1],
+<a id='L174' name='L174'></a> 174                  (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=caller&amp;type=symbol' title='Multiple used in 60 places.'>caller</a>[2], (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=caller&amp;type=symbol' title='Multiple used in 60 places.'>caller</a>[3],
+<a id='L175' name='L175'></a> 175                  (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=caller&amp;type=symbol' title='Multiple used in 60 places.'>caller</a>[4], (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=caller&amp;type=symbol' title='Multiple used in 60 places.'>caller</a>[5],
+<a id='L176' name='L176'></a> 176                  (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=caller&amp;type=symbol' title='Multiple used in 60 places.'>caller</a>[6], (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=caller&amp;type=symbol' title='Multiple used in 60 places.'>caller</a>[7])
+<a id='L177' name='L177'></a> 177 );
+<a id='L178' name='L178'></a> 178 
+<a id='L179' name='L179'></a> 179 <a href='../cgi-bin/global.cgi?pattern=FTRACE_ENTRY&amp;type=definitions' title='Multiple defined in 10 places.'>FTRACE_ENTRY</a>(user_stack, <a href='../cgi-bin/global.cgi?pattern=userstack_entry&amp;type=symbol' title='Multiple used in 4 places.'>userstack_entry</a>,
+<a id='L180' name='L180'></a> 180 
+<a id='L181' name='L181'></a> 181         <a href='../S/256.html#L43' title='Defined at 43 in trace/trace.h.'>TRACE_USER_STACK</a>,
+<a id='L182' name='L182'></a> 182 
+<a id='L183' name='L183'></a> 183         <a href='../cgi-bin/global.cgi?pattern=F_STRUCT&amp;type=definitions' title='Multiple defined in 4 places.'>F_STRUCT</a>(
+<a id='L184' name='L184'></a> 184                 <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>,   <a href='../cgi-bin/global.cgi?pattern=tgid&amp;type=symbol' title='Multiple used in 55 places.'>tgid</a>    )
+<a id='L185' name='L185'></a> 185                 <a href='../cgi-bin/global.cgi?pattern=__array&amp;type=definitions' title='Multiple defined in 8 places.'>__array</a>(        <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>,  <a href='../cgi-bin/global.cgi?pattern=caller&amp;type=symbol' title='Multiple used in 60 places.'>caller</a>, <a href='../S/273.html#L159' title='Defined at 159 in trace/trace_entries.h.'>FTRACE_STACK_ENTRIES</a>    )
+<a id='L186' name='L186'></a> 186         ),
+<a id='L187' name='L187'></a> 187 
+<a id='L188' name='L188'></a> 188         <a href='../cgi-bin/global.cgi?pattern=F_printk&amp;type=definitions' title='Multiple defined in 4 places.'>F_printk</a>("\t=&gt; %ps\n\t=&gt; %ps\n\t=&gt; %ps\n"
+<a id='L189' name='L189'></a> 189                  "\t=&gt; %ps\n\t=&gt; %ps\n\t=&gt; %ps\n"
+<a id='L190' name='L190'></a> 190                  "\t=&gt; %ps\n\t=&gt; %ps\n",
+<a id='L191' name='L191'></a> 191                  (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=caller&amp;type=symbol' title='Multiple used in 60 places.'>caller</a>[0], (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=caller&amp;type=symbol' title='Multiple used in 60 places.'>caller</a>[1],
+<a id='L192' name='L192'></a> 192                  (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=caller&amp;type=symbol' title='Multiple used in 60 places.'>caller</a>[2], (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=caller&amp;type=symbol' title='Multiple used in 60 places.'>caller</a>[3],
+<a id='L193' name='L193'></a> 193                  (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=caller&amp;type=symbol' title='Multiple used in 60 places.'>caller</a>[4], (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=caller&amp;type=symbol' title='Multiple used in 60 places.'>caller</a>[5],
+<a id='L194' name='L194'></a> 194                  (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=caller&amp;type=symbol' title='Multiple used in 60 places.'>caller</a>[6], (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=caller&amp;type=symbol' title='Multiple used in 60 places.'>caller</a>[7])
+<a id='L195' name='L195'></a> 195 );
+<a id='L196' name='L196'></a> 196 
+<a id='L197' name='L197'></a> 197 <em class='comment'>/*</em>
+<a id='L198' name='L198'></a> 198 <em class='comment'> * trace_printk entry:</em>
+<a id='L199' name='L199'></a> 199 <em class='comment'> */</em>
+<a id='L200' name='L200'></a> 200 <a href='../cgi-bin/global.cgi?pattern=FTRACE_ENTRY&amp;type=definitions' title='Multiple defined in 10 places.'>FTRACE_ENTRY</a>(bprint, <a href='../cgi-bin/global.cgi?pattern=bprint_entry&amp;type=symbol' title='Multiple used in 6 places.'>bprint_entry</a>,
+<a id='L201' name='L201'></a> 201 
+<a id='L202' name='L202'></a> 202         <a href='../S/256.html#L37' title='Defined at 37 in trace/trace.h.'>TRACE_BPRINT</a>,
+<a id='L203' name='L203'></a> 203 
+<a id='L204' name='L204'></a> 204         <a href='../cgi-bin/global.cgi?pattern=F_STRUCT&amp;type=definitions' title='Multiple defined in 4 places.'>F_STRUCT</a>(
+<a id='L205' name='L205'></a> 205                 <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>,  <a href='../cgi-bin/global.cgi?pattern=ip&amp;type=symbol' title='Multiple used in 480 places.'>ip</a>      )
+<a id='L206' name='L206'></a> 206                 <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *,   <a href='../cgi-bin/global.cgi?pattern=fmt&amp;type=symbol' title='Multiple used in 393 places.'>fmt</a>     )
+<a id='L207' name='L207'></a> 207                 <a href='../cgi-bin/global.cgi?pattern=__dynamic_array&amp;type=definitions' title='Multiple defined in 8 places.'>__dynamic_array</a>(        <a href='../cgi-bin/global.cgi?pattern=u32&amp;type=symbol' title='Multiple used in 1371 places.'>u32</a>,    <a href='../cgi-bin/global.cgi?pattern=buf&amp;type=symbol' title='Multiple used in 1739 places.'>buf</a>     )
+<a id='L208' name='L208'></a> 208         ),
+<a id='L209' name='L209'></a> 209 
+<a id='L210' name='L210'></a> 210         <a href='../cgi-bin/global.cgi?pattern=F_printk&amp;type=definitions' title='Multiple defined in 4 places.'>F_printk</a>("%ps: %s",
+<a id='L211' name='L211'></a> 211                  (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=ip&amp;type=symbol' title='Multiple used in 480 places.'>ip</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=fmt&amp;type=symbol' title='Multiple used in 393 places.'>fmt</a>)
+<a id='L212' name='L212'></a> 212 );
+<a id='L213' name='L213'></a> 213 
+<a id='L214' name='L214'></a> 214 <a href='../cgi-bin/global.cgi?pattern=FTRACE_ENTRY_REG&amp;type=definitions' title='Multiple defined in 6 places.'>FTRACE_ENTRY_REG</a>(<a href='../cgi-bin/global.cgi?pattern=print&amp;type=symbol' title='Multiple used in 74 places.'>print</a>, <a href='../cgi-bin/global.cgi?pattern=print_entry&amp;type=symbol' title='Multiple used in 9 places.'>print_entry</a>,
+<a id='L215' name='L215'></a> 215 
+<a id='L216' name='L216'></a> 216         <a href='../S/256.html#L36' title='Defined at 36 in trace/trace.h.'>TRACE_PRINT</a>,
+<a id='L217' name='L217'></a> 217 
+<a id='L218' name='L218'></a> 218         <a href='../cgi-bin/global.cgi?pattern=F_STRUCT&amp;type=definitions' title='Multiple defined in 4 places.'>F_STRUCT</a>(
+<a id='L219' name='L219'></a> 219                 <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>,  <a href='../cgi-bin/global.cgi?pattern=ip&amp;type=symbol' title='Multiple used in 480 places.'>ip</a>      )
+<a id='L220' name='L220'></a> 220                 <a href='../cgi-bin/global.cgi?pattern=__dynamic_array&amp;type=definitions' title='Multiple defined in 8 places.'>__dynamic_array</a>(        <strong class='reserved'>char</strong>,   <a href='../cgi-bin/global.cgi?pattern=buf&amp;type=symbol' title='Multiple used in 1739 places.'>buf</a>     )
+<a id='L221' name='L221'></a> 221         ),
+<a id='L222' name='L222'></a> 222 
+<a id='L223' name='L223'></a> 223         <a href='../cgi-bin/global.cgi?pattern=F_printk&amp;type=definitions' title='Multiple defined in 4 places.'>F_printk</a>("%ps: %s",
+<a id='L224' name='L224'></a> 224                  (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=ip&amp;type=symbol' title='Multiple used in 480 places.'>ip</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=buf&amp;type=symbol' title='Multiple used in 1739 places.'>buf</a>),
+<a id='L225' name='L225'></a> 225 
+<a id='L226' name='L226'></a> 226         <a href='../S/276.html#L18' title='Defined at 18 in trace/trace_export.c.'>ftrace_event_register</a>
+<a id='L227' name='L227'></a> 227 );
+<a id='L228' name='L228'></a> 228 
+<a id='L229' name='L229'></a> 229 <a href='../cgi-bin/global.cgi?pattern=FTRACE_ENTRY&amp;type=definitions' title='Multiple defined in 10 places.'>FTRACE_ENTRY</a>(<a href='../cgi-bin/global.cgi?pattern=raw_data&amp;type=symbol' title='Multiple used in 9 places.'>raw_data</a>, <a href='../cgi-bin/global.cgi?pattern=raw_data_entry&amp;type=symbol' title='Multiple used in 5 places.'>raw_data_entry</a>,
+<a id='L230' name='L230'></a> 230 
+<a id='L231' name='L231'></a> 231         <a href='../S/256.html#L47' title='Defined at 47 in trace/trace.h.'>TRACE_RAW_DATA</a>,
+<a id='L232' name='L232'></a> 232 
+<a id='L233' name='L233'></a> 233         <a href='../cgi-bin/global.cgi?pattern=F_STRUCT&amp;type=definitions' title='Multiple defined in 4 places.'>F_STRUCT</a>(
+<a id='L234' name='L234'></a> 234                 <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>,   <a href='../cgi-bin/global.cgi?pattern=id&amp;type=symbol' title='Multiple used in 619 places.'>id</a>      )
+<a id='L235' name='L235'></a> 235                 <a href='../cgi-bin/global.cgi?pattern=__dynamic_array&amp;type=definitions' title='Multiple defined in 8 places.'>__dynamic_array</a>(        <strong class='reserved'>char</strong>,   <a href='../cgi-bin/global.cgi?pattern=buf&amp;type=symbol' title='Multiple used in 1739 places.'>buf</a>     )
+<a id='L236' name='L236'></a> 236         ),
+<a id='L237' name='L237'></a> 237 
+<a id='L238' name='L238'></a> 238         <a href='../cgi-bin/global.cgi?pattern=F_printk&amp;type=definitions' title='Multiple defined in 4 places.'>F_printk</a>("id:%04x %08x",
+<a id='L239' name='L239'></a> 239                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=id&amp;type=symbol' title='Multiple used in 619 places.'>id</a>, (<strong class='reserved'>int</strong>)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=buf&amp;type=symbol' title='Multiple used in 1739 places.'>buf</a>[0])
+<a id='L240' name='L240'></a> 240 );
+<a id='L241' name='L241'></a> 241 
+<a id='L242' name='L242'></a> 242 <a href='../cgi-bin/global.cgi?pattern=FTRACE_ENTRY&amp;type=definitions' title='Multiple defined in 10 places.'>FTRACE_ENTRY</a>(bputs, <a href='../cgi-bin/global.cgi?pattern=bputs_entry&amp;type=symbol' title='Multiple used in 7 places.'>bputs_entry</a>,
+<a id='L243' name='L243'></a> 243 
+<a id='L244' name='L244'></a> 244         <a href='../S/256.html#L45' title='Defined at 45 in trace/trace.h.'>TRACE_BPUTS</a>,
+<a id='L245' name='L245'></a> 245 
+<a id='L246' name='L246'></a> 246         <a href='../cgi-bin/global.cgi?pattern=F_STRUCT&amp;type=definitions' title='Multiple defined in 4 places.'>F_STRUCT</a>(
+<a id='L247' name='L247'></a> 247                 <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>,  <a href='../cgi-bin/global.cgi?pattern=ip&amp;type=symbol' title='Multiple used in 480 places.'>ip</a>      )
+<a id='L248' name='L248'></a> 248                 <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *,   <a href='../cgi-bin/global.cgi?pattern=str&amp;type=symbol' title='Multiple used in 655 places.'>str</a>     )
+<a id='L249' name='L249'></a> 249         ),
+<a id='L250' name='L250'></a> 250 
+<a id='L251' name='L251'></a> 251         <a href='../cgi-bin/global.cgi?pattern=F_printk&amp;type=definitions' title='Multiple defined in 4 places.'>F_printk</a>("%ps: %s",
+<a id='L252' name='L252'></a> 252                  (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=ip&amp;type=symbol' title='Multiple used in 480 places.'>ip</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=str&amp;type=symbol' title='Multiple used in 655 places.'>str</a>)
+<a id='L253' name='L253'></a> 253 );
+<a id='L254' name='L254'></a> 254 
+<a id='L255' name='L255'></a> 255 <a href='../cgi-bin/global.cgi?pattern=FTRACE_ENTRY&amp;type=definitions' title='Multiple defined in 10 places.'>FTRACE_ENTRY</a>(<a href='../cgi-bin/global.cgi?pattern=mmiotrace_rw&amp;type=symbol' title='Multiple used in 5 places.'>mmiotrace_rw</a>, <a href='../cgi-bin/global.cgi?pattern=trace_mmiotrace_rw&amp;type=symbol' title='Multiple used in 4 places.'>trace_mmiotrace_rw</a>,
+<a id='L256' name='L256'></a> 256 
+<a id='L257' name='L257'></a> 257         <a href='../S/256.html#L38' title='Defined at 38 in trace/trace.h.'>TRACE_MMIO_RW</a>,
+<a id='L258' name='L258'></a> 258 
+<a id='L259' name='L259'></a> 259         <a href='../cgi-bin/global.cgi?pattern=F_STRUCT&amp;type=definitions' title='Multiple defined in 4 places.'>F_STRUCT</a>(
+<a id='L260' name='L260'></a> 260                 <a href='../cgi-bin/global.cgi?pattern=__field_struct&amp;type=definitions' title='Multiple defined in 4 places.'>__field_struct</a>( <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=mmiotrace_rw&amp;type=symbol' title='Multiple used in 5 places.'>mmiotrace_rw</a>,    <a href='../cgi-bin/global.cgi?pattern=rw&amp;type=symbol' title='Multiple used in 31 places.'>rw</a>      )
+<a id='L261' name='L261'></a> 261                 <a href='../cgi-bin/global.cgi?pattern=__field_desc&amp;type=definitions' title='Multiple defined in 8 places.'>__field_desc</a>(   <a href='../cgi-bin/global.cgi?pattern=resource_size_t&amp;type=symbol' title='Multiple used in 55 places.'>resource_size_t</a>, <a href='../cgi-bin/global.cgi?pattern=rw&amp;type=symbol' title='Multiple used in 31 places.'>rw</a>,    <a href='../cgi-bin/global.cgi?pattern=phys&amp;type=symbol' title='Multiple used in 39 places.'>phys</a>    )
+<a id='L262' name='L262'></a> 262                 <a href='../cgi-bin/global.cgi?pattern=__field_desc&amp;type=definitions' title='Multiple defined in 8 places.'>__field_desc</a>(   <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>,  <a href='../cgi-bin/global.cgi?pattern=rw&amp;type=symbol' title='Multiple used in 31 places.'>rw</a>,     <a href='../cgi-bin/global.cgi?pattern=value&amp;type=symbol' title='Multiple used in 604 places.'>value</a>   )
+<a id='L263' name='L263'></a> 263                 <a href='../cgi-bin/global.cgi?pattern=__field_desc&amp;type=definitions' title='Multiple defined in 8 places.'>__field_desc</a>(   <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>,  <a href='../cgi-bin/global.cgi?pattern=rw&amp;type=symbol' title='Multiple used in 31 places.'>rw</a>,     <a href='../cgi-bin/global.cgi?pattern=pc&amp;type=symbol' title='Multiple used in 242 places.'>pc</a>      )
+<a id='L264' name='L264'></a> 264                 <a href='../cgi-bin/global.cgi?pattern=__field_desc&amp;type=definitions' title='Multiple defined in 8 places.'>__field_desc</a>(   <strong class='reserved'>int</strong>,            <a href='../cgi-bin/global.cgi?pattern=rw&amp;type=symbol' title='Multiple used in 31 places.'>rw</a>,     <a href='../cgi-bin/global.cgi?pattern=map_id&amp;type=symbol' title='Multiple used in 21 places.'>map_id</a>  )
+<a id='L265' name='L265'></a> 265                 <a href='../cgi-bin/global.cgi?pattern=__field_desc&amp;type=definitions' title='Multiple defined in 8 places.'>__field_desc</a>(   <strong class='reserved'>unsigned</strong> <strong class='reserved'>char</strong>,  <a href='../cgi-bin/global.cgi?pattern=rw&amp;type=symbol' title='Multiple used in 31 places.'>rw</a>,     <a href='../cgi-bin/global.cgi?pattern=opcode&amp;type=symbol' title='Multiple used in 105 places.'>opcode</a>  )
+<a id='L266' name='L266'></a> 266                 <a href='../cgi-bin/global.cgi?pattern=__field_desc&amp;type=definitions' title='Multiple defined in 8 places.'>__field_desc</a>(   <strong class='reserved'>unsigned</strong> <strong class='reserved'>char</strong>,  <a href='../cgi-bin/global.cgi?pattern=rw&amp;type=symbol' title='Multiple used in 31 places.'>rw</a>,     <a href='../cgi-bin/global.cgi?pattern=width&amp;type=symbol' title='Multiple used in 16 places.'>width</a>   )
+<a id='L267' name='L267'></a> 267         ),
+<a id='L268' name='L268'></a> 268 
+<a id='L269' name='L269'></a> 269         <a href='../cgi-bin/global.cgi?pattern=F_printk&amp;type=definitions' title='Multiple defined in 4 places.'>F_printk</a>("%lx %lx %lx %d %x %x",
+<a id='L270' name='L270'></a> 270                  (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=phys&amp;type=symbol' title='Multiple used in 39 places.'>phys</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=value&amp;type=symbol' title='Multiple used in 604 places.'>value</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=pc&amp;type=symbol' title='Multiple used in 242 places.'>pc</a>,
+<a id='L271' name='L271'></a> 271                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=map_id&amp;type=symbol' title='Multiple used in 21 places.'>map_id</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=opcode&amp;type=symbol' title='Multiple used in 105 places.'>opcode</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=width&amp;type=symbol' title='Multiple used in 16 places.'>width</a>)
+<a id='L272' name='L272'></a> 272 );
+<a id='L273' name='L273'></a> 273 
+<a id='L274' name='L274'></a> 274 <a href='../cgi-bin/global.cgi?pattern=FTRACE_ENTRY&amp;type=definitions' title='Multiple defined in 10 places.'>FTRACE_ENTRY</a>(<a href='../cgi-bin/global.cgi?pattern=mmiotrace_map&amp;type=symbol' title='Multiple used in 5 places.'>mmiotrace_map</a>, <a href='../cgi-bin/global.cgi?pattern=trace_mmiotrace_map&amp;type=symbol' title='Multiple used in 4 places.'>trace_mmiotrace_map</a>,
+<a id='L275' name='L275'></a> 275 
+<a id='L276' name='L276'></a> 276         <a href='../S/256.html#L39' title='Defined at 39 in trace/trace.h.'>TRACE_MMIO_MAP</a>,
+<a id='L277' name='L277'></a> 277 
+<a id='L278' name='L278'></a> 278         <a href='../cgi-bin/global.cgi?pattern=F_STRUCT&amp;type=definitions' title='Multiple defined in 4 places.'>F_STRUCT</a>(
+<a id='L279' name='L279'></a> 279                 <a href='../cgi-bin/global.cgi?pattern=__field_struct&amp;type=definitions' title='Multiple defined in 4 places.'>__field_struct</a>( <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=mmiotrace_map&amp;type=symbol' title='Multiple used in 5 places.'>mmiotrace_map</a>,   <a href='../cgi-bin/global.cgi?pattern=map&amp;type=symbol' title='Multiple used in 1661 places.'>map</a>     )
+<a id='L280' name='L280'></a> 280                 <a href='../cgi-bin/global.cgi?pattern=__field_desc&amp;type=definitions' title='Multiple defined in 8 places.'>__field_desc</a>(   <a href='../cgi-bin/global.cgi?pattern=resource_size_t&amp;type=symbol' title='Multiple used in 55 places.'>resource_size_t</a>, <a href='../cgi-bin/global.cgi?pattern=map&amp;type=symbol' title='Multiple used in 1661 places.'>map</a>,   <a href='../cgi-bin/global.cgi?pattern=phys&amp;type=symbol' title='Multiple used in 39 places.'>phys</a>    )
+<a id='L281' name='L281'></a> 281                 <a href='../cgi-bin/global.cgi?pattern=__field_desc&amp;type=definitions' title='Multiple defined in 8 places.'>__field_desc</a>(   <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>,  <a href='../cgi-bin/global.cgi?pattern=map&amp;type=symbol' title='Multiple used in 1661 places.'>map</a>,    <a href='../cgi-bin/global.cgi?pattern=virt&amp;type=symbol' title='Multiple used in 28 places.'>virt</a>    )
+<a id='L282' name='L282'></a> 282                 <a href='../cgi-bin/global.cgi?pattern=__field_desc&amp;type=definitions' title='Multiple defined in 8 places.'>__field_desc</a>(   <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>,  <a href='../cgi-bin/global.cgi?pattern=map&amp;type=symbol' title='Multiple used in 1661 places.'>map</a>,    <a href='../cgi-bin/global.cgi?pattern=len&amp;type=symbol' title='Multiple used in 1336 places.'>len</a>     )
+<a id='L283' name='L283'></a> 283                 <a href='../cgi-bin/global.cgi?pattern=__field_desc&amp;type=definitions' title='Multiple defined in 8 places.'>__field_desc</a>(   <strong class='reserved'>int</strong>,            <a href='../cgi-bin/global.cgi?pattern=map&amp;type=symbol' title='Multiple used in 1661 places.'>map</a>,    <a href='../cgi-bin/global.cgi?pattern=map_id&amp;type=symbol' title='Multiple used in 21 places.'>map_id</a>  )
+<a id='L284' name='L284'></a> 284                 <a href='../cgi-bin/global.cgi?pattern=__field_desc&amp;type=definitions' title='Multiple defined in 8 places.'>__field_desc</a>(   <strong class='reserved'>unsigned</strong> <strong class='reserved'>char</strong>,  <a href='../cgi-bin/global.cgi?pattern=map&amp;type=symbol' title='Multiple used in 1661 places.'>map</a>,    <a href='../cgi-bin/global.cgi?pattern=opcode&amp;type=symbol' title='Multiple used in 105 places.'>opcode</a>  )
+<a id='L285' name='L285'></a> 285         ),
+<a id='L286' name='L286'></a> 286 
+<a id='L287' name='L287'></a> 287         <a href='../cgi-bin/global.cgi?pattern=F_printk&amp;type=definitions' title='Multiple defined in 4 places.'>F_printk</a>("%lx %lx %lx %d %x",
+<a id='L288' name='L288'></a> 288                  (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)<a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=phys&amp;type=symbol' title='Multiple used in 39 places.'>phys</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=virt&amp;type=symbol' title='Multiple used in 28 places.'>virt</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=len&amp;type=symbol' title='Multiple used in 1336 places.'>len</a>,
+<a id='L289' name='L289'></a> 289                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=map_id&amp;type=symbol' title='Multiple used in 21 places.'>map_id</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=opcode&amp;type=symbol' title='Multiple used in 105 places.'>opcode</a>)
+<a id='L290' name='L290'></a> 290 );
+<a id='L291' name='L291'></a> 291 
+<a id='L292' name='L292'></a> 292 
+<a id='L293' name='L293'></a> 293 <em class='sharp'>#define</em> <a href='../cgi-bin/global.cgi?pattern=TRACE_FUNC_SIZE&amp;type=reference' title='Multiple referred from 3 places.'>TRACE_FUNC_SIZE</a> 30
+<a id='L294' name='L294'></a> 294 <em class='sharp'>#define</em> <a href='../cgi-bin/global.cgi?pattern=TRACE_FILE_SIZE&amp;type=reference' title='Multiple referred from 3 places.'>TRACE_FILE_SIZE</a> 20
+<a id='L295' name='L295'></a> 295 
+<a id='L296' name='L296'></a> 296 <a href='../cgi-bin/global.cgi?pattern=FTRACE_ENTRY&amp;type=definitions' title='Multiple defined in 10 places.'>FTRACE_ENTRY</a>(<a href='../cgi-bin/global.cgi?pattern=branch&amp;type=symbol' title='Multiple used in 5 places.'>branch</a>, <a href='../cgi-bin/global.cgi?pattern=trace_branch&amp;type=symbol' title='Multiple used in 4 places.'>trace_branch</a>,
+<a id='L297' name='L297'></a> 297 
+<a id='L298' name='L298'></a> 298         <a href='../S/256.html#L40' title='Defined at 40 in trace/trace.h.'>TRACE_BRANCH</a>,
+<a id='L299' name='L299'></a> 299 
+<a id='L300' name='L300'></a> 300         <a href='../cgi-bin/global.cgi?pattern=F_STRUCT&amp;type=definitions' title='Multiple defined in 4 places.'>F_STRUCT</a>(
+<a id='L301' name='L301'></a> 301                 <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>,   <a href='../cgi-bin/global.cgi?pattern=line&amp;type=symbol' title='Multiple used in 35 places.'>line</a>                            )
+<a id='L302' name='L302'></a> 302                 <a href='../cgi-bin/global.cgi?pattern=__array&amp;type=definitions' title='Multiple defined in 8 places.'>__array</a>(        <strong class='reserved'>char</strong>,           <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>,   <a href='../S/273.html#L293' title='Defined at 293 in trace/trace_entries.h.'>TRACE_FUNC_SIZE</a>+1       )
+<a id='L303' name='L303'></a> 303                 <a href='../cgi-bin/global.cgi?pattern=__array&amp;type=definitions' title='Multiple defined in 8 places.'>__array</a>(        <strong class='reserved'>char</strong>,           <a href='../cgi-bin/global.cgi?pattern=file&amp;type=symbol' title='Multiple used in 1447 places.'>file</a>,   <a href='../S/273.html#L294' title='Defined at 294 in trace/trace_entries.h.'>TRACE_FILE_SIZE</a>+1       )
+<a id='L304' name='L304'></a> 304                 <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>char</strong>,           <a href='../cgi-bin/global.cgi?pattern=correct&amp;type=symbol' title='Multiple used in 11 places.'>correct</a>                         )
+<a id='L305' name='L305'></a> 305                 <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>char</strong>,           <a href='../cgi-bin/global.cgi?pattern=constant&amp;type=symbol' title='Multiple used in 13 places.'>constant</a>                        )
+<a id='L306' name='L306'></a> 306         ),
+<a id='L307' name='L307'></a> 307 
+<a id='L308' name='L308'></a> 308         <a href='../cgi-bin/global.cgi?pattern=F_printk&amp;type=definitions' title='Multiple defined in 4 places.'>F_printk</a>("%u:%s:%s (%u)%s",
+<a id='L309' name='L309'></a> 309                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=line&amp;type=symbol' title='Multiple used in 35 places.'>line</a>,
+<a id='L310' name='L310'></a> 310                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=file&amp;type=symbol' title='Multiple used in 1447 places.'>file</a>, <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=correct&amp;type=symbol' title='Multiple used in 11 places.'>correct</a>,
+<a id='L311' name='L311'></a> 311                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=constant&amp;type=symbol' title='Multiple used in 13 places.'>constant</a> ? " CONSTANT" : "")
+<a id='L312' name='L312'></a> 312 );
+<a id='L313' name='L313'></a> 313 
+<a id='L314' name='L314'></a> 314 
+<a id='L315' name='L315'></a> 315 <a href='../cgi-bin/global.cgi?pattern=FTRACE_ENTRY&amp;type=definitions' title='Multiple defined in 10 places.'>FTRACE_ENTRY</a>(hwlat, <a href='../cgi-bin/global.cgi?pattern=hwlat_entry&amp;type=symbol' title='Multiple used in 5 places.'>hwlat_entry</a>,
+<a id='L316' name='L316'></a> 316 
+<a id='L317' name='L317'></a> 317         <a href='../S/256.html#L46' title='Defined at 46 in trace/trace.h.'>TRACE_HWLAT</a>,
+<a id='L318' name='L318'></a> 318 
+<a id='L319' name='L319'></a> 319         <a href='../cgi-bin/global.cgi?pattern=F_STRUCT&amp;type=definitions' title='Multiple defined in 4 places.'>F_STRUCT</a>(
+<a id='L320' name='L320'></a> 320                 <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <a href='../cgi-bin/global.cgi?pattern=u64&amp;type=symbol' title='Multiple used in 1746 places.'>u64</a>,                    <a href='../cgi-bin/global.cgi?pattern=duration&amp;type=symbol' title='Multiple used in 40 places.'>duration</a>        )
+<a id='L321' name='L321'></a> 321                 <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <a href='../cgi-bin/global.cgi?pattern=u64&amp;type=symbol' title='Multiple used in 1746 places.'>u64</a>,                    <a href='../cgi-bin/global.cgi?pattern=outer_duration&amp;type=symbol' title='Multiple used in 7 places.'>outer_duration</a>  )
+<a id='L322' name='L322'></a> 322                 <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <a href='../cgi-bin/global.cgi?pattern=u64&amp;type=symbol' title='Multiple used in 1746 places.'>u64</a>,                    <a href='../cgi-bin/global.cgi?pattern=nmi_total_ts&amp;type=symbol' title='Multiple used in 11 places.'>nmi_total_ts</a>    )
+<a id='L323' name='L323'></a> 323                 <a href='../cgi-bin/global.cgi?pattern=__field_struct&amp;type=definitions' title='Multiple defined in 4 places.'>__field_struct</a>( <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=timespec64&amp;type=symbol' title='Multiple used in 160 places.'>timespec64</a>,      <a href='../cgi-bin/global.cgi?pattern=timestamp&amp;type=symbol' title='Multiple used in 28 places.'>timestamp</a>       )
+<a id='L324' name='L324'></a> 324                 <a href='../cgi-bin/global.cgi?pattern=__field_desc&amp;type=definitions' title='Multiple defined in 8 places.'>__field_desc</a>(   <a href='../cgi-bin/global.cgi?pattern=s64&amp;type=symbol' title='Multiple used in 187 places.'>s64</a>,    <a href='../cgi-bin/global.cgi?pattern=timestamp&amp;type=symbol' title='Multiple used in 28 places.'>timestamp</a>,      <a href='../cgi-bin/global.cgi?pattern=tv_sec&amp;type=symbol' title='Multiple used in 101 places.'>tv_sec</a>          )
+<a id='L325' name='L325'></a> 325                 <a href='../cgi-bin/global.cgi?pattern=__field_desc&amp;type=definitions' title='Multiple defined in 8 places.'>__field_desc</a>(   <strong class='reserved'>long</strong>,   <a href='../cgi-bin/global.cgi?pattern=timestamp&amp;type=symbol' title='Multiple used in 28 places.'>timestamp</a>,      <a href='../cgi-bin/global.cgi?pattern=tv_nsec&amp;type=symbol' title='Multiple used in 94 places.'>tv_nsec</a>         )
+<a id='L326' name='L326'></a> 326                 <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>,           <a href='../cgi-bin/global.cgi?pattern=nmi_count&amp;type=symbol' title='Multiple used in 10 places.'>nmi_count</a>       )
+<a id='L327' name='L327'></a> 327                 <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>,           <a href='../cgi-bin/global.cgi?pattern=seqnum&amp;type=symbol' title='Multiple used in 7 places.'>seqnum</a>          )
+<a id='L328' name='L328'></a> 328                 <a href='../cgi-bin/global.cgi?pattern=__field&amp;type=definitions' title='Multiple defined in 8 places.'>__field</a>(        <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>,           <a href='../cgi-bin/global.cgi?pattern=count&amp;type=symbol' title='Multiple used in 1028 places.'>count</a>           )
+<a id='L329' name='L329'></a> 329         ),
+<a id='L330' name='L330'></a> 330 
+<a id='L331' name='L331'></a> 331         <a href='../cgi-bin/global.cgi?pattern=F_printk&amp;type=definitions' title='Multiple defined in 4 places.'>F_printk</a>("cnt:%u\tts:%010llu.%010lu\tinner:%llu\touter:%llu\tcount:%d\tnmi-ts:%llu\tnmi-count:%u\n",
+<a id='L332' name='L332'></a> 332                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=seqnum&amp;type=symbol' title='Multiple used in 7 places.'>seqnum</a>,
+<a id='L333' name='L333'></a> 333                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=tv_sec&amp;type=symbol' title='Multiple used in 101 places.'>tv_sec</a>,
+<a id='L334' name='L334'></a> 334                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=tv_nsec&amp;type=symbol' title='Multiple used in 94 places.'>tv_nsec</a>,
+<a id='L335' name='L335'></a> 335                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=duration&amp;type=symbol' title='Multiple used in 40 places.'>duration</a>,
+<a id='L336' name='L336'></a> 336                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=outer_duration&amp;type=symbol' title='Multiple used in 7 places.'>outer_duration</a>,
+<a id='L337' name='L337'></a> 337                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=count&amp;type=symbol' title='Multiple used in 1028 places.'>count</a>,
+<a id='L338' name='L338'></a> 338                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=nmi_total_ts&amp;type=symbol' title='Multiple used in 11 places.'>nmi_total_ts</a>,
+<a id='L339' name='L339'></a> 339                  <a href='../cgi-bin/global.cgi?pattern=__entry&amp;type=definitions' title='Multiple defined in 2 places.'>__entry</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=nmi_count&amp;type=symbol' title='Multiple used in 10 places.'>nmi_count</a>)
+<a id='L340' name='L340'></a> 340 );
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><img class='icon' src='../icons/n_first.png' alt='[first]' /><img class='icon' src='../icons/n_last.png' alt='[last]' /><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><img class='icon' src='../icons/n_bottom.png' alt='[bottom]' /><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+340 trace/trace_entries.h'  /> */</em>
+</body>
+</html>

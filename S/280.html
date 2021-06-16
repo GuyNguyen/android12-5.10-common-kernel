@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>trace/trace_kdb.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<!-- beginning of fixed guide -->
+<div id='guide'><ul>
+<li><a href='#L23'><img class='icon' src='../icons/first.png' alt='[^]' /></a></li>
+<li><a href='#L150'><img class='icon' src='../icons/last.png' alt='[v]' /></a></li>
+<li><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a></li>
+<li><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a></li>
+<li><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a></li>
+<li class='standout'><span><a href='../files/514.html'>trace</a>/trace_kdb.c</span></li>
+</ul></div>
+<!-- end of fixed guide -->
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/514.html'>trace</a>/trace_kdb.c</h2>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L23'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L150'><img class='icon' src='../icons/last.png' alt='[last]' /></a><img class='icon' src='../icons/n_top.png' alt='[top]' /><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+1 trace/trace_kdb.c'  /> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L23' title='Defined at 23.'>ftrace_dump_buf</a></li>
+<li><a href='#L95' title='Defined at 95.'>kdb_ftdump</a></li>
+<li><a href='#L150' title='Defined at 150.'>kdb_ftrace_register</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * kdb helper for dumping the ftrace buffer</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> *</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * Copyright (C) 2010 Jason Wessel &lt;jason.wessel@windriver.com&gt;</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> *</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> * ftrace_dump_buf based on ftrace_dump:</em>
+<a id='L8' name='L8'></a>   8 <em class='comment'> * Copyright (C) 2007-2008 Steven Rostedt &lt;srostedt@redhat.com&gt;</em>
+<a id='L9' name='L9'></a>   9 <em class='comment'> * Copyright (C) 2008 Ingo Molnar &lt;mingo@redhat.com&gt;</em>
+<a id='L10' name='L10'></a>  10 <em class='comment'> *</em>
+<a id='L11' name='L11'></a>  11 <em class='comment'> */</em>
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;linux/init.h&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;linux/kgdb.h&gt;
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> &lt;linux/kdb.h&gt;
+<a id='L15' name='L15'></a>  15 <em class='sharp'>#include</em> &lt;linux/ftrace.h&gt;
+<a id='L16' name='L16'></a>  16 
+<a id='L17' name='L17'></a>  17 <em class='sharp'>#include</em> "<a href='256.html'>trace.h</a>"
+<a id='L18' name='L18'></a>  18 <em class='sharp'>#include</em> "<a href='315.html'>trace_output.h</a>"
+<a id='L19' name='L19'></a>  19 
+<a id='L20' name='L20'></a>  20 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=trace_iterator&amp;type=symbol' title='Multiple used in 167 places.'>trace_iterator</a> <a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>;
+<a id='L21' name='L21'></a>  21 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../S/258.html#L555' title='Defined at 555 in trace/ring_buffer.c.'>ring_buffer_iter</a> *<a href='../cgi-bin/global.cgi?pattern=buffer_iter&amp;type=symbol' title='Multiple used in 20 places.'>buffer_iter</a>[<a href='../cgi-bin/global.cgi?pattern=CONFIG_NR_CPUS&amp;type=symbol' title='Multiple used in 4 places.'>CONFIG_NR_CPUS</a>];
+<a id='L22' name='L22'></a>  22 
+<a id='L23' name='L23'></a>  23 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/280.html#L139' title='Referred from 139 in trace/trace_kdb.c.'>ftrace_dump_buf</a>(<strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=skip_entries&amp;type=symbol' title='Multiple used in 11 places.'>skip_entries</a>, <strong class='reserved'>long</strong> <a href='../cgi-bin/global.cgi?pattern=cpu_file&amp;type=symbol' title='Multiple used in 65 places.'>cpu_file</a>)
+     <em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><a href='#L95'><img class='icon' src='../icons/right.png' alt='[next]' /></a><img class='icon' src='../icons/n_first.png' alt='[first]' /><a href='#L150'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+23 trace/trace_kdb.c'  /> */</em>
+<a id='L24' name='L24'></a>  24 <em class='brace'>{</em>
+<a id='L25' name='L25'></a>  25         <strong class='reserved'>struct</strong> <a href='../S/256.html#L288' title='Defined at 288 in trace/trace.h.'>trace_array</a> *<a href='../cgi-bin/global.cgi?pattern=tr&amp;type=symbol' title='Multiple used in 2019 places.'>tr</a>;
+<a id='L26' name='L26'></a>  26         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=old_userobj&amp;type=symbol' title='Multiple used in 6 places.'>old_userobj</a>;
+<a id='L27' name='L27'></a>  27         <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=cnt&amp;type=symbol' title='Multiple used in 575 places.'>cnt</a> = 0, <a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>;
+<a id='L28' name='L28'></a>  28 
+<a id='L29' name='L29'></a>  29         <a href='../cgi-bin/global.cgi?pattern=tr&amp;type=symbol' title='Multiple used in 2019 places.'>tr</a> = <a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>.<a href='../cgi-bin/global.cgi?pattern=tr&amp;type=symbol' title='Multiple used in 2019 places.'>tr</a>;
+<a id='L30' name='L30'></a>  30 
+<a id='L31' name='L31'></a>  31         <a href='../cgi-bin/global.cgi?pattern=old_userobj&amp;type=symbol' title='Multiple used in 6 places.'>old_userobj</a> = <a href='../cgi-bin/global.cgi?pattern=tr&amp;type=symbol' title='Multiple used in 2019 places.'>tr</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=trace_flags&amp;type=symbol' title='Multiple used in 82 places.'>trace_flags</a>;
+<a id='L32' name='L32'></a>  32 
+<a id='L33' name='L33'></a>  33         <em class='comment'>/* don't look at user memory in panic mode */</em>
+<a id='L34' name='L34'></a>  34         <a href='../cgi-bin/global.cgi?pattern=tr&amp;type=symbol' title='Multiple used in 2019 places.'>tr</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=trace_flags&amp;type=symbol' title='Multiple used in 82 places.'>trace_flags</a> &amp;= ~<a href='../cgi-bin/global.cgi?pattern=TRACE_ITER_SYM_USEROBJ&amp;type=symbol' title='Multiple used in 4 places.'>TRACE_ITER_SYM_USEROBJ</a>;
+<a id='L35' name='L35'></a>  35 
+<a id='L36' name='L36'></a>  36         <a href='../S/57.html#L859' title='Defined at 859 in debug/kdb/kdb_io.c.'>kdb_printf</a>("Dumping ftrace buffer:\n");
+<a id='L37' name='L37'></a>  37         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=skip_entries&amp;type=symbol' title='Multiple used in 11 places.'>skip_entries</a>)
+<a id='L38' name='L38'></a>  38                 <a href='../S/57.html#L859' title='Defined at 859 in debug/kdb/kdb_io.c.'>kdb_printf</a>("(skipping %d entries)\n", <a href='../cgi-bin/global.cgi?pattern=skip_entries&amp;type=symbol' title='Multiple used in 11 places.'>skip_entries</a>);
+<a id='L39' name='L39'></a>  39 
+<a id='L40' name='L40'></a>  40         <a href='../S/256.html#L2106' title='Defined at 2106 in trace/trace.h.'>trace_iterator_reset</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>);
+<a id='L41' name='L41'></a>  41         <a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>.<a href='../cgi-bin/global.cgi?pattern=iter_flags&amp;type=symbol' title='Multiple used in 18 places.'>iter_flags</a> |= <a href='../cgi-bin/global.cgi?pattern=TRACE_FILE_LAT_FMT&amp;type=symbol' title='Multiple used in 7 places.'>TRACE_FILE_LAT_FMT</a>;
+<a id='L42' name='L42'></a>  42 
+<a id='L43' name='L43'></a>  43         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=cpu_file&amp;type=symbol' title='Multiple used in 65 places.'>cpu_file</a> == <a href='../cgi-bin/global.cgi?pattern=RING_BUFFER_ALL_CPUS&amp;type=symbol' title='Multiple used in 40 places.'>RING_BUFFER_ALL_CPUS</a>) <em class='brace'>{</em>
+<a id='L44' name='L44'></a>  44                 <a href='../S/256.html#L821' title='Defined at 821 in trace/trace.h.'>for_each_tracing_cpu</a>(<a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>) <em class='brace'>{</em>
+<a id='L45' name='L45'></a>  45                         <a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>.<a href='../cgi-bin/global.cgi?pattern=buffer_iter&amp;type=symbol' title='Multiple used in 20 places.'>buffer_iter</a>[<a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>] =
+<a id='L46' name='L46'></a>  46                         <a href='../S/258.html#L4702' title='Defined at 4702 in trace/ring_buffer.c.'>ring_buffer_read_prepare</a>(<a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>.<a href='../S/256.html#L194' title='Defined at 194 in trace/trace.h.'>array_buffer</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=buffer&amp;type=symbol' title='Multiple used in 1031 places.'>buffer</a>,
+<a id='L47' name='L47'></a>  47                                                  <a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>, <a href='../cgi-bin/global.cgi?pattern=GFP_ATOMIC&amp;type=symbol' title='Multiple used in 49 places.'>GFP_ATOMIC</a>);
+<a id='L48' name='L48'></a>  48                         <a href='../S/258.html#L4756' title='Defined at 4756 in trace/ring_buffer.c.'>ring_buffer_read_start</a>(<a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>.<a href='../cgi-bin/global.cgi?pattern=buffer_iter&amp;type=symbol' title='Multiple used in 20 places.'>buffer_iter</a>[<a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>]);
+<a id='L49' name='L49'></a>  49                         <a href='../S/271.html#L3631' title='Defined at 3631 in trace/trace.c.'>tracing_iter_reset</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>, <a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>);
+<a id='L50' name='L50'></a>  50                 <em class='brace'>}</em>
+<a id='L51' name='L51'></a>  51         <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L52' name='L52'></a>  52                 <a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>.<a href='../cgi-bin/global.cgi?pattern=cpu_file&amp;type=symbol' title='Multiple used in 65 places.'>cpu_file</a> = <a href='../cgi-bin/global.cgi?pattern=cpu_file&amp;type=symbol' title='Multiple used in 65 places.'>cpu_file</a>;
+<a id='L53' name='L53'></a>  53                 <a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>.<a href='../cgi-bin/global.cgi?pattern=buffer_iter&amp;type=symbol' title='Multiple used in 20 places.'>buffer_iter</a>[<a href='../cgi-bin/global.cgi?pattern=cpu_file&amp;type=symbol' title='Multiple used in 65 places.'>cpu_file</a>] =
+<a id='L54' name='L54'></a>  54                         <a href='../S/258.html#L4702' title='Defined at 4702 in trace/ring_buffer.c.'>ring_buffer_read_prepare</a>(<a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>.<a href='../S/256.html#L194' title='Defined at 194 in trace/trace.h.'>array_buffer</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=buffer&amp;type=symbol' title='Multiple used in 1031 places.'>buffer</a>,
+<a id='L55' name='L55'></a>  55                                                  <a href='../cgi-bin/global.cgi?pattern=cpu_file&amp;type=symbol' title='Multiple used in 65 places.'>cpu_file</a>, <a href='../cgi-bin/global.cgi?pattern=GFP_ATOMIC&amp;type=symbol' title='Multiple used in 49 places.'>GFP_ATOMIC</a>);
+<a id='L56' name='L56'></a>  56                 <a href='../S/258.html#L4756' title='Defined at 4756 in trace/ring_buffer.c.'>ring_buffer_read_start</a>(<a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>.<a href='../cgi-bin/global.cgi?pattern=buffer_iter&amp;type=symbol' title='Multiple used in 20 places.'>buffer_iter</a>[<a href='../cgi-bin/global.cgi?pattern=cpu_file&amp;type=symbol' title='Multiple used in 65 places.'>cpu_file</a>]);
+<a id='L57' name='L57'></a>  57                 <a href='../S/271.html#L3631' title='Defined at 3631 in trace/trace.c.'>tracing_iter_reset</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>, <a href='../cgi-bin/global.cgi?pattern=cpu_file&amp;type=symbol' title='Multiple used in 65 places.'>cpu_file</a>);
+<a id='L58' name='L58'></a>  58         <em class='brace'>}</em>
+<a id='L59' name='L59'></a>  59 
+<a id='L60' name='L60'></a>  60         <strong class='reserved'>while</strong> (<a href='../S/271.html#L3587' title='Defined at 3587 in trace/trace.c.'>trace_find_next_entry_inc</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>)) <em class='brace'>{</em>
+<a id='L61' name='L61'></a>  61                 <strong class='reserved'>if</strong> (!<a href='../cgi-bin/global.cgi?pattern=cnt&amp;type=symbol' title='Multiple used in 575 places.'>cnt</a>)
+<a id='L62' name='L62'></a>  62                         <a href='../S/57.html#L859' title='Defined at 859 in debug/kdb/kdb_io.c.'>kdb_printf</a>("---------------------------------\n");
+<a id='L63' name='L63'></a>  63                 <a href='../cgi-bin/global.cgi?pattern=cnt&amp;type=symbol' title='Multiple used in 575 places.'>cnt</a>++;
+<a id='L64' name='L64'></a>  64 
+<a id='L65' name='L65'></a>  65                 <strong class='reserved'>if</strong> (!<a href='../cgi-bin/global.cgi?pattern=skip_entries&amp;type=symbol' title='Multiple used in 11 places.'>skip_entries</a>) <em class='brace'>{</em>
+<a id='L66' name='L66'></a>  66                         <a href='../S/271.html#L4090' title='Defined at 4090 in trace/trace.c.'>print_trace_line</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>);
+<a id='L67' name='L67'></a>  67                         <a href='../S/271.html#L9264' title='Defined at 9264 in trace/trace.c.'>trace_printk_seq</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>.<a href='../cgi-bin/global.cgi?pattern=seq&amp;type=symbol' title='Multiple used in 806 places.'>seq</a>);
+<a id='L68' name='L68'></a>  68                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L69' name='L69'></a>  69                         <a href='../cgi-bin/global.cgi?pattern=skip_entries&amp;type=symbol' title='Multiple used in 11 places.'>skip_entries</a>--;
+<a id='L70' name='L70'></a>  70                 <em class='brace'>}</em>
+<a id='L71' name='L71'></a>  71 
+<a id='L72' name='L72'></a>  72                 <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=KDB_FLAG&amp;type=symbol' title='Multiple used in 11 places.'>KDB_FLAG</a>(<a href='../cgi-bin/global.cgi?pattern=CMD_INTERRUPT&amp;type=symbol' title='Multiple used in 11 places.'>CMD_INTERRUPT</a>))
+<a id='L73' name='L73'></a>  73                         <strong class='reserved'>goto</strong> <a href='../cgi-bin/global.cgi?pattern=out&amp;type=symbol' title='Multiple used in 1465 places.'>out</a>;
+<a id='L74' name='L74'></a>  74         <em class='brace'>}</em>
+<a id='L75' name='L75'></a>  75 
+<a id='L76' name='L76'></a>  76         <strong class='reserved'>if</strong> (!<a href='../cgi-bin/global.cgi?pattern=cnt&amp;type=symbol' title='Multiple used in 575 places.'>cnt</a>)
+<a id='L77' name='L77'></a>  77                 <a href='../S/57.html#L859' title='Defined at 859 in debug/kdb/kdb_io.c.'>kdb_printf</a>("   (ftrace buffer empty)\n");
+<a id='L78' name='L78'></a>  78         <strong class='reserved'>else</strong>
+<a id='L79' name='L79'></a>  79                 <a href='../S/57.html#L859' title='Defined at 859 in debug/kdb/kdb_io.c.'>kdb_printf</a>("---------------------------------\n");
+<a id='L80' name='L80'></a>  80 
+<a id='L81' name='L81'></a>  81 <a href='../cgi-bin/global.cgi?pattern=out&amp;type=symbol' title='Multiple used in 1465 places.'>out</a>:
+<a id='L82' name='L82'></a>  82         <a href='../cgi-bin/global.cgi?pattern=tr&amp;type=symbol' title='Multiple used in 2019 places.'>tr</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=trace_flags&amp;type=symbol' title='Multiple used in 82 places.'>trace_flags</a> = <a href='../cgi-bin/global.cgi?pattern=old_userobj&amp;type=symbol' title='Multiple used in 6 places.'>old_userobj</a>;
+<a id='L83' name='L83'></a>  83 
+<a id='L84' name='L84'></a>  84         <a href='../S/256.html#L821' title='Defined at 821 in trace/trace.h.'>for_each_tracing_cpu</a>(<a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>) <em class='brace'>{</em>
+<a id='L85' name='L85'></a>  85                 <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>.<a href='../cgi-bin/global.cgi?pattern=buffer_iter&amp;type=symbol' title='Multiple used in 20 places.'>buffer_iter</a>[<a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>]) <em class='brace'>{</em>
+<a id='L86' name='L86'></a>  86                         <a href='../S/258.html#L4782' title='Defined at 4782 in trace/ring_buffer.c.'>ring_buffer_read_finish</a>(<a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>.<a href='../cgi-bin/global.cgi?pattern=buffer_iter&amp;type=symbol' title='Multiple used in 20 places.'>buffer_iter</a>[<a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>]);
+<a id='L87' name='L87'></a>  87                         <a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>.<a href='../cgi-bin/global.cgi?pattern=buffer_iter&amp;type=symbol' title='Multiple used in 20 places.'>buffer_iter</a>[<a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>] = <a href='../cgi-bin/global.cgi?pattern=NULL&amp;type=symbol' title='Multiple used in 3516 places.'>NULL</a>;
+<a id='L88' name='L88'></a>  88                 <em class='brace'>}</em>
+<a id='L89' name='L89'></a>  89         <em class='brace'>}</em>
+<a id='L90' name='L90'></a>  90 <em class='brace'>}</em>
+<a id='L91' name='L91'></a>  91 
+<a id='L92' name='L92'></a>  92 <em class='comment'>/*</em>
+<a id='L93' name='L93'></a>  93 <em class='comment'> * kdb_ftdump - Dump the ftrace log buffer</em>
+<a id='L94' name='L94'></a>  94 <em class='comment'> */</em>
+<a id='L95' name='L95'></a>  95 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/280.html#L152' title='Referred from 152 in trace/trace_kdb.c.'>kdb_ftdump</a>(<strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=argc&amp;type=symbol' title='Multiple used in 188 places.'>argc</a>, <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> **<a href='../cgi-bin/global.cgi?pattern=argv&amp;type=symbol' title='Multiple used in 273 places.'>argv</a>)
+     <em class='comment'>/* <a href='#L23'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L150'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L23'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L150'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+95 trace/trace_kdb.c'  /> */</em>
+<a id='L96' name='L96'></a>  96 <em class='brace'>{</em>
+<a id='L97' name='L97'></a>  97         <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=skip_entries&amp;type=symbol' title='Multiple used in 11 places.'>skip_entries</a> = 0;
+<a id='L98' name='L98'></a>  98         <strong class='reserved'>long</strong> <a href='../cgi-bin/global.cgi?pattern=cpu_file&amp;type=symbol' title='Multiple used in 65 places.'>cpu_file</a>;
+<a id='L99' name='L99'></a>  99         <strong class='reserved'>char</strong> *<a href='../cgi-bin/global.cgi?pattern=cp&amp;type=symbol' title='Multiple used in 335 places.'>cp</a>;
+<a id='L100' name='L100'></a> 100         <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=cnt&amp;type=symbol' title='Multiple used in 575 places.'>cnt</a>;
+<a id='L101' name='L101'></a> 101         <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>;
+<a id='L102' name='L102'></a> 102 
+<a id='L103' name='L103'></a> 103         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=argc&amp;type=symbol' title='Multiple used in 188 places.'>argc</a> &gt; 2)
+<a id='L104' name='L104'></a> 104                 <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=KDB_ARGCOUNT&amp;type=symbol' title='Multiple used in 29 places.'>KDB_ARGCOUNT</a>;
+<a id='L105' name='L105'></a> 105 
+<a id='L106' name='L106'></a> 106         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=argc&amp;type=symbol' title='Multiple used in 188 places.'>argc</a>) <em class='brace'>{</em>
+<a id='L107' name='L107'></a> 107                 <a href='../cgi-bin/global.cgi?pattern=skip_entries&amp;type=symbol' title='Multiple used in 11 places.'>skip_entries</a> = <a href='../cgi-bin/global.cgi?pattern=simple_strtol&amp;type=symbol' title='Multiple used in 5 places.'>simple_strtol</a>(<a href='../cgi-bin/global.cgi?pattern=argv&amp;type=symbol' title='Multiple used in 273 places.'>argv</a>[1], &amp;<a href='../cgi-bin/global.cgi?pattern=cp&amp;type=symbol' title='Multiple used in 335 places.'>cp</a>, 0);
+<a id='L108' name='L108'></a> 108                 <strong class='reserved'>if</strong> (*<a href='../cgi-bin/global.cgi?pattern=cp&amp;type=symbol' title='Multiple used in 335 places.'>cp</a>)
+<a id='L109' name='L109'></a> 109                         <a href='../cgi-bin/global.cgi?pattern=skip_entries&amp;type=symbol' title='Multiple used in 11 places.'>skip_entries</a> = 0;
+<a id='L110' name='L110'></a> 110         <em class='brace'>}</em>
+<a id='L111' name='L111'></a> 111 
+<a id='L112' name='L112'></a> 112         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=argc&amp;type=symbol' title='Multiple used in 188 places.'>argc</a> == 2) <em class='brace'>{</em>
+<a id='L113' name='L113'></a> 113                 <a href='../cgi-bin/global.cgi?pattern=cpu_file&amp;type=symbol' title='Multiple used in 65 places.'>cpu_file</a> = <a href='../cgi-bin/global.cgi?pattern=simple_strtol&amp;type=symbol' title='Multiple used in 5 places.'>simple_strtol</a>(<a href='../cgi-bin/global.cgi?pattern=argv&amp;type=symbol' title='Multiple used in 273 places.'>argv</a>[2], &amp;<a href='../cgi-bin/global.cgi?pattern=cp&amp;type=symbol' title='Multiple used in 335 places.'>cp</a>, 0);
+<a id='L114' name='L114'></a> 114                 <strong class='reserved'>if</strong> (*<a href='../cgi-bin/global.cgi?pattern=cp&amp;type=symbol' title='Multiple used in 335 places.'>cp</a> || <a href='../cgi-bin/global.cgi?pattern=cpu_file&amp;type=symbol' title='Multiple used in 65 places.'>cpu_file</a> &gt;= <a href='../cgi-bin/global.cgi?pattern=NR_CPUS&amp;type=symbol' title='Multiple used in 21 places.'>NR_CPUS</a> || <a href='../cgi-bin/global.cgi?pattern=cpu_file&amp;type=symbol' title='Multiple used in 65 places.'>cpu_file</a> &lt; 0 ||
+<a id='L115' name='L115'></a> 115                     !<a href='../cgi-bin/global.cgi?pattern=cpu_online&amp;type=symbol' title='Multiple used in 49 places.'>cpu_online</a>(<a href='../cgi-bin/global.cgi?pattern=cpu_file&amp;type=symbol' title='Multiple used in 65 places.'>cpu_file</a>))
+<a id='L116' name='L116'></a> 116                         <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=KDB_BADINT&amp;type=symbol' title='Multiple used in 7 places.'>KDB_BADINT</a>;
+<a id='L117' name='L117'></a> 117         <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L118' name='L118'></a> 118                 <a href='../cgi-bin/global.cgi?pattern=cpu_file&amp;type=symbol' title='Multiple used in 65 places.'>cpu_file</a> = <a href='../cgi-bin/global.cgi?pattern=RING_BUFFER_ALL_CPUS&amp;type=symbol' title='Multiple used in 40 places.'>RING_BUFFER_ALL_CPUS</a>;
+<a id='L119' name='L119'></a> 119         <em class='brace'>}</em>
+<a id='L120' name='L120'></a> 120 
+<a id='L121' name='L121'></a> 121         <a href='../cgi-bin/global.cgi?pattern=kdb_trap_printk&amp;type=symbol' title='Multiple used in 10 places.'>kdb_trap_printk</a>++;
+<a id='L122' name='L122'></a> 122 
+<a id='L123' name='L123'></a> 123         <a href='../S/271.html#L9290' title='Defined at 9290 in trace/trace.c.'>trace_init_global_iter</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>);
+<a id='L124' name='L124'></a> 124         <a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>.<a href='../cgi-bin/global.cgi?pattern=buffer_iter&amp;type=symbol' title='Multiple used in 20 places.'>buffer_iter</a> = <a href='../cgi-bin/global.cgi?pattern=buffer_iter&amp;type=symbol' title='Multiple used in 20 places.'>buffer_iter</a>;
+<a id='L125' name='L125'></a> 125 
+<a id='L126' name='L126'></a> 126         <a href='../S/256.html#L821' title='Defined at 821 in trace/trace.h.'>for_each_tracing_cpu</a>(<a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>) <em class='brace'>{</em>
+<a id='L127' name='L127'></a> 127                 <a href='../cgi-bin/global.cgi?pattern=atomic_inc&amp;type=symbol' title='Multiple used in 121 places.'>atomic_inc</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=per_cpu_ptr&amp;type=symbol' title='Multiple used in 300 places.'>per_cpu_ptr</a>(<a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>.<a href='../S/256.html#L194' title='Defined at 194 in trace/trace.h.'>array_buffer</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=data&amp;type=symbol' title='Multiple used in 2604 places.'>data</a>, <a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>)-&gt;<a href='../cgi-bin/global.cgi?pattern=disabled&amp;type=symbol' title='Multiple used in 62 places.'>disabled</a>);
+<a id='L128' name='L128'></a> 128         <em class='brace'>}</em>
+<a id='L129' name='L129'></a> 129 
+<a id='L130' name='L130'></a> 130         <em class='comment'>/* A negative skip_entries means skip all but the last entries */</em>
+<a id='L131' name='L131'></a> 131         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=skip_entries&amp;type=symbol' title='Multiple used in 11 places.'>skip_entries</a> &lt; 0) <em class='brace'>{</em>
+<a id='L132' name='L132'></a> 132                 <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=cpu_file&amp;type=symbol' title='Multiple used in 65 places.'>cpu_file</a> == <a href='../cgi-bin/global.cgi?pattern=RING_BUFFER_ALL_CPUS&amp;type=symbol' title='Multiple used in 40 places.'>RING_BUFFER_ALL_CPUS</a>)
+<a id='L133' name='L133'></a> 133                         <a href='../cgi-bin/global.cgi?pattern=cnt&amp;type=symbol' title='Multiple used in 575 places.'>cnt</a> = <a href='../S/271.html#L3792' title='Defined at 3792 in trace/trace.c.'>trace_total_entries</a>(<a href='../cgi-bin/global.cgi?pattern=NULL&amp;type=symbol' title='Multiple used in 3516 places.'>NULL</a>);
+<a id='L134' name='L134'></a> 134                 <strong class='reserved'>else</strong>
+<a id='L135' name='L135'></a> 135                         <a href='../cgi-bin/global.cgi?pattern=cnt&amp;type=symbol' title='Multiple used in 575 places.'>cnt</a> = <a href='../S/271.html#L3780' title='Defined at 3780 in trace/trace.c.'>trace_total_entries_cpu</a>(<a href='../cgi-bin/global.cgi?pattern=NULL&amp;type=symbol' title='Multiple used in 3516 places.'>NULL</a>, <a href='../cgi-bin/global.cgi?pattern=cpu_file&amp;type=symbol' title='Multiple used in 65 places.'>cpu_file</a>);
+<a id='L136' name='L136'></a> 136                 <a href='../cgi-bin/global.cgi?pattern=skip_entries&amp;type=symbol' title='Multiple used in 11 places.'>skip_entries</a> = <a href='../cgi-bin/global.cgi?pattern=max&amp;type=symbol' title='Multiple used in 212 places.'>max</a>(<a href='../cgi-bin/global.cgi?pattern=cnt&amp;type=symbol' title='Multiple used in 575 places.'>cnt</a> + <a href='../cgi-bin/global.cgi?pattern=skip_entries&amp;type=symbol' title='Multiple used in 11 places.'>skip_entries</a>, 0);
+<a id='L137' name='L137'></a> 137         <em class='brace'>}</em>
+<a id='L138' name='L138'></a> 138 
+<a id='L139' name='L139'></a> 139         <a href='../S/280.html#L23' title='Defined at 23 in trace/trace_kdb.c.'>ftrace_dump_buf</a>(<a href='../cgi-bin/global.cgi?pattern=skip_entries&amp;type=symbol' title='Multiple used in 11 places.'>skip_entries</a>, <a href='../cgi-bin/global.cgi?pattern=cpu_file&amp;type=symbol' title='Multiple used in 65 places.'>cpu_file</a>);
+<a id='L140' name='L140'></a> 140 
+<a id='L141' name='L141'></a> 141         <a href='../S/256.html#L821' title='Defined at 821 in trace/trace.h.'>for_each_tracing_cpu</a>(<a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>) <em class='brace'>{</em>
+<a id='L142' name='L142'></a> 142                 <a href='../cgi-bin/global.cgi?pattern=atomic_dec&amp;type=symbol' title='Multiple used in 91 places.'>atomic_dec</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=per_cpu_ptr&amp;type=symbol' title='Multiple used in 300 places.'>per_cpu_ptr</a>(<a href='../cgi-bin/global.cgi?pattern=iter&amp;type=symbol' title='Multiple used in 1388 places.'>iter</a>.<a href='../S/256.html#L194' title='Defined at 194 in trace/trace.h.'>array_buffer</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=data&amp;type=symbol' title='Multiple used in 2604 places.'>data</a>, <a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>)-&gt;<a href='../cgi-bin/global.cgi?pattern=disabled&amp;type=symbol' title='Multiple used in 62 places.'>disabled</a>);
+<a id='L143' name='L143'></a> 143         <em class='brace'>}</em>
+<a id='L144' name='L144'></a> 144 
+<a id='L145' name='L145'></a> 145         <a href='../cgi-bin/global.cgi?pattern=kdb_trap_printk&amp;type=symbol' title='Multiple used in 10 places.'>kdb_trap_printk</a>--;
+<a id='L146' name='L146'></a> 146 
+<a id='L147' name='L147'></a> 147         <strong class='reserved'>return</strong> 0;
+<a id='L148' name='L148'></a> 148 <em class='brace'>}</em>
+<a id='L149' name='L149'></a> 149 
+<a id='L150' name='L150'></a> 150 <strong class='reserved'>static</strong> <a href='../cgi-bin/global.cgi?pattern=__init&amp;type=symbol' title='Multiple used in 557 places.'>__init</a> <strong class='reserved'>int</strong> <a href='../S/280.html#L158' title='Referred from 158 in trace/trace_kdb.c.'>kdb_ftrace_register</a>(<strong class='reserved'>void</strong>)
+     <em class='comment'>/* <a href='#L95'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L23'><img class='icon' src='../icons/first.png' alt='[first]' /></a><img class='icon' src='../icons/n_last.png' alt='[last]' /><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+150 trace/trace_kdb.c'  /> */</em>
+<a id='L151' name='L151'></a> 151 <em class='brace'>{</em>
+<a id='L152' name='L152'></a> 152         <a href='../S/60.html#L2663' title='Defined at 2663 in debug/kdb/kdb_main.c.'>kdb_register_flags</a>("ftdump", <a href='../S/280.html#L95' title='Defined at 95 in trace/trace_kdb.c.'>kdb_ftdump</a>, "[skip_#entries] [cpu]",
+<a id='L153' name='L153'></a> 153                             "Dump ftrace log; -skip dumps last #entries", 0,
+<a id='L154' name='L154'></a> 154                             <a href='../cgi-bin/global.cgi?pattern=KDB_ENABLE_ALWAYS_SAFE&amp;type=symbol' title='Multiple used in 13 places.'>KDB_ENABLE_ALWAYS_SAFE</a>);
+<a id='L155' name='L155'></a> 155         <strong class='reserved'>return</strong> 0;
+<a id='L156' name='L156'></a> 156 <em class='brace'>}</em>
+<a id='L157' name='L157'></a> 157 
+<a id='L158' name='L158'></a> 158 <a href='../cgi-bin/global.cgi?pattern=late_initcall&amp;type=symbol' title='Multiple used in 29 places.'>late_initcall</a>(<a href='../S/280.html#L150' title='Defined at 150 in trace/trace_kdb.c.'>kdb_ftrace_register</a>);
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L23'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L150'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><img class='icon' src='../icons/n_bottom.png' alt='[bottom]' /><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+158 trace/trace_kdb.c'  /> */</em>
+</body>
+</html>

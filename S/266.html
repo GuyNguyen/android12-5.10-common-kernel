@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>trace/trace_nop.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<!-- beginning of fixed guide -->
+<div id='guide'><ul>
+<li><a href='#L37'><img class='icon' src='../icons/first.png' alt='[^]' /></a></li>
+<li><a href='#L64'><img class='icon' src='../icons/last.png' alt='[v]' /></a></li>
+<li><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a></li>
+<li><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a></li>
+<li><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a></li>
+<li class='standout'><span><a href='../files/514.html'>trace</a>/trace_nop.c</span></li>
+</ul></div>
+<!-- end of fixed guide -->
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/514.html'>trace</a>/trace_nop.c</h2>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L37'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L64'><img class='icon' src='../icons/last.png' alt='[last]' /></a><img class='icon' src='../icons/n_top.png' alt='[top]' /><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+1 trace/trace_nop.c'  /> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L37' title='Defined at 37.'>start_nop_trace</a></li>
+<li><a href='#L42' title='Defined at 42.'>stop_nop_trace</a></li>
+<li><a href='#L47' title='Defined at 47.'>nop_trace_init</a></li>
+<li><a href='#L54' title='Defined at 54.'>nop_trace_reset</a></li>
+<li><a href='#L64' title='Defined at 64.'>nop_set_flag</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * nop tracer</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> *</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * Copyright (C) 2008 Steven Noonan &lt;steven@uplinklabs.net&gt;</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> *</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> */</em>
+<a id='L8' name='L8'></a>   8 
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> &lt;linux/module.h&gt;
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;linux/ftrace.h&gt;
+<a id='L11' name='L11'></a>  11 
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> "<a href='256.html'>trace.h</a>"
+<a id='L13' name='L13'></a>  13 
+<a id='L14' name='L14'></a>  14 <em class='comment'>/* Our two options */</em>
+<a id='L15' name='L15'></a>  15 <strong class='reserved'>enum</strong> <em class='brace'>{</em>
+<a id='L16' name='L16'></a>  16         <a href='../cgi-bin/global.cgi?pattern=TRACE_NOP_OPT_ACCEPT&amp;type=reference' title='Multiple referred from 2 places.'>TRACE_NOP_OPT_ACCEPT</a> = 0x1,
+<a id='L17' name='L17'></a>  17         <a href='../cgi-bin/global.cgi?pattern=TRACE_NOP_OPT_REFUSE&amp;type=reference' title='Multiple referred from 2 places.'>TRACE_NOP_OPT_REFUSE</a> = 0x2
+<a id='L18' name='L18'></a>  18 <em class='brace'>}</em>;
+<a id='L19' name='L19'></a>  19 
+<a id='L20' name='L20'></a>  20 <em class='comment'>/* Options for the tracer (see trace_options file) */</em>
+<a id='L21' name='L21'></a>  21 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../S/256.html#L471' title='Defined at 471 in trace/trace.h.'>tracer_opt</a> <a href='../cgi-bin/global.cgi?pattern=nop_opts&amp;type=symbol' title='Multiple used in 2 places.'>nop_opts</a>[] = <em class='brace'>{</em>
+<a id='L22' name='L22'></a>  22         <em class='comment'>/* Option that will be accepted by set_flag callback */</em>
+<a id='L23' name='L23'></a>  23         <em class='brace'>{</em> <a href='../S/256.html#L487' title='Defined at 487 in trace/trace.h.'>TRACER_OPT</a>(test_nop_accept, <a href='../S/266.html#L16' title='Defined at 16 in trace/trace_nop.c.'>TRACE_NOP_OPT_ACCEPT</a>) <em class='brace'>}</em>,
+<a id='L24' name='L24'></a>  24         <em class='comment'>/* Option that will be refused by set_flag callback */</em>
+<a id='L25' name='L25'></a>  25         <em class='brace'>{</em> <a href='../S/256.html#L487' title='Defined at 487 in trace/trace.h.'>TRACER_OPT</a>(test_nop_refuse, <a href='../S/266.html#L17' title='Defined at 17 in trace/trace_nop.c.'>TRACE_NOP_OPT_REFUSE</a>) <em class='brace'>}</em>,
+<a id='L26' name='L26'></a>  26         <em class='brace'>{</em> <em class='brace'>}</em> <em class='comment'>/* Always set a last empty entry */</em>
+<a id='L27' name='L27'></a>  27 <em class='brace'>}</em>;
+<a id='L28' name='L28'></a>  28 
+<a id='L29' name='L29'></a>  29 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../S/256.html#L480' title='Defined at 480 in trace/trace.h.'>tracer_flags</a> <a href='../cgi-bin/global.cgi?pattern=nop_flags&amp;type=symbol' title='Multiple used in 2 places.'>nop_flags</a> = <em class='brace'>{</em>
+<a id='L30' name='L30'></a>  30         <em class='comment'>/* You can check your flags value here when you want. */</em>
+<a id='L31' name='L31'></a>  31         .<a href='../cgi-bin/global.cgi?pattern=val&amp;type=symbol' title='Multiple used in 987 places.'>val</a> = 0, <em class='comment'>/* By default: all flags disabled */</em>
+<a id='L32' name='L32'></a>  32         .<a href='../cgi-bin/global.cgi?pattern=opts&amp;type=symbol' title='Multiple used in 38 places.'>opts</a> = <a href='../cgi-bin/global.cgi?pattern=nop_opts&amp;type=symbol' title='Multiple used in 2 places.'>nop_opts</a>
+<a id='L33' name='L33'></a>  33 <em class='brace'>}</em>;
+<a id='L34' name='L34'></a>  34 
+<a id='L35' name='L35'></a>  35 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../S/256.html#L288' title='Defined at 288 in trace/trace.h.'>trace_array</a>       *<a href='../cgi-bin/global.cgi?pattern=ctx_trace&amp;type=symbol' title='Multiple used in 2 places.'>ctx_trace</a>;
+<a id='L36' name='L36'></a>  36 
+<a id='L37' name='L37'></a>  37 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/266.html#L50' title='Referred from 50 in trace/trace_nop.c.'>start_nop_trace</a>(<strong class='reserved'>struct</strong> <a href='../S/256.html#L288' title='Defined at 288 in trace/trace.h.'>trace_array</a> *<a href='../cgi-bin/global.cgi?pattern=tr&amp;type=symbol' title='Multiple used in 2019 places.'>tr</a>)
+     <em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><a href='#L42'><img class='icon' src='../icons/right.png' alt='[next]' /></a><img class='icon' src='../icons/n_first.png' alt='[first]' /><a href='#L64'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+37 trace/trace_nop.c'  /> */</em>
+<a id='L38' name='L38'></a>  38 <em class='brace'>{</em>
+<a id='L39' name='L39'></a>  39         <em class='comment'>/* Nothing to do! */</em>
+<a id='L40' name='L40'></a>  40 <em class='brace'>}</em>
+<a id='L41' name='L41'></a>  41 
+<a id='L42' name='L42'></a>  42 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/266.html#L56' title='Referred from 56 in trace/trace_nop.c.'>stop_nop_trace</a>(<strong class='reserved'>struct</strong> <a href='../S/256.html#L288' title='Defined at 288 in trace/trace.h.'>trace_array</a> *<a href='../cgi-bin/global.cgi?pattern=tr&amp;type=symbol' title='Multiple used in 2019 places.'>tr</a>)
+     <em class='comment'>/* <a href='#L37'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L47'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L37'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L64'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+42 trace/trace_nop.c'  /> */</em>
+<a id='L43' name='L43'></a>  43 <em class='brace'>{</em>
+<a id='L44' name='L44'></a>  44         <em class='comment'>/* Nothing to do! */</em>
+<a id='L45' name='L45'></a>  45 <em class='brace'>}</em>
+<a id='L46' name='L46'></a>  46 
+<a id='L47' name='L47'></a>  47 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/266.html#L91' title='Referred from 91 in trace/trace_nop.c.'>nop_trace_init</a>(<strong class='reserved'>struct</strong> <a href='../S/256.html#L288' title='Defined at 288 in trace/trace.h.'>trace_array</a> *<a href='../cgi-bin/global.cgi?pattern=tr&amp;type=symbol' title='Multiple used in 2019 places.'>tr</a>)
+     <em class='comment'>/* <a href='#L42'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L54'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L37'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L64'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+47 trace/trace_nop.c'  /> */</em>
+<a id='L48' name='L48'></a>  48 <em class='brace'>{</em>
+<a id='L49' name='L49'></a>  49         <a href='../cgi-bin/global.cgi?pattern=ctx_trace&amp;type=symbol' title='Multiple used in 2 places.'>ctx_trace</a> = <a href='../cgi-bin/global.cgi?pattern=tr&amp;type=symbol' title='Multiple used in 2019 places.'>tr</a>;
+<a id='L50' name='L50'></a>  50         <a href='../S/266.html#L37' title='Defined at 37 in trace/trace_nop.c.'>start_nop_trace</a>(<a href='../cgi-bin/global.cgi?pattern=tr&amp;type=symbol' title='Multiple used in 2019 places.'>tr</a>);
+<a id='L51' name='L51'></a>  51         <strong class='reserved'>return</strong> 0;
+<a id='L52' name='L52'></a>  52 <em class='brace'>}</em>
+<a id='L53' name='L53'></a>  53 
+<a id='L54' name='L54'></a>  54 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/266.html#L92' title='Referred from 92 in trace/trace_nop.c.'>nop_trace_reset</a>(<strong class='reserved'>struct</strong> <a href='../S/256.html#L288' title='Defined at 288 in trace/trace.h.'>trace_array</a> *<a href='../cgi-bin/global.cgi?pattern=tr&amp;type=symbol' title='Multiple used in 2019 places.'>tr</a>)
+     <em class='comment'>/* <a href='#L47'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L64'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L37'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L64'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+54 trace/trace_nop.c'  /> */</em>
+<a id='L55' name='L55'></a>  55 <em class='brace'>{</em>
+<a id='L56' name='L56'></a>  56         <a href='../S/266.html#L42' title='Defined at 42 in trace/trace_nop.c.'>stop_nop_trace</a>(<a href='../cgi-bin/global.cgi?pattern=tr&amp;type=symbol' title='Multiple used in 2019 places.'>tr</a>);
+<a id='L57' name='L57'></a>  57 <em class='brace'>}</em>
+<a id='L58' name='L58'></a>  58 
+<a id='L59' name='L59'></a>  59 <em class='comment'>/* It only serves as a signal handler and a callback to</em>
+<a id='L60' name='L60'></a>  60 <em class='comment'> * accept or refuse the setting of a flag.</em>
+<a id='L61' name='L61'></a>  61 <em class='comment'> * If you don't implement it, then the flag setting will be</em>
+<a id='L62' name='L62'></a>  62 <em class='comment'> * automatically accepted.</em>
+<a id='L63' name='L63'></a>  63 <em class='comment'> */</em>
+<a id='L64' name='L64'></a>  64 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/266.html#L97' title='Referred from 97 in trace/trace_nop.c.'>nop_set_flag</a>(<strong class='reserved'>struct</strong> <a href='../S/256.html#L288' title='Defined at 288 in trace/trace.h.'>trace_array</a> *<a href='../cgi-bin/global.cgi?pattern=tr&amp;type=symbol' title='Multiple used in 2019 places.'>tr</a>, <a href='../cgi-bin/global.cgi?pattern=u32&amp;type=symbol' title='Multiple used in 1371 places.'>u32</a> <a href='../cgi-bin/global.cgi?pattern=old_flags&amp;type=symbol' title='Multiple used in 12 places.'>old_flags</a>, <a href='../cgi-bin/global.cgi?pattern=u32&amp;type=symbol' title='Multiple used in 1371 places.'>u32</a> <a href='../cgi-bin/global.cgi?pattern=bit&amp;type=symbol' title='Multiple used in 205 places.'>bit</a>, <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=set&amp;type=symbol' title='Multiple used in 175 places.'>set</a>)
+     <em class='comment'>/* <a href='#L54'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L37'><img class='icon' src='../icons/first.png' alt='[first]' /></a><img class='icon' src='../icons/n_last.png' alt='[last]' /><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+64 trace/trace_nop.c'  /> */</em>
+<a id='L65' name='L65'></a>  65 <em class='brace'>{</em>
+<a id='L66' name='L66'></a>  66         <em class='comment'>/*</em>
+<a id='L67' name='L67'></a>  67 <em class='comment'>         * Note that you don't need to update nop_flags.val yourself.</em>
+<a id='L68' name='L68'></a>  68 <em class='comment'>         * The tracing Api will do it automatically if you return 0</em>
+<a id='L69' name='L69'></a>  69 <em class='comment'>         */</em>
+<a id='L70' name='L70'></a>  70         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=bit&amp;type=symbol' title='Multiple used in 205 places.'>bit</a> == <a href='../S/266.html#L16' title='Defined at 16 in trace/trace_nop.c.'>TRACE_NOP_OPT_ACCEPT</a>) <em class='brace'>{</em>
+<a id='L71' name='L71'></a>  71                 <a href='../S/6.html#L2101' title='Defined at 2101 in printk/printk.c.'>printk</a>(<a href='../cgi-bin/global.cgi?pattern=KERN_DEBUG&amp;type=symbol' title='Multiple used in 16 places.'>KERN_DEBUG</a> "nop_test_accept flag set to %d: we accept."
+<a id='L72' name='L72'></a>  72                         " Now cat trace_options to see the result\n",
+<a id='L73' name='L73'></a>  73                         <a href='../cgi-bin/global.cgi?pattern=set&amp;type=symbol' title='Multiple used in 175 places.'>set</a>);
+<a id='L74' name='L74'></a>  74                 <strong class='reserved'>return</strong> 0;
+<a id='L75' name='L75'></a>  75         <em class='brace'>}</em>
+<a id='L76' name='L76'></a>  76 
+<a id='L77' name='L77'></a>  77         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=bit&amp;type=symbol' title='Multiple used in 205 places.'>bit</a> == <a href='../S/266.html#L17' title='Defined at 17 in trace/trace_nop.c.'>TRACE_NOP_OPT_REFUSE</a>) <em class='brace'>{</em>
+<a id='L78' name='L78'></a>  78                 <a href='../S/6.html#L2101' title='Defined at 2101 in printk/printk.c.'>printk</a>(<a href='../cgi-bin/global.cgi?pattern=KERN_DEBUG&amp;type=symbol' title='Multiple used in 16 places.'>KERN_DEBUG</a> "nop_test_refuse flag set to %d: we refuse."
+<a id='L79' name='L79'></a>  79                         " Now cat trace_options to see the result\n",
+<a id='L80' name='L80'></a>  80                         <a href='../cgi-bin/global.cgi?pattern=set&amp;type=symbol' title='Multiple used in 175 places.'>set</a>);
+<a id='L81' name='L81'></a>  81                 <strong class='reserved'>return</strong> -<a href='../cgi-bin/global.cgi?pattern=EINVAL&amp;type=symbol' title='Multiple used in 1964 places.'>EINVAL</a>;
+<a id='L82' name='L82'></a>  82         <em class='brace'>}</em>
+<a id='L83' name='L83'></a>  83 
+<a id='L84' name='L84'></a>  84         <strong class='reserved'>return</strong> 0;
+<a id='L85' name='L85'></a>  85 <em class='brace'>}</em>
+<a id='L86' name='L86'></a>  86 
+<a id='L87' name='L87'></a>  87 
+<a id='L88' name='L88'></a>  88 <strong class='reserved'>struct</strong> <a href='../S/256.html#L517' title='Defined at 517 in trace/trace.h.'>tracer</a> <a href='../cgi-bin/global.cgi?pattern=nop_trace&amp;type=symbol' title='Multiple used in 10 places.'>nop_trace</a> <a href='../cgi-bin/global.cgi?pattern=__read_mostly&amp;type=symbol' title='Multiple used in 179 places.'>__read_mostly</a> =
+<a id='L89' name='L89'></a>  89 <em class='brace'>{</em>
+<a id='L90' name='L90'></a>  90         .<a href='../cgi-bin/global.cgi?pattern=name&amp;type=symbol' title='Multiple used in 1868 places.'>name</a>           = "nop",
+<a id='L91' name='L91'></a>  91         .<a href='../cgi-bin/global.cgi?pattern=init&amp;type=symbol' title='Multiple used in 115 places.'>init</a>           = <a href='../S/266.html#L47' title='Defined at 47 in trace/trace_nop.c.'>nop_trace_init</a>,
+<a id='L92' name='L92'></a>  92         .<a href='../cgi-bin/global.cgi?pattern=reset&amp;type=symbol' title='Multiple used in 58 places.'>reset</a>          = <a href='../S/266.html#L54' title='Defined at 54 in trace/trace_nop.c.'>nop_trace_reset</a>,
+<a id='L93' name='L93'></a>  93 <em class='sharp'>#ifdef</em> <a href='../cgi-bin/global.cgi?pattern=CONFIG_FTRACE_SELFTEST&amp;type=symbol' title='Multiple used in 11 places.'>CONFIG_FTRACE_SELFTEST</a>
+<a id='L94' name='L94'></a>  94         .<a href='../cgi-bin/global.cgi?pattern=selftest&amp;type=symbol' title='Multiple used in 18 places.'>selftest</a>       = <a href='../S/319.html#L1038' title='Defined at 1038 in trace/trace_selftest.c.'>trace_selftest_startup_nop</a>,
+<a id='L95' name='L95'></a>  95 <em class='sharp'>#endif</em>
+<a id='L96' name='L96'></a>  96         .<a href='../cgi-bin/global.cgi?pattern=flags&amp;type=symbol' title='Multiple used in 4690 places.'>flags</a>          = &amp;<a href='../cgi-bin/global.cgi?pattern=nop_flags&amp;type=symbol' title='Multiple used in 2 places.'>nop_flags</a>,
+<a id='L97' name='L97'></a>  97         .<a href='../cgi-bin/global.cgi?pattern=set_flag&amp;type=symbol' title='Multiple used in 8 places.'>set_flag</a>       = <a href='../S/266.html#L64' title='Defined at 64 in trace/trace_nop.c.'>nop_set_flag</a>,
+<a id='L98' name='L98'></a>  98         .<a href='../cgi-bin/global.cgi?pattern=allow_instances&amp;type=symbol' title='Multiple used in 11 places.'>allow_instances</a> = <a href='../cgi-bin/global.cgi?pattern=true&amp;type=symbol' title='Multiple used in 1476 places.'>true</a>,
+<a id='L99' name='L99'></a>  99 <em class='brace'>}</em>;
+<a id='L100' name='L100'></a> 100 
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L37'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L64'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><img class='icon' src='../icons/n_bottom.png' alt='[bottom]' /><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+100 trace/trace_nop.c'  /> */</em>
+</body>
+</html>
