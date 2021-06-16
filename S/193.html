@@ -1,0 +1,337 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>latencytop.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<!-- beginning of fixed guide -->
+<div id='guide'><ul>
+<li><a href='#L66'><img class='icon' src='../icons/first.png' alt='[^]' /></a></li>
+<li><a href='#L272'><img class='icon' src='../icons/last.png' alt='[v]' /></a></li>
+<li><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a></li>
+<li><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a></li>
+<li><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a></li>
+<li class='standout'><span>latencytop.c</span></li>
+</ul></div>
+<!-- end of fixed guide -->
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/latencytop.c</h2>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L66'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L272'><img class='icon' src='../icons/last.png' alt='[last]' /></a><img class='icon' src='../icons/n_top.png' alt='[top]' /><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+1 latencytop.c'  /> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L66' title='Defined at 66.'>clear_tsk_latency_tracing</a></li>
+<li><a href='#L76' title='Defined at 76.'>clear_global_latency_tracing</a></li>
+<li><a href='#L86' title='Defined at 86.'>account_global_scheduler_latency</a></li>
+<li><a href='#L151' title='Defined at 151.'>__account_scheduler_latency</a></li>
+<li><a href='#L217' title='Defined at 217.'>lstats_show</a></li>
+<li><a href='#L245' title='Defined at 245.'>lstats_write</a></li>
+<li><a href='#L253' title='Defined at 253.'>lstats_open</a></li>
+<li><a href='#L266' title='Defined at 266.'>init_lstats_procfs</a></li>
+<li><a href='#L272' title='Defined at 272.'>sysctl_latencytop</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0-only</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * latencytop.c: Latency display infrastructure</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> *</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * (C) Copyright 2008 Intel Corporation</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> * Author: Arjan van de Ven &lt;arjan@linux.intel.com&gt;</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> */</em>
+<a id='L8' name='L8'></a>   8 
+<a id='L9' name='L9'></a>   9 <em class='comment'>/*</em>
+<a id='L10' name='L10'></a>  10 <em class='comment'> * CONFIG_LATENCYTOP enables a kernel latency tracking infrastructure that is</em>
+<a id='L11' name='L11'></a>  11 <em class='comment'> * used by the "latencytop" userspace tool. The latency that is tracked is not</em>
+<a id='L12' name='L12'></a>  12 <em class='comment'> * the 'traditional' interrupt latency (which is primarily caused by something</em>
+<a id='L13' name='L13'></a>  13 <em class='comment'> * else consuming CPU), but instead, it is the latency an application encounters</em>
+<a id='L14' name='L14'></a>  14 <em class='comment'> * because the kernel sleeps on its behalf for various reasons.</em>
+<a id='L15' name='L15'></a>  15 <em class='comment'> *</em>
+<a id='L16' name='L16'></a>  16 <em class='comment'> * This code tracks 2 levels of statistics:</em>
+<a id='L17' name='L17'></a>  17 <em class='comment'> * 1) System level latency</em>
+<a id='L18' name='L18'></a>  18 <em class='comment'> * 2) Per process latency</em>
+<a id='L19' name='L19'></a>  19 <em class='comment'> *</em>
+<a id='L20' name='L20'></a>  20 <em class='comment'> * The latency is stored in fixed sized data structures in an accumulated form;</em>
+<a id='L21' name='L21'></a>  21 <em class='comment'> * if the "same" latency cause is hit twice, this will be tracked as one entry</em>
+<a id='L22' name='L22'></a>  22 <em class='comment'> * in the data structure. Both the count, total accumulated latency and maximum</em>
+<a id='L23' name='L23'></a>  23 <em class='comment'> * latency are tracked in this data structure. When the fixed size structure is</em>
+<a id='L24' name='L24'></a>  24 <em class='comment'> * full, no new causes are tracked until the buffer is flushed by writing to</em>
+<a id='L25' name='L25'></a>  25 <em class='comment'> * the /proc file; the userspace tool does this on a regular basis.</em>
+<a id='L26' name='L26'></a>  26 <em class='comment'> *</em>
+<a id='L27' name='L27'></a>  27 <em class='comment'> * A latency cause is identified by a stringified backtrace at the point that</em>
+<a id='L28' name='L28'></a>  28 <em class='comment'> * the scheduler gets invoked. The userland tool will use this string to</em>
+<a id='L29' name='L29'></a>  29 <em class='comment'> * identify the cause of the latency in human readable form.</em>
+<a id='L30' name='L30'></a>  30 <em class='comment'> *</em>
+<a id='L31' name='L31'></a>  31 <em class='comment'> * The information is exported via /proc/latency_stats and /proc/&lt;pid&gt;/latency.</em>
+<a id='L32' name='L32'></a>  32 <em class='comment'> * These files look like this:</em>
+<a id='L33' name='L33'></a>  33 <em class='comment'> *</em>
+<a id='L34' name='L34'></a>  34 <em class='comment'> * Latency Top version : v0.1</em>
+<a id='L35' name='L35'></a>  35 <em class='comment'> * 70 59433 4897 i915_irq_wait drm_ioctl vfs_ioctl do_vfs_ioctl sys_ioctl</em>
+<a id='L36' name='L36'></a>  36 <em class='comment'> * |    |    |    |</em>
+<a id='L37' name='L37'></a>  37 <em class='comment'> * |    |    |    +----&gt; the stringified backtrace</em>
+<a id='L38' name='L38'></a>  38 <em class='comment'> * |    |    +---------&gt; The maximum latency for this entry in microseconds</em>
+<a id='L39' name='L39'></a>  39 <em class='comment'> * |    +--------------&gt; The accumulated latency for this entry (microseconds)</em>
+<a id='L40' name='L40'></a>  40 <em class='comment'> * +-------------------&gt; The number of times this entry is hit</em>
+<a id='L41' name='L41'></a>  41 <em class='comment'> *</em>
+<a id='L42' name='L42'></a>  42 <em class='comment'> * (note: the average latency is the accumulated latency divided by the number</em>
+<a id='L43' name='L43'></a>  43 <em class='comment'> * of times)</em>
+<a id='L44' name='L44'></a>  44 <em class='comment'> */</em>
+<a id='L45' name='L45'></a>  45 
+<a id='L46' name='L46'></a>  46 <em class='sharp'>#include</em> &lt;linux/kallsyms.h&gt;
+<a id='L47' name='L47'></a>  47 <em class='sharp'>#include</em> &lt;linux/seq_file.h&gt;
+<a id='L48' name='L48'></a>  48 <em class='sharp'>#include</em> &lt;linux/notifier.h&gt;
+<a id='L49' name='L49'></a>  49 <em class='sharp'>#include</em> &lt;linux/spinlock.h&gt;
+<a id='L50' name='L50'></a>  50 <em class='sharp'>#include</em> &lt;linux/proc_fs.h&gt;
+<a id='L51' name='L51'></a>  51 <em class='sharp'>#include</em> &lt;linux/latencytop.h&gt;
+<a id='L52' name='L52'></a>  52 <em class='sharp'>#include</em> &lt;linux/export.h&gt;
+<a id='L53' name='L53'></a>  53 <em class='sharp'>#include</em> &lt;<a href='447.html'>linux/sched.h</a>&gt;
+<a id='L54' name='L54'></a>  54 <em class='sharp'>#include</em> &lt;<a href='../I/118.html'>linux/sched/debug.h</a>&gt;
+<a id='L55' name='L55'></a>  55 <em class='sharp'>#include</em> &lt;linux/sched/stat.h&gt;
+<a id='L56' name='L56'></a>  56 <em class='sharp'>#include</em> &lt;linux/list.h&gt;
+<a id='L57' name='L57'></a>  57 <em class='sharp'>#include</em> &lt;linux/stacktrace.h&gt;
+<a id='L58' name='L58'></a>  58 
+<a id='L59' name='L59'></a>  59 <strong class='reserved'>static</strong> <a href='../cgi-bin/global.cgi?pattern=DEFINE_RAW_SPINLOCK&amp;type=symbol' title='Multiple used in 19 places.'>DEFINE_RAW_SPINLOCK</a>(<a href='../cgi-bin/global.cgi?pattern=latency_lock&amp;type=symbol' title='Multiple used in 7 places.'>latency_lock</a>);
+<a id='L60' name='L60'></a>  60 
+<a id='L61' name='L61'></a>  61 <em class='sharp'>#define</em> <a href='../cgi-bin/global.cgi?pattern=MAXLR&amp;type=reference' title='Multiple referred from 5 places.'>MAXLR</a> 128
+<a id='L62' name='L62'></a>  62 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a> <a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a>[<a href='../S/193.html#L61' title='Defined at 61 in latencytop.c.'>MAXLR</a>];
+<a id='L63' name='L63'></a>  63 
+<a id='L64' name='L64'></a>  64 <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=latencytop_enabled&amp;type=symbol' title='Multiple used in 3 places.'>latencytop_enabled</a>;
+<a id='L65' name='L65'></a>  65 
+<a id='L66' name='L66'></a>  66 <strong class='reserved'>void</strong> <a href='../S/48.html#L2212' title='Referred from 2212 in fork.c.'>clear_tsk_latency_tracing</a>(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=task_struct&amp;type=symbol' title='Multiple used in 1729 places.'>task_struct</a> *<a href='../cgi-bin/global.cgi?pattern=p&amp;type=symbol' title='Multiple used in 3890 places.'>p</a>)
+     <em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><a href='#L76'><img class='icon' src='../icons/right.png' alt='[next]' /></a><img class='icon' src='../icons/n_first.png' alt='[first]' /><a href='#L272'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+66 latencytop.c'  /> */</em>
+<a id='L67' name='L67'></a>  67 <em class='brace'>{</em>
+<a id='L68' name='L68'></a>  68         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <a href='../cgi-bin/global.cgi?pattern=flags&amp;type=symbol' title='Multiple used in 4690 places.'>flags</a>;
+<a id='L69' name='L69'></a>  69 
+<a id='L70' name='L70'></a>  70         <a href='../cgi-bin/global.cgi?pattern=raw_spin_lock_irqsave&amp;type=symbol' title='Multiple used in 190 places.'>raw_spin_lock_irqsave</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=latency_lock&amp;type=symbol' title='Multiple used in 7 places.'>latency_lock</a>, <a href='../cgi-bin/global.cgi?pattern=flags&amp;type=symbol' title='Multiple used in 4690 places.'>flags</a>);
+<a id='L71' name='L71'></a>  71         <a href='../cgi-bin/global.cgi?pattern=memset&amp;type=symbol' title='Multiple used in 227 places.'>memset</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=p&amp;type=symbol' title='Multiple used in 3890 places.'>p</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a>, 0, <strong class='reserved'>sizeof</strong>(<a href='../cgi-bin/global.cgi?pattern=p&amp;type=symbol' title='Multiple used in 3890 places.'>p</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a>));
+<a id='L72' name='L72'></a>  72         <a href='../cgi-bin/global.cgi?pattern=p&amp;type=symbol' title='Multiple used in 3890 places.'>p</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=latency_record_count&amp;type=symbol' title='Multiple used in 4 places.'>latency_record_count</a> = 0;
+<a id='L73' name='L73'></a>  73         <a href='../cgi-bin/global.cgi?pattern=raw_spin_unlock_irqrestore&amp;type=symbol' title='Multiple used in 218 places.'>raw_spin_unlock_irqrestore</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=latency_lock&amp;type=symbol' title='Multiple used in 7 places.'>latency_lock</a>, <a href='../cgi-bin/global.cgi?pattern=flags&amp;type=symbol' title='Multiple used in 4690 places.'>flags</a>);
+<a id='L74' name='L74'></a>  74 <em class='brace'>}</em>
+<a id='L75' name='L75'></a>  75 
+<a id='L76' name='L76'></a>  76 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/193.html#L248' title='Referred from 248 in latencytop.c.'>clear_global_latency_tracing</a>(<strong class='reserved'>void</strong>)
+     <em class='comment'>/* <a href='#L66'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L86'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L66'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L272'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+76 latencytop.c'  /> */</em>
+<a id='L77' name='L77'></a>  77 <em class='brace'>{</em>
+<a id='L78' name='L78'></a>  78         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <a href='../cgi-bin/global.cgi?pattern=flags&amp;type=symbol' title='Multiple used in 4690 places.'>flags</a>;
+<a id='L79' name='L79'></a>  79 
+<a id='L80' name='L80'></a>  80         <a href='../cgi-bin/global.cgi?pattern=raw_spin_lock_irqsave&amp;type=symbol' title='Multiple used in 190 places.'>raw_spin_lock_irqsave</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=latency_lock&amp;type=symbol' title='Multiple used in 7 places.'>latency_lock</a>, <a href='../cgi-bin/global.cgi?pattern=flags&amp;type=symbol' title='Multiple used in 4690 places.'>flags</a>);
+<a id='L81' name='L81'></a>  81         <a href='../cgi-bin/global.cgi?pattern=memset&amp;type=symbol' title='Multiple used in 227 places.'>memset</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a>, 0, <strong class='reserved'>sizeof</strong>(<a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a>));
+<a id='L82' name='L82'></a>  82         <a href='../cgi-bin/global.cgi?pattern=raw_spin_unlock_irqrestore&amp;type=symbol' title='Multiple used in 218 places.'>raw_spin_unlock_irqrestore</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=latency_lock&amp;type=symbol' title='Multiple used in 7 places.'>latency_lock</a>, <a href='../cgi-bin/global.cgi?pattern=flags&amp;type=symbol' title='Multiple used in 4690 places.'>flags</a>);
+<a id='L83' name='L83'></a>  83 <em class='brace'>}</em>
+<a id='L84' name='L84'></a>  84 
+<a id='L85' name='L85'></a>  85 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../cgi-bin/global.cgi?pattern=__sched&amp;type=symbol' title='Multiple used in 113 places.'>__sched</a>
+<a id='L86' name='L86'></a>  86 <a href='../S/193.html#L175' title='Referred from 175 in latencytop.c.'>account_global_scheduler_latency</a>(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=task_struct&amp;type=symbol' title='Multiple used in 1729 places.'>task_struct</a> *<a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>,
+     <em class='comment'>/* <a href='#L76'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L151'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L66'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L272'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+86 latencytop.c'  /> */</em>
+<a id='L87' name='L87'></a>  87                                  <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a> *<a href='../cgi-bin/global.cgi?pattern=lat&amp;type=symbol' title='Multiple used in 22 places.'>lat</a>)
+<a id='L88' name='L88'></a>  88 <em class='brace'>{</em>
+<a id='L89' name='L89'></a>  89         <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=firstnonnull&amp;type=symbol' title='Multiple used in 4 places.'>firstnonnull</a> = <a href='../S/193.html#L61' title='Defined at 61 in latencytop.c.'>MAXLR</a> + 1;
+<a id='L90' name='L90'></a>  90         <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>;
+<a id='L91' name='L91'></a>  91 
+<a id='L92' name='L92'></a>  92         <em class='comment'>/* skip kernel threads for now */</em>
+<a id='L93' name='L93'></a>  93         <strong class='reserved'>if</strong> (!<a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=mm&amp;type=symbol' title='Multiple used in 602 places.'>mm</a>)
+<a id='L94' name='L94'></a>  94                 <strong class='reserved'>return</strong>;
+<a id='L95' name='L95'></a>  95 
+<a id='L96' name='L96'></a>  96         <strong class='reserved'>for</strong> (<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a> = 0; <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a> &lt; <a href='../S/193.html#L61' title='Defined at 61 in latencytop.c.'>MAXLR</a>; <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>++) <em class='brace'>{</em>
+<a id='L97' name='L97'></a>  97                 <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=q&amp;type=symbol' title='Multiple used in 431 places.'>q</a>, <a href='../cgi-bin/global.cgi?pattern=same&amp;type=symbol' title='Multiple used in 6 places.'>same</a> = 1;
+<a id='L98' name='L98'></a>  98 
+<a id='L99' name='L99'></a>  99                 <em class='comment'>/* Nothing stored: */</em>
+<a id='L100' name='L100'></a> 100                 <strong class='reserved'>if</strong> (!<a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a>[<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>].<a href='../cgi-bin/global.cgi?pattern=backtrace&amp;type=symbol' title='Multiple used in 8 places.'>backtrace</a>[0]) <em class='brace'>{</em>
+<a id='L101' name='L101'></a> 101                         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=firstnonnull&amp;type=symbol' title='Multiple used in 4 places.'>firstnonnull</a> &gt; <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>)
+<a id='L102' name='L102'></a> 102                                 <a href='../cgi-bin/global.cgi?pattern=firstnonnull&amp;type=symbol' title='Multiple used in 4 places.'>firstnonnull</a> = <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>;
+<a id='L103' name='L103'></a> 103                         <strong class='reserved'>continue</strong>;
+<a id='L104' name='L104'></a> 104                 <em class='brace'>}</em>
+<a id='L105' name='L105'></a> 105                 <strong class='reserved'>for</strong> (<a href='../cgi-bin/global.cgi?pattern=q&amp;type=symbol' title='Multiple used in 431 places.'>q</a> = 0; <a href='../cgi-bin/global.cgi?pattern=q&amp;type=symbol' title='Multiple used in 431 places.'>q</a> &lt; <a href='../cgi-bin/global.cgi?pattern=LT_BACKTRACEDEPTH&amp;type=symbol' title='Multiple used in 4 places.'>LT_BACKTRACEDEPTH</a>; <a href='../cgi-bin/global.cgi?pattern=q&amp;type=symbol' title='Multiple used in 431 places.'>q</a>++) <em class='brace'>{</em>
+<a id='L106' name='L106'></a> 106                         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <a href='../cgi-bin/global.cgi?pattern=record&amp;type=symbol' title='Multiple used in 17 places.'>record</a> = <a href='../cgi-bin/global.cgi?pattern=lat&amp;type=symbol' title='Multiple used in 22 places.'>lat</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=backtrace&amp;type=symbol' title='Multiple used in 8 places.'>backtrace</a>[<a href='../cgi-bin/global.cgi?pattern=q&amp;type=symbol' title='Multiple used in 431 places.'>q</a>];
+<a id='L107' name='L107'></a> 107 
+<a id='L108' name='L108'></a> 108                         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a>[<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>].<a href='../cgi-bin/global.cgi?pattern=backtrace&amp;type=symbol' title='Multiple used in 8 places.'>backtrace</a>[<a href='../cgi-bin/global.cgi?pattern=q&amp;type=symbol' title='Multiple used in 431 places.'>q</a>] != <a href='../cgi-bin/global.cgi?pattern=record&amp;type=symbol' title='Multiple used in 17 places.'>record</a>) <em class='brace'>{</em>
+<a id='L109' name='L109'></a> 109                                 <a href='../cgi-bin/global.cgi?pattern=same&amp;type=symbol' title='Multiple used in 6 places.'>same</a> = 0;
+<a id='L110' name='L110'></a> 110                                 <strong class='reserved'>break</strong>;
+<a id='L111' name='L111'></a> 111                         <em class='brace'>}</em>
+<a id='L112' name='L112'></a> 112 
+<a id='L113' name='L113'></a> 113                         <em class='comment'>/* 0 entry marks end of backtrace: */</em>
+<a id='L114' name='L114'></a> 114                         <strong class='reserved'>if</strong> (!<a href='../cgi-bin/global.cgi?pattern=record&amp;type=symbol' title='Multiple used in 17 places.'>record</a>)
+<a id='L115' name='L115'></a> 115                                 <strong class='reserved'>break</strong>;
+<a id='L116' name='L116'></a> 116                 <em class='brace'>}</em>
+<a id='L117' name='L117'></a> 117                 <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=same&amp;type=symbol' title='Multiple used in 6 places.'>same</a>) <em class='brace'>{</em>
+<a id='L118' name='L118'></a> 118                         <a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a>[<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>].<a href='../cgi-bin/global.cgi?pattern=count&amp;type=symbol' title='Multiple used in 1028 places.'>count</a>++;
+<a id='L119' name='L119'></a> 119                         <a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a>[<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>].<a href='../cgi-bin/global.cgi?pattern=time&amp;type=symbol' title='Multiple used in 164 places.'>time</a> += <a href='../cgi-bin/global.cgi?pattern=lat&amp;type=symbol' title='Multiple used in 22 places.'>lat</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=time&amp;type=symbol' title='Multiple used in 164 places.'>time</a>;
+<a id='L120' name='L120'></a> 120                         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=lat&amp;type=symbol' title='Multiple used in 22 places.'>lat</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=time&amp;type=symbol' title='Multiple used in 164 places.'>time</a> &gt; <a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a>[<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>].<a href='../cgi-bin/global.cgi?pattern=max&amp;type=symbol' title='Multiple used in 212 places.'>max</a>)
+<a id='L121' name='L121'></a> 121                                 <a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a>[<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>].<a href='../cgi-bin/global.cgi?pattern=max&amp;type=symbol' title='Multiple used in 212 places.'>max</a> = <a href='../cgi-bin/global.cgi?pattern=lat&amp;type=symbol' title='Multiple used in 22 places.'>lat</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=time&amp;type=symbol' title='Multiple used in 164 places.'>time</a>;
+<a id='L122' name='L122'></a> 122                         <strong class='reserved'>return</strong>;
+<a id='L123' name='L123'></a> 123                 <em class='brace'>}</em>
+<a id='L124' name='L124'></a> 124         <em class='brace'>}</em>
+<a id='L125' name='L125'></a> 125 
+<a id='L126' name='L126'></a> 126         <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a> = <a href='../cgi-bin/global.cgi?pattern=firstnonnull&amp;type=symbol' title='Multiple used in 4 places.'>firstnonnull</a>;
+<a id='L127' name='L127'></a> 127         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a> &gt;= <a href='../S/193.html#L61' title='Defined at 61 in latencytop.c.'>MAXLR</a> - 1)
+<a id='L128' name='L128'></a> 128                 <strong class='reserved'>return</strong>;
+<a id='L129' name='L129'></a> 129 
+<a id='L130' name='L130'></a> 130         <em class='comment'>/* Allocted a new one: */</em>
+<a id='L131' name='L131'></a> 131         <a href='../cgi-bin/global.cgi?pattern=memcpy&amp;type=symbol' title='Multiple used in 229 places.'>memcpy</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a>[<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>], <a href='../cgi-bin/global.cgi?pattern=lat&amp;type=symbol' title='Multiple used in 22 places.'>lat</a>, <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a>));
+<a id='L132' name='L132'></a> 132 <em class='brace'>}</em>
+<a id='L133' name='L133'></a> 133 
+<a id='L134' name='L134'></a> 134 <em class='comment'>/**</em>
+<a id='L135' name='L135'></a> 135 <em class='comment'> * __account_scheduler_latency - record an occurred latency</em>
+<a id='L136' name='L136'></a> 136 <em class='comment'> * @tsk - the task struct of the task hitting the latency</em>
+<a id='L137' name='L137'></a> 137 <em class='comment'> * @usecs - the duration of the latency in microseconds</em>
+<a id='L138' name='L138'></a> 138 <em class='comment'> * @inter - 1 if the sleep was interruptible, 0 if uninterruptible</em>
+<a id='L139' name='L139'></a> 139 <em class='comment'> *</em>
+<a id='L140' name='L140'></a> 140 <em class='comment'> * This function is the main entry point for recording latency entries</em>
+<a id='L141' name='L141'></a> 141 <em class='comment'> * as called by the scheduler.</em>
+<a id='L142' name='L142'></a> 142 <em class='comment'> *</em>
+<a id='L143' name='L143'></a> 143 <em class='comment'> * This function has a few special cases to deal with normal 'non-latency'</em>
+<a id='L144' name='L144'></a> 144 <em class='comment'> * sleeps: specifically, interruptible sleep longer than 5 msec is skipped</em>
+<a id='L145' name='L145'></a> 145 <em class='comment'> * since this usually is caused by waiting for events via select() and co.</em>
+<a id='L146' name='L146'></a> 146 <em class='comment'> *</em>
+<a id='L147' name='L147'></a> 147 <em class='comment'> * Negative latencies (caused by time going backwards) are also explicitly</em>
+<a id='L148' name='L148'></a> 148 <em class='comment'> * skipped.</em>
+<a id='L149' name='L149'></a> 149 <em class='comment'> */</em>
+<a id='L150' name='L150'></a> 150 <strong class='reserved'>void</strong> <a href='../cgi-bin/global.cgi?pattern=__sched&amp;type=symbol' title='Multiple used in 113 places.'>__sched</a>
+<a id='L151' name='L151'></a> 151 __account_scheduler_latency(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=task_struct&amp;type=symbol' title='Multiple used in 1729 places.'>task_struct</a> *<a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>, <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=usecs&amp;type=symbol' title='Multiple used in 23 places.'>usecs</a>, <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=inter&amp;type=symbol' title='Multiple used in 2 places.'>inter</a>)
+     <em class='comment'>/* <a href='#L86'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L217'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L66'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L272'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+151 latencytop.c'  /> */</em>
+<a id='L152' name='L152'></a> 152 <em class='brace'>{</em>
+<a id='L153' name='L153'></a> 153         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <a href='../cgi-bin/global.cgi?pattern=flags&amp;type=symbol' title='Multiple used in 4690 places.'>flags</a>;
+<a id='L154' name='L154'></a> 154         <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>, <a href='../cgi-bin/global.cgi?pattern=q&amp;type=symbol' title='Multiple used in 431 places.'>q</a>;
+<a id='L155' name='L155'></a> 155         <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a> <a href='../cgi-bin/global.cgi?pattern=lat&amp;type=symbol' title='Multiple used in 22 places.'>lat</a>;
+<a id='L156' name='L156'></a> 156 
+<a id='L157' name='L157'></a> 157         <em class='comment'>/* Long interruptible waits are generally user requested... */</em>
+<a id='L158' name='L158'></a> 158         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=inter&amp;type=symbol' title='Multiple used in 2 places.'>inter</a> &amp;&amp; <a href='../cgi-bin/global.cgi?pattern=usecs&amp;type=symbol' title='Multiple used in 23 places.'>usecs</a> &gt; 5000)
+<a id='L159' name='L159'></a> 159                 <strong class='reserved'>return</strong>;
+<a id='L160' name='L160'></a> 160 
+<a id='L161' name='L161'></a> 161         <em class='comment'>/* Negative sleeps are time going backwards */</em>
+<a id='L162' name='L162'></a> 162         <em class='comment'>/* Zero-time sleeps are non-interesting */</em>
+<a id='L163' name='L163'></a> 163         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=usecs&amp;type=symbol' title='Multiple used in 23 places.'>usecs</a> &lt;= 0)
+<a id='L164' name='L164'></a> 164                 <strong class='reserved'>return</strong>;
+<a id='L165' name='L165'></a> 165 
+<a id='L166' name='L166'></a> 166         <a href='../cgi-bin/global.cgi?pattern=memset&amp;type=symbol' title='Multiple used in 227 places.'>memset</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=lat&amp;type=symbol' title='Multiple used in 22 places.'>lat</a>, 0, <strong class='reserved'>sizeof</strong>(<a href='../cgi-bin/global.cgi?pattern=lat&amp;type=symbol' title='Multiple used in 22 places.'>lat</a>));
+<a id='L167' name='L167'></a> 167         <a href='../cgi-bin/global.cgi?pattern=lat&amp;type=symbol' title='Multiple used in 22 places.'>lat</a>.<a href='../cgi-bin/global.cgi?pattern=count&amp;type=symbol' title='Multiple used in 1028 places.'>count</a> = 1;
+<a id='L168' name='L168'></a> 168         <a href='../cgi-bin/global.cgi?pattern=lat&amp;type=symbol' title='Multiple used in 22 places.'>lat</a>.<a href='../cgi-bin/global.cgi?pattern=time&amp;type=symbol' title='Multiple used in 164 places.'>time</a> = <a href='../cgi-bin/global.cgi?pattern=usecs&amp;type=symbol' title='Multiple used in 23 places.'>usecs</a>;
+<a id='L169' name='L169'></a> 169         <a href='../cgi-bin/global.cgi?pattern=lat&amp;type=symbol' title='Multiple used in 22 places.'>lat</a>.<a href='../cgi-bin/global.cgi?pattern=max&amp;type=symbol' title='Multiple used in 212 places.'>max</a> = <a href='../cgi-bin/global.cgi?pattern=usecs&amp;type=symbol' title='Multiple used in 23 places.'>usecs</a>;
+<a id='L170' name='L170'></a> 170 
+<a id='L171' name='L171'></a> 171         <a href='../cgi-bin/global.cgi?pattern=stack_trace_save_tsk&amp;type=definitions' title='Multiple defined in 2 places.'>stack_trace_save_tsk</a>(<a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>, <a href='../cgi-bin/global.cgi?pattern=lat&amp;type=symbol' title='Multiple used in 22 places.'>lat</a>.<a href='../cgi-bin/global.cgi?pattern=backtrace&amp;type=symbol' title='Multiple used in 8 places.'>backtrace</a>, <a href='../cgi-bin/global.cgi?pattern=LT_BACKTRACEDEPTH&amp;type=symbol' title='Multiple used in 4 places.'>LT_BACKTRACEDEPTH</a>, 0);
+<a id='L172' name='L172'></a> 172 
+<a id='L173' name='L173'></a> 173         <a href='../cgi-bin/global.cgi?pattern=raw_spin_lock_irqsave&amp;type=symbol' title='Multiple used in 190 places.'>raw_spin_lock_irqsave</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=latency_lock&amp;type=symbol' title='Multiple used in 7 places.'>latency_lock</a>, <a href='../cgi-bin/global.cgi?pattern=flags&amp;type=symbol' title='Multiple used in 4690 places.'>flags</a>);
+<a id='L174' name='L174'></a> 174 
+<a id='L175' name='L175'></a> 175         <a href='../S/193.html#L86' title='Defined at 86 in latencytop.c.'>account_global_scheduler_latency</a>(<a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>, &amp;<a href='../cgi-bin/global.cgi?pattern=lat&amp;type=symbol' title='Multiple used in 22 places.'>lat</a>);
+<a id='L176' name='L176'></a> 176 
+<a id='L177' name='L177'></a> 177         <strong class='reserved'>for</strong> (<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a> = 0; <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a> &lt; <a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=latency_record_count&amp;type=symbol' title='Multiple used in 4 places.'>latency_record_count</a>; <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>++) <em class='brace'>{</em>
+<a id='L178' name='L178'></a> 178                 <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a> *<a href='../cgi-bin/global.cgi?pattern=mylat&amp;type=symbol' title='Multiple used in 7 places.'>mylat</a>;
+<a id='L179' name='L179'></a> 179                 <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=same&amp;type=symbol' title='Multiple used in 6 places.'>same</a> = 1;
+<a id='L180' name='L180'></a> 180 
+<a id='L181' name='L181'></a> 181                 <a href='../cgi-bin/global.cgi?pattern=mylat&amp;type=symbol' title='Multiple used in 7 places.'>mylat</a> = &amp;<a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a>[<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>];
+<a id='L182' name='L182'></a> 182                 <strong class='reserved'>for</strong> (<a href='../cgi-bin/global.cgi?pattern=q&amp;type=symbol' title='Multiple used in 431 places.'>q</a> = 0; <a href='../cgi-bin/global.cgi?pattern=q&amp;type=symbol' title='Multiple used in 431 places.'>q</a> &lt; <a href='../cgi-bin/global.cgi?pattern=LT_BACKTRACEDEPTH&amp;type=symbol' title='Multiple used in 4 places.'>LT_BACKTRACEDEPTH</a>; <a href='../cgi-bin/global.cgi?pattern=q&amp;type=symbol' title='Multiple used in 431 places.'>q</a>++) <em class='brace'>{</em>
+<a id='L183' name='L183'></a> 183                         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <a href='../cgi-bin/global.cgi?pattern=record&amp;type=symbol' title='Multiple used in 17 places.'>record</a> = <a href='../cgi-bin/global.cgi?pattern=lat&amp;type=symbol' title='Multiple used in 22 places.'>lat</a>.<a href='../cgi-bin/global.cgi?pattern=backtrace&amp;type=symbol' title='Multiple used in 8 places.'>backtrace</a>[<a href='../cgi-bin/global.cgi?pattern=q&amp;type=symbol' title='Multiple used in 431 places.'>q</a>];
+<a id='L184' name='L184'></a> 184 
+<a id='L185' name='L185'></a> 185                         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=mylat&amp;type=symbol' title='Multiple used in 7 places.'>mylat</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=backtrace&amp;type=symbol' title='Multiple used in 8 places.'>backtrace</a>[<a href='../cgi-bin/global.cgi?pattern=q&amp;type=symbol' title='Multiple used in 431 places.'>q</a>] != <a href='../cgi-bin/global.cgi?pattern=record&amp;type=symbol' title='Multiple used in 17 places.'>record</a>) <em class='brace'>{</em>
+<a id='L186' name='L186'></a> 186                                 <a href='../cgi-bin/global.cgi?pattern=same&amp;type=symbol' title='Multiple used in 6 places.'>same</a> = 0;
+<a id='L187' name='L187'></a> 187                                 <strong class='reserved'>break</strong>;
+<a id='L188' name='L188'></a> 188                         <em class='brace'>}</em>
+<a id='L189' name='L189'></a> 189 
+<a id='L190' name='L190'></a> 190                         <em class='comment'>/* 0 entry is end of backtrace */</em>
+<a id='L191' name='L191'></a> 191                         <strong class='reserved'>if</strong> (!<a href='../cgi-bin/global.cgi?pattern=record&amp;type=symbol' title='Multiple used in 17 places.'>record</a>)
+<a id='L192' name='L192'></a> 192                                 <strong class='reserved'>break</strong>;
+<a id='L193' name='L193'></a> 193                 <em class='brace'>}</em>
+<a id='L194' name='L194'></a> 194                 <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=same&amp;type=symbol' title='Multiple used in 6 places.'>same</a>) <em class='brace'>{</em>
+<a id='L195' name='L195'></a> 195                         <a href='../cgi-bin/global.cgi?pattern=mylat&amp;type=symbol' title='Multiple used in 7 places.'>mylat</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=count&amp;type=symbol' title='Multiple used in 1028 places.'>count</a>++;
+<a id='L196' name='L196'></a> 196                         <a href='../cgi-bin/global.cgi?pattern=mylat&amp;type=symbol' title='Multiple used in 7 places.'>mylat</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=time&amp;type=symbol' title='Multiple used in 164 places.'>time</a> += <a href='../cgi-bin/global.cgi?pattern=lat&amp;type=symbol' title='Multiple used in 22 places.'>lat</a>.<a href='../cgi-bin/global.cgi?pattern=time&amp;type=symbol' title='Multiple used in 164 places.'>time</a>;
+<a id='L197' name='L197'></a> 197                         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=lat&amp;type=symbol' title='Multiple used in 22 places.'>lat</a>.<a href='../cgi-bin/global.cgi?pattern=time&amp;type=symbol' title='Multiple used in 164 places.'>time</a> &gt; <a href='../cgi-bin/global.cgi?pattern=mylat&amp;type=symbol' title='Multiple used in 7 places.'>mylat</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=max&amp;type=symbol' title='Multiple used in 212 places.'>max</a>)
+<a id='L198' name='L198'></a> 198                                 <a href='../cgi-bin/global.cgi?pattern=mylat&amp;type=symbol' title='Multiple used in 7 places.'>mylat</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=max&amp;type=symbol' title='Multiple used in 212 places.'>max</a> = <a href='../cgi-bin/global.cgi?pattern=lat&amp;type=symbol' title='Multiple used in 22 places.'>lat</a>.<a href='../cgi-bin/global.cgi?pattern=time&amp;type=symbol' title='Multiple used in 164 places.'>time</a>;
+<a id='L199' name='L199'></a> 199                         <strong class='reserved'>goto</strong> <a href='../cgi-bin/global.cgi?pattern=out_unlock&amp;type=symbol' title='Multiple used in 284 places.'>out_unlock</a>;
+<a id='L200' name='L200'></a> 200                 <em class='brace'>}</em>
+<a id='L201' name='L201'></a> 201         <em class='brace'>}</em>
+<a id='L202' name='L202'></a> 202 
+<a id='L203' name='L203'></a> 203         <em class='comment'>/*</em>
+<a id='L204' name='L204'></a> 204 <em class='comment'>         * short term hack; if we're &gt; 32 we stop; future we recycle:</em>
+<a id='L205' name='L205'></a> 205 <em class='comment'>         */</em>
+<a id='L206' name='L206'></a> 206         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=latency_record_count&amp;type=symbol' title='Multiple used in 4 places.'>latency_record_count</a> &gt;= LT_SAVECOUNT)
+<a id='L207' name='L207'></a> 207                 <strong class='reserved'>goto</strong> <a href='../cgi-bin/global.cgi?pattern=out_unlock&amp;type=symbol' title='Multiple used in 284 places.'>out_unlock</a>;
+<a id='L208' name='L208'></a> 208 
+<a id='L209' name='L209'></a> 209         <em class='comment'>/* Allocated a new one: */</em>
+<a id='L210' name='L210'></a> 210         <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a> = <a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=latency_record_count&amp;type=symbol' title='Multiple used in 4 places.'>latency_record_count</a>++;
+<a id='L211' name='L211'></a> 211         <a href='../cgi-bin/global.cgi?pattern=memcpy&amp;type=symbol' title='Multiple used in 229 places.'>memcpy</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=tsk&amp;type=symbol' title='Multiple used in 1055 places.'>tsk</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a>[<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>], &amp;<a href='../cgi-bin/global.cgi?pattern=lat&amp;type=symbol' title='Multiple used in 22 places.'>lat</a>, <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a>));
+<a id='L212' name='L212'></a> 212 
+<a id='L213' name='L213'></a> 213 <a href='../cgi-bin/global.cgi?pattern=out_unlock&amp;type=symbol' title='Multiple used in 284 places.'>out_unlock</a>:
+<a id='L214' name='L214'></a> 214         <a href='../cgi-bin/global.cgi?pattern=raw_spin_unlock_irqrestore&amp;type=symbol' title='Multiple used in 218 places.'>raw_spin_unlock_irqrestore</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=latency_lock&amp;type=symbol' title='Multiple used in 7 places.'>latency_lock</a>, <a href='../cgi-bin/global.cgi?pattern=flags&amp;type=symbol' title='Multiple used in 4690 places.'>flags</a>);
+<a id='L215' name='L215'></a> 215 <em class='brace'>}</em>
+<a id='L216' name='L216'></a> 216 
+<a id='L217' name='L217'></a> 217 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/193.html#L255' title='Referred from 255 in latencytop.c.'>lstats_show</a>(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=seq_file&amp;type=symbol' title='Multiple used in 516 places.'>seq_file</a> *<a href='../cgi-bin/global.cgi?pattern=m&amp;type=symbol' title='Multiple used in 1522 places.'>m</a>, <strong class='reserved'>void</strong> *<a href='../cgi-bin/global.cgi?pattern=v&amp;type=symbol' title='Multiple used in 497 places.'>v</a>)
+     <em class='comment'>/* <a href='#L151'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L245'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L66'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L272'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+217 latencytop.c'  /> */</em>
+<a id='L218' name='L218'></a> 218 <em class='brace'>{</em>
+<a id='L219' name='L219'></a> 219         <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>;
+<a id='L220' name='L220'></a> 220 
+<a id='L221' name='L221'></a> 221         <a href='../cgi-bin/global.cgi?pattern=seq_puts&amp;type=symbol' title='Multiple used in 202 places.'>seq_puts</a>(<a href='../cgi-bin/global.cgi?pattern=m&amp;type=symbol' title='Multiple used in 1522 places.'>m</a>, "Latency Top version : v0.1\n");
+<a id='L222' name='L222'></a> 222 
+<a id='L223' name='L223'></a> 223         <strong class='reserved'>for</strong> (<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a> = 0; <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a> &lt; <a href='../S/193.html#L61' title='Defined at 61 in latencytop.c.'>MAXLR</a>; <a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>++) <em class='brace'>{</em>
+<a id='L224' name='L224'></a> 224                 <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a> *<a href='../cgi-bin/global.cgi?pattern=lr&amp;type=symbol' title='Multiple used in 4 places.'>lr</a> = &amp;<a href='../cgi-bin/global.cgi?pattern=latency_record&amp;type=symbol' title='Multiple used in 16 places.'>latency_record</a>[<a href='../cgi-bin/global.cgi?pattern=i&amp;type=symbol' title='Multiple used in 4673 places.'>i</a>];
+<a id='L225' name='L225'></a> 225 
+<a id='L226' name='L226'></a> 226                 <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=lr&amp;type=symbol' title='Multiple used in 4 places.'>lr</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=backtrace&amp;type=symbol' title='Multiple used in 8 places.'>backtrace</a>[0]) <em class='brace'>{</em>
+<a id='L227' name='L227'></a> 227                         <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=q&amp;type=symbol' title='Multiple used in 431 places.'>q</a>;
+<a id='L228' name='L228'></a> 228                         <a href='../cgi-bin/global.cgi?pattern=seq_printf&amp;type=symbol' title='Multiple used in 411 places.'>seq_printf</a>(<a href='../cgi-bin/global.cgi?pattern=m&amp;type=symbol' title='Multiple used in 1522 places.'>m</a>, "%i %lu %lu",
+<a id='L229' name='L229'></a> 229                                    <a href='../cgi-bin/global.cgi?pattern=lr&amp;type=symbol' title='Multiple used in 4 places.'>lr</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=count&amp;type=symbol' title='Multiple used in 1028 places.'>count</a>, <a href='../cgi-bin/global.cgi?pattern=lr&amp;type=symbol' title='Multiple used in 4 places.'>lr</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=time&amp;type=symbol' title='Multiple used in 164 places.'>time</a>, <a href='../cgi-bin/global.cgi?pattern=lr&amp;type=symbol' title='Multiple used in 4 places.'>lr</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=max&amp;type=symbol' title='Multiple used in 212 places.'>max</a>);
+<a id='L230' name='L230'></a> 230                         <strong class='reserved'>for</strong> (<a href='../cgi-bin/global.cgi?pattern=q&amp;type=symbol' title='Multiple used in 431 places.'>q</a> = 0; <a href='../cgi-bin/global.cgi?pattern=q&amp;type=symbol' title='Multiple used in 431 places.'>q</a> &lt; <a href='../cgi-bin/global.cgi?pattern=LT_BACKTRACEDEPTH&amp;type=symbol' title='Multiple used in 4 places.'>LT_BACKTRACEDEPTH</a>; <a href='../cgi-bin/global.cgi?pattern=q&amp;type=symbol' title='Multiple used in 431 places.'>q</a>++) <em class='brace'>{</em>
+<a id='L231' name='L231'></a> 231                                 <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <a href='../cgi-bin/global.cgi?pattern=bt&amp;type=symbol' title='Multiple used in 168 places.'>bt</a> = <a href='../cgi-bin/global.cgi?pattern=lr&amp;type=symbol' title='Multiple used in 4 places.'>lr</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=backtrace&amp;type=symbol' title='Multiple used in 8 places.'>backtrace</a>[<a href='../cgi-bin/global.cgi?pattern=q&amp;type=symbol' title='Multiple used in 431 places.'>q</a>];
+<a id='L232' name='L232'></a> 232 
+<a id='L233' name='L233'></a> 233                                 <strong class='reserved'>if</strong> (!<a href='../cgi-bin/global.cgi?pattern=bt&amp;type=symbol' title='Multiple used in 168 places.'>bt</a>)
+<a id='L234' name='L234'></a> 234                                         <strong class='reserved'>break</strong>;
+<a id='L235' name='L235'></a> 235 
+<a id='L236' name='L236'></a> 236                                 <a href='../cgi-bin/global.cgi?pattern=seq_printf&amp;type=symbol' title='Multiple used in 411 places.'>seq_printf</a>(<a href='../cgi-bin/global.cgi?pattern=m&amp;type=symbol' title='Multiple used in 1522 places.'>m</a>, " %ps", (<strong class='reserved'>void</strong> *)<a href='../cgi-bin/global.cgi?pattern=bt&amp;type=symbol' title='Multiple used in 168 places.'>bt</a>);
+<a id='L237' name='L237'></a> 237                         <em class='brace'>}</em>
+<a id='L238' name='L238'></a> 238                         <a href='../cgi-bin/global.cgi?pattern=seq_puts&amp;type=symbol' title='Multiple used in 202 places.'>seq_puts</a>(<a href='../cgi-bin/global.cgi?pattern=m&amp;type=symbol' title='Multiple used in 1522 places.'>m</a>, "\n");
+<a id='L239' name='L239'></a> 239                 <em class='brace'>}</em>
+<a id='L240' name='L240'></a> 240         <em class='brace'>}</em>
+<a id='L241' name='L241'></a> 241         <strong class='reserved'>return</strong> 0;
+<a id='L242' name='L242'></a> 242 <em class='brace'>}</em>
+<a id='L243' name='L243'></a> 243 
+<a id='L244' name='L244'></a> 244 <strong class='reserved'>static</strong> <a href='../cgi-bin/global.cgi?pattern=ssize_t&amp;type=symbol' title='Multiple used in 393 places.'>ssize_t</a>
+<a id='L245' name='L245'></a> 245 <a href='../S/193.html#L261' title='Referred from 261 in latencytop.c.'>lstats_write</a>(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=file&amp;type=symbol' title='Multiple used in 1447 places.'>file</a> *<a href='../cgi-bin/global.cgi?pattern=file&amp;type=symbol' title='Multiple used in 1447 places.'>file</a>, <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> <a href='../cgi-bin/global.cgi?pattern=__user&amp;type=symbol' title='Multiple used in 655 places.'>__user</a> *<a href='../cgi-bin/global.cgi?pattern=buf&amp;type=symbol' title='Multiple used in 1739 places.'>buf</a>, <a href='../cgi-bin/global.cgi?pattern=size_t&amp;type=symbol' title='Multiple used in 831 places.'>size_t</a> <a href='../cgi-bin/global.cgi?pattern=count&amp;type=symbol' title='Multiple used in 1028 places.'>count</a>,
+     <em class='comment'>/* <a href='#L217'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L253'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L66'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L272'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+245 latencytop.c'  /> */</em>
+<a id='L246' name='L246'></a> 246              <a href='../cgi-bin/global.cgi?pattern=loff_t&amp;type=symbol' title='Multiple used in 442 places.'>loff_t</a> *<a href='../cgi-bin/global.cgi?pattern=offs&amp;type=symbol' title='Multiple used in 59 places.'>offs</a>)
+<a id='L247' name='L247'></a> 247 <em class='brace'>{</em>
+<a id='L248' name='L248'></a> 248         <a href='../S/193.html#L76' title='Defined at 76 in latencytop.c.'>clear_global_latency_tracing</a>();
+<a id='L249' name='L249'></a> 249 
+<a id='L250' name='L250'></a> 250         <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=count&amp;type=symbol' title='Multiple used in 1028 places.'>count</a>;
+<a id='L251' name='L251'></a> 251 <em class='brace'>}</em>
+<a id='L252' name='L252'></a> 252 
+<a id='L253' name='L253'></a> 253 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/193.html#L259' title='Referred from 259 in latencytop.c.'>lstats_open</a>(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=inode&amp;type=symbol' title='Multiple used in 467 places.'>inode</a> *<a href='../cgi-bin/global.cgi?pattern=inode&amp;type=symbol' title='Multiple used in 467 places.'>inode</a>, <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=file&amp;type=symbol' title='Multiple used in 1447 places.'>file</a> *<a href='../cgi-bin/global.cgi?pattern=filp&amp;type=symbol' title='Multiple used in 255 places.'>filp</a>)
+     <em class='comment'>/* <a href='#L245'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L266'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L66'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L272'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+253 latencytop.c'  /> */</em>
+<a id='L254' name='L254'></a> 254 <em class='brace'>{</em>
+<a id='L255' name='L255'></a> 255         <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=single_open&amp;type=symbol' title='Multiple used in 17 places.'>single_open</a>(<a href='../cgi-bin/global.cgi?pattern=filp&amp;type=symbol' title='Multiple used in 255 places.'>filp</a>, <a href='../S/193.html#L217' title='Defined at 217 in latencytop.c.'>lstats_show</a>, <a href='../cgi-bin/global.cgi?pattern=NULL&amp;type=symbol' title='Multiple used in 3516 places.'>NULL</a>);
+<a id='L256' name='L256'></a> 256 <em class='brace'>}</em>
+<a id='L257' name='L257'></a> 257 
+<a id='L258' name='L258'></a> 258 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=proc_ops&amp;type=symbol' title='Multiple used in 13 places.'>proc_ops</a> <a href='../cgi-bin/global.cgi?pattern=lstats_proc_ops&amp;type=symbol' title='Multiple used in 2 places.'>lstats_proc_ops</a> = <em class='brace'>{</em>
+<a id='L259' name='L259'></a> 259         .<a href='../cgi-bin/global.cgi?pattern=proc_open&amp;type=symbol' title='Multiple used in 11 places.'>proc_open</a>      = <a href='../S/193.html#L253' title='Defined at 253 in latencytop.c.'>lstats_open</a>,
+<a id='L260' name='L260'></a> 260         .<a href='../cgi-bin/global.cgi?pattern=proc_read&amp;type=symbol' title='Multiple used in 13 places.'>proc_read</a>      = <a href='../cgi-bin/global.cgi?pattern=seq_read&amp;type=symbol' title='Multiple used in 54 places.'>seq_read</a>,
+<a id='L261' name='L261'></a> 261         .<a href='../cgi-bin/global.cgi?pattern=proc_write&amp;type=symbol' title='Multiple used in 10 places.'>proc_write</a>     = <a href='../S/193.html#L245' title='Defined at 245 in latencytop.c.'>lstats_write</a>,
+<a id='L262' name='L262'></a> 262         .<a href='../cgi-bin/global.cgi?pattern=proc_lseek&amp;type=symbol' title='Multiple used in 13 places.'>proc_lseek</a>     = <a href='../cgi-bin/global.cgi?pattern=seq_lseek&amp;type=symbol' title='Multiple used in 43 places.'>seq_lseek</a>,
+<a id='L263' name='L263'></a> 263         .<a href='../cgi-bin/global.cgi?pattern=proc_release&amp;type=symbol' title='Multiple used in 11 places.'>proc_release</a>   = <a href='../cgi-bin/global.cgi?pattern=single_release&amp;type=symbol' title='Multiple used in 13 places.'>single_release</a>,
+<a id='L264' name='L264'></a> 264 <em class='brace'>}</em>;
+<a id='L265' name='L265'></a> 265 
+<a id='L266' name='L266'></a> 266 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=__init&amp;type=symbol' title='Multiple used in 557 places.'>__init</a> <a href='../S/193.html#L283' title='Referred from 283 in latencytop.c.'>init_lstats_procfs</a>(<strong class='reserved'>void</strong>)
+     <em class='comment'>/* <a href='#L253'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L272'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L66'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L272'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+266 latencytop.c'  /> */</em>
+<a id='L267' name='L267'></a> 267 <em class='brace'>{</em>
+<a id='L268' name='L268'></a> 268         <a href='../cgi-bin/global.cgi?pattern=proc_create&amp;type=symbol' title='Multiple used in 11 places.'>proc_create</a>("latency_stats", 0644, <a href='../cgi-bin/global.cgi?pattern=NULL&amp;type=symbol' title='Multiple used in 3516 places.'>NULL</a>, &amp;<a href='../cgi-bin/global.cgi?pattern=lstats_proc_ops&amp;type=symbol' title='Multiple used in 2 places.'>lstats_proc_ops</a>);
+<a id='L269' name='L269'></a> 269         <strong class='reserved'>return</strong> 0;
+<a id='L270' name='L270'></a> 270 <em class='brace'>}</em>
+<a id='L271' name='L271'></a> 271 
+<a id='L272' name='L272'></a> 272 <strong class='reserved'>int</strong> <a href='../S/326.html#L1931' title='Referred from 1931 in sysctl.c.'>sysctl_latencytop</a>(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=ctl_table&amp;type=symbol' title='Multiple used in 133 places.'>ctl_table</a> *<a href='../cgi-bin/global.cgi?pattern=table&amp;type=symbol' title='Multiple used in 235 places.'>table</a>, <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=write&amp;type=symbol' title='Multiple used in 348 places.'>write</a>, <strong class='reserved'>void</strong> *<a href='../cgi-bin/global.cgi?pattern=buffer&amp;type=symbol' title='Multiple used in 1031 places.'>buffer</a>,
+     <em class='comment'>/* <a href='#L266'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L66'><img class='icon' src='../icons/first.png' alt='[first]' /></a><img class='icon' src='../icons/n_last.png' alt='[last]' /><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+272 latencytop.c'  /> */</em>
+<a id='L273' name='L273'></a> 273                 <a href='../cgi-bin/global.cgi?pattern=size_t&amp;type=symbol' title='Multiple used in 831 places.'>size_t</a> *<a href='../cgi-bin/global.cgi?pattern=lenp&amp;type=symbol' title='Multiple used in 176 places.'>lenp</a>, <a href='../cgi-bin/global.cgi?pattern=loff_t&amp;type=symbol' title='Multiple used in 442 places.'>loff_t</a> *<a href='../cgi-bin/global.cgi?pattern=ppos&amp;type=symbol' title='Multiple used in 386 places.'>ppos</a>)
+<a id='L274' name='L274'></a> 274 <em class='brace'>{</em>
+<a id='L275' name='L275'></a> 275         <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=err&amp;type=symbol' title='Multiple used in 2902 places.'>err</a>;
+<a id='L276' name='L276'></a> 276 
+<a id='L277' name='L277'></a> 277         <a href='../cgi-bin/global.cgi?pattern=err&amp;type=symbol' title='Multiple used in 2902 places.'>err</a> = <a href='../cgi-bin/global.cgi?pattern=proc_dointvec&amp;type=definitions' title='Multiple defined in 2 places.'>proc_dointvec</a>(<a href='../cgi-bin/global.cgi?pattern=table&amp;type=symbol' title='Multiple used in 235 places.'>table</a>, <a href='../cgi-bin/global.cgi?pattern=write&amp;type=symbol' title='Multiple used in 348 places.'>write</a>, <a href='../cgi-bin/global.cgi?pattern=buffer&amp;type=symbol' title='Multiple used in 1031 places.'>buffer</a>, <a href='../cgi-bin/global.cgi?pattern=lenp&amp;type=symbol' title='Multiple used in 176 places.'>lenp</a>, <a href='../cgi-bin/global.cgi?pattern=ppos&amp;type=symbol' title='Multiple used in 386 places.'>ppos</a>);
+<a id='L278' name='L278'></a> 278         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=latencytop_enabled&amp;type=symbol' title='Multiple used in 3 places.'>latencytop_enabled</a>)
+<a id='L279' name='L279'></a> 279                 <a href='../S/441.html#L3371' title='Defined at 3371 in sched/core.c.'>force_schedstat_enabled</a>();
+<a id='L280' name='L280'></a> 280 
+<a id='L281' name='L281'></a> 281         <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=err&amp;type=symbol' title='Multiple used in 2902 places.'>err</a>;
+<a id='L282' name='L282'></a> 282 <em class='brace'>}</em>
+<a id='L283' name='L283'></a> 283 <a href='../cgi-bin/global.cgi?pattern=device_initcall&amp;type=symbol' title='Multiple used in 23 places.'>device_initcall</a>(<a href='../S/193.html#L266' title='Defined at 266 in latencytop.c.'>init_lstats_procfs</a>);
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L66'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L272'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><img class='icon' src='../icons/n_bottom.png' alt='[bottom]' /><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+283 latencytop.c'  /> */</em>
+</body>
+</html>

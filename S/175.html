@@ -1,0 +1,368 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>power/Kconfig</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<!-- beginning of fixed guide -->
+<div id='guide'><ul>
+<li><a href='#TOP'><img class='icon' src='../icons/first.png' alt='[^]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/last.png' alt='[v]' /></a></li>
+<li><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a></li>
+<li><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a></li>
+<li><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a></li>
+<li class='standout'><span><a href='../files/509.html'>power</a>/Kconfig</span></li>
+</ul></div>
+<!-- end of fixed guide -->
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/509.html'>power</a>/Kconfig</h2>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><img class='icon' src='../icons/n_first.png' alt='[first]' /><img class='icon' src='../icons/n_last.png' alt='[last]' /><img class='icon' src='../icons/n_top.png' alt='[top]' /><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+1 power/Kconfig'  /> */</em>
+<hr />
+<pre>
+<a id='L1' name='L1'></a># SPDX-License-Identifier: GPL-2.0-only
+<a id='L2' name='L2'></a>config SUSPEND
+<a id='L3' name='L3'></a>        bool "Suspend to RAM and standby"
+<a id='L4' name='L4'></a>        depends on ARCH_SUSPEND_POSSIBLE
+<a id='L5' name='L5'></a>        default y
+<a id='L6' name='L6'></a>        help
+<a id='L7' name='L7'></a>          Allow the system to enter sleep states in which main memory is
+<a id='L8' name='L8'></a>          powered and thus its contents are preserved, such as the
+<a id='L9' name='L9'></a>          suspend-to-RAM state (e.g. the ACPI S3 state).
+<a id='L10' name='L10'></a>
+<a id='L11' name='L11'></a>config SUSPEND_FREEZER
+<a id='L12' name='L12'></a>        bool "Enable freezer for suspend to RAM/standby" \
+<a id='L13' name='L13'></a>                if ARCH_WANTS_FREEZER_CONTROL || BROKEN
+<a id='L14' name='L14'></a>        depends on SUSPEND
+<a id='L15' name='L15'></a>        default y
+<a id='L16' name='L16'></a>        help
+<a id='L17' name='L17'></a>          This allows you to turn off the freezer for suspend. If this is
+<a id='L18' name='L18'></a>          done, no tasks are frozen for suspend to RAM/standby.
+<a id='L19' name='L19'></a>
+<a id='L20' name='L20'></a>          Turning OFF this setting is NOT recommended! If in doubt, say Y.
+<a id='L21' name='L21'></a>
+<a id='L22' name='L22'></a>config SUSPEND_SKIP_SYNC
+<a id='L23' name='L23'></a>        bool "Skip kernel's sys_sync() on suspend to RAM/standby"
+<a id='L24' name='L24'></a>        depends on SUSPEND
+<a id='L25' name='L25'></a>        depends on EXPERT
+<a id='L26' name='L26'></a>        help
+<a id='L27' name='L27'></a>          Skip the kernel sys_sync() before freezing user processes.
+<a id='L28' name='L28'></a>          Some systems prefer not to pay this cost on every invocation
+<a id='L29' name='L29'></a>          of suspend, or they are content with invoking sync() from
+<a id='L30' name='L30'></a>          user-space before invoking suspend.  There's a run-time switch
+<a id='L31' name='L31'></a>          at '/sys/power/sync_on_suspend' to configure this behaviour.
+<a id='L32' name='L32'></a>          This setting changes the default for the run-tim switch. Say Y
+<a id='L33' name='L33'></a>          to change the default to disable the kernel sys_sync().
+<a id='L34' name='L34'></a>
+<a id='L35' name='L35'></a>config HIBERNATE_CALLBACKS
+<a id='L36' name='L36'></a>        bool
+<a id='L37' name='L37'></a>
+<a id='L38' name='L38'></a>config HIBERNATION
+<a id='L39' name='L39'></a>        bool "Hibernation (aka 'suspend to disk')"
+<a id='L40' name='L40'></a>        depends on SWAP &amp;&amp; ARCH_HIBERNATION_POSSIBLE
+<a id='L41' name='L41'></a>        select HIBERNATE_CALLBACKS
+<a id='L42' name='L42'></a>        select LZO_COMPRESS
+<a id='L43' name='L43'></a>        select LZO_DECOMPRESS
+<a id='L44' name='L44'></a>        select CRC32
+<a id='L45' name='L45'></a>        help
+<a id='L46' name='L46'></a>          Enable the suspend to disk (STD) functionality, which is usually
+<a id='L47' name='L47'></a>          called "hibernation" in user interfaces.  STD checkpoints the
+<a id='L48' name='L48'></a>          system and powers it off; and restores that checkpoint on reboot.
+<a id='L49' name='L49'></a>
+<a id='L50' name='L50'></a>          You can suspend your machine with 'echo disk &gt; /sys/power/state'
+<a id='L51' name='L51'></a>          after placing resume=/dev/swappartition on the kernel command line
+<a id='L52' name='L52'></a>          in your bootloader's configuration file.
+<a id='L53' name='L53'></a>
+<a id='L54' name='L54'></a>          Alternatively, you can use the additional userland tools available
+<a id='L55' name='L55'></a>          from &lt;http://suspend.sf.net&gt;.
+<a id='L56' name='L56'></a>
+<a id='L57' name='L57'></a>          In principle it does not require ACPI or APM, although for example
+<a id='L58' name='L58'></a>          ACPI will be used for the final steps when it is available.  One
+<a id='L59' name='L59'></a>          of the reasons to use software suspend is that the firmware hooks
+<a id='L60' name='L60'></a>          for suspend states like suspend-to-RAM (STR) often don't work very
+<a id='L61' name='L61'></a>          well with Linux.
+<a id='L62' name='L62'></a>
+<a id='L63' name='L63'></a>          It creates an image which is saved in your active swap. Upon the next
+<a id='L64' name='L64'></a>          boot, pass the 'resume=/dev/swappartition' argument to the kernel to
+<a id='L65' name='L65'></a>          have it detect the saved image, restore memory state from it, and
+<a id='L66' name='L66'></a>          continue to run as before. If you do not want the previous state to
+<a id='L67' name='L67'></a>          be reloaded, then use the 'noresume' kernel command line argument.
+<a id='L68' name='L68'></a>          Note, however, that fsck will be run on your filesystems and you will
+<a id='L69' name='L69'></a>          need to run mkswap against the swap partition used for the suspend.
+<a id='L70' name='L70'></a>
+<a id='L71' name='L71'></a>          It also works with swap files to a limited extent (for details see
+<a id='L72' name='L72'></a>          &lt;file:Documentation/power/swsusp-and-swap-files.rst&gt;).
+<a id='L73' name='L73'></a>
+<a id='L74' name='L74'></a>          Right now you may boot without resuming and resume later but in the
+<a id='L75' name='L75'></a>          meantime you cannot use the swap partition(s)/file(s) involved in
+<a id='L76' name='L76'></a>          suspending.  Also in this case you must not use the filesystems
+<a id='L77' name='L77'></a>          that were mounted before the suspend.  In particular, you MUST NOT
+<a id='L78' name='L78'></a>          MOUNT any journaled filesystems mounted before the suspend or they
+<a id='L79' name='L79'></a>          will get corrupted in a nasty way.
+<a id='L80' name='L80'></a>
+<a id='L81' name='L81'></a>          For more information take a look at &lt;file:Documentation/power/swsusp.rst&gt;.
+<a id='L82' name='L82'></a>
+<a id='L83' name='L83'></a>config HIBERNATION_SNAPSHOT_DEV
+<a id='L84' name='L84'></a>        bool "Userspace snapshot device"
+<a id='L85' name='L85'></a>        depends on HIBERNATION
+<a id='L86' name='L86'></a>        default y
+<a id='L87' name='L87'></a>        help
+<a id='L88' name='L88'></a>          Device used by the uswsusp tools.
+<a id='L89' name='L89'></a>
+<a id='L90' name='L90'></a>          Say N if no snapshotting from userspace is needed, this also
+<a id='L91' name='L91'></a>          reduces the attack surface of the kernel.
+<a id='L92' name='L92'></a>
+<a id='L93' name='L93'></a>          If in doubt, say Y.
+<a id='L94' name='L94'></a>
+<a id='L95' name='L95'></a>config PM_STD_PARTITION
+<a id='L96' name='L96'></a>        string "Default resume partition"
+<a id='L97' name='L97'></a>        depends on HIBERNATION
+<a id='L98' name='L98'></a>        default ""
+<a id='L99' name='L99'></a>        help
+<a id='L100' name='L100'></a>          The default resume partition is the partition that the suspend-
+<a id='L101' name='L101'></a>          to-disk implementation will look for a suspended disk image. 
+<a id='L102' name='L102'></a>
+<a id='L103' name='L103'></a>          The partition specified here will be different for almost every user. 
+<a id='L104' name='L104'></a>          It should be a valid swap partition (at least for now) that is turned
+<a id='L105' name='L105'></a>          on before suspending. 
+<a id='L106' name='L106'></a>
+<a id='L107' name='L107'></a>          The partition specified can be overridden by specifying:
+<a id='L108' name='L108'></a>
+<a id='L109' name='L109'></a>                resume=/dev/&lt;other device&gt; 
+<a id='L110' name='L110'></a>
+<a id='L111' name='L111'></a>          which will set the resume partition to the device specified. 
+<a id='L112' name='L112'></a>
+<a id='L113' name='L113'></a>          Note there is currently not a way to specify which device to save the
+<a id='L114' name='L114'></a>          suspended image to. It will simply pick the first available swap 
+<a id='L115' name='L115'></a>          device.
+<a id='L116' name='L116'></a>
+<a id='L117' name='L117'></a>config PM_SLEEP
+<a id='L118' name='L118'></a>        def_bool y
+<a id='L119' name='L119'></a>        depends on SUSPEND || HIBERNATE_CALLBACKS
+<a id='L120' name='L120'></a>        select PM
+<a id='L121' name='L121'></a>        select SRCU
+<a id='L122' name='L122'></a>
+<a id='L123' name='L123'></a>config PM_SLEEP_SMP
+<a id='L124' name='L124'></a>        def_bool y
+<a id='L125' name='L125'></a>        depends on SMP
+<a id='L126' name='L126'></a>        depends on ARCH_SUSPEND_POSSIBLE || ARCH_HIBERNATION_POSSIBLE
+<a id='L127' name='L127'></a>        depends on PM_SLEEP
+<a id='L128' name='L128'></a>        select HOTPLUG_CPU
+<a id='L129' name='L129'></a>
+<a id='L130' name='L130'></a>config PM_SLEEP_SMP_NONZERO_CPU
+<a id='L131' name='L131'></a>        def_bool y
+<a id='L132' name='L132'></a>        depends on PM_SLEEP_SMP
+<a id='L133' name='L133'></a>        depends on ARCH_SUSPEND_NONZERO_CPU
+<a id='L134' name='L134'></a>        help
+<a id='L135' name='L135'></a>        If an arch can suspend (for suspend, hibernate, kexec, etc) on a
+<a id='L136' name='L136'></a>        non-zero numbered CPU, it may define ARCH_SUSPEND_NONZERO_CPU. This
+<a id='L137' name='L137'></a>        will allow nohz_full mask to include CPU0.
+<a id='L138' name='L138'></a>
+<a id='L139' name='L139'></a>config PM_AUTOSLEEP
+<a id='L140' name='L140'></a>        bool "Opportunistic sleep"
+<a id='L141' name='L141'></a>        depends on PM_SLEEP
+<a id='L142' name='L142'></a>        default n
+<a id='L143' name='L143'></a>        help
+<a id='L144' name='L144'></a>        Allow the kernel to trigger a system transition into a global sleep
+<a id='L145' name='L145'></a>        state automatically whenever there are no active wakeup sources.
+<a id='L146' name='L146'></a>
+<a id='L147' name='L147'></a>config PM_WAKELOCKS
+<a id='L148' name='L148'></a>        bool "User space wakeup sources interface"
+<a id='L149' name='L149'></a>        depends on PM_SLEEP
+<a id='L150' name='L150'></a>        default n
+<a id='L151' name='L151'></a>        help
+<a id='L152' name='L152'></a>        Allow user space to create, activate and deactivate wakeup source
+<a id='L153' name='L153'></a>        objects with the help of a sysfs-based interface.
+<a id='L154' name='L154'></a>
+<a id='L155' name='L155'></a>config PM_WAKELOCKS_LIMIT
+<a id='L156' name='L156'></a>        int "Maximum number of user space wakeup sources (0 = no limit)"
+<a id='L157' name='L157'></a>        range 0 100000
+<a id='L158' name='L158'></a>        default 100
+<a id='L159' name='L159'></a>        depends on PM_WAKELOCKS
+<a id='L160' name='L160'></a>
+<a id='L161' name='L161'></a>config PM_WAKELOCKS_GC
+<a id='L162' name='L162'></a>        bool "Garbage collector for user space wakeup sources"
+<a id='L163' name='L163'></a>        depends on PM_WAKELOCKS
+<a id='L164' name='L164'></a>        default y
+<a id='L165' name='L165'></a>
+<a id='L166' name='L166'></a>config PM
+<a id='L167' name='L167'></a>        bool "Device power management core functionality"
+<a id='L168' name='L168'></a>        help
+<a id='L169' name='L169'></a>          Enable functionality allowing I/O devices to be put into energy-saving
+<a id='L170' name='L170'></a>          (low power) states, for example after a specified period of inactivity
+<a id='L171' name='L171'></a>          (autosuspended), and woken up in response to a hardware-generated
+<a id='L172' name='L172'></a>          wake-up event or a driver's request.
+<a id='L173' name='L173'></a>
+<a id='L174' name='L174'></a>          Hardware support is generally required for this functionality to work
+<a id='L175' name='L175'></a>          and the bus type drivers of the buses the devices are on are
+<a id='L176' name='L176'></a>          responsible for the actual handling of device suspend requests and
+<a id='L177' name='L177'></a>          wake-up events.
+<a id='L178' name='L178'></a>
+<a id='L179' name='L179'></a>config PM_DEBUG
+<a id='L180' name='L180'></a>        bool "Power Management Debug Support"
+<a id='L181' name='L181'></a>        depends on PM
+<a id='L182' name='L182'></a>        help
+<a id='L183' name='L183'></a>        This option enables various debugging support in the Power Management
+<a id='L184' name='L184'></a>        code. This is helpful when debugging and reporting PM bugs, like
+<a id='L185' name='L185'></a>        suspend support.
+<a id='L186' name='L186'></a>
+<a id='L187' name='L187'></a>config PM_ADVANCED_DEBUG
+<a id='L188' name='L188'></a>        bool "Extra PM attributes in sysfs for low-level debugging/testing"
+<a id='L189' name='L189'></a>        depends on PM_DEBUG
+<a id='L190' name='L190'></a>        help
+<a id='L191' name='L191'></a>        Add extra sysfs attributes allowing one to access some Power Management
+<a id='L192' name='L192'></a>        fields of device objects from user space.  If you are not a kernel
+<a id='L193' name='L193'></a>        developer interested in debugging/testing Power Management, say "no".
+<a id='L194' name='L194'></a>
+<a id='L195' name='L195'></a>config PM_TEST_SUSPEND
+<a id='L196' name='L196'></a>        bool "Test suspend/resume and wakealarm during bootup"
+<a id='L197' name='L197'></a>        depends on SUSPEND &amp;&amp; PM_DEBUG &amp;&amp; RTC_CLASS=y
+<a id='L198' name='L198'></a>        help
+<a id='L199' name='L199'></a>        This option will let you suspend your machine during bootup, and
+<a id='L200' name='L200'></a>        make it wake up a few seconds later using an RTC wakeup alarm.
+<a id='L201' name='L201'></a>        Enable this with a kernel parameter like "test_suspend=mem".
+<a id='L202' name='L202'></a>
+<a id='L203' name='L203'></a>        You probably want to have your system's RTC driver statically
+<a id='L204' name='L204'></a>        linked, ensuring that it's available when this test runs.
+<a id='L205' name='L205'></a>
+<a id='L206' name='L206'></a>config PM_SLEEP_DEBUG
+<a id='L207' name='L207'></a>        def_bool y
+<a id='L208' name='L208'></a>        depends on PM_DEBUG &amp;&amp; PM_SLEEP
+<a id='L209' name='L209'></a>
+<a id='L210' name='L210'></a>config DPM_WATCHDOG
+<a id='L211' name='L211'></a>        bool "Device suspend/resume watchdog"
+<a id='L212' name='L212'></a>        depends on PM_DEBUG &amp;&amp; PSTORE &amp;&amp; EXPERT
+<a id='L213' name='L213'></a>        help
+<a id='L214' name='L214'></a>          Sets up a watchdog timer to capture drivers that are
+<a id='L215' name='L215'></a>          locked up attempting to suspend/resume a device.
+<a id='L216' name='L216'></a>          A detected lockup causes system panic with message
+<a id='L217' name='L217'></a>          captured in pstore device for inspection in subsequent
+<a id='L218' name='L218'></a>          boot session.
+<a id='L219' name='L219'></a>
+<a id='L220' name='L220'></a>config DPM_WATCHDOG_TIMEOUT
+<a id='L221' name='L221'></a>        int "Watchdog timeout in seconds"
+<a id='L222' name='L222'></a>        range 1 120
+<a id='L223' name='L223'></a>        default 120
+<a id='L224' name='L224'></a>        depends on DPM_WATCHDOG
+<a id='L225' name='L225'></a>
+<a id='L226' name='L226'></a>config PM_TRACE
+<a id='L227' name='L227'></a>        bool
+<a id='L228' name='L228'></a>        help
+<a id='L229' name='L229'></a>          This enables code to save the last PM event point across
+<a id='L230' name='L230'></a>          reboot. The architecture needs to support this, x86 for
+<a id='L231' name='L231'></a>          example does by saving things in the RTC, see below.
+<a id='L232' name='L232'></a>
+<a id='L233' name='L233'></a>          The architecture specific code must provide the extern
+<a id='L234' name='L234'></a>          functions from &lt;linux/resume-trace.h&gt; as well as the
+<a id='L235' name='L235'></a>          &lt;asm/resume-trace.h&gt; header with a TRACE_RESUME() macro.
+<a id='L236' name='L236'></a>
+<a id='L237' name='L237'></a>          The way the information is presented is architecture-
+<a id='L238' name='L238'></a>          dependent, x86 will print the information during a
+<a id='L239' name='L239'></a>          late_initcall.
+<a id='L240' name='L240'></a>
+<a id='L241' name='L241'></a>config PM_TRACE_RTC
+<a id='L242' name='L242'></a>        bool "Suspend/resume event tracing"
+<a id='L243' name='L243'></a>        depends on PM_SLEEP_DEBUG
+<a id='L244' name='L244'></a>        depends on X86
+<a id='L245' name='L245'></a>        select PM_TRACE
+<a id='L246' name='L246'></a>        help
+<a id='L247' name='L247'></a>        This enables some cheesy code to save the last PM event point in the
+<a id='L248' name='L248'></a>        RTC across reboots, so that you can debug a machine that just hangs
+<a id='L249' name='L249'></a>        during suspend (or more commonly, during resume).
+<a id='L250' name='L250'></a>
+<a id='L251' name='L251'></a>        To use this debugging feature you should attempt to suspend the
+<a id='L252' name='L252'></a>        machine, reboot it and then run
+<a id='L253' name='L253'></a>
+<a id='L254' name='L254'></a>                dmesg -s 1000000 | grep 'hash matches'
+<a id='L255' name='L255'></a>
+<a id='L256' name='L256'></a>        CAUTION: this option will cause your machine's real-time clock to be
+<a id='L257' name='L257'></a>        set to an invalid time after a resume.
+<a id='L258' name='L258'></a>
+<a id='L259' name='L259'></a>config APM_EMULATION
+<a id='L260' name='L260'></a>        tristate "Advanced Power Management Emulation"
+<a id='L261' name='L261'></a>        depends on SYS_SUPPORTS_APM_EMULATION
+<a id='L262' name='L262'></a>        help
+<a id='L263' name='L263'></a>          APM is a BIOS specification for saving power using several different
+<a id='L264' name='L264'></a>          techniques. This is mostly useful for battery powered laptops with
+<a id='L265' name='L265'></a>          APM compliant BIOSes. If you say Y here, the system time will be
+<a id='L266' name='L266'></a>          reset after a RESUME operation, the /proc/apm device will provide
+<a id='L267' name='L267'></a>          battery status information, and user-space programs will receive
+<a id='L268' name='L268'></a>          notification of APM "events" (e.g. battery status change).
+<a id='L269' name='L269'></a>
+<a id='L270' name='L270'></a>          In order to use APM, you will need supporting software. For location
+<a id='L271' name='L271'></a>          and more information, read &lt;file:Documentation/power/apm-acpi.rst&gt;
+<a id='L272' name='L272'></a>          and the Battery Powered Linux mini-HOWTO, available from
+<a id='L273' name='L273'></a>          &lt;http://www.tldp.org/docs.html#howto&gt;.
+<a id='L274' name='L274'></a>
+<a id='L275' name='L275'></a>          This driver does not spin down disk drives (see the hdparm(8)
+<a id='L276' name='L276'></a>          manpage ("man 8 hdparm") for that), and it doesn't turn off
+<a id='L277' name='L277'></a>          VESA-compliant "green" monitors.
+<a id='L278' name='L278'></a>
+<a id='L279' name='L279'></a>          Generally, if you don't have a battery in your machine, there isn't
+<a id='L280' name='L280'></a>          much point in using this driver and you should say N. If you get
+<a id='L281' name='L281'></a>          random kernel OOPSes or reboots that don't seem to be related to
+<a id='L282' name='L282'></a>          anything, try disabling/enabling this option (or disabling/enabling
+<a id='L283' name='L283'></a>          APM in your BIOS).
+<a id='L284' name='L284'></a>
+<a id='L285' name='L285'></a>config PM_CLK
+<a id='L286' name='L286'></a>        def_bool y
+<a id='L287' name='L287'></a>        depends on PM &amp;&amp; HAVE_CLK
+<a id='L288' name='L288'></a>
+<a id='L289' name='L289'></a>config PM_GENERIC_DOMAINS
+<a id='L290' name='L290'></a>        bool
+<a id='L291' name='L291'></a>        depends on PM
+<a id='L292' name='L292'></a>
+<a id='L293' name='L293'></a>config WQ_POWER_EFFICIENT_DEFAULT
+<a id='L294' name='L294'></a>        bool "Enable workqueue power-efficient mode by default"
+<a id='L295' name='L295'></a>        depends on PM
+<a id='L296' name='L296'></a>        default n
+<a id='L297' name='L297'></a>        help
+<a id='L298' name='L298'></a>          Per-cpu workqueues are generally preferred because they show
+<a id='L299' name='L299'></a>          better performance thanks to cache locality; unfortunately,
+<a id='L300' name='L300'></a>          per-cpu workqueues tend to be more power hungry than unbound
+<a id='L301' name='L301'></a>          workqueues.
+<a id='L302' name='L302'></a>
+<a id='L303' name='L303'></a>          Enabling workqueue.power_efficient kernel parameter makes the
+<a id='L304' name='L304'></a>          per-cpu workqueues which were observed to contribute
+<a id='L305' name='L305'></a>          significantly to power consumption unbound, leading to measurably
+<a id='L306' name='L306'></a>          lower power usage at the cost of small performance overhead.
+<a id='L307' name='L307'></a>
+<a id='L308' name='L308'></a>          This config option determines whether workqueue.power_efficient
+<a id='L309' name='L309'></a>          is enabled by default.
+<a id='L310' name='L310'></a>
+<a id='L311' name='L311'></a>          If in doubt, say N.
+<a id='L312' name='L312'></a>
+<a id='L313' name='L313'></a>config PM_GENERIC_DOMAINS_SLEEP
+<a id='L314' name='L314'></a>        def_bool y
+<a id='L315' name='L315'></a>        depends on PM_SLEEP &amp;&amp; PM_GENERIC_DOMAINS
+<a id='L316' name='L316'></a>
+<a id='L317' name='L317'></a>config PM_GENERIC_DOMAINS_OF
+<a id='L318' name='L318'></a>        def_bool y
+<a id='L319' name='L319'></a>        depends on PM_GENERIC_DOMAINS &amp;&amp; OF
+<a id='L320' name='L320'></a>
+<a id='L321' name='L321'></a>config CPU_PM
+<a id='L322' name='L322'></a>        bool
+<a id='L323' name='L323'></a>
+<a id='L324' name='L324'></a>config ENERGY_MODEL
+<a id='L325' name='L325'></a>        bool "Energy Model for CPUs"
+<a id='L326' name='L326'></a>        depends on SMP
+<a id='L327' name='L327'></a>        depends on CPU_FREQ
+<a id='L328' name='L328'></a>        default n
+<a id='L329' name='L329'></a>        help
+<a id='L330' name='L330'></a>          Several subsystems (thermal and/or the task scheduler for example)
+<a id='L331' name='L331'></a>          can leverage information about the energy consumed by CPUs to make
+<a id='L332' name='L332'></a>          smarter decisions. This config option enables the framework from
+<a id='L333' name='L333'></a>          which subsystems can access the energy models.
+<a id='L334' name='L334'></a>
+<a id='L335' name='L335'></a>          The exact usage of the energy model is subsystem-dependent.
+<a id='L336' name='L336'></a>
+<a id='L337' name='L337'></a>          If in doubt, say N.
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><img class='icon' src='../icons/n_first.png' alt='[first]' /><img class='icon' src='../icons/n_last.png' alt='[last]' /><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><img class='icon' src='../icons/n_bottom.png' alt='[bottom]' /><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+337 power/Kconfig'  /> */</em>
+</body>
+</html>

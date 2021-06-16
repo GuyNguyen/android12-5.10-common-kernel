@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>time/jiffies.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<!-- beginning of fixed guide -->
+<div id='guide'><ul>
+<li><a href='#L35'><img class='icon' src='../icons/first.png' alt='[^]' /></a></li>
+<li><a href='#L95'><img class='icon' src='../icons/last.png' alt='[v]' /></a></li>
+<li><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a></li>
+<li><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a></li>
+<li><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a></li>
+<li class='standout'><span><a href='../files/513.html'>time</a>/jiffies.c</span></li>
+</ul></div>
+<!-- end of fixed guide -->
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/513.html'>time</a>/jiffies.c</h2>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L35'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L95'><img class='icon' src='../icons/last.png' alt='[last]' /></a><img class='icon' src='../icons/n_top.png' alt='[top]' /><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+1 time/jiffies.c'  /> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L35' title='Defined at 35.'>jiffies_read</a></li>
+<li><a href='#L65' title='Defined at 65.'>get_jiffies_64</a></li>
+<li><a href='#L81' title='Defined at 81.'>init_jiffies_clocksource</a></li>
+<li><a href='#L88' title='Defined at 88.'>clocksource_default_clock</a></li>
+<li><a href='#L95' title='Defined at 95.'>register_refined_jiffies</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0+</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * This file contains the jiffies based clocksource.</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> *</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * Copyright (C) 2004, 2005 IBM, John Stultz (johnstul@us.ibm.com)</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> */</em>
+<a id='L7' name='L7'></a>   7 <em class='sharp'>#include</em> &lt;linux/clocksource.h&gt;
+<a id='L8' name='L8'></a>   8 <em class='sharp'>#include</em> &lt;linux/jiffies.h&gt;
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> &lt;linux/module.h&gt;
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;linux/init.h&gt;
+<a id='L11' name='L11'></a>  11 
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> "<a href='102.html'>timekeeping.h</a>"
+<a id='L13' name='L13'></a>  13 
+<a id='L14' name='L14'></a>  14 
+<a id='L15' name='L15'></a>  15 <em class='comment'>/* Since jiffies uses a simple TICK_NSEC multiplier</em>
+<a id='L16' name='L16'></a>  16 <em class='comment'> * conversion, the .shift value could be zero. However</em>
+<a id='L17' name='L17'></a>  17 <em class='comment'> * this would make NTP adjustments impossible as they are</em>
+<a id='L18' name='L18'></a>  18 <em class='comment'> * in units of 1/2^.shift. Thus we use JIFFIES_SHIFT to</em>
+<a id='L19' name='L19'></a>  19 <em class='comment'> * shift both the nominator and denominator the same</em>
+<a id='L20' name='L20'></a>  20 <em class='comment'> * amount, and give ntp adjustments in units of 1/2^8</em>
+<a id='L21' name='L21'></a>  21 <em class='comment'> *</em>
+<a id='L22' name='L22'></a>  22 <em class='comment'> * The value 8 is somewhat carefully chosen, as anything</em>
+<a id='L23' name='L23'></a>  23 <em class='comment'> * larger can result in overflows. TICK_NSEC grows as HZ</em>
+<a id='L24' name='L24'></a>  24 <em class='comment'> * shrinks, so values greater than 8 overflow 32bits when</em>
+<a id='L25' name='L25'></a>  25 <em class='comment'> * HZ=100.</em>
+<a id='L26' name='L26'></a>  26 <em class='comment'> */</em>
+<a id='L27' name='L27'></a>  27 <em class='sharp'>#if</em> <a href='../cgi-bin/global.cgi?pattern=HZ&amp;type=symbol' title='Multiple used in 182 places.'>HZ</a> &lt; 34
+<a id='L28' name='L28'></a>  28 <em class='sharp'>#define</em> <a href='../cgi-bin/global.cgi?pattern=JIFFIES_SHIFT&amp;type=reference' title='Multiple referred from 3 places.'>JIFFIES_SHIFT</a>   6
+<a id='L29' name='L29'></a>  29 <em class='sharp'>#elif</em> <a href='../cgi-bin/global.cgi?pattern=HZ&amp;type=symbol' title='Multiple used in 182 places.'>HZ</a> &lt; 67
+<a id='L30' name='L30'></a>  30 <em class='sharp'>#define</em> <a href='../cgi-bin/global.cgi?pattern=JIFFIES_SHIFT&amp;type=reference' title='Multiple referred from 3 places.'>JIFFIES_SHIFT</a>   7
+<a id='L31' name='L31'></a>  31 <em class='sharp'>#else</em>
+<a id='L32' name='L32'></a>  32 <em class='sharp'>#define</em> <a href='../cgi-bin/global.cgi?pattern=JIFFIES_SHIFT&amp;type=reference' title='Multiple referred from 3 places.'>JIFFIES_SHIFT</a>   8
+<a id='L33' name='L33'></a>  33 <em class='sharp'>#endif</em>
+<a id='L34' name='L34'></a>  34 
+<a id='L35' name='L35'></a>  35 <strong class='reserved'>static</strong> <a href='../cgi-bin/global.cgi?pattern=u64&amp;type=symbol' title='Multiple used in 1746 places.'>u64</a> <a href='../S/108.html#L54' title='Referred from 54 in time/jiffies.c.'>jiffies_read</a>(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=clocksource&amp;type=symbol' title='Multiple used in 55 places.'>clocksource</a> *<a href='../cgi-bin/global.cgi?pattern=cs&amp;type=symbol' title='Multiple used in 463 places.'>cs</a>)
+     <em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><a href='#L65'><img class='icon' src='../icons/right.png' alt='[next]' /></a><img class='icon' src='../icons/n_first.png' alt='[first]' /><a href='#L95'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+35 time/jiffies.c'  /> */</em>
+<a id='L36' name='L36'></a>  36 <em class='brace'>{</em>
+<a id='L37' name='L37'></a>  37         <strong class='reserved'>return</strong> (<a href='../cgi-bin/global.cgi?pattern=u64&amp;type=symbol' title='Multiple used in 1746 places.'>u64</a>) <a href='../cgi-bin/global.cgi?pattern=jiffies&amp;type=symbol' title='Multiple used in 260 places.'>jiffies</a>;
+<a id='L38' name='L38'></a>  38 <em class='brace'>}</em>
+<a id='L39' name='L39'></a>  39 
+<a id='L40' name='L40'></a>  40 <em class='comment'>/*</em>
+<a id='L41' name='L41'></a>  41 <em class='comment'> * The Jiffies based clocksource is the lowest common</em>
+<a id='L42' name='L42'></a>  42 <em class='comment'> * denominator clock source which should function on</em>
+<a id='L43' name='L43'></a>  43 <em class='comment'> * all systems. It has the same coarse resolution as</em>
+<a id='L44' name='L44'></a>  44 <em class='comment'> * the timer interrupt frequency HZ and it suffers</em>
+<a id='L45' name='L45'></a>  45 <em class='comment'> * inaccuracies caused by missed or lost timer</em>
+<a id='L46' name='L46'></a>  46 <em class='comment'> * interrupts and the inability for the timer</em>
+<a id='L47' name='L47'></a>  47 <em class='comment'> * interrupt hardware to accuratly tick at the</em>
+<a id='L48' name='L48'></a>  48 <em class='comment'> * requested HZ value. It is also not recommended</em>
+<a id='L49' name='L49'></a>  49 <em class='comment'> * for "tick-less" systems.</em>
+<a id='L50' name='L50'></a>  50 <em class='comment'> */</em>
+<a id='L51' name='L51'></a>  51 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=clocksource&amp;type=symbol' title='Multiple used in 55 places.'>clocksource</a> <a href='../cgi-bin/global.cgi?pattern=clocksource_jiffies&amp;type=symbol' title='Multiple used in 4 places.'>clocksource_jiffies</a> = <em class='brace'>{</em>
+<a id='L52' name='L52'></a>  52         .<a href='../cgi-bin/global.cgi?pattern=name&amp;type=symbol' title='Multiple used in 1868 places.'>name</a>           = "jiffies",
+<a id='L53' name='L53'></a>  53         .<a href='../cgi-bin/global.cgi?pattern=rating&amp;type=symbol' title='Multiple used in 15 places.'>rating</a>         = 1, <em class='comment'>/* lowest valid rating*/</em>
+<a id='L54' name='L54'></a>  54         .<a href='../cgi-bin/global.cgi?pattern=read&amp;type=symbol' title='Multiple used in 249 places.'>read</a>           = <a href='../S/108.html#L35' title='Defined at 35 in time/jiffies.c.'>jiffies_read</a>,
+<a id='L55' name='L55'></a>  55         .<a href='../cgi-bin/global.cgi?pattern=mask&amp;type=symbol' title='Multiple used in 659 places.'>mask</a>           = <a href='../cgi-bin/global.cgi?pattern=CLOCKSOURCE_MASK&amp;type=symbol' title='Multiple used in 3 places.'>CLOCKSOURCE_MASK</a>(32),
+<a id='L56' name='L56'></a>  56         .<a href='../cgi-bin/global.cgi?pattern=mult&amp;type=symbol' title='Multiple used in 66 places.'>mult</a>           = <a href='../cgi-bin/global.cgi?pattern=TICK_NSEC&amp;type=symbol' title='Multiple used in 30 places.'>TICK_NSEC</a> &lt;&lt; <a href='../cgi-bin/global.cgi?pattern=JIFFIES_SHIFT&amp;type=definitions' title='Multiple defined in 3 places.'>JIFFIES_SHIFT</a>, <em class='comment'>/* details above */</em>
+<a id='L57' name='L57'></a>  57         .<a href='../cgi-bin/global.cgi?pattern=shift&amp;type=symbol' title='Multiple used in 97 places.'>shift</a>          = <a href='../cgi-bin/global.cgi?pattern=JIFFIES_SHIFT&amp;type=definitions' title='Multiple defined in 3 places.'>JIFFIES_SHIFT</a>,
+<a id='L58' name='L58'></a>  58         .<a href='../cgi-bin/global.cgi?pattern=max_cycles&amp;type=symbol' title='Multiple used in 16 places.'>max_cycles</a>     = 10,
+<a id='L59' name='L59'></a>  59 <em class='brace'>}</em>;
+<a id='L60' name='L60'></a>  60 
+<a id='L61' name='L61'></a>  61 <a href='../cgi-bin/global.cgi?pattern=__cacheline_aligned_in_smp&amp;type=symbol' title='Multiple used in 11 places.'>__cacheline_aligned_in_smp</a> <a href='../cgi-bin/global.cgi?pattern=DEFINE_RAW_SPINLOCK&amp;type=symbol' title='Multiple used in 19 places.'>DEFINE_RAW_SPINLOCK</a>(<a href='../cgi-bin/global.cgi?pattern=jiffies_lock&amp;type=symbol' title='Multiple used in 11 places.'>jiffies_lock</a>);
+<a id='L62' name='L62'></a>  62 <a href='../cgi-bin/global.cgi?pattern=__cacheline_aligned_in_smp&amp;type=symbol' title='Multiple used in 11 places.'>__cacheline_aligned_in_smp</a> <a href='../cgi-bin/global.cgi?pattern=seqcount_t&amp;type=symbol' title='Multiple used in 2 places.'>seqcount_t</a> <a href='../cgi-bin/global.cgi?pattern=jiffies_seq&amp;type=symbol' title='Multiple used in 17 places.'>jiffies_seq</a>;
+<a id='L63' name='L63'></a>  63 
+<a id='L64' name='L64'></a>  64 <em class='sharp'>#if</em> (<a href='../cgi-bin/global.cgi?pattern=BITS_PER_LONG&amp;type=symbol' title='Multiple used in 38 places.'>BITS_PER_LONG</a> &lt; 64)
+<a id='L65' name='L65'></a>  65 <a href='../cgi-bin/global.cgi?pattern=u64&amp;type=symbol' title='Multiple used in 1746 places.'>u64</a> <a href='../cgi-bin/global.cgi?pattern=get_jiffies_64&amp;type=reference' title='Multiple referred from 3 places.'>get_jiffies_64</a>(<strong class='reserved'>void</strong>)
+     <em class='comment'>/* <a href='#L35'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L81'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L35'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L95'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+65 time/jiffies.c'  /> */</em>
+<a id='L66' name='L66'></a>  66 <em class='brace'>{</em>
+<a id='L67' name='L67'></a>  67         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=seq&amp;type=symbol' title='Multiple used in 806 places.'>seq</a>;
+<a id='L68' name='L68'></a>  68         <a href='../cgi-bin/global.cgi?pattern=u64&amp;type=symbol' title='Multiple used in 1746 places.'>u64</a> <a href='../cgi-bin/global.cgi?pattern=ret&amp;type=symbol' title='Multiple used in 7615 places.'>ret</a>;
+<a id='L69' name='L69'></a>  69 
+<a id='L70' name='L70'></a>  70         <strong class='reserved'>do</strong> <em class='brace'>{</em>
+<a id='L71' name='L71'></a>  71                 <a href='../cgi-bin/global.cgi?pattern=seq&amp;type=symbol' title='Multiple used in 806 places.'>seq</a> = <a href='../cgi-bin/global.cgi?pattern=read_seqcount_begin&amp;type=symbol' title='Multiple used in 26 places.'>read_seqcount_begin</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=jiffies_seq&amp;type=symbol' title='Multiple used in 17 places.'>jiffies_seq</a>);
+<a id='L72' name='L72'></a>  72                 <a href='../cgi-bin/global.cgi?pattern=ret&amp;type=symbol' title='Multiple used in 7615 places.'>ret</a> = <a href='../cgi-bin/global.cgi?pattern=jiffies_64&amp;type=symbol' title='Multiple used in 5 places.'>jiffies_64</a>;
+<a id='L73' name='L73'></a>  73         <em class='brace'>}</em> <strong class='reserved'>while</strong> (<a href='../cgi-bin/global.cgi?pattern=read_seqcount_retry&amp;type=symbol' title='Multiple used in 27 places.'>read_seqcount_retry</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=jiffies_seq&amp;type=symbol' title='Multiple used in 17 places.'>jiffies_seq</a>, <a href='../cgi-bin/global.cgi?pattern=seq&amp;type=symbol' title='Multiple used in 806 places.'>seq</a>));
+<a id='L74' name='L74'></a>  74         <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=ret&amp;type=symbol' title='Multiple used in 7615 places.'>ret</a>;
+<a id='L75' name='L75'></a>  75 <em class='brace'>}</em>
+<a id='L76' name='L76'></a>  76 <a href='../cgi-bin/global.cgi?pattern=EXPORT_SYMBOL&amp;type=symbol' title='Multiple used in 572 places.'>EXPORT_SYMBOL</a>(<a href='../S/108.html#L65' title='Defined at 65 in time/jiffies.c.'>get_jiffies_64</a>);
+<a id='L77' name='L77'></a>  77 <em class='sharp'>#endif</em>
+<a id='L78' name='L78'></a>  78 
+<a id='L79' name='L79'></a>  79 <a href='../cgi-bin/global.cgi?pattern=EXPORT_SYMBOL&amp;type=symbol' title='Multiple used in 572 places.'>EXPORT_SYMBOL</a>(<a href='../cgi-bin/global.cgi?pattern=jiffies&amp;type=symbol' title='Multiple used in 260 places.'>jiffies</a>);
+<a id='L80' name='L80'></a>  80 
+<a id='L81' name='L81'></a>  81 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=__init&amp;type=symbol' title='Multiple used in 557 places.'>__init</a> <a href='../S/108.html#L86' title='Referred from 86 in time/jiffies.c.'>init_jiffies_clocksource</a>(<strong class='reserved'>void</strong>)
+     <em class='comment'>/* <a href='#L65'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L88'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L35'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L95'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+81 time/jiffies.c'  /> */</em>
+<a id='L82' name='L82'></a>  82 <em class='brace'>{</em>
+<a id='L83' name='L83'></a>  83         <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=__clocksource_register&amp;type=symbol' title='Multiple used in 2 places.'>__clocksource_register</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=clocksource_jiffies&amp;type=symbol' title='Multiple used in 4 places.'>clocksource_jiffies</a>);
+<a id='L84' name='L84'></a>  84 <em class='brace'>}</em>
+<a id='L85' name='L85'></a>  85 
+<a id='L86' name='L86'></a>  86 <a href='../cgi-bin/global.cgi?pattern=core_initcall&amp;type=symbol' title='Multiple used in 24 places.'>core_initcall</a>(<a href='../S/108.html#L81' title='Defined at 81 in time/jiffies.c.'>init_jiffies_clocksource</a>);
+<a id='L87' name='L87'></a>  87 
+<a id='L88' name='L88'></a>  88 <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=clocksource&amp;type=symbol' title='Multiple used in 55 places.'>clocksource</a> * <a href='../cgi-bin/global.cgi?pattern=__init&amp;type=symbol' title='Multiple used in 557 places.'>__init</a> <a href='../cgi-bin/global.cgi?pattern=__weak&amp;type=symbol' title='Multiple used in 182 places.'>__weak</a> <a href='../cgi-bin/global.cgi?pattern=clocksource_default_clock&amp;type=reference' title='Multiple referred from 2 places.'>clocksource_default_clock</a>(<strong class='reserved'>void</strong>)
+     <em class='comment'>/* <a href='#L81'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L95'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L35'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L95'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+88 time/jiffies.c'  /> */</em>
+<a id='L89' name='L89'></a>  89 <em class='brace'>{</em>
+<a id='L90' name='L90'></a>  90         <strong class='reserved'>return</strong> &amp;<a href='../cgi-bin/global.cgi?pattern=clocksource_jiffies&amp;type=symbol' title='Multiple used in 4 places.'>clocksource_jiffies</a>;
+<a id='L91' name='L91'></a>  91 <em class='brace'>}</em>
+<a id='L92' name='L92'></a>  92 
+<a id='L93' name='L93'></a>  93 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=clocksource&amp;type=symbol' title='Multiple used in 55 places.'>clocksource</a> <a href='../cgi-bin/global.cgi?pattern=refined_jiffies&amp;type=symbol' title='Multiple used in 6 places.'>refined_jiffies</a>;
+<a id='L94' name='L94'></a>  94 
+<a id='L95' name='L95'></a>  95 <strong class='reserved'>int</strong> register_refined_jiffies(<strong class='reserved'>long</strong> <a href='../cgi-bin/global.cgi?pattern=cycles_per_second&amp;type=symbol' title='Multiple used in 3 places.'>cycles_per_second</a>)
+     <em class='comment'>/* <a href='#L88'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L35'><img class='icon' src='../icons/first.png' alt='[first]' /></a><img class='icon' src='../icons/n_last.png' alt='[last]' /><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+95 time/jiffies.c'  /> */</em>
+<a id='L96' name='L96'></a>  96 <em class='brace'>{</em>
+<a id='L97' name='L97'></a>  97         <a href='../cgi-bin/global.cgi?pattern=u64&amp;type=symbol' title='Multiple used in 1746 places.'>u64</a> <a href='../cgi-bin/global.cgi?pattern=nsec_per_tick&amp;type=symbol' title='Multiple used in 5 places.'>nsec_per_tick</a>, <a href='../cgi-bin/global.cgi?pattern=shift_hz&amp;type=symbol' title='Multiple used in 6 places.'>shift_hz</a>;
+<a id='L98' name='L98'></a>  98         <strong class='reserved'>long</strong> <a href='../cgi-bin/global.cgi?pattern=cycles_per_tick&amp;type=symbol' title='Multiple used in 4 places.'>cycles_per_tick</a>;
+<a id='L99' name='L99'></a>  99 
+<a id='L100' name='L100'></a> 100 
+<a id='L101' name='L101'></a> 101 
+<a id='L102' name='L102'></a> 102         <a href='../cgi-bin/global.cgi?pattern=refined_jiffies&amp;type=symbol' title='Multiple used in 6 places.'>refined_jiffies</a> = <a href='../cgi-bin/global.cgi?pattern=clocksource_jiffies&amp;type=symbol' title='Multiple used in 4 places.'>clocksource_jiffies</a>;
+<a id='L103' name='L103'></a> 103         <a href='../cgi-bin/global.cgi?pattern=refined_jiffies&amp;type=symbol' title='Multiple used in 6 places.'>refined_jiffies</a>.<a href='../cgi-bin/global.cgi?pattern=name&amp;type=symbol' title='Multiple used in 1868 places.'>name</a> = "refined-jiffies";
+<a id='L104' name='L104'></a> 104         <a href='../cgi-bin/global.cgi?pattern=refined_jiffies&amp;type=symbol' title='Multiple used in 6 places.'>refined_jiffies</a>.<a href='../cgi-bin/global.cgi?pattern=rating&amp;type=symbol' title='Multiple used in 15 places.'>rating</a>++;
+<a id='L105' name='L105'></a> 105 
+<a id='L106' name='L106'></a> 106         <em class='comment'>/* Calc cycles per tick */</em>
+<a id='L107' name='L107'></a> 107         <a href='../cgi-bin/global.cgi?pattern=cycles_per_tick&amp;type=symbol' title='Multiple used in 4 places.'>cycles_per_tick</a> = (<a href='../cgi-bin/global.cgi?pattern=cycles_per_second&amp;type=symbol' title='Multiple used in 3 places.'>cycles_per_second</a> + <a href='../cgi-bin/global.cgi?pattern=HZ&amp;type=symbol' title='Multiple used in 182 places.'>HZ</a>/2)/<a href='../cgi-bin/global.cgi?pattern=HZ&amp;type=symbol' title='Multiple used in 182 places.'>HZ</a>;
+<a id='L108' name='L108'></a> 108         <em class='comment'>/* shift_hz stores hz&lt;&lt;8 for extra accuracy */</em>
+<a id='L109' name='L109'></a> 109         <a href='../cgi-bin/global.cgi?pattern=shift_hz&amp;type=symbol' title='Multiple used in 6 places.'>shift_hz</a> = (<a href='../cgi-bin/global.cgi?pattern=u64&amp;type=symbol' title='Multiple used in 1746 places.'>u64</a>)<a href='../cgi-bin/global.cgi?pattern=cycles_per_second&amp;type=symbol' title='Multiple used in 3 places.'>cycles_per_second</a> &lt;&lt; 8;
+<a id='L110' name='L110'></a> 110         <a href='../cgi-bin/global.cgi?pattern=shift_hz&amp;type=symbol' title='Multiple used in 6 places.'>shift_hz</a> += <a href='../cgi-bin/global.cgi?pattern=cycles_per_tick&amp;type=symbol' title='Multiple used in 4 places.'>cycles_per_tick</a>/2;
+<a id='L111' name='L111'></a> 111         <a href='../cgi-bin/global.cgi?pattern=do_div&amp;type=symbol' title='Multiple used in 66 places.'>do_div</a>(<a href='../cgi-bin/global.cgi?pattern=shift_hz&amp;type=symbol' title='Multiple used in 6 places.'>shift_hz</a>, <a href='../cgi-bin/global.cgi?pattern=cycles_per_tick&amp;type=symbol' title='Multiple used in 4 places.'>cycles_per_tick</a>);
+<a id='L112' name='L112'></a> 112         <em class='comment'>/* Calculate nsec_per_tick using shift_hz */</em>
+<a id='L113' name='L113'></a> 113         <a href='../cgi-bin/global.cgi?pattern=nsec_per_tick&amp;type=symbol' title='Multiple used in 5 places.'>nsec_per_tick</a> = (<a href='../cgi-bin/global.cgi?pattern=u64&amp;type=symbol' title='Multiple used in 1746 places.'>u64</a>)<a href='../cgi-bin/global.cgi?pattern=NSEC_PER_SEC&amp;type=symbol' title='Multiple used in 83 places.'>NSEC_PER_SEC</a> &lt;&lt; 8;
+<a id='L114' name='L114'></a> 114         <a href='../cgi-bin/global.cgi?pattern=nsec_per_tick&amp;type=symbol' title='Multiple used in 5 places.'>nsec_per_tick</a> += (<a href='../cgi-bin/global.cgi?pattern=u32&amp;type=symbol' title='Multiple used in 1371 places.'>u32</a>)<a href='../cgi-bin/global.cgi?pattern=shift_hz&amp;type=symbol' title='Multiple used in 6 places.'>shift_hz</a>/2;
+<a id='L115' name='L115'></a> 115         <a href='../cgi-bin/global.cgi?pattern=do_div&amp;type=symbol' title='Multiple used in 66 places.'>do_div</a>(<a href='../cgi-bin/global.cgi?pattern=nsec_per_tick&amp;type=symbol' title='Multiple used in 5 places.'>nsec_per_tick</a>, (<a href='../cgi-bin/global.cgi?pattern=u32&amp;type=symbol' title='Multiple used in 1371 places.'>u32</a>)<a href='../cgi-bin/global.cgi?pattern=shift_hz&amp;type=symbol' title='Multiple used in 6 places.'>shift_hz</a>);
+<a id='L116' name='L116'></a> 116 
+<a id='L117' name='L117'></a> 117         <a href='../cgi-bin/global.cgi?pattern=refined_jiffies&amp;type=symbol' title='Multiple used in 6 places.'>refined_jiffies</a>.<a href='../cgi-bin/global.cgi?pattern=mult&amp;type=symbol' title='Multiple used in 66 places.'>mult</a> = ((<a href='../cgi-bin/global.cgi?pattern=u32&amp;type=symbol' title='Multiple used in 1371 places.'>u32</a>)<a href='../cgi-bin/global.cgi?pattern=nsec_per_tick&amp;type=symbol' title='Multiple used in 5 places.'>nsec_per_tick</a>) &lt;&lt; <a href='../cgi-bin/global.cgi?pattern=JIFFIES_SHIFT&amp;type=definitions' title='Multiple defined in 3 places.'>JIFFIES_SHIFT</a>;
+<a id='L118' name='L118'></a> 118 
+<a id='L119' name='L119'></a> 119         <a href='../cgi-bin/global.cgi?pattern=__clocksource_register&amp;type=symbol' title='Multiple used in 2 places.'>__clocksource_register</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=refined_jiffies&amp;type=symbol' title='Multiple used in 6 places.'>refined_jiffies</a>);
+<a id='L120' name='L120'></a> 120         <strong class='reserved'>return</strong> 0;
+<a id='L121' name='L121'></a> 121 <em class='brace'>}</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L35'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L95'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><img class='icon' src='../icons/n_bottom.png' alt='[bottom]' /><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+121 time/jiffies.c'  /> */</em>
+</body>
+</html>

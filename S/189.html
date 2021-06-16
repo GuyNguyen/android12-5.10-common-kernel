@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>utsname_sysctl.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<!-- beginning of fixed guide -->
+<div id='guide'><ul>
+<li><a href='#L17'><img class='icon' src='../icons/first.png' alt='[^]' /></a></li>
+<li><a href='#L138'><img class='icon' src='../icons/last.png' alt='[v]' /></a></li>
+<li><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a></li>
+<li><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a></li>
+<li><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a></li>
+<li class='standout'><span>utsname_sysctl.c</span></li>
+</ul></div>
+<!-- end of fixed guide -->
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/utsname_sysctl.c</h2>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L17'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L138'><img class='icon' src='../icons/last.png' alt='[last]' /></a><img class='icon' src='../icons/n_top.png' alt='[top]' /><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+1 utsname_sysctl.c'  /> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L17' title='Defined at 17.'>get_uts</a></li>
+<li><a href='#L32' title='Defined at 32.'>proc_do_uts_string</a></li>
+<li><a href='#L130' title='Defined at 130.'>uts_proc_notify</a></li>
+<li><a href='#L138' title='Defined at 138.'>utsname_sysctl_init</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0-only</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> *  Copyright (C) 2007</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> *</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> *  Author: Eric Biederman &lt;ebiederm@xmision.com&gt;</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> */</em>
+<a id='L7' name='L7'></a>   7 
+<a id='L8' name='L8'></a>   8 <em class='sharp'>#include</em> &lt;linux/export.h&gt;
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> &lt;linux/uts.h&gt;
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;linux/utsname.h&gt;
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;linux/sysctl.h&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;linux/wait.h&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;<a href='24.html'>linux/rwsem.h</a>&gt;
+<a id='L14' name='L14'></a>  14 
+<a id='L15' name='L15'></a>  15 <em class='sharp'>#ifdef</em> <a href='../cgi-bin/global.cgi?pattern=CONFIG_PROC_SYSCTL&amp;type=symbol' title='Multiple used in 9 places.'>CONFIG_PROC_SYSCTL</a>
+<a id='L16' name='L16'></a>  16 
+<a id='L17' name='L17'></a>  17 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> *<a href='../cgi-bin/global.cgi?pattern=get_uts&amp;type=reference' title='Multiple referred from 2 places.'>get_uts</a>(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=ctl_table&amp;type=symbol' title='Multiple used in 133 places.'>ctl_table</a> *<a href='../cgi-bin/global.cgi?pattern=table&amp;type=symbol' title='Multiple used in 235 places.'>table</a>)
+     <em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><a href='#L32'><img class='icon' src='../icons/right.png' alt='[next]' /></a><img class='icon' src='../icons/n_first.png' alt='[first]' /><a href='#L138'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+17 utsname_sysctl.c'  /> */</em>
+<a id='L18' name='L18'></a>  18 <em class='brace'>{</em>
+<a id='L19' name='L19'></a>  19         <strong class='reserved'>char</strong> *<a href='../cgi-bin/global.cgi?pattern=which&amp;type=symbol' title='Multiple used in 54 places.'>which</a> = <a href='../cgi-bin/global.cgi?pattern=table&amp;type=symbol' title='Multiple used in 235 places.'>table</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=data&amp;type=symbol' title='Multiple used in 2604 places.'>data</a>;
+<a id='L20' name='L20'></a>  20         <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=uts_namespace&amp;type=symbol' title='Multiple used in 18 places.'>uts_namespace</a> *<a href='../cgi-bin/global.cgi?pattern=uts_ns&amp;type=symbol' title='Multiple used in 22 places.'>uts_ns</a>;
+<a id='L21' name='L21'></a>  21 
+<a id='L22' name='L22'></a>  22         <a href='../cgi-bin/global.cgi?pattern=uts_ns&amp;type=symbol' title='Multiple used in 22 places.'>uts_ns</a> = <a href='../cgi-bin/global.cgi?pattern=current&amp;type=symbol' title='Multiple used in 1376 places.'>current</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=nsproxy&amp;type=symbol' title='Multiple used in 96 places.'>nsproxy</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=uts_ns&amp;type=symbol' title='Multiple used in 22 places.'>uts_ns</a>;
+<a id='L23' name='L23'></a>  23         <a href='../cgi-bin/global.cgi?pattern=which&amp;type=symbol' title='Multiple used in 54 places.'>which</a> = (<a href='../cgi-bin/global.cgi?pattern=which&amp;type=symbol' title='Multiple used in 54 places.'>which</a> - (<strong class='reserved'>char</strong> *)&amp;<a href='../cgi-bin/global.cgi?pattern=init_uts_ns&amp;type=symbol' title='Multiple used in 20 places.'>init_uts_ns</a>) + (<strong class='reserved'>char</strong> *)<a href='../cgi-bin/global.cgi?pattern=uts_ns&amp;type=symbol' title='Multiple used in 22 places.'>uts_ns</a>;
+<a id='L24' name='L24'></a>  24 
+<a id='L25' name='L25'></a>  25         <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=which&amp;type=symbol' title='Multiple used in 54 places.'>which</a>;
+<a id='L26' name='L26'></a>  26 <em class='brace'>}</em>
+<a id='L27' name='L27'></a>  27 
+<a id='L28' name='L28'></a>  28 <em class='comment'>/*</em>
+<a id='L29' name='L29'></a>  29 <em class='comment'> *      Special case of dostring for the UTS structure. This has locks</em>
+<a id='L30' name='L30'></a>  30 <em class='comment'> *      to observe. Should this be in kernel/sys.c ????</em>
+<a id='L31' name='L31'></a>  31 <em class='comment'> */</em>
+<a id='L32' name='L32'></a>  32 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=proc_do_uts_string&amp;type=reference' title='Multiple referred from 5 places.'>proc_do_uts_string</a>(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=ctl_table&amp;type=symbol' title='Multiple used in 133 places.'>ctl_table</a> *<a href='../cgi-bin/global.cgi?pattern=table&amp;type=symbol' title='Multiple used in 235 places.'>table</a>, <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=write&amp;type=symbol' title='Multiple used in 348 places.'>write</a>,
+     <em class='comment'>/* <a href='#L17'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L130'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L17'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L138'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+32 utsname_sysctl.c'  /> */</em>
+<a id='L33' name='L33'></a>  33                   <strong class='reserved'>void</strong> *<a href='../cgi-bin/global.cgi?pattern=buffer&amp;type=symbol' title='Multiple used in 1031 places.'>buffer</a>, <a href='../cgi-bin/global.cgi?pattern=size_t&amp;type=symbol' title='Multiple used in 831 places.'>size_t</a> *<a href='../cgi-bin/global.cgi?pattern=lenp&amp;type=symbol' title='Multiple used in 176 places.'>lenp</a>, <a href='../cgi-bin/global.cgi?pattern=loff_t&amp;type=symbol' title='Multiple used in 442 places.'>loff_t</a> *<a href='../cgi-bin/global.cgi?pattern=ppos&amp;type=symbol' title='Multiple used in 386 places.'>ppos</a>)
+<a id='L34' name='L34'></a>  34 <em class='brace'>{</em>
+<a id='L35' name='L35'></a>  35         <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=ctl_table&amp;type=symbol' title='Multiple used in 133 places.'>ctl_table</a> <a href='../cgi-bin/global.cgi?pattern=uts_table&amp;type=symbol' title='Multiple used in 4 places.'>uts_table</a>;
+<a id='L36' name='L36'></a>  36         <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=r&amp;type=symbol' title='Multiple used in 440 places.'>r</a>;
+<a id='L37' name='L37'></a>  37         <strong class='reserved'>char</strong> <a href='../cgi-bin/global.cgi?pattern=tmp_data&amp;type=symbol' title='Multiple used in 4 places.'>tmp_data</a>[<a href='../cgi-bin/global.cgi?pattern=__NEW_UTS_LEN&amp;type=symbol' title='Multiple used in 6 places.'>__NEW_UTS_LEN</a> + 1];
+<a id='L38' name='L38'></a>  38 
+<a id='L39' name='L39'></a>  39         <a href='../cgi-bin/global.cgi?pattern=memcpy&amp;type=symbol' title='Multiple used in 229 places.'>memcpy</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=uts_table&amp;type=symbol' title='Multiple used in 4 places.'>uts_table</a>, <a href='../cgi-bin/global.cgi?pattern=table&amp;type=symbol' title='Multiple used in 235 places.'>table</a>, <strong class='reserved'>sizeof</strong>(<a href='../cgi-bin/global.cgi?pattern=uts_table&amp;type=symbol' title='Multiple used in 4 places.'>uts_table</a>));
+<a id='L40' name='L40'></a>  40         <a href='../cgi-bin/global.cgi?pattern=uts_table&amp;type=symbol' title='Multiple used in 4 places.'>uts_table</a>.<a href='../cgi-bin/global.cgi?pattern=data&amp;type=symbol' title='Multiple used in 2604 places.'>data</a> = <a href='../cgi-bin/global.cgi?pattern=tmp_data&amp;type=symbol' title='Multiple used in 4 places.'>tmp_data</a>;
+<a id='L41' name='L41'></a>  41 
+<a id='L42' name='L42'></a>  42         <em class='comment'>/*</em>
+<a id='L43' name='L43'></a>  43 <em class='comment'>         * Buffer the value in tmp_data so that proc_dostring() can be called</em>
+<a id='L44' name='L44'></a>  44 <em class='comment'>         * without holding any locks.</em>
+<a id='L45' name='L45'></a>  45 <em class='comment'>         * We also need to read the original value in the write==1 case to</em>
+<a id='L46' name='L46'></a>  46 <em class='comment'>         * support partial writes.</em>
+<a id='L47' name='L47'></a>  47 <em class='comment'>         */</em>
+<a id='L48' name='L48'></a>  48         <a href='../S/27.html#L1511' title='Defined at 1511 in locking/rwsem.c.'>down_read</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=uts_sem&amp;type=symbol' title='Multiple used in 19 places.'>uts_sem</a>);
+<a id='L49' name='L49'></a>  49         <a href='../cgi-bin/global.cgi?pattern=memcpy&amp;type=symbol' title='Multiple used in 229 places.'>memcpy</a>(<a href='../cgi-bin/global.cgi?pattern=tmp_data&amp;type=symbol' title='Multiple used in 4 places.'>tmp_data</a>, <a href='../S/189.html#L17' title='Defined at 17 in utsname_sysctl.c.'>get_uts</a>(<a href='../cgi-bin/global.cgi?pattern=table&amp;type=symbol' title='Multiple used in 235 places.'>table</a>), <strong class='reserved'>sizeof</strong>(<a href='../cgi-bin/global.cgi?pattern=tmp_data&amp;type=symbol' title='Multiple used in 4 places.'>tmp_data</a>));
+<a id='L50' name='L50'></a>  50         <a href='../S/27.html#L1607' title='Defined at 1607 in locking/rwsem.c.'>up_read</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=uts_sem&amp;type=symbol' title='Multiple used in 19 places.'>uts_sem</a>);
+<a id='L51' name='L51'></a>  51         <a href='../cgi-bin/global.cgi?pattern=r&amp;type=symbol' title='Multiple used in 440 places.'>r</a> = <a href='../cgi-bin/global.cgi?pattern=proc_dostring&amp;type=definitions' title='Multiple defined in 2 places.'>proc_dostring</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=uts_table&amp;type=symbol' title='Multiple used in 4 places.'>uts_table</a>, <a href='../cgi-bin/global.cgi?pattern=write&amp;type=symbol' title='Multiple used in 348 places.'>write</a>, <a href='../cgi-bin/global.cgi?pattern=buffer&amp;type=symbol' title='Multiple used in 1031 places.'>buffer</a>, <a href='../cgi-bin/global.cgi?pattern=lenp&amp;type=symbol' title='Multiple used in 176 places.'>lenp</a>, <a href='../cgi-bin/global.cgi?pattern=ppos&amp;type=symbol' title='Multiple used in 386 places.'>ppos</a>);
+<a id='L52' name='L52'></a>  52 
+<a id='L53' name='L53'></a>  53         <strong class='reserved'>if</strong> (<a href='../cgi-bin/global.cgi?pattern=write&amp;type=symbol' title='Multiple used in 348 places.'>write</a>) <em class='brace'>{</em>
+<a id='L54' name='L54'></a>  54                 <em class='comment'>/*</em>
+<a id='L55' name='L55'></a>  55 <em class='comment'>                 * Write back the new value.</em>
+<a id='L56' name='L56'></a>  56 <em class='comment'>                 * Note that, since we dropped uts_sem, the result can</em>
+<a id='L57' name='L57'></a>  57 <em class='comment'>                 * theoretically be incorrect if there are two parallel writes</em>
+<a id='L58' name='L58'></a>  58 <em class='comment'>                 * at non-zero offsets to the same sysctl.</em>
+<a id='L59' name='L59'></a>  59 <em class='comment'>                 */</em>
+<a id='L60' name='L60'></a>  60                 <a href='../S/27.html#L1564' title='Defined at 1564 in locking/rwsem.c.'>down_write</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=uts_sem&amp;type=symbol' title='Multiple used in 19 places.'>uts_sem</a>);
+<a id='L61' name='L61'></a>  61                 <a href='../cgi-bin/global.cgi?pattern=memcpy&amp;type=symbol' title='Multiple used in 229 places.'>memcpy</a>(<a href='../S/189.html#L17' title='Defined at 17 in utsname_sysctl.c.'>get_uts</a>(<a href='../cgi-bin/global.cgi?pattern=table&amp;type=symbol' title='Multiple used in 235 places.'>table</a>), <a href='../cgi-bin/global.cgi?pattern=tmp_data&amp;type=symbol' title='Multiple used in 4 places.'>tmp_data</a>, <strong class='reserved'>sizeof</strong>(<a href='../cgi-bin/global.cgi?pattern=tmp_data&amp;type=symbol' title='Multiple used in 4 places.'>tmp_data</a>));
+<a id='L62' name='L62'></a>  62                 <a href='../S/27.html#L1617' title='Defined at 1617 in locking/rwsem.c.'>up_write</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=uts_sem&amp;type=symbol' title='Multiple used in 19 places.'>uts_sem</a>);
+<a id='L63' name='L63'></a>  63                 <a href='../cgi-bin/global.cgi?pattern=proc_sys_poll_notify&amp;type=symbol' title='Multiple used in 2 places.'>proc_sys_poll_notify</a>(<a href='../cgi-bin/global.cgi?pattern=table&amp;type=symbol' title='Multiple used in 235 places.'>table</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=poll&amp;type=symbol' title='Multiple used in 25 places.'>poll</a>);
+<a id='L64' name='L64'></a>  64         <em class='brace'>}</em>
+<a id='L65' name='L65'></a>  65 
+<a id='L66' name='L66'></a>  66         <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=r&amp;type=symbol' title='Multiple used in 440 places.'>r</a>;
+<a id='L67' name='L67'></a>  67 <em class='brace'>}</em>
+<a id='L68' name='L68'></a>  68 <em class='sharp'>#else</em>
+<a id='L69' name='L69'></a>  69 <em class='sharp'>#define</em> <a href='../cgi-bin/global.cgi?pattern=proc_do_uts_string&amp;type=reference' title='Multiple referred from 5 places.'>proc_do_uts_string</a> <a href='../cgi-bin/global.cgi?pattern=NULL&amp;type=symbol' title='Multiple used in 3516 places.'>NULL</a>
+<a id='L70' name='L70'></a>  70 <em class='sharp'>#endif</em>
+<a id='L71' name='L71'></a>  71 
+<a id='L72' name='L72'></a>  72 <strong class='reserved'>static</strong> <a href='../cgi-bin/global.cgi?pattern=DEFINE_CTL_TABLE_POLL&amp;type=symbol' title='Multiple used in 2 places.'>DEFINE_CTL_TABLE_POLL</a>(<a href='../cgi-bin/global.cgi?pattern=hostname_poll&amp;type=symbol' title='Multiple used in 2 places.'>hostname_poll</a>);
+<a id='L73' name='L73'></a>  73 <strong class='reserved'>static</strong> <a href='../cgi-bin/global.cgi?pattern=DEFINE_CTL_TABLE_POLL&amp;type=symbol' title='Multiple used in 2 places.'>DEFINE_CTL_TABLE_POLL</a>(<a href='../cgi-bin/global.cgi?pattern=domainname_poll&amp;type=symbol' title='Multiple used in 2 places.'>domainname_poll</a>);
+<a id='L74' name='L74'></a>  74 
+<a id='L75' name='L75'></a>  75 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=ctl_table&amp;type=symbol' title='Multiple used in 133 places.'>ctl_table</a> <a href='../cgi-bin/global.cgi?pattern=uts_kern_table&amp;type=symbol' title='Multiple used in 3 places.'>uts_kern_table</a>[] = <em class='brace'>{</em>
+<a id='L76' name='L76'></a>  76         <em class='brace'>{</em>
+<a id='L77' name='L77'></a>  77                 .<a href='../cgi-bin/global.cgi?pattern=procname&amp;type=symbol' title='Multiple used in 240 places.'>procname</a>       = "ostype",
+<a id='L78' name='L78'></a>  78                 .<a href='../cgi-bin/global.cgi?pattern=data&amp;type=symbol' title='Multiple used in 2604 places.'>data</a>           = <a href='../cgi-bin/global.cgi?pattern=init_uts_ns&amp;type=symbol' title='Multiple used in 20 places.'>init_uts_ns</a>.<a href='../cgi-bin/global.cgi?pattern=name&amp;type=symbol' title='Multiple used in 1868 places.'>name</a>.<a href='../cgi-bin/global.cgi?pattern=sysname&amp;type=symbol' title='Multiple used in 5 places.'>sysname</a>,
+<a id='L79' name='L79'></a>  79                 .<a href='../cgi-bin/global.cgi?pattern=maxlen&amp;type=symbol' title='Multiple used in 263 places.'>maxlen</a>         = <strong class='reserved'>sizeof</strong>(<a href='../cgi-bin/global.cgi?pattern=init_uts_ns&amp;type=symbol' title='Multiple used in 20 places.'>init_uts_ns</a>.<a href='../cgi-bin/global.cgi?pattern=name&amp;type=symbol' title='Multiple used in 1868 places.'>name</a>.<a href='../cgi-bin/global.cgi?pattern=sysname&amp;type=symbol' title='Multiple used in 5 places.'>sysname</a>),
+<a id='L80' name='L80'></a>  80                 .<a href='../cgi-bin/global.cgi?pattern=mode&amp;type=symbol' title='Multiple used in 565 places.'>mode</a>           = 0444,
+<a id='L81' name='L81'></a>  81                 .<a href='../cgi-bin/global.cgi?pattern=proc_handler&amp;type=symbol' title='Multiple used in 216 places.'>proc_handler</a>   = <a href='../cgi-bin/global.cgi?pattern=proc_do_uts_string&amp;type=definitions' title='Multiple defined in 2 places.'>proc_do_uts_string</a>,
+<a id='L82' name='L82'></a>  82         <em class='brace'>}</em>,
+<a id='L83' name='L83'></a>  83         <em class='brace'>{</em>
+<a id='L84' name='L84'></a>  84                 .<a href='../cgi-bin/global.cgi?pattern=procname&amp;type=symbol' title='Multiple used in 240 places.'>procname</a>       = "osrelease",
+<a id='L85' name='L85'></a>  85                 .<a href='../cgi-bin/global.cgi?pattern=data&amp;type=symbol' title='Multiple used in 2604 places.'>data</a>           = <a href='../cgi-bin/global.cgi?pattern=init_uts_ns&amp;type=symbol' title='Multiple used in 20 places.'>init_uts_ns</a>.<a href='../cgi-bin/global.cgi?pattern=name&amp;type=symbol' title='Multiple used in 1868 places.'>name</a>.<a href='../cgi-bin/global.cgi?pattern=release&amp;type=symbol' title='Multiple used in 134 places.'>release</a>,
+<a id='L86' name='L86'></a>  86                 .<a href='../cgi-bin/global.cgi?pattern=maxlen&amp;type=symbol' title='Multiple used in 263 places.'>maxlen</a>         = <strong class='reserved'>sizeof</strong>(<a href='../cgi-bin/global.cgi?pattern=init_uts_ns&amp;type=symbol' title='Multiple used in 20 places.'>init_uts_ns</a>.<a href='../cgi-bin/global.cgi?pattern=name&amp;type=symbol' title='Multiple used in 1868 places.'>name</a>.<a href='../cgi-bin/global.cgi?pattern=release&amp;type=symbol' title='Multiple used in 134 places.'>release</a>),
+<a id='L87' name='L87'></a>  87                 .<a href='../cgi-bin/global.cgi?pattern=mode&amp;type=symbol' title='Multiple used in 565 places.'>mode</a>           = 0444,
+<a id='L88' name='L88'></a>  88                 .<a href='../cgi-bin/global.cgi?pattern=proc_handler&amp;type=symbol' title='Multiple used in 216 places.'>proc_handler</a>   = <a href='../cgi-bin/global.cgi?pattern=proc_do_uts_string&amp;type=definitions' title='Multiple defined in 2 places.'>proc_do_uts_string</a>,
+<a id='L89' name='L89'></a>  89         <em class='brace'>}</em>,
+<a id='L90' name='L90'></a>  90         <em class='brace'>{</em>
+<a id='L91' name='L91'></a>  91                 .<a href='../cgi-bin/global.cgi?pattern=procname&amp;type=symbol' title='Multiple used in 240 places.'>procname</a>       = "version",
+<a id='L92' name='L92'></a>  92                 .<a href='../cgi-bin/global.cgi?pattern=data&amp;type=symbol' title='Multiple used in 2604 places.'>data</a>           = <a href='../cgi-bin/global.cgi?pattern=init_uts_ns&amp;type=symbol' title='Multiple used in 20 places.'>init_uts_ns</a>.<a href='../cgi-bin/global.cgi?pattern=name&amp;type=symbol' title='Multiple used in 1868 places.'>name</a>.<a href='../cgi-bin/global.cgi?pattern=version&amp;type=symbol' title='Multiple used in 35 places.'>version</a>,
+<a id='L93' name='L93'></a>  93                 .<a href='../cgi-bin/global.cgi?pattern=maxlen&amp;type=symbol' title='Multiple used in 263 places.'>maxlen</a>         = <strong class='reserved'>sizeof</strong>(<a href='../cgi-bin/global.cgi?pattern=init_uts_ns&amp;type=symbol' title='Multiple used in 20 places.'>init_uts_ns</a>.<a href='../cgi-bin/global.cgi?pattern=name&amp;type=symbol' title='Multiple used in 1868 places.'>name</a>.<a href='../cgi-bin/global.cgi?pattern=version&amp;type=symbol' title='Multiple used in 35 places.'>version</a>),
+<a id='L94' name='L94'></a>  94                 .<a href='../cgi-bin/global.cgi?pattern=mode&amp;type=symbol' title='Multiple used in 565 places.'>mode</a>           = 0444,
+<a id='L95' name='L95'></a>  95                 .<a href='../cgi-bin/global.cgi?pattern=proc_handler&amp;type=symbol' title='Multiple used in 216 places.'>proc_handler</a>   = <a href='../cgi-bin/global.cgi?pattern=proc_do_uts_string&amp;type=definitions' title='Multiple defined in 2 places.'>proc_do_uts_string</a>,
+<a id='L96' name='L96'></a>  96         <em class='brace'>}</em>,
+<a id='L97' name='L97'></a>  97         <em class='brace'>{</em>
+<a id='L98' name='L98'></a>  98                 .<a href='../cgi-bin/global.cgi?pattern=procname&amp;type=symbol' title='Multiple used in 240 places.'>procname</a>       = "hostname",
+<a id='L99' name='L99'></a>  99                 .<a href='../cgi-bin/global.cgi?pattern=data&amp;type=symbol' title='Multiple used in 2604 places.'>data</a>           = <a href='../cgi-bin/global.cgi?pattern=init_uts_ns&amp;type=symbol' title='Multiple used in 20 places.'>init_uts_ns</a>.<a href='../cgi-bin/global.cgi?pattern=name&amp;type=symbol' title='Multiple used in 1868 places.'>name</a>.<a href='../cgi-bin/global.cgi?pattern=nodename&amp;type=symbol' title='Multiple used in 8 places.'>nodename</a>,
+<a id='L100' name='L100'></a> 100                 .<a href='../cgi-bin/global.cgi?pattern=maxlen&amp;type=symbol' title='Multiple used in 263 places.'>maxlen</a>         = <strong class='reserved'>sizeof</strong>(<a href='../cgi-bin/global.cgi?pattern=init_uts_ns&amp;type=symbol' title='Multiple used in 20 places.'>init_uts_ns</a>.<a href='../cgi-bin/global.cgi?pattern=name&amp;type=symbol' title='Multiple used in 1868 places.'>name</a>.<a href='../cgi-bin/global.cgi?pattern=nodename&amp;type=symbol' title='Multiple used in 8 places.'>nodename</a>),
+<a id='L101' name='L101'></a> 101                 .<a href='../cgi-bin/global.cgi?pattern=mode&amp;type=symbol' title='Multiple used in 565 places.'>mode</a>           = 0644,
+<a id='L102' name='L102'></a> 102                 .<a href='../cgi-bin/global.cgi?pattern=proc_handler&amp;type=symbol' title='Multiple used in 216 places.'>proc_handler</a>   = <a href='../cgi-bin/global.cgi?pattern=proc_do_uts_string&amp;type=definitions' title='Multiple defined in 2 places.'>proc_do_uts_string</a>,
+<a id='L103' name='L103'></a> 103                 .<a href='../cgi-bin/global.cgi?pattern=poll&amp;type=symbol' title='Multiple used in 25 places.'>poll</a>           = &amp;<a href='../cgi-bin/global.cgi?pattern=hostname_poll&amp;type=symbol' title='Multiple used in 2 places.'>hostname_poll</a>,
+<a id='L104' name='L104'></a> 104         <em class='brace'>}</em>,
+<a id='L105' name='L105'></a> 105         <em class='brace'>{</em>
+<a id='L106' name='L106'></a> 106                 .<a href='../cgi-bin/global.cgi?pattern=procname&amp;type=symbol' title='Multiple used in 240 places.'>procname</a>       = "domainname",
+<a id='L107' name='L107'></a> 107                 .<a href='../cgi-bin/global.cgi?pattern=data&amp;type=symbol' title='Multiple used in 2604 places.'>data</a>           = <a href='../cgi-bin/global.cgi?pattern=init_uts_ns&amp;type=symbol' title='Multiple used in 20 places.'>init_uts_ns</a>.<a href='../cgi-bin/global.cgi?pattern=name&amp;type=symbol' title='Multiple used in 1868 places.'>name</a>.<a href='../cgi-bin/global.cgi?pattern=domainname&amp;type=symbol' title='Multiple used in 5 places.'>domainname</a>,
+<a id='L108' name='L108'></a> 108                 .<a href='../cgi-bin/global.cgi?pattern=maxlen&amp;type=symbol' title='Multiple used in 263 places.'>maxlen</a>         = <strong class='reserved'>sizeof</strong>(<a href='../cgi-bin/global.cgi?pattern=init_uts_ns&amp;type=symbol' title='Multiple used in 20 places.'>init_uts_ns</a>.<a href='../cgi-bin/global.cgi?pattern=name&amp;type=symbol' title='Multiple used in 1868 places.'>name</a>.<a href='../cgi-bin/global.cgi?pattern=domainname&amp;type=symbol' title='Multiple used in 5 places.'>domainname</a>),
+<a id='L109' name='L109'></a> 109                 .<a href='../cgi-bin/global.cgi?pattern=mode&amp;type=symbol' title='Multiple used in 565 places.'>mode</a>           = 0644,
+<a id='L110' name='L110'></a> 110                 .<a href='../cgi-bin/global.cgi?pattern=proc_handler&amp;type=symbol' title='Multiple used in 216 places.'>proc_handler</a>   = <a href='../cgi-bin/global.cgi?pattern=proc_do_uts_string&amp;type=definitions' title='Multiple defined in 2 places.'>proc_do_uts_string</a>,
+<a id='L111' name='L111'></a> 111                 .<a href='../cgi-bin/global.cgi?pattern=poll&amp;type=symbol' title='Multiple used in 25 places.'>poll</a>           = &amp;<a href='../cgi-bin/global.cgi?pattern=domainname_poll&amp;type=symbol' title='Multiple used in 2 places.'>domainname_poll</a>,
+<a id='L112' name='L112'></a> 112         <em class='brace'>}</em>,
+<a id='L113' name='L113'></a> 113         <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L114' name='L114'></a> 114 <em class='brace'>}</em>;
+<a id='L115' name='L115'></a> 115 
+<a id='L116' name='L116'></a> 116 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=ctl_table&amp;type=symbol' title='Multiple used in 133 places.'>ctl_table</a> <a href='../cgi-bin/global.cgi?pattern=uts_root_table&amp;type=symbol' title='Multiple used in 2 places.'>uts_root_table</a>[] = <em class='brace'>{</em>
+<a id='L117' name='L117'></a> 117         <em class='brace'>{</em>
+<a id='L118' name='L118'></a> 118                 .<a href='../cgi-bin/global.cgi?pattern=procname&amp;type=symbol' title='Multiple used in 240 places.'>procname</a>       = "kernel",
+<a id='L119' name='L119'></a> 119                 .<a href='../cgi-bin/global.cgi?pattern=mode&amp;type=symbol' title='Multiple used in 565 places.'>mode</a>           = 0555,
+<a id='L120' name='L120'></a> 120                 .<a href='../cgi-bin/global.cgi?pattern=child&amp;type=symbol' title='Multiple used in 402 places.'>child</a>          = <a href='../cgi-bin/global.cgi?pattern=uts_kern_table&amp;type=symbol' title='Multiple used in 3 places.'>uts_kern_table</a>,
+<a id='L121' name='L121'></a> 121         <em class='brace'>}</em>,
+<a id='L122' name='L122'></a> 122         <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L123' name='L123'></a> 123 <em class='brace'>}</em>;
+<a id='L124' name='L124'></a> 124 
+<a id='L125' name='L125'></a> 125 <em class='sharp'>#ifdef</em> <a href='../cgi-bin/global.cgi?pattern=CONFIG_PROC_SYSCTL&amp;type=symbol' title='Multiple used in 9 places.'>CONFIG_PROC_SYSCTL</a>
+<a id='L126' name='L126'></a> 126 <em class='comment'>/*</em>
+<a id='L127' name='L127'></a> 127 <em class='comment'> * Notify userspace about a change in a certain entry of uts_kern_table,</em>
+<a id='L128' name='L128'></a> 128 <em class='comment'> * identified by the parameter proc.</em>
+<a id='L129' name='L129'></a> 129 <em class='comment'> */</em>
+<a id='L130' name='L130'></a> 130 <strong class='reserved'>void</strong> <a href='../cgi-bin/global.cgi?pattern=uts_proc_notify&amp;type=reference' title='Multiple referred from 2 places.'>uts_proc_notify</a>(<strong class='reserved'>enum</strong> uts_proc <a href='../cgi-bin/global.cgi?pattern=proc&amp;type=symbol' title='Multiple used in 3 places.'>proc</a>)
+     <em class='comment'>/* <a href='#L32'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><a href='#L138'><img class='icon' src='../icons/right.png' alt='[next]' /></a><a href='#L17'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L138'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+130 utsname_sysctl.c'  /> */</em>
+<a id='L131' name='L131'></a> 131 <em class='brace'>{</em>
+<a id='L132' name='L132'></a> 132         <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=ctl_table&amp;type=symbol' title='Multiple used in 133 places.'>ctl_table</a> *<a href='../cgi-bin/global.cgi?pattern=table&amp;type=symbol' title='Multiple used in 235 places.'>table</a> = &amp;<a href='../cgi-bin/global.cgi?pattern=uts_kern_table&amp;type=symbol' title='Multiple used in 3 places.'>uts_kern_table</a>[<a href='../cgi-bin/global.cgi?pattern=proc&amp;type=symbol' title='Multiple used in 3 places.'>proc</a>];
+<a id='L133' name='L133'></a> 133 
+<a id='L134' name='L134'></a> 134         <a href='../cgi-bin/global.cgi?pattern=proc_sys_poll_notify&amp;type=symbol' title='Multiple used in 2 places.'>proc_sys_poll_notify</a>(<a href='../cgi-bin/global.cgi?pattern=table&amp;type=symbol' title='Multiple used in 235 places.'>table</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=poll&amp;type=symbol' title='Multiple used in 25 places.'>poll</a>);
+<a id='L135' name='L135'></a> 135 <em class='brace'>}</em>
+<a id='L136' name='L136'></a> 136 <em class='sharp'>#endif</em>
+<a id='L137' name='L137'></a> 137 
+<a id='L138' name='L138'></a> 138 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=__init&amp;type=symbol' title='Multiple used in 557 places.'>__init</a> <a href='../S/189.html#L144' title='Referred from 144 in utsname_sysctl.c.'>utsname_sysctl_init</a>(<strong class='reserved'>void</strong>)
+     <em class='comment'>/* <a href='#L130'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L17'><img class='icon' src='../icons/first.png' alt='[first]' /></a><img class='icon' src='../icons/n_last.png' alt='[last]' /><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+138 utsname_sysctl.c'  /> */</em>
+<a id='L139' name='L139'></a> 139 <em class='brace'>{</em>
+<a id='L140' name='L140'></a> 140         <a href='../cgi-bin/global.cgi?pattern=register_sysctl_table&amp;type=symbol' title='Multiple used in 3 places.'>register_sysctl_table</a>(<a href='../cgi-bin/global.cgi?pattern=uts_root_table&amp;type=symbol' title='Multiple used in 2 places.'>uts_root_table</a>);
+<a id='L141' name='L141'></a> 141         <strong class='reserved'>return</strong> 0;
+<a id='L142' name='L142'></a> 142 <em class='brace'>}</em>
+<a id='L143' name='L143'></a> 143 
+<a id='L144' name='L144'></a> 144 <a href='../cgi-bin/global.cgi?pattern=device_initcall&amp;type=symbol' title='Multiple used in 23 places.'>device_initcall</a>(<a href='../S/189.html#L138' title='Defined at 138 in utsname_sysctl.c.'>utsname_sysctl_init</a>);
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L17'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L138'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><img class='icon' src='../icons/n_bottom.png' alt='[bottom]' /><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+144 utsname_sysctl.c'  /> */</em>
+</body>
+</html>
