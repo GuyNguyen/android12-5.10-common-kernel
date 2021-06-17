@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>bpf/disasm.h</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/494.html'>bpf</a>/disasm.h</h2>
+<em class='comment'>/* [&lt;][&gt;][^][v][top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'><a href='../J/27.html' title='Multiple included from 2 places.'>INCLUDED FROM</a></h2>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>/* SPDX-License-Identifier: GPL-2.0-only */</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/* Copyright (c) 2011-2014 PLUMgrid, http://plumgrid.com</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * Copyright (c) 2016 Facebook</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> */</em>
+<a id='L5' name='L5'></a>   5 
+<a id='L6' name='L6'></a>   6 <em class='sharp'>#ifndef</em> <a href='../S/374.html#L7' title='Defined at 7 in bpf/disasm.h.'>__BPF_DISASM_H__</a>
+<a id='L7' name='L7'></a>   7 <em class='sharp'>#define</em> <a href='../S/374.html#L6' title='Referred from 6 in bpf/disasm.h.'>__BPF_DISASM_H__</a>
+<a id='L8' name='L8'></a>   8 
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> &lt;linux/bpf.h&gt;
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;linux/kernel.h&gt;
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;linux/stringify.h&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#ifndef</em> __KERNEL__
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;stdio.h&gt;
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> &lt;string.h&gt;
+<a id='L15' name='L15'></a>  15 <em class='sharp'>#endif</em>
+<a id='L16' name='L16'></a>  16 
+<a id='L17' name='L17'></a>  17 <strong class='reserved'>extern</strong> <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *<strong class='reserved'>const</strong> bpf_alu_string[16];
+<a id='L18' name='L18'></a>  18 <strong class='reserved'>extern</strong> <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *<strong class='reserved'>const</strong> bpf_class_string[8];
+<a id='L19' name='L19'></a>  19 
+<a id='L20' name='L20'></a>  20 <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *<a href='../S/409.html#L47' title='Defined at 47 in bpf/disasm.c.'>func_id_name</a>(<strong class='reserved'>int</strong> id);
+<a id='L21' name='L21'></a>  21 
+<a id='L22' name='L22'></a>  22 <strong class='reserved'>typedef</strong> <a href='../D/2510.html' title='Multiple defined in 27 places.'>__printf</a>(2, 3) <strong class='reserved'>void</strong> (*bpf_insn_print_t)(<strong class='reserved'>void</strong> *private_data,
+<a id='L23' name='L23'></a>  23                                                 <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *, ...);
+<a id='L24' name='L24'></a>  24 <strong class='reserved'>typedef</strong> <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *(*bpf_insn_revmap_call_t)(<strong class='reserved'>void</strong> *private_data,
+<a id='L25' name='L25'></a>  25                                               <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> bpf_insn *insn);
+<a id='L26' name='L26'></a>  26 <strong class='reserved'>typedef</strong> <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *(*bpf_insn_print_imm_t)(<strong class='reserved'>void</strong> *private_data,
+<a id='L27' name='L27'></a>  27                                             <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> bpf_insn *insn,
+<a id='L28' name='L28'></a>  28                                             __u64 full_imm);
+<a id='L29' name='L29'></a>  29 
+<a id='L30' name='L30'></a>  30 <strong class='reserved'>struct</strong> <a href='../R/3555.html' title='Multiple referred from 6 places.'>bpf_insn_cbs</a> <em class='brace'>{</em>
+<a id='L31' name='L31'></a>  31         bpf_insn_print_t        cb_print;
+<a id='L32' name='L32'></a>  32         bpf_insn_revmap_call_t  cb_call;
+<a id='L33' name='L33'></a>  33         bpf_insn_print_imm_t    cb_imm;
+<a id='L34' name='L34'></a>  34         <strong class='reserved'>void</strong>                    *private_data;
+<a id='L35' name='L35'></a>  35 <em class='brace'>}</em>;
+<a id='L36' name='L36'></a>  36 
+<a id='L37' name='L37'></a>  37 <strong class='reserved'>void</strong> <a href='../S/409.html#L117' title='Defined at 117 in bpf/disasm.c.'>print_bpf_insn</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> <a href='../S/374.html#L30' title='Defined at 30 in bpf/disasm.h.'>bpf_insn_cbs</a> *cbs,
+<a id='L38' name='L38'></a>  38                     <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> bpf_insn *insn,
+<a id='L39' name='L39'></a>  39                     bool allow_ptr_leaks);
+<a id='L40' name='L40'></a>  40 <em class='sharp'>#endif</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;][^][v]<a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>power/power.h</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/508.html'>power</a>/power.h</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L30'>[^]</a><a href='#L301'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'><a href='../J/234.html' title='Multiple included from 20 places.'>INCLUDED FROM</a></h2>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L30' title='Defined at 30.'>init_header_complete</a></li>
+<li><a href='#L35' title='Defined at 35.'>check_image_kernel</a></li>
+<li><a href='#L69' title='Defined at 69.'>enable_restore_image_protection</a></li>
+<li><a href='#L74' title='Defined at 74.'>hibernate_reserved_size_init</a></li>
+<li><a href='#L75' title='Defined at 75.'>hibernate_image_size_init</a></li>
+<li><a href='#L196' title='Defined at 196.'>suspend_devices_and_enter</a></li>
+<li><a href='#L207' title='Defined at 207.'>suspend_test_start</a></li>
+<li><a href='#L208' title='Defined at 208.'>suspend_test_finish</a></li>
+<li><a href='#L220' title='Defined at 220.'>count_highmem_pages</a></li>
+<li><a href='#L221' title='Defined at 221.'>restore_highmem</a></li>
+<li><a href='#L249' title='Defined at 249.'>suspend_freeze_processes</a></li>
+<li><a href='#L272' title='Defined at 272.'>suspend_thaw_processes</a></li>
+<li><a href='#L277' title='Defined at 277.'>suspend_freeze_processes</a></li>
+<li><a href='#L282' title='Defined at 282.'>suspend_thaw_processes</a></li>
+<li><a href='#L298' title='Defined at 298.'>pm_autosleep_init</a></li>
+<li><a href='#L299' title='Defined at 299.'>pm_autosleep_lock</a></li>
+<li><a href='#L300' title='Defined at 300.'>pm_autosleep_unlock</a></li>
+<li><a href='#L301' title='Defined at 301.'>pm_autosleep_state</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>/* SPDX-License-Identifier: GPL-2.0 */</em>
+<a id='L2' name='L2'></a>   2 <em class='sharp'>#include</em> &lt;linux/suspend.h&gt;
+<a id='L3' name='L3'></a>   3 <em class='sharp'>#include</em> &lt;linux/suspend_ioctls.h&gt;
+<a id='L4' name='L4'></a>   4 <em class='sharp'>#include</em> &lt;linux/utsname.h&gt;
+<a id='L5' name='L5'></a>   5 <em class='sharp'>#include</em> &lt;linux/freezer.h&gt;
+<a id='L6' name='L6'></a>   6 <em class='sharp'>#include</em> &lt;linux/compiler.h&gt;
+<a id='L7' name='L7'></a>   7 
+<a id='L8' name='L8'></a>   8 <strong class='reserved'>struct</strong> <a href='../R/12838.html' title='Multiple referred from 13 places.'>swsusp_info</a> <em class='brace'>{</em>
+<a id='L9' name='L9'></a>   9         <strong class='reserved'>struct</strong> new_utsname      uts;
+<a id='L10' name='L10'></a>  10         u32                     version_code;
+<a id='L11' name='L11'></a>  11         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>           num_physpages;
+<a id='L12' name='L12'></a>  12         <strong class='reserved'>int</strong>                     cpus;
+<a id='L13' name='L13'></a>  13         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>           image_pages;
+<a id='L14' name='L14'></a>  14         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>           pages;
+<a id='L15' name='L15'></a>  15         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>           size;
+<a id='L16' name='L16'></a>  16 <em class='brace'>}</em> __aligned(PAGE_SIZE);
+<a id='L17' name='L17'></a>  17 
+<a id='L18' name='L18'></a>  18 <em class='sharp'>#ifdef</em> CONFIG_HIBERNATION
+<a id='L19' name='L19'></a>  19 <em class='comment'>/* kernel/power/snapshot.c */</em>
+<a id='L20' name='L20'></a>  20 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> __init <a href='../D/7726.html' title='Multiple defined in 2 places.'>hibernate_reserved_size_init</a>(<strong class='reserved'>void</strong>);
+<a id='L21' name='L21'></a>  21 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> __init <a href='../D/7722.html' title='Multiple defined in 2 places.'>hibernate_image_size_init</a>(<strong class='reserved'>void</strong>);
+<a id='L22' name='L22'></a>  22 
+<a id='L23' name='L23'></a>  23 <em class='sharp'>#ifdef</em> CONFIG_ARCH_HIBERNATION_HEADER
+<a id='L24' name='L24'></a>  24 <em class='comment'>/* Maximum size of architecture specific data in a hibernation header */</em>
+<a id='L25' name='L25'></a>  25 <em class='sharp'>#define</em> <a href='../S/174.html#L32' title='Referred from 32 in power/power.h.'>MAX_ARCH_HEADER_SIZE</a>    (<strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> new_utsname) + 4)
+<a id='L26' name='L26'></a>  26 
+<a id='L27' name='L27'></a>  27 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> arch_hibernation_header_save(<strong class='reserved'>void</strong> *addr, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> max_size);
+<a id='L28' name='L28'></a>  28 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> arch_hibernation_header_restore(<strong class='reserved'>void</strong> *addr);
+<a id='L29' name='L29'></a>  29 
+<a id='L30' name='L30'></a>  30 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>int</strong> <a href='../S/177.html#L2063' title='Referred from 2063 in power/snapshot.c.'>init_header_complete</a>(<strong class='reserved'>struct</strong> <a href='../S/174.html#L8' title='Defined at 8 in power/power.h.'>swsusp_info</a> *info)
+<a id='L31' name='L31'></a>  31 <em class='brace'>{</em>
+<a id='L32' name='L32'></a>  32         <strong class='reserved'>return</strong> arch_hibernation_header_save(info, <a href='../S/174.html#L25' title='Defined at 25 in power/power.h.'>MAX_ARCH_HEADER_SIZE</a>);
+<a id='L33' name='L33'></a>  33 <em class='brace'>}</em>
+<a id='L34' name='L34'></a>  34 
+<a id='L35' name='L35'></a>  35 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *<a href='../S/177.html#L2189' title='Referred from 2189 in power/snapshot.c.'>check_image_kernel</a>(<strong class='reserved'>struct</strong> <a href='../S/174.html#L8' title='Defined at 8 in power/power.h.'>swsusp_info</a> *info)
+<a id='L36' name='L36'></a>  36 <em class='brace'>{</em>
+<a id='L37' name='L37'></a>  37         <strong class='reserved'>return</strong> arch_hibernation_header_restore(info) ?
+<a id='L38' name='L38'></a>  38                         "architecture specific data" : NULL;
+<a id='L39' name='L39'></a>  39 <em class='brace'>}</em>
+<a id='L40' name='L40'></a>  40 <em class='sharp'>#endif</em> <em class='comment'>/* CONFIG_ARCH_HIBERNATION_HEADER */</em>
+<a id='L41' name='L41'></a>  41 
+<a id='L42' name='L42'></a>  42 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/170.html#L438' title='Defined at 438 in power/hibernate.c.'>hibernate_resume_nonboot_cpu_disable</a>(<strong class='reserved'>void</strong>);
+<a id='L43' name='L43'></a>  43 
+<a id='L44' name='L44'></a>  44 <em class='comment'>/*</em>
+<a id='L45' name='L45'></a>  45 <em class='comment'> * Keep some memory free so that I/O operations can succeed without paging</em>
+<a id='L46' name='L46'></a>  46 <em class='comment'> * [Might this be more than 4 MB?]</em>
+<a id='L47' name='L47'></a>  47 <em class='comment'> */</em>
+<a id='L48' name='L48'></a>  48 <em class='sharp'>#define</em> <a href='../R/981.html' title='Multiple referred from 4 places.'>PAGES_FOR_IO</a>    ((4096 * 1024) &gt;&gt; PAGE_SHIFT)
+<a id='L49' name='L49'></a>  49 
+<a id='L50' name='L50'></a>  50 <em class='comment'>/*</em>
+<a id='L51' name='L51'></a>  51 <em class='comment'> * Keep 1 MB of memory free so that device drivers can allocate some pages in</em>
+<a id='L52' name='L52'></a>  52 <em class='comment'> * their .suspend() routines without breaking the suspend to disk.</em>
+<a id='L53' name='L53'></a>  53 <em class='comment'> */</em>
+<a id='L54' name='L54'></a>  54 <em class='sharp'>#define</em> <a href='../S/177.html#L92' title='Referred from 92 in power/snapshot.c.'>SPARE_PAGES</a>     ((1024 * 1024) &gt;&gt; PAGE_SHIFT)
+<a id='L55' name='L55'></a>  55 
+<a id='L56' name='L56'></a>  56 asmlinkage <strong class='reserved'>int</strong> <a href='../S/177.html#L1983' title='Defined at 1983 in power/snapshot.c.'>swsusp_save</a>(<strong class='reserved'>void</strong>);
+<a id='L57' name='L57'></a>  57 
+<a id='L58' name='L58'></a>  58 <em class='comment'>/* kernel/power/hibernate.c */</em>
+<a id='L59' name='L59'></a>  59 <strong class='reserved'>extern</strong> bool freezer_test_done;
+<a id='L60' name='L60'></a>  60 
+<a id='L61' name='L61'></a>  61 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/170.html#L363' title='Defined at 363 in power/hibernate.c.'>hibernation_snapshot</a>(<strong class='reserved'>int</strong> platform_mode);
+<a id='L62' name='L62'></a>  62 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/170.html#L527' title='Defined at 527 in power/hibernate.c.'>hibernation_restore</a>(<strong class='reserved'>int</strong> platform_mode);
+<a id='L63' name='L63'></a>  63 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/170.html#L554' title='Defined at 554 in power/hibernate.c.'>hibernation_platform_enter</a>(<strong class='reserved'>void</strong>);
+<a id='L64' name='L64'></a>  64 
+<a id='L65' name='L65'></a>  65 <em class='sharp'>#ifdef</em> CONFIG_STRICT_KERNEL_RWX
+<a id='L66' name='L66'></a>  66 <em class='comment'>/* kernel/power/snapshot.c */</em>
+<a id='L67' name='L67'></a>  67 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/6378.html' title='Multiple defined in 2 places.'>enable_restore_image_protection</a>(<strong class='reserved'>void</strong>);
+<a id='L68' name='L68'></a>  68 <em class='sharp'>#else</em>
+<a id='L69' name='L69'></a>  69 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/6017.html' title='Multiple referred from 2 places.'>enable_restore_image_protection</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L70' name='L70'></a>  70 <em class='sharp'>#endif</em> <em class='comment'>/* CONFIG_STRICT_KERNEL_RWX */</em>
+<a id='L71' name='L71'></a>  71 
+<a id='L72' name='L72'></a>  72 <em class='sharp'>#else</em> <em class='comment'>/* !CONFIG_HIBERNATION */</em>
+<a id='L73' name='L73'></a>  73 
+<a id='L74' name='L74'></a>  74 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/7312.html' title='Multiple referred from 2 places.'>hibernate_reserved_size_init</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L75' name='L75'></a>  75 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/7308.html' title='Multiple referred from 2 places.'>hibernate_image_size_init</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L76' name='L76'></a>  76 <em class='sharp'>#endif</em> <em class='comment'>/* !CONFIG_HIBERNATION */</em>
+<a id='L77' name='L77'></a>  77 
+<a id='L78' name='L78'></a>  78 <em class='sharp'>#define</em> <a href='../R/10125.html' title='Multiple referred from 18 places.'>power_attr</a>(<a href='../D/2859.html' title='Multiple defined in 3 places.'>_name</a>) \
+<a id='L79' name='L79'></a>  79 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> kobj_attribute <a href='../D/2859.html' title='Multiple defined in 3 places.'>_name</a>##_attr = <em class='brace'>{</em>   \
+<a id='L80' name='L80'></a>  80         .attr   = <em class='brace'>{</em>                             \
+<a id='L81' name='L81'></a>  81                 .name = __stringify(<a href='../D/2859.html' title='Multiple defined in 3 places.'>_name</a>),     \
+<a id='L82' name='L82'></a>  82                 .mode = 0644,                   \
+<a id='L83' name='L83'></a>  83         <em class='brace'>}</em>,                                      \
+<a id='L84' name='L84'></a>  84         .show   = <a href='../D/2859.html' title='Multiple defined in 3 places.'>_name</a>##_show,                 \
+<a id='L85' name='L85'></a>  85         .store  = <a href='../D/2859.html' title='Multiple defined in 3 places.'>_name</a>##_store,                \
+<a id='L86' name='L86'></a>  86 <em class='brace'>}</em>
+<a id='L87' name='L87'></a>  87 
+<a id='L88' name='L88'></a>  88 <em class='sharp'>#define</em> <a href='../R/10126.html' title='Multiple referred from 2 places.'>power_attr_ro</a>(<a href='../D/2859.html' title='Multiple defined in 3 places.'>_name</a>) \
+<a id='L89' name='L89'></a>  89 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> kobj_attribute <a href='../D/2859.html' title='Multiple defined in 3 places.'>_name</a>##_attr = <em class='brace'>{</em>   \
+<a id='L90' name='L90'></a>  90         .attr   = <em class='brace'>{</em>                             \
+<a id='L91' name='L91'></a>  91                 .name = __stringify(<a href='../D/2859.html' title='Multiple defined in 3 places.'>_name</a>),     \
+<a id='L92' name='L92'></a>  92                 .mode = S_IRUGO,                \
+<a id='L93' name='L93'></a>  93         <em class='brace'>}</em>,                                      \
+<a id='L94' name='L94'></a>  94         .show   = <a href='../D/2859.html' title='Multiple defined in 3 places.'>_name</a>##_show,                 \
+<a id='L95' name='L95'></a>  95 <em class='brace'>}</em>
+<a id='L96' name='L96'></a>  96 
+<a id='L97' name='L97'></a>  97 <em class='comment'>/* Preferred image size in bytes (default 500 MB) */</em>
+<a id='L98' name='L98'></a>  98 <strong class='reserved'>extern</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> image_size;
+<a id='L99' name='L99'></a>  99 <em class='comment'>/* Size of memory reserved for drivers (default SPARE_PAGES x PAGE_SIZE) */</em>
+<a id='L100' name='L100'></a> 100 <strong class='reserved'>extern</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> reserved_size;
+<a id='L101' name='L101'></a> 101 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> in_suspend;
+<a id='L102' name='L102'></a> 102 <strong class='reserved'>extern</strong> dev_t swsusp_resume_device;
+<a id='L103' name='L103'></a> 103 <strong class='reserved'>extern</strong> sector_t swsusp_resume_block;
+<a id='L104' name='L104'></a> 104 
+<a id='L105' name='L105'></a> 105 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/177.html#L1078' title='Defined at 1078 in power/snapshot.c.'>create_basic_memory_bitmaps</a>(<strong class='reserved'>void</strong>);
+<a id='L106' name='L106'></a> 106 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/177.html#L1128' title='Defined at 1128 in power/snapshot.c.'>free_basic_memory_bitmaps</a>(<strong class='reserved'>void</strong>);
+<a id='L107' name='L107'></a> 107 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/177.html#L1705' title='Defined at 1705 in power/snapshot.c.'>hibernate_preallocate_memory</a>(<strong class='reserved'>void</strong>);
+<a id='L108' name='L108'></a> 108 
+<a id='L109' name='L109'></a> 109 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/177.html#L1155' title='Defined at 1155 in power/snapshot.c.'>clear_or_poison_free_pages</a>(<strong class='reserved'>void</strong>);
+<a id='L110' name='L110'></a> 110 
+<a id='L111' name='L111'></a> 111 <em class='comment'>/**</em>
+<a id='L112' name='L112'></a> 112 <em class='comment'> *      Auxiliary structure used for reading the snapshot image data and</em>
+<a id='L113' name='L113'></a> 113 <em class='comment'> *      metadata from and writing them to the list of page backup entries</em>
+<a id='L114' name='L114'></a> 114 <em class='comment'> *      (PBEs) which is the main data structure of swsusp.</em>
+<a id='L115' name='L115'></a> 115 <em class='comment'> *</em>
+<a id='L116' name='L116'></a> 116 <em class='comment'> *      Using struct snapshot_handle we can transfer the image, including its</em>
+<a id='L117' name='L117'></a> 117 <em class='comment'> *      metadata, as a continuous sequence of bytes with the help of</em>
+<a id='L118' name='L118'></a> 118 <em class='comment'> *      snapshot_read_next() and snapshot_write_next().</em>
+<a id='L119' name='L119'></a> 119 <em class='comment'> *</em>
+<a id='L120' name='L120'></a> 120 <em class='comment'> *      The code that writes the image to a storage or transfers it to</em>
+<a id='L121' name='L121'></a> 121 <em class='comment'> *      the user land is required to use snapshot_read_next() for this</em>
+<a id='L122' name='L122'></a> 122 <em class='comment'> *      purpose and it should not make any assumptions regarding the internal</em>
+<a id='L123' name='L123'></a> 123 <em class='comment'> *      structure of the image.  Similarly, the code that reads the image from</em>
+<a id='L124' name='L124'></a> 124 <em class='comment'> *      a storage or transfers it from the user land is required to use</em>
+<a id='L125' name='L125'></a> 125 <em class='comment'> *      snapshot_write_next().</em>
+<a id='L126' name='L126'></a> 126 <em class='comment'> *</em>
+<a id='L127' name='L127'></a> 127 <em class='comment'> *      This may allow us to change the internal structure of the image</em>
+<a id='L128' name='L128'></a> 128 <em class='comment'> *      in the future with considerably less effort.</em>
+<a id='L129' name='L129'></a> 129 <em class='comment'> */</em>
+<a id='L130' name='L130'></a> 130 
+<a id='L131' name='L131'></a> 131 <strong class='reserved'>struct</strong> <a href='../R/12476.html' title='Multiple referred from 19 places.'>snapshot_handle</a> <em class='brace'>{</em>
+<a id='L132' name='L132'></a> 132         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>    cur;    <em class='comment'>/* number of the block of PAGE_SIZE bytes the</em>
+<a id='L133' name='L133'></a> 133 <em class='comment'>                                 * next operation will refer to (ie. current)</em>
+<a id='L134' name='L134'></a> 134 <em class='comment'>                                 */</em>
+<a id='L135' name='L135'></a> 135         <strong class='reserved'>void</strong>            *buffer;        <em class='comment'>/* address of the block to read from</em>
+<a id='L136' name='L136'></a> 136 <em class='comment'>                                         * or write to</em>
+<a id='L137' name='L137'></a> 137 <em class='comment'>                                         */</em>
+<a id='L138' name='L138'></a> 138         <strong class='reserved'>int</strong>             sync_read;      <em class='comment'>/* Set to one to notify the caller of</em>
+<a id='L139' name='L139'></a> 139 <em class='comment'>                                         * snapshot_write_next() that it may</em>
+<a id='L140' name='L140'></a> 140 <em class='comment'>                                         * need to call wait_on_bio_chain()</em>
+<a id='L141' name='L141'></a> 141 <em class='comment'>                                         */</em>
+<a id='L142' name='L142'></a> 142 <em class='brace'>}</em>;
+<a id='L143' name='L143'></a> 143 
+<a id='L144' name='L144'></a> 144 <em class='comment'>/* This macro returns the address from/to which the caller of</em>
+<a id='L145' name='L145'></a> 145 <em class='comment'> * snapshot_read_next()/snapshot_write_next() is allowed to</em>
+<a id='L146' name='L146'></a> 146 <em class='comment'> * read/write data after the function returns</em>
+<a id='L147' name='L147'></a> 147 <em class='comment'> */</em>
+<a id='L148' name='L148'></a> 148 <em class='sharp'>#define</em> <a href='../R/5351.html' title='Multiple referred from 9 places.'>data_of</a>(handle) ((handle).buffer)
+<a id='L149' name='L149'></a> 149 
+<a id='L150' name='L150'></a> 150 <strong class='reserved'>extern</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> <a href='../S/177.html#L1185' title='Defined at 1185 in power/snapshot.c.'>snapshot_additional_pages</a>(<strong class='reserved'>struct</strong> zone *zone);
+<a id='L151' name='L151'></a> 151 <strong class='reserved'>extern</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <a href='../S/177.html#L2050' title='Defined at 2050 in power/snapshot.c.'>snapshot_get_image_size</a>(<strong class='reserved'>void</strong>);
+<a id='L152' name='L152'></a> 152 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/177.html#L2101' title='Defined at 2101 in power/snapshot.c.'>snapshot_read_next</a>(<strong class='reserved'>struct</strong> <a href='../S/174.html#L131' title='Defined at 131 in power/power.h.'>snapshot_handle</a> *handle);
+<a id='L153' name='L153'></a> 153 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/177.html#L2594' title='Defined at 2594 in power/snapshot.c.'>snapshot_write_next</a>(<strong class='reserved'>struct</strong> <a href='../S/174.html#L131' title='Defined at 131 in power/power.h.'>snapshot_handle</a> *handle);
+<a id='L154' name='L154'></a> 154 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/177.html#L2665' title='Defined at 2665 in power/snapshot.c.'>snapshot_write_finalize</a>(<strong class='reserved'>struct</strong> <a href='../S/174.html#L131' title='Defined at 131 in power/power.h.'>snapshot_handle</a> *handle);
+<a id='L155' name='L155'></a> 155 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/177.html#L2676' title='Defined at 2676 in power/snapshot.c.'>snapshot_image_loaded</a>(<strong class='reserved'>struct</strong> <a href='../S/174.html#L131' title='Defined at 131 in power/power.h.'>snapshot_handle</a> *handle);
+<a id='L156' name='L156'></a> 156 
+<a id='L157' name='L157'></a> 157 <strong class='reserved'>extern</strong> bool <a href='../S/170.html#L72' title='Defined at 72 in power/hibernate.c.'>hibernate_acquire</a>(<strong class='reserved'>void</strong>);
+<a id='L158' name='L158'></a> 158 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/170.html#L77' title='Defined at 77 in power/hibernate.c.'>hibernate_release</a>(<strong class='reserved'>void</strong>);
+<a id='L159' name='L159'></a> 159 
+<a id='L160' name='L160'></a> 160 <strong class='reserved'>extern</strong> sector_t <a href='../S/165.html#L176' title='Defined at 176 in power/swap.c.'>alloc_swapdev_block</a>(<strong class='reserved'>int</strong> swap);
+<a id='L161' name='L161'></a> 161 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/165.html#L196' title='Defined at 196 in power/swap.c.'>free_all_swap_pages</a>(<strong class='reserved'>int</strong> swap);
+<a id='L162' name='L162'></a> 162 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/165.html#L213' title='Defined at 213 in power/swap.c.'>swsusp_swap_in_use</a>(<strong class='reserved'>void</strong>);
+<a id='L163' name='L163'></a> 163 
+<a id='L164' name='L164'></a> 164 <em class='comment'>/*</em>
+<a id='L165' name='L165'></a> 165 <em class='comment'> * Flags that can be passed from the hibernatig hernel to the "boot" kernel in</em>
+<a id='L166' name='L166'></a> 166 <em class='comment'> * the image header.</em>
+<a id='L167' name='L167'></a> 167 <em class='comment'> */</em>
+<a id='L168' name='L168'></a> 168 <em class='sharp'>#define</em> <a href='../R/1327.html' title='Multiple referred from 2 places.'>SF_PLATFORM_MODE</a>        1
+<a id='L169' name='L169'></a> 169 <em class='sharp'>#define</em> <a href='../R/1326.html' title='Multiple referred from 4 places.'>SF_NOCOMPRESS_MODE</a>      2
+<a id='L170' name='L170'></a> 170 <em class='sharp'>#define</em> <a href='../R/1325.html' title='Multiple referred from 3 places.'>SF_CRC32_MODE</a>           4
+<a id='L171' name='L171'></a> 171 
+<a id='L172' name='L172'></a> 172 <em class='comment'>/* kernel/power/hibernate.c */</em>
+<a id='L173' name='L173'></a> 173 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/165.html#L1521' title='Defined at 1521 in power/swap.c.'>swsusp_check</a>(<strong class='reserved'>void</strong>);
+<a id='L174' name='L174'></a> 174 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/177.html#L1472' title='Defined at 1472 in power/snapshot.c.'>swsusp_free</a>(<strong class='reserved'>void</strong>);
+<a id='L175' name='L175'></a> 175 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/165.html#L1486' title='Defined at 1486 in power/swap.c.'>swsusp_read</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> *flags_p);
+<a id='L176' name='L176'></a> 176 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/165.html#L911' title='Defined at 911 in power/swap.c.'>swsusp_write</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> flags);
+<a id='L177' name='L177'></a> 177 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/165.html#L1565' title='Defined at 1565 in power/swap.c.'>swsusp_close</a>(fmode_t);
+<a id='L178' name='L178'></a> 178 <em class='sharp'>#ifdef</em> CONFIG_SUSPEND
+<a id='L179' name='L179'></a> 179 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/165.html#L1580' title='Defined at 1580 in power/swap.c.'>swsusp_unmark</a>(<strong class='reserved'>void</strong>);
+<a id='L180' name='L180'></a> 180 <em class='sharp'>#endif</em>
+<a id='L181' name='L181'></a> 181 
+<a id='L182' name='L182'></a> 182 <strong class='reserved'>struct</strong> __kernel_old_timeval;
+<a id='L183' name='L183'></a> 183 <em class='comment'>/* kernel/power/swsusp.c */</em>
+<a id='L184' name='L184'></a> 184 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/170.html#L251' title='Defined at 251 in power/hibernate.c.'>swsusp_show_speed</a>(ktime_t, ktime_t, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>, <strong class='reserved'>char</strong> *);
+<a id='L185' name='L185'></a> 185 
+<a id='L186' name='L186'></a> 186 <em class='sharp'>#ifdef</em> CONFIG_SUSPEND
+<a id='L187' name='L187'></a> 187 <em class='comment'>/* kernel/power/suspend.c */</em>
+<a id='L188' name='L188'></a> 188 <strong class='reserved'>extern</strong> <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> * <strong class='reserved'>const</strong> pm_labels[];
+<a id='L189' name='L189'></a> 189 <strong class='reserved'>extern</strong> <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *pm_states[];
+<a id='L190' name='L190'></a> 190 <strong class='reserved'>extern</strong> <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *mem_sleep_states[];
+<a id='L191' name='L191'></a> 191 
+<a id='L192' name='L192'></a> 192 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../D/13467.html' title='Multiple defined in 2 places.'>suspend_devices_and_enter</a>(suspend_state_t state);
+<a id='L193' name='L193'></a> 193 <em class='sharp'>#else</em> <em class='comment'>/* !CONFIG_SUSPEND */</em>
+<a id='L194' name='L194'></a> 194 <em class='sharp'>#define</em> <a href='../R/9080.html' title='Multiple referred from 8 places.'>mem_sleep_current</a>       PM_SUSPEND_ON
+<a id='L195' name='L195'></a> 195 
+<a id='L196' name='L196'></a> 196 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>int</strong> <a href='../R/12768.html' title='Multiple referred from 4 places.'>suspend_devices_and_enter</a>(suspend_state_t state)
+<a id='L197' name='L197'></a> 197 <em class='brace'>{</em>
+<a id='L198' name='L198'></a> 198         <strong class='reserved'>return</strong> -ENOSYS;
+<a id='L199' name='L199'></a> 199 <em class='brace'>}</em>
+<a id='L200' name='L200'></a> 200 <em class='sharp'>#endif</em> <em class='comment'>/* !CONFIG_SUSPEND */</em>
+<a id='L201' name='L201'></a> 201 
+<a id='L202' name='L202'></a> 202 <em class='sharp'>#ifdef</em> CONFIG_PM_TEST_SUSPEND
+<a id='L203' name='L203'></a> 203 <em class='comment'>/* kernel/power/suspend_test.c */</em>
+<a id='L204' name='L204'></a> 204 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/13477.html' title='Multiple defined in 2 places.'>suspend_test_start</a>(<strong class='reserved'>void</strong>);
+<a id='L205' name='L205'></a> 205 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/13476.html' title='Multiple defined in 2 places.'>suspend_test_finish</a>(<strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *label);
+<a id='L206' name='L206'></a> 206 <em class='sharp'>#else</em> <em class='comment'>/* !CONFIG_PM_TEST_SUSPEND */</em>
+<a id='L207' name='L207'></a> 207 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/12777.html' title='Multiple referred from 3 places.'>suspend_test_start</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L208' name='L208'></a> 208 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/12776.html' title='Multiple referred from 3 places.'>suspend_test_finish</a>(<strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *label) <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L209' name='L209'></a> 209 <em class='sharp'>#endif</em> <em class='comment'>/* !CONFIG_PM_TEST_SUSPEND */</em>
+<a id='L210' name='L210'></a> 210 
+<a id='L211' name='L211'></a> 211 <em class='sharp'>#ifdef</em> CONFIG_PM_SLEEP
+<a id='L212' name='L212'></a> 212 <em class='comment'>/* kernel/power/main.c */</em>
+<a id='L213' name='L213'></a> 213 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/164.html#L83' title='Defined at 83 in power/main.c.'>pm_notifier_call_chain_robust</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> val_up, <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> val_down);
+<a id='L214' name='L214'></a> 214 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/164.html#L92' title='Defined at 92 in power/main.c.'>pm_notifier_call_chain</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> val);
+<a id='L215' name='L215'></a> 215 <em class='sharp'>#endif</em>
+<a id='L216' name='L216'></a> 216 
+<a id='L217' name='L217'></a> 217 <em class='sharp'>#ifdef</em> CONFIG_HIGHMEM
+<a id='L218' name='L218'></a> 218 <strong class='reserved'>int</strong> <a href='../D/12207.html' title='Multiple defined in 2 places.'>restore_highmem</a>(<strong class='reserved'>void</strong>);
+<a id='L219' name='L219'></a> 219 <em class='sharp'>#else</em>
+<a id='L220' name='L220'></a> 220 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> <a href='../R/4953.html' title='Multiple referred from 3 places.'>count_highmem_pages</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em> <strong class='reserved'>return</strong> 0; <em class='brace'>}</em>
+<a id='L221' name='L221'></a> 221 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>int</strong> <a href='../R/11552.html' title='Multiple referred from 3 places.'>restore_highmem</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em> <strong class='reserved'>return</strong> 0; <em class='brace'>}</em>
+<a id='L222' name='L222'></a> 222 <em class='sharp'>#endif</em>
+<a id='L223' name='L223'></a> 223 
+<a id='L224' name='L224'></a> 224 <em class='comment'>/*</em>
+<a id='L225' name='L225'></a> 225 <em class='comment'> * Suspend test levels</em>
+<a id='L226' name='L226'></a> 226 <em class='comment'> */</em>
+<a id='L227' name='L227'></a> 227 <strong class='reserved'>enum</strong> <em class='brace'>{</em>
+<a id='L228' name='L228'></a> 228         <em class='comment'>/* keep first */</em>
+<a id='L229' name='L229'></a> 229         <a href='../R/1413.html' title='Multiple referred from 5 places.'>TEST_NONE</a>,
+<a id='L230' name='L230'></a> 230         <a href='../R/1403.html' title='Multiple referred from 3 places.'>TEST_CORE</a>,
+<a id='L231' name='L231'></a> 231         <a href='../R/1404.html' title='Multiple referred from 4 places.'>TEST_CPUS</a>,
+<a id='L232' name='L232'></a> 232         <a href='../R/1414.html' title='Multiple referred from 3 places.'>TEST_PLATFORM</a>,
+<a id='L233' name='L233'></a> 233         <a href='../R/1405.html' title='Multiple referred from 3 places.'>TEST_DEVICES</a>,
+<a id='L234' name='L234'></a> 234         <a href='../R/1408.html' title='Multiple referred from 3 places.'>TEST_FREEZER</a>,
+<a id='L235' name='L235'></a> 235         <em class='comment'>/* keep last */</em>
+<a id='L236' name='L236'></a> 236         <a href='../R/1720.html' title='Multiple referred from 2 places.'>__TEST_AFTER_LAST</a>
+<a id='L237' name='L237'></a> 237 <em class='brace'>}</em>;
+<a id='L238' name='L238'></a> 238 
+<a id='L239' name='L239'></a> 239 <em class='sharp'>#define</em> <a href='../R/1407.html' title='Multiple referred from 2 places.'>TEST_FIRST</a>      <a href='../S/174.html#L229' title='Defined at 229 in power/power.h.'>TEST_NONE</a>
+<a id='L240' name='L240'></a> 240 <em class='sharp'>#define</em> <a href='../R/1409.html' title='Multiple referred from 2 places.'>TEST_MAX</a>        (<a href='../S/174.html#L236' title='Defined at 236 in power/power.h.'>__TEST_AFTER_LAST</a> - 1)
+<a id='L241' name='L241'></a> 241 
+<a id='L242' name='L242'></a> 242 <em class='sharp'>#ifdef</em> CONFIG_PM_SLEEP_DEBUG
+<a id='L243' name='L243'></a> 243 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/174.html#L245' title='Defined at 245 in power/power.h.'>pm_test_level</a>;
+<a id='L244' name='L244'></a> 244 <em class='sharp'>#else</em>
+<a id='L245' name='L245'></a> 245 <em class='sharp'>#define</em> <a href='../R/10056.html' title='Multiple referred from 7 places.'>pm_test_level</a>   (<a href='../S/174.html#L229' title='Defined at 229 in power/power.h.'>TEST_NONE</a>)
+<a id='L246' name='L246'></a> 246 <em class='sharp'>#endif</em>
+<a id='L247' name='L247'></a> 247 
+<a id='L248' name='L248'></a> 248 <em class='sharp'>#ifdef</em> CONFIG_SUSPEND_FREEZER
+<a id='L249' name='L249'></a> 249 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>int</strong> <a href='../S/169.html#L359' title='Referred from 359 in power/suspend.c.'>suspend_freeze_processes</a>(<strong class='reserved'>void</strong>)
+<a id='L250' name='L250'></a> 250 <em class='brace'>{</em>
+<a id='L251' name='L251'></a> 251         <strong class='reserved'>int</strong> error;
+<a id='L252' name='L252'></a> 252 
+<a id='L253' name='L253'></a> 253         error = <a href='../S/163.html#L132' title='Defined at 132 in power/process.c.'>freeze_processes</a>();
+<a id='L254' name='L254'></a> 254         <em class='comment'>/*</em>
+<a id='L255' name='L255'></a> 255 <em class='comment'>         * freeze_processes() automatically thaws every task if freezing</em>
+<a id='L256' name='L256'></a> 256 <em class='comment'>         * fails. So we need not do anything extra upon error.</em>
+<a id='L257' name='L257'></a> 257 <em class='comment'>         */</em>
+<a id='L258' name='L258'></a> 258         <strong class='reserved'>if</strong> (error)
+<a id='L259' name='L259'></a> 259                 <strong class='reserved'>return</strong> error;
+<a id='L260' name='L260'></a> 260 
+<a id='L261' name='L261'></a> 261         error = <a href='../S/163.html#L179' title='Defined at 179 in power/process.c.'>freeze_kernel_threads</a>();
+<a id='L262' name='L262'></a> 262         <em class='comment'>/*</em>
+<a id='L263' name='L263'></a> 263 <em class='comment'>         * freeze_kernel_threads() thaws only kernel threads upon freezing</em>
+<a id='L264' name='L264'></a> 264 <em class='comment'>         * failure. So we have to thaw the userspace tasks ourselves.</em>
+<a id='L265' name='L265'></a> 265 <em class='comment'>         */</em>
+<a id='L266' name='L266'></a> 266         <strong class='reserved'>if</strong> (error)
+<a id='L267' name='L267'></a> 267                 <a href='../S/163.html#L198' title='Defined at 198 in power/process.c.'>thaw_processes</a>();
+<a id='L268' name='L268'></a> 268 
+<a id='L269' name='L269'></a> 269         <strong class='reserved'>return</strong> error;
+<a id='L270' name='L270'></a> 270 <em class='brace'>}</em>
+<a id='L271' name='L271'></a> 271 
+<a id='L272' name='L272'></a> 272 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/169.html#L547' title='Referred from 547 in power/suspend.c.'>suspend_thaw_processes</a>(<strong class='reserved'>void</strong>)
+<a id='L273' name='L273'></a> 273 <em class='brace'>{</em>
+<a id='L274' name='L274'></a> 274         <a href='../S/163.html#L198' title='Defined at 198 in power/process.c.'>thaw_processes</a>();
+<a id='L275' name='L275'></a> 275 <em class='brace'>}</em>
+<a id='L276' name='L276'></a> 276 <em class='sharp'>#else</em>
+<a id='L277' name='L277'></a> 277 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>int</strong> <a href='../S/169.html#L359' title='Referred from 359 in power/suspend.c.'>suspend_freeze_processes</a>(<strong class='reserved'>void</strong>)
+<a id='L278' name='L278'></a> 278 <em class='brace'>{</em>
+<a id='L279' name='L279'></a> 279         <strong class='reserved'>return</strong> 0;
+<a id='L280' name='L280'></a> 280 <em class='brace'>}</em>
+<a id='L281' name='L281'></a> 281 
+<a id='L282' name='L282'></a> 282 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/169.html#L547' title='Referred from 547 in power/suspend.c.'>suspend_thaw_processes</a>(<strong class='reserved'>void</strong>)
+<a id='L283' name='L283'></a> 283 <em class='brace'>{</em>
+<a id='L284' name='L284'></a> 284 <em class='brace'>}</em>
+<a id='L285' name='L285'></a> 285 <em class='sharp'>#endif</em>
+<a id='L286' name='L286'></a> 286 
+<a id='L287' name='L287'></a> 287 <em class='sharp'>#ifdef</em> CONFIG_PM_AUTOSLEEP
+<a id='L288' name='L288'></a> 288 
+<a id='L289' name='L289'></a> 289 <em class='comment'>/* kernel/power/autosleep.c */</em>
+<a id='L290' name='L290'></a> 290 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../D/10618.html' title='Multiple defined in 2 places.'>pm_autosleep_init</a>(<strong class='reserved'>void</strong>);
+<a id='L291' name='L291'></a> 291 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../D/10619.html' title='Multiple defined in 2 places.'>pm_autosleep_lock</a>(<strong class='reserved'>void</strong>);
+<a id='L292' name='L292'></a> 292 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/10622.html' title='Multiple defined in 2 places.'>pm_autosleep_unlock</a>(<strong class='reserved'>void</strong>);
+<a id='L293' name='L293'></a> 293 <strong class='reserved'>extern</strong> suspend_state_t <a href='../D/10621.html' title='Multiple defined in 2 places.'>pm_autosleep_state</a>(<strong class='reserved'>void</strong>);
+<a id='L294' name='L294'></a> 294 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/173.html#L90' title='Defined at 90 in power/autosleep.c.'>pm_autosleep_set_state</a>(suspend_state_t state);
+<a id='L295' name='L295'></a> 295 
+<a id='L296' name='L296'></a> 296 <em class='sharp'>#else</em> <em class='comment'>/* !CONFIG_PM_AUTOSLEEP */</em>
+<a id='L297' name='L297'></a> 297 
+<a id='L298' name='L298'></a> 298 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>int</strong> <a href='../R/10031.html' title='Multiple referred from 2 places.'>pm_autosleep_init</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em> <strong class='reserved'>return</strong> 0; <em class='brace'>}</em>
+<a id='L299' name='L299'></a> 299 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>int</strong> <a href='../R/10032.html' title='Multiple referred from 4 places.'>pm_autosleep_lock</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em> <strong class='reserved'>return</strong> 0; <em class='brace'>}</em>
+<a id='L300' name='L300'></a> 300 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/10035.html' title='Multiple referred from 4 places.'>pm_autosleep_unlock</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L301' name='L301'></a> 301 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> suspend_state_t <a href='../R/10034.html' title='Multiple referred from 5 places.'>pm_autosleep_state</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em> <strong class='reserved'>return</strong> PM_SUSPEND_ON; <em class='brace'>}</em>
+<a id='L302' name='L302'></a> 302 
+<a id='L303' name='L303'></a> 303 <em class='sharp'>#endif</em> <em class='comment'>/* !CONFIG_PM_AUTOSLEEP */</em>
+<a id='L304' name='L304'></a> 304 
+<a id='L305' name='L305'></a> 305 <em class='sharp'>#ifdef</em> CONFIG_PM_WAKELOCKS
+<a id='L306' name='L306'></a> 306 
+<a id='L307' name='L307'></a> 307 <em class='comment'>/* kernel/power/wakelock.c */</em>
+<a id='L308' name='L308'></a> 308 <strong class='reserved'>extern</strong> ssize_t <a href='../S/172.html#L38' title='Defined at 38 in power/wakelock.c.'>pm_show_wakelocks</a>(<strong class='reserved'>char</strong> *buf, bool show_active);
+<a id='L309' name='L309'></a> 309 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/172.html#L206' title='Defined at 206 in power/wakelock.c.'>pm_wake_lock</a>(<strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *buf);
+<a id='L310' name='L310'></a> 310 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/172.html#L254' title='Defined at 254 in power/wakelock.c.'>pm_wake_unlock</a>(<strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *buf);
+<a id='L311' name='L311'></a> 311 
+<a id='L312' name='L312'></a> 312 <em class='sharp'>#endif</em> <em class='comment'>/* !CONFIG_PM_WAKELOCKS */</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L30'>[^]</a><a href='#L301'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>dma_debug_entry</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/156.html#L35'>dma_debug_entry</a>    35 dma/debug.c    #define DMA_DEBUG_DYNAMIC_ENTRIES (PAGE_SIZE / sizeof(struct dma_debug_entry))</span>
+<span class='curline'><a href='../S/156.html#L84'>dma_debug_entry</a>    84 dma/debug.c    typedef bool (*match_fn)(struct dma_debug_entry *, struct dma_debug_entry *);</span>
+<span class='curline'><a href='../S/156.html#L166'>dma_debug_entry</a>   166 dma/debug.c    static inline void dump_entry_trace(struct dma_debug_entry *entry)</span>
+<span class='curline'><a href='../S/156.html#L236'>dma_debug_entry</a>   236 dma/debug.c    static int hash_fn(struct dma_debug_entry *entry)</span>
+<span class='curline'><a href='../S/156.html#L248'>dma_debug_entry</a>   248 dma/debug.c    static struct hash_bucket *get_hash_bucket(struct dma_debug_entry *entry,</span>
+<span class='curline'><a href='../S/156.html#L270'>dma_debug_entry</a>   270 dma/debug.c    static bool exact_match(struct dma_debug_entry *a, struct dma_debug_entry *b)</span>
+<span class='curline'><a href='../S/156.html#L276'>dma_debug_entry</a>   276 dma/debug.c    static bool containing_match(struct dma_debug_entry *a,</span>
+<span class='curline'><a href='../S/156.html#L277'>dma_debug_entry</a>   277 dma/debug.c    			     struct dma_debug_entry *b)</span>
+<span class='curline'><a href='../S/156.html#L292'>dma_debug_entry</a>   292 dma/debug.c    static struct dma_debug_entry *__hash_bucket_find(struct hash_bucket *bucket,</span>
+<span class='curline'><a href='../S/156.html#L293'>dma_debug_entry</a>   293 dma/debug.c    						  struct dma_debug_entry *ref,</span>
+<span class='curline'><a href='../S/156.html#L296'>dma_debug_entry</a>   296 dma/debug.c    	struct dma_debug_entry *entry, *ret = NULL;</span>
+<span class='curline'><a href='../S/156.html#L342'>dma_debug_entry</a>   342 dma/debug.c    static struct dma_debug_entry *bucket_find_exact(struct hash_bucket *bucket,</span>
+<span class='curline'><a href='../S/156.html#L343'>dma_debug_entry</a>   343 dma/debug.c    						 struct dma_debug_entry *ref)</span>
+<span class='curline'><a href='../S/156.html#L348'>dma_debug_entry</a>   348 dma/debug.c    static struct dma_debug_entry *bucket_find_contain(struct hash_bucket **bucket,</span>
+<span class='curline'><a href='../S/156.html#L349'>dma_debug_entry</a>   349 dma/debug.c    						   struct dma_debug_entry *ref,</span>
+<span class='curline'><a href='../S/156.html#L354'>dma_debug_entry</a>   354 dma/debug.c    	struct dma_debug_entry *entry, index = *ref;</span>
+<span class='curline'><a href='../S/156.html#L379'>dma_debug_entry</a>   379 dma/debug.c    			    struct dma_debug_entry *entry)</span>
+<span class='curline'><a href='../S/156.html#L387'>dma_debug_entry</a>   387 dma/debug.c    static void hash_bucket_del(struct dma_debug_entry *entry)</span>
+<span class='curline'><a href='../S/156.html#L392'>dma_debug_entry</a>   392 dma/debug.c    static unsigned long long phys_addr(struct dma_debug_entry *entry)</span>
+<span class='curline'><a href='../S/156.html#L409'>dma_debug_entry</a>   409 dma/debug.c    		struct dma_debug_entry *entry;</span>
+<span class='curline'><a href='../S/156.html#L457'>dma_debug_entry</a>   457 dma/debug.c    static phys_addr_t to_cacheline_number(struct dma_debug_entry *entry)</span>
+<span class='curline'><a href='../S/156.html#L510'>dma_debug_entry</a>   510 dma/debug.c    static int active_cacheline_insert(struct dma_debug_entry *entry)</span>
+<span class='curline'><a href='../S/156.html#L532'>dma_debug_entry</a>   532 dma/debug.c    static void active_cacheline_remove(struct dma_debug_entry *entry)</span>
+<span class='curline'><a href='../S/156.html#L555'>dma_debug_entry</a>   555 dma/debug.c    static void add_dma_entry(struct dma_debug_entry *entry)</span>
+<span class='curline'><a href='../S/156.html#L578'>dma_debug_entry</a>   578 dma/debug.c    	struct dma_debug_entry *entry;</span>
+<span class='curline'><a href='../S/156.html#L594'>dma_debug_entry</a>   594 dma/debug.c    static struct dma_debug_entry *__dma_entry_alloc(void)</span>
+<span class='curline'><a href='../S/156.html#L596'>dma_debug_entry</a>   596 dma/debug.c    	struct dma_debug_entry *entry;</span>
+<span class='curline'><a href='../S/156.html#L598'>dma_debug_entry</a>   598 dma/debug.c    	entry = list_entry(free_entries.next, struct dma_debug_entry, list);</span>
+<span class='curline'><a href='../S/156.html#L626'>dma_debug_entry</a>   626 dma/debug.c    static struct dma_debug_entry *dma_entry_alloc(void)</span>
+<span class='curline'><a href='../S/156.html#L628'>dma_debug_entry</a>   628 dma/debug.c    	struct dma_debug_entry *entry;</span>
+<span class='curline'><a href='../S/156.html#L654'>dma_debug_entry</a>   654 dma/debug.c    static void dma_entry_free(struct dma_debug_entry *entry)</span>
+<span class='curline'><a href='../S/156.html#L776'>dma_debug_entry</a>   776 dma/debug.c    		struct dma_debug_entry *entry;</span>
+<span class='curline'><a href='../S/156.html#L812'>dma_debug_entry</a>   812 dma/debug.c    static int device_dma_allocations(struct device *dev, struct dma_debug_entry **out_entry)</span>
+<span class='curline'><a href='../S/156.html#L814'>dma_debug_entry</a>   814 dma/debug.c    	struct dma_debug_entry *entry;</span>
+<span class='curline'><a href='../S/156.html#L835'>dma_debug_entry</a>   835 dma/debug.c    	struct dma_debug_entry *entry;</span>
+<span class='curline'><a href='../S/156.html#L945'>dma_debug_entry</a>   945 dma/debug.c    static void check_unmap(struct dma_debug_entry *ref)</span>
+<span class='curline'><a href='../S/156.html#L947'>dma_debug_entry</a>   947 dma/debug.c    	struct dma_debug_entry *entry;</span>
+<span class='curline'><a href='../S/156.html#L1087'>dma_debug_entry</a>  1087 dma/debug.c    		       struct dma_debug_entry *ref,</span>
+<span class='curline'><a href='../S/156.html#L1090'>dma_debug_entry</a>  1090 dma/debug.c    	struct dma_debug_entry *entry;</span>
+<span class='curline'><a href='../S/156.html#L1206'>dma_debug_entry</a>  1206 dma/debug.c    	struct dma_debug_entry *entry;</span>
+<span class='curline'><a href='../S/156.html#L1240'>dma_debug_entry</a>  1240 dma/debug.c    	struct dma_debug_entry ref;</span>
+<span class='curline'><a href='../S/156.html#L1241'>dma_debug_entry</a>  1241 dma/debug.c    	struct dma_debug_entry *entry;</span>
+<span class='curline'><a href='../S/156.html#L1279'>dma_debug_entry</a>  1279 dma/debug.c    	struct dma_debug_entry ref = {</span>
+<span class='curline'><a href='../S/156.html#L1295'>dma_debug_entry</a>  1295 dma/debug.c    	struct dma_debug_entry *entry;</span>
+<span class='curline'><a href='../S/156.html#L1330'>dma_debug_entry</a>  1330 dma/debug.c    				 struct dma_debug_entry *ref)</span>
+<span class='curline'><a href='../S/156.html#L1332'>dma_debug_entry</a>  1332 dma/debug.c    	struct dma_debug_entry *entry;</span>
+<span class='curline'><a href='../S/156.html#L1359'>dma_debug_entry</a>  1359 dma/debug.c    		struct dma_debug_entry ref = {</span>
+<span class='curline'><a href='../S/156.html#L1383'>dma_debug_entry</a>  1383 dma/debug.c    	struct dma_debug_entry *entry;</span>
+<span class='curline'><a href='../S/156.html#L1417'>dma_debug_entry</a>  1417 dma/debug.c    	struct dma_debug_entry ref = {</span>
+<span class='curline'><a href='../S/156.html#L1444'>dma_debug_entry</a>  1444 dma/debug.c    	struct dma_debug_entry *entry;</span>
+<span class='curline'><a href='../S/156.html#L1468'>dma_debug_entry</a>  1468 dma/debug.c    	struct dma_debug_entry ref = {</span>
+<span class='curline'><a href='../S/156.html#L1485'>dma_debug_entry</a>  1485 dma/debug.c    	struct dma_debug_entry ref;</span>
+<span class='curline'><a href='../S/156.html#L1504'>dma_debug_entry</a>  1504 dma/debug.c    	struct dma_debug_entry ref;</span>
+<span class='curline'><a href='../S/156.html#L1530'>dma_debug_entry</a>  1530 dma/debug.c    		struct dma_debug_entry ref = {</span>
+<span class='curline'><a href='../S/156.html#L1562'>dma_debug_entry</a>  1562 dma/debug.c    		struct dma_debug_entry ref = {</span>
+</pre>
+</body>
+</html>

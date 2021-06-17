@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>field_var</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/291.html#L369'>field_var</a>         369 trace/trace_events_hist.c 	struct field_var		*field_vars[SYNTH_FIELDS_MAX];</span>
+<span class='curline'><a href='../S/291.html#L375'>field_var</a>         375 trace/trace_events_hist.c 	struct field_var		*save_vars[SYNTH_FIELDS_MAX];</span>
+<span class='curline'><a href='../S/291.html#L2566'>field_var</a>        2566 trace/trace_events_hist.c 				       struct field_var **field_vars,</span>
+<span class='curline'><a href='../S/291.html#L2575'>field_var</a>        2575 trace/trace_events_hist.c 		struct field_var *field_var = field_vars[i];</span>
+<span class='curline'><a href='../S/291.html#L2576'>field_var</a>        2576 trace/trace_events_hist.c 		struct hist_field *var = field_var-&gt;var;</span>
+<span class='curline'><a href='../S/291.html#L2577'>field_var</a>        2577 trace/trace_events_hist.c 		struct hist_field *val = field_var-&gt;val;</span>
+<span class='curline'><a href='../S/291.html#L2653'>field_var</a>        2653 trace/trace_events_hist.c static struct field_var *create_field_var(struct hist_trigger_data *hist_data,</span>
+<span class='curline'><a href='../S/291.html#L2660'>field_var</a>        2660 trace/trace_events_hist.c 	struct field_var *field_var;</span>
+<span class='curline'><a href='../S/291.html#L2684'>field_var</a>        2684 trace/trace_events_hist.c 	field_var = kzalloc(sizeof(struct field_var), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/291.html#L2685'>field_var</a>        2685 trace/trace_events_hist.c 	if (!field_var) {</span>
+<span class='curline'><a href='../S/291.html#L2692'>field_var</a>        2692 trace/trace_events_hist.c 	field_var-&gt;var = var;</span>
+<span class='curline'><a href='../S/291.html#L2693'>field_var</a>        2693 trace/trace_events_hist.c 	field_var-&gt;val = val;</span>
+<span class='curline'><a href='../S/291.html#L2695'>field_var</a>        2695 trace/trace_events_hist.c 	return field_var;</span>
+<span class='curline'><a href='../S/291.html#L2697'>field_var</a>        2697 trace/trace_events_hist.c 	field_var = ERR_PTR(ret);</span>
+<span class='curline'><a href='../S/291.html#L2721'>field_var</a>        2721 trace/trace_events_hist.c static struct field_var *</span>
+<span class='curline'><a href='../S/291.html#L3249'>field_var</a>        3249 trace/trace_events_hist.c static void destroy_field_var(struct field_var *field_var)</span>
+<span class='curline'><a href='../S/291.html#L3251'>field_var</a>        3251 trace/trace_events_hist.c 	if (!field_var)</span>
+<span class='curline'><a href='../S/291.html#L3254'>field_var</a>        3254 trace/trace_events_hist.c 	destroy_hist_field(field_var-&gt;var, 0);</span>
+<span class='curline'><a href='../S/291.html#L3255'>field_var</a>        3255 trace/trace_events_hist.c 	destroy_hist_field(field_var-&gt;val, 0);</span>
+<span class='curline'><a href='../S/291.html#L3257'>field_var</a>        3257 trace/trace_events_hist.c 	kfree(field_var);</span>
+<span class='curline'><a href='../S/291.html#L3272'>field_var</a>        3272 trace/trace_events_hist.c 			   struct field_var *field_var)</span>
+<span class='curline'><a href='../S/291.html#L3274'>field_var</a>        3274 trace/trace_events_hist.c 	hist_data-&gt;field_vars[hist_data-&gt;n_field_vars++] = field_var;</span>
+<span class='curline'><a href='../S/291.html#L3276'>field_var</a>        3276 trace/trace_events_hist.c 	if (field_var-&gt;val-&gt;flags &amp; HIST_FIELD_FL_STRING)</span>
+<span class='curline'><a href='../S/291.html#L3342'>field_var</a>        3342 trace/trace_events_hist.c 	struct field_var *field_var;</span>
+<span class='curline'><a href='../S/291.html#L3350'>field_var</a>        3350 trace/trace_events_hist.c 	field_var = create_target_field_var(hist_data, system, event, var);</span>
+<span class='curline'><a href='../S/291.html#L3352'>field_var</a>        3352 trace/trace_events_hist.c 	if (field_var &amp;&amp; !IS_ERR(field_var)) {</span>
+<span class='curline'><a href='../S/291.html#L3353'>field_var</a>        3353 trace/trace_events_hist.c 		save_field_var(hist_data, field_var);</span>
+<span class='curline'><a href='../S/291.html#L3354'>field_var</a>        3354 trace/trace_events_hist.c 		hist_field = field_var-&gt;var;</span>
+<span class='curline'><a href='../S/291.html#L3356'>field_var</a>        3356 trace/trace_events_hist.c 		field_var = NULL;</span>
+<span class='curline'><a href='../S/291.html#L3381'>field_var</a>        3381 trace/trace_events_hist.c 	destroy_field_var(field_var);</span>
+<span class='curline'><a href='../S/291.html#L3501'>field_var</a>        3501 trace/trace_events_hist.c 	struct field_var *field_var;</span>
+<span class='curline'><a href='../S/291.html#L3538'>field_var</a>        3538 trace/trace_events_hist.c 			field_var = create_target_field_var(hist_data, NULL, NULL, param);</span>
+<span class='curline'><a href='../S/291.html#L3539'>field_var</a>        3539 trace/trace_events_hist.c 			if (IS_ERR(field_var)) {</span>
+<span class='curline'><a href='../S/291.html#L3542'>field_var</a>        3542 trace/trace_events_hist.c 				ret = PTR_ERR(field_var);</span>
+<span class='curline'><a href='../S/291.html#L3547'>field_var</a>        3547 trace/trace_events_hist.c 			hist_data-&gt;save_vars[hist_data-&gt;n_save_vars++] = field_var;</span>
+<span class='curline'><a href='../S/291.html#L3548'>field_var</a>        3548 trace/trace_events_hist.c 			if (field_var-&gt;val-&gt;flags &amp; HIST_FIELD_FL_STRING)</span>
+<span class='curline'><a href='../S/291.html#L4837'>field_var</a>        4837 trace/trace_events_hist.c 				struct field_var *field_var, unsigned int i,</span>
+<span class='curline'><a href='../S/291.html#L4846'>field_var</a>        4846 trace/trace_events_hist.c 	field = field_var-&gt;var;</span>
+<span class='curline'><a href='../S/291.html#L4855'>field_var</a>        4855 trace/trace_events_hist.c 	field = field_var-&gt;val;</span>
+</pre>
+</body>
+</html>

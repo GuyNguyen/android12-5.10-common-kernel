@@ -1,0 +1,18 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>vcpu_running</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/20.html#L272'>vcpu_running</a>      272 locking/qspinlock_paravirt.h 	return READ_ONCE(prev-&gt;state) != vcpu_running;</span>
+<span class='curline'><a href='../S/20.html#L285'>vcpu_running</a>      285 locking/qspinlock_paravirt.h 	pn-&gt;state = vcpu_running;</span>
+<span class='curline'><a href='../S/20.html#L333'>vcpu_running</a>      333 locking/qspinlock_paravirt.h 		cmpxchg(&amp;pn-&gt;state, vcpu_halted, vcpu_running);</span>
+<span class='curline'><a href='../S/20.html#L427'>vcpu_running</a>      427 locking/qspinlock_paravirt.h 		WRITE_ONCE(pn-&gt;state, vcpu_running);</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>audit_fsnotify_mark</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/120.html#L41'>audit_fsnotify_mark</a>   41 audit.h        struct audit_fsnotify_mark;</span>
+<span class='curline'><a href='../S/120.html#L265'>audit_fsnotify_mark</a>  265 audit.h        extern struct audit_fsnotify_mark *audit_alloc_mark(struct audit_krule *krule,</span>
+<span class='curline'><a href='../S/120.html#L267'>audit_fsnotify_mark</a>  267 audit.h        extern char *audit_mark_path(struct audit_fsnotify_mark *mark);</span>
+<span class='curline'><a href='../S/120.html#L268'>audit_fsnotify_mark</a>  268 audit.h        extern void audit_remove_mark(struct audit_fsnotify_mark *audit_mark);</span>
+<span class='curline'><a href='../S/120.html#L270'>audit_fsnotify_mark</a>  270 audit.h        extern int audit_mark_compare(struct audit_fsnotify_mark *mark,</span>
+<span class='curline'><a href='../S/120.html#L274'>audit_fsnotify_mark</a>  274 audit.h        			     struct audit_fsnotify_mark *mark);</span>
+<span class='curline'><a href='../S/367.html#L41'>audit_fsnotify_mark</a>   41 audit_fsnotify.c static void audit_fsnotify_mark_free(struct audit_fsnotify_mark *audit_mark)</span>
+<span class='curline'><a href='../S/367.html#L49'>audit_fsnotify_mark</a>   49 audit_fsnotify.c 	struct audit_fsnotify_mark *audit_mark;</span>
+<span class='curline'><a href='../S/367.html#L51'>audit_fsnotify_mark</a>   51 audit_fsnotify.c 	audit_mark = container_of(mark, struct audit_fsnotify_mark, mark);</span>
+<span class='curline'><a href='../S/367.html#L55'>audit_fsnotify_mark</a>   55 audit_fsnotify.c char *audit_mark_path(struct audit_fsnotify_mark *mark)</span>
+<span class='curline'><a href='../S/367.html#L60'>audit_fsnotify_mark</a>   60 audit_fsnotify.c int audit_mark_compare(struct audit_fsnotify_mark *mark, unsigned long ino, dev_t dev)</span>
+<span class='curline'><a href='../S/367.html#L67'>audit_fsnotify_mark</a>   67 audit_fsnotify.c static void audit_update_mark(struct audit_fsnotify_mark *audit_mark,</span>
+<span class='curline'><a href='../S/367.html#L74'>audit_fsnotify_mark</a>   74 audit_fsnotify.c struct audit_fsnotify_mark *audit_alloc_mark(struct audit_krule *krule, char *pathname, int len)</span>
+<span class='curline'><a href='../S/367.html#L76'>audit_fsnotify_mark</a>   76 audit_fsnotify.c 	struct audit_fsnotify_mark *audit_mark;</span>
+<span class='curline'><a href='../S/367.html#L114'>audit_fsnotify_mark</a>  114 audit_fsnotify.c static void audit_mark_log_rule_change(struct audit_fsnotify_mark *audit_mark, char *op)</span>
+<span class='curline'><a href='../S/367.html#L132'>audit_fsnotify_mark</a>  132 audit_fsnotify.c void audit_remove_mark(struct audit_fsnotify_mark *audit_mark)</span>
+<span class='curline'><a href='../S/367.html#L140'>audit_fsnotify_mark</a>  140 audit_fsnotify.c 	struct audit_fsnotify_mark *mark = krule-&gt;exe;</span>
+<span class='curline'><a href='../S/367.html#L145'>audit_fsnotify_mark</a>  145 audit_fsnotify.c static void audit_autoremove_mark_rule(struct audit_fsnotify_mark *audit_mark)</span>
+<span class='curline'><a href='../S/367.html#L159'>audit_fsnotify_mark</a>  159 audit_fsnotify.c 	struct audit_fsnotify_mark *audit_mark;</span>
+<span class='curline'><a href='../S/367.html#L161'>audit_fsnotify_mark</a>  161 audit_fsnotify.c 	audit_mark = container_of(inode_mark, struct audit_fsnotify_mark, mark);</span>
+<span class='curline'><a href='../S/181.html#L507'>audit_fsnotify_mark</a>  507 audit_watch.c  	struct audit_fsnotify_mark *audit_mark;</span>
+<span class='curline'><a href='../S/181.html#L524'>audit_fsnotify_mark</a>  524 audit_watch.c  int audit_exe_compare(struct task_struct *tsk, struct audit_fsnotify_mark *mark)</span>
+<span class='curline'><a href='../S/219.html#L450'>audit_fsnotify_mark</a>  450 auditfilter.c  	struct audit_fsnotify_mark *audit_mark;</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>kdb_register_flags</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/56.html#L540'>kdb_register_flags</a>  540 debug/kdb/kdb_bp.c 	kdb_register_flags("bp", kdb_bp, "[&lt;vaddr&gt;]",</span>
+<span class='curline'><a href='../S/56.html#L543'>kdb_register_flags</a>  543 debug/kdb/kdb_bp.c 	kdb_register_flags("bl", kdb_bp, "[&lt;vaddr&gt;]",</span>
+<span class='curline'><a href='../S/56.html#L547'>kdb_register_flags</a>  547 debug/kdb/kdb_bp.c 		kdb_register_flags("bph", kdb_bp, "[&lt;vaddr&gt;]",</span>
+<span class='curline'><a href='../S/56.html#L550'>kdb_register_flags</a>  550 debug/kdb/kdb_bp.c 	kdb_register_flags("bc", kdb_bc, "&lt;bpnum&gt;",</span>
+<span class='curline'><a href='../S/56.html#L553'>kdb_register_flags</a>  553 debug/kdb/kdb_bp.c 	kdb_register_flags("be", kdb_bc, "&lt;bpnum&gt;",</span>
+<span class='curline'><a href='../S/56.html#L556'>kdb_register_flags</a>  556 debug/kdb/kdb_bp.c 	kdb_register_flags("bd", kdb_bc, "&lt;bpnum&gt;",</span>
+<span class='curline'><a href='../S/56.html#L560'>kdb_register_flags</a>  560 debug/kdb/kdb_bp.c 	kdb_register_flags("ss", kdb_ss, "",</span>
+<span class='curline'><a href='../S/60.html#L692'>kdb_register_flags</a>  692 debug/kdb/kdb_main.c 			kdb_register_flags(s-&gt;name, kdb_exec_defcmd, s-&gt;usage,</span>
+<span class='curline'><a href='../S/60.html#L2724'>kdb_register_flags</a> 2724 debug/kdb/kdb_main.c EXPORT_SYMBOL_GPL(kdb_register_flags);</span>
+<span class='curline'><a href='../S/60.html#L2745'>kdb_register_flags</a> 2745 debug/kdb/kdb_main.c 	return kdb_register_flags(cmd, func, usage, help, minlen, 0);</span>
+<span class='curline'><a href='../S/60.html#L2787'>kdb_register_flags</a> 2787 debug/kdb/kdb_main.c 	kdb_register_flags("md", kdb_md, "&lt;vaddr&gt;",</span>
+<span class='curline'><a href='../S/60.html#L2790'>kdb_register_flags</a> 2790 debug/kdb/kdb_main.c 	kdb_register_flags("mdr", kdb_md, "&lt;vaddr&gt; &lt;bytes&gt;",</span>
+<span class='curline'><a href='../S/60.html#L2793'>kdb_register_flags</a> 2793 debug/kdb/kdb_main.c 	kdb_register_flags("mdp", kdb_md, "&lt;paddr&gt; &lt;bytes&gt;",</span>
+<span class='curline'><a href='../S/60.html#L2796'>kdb_register_flags</a> 2796 debug/kdb/kdb_main.c 	kdb_register_flags("mds", kdb_md, "&lt;vaddr&gt;",</span>
+<span class='curline'><a href='../S/60.html#L2799'>kdb_register_flags</a> 2799 debug/kdb/kdb_main.c 	kdb_register_flags("mm", kdb_mm, "&lt;vaddr&gt; &lt;contents&gt;",</span>
+<span class='curline'><a href='../S/60.html#L2802'>kdb_register_flags</a> 2802 debug/kdb/kdb_main.c 	kdb_register_flags("go", kdb_go, "[&lt;vaddr&gt;]",</span>
+<span class='curline'><a href='../S/60.html#L2805'>kdb_register_flags</a> 2805 debug/kdb/kdb_main.c 	kdb_register_flags("rd", kdb_rd, "",</span>
+<span class='curline'><a href='../S/60.html#L2808'>kdb_register_flags</a> 2808 debug/kdb/kdb_main.c 	kdb_register_flags("rm", kdb_rm, "&lt;reg&gt; &lt;contents&gt;",</span>
+<span class='curline'><a href='../S/60.html#L2811'>kdb_register_flags</a> 2811 debug/kdb/kdb_main.c 	kdb_register_flags("ef", kdb_ef, "&lt;vaddr&gt;",</span>
+<span class='curline'><a href='../S/60.html#L2814'>kdb_register_flags</a> 2814 debug/kdb/kdb_main.c 	kdb_register_flags("bt", kdb_bt, "[&lt;vaddr&gt;]",</span>
+<span class='curline'><a href='../S/60.html#L2817'>kdb_register_flags</a> 2817 debug/kdb/kdb_main.c 	kdb_register_flags("btp", kdb_bt, "&lt;pid&gt;",</span>
+<span class='curline'><a href='../S/60.html#L2820'>kdb_register_flags</a> 2820 debug/kdb/kdb_main.c 	kdb_register_flags("bta", kdb_bt, "[D|R|S|T|C|Z|E|U|I|M|A]",</span>
+<span class='curline'><a href='../S/60.html#L2823'>kdb_register_flags</a> 2823 debug/kdb/kdb_main.c 	kdb_register_flags("btc", kdb_bt, "",</span>
+<span class='curline'><a href='../S/60.html#L2826'>kdb_register_flags</a> 2826 debug/kdb/kdb_main.c 	kdb_register_flags("btt", kdb_bt, "&lt;vaddr&gt;",</span>
+<span class='curline'><a href='../S/60.html#L2829'>kdb_register_flags</a> 2829 debug/kdb/kdb_main.c 	kdb_register_flags("env", kdb_env, "",</span>
+<span class='curline'><a href='../S/60.html#L2832'>kdb_register_flags</a> 2832 debug/kdb/kdb_main.c 	kdb_register_flags("set", kdb_set, "",</span>
+<span class='curline'><a href='../S/60.html#L2835'>kdb_register_flags</a> 2835 debug/kdb/kdb_main.c 	kdb_register_flags("help", kdb_help, "",</span>
+<span class='curline'><a href='../S/60.html#L2838'>kdb_register_flags</a> 2838 debug/kdb/kdb_main.c 	kdb_register_flags("?", kdb_help, "",</span>
+<span class='curline'><a href='../S/60.html#L2841'>kdb_register_flags</a> 2841 debug/kdb/kdb_main.c 	kdb_register_flags("cpu", kdb_cpu, "&lt;cpunum&gt;",</span>
+<span class='curline'><a href='../S/60.html#L2844'>kdb_register_flags</a> 2844 debug/kdb/kdb_main.c 	kdb_register_flags("kgdb", kdb_kgdb, "",</span>
+<span class='curline'><a href='../S/60.html#L2846'>kdb_register_flags</a> 2846 debug/kdb/kdb_main.c 	kdb_register_flags("ps", kdb_ps, "[&lt;flags&gt;|A]",</span>
+<span class='curline'><a href='../S/60.html#L2849'>kdb_register_flags</a> 2849 debug/kdb/kdb_main.c 	kdb_register_flags("pid", kdb_pid, "&lt;pidnum&gt;",</span>
+<span class='curline'><a href='../S/60.html#L2852'>kdb_register_flags</a> 2852 debug/kdb/kdb_main.c 	kdb_register_flags("reboot", kdb_reboot, "",</span>
+<span class='curline'><a href='../S/60.html#L2856'>kdb_register_flags</a> 2856 debug/kdb/kdb_main.c 	kdb_register_flags("lsmod", kdb_lsmod, "",</span>
+<span class='curline'><a href='../S/60.html#L2861'>kdb_register_flags</a> 2861 debug/kdb/kdb_main.c 	kdb_register_flags("sr", kdb_sr, "&lt;key&gt;",</span>
+<span class='curline'><a href='../S/60.html#L2866'>kdb_register_flags</a> 2866 debug/kdb/kdb_main.c 	kdb_register_flags("dmesg", kdb_dmesg, "[lines]",</span>
+<span class='curline'><a href='../S/60.html#L2871'>kdb_register_flags</a> 2871 debug/kdb/kdb_main.c 		kdb_register_flags("disable_nmi", kdb_disable_nmi, "",</span>
+<span class='curline'><a href='../S/60.html#L2875'>kdb_register_flags</a> 2875 debug/kdb/kdb_main.c 	kdb_register_flags("defcmd", kdb_defcmd, "name \"usage\" \"help\"",</span>
+<span class='curline'><a href='../S/60.html#L2878'>kdb_register_flags</a> 2878 debug/kdb/kdb_main.c 	kdb_register_flags("kill", kdb_kill, "&lt;-signal&gt; &lt;pid&gt;",</span>
+<span class='curline'><a href='../S/60.html#L2881'>kdb_register_flags</a> 2881 debug/kdb/kdb_main.c 	kdb_register_flags("summary", kdb_summary, "",</span>
+<span class='curline'><a href='../S/60.html#L2884'>kdb_register_flags</a> 2884 debug/kdb/kdb_main.c 	kdb_register_flags("per_cpu", kdb_per_cpu, "&lt;sym&gt; [&lt;bytes&gt;] [&lt;cpu&gt;]",</span>
+<span class='curline'><a href='../S/60.html#L2887'>kdb_register_flags</a> 2887 debug/kdb/kdb_main.c 	kdb_register_flags("grephelp", kdb_grep_help, "",</span>
+<span class='curline'><a href='../S/280.html#L152'>kdb_register_flags</a>  152 trace/trace_kdb.c 	kdb_register_flags("ftdump", kdb_ftdump, "[skip_#entries] [cpu]",</span>
+</pre>
+</body>
+</html>

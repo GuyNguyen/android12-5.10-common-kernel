@@ -1,0 +1,512 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>pid_namespace.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/pid_namespace.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L37'>[^]</a><a href='#L457'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L37' title='Defined at 37.'>create_pid_cachep</a></li>
+<li><a href='#L60' title='Defined at 60.'>inc_pid_namespaces</a></li>
+<li><a href='#L65' title='Defined at 65.'>dec_pid_namespaces</a></li>
+<li><a href='#L70' title='Defined at 70.'>create_pid_namespace</a></li>
+<li><a href='#L123' title='Defined at 123.'>delayed_free_pidns</a></li>
+<li><a href='#L133' title='Defined at 133.'>destroy_pid_namespace</a></li>
+<li><a href='#L141' title='Defined at 141.'>copy_pid_ns</a></li>
+<li><a href='#L151' title='Defined at 151.'>free_pid_ns</a></li>
+<li><a href='#L159' title='Defined at 159.'>put_pid_ns</a></li>
+<li><a href='#L172' title='Defined at 172.'>zap_pid_ns_processes</a></li>
+<li><a href='#L265' title='Defined at 265.'>pid_ns_ctl_handler</a></li>
+<li><a href='#L306' title='Defined at 306.'>reboot_pid_ns</a></li>
+<li><a href='#L335' title='Defined at 335.'>to_pid_ns</a></li>
+<li><a href='#L340' title='Defined at 340.'>pidns_get</a></li>
+<li><a href='#L353' title='Defined at 353.'>pidns_for_children_get</a></li>
+<li><a href='#L376' title='Defined at 376.'>pidns_put</a></li>
+<li><a href='#L381' title='Defined at 381.'>pidns_install</a></li>
+<li><a href='#L413' title='Defined at 413.'>pidns_get_parent</a></li>
+<li><a href='#L431' title='Defined at 431.'>pidns_owner</a></li>
+<li><a href='#L457' title='Defined at 457.'>pid_namespaces_init</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0-only</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * Pid namespaces</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> *</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * Authors:</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> *    (C) 2007 Pavel Emelyanov &lt;xemul@openvz.org&gt;, OpenVZ, SWsoft Inc.</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> *    (C) 2007 Sukadev Bhattiprolu &lt;sukadev@us.ibm.com&gt;, IBM</em>
+<a id='L8' name='L8'></a>   8 <em class='comment'> *     Many thanks to Oleg Nesterov for comments and help</em>
+<a id='L9' name='L9'></a>   9 <em class='comment'> *</em>
+<a id='L10' name='L10'></a>  10 <em class='comment'> */</em>
+<a id='L11' name='L11'></a>  11 
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;linux/pid.h&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;linux/pid_namespace.h&gt;
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> &lt;linux/user_namespace.h&gt;
+<a id='L15' name='L15'></a>  15 <em class='sharp'>#include</em> &lt;linux/syscalls.h&gt;
+<a id='L16' name='L16'></a>  16 <em class='sharp'>#include</em> &lt;linux/cred.h&gt;
+<a id='L17' name='L17'></a>  17 <em class='sharp'>#include</em> &lt;linux/err.h&gt;
+<a id='L18' name='L18'></a>  18 <em class='sharp'>#include</em> &lt;linux/acct.h&gt;
+<a id='L19' name='L19'></a>  19 <em class='sharp'>#include</em> &lt;linux/slab.h&gt;
+<a id='L20' name='L20'></a>  20 <em class='sharp'>#include</em> &lt;linux/proc_ns.h&gt;
+<a id='L21' name='L21'></a>  21 <em class='sharp'>#include</em> &lt;linux/reboot.h&gt;
+<a id='L22' name='L22'></a>  22 <em class='sharp'>#include</em> &lt;linux/export.h&gt;
+<a id='L23' name='L23'></a>  23 <em class='sharp'>#include</em> &lt;linux/sched/task.h&gt;
+<a id='L24' name='L24'></a>  24 <em class='sharp'>#include</em> &lt;linux/sched/signal.h&gt;
+<a id='L25' name='L25'></a>  25 <em class='sharp'>#include</em> &lt;linux/idr.h&gt;
+<a id='L26' name='L26'></a>  26 
+<a id='L27' name='L27'></a>  27 <strong class='reserved'>static</strong> DEFINE_MUTEX(pid_caches_mutex);
+<a id='L28' name='L28'></a>  28 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> kmem_cache *pid_ns_cachep;
+<a id='L29' name='L29'></a>  29 <em class='comment'>/* Write once array, filled from the beginning. */</em>
+<a id='L30' name='L30'></a>  30 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> kmem_cache *pid_cache[MAX_PID_NS_LEVEL];
+<a id='L31' name='L31'></a>  31 
+<a id='L32' name='L32'></a>  32 <em class='comment'>/*</em>
+<a id='L33' name='L33'></a>  33 <em class='comment'> * creates the kmem cache to allocate pids from.</em>
+<a id='L34' name='L34'></a>  34 <em class='comment'> * @level: pid namespace level</em>
+<a id='L35' name='L35'></a>  35 <em class='comment'> */</em>
+<a id='L36' name='L36'></a>  36 
+<a id='L37' name='L37'></a>  37 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> kmem_cache *<a href='../S/195.html#L96' title='Referred from 96 in pid_namespace.c.'>create_pid_cachep</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> level)
+<a id='L38' name='L38'></a>  38 <em class='brace'>{</em>
+<a id='L39' name='L39'></a>  39         <em class='comment'>/* Level 0 is init_pid_ns.pid_cachep */</em>
+<a id='L40' name='L40'></a>  40         <strong class='reserved'>struct</strong> kmem_cache **pkc = &amp;pid_cache[level - 1];
+<a id='L41' name='L41'></a>  41         <strong class='reserved'>struct</strong> kmem_cache *kc;
+<a id='L42' name='L42'></a>  42         <strong class='reserved'>char</strong> name[4 + 10 + 1];
+<a id='L43' name='L43'></a>  43         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> len;
+<a id='L44' name='L44'></a>  44 
+<a id='L45' name='L45'></a>  45         kc = READ_ONCE(*pkc);
+<a id='L46' name='L46'></a>  46         <strong class='reserved'>if</strong> (kc)
+<a id='L47' name='L47'></a>  47                 <strong class='reserved'>return</strong> kc;
+<a id='L48' name='L48'></a>  48 
+<a id='L49' name='L49'></a>  49         snprintf(name, <strong class='reserved'>sizeof</strong>(name), "pid_%u", level + 1);
+<a id='L50' name='L50'></a>  50         len = <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> pid) + level * <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> upid);
+<a id='L51' name='L51'></a>  51         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;pid_caches_mutex);
+<a id='L52' name='L52'></a>  52         <em class='comment'>/* Name collision forces to do allocation under mutex. */</em>
+<a id='L53' name='L53'></a>  53         <strong class='reserved'>if</strong> (!*pkc)
+<a id='L54' name='L54'></a>  54                 *pkc = kmem_cache_create(name, len, 0, SLAB_HWCACHE_ALIGN, 0);
+<a id='L55' name='L55'></a>  55         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;pid_caches_mutex);
+<a id='L56' name='L56'></a>  56         <em class='comment'>/* current can fail, but someone else can succeed. */</em>
+<a id='L57' name='L57'></a>  57         <strong class='reserved'>return</strong> READ_ONCE(*pkc);
+<a id='L58' name='L58'></a>  58 <em class='brace'>}</em>
+<a id='L59' name='L59'></a>  59 
+<a id='L60' name='L60'></a>  60 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> ucounts *<a href='../S/195.html#L85' title='Referred from 85 in pid_namespace.c.'>inc_pid_namespaces</a>(<strong class='reserved'>struct</strong> user_namespace *ns)
+<a id='L61' name='L61'></a>  61 <em class='brace'>{</em>
+<a id='L62' name='L62'></a>  62         <strong class='reserved'>return</strong> <a href='../S/252.html#L192' title='Defined at 192 in ucount.c.'>inc_ucount</a>(ns, current_euid(), UCOUNT_PID_NAMESPACES);
+<a id='L63' name='L63'></a>  63 <em class='brace'>}</em>
+<a id='L64' name='L64'></a>  64 
+<a id='L65' name='L65'></a>  65 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/5452.html' title='Multiple referred from 2 places.'>dec_pid_namespaces</a>(<strong class='reserved'>struct</strong> ucounts *ucounts)
+<a id='L66' name='L66'></a>  66 <em class='brace'>{</em>
+<a id='L67' name='L67'></a>  67         <a href='../S/252.html#L215' title='Defined at 215 in ucount.c.'>dec_ucount</a>(ucounts, UCOUNT_PID_NAMESPACES);
+<a id='L68' name='L68'></a>  68 <em class='brace'>}</em>
+<a id='L69' name='L69'></a>  69 
+<a id='L70' name='L70'></a>  70 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> pid_namespace *<a href='../S/195.html#L148' title='Referred from 148 in pid_namespace.c.'>create_pid_namespace</a>(<strong class='reserved'>struct</strong> user_namespace *user_ns,
+<a id='L71' name='L71'></a>  71         <strong class='reserved'>struct</strong> pid_namespace *parent_pid_ns)
+<a id='L72' name='L72'></a>  72 <em class='brace'>{</em>
+<a id='L73' name='L73'></a>  73         <strong class='reserved'>struct</strong> pid_namespace *ns;
+<a id='L74' name='L74'></a>  74         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> level = parent_pid_ns-&gt;level + 1;
+<a id='L75' name='L75'></a>  75         <strong class='reserved'>struct</strong> ucounts *ucounts;
+<a id='L76' name='L76'></a>  76         <strong class='reserved'>int</strong> err;
+<a id='L77' name='L77'></a>  77 
+<a id='L78' name='L78'></a>  78         err = -EINVAL;
+<a id='L79' name='L79'></a>  79         <strong class='reserved'>if</strong> (!<a href='../S/117.html#L1279' title='Defined at 1279 in user_namespace.c.'>in_userns</a>(parent_pid_ns-&gt;user_ns, user_ns))
+<a id='L80' name='L80'></a>  80                 <strong class='reserved'>goto</strong> out;
+<a id='L81' name='L81'></a>  81 
+<a id='L82' name='L82'></a>  82         err = -ENOSPC;
+<a id='L83' name='L83'></a>  83         <strong class='reserved'>if</strong> (level &gt; MAX_PID_NS_LEVEL)
+<a id='L84' name='L84'></a>  84                 <strong class='reserved'>goto</strong> out;
+<a id='L85' name='L85'></a>  85         ucounts = <a href='../S/195.html#L60' title='Defined at 60 in pid_namespace.c.'>inc_pid_namespaces</a>(user_ns);
+<a id='L86' name='L86'></a>  86         <strong class='reserved'>if</strong> (!ucounts)
+<a id='L87' name='L87'></a>  87                 <strong class='reserved'>goto</strong> out;
+<a id='L88' name='L88'></a>  88 
+<a id='L89' name='L89'></a>  89         err = -ENOMEM;
+<a id='L90' name='L90'></a>  90         ns = kmem_cache_zalloc(pid_ns_cachep, GFP_KERNEL);
+<a id='L91' name='L91'></a>  91         <strong class='reserved'>if</strong> (ns == NULL)
+<a id='L92' name='L92'></a>  92                 <strong class='reserved'>goto</strong> out_dec;
+<a id='L93' name='L93'></a>  93 
+<a id='L94' name='L94'></a>  94         idr_init(&amp;ns-&gt;idr);
+<a id='L95' name='L95'></a>  95 
+<a id='L96' name='L96'></a>  96         ns-&gt;pid_cachep = <a href='../S/195.html#L37' title='Defined at 37 in pid_namespace.c.'>create_pid_cachep</a>(level);
+<a id='L97' name='L97'></a>  97         <strong class='reserved'>if</strong> (ns-&gt;pid_cachep == NULL)
+<a id='L98' name='L98'></a>  98                 <strong class='reserved'>goto</strong> out_free_idr;
+<a id='L99' name='L99'></a>  99 
+<a id='L100' name='L100'></a> 100         err = ns_alloc_inum(&amp;ns-&gt;ns);
+<a id='L101' name='L101'></a> 101         <strong class='reserved'>if</strong> (err)
+<a id='L102' name='L102'></a> 102                 <strong class='reserved'>goto</strong> out_free_idr;
+<a id='L103' name='L103'></a> 103         ns-&gt;ns.ops = &amp;pidns_operations;
+<a id='L104' name='L104'></a> 104 
+<a id='L105' name='L105'></a> 105         kref_init(&amp;ns-&gt;kref);
+<a id='L106' name='L106'></a> 106         ns-&gt;level = level;
+<a id='L107' name='L107'></a> 107         ns-&gt;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a> = get_pid_ns(parent_pid_ns);
+<a id='L108' name='L108'></a> 108         ns-&gt;user_ns = get_user_ns(user_ns);
+<a id='L109' name='L109'></a> 109         ns-&gt;ucounts = ucounts;
+<a id='L110' name='L110'></a> 110         ns-&gt;pid_allocated = PIDNS_ADDING;
+<a id='L111' name='L111'></a> 111 
+<a id='L112' name='L112'></a> 112         <strong class='reserved'>return</strong> ns;
+<a id='L113' name='L113'></a> 113 
+<a id='L114' name='L114'></a> 114 out_free_idr:
+<a id='L115' name='L115'></a> 115         idr_destroy(&amp;ns-&gt;idr);
+<a id='L116' name='L116'></a> 116         kmem_cache_free(pid_ns_cachep, ns);
+<a id='L117' name='L117'></a> 117 out_dec:
+<a id='L118' name='L118'></a> 118         <a href='../S/195.html#L65' title='Defined at 65 in pid_namespace.c.'>dec_pid_namespaces</a>(ucounts);
+<a id='L119' name='L119'></a> 119 out:
+<a id='L120' name='L120'></a> 120         <strong class='reserved'>return</strong> ERR_PTR(err);
+<a id='L121' name='L121'></a> 121 <em class='brace'>}</em>
+<a id='L122' name='L122'></a> 122 
+<a id='L123' name='L123'></a> 123 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/195.html#L138' title='Referred from 138 in pid_namespace.c.'>delayed_free_pidns</a>(<strong class='reserved'>struct</strong> rcu_head *p)
+<a id='L124' name='L124'></a> 124 <em class='brace'>{</em>
+<a id='L125' name='L125'></a> 125         <strong class='reserved'>struct</strong> pid_namespace *ns = container_of(p, <strong class='reserved'>struct</strong> pid_namespace, rcu);
+<a id='L126' name='L126'></a> 126 
+<a id='L127' name='L127'></a> 127         <a href='../S/195.html#L65' title='Defined at 65 in pid_namespace.c.'>dec_pid_namespaces</a>(ns-&gt;ucounts);
+<a id='L128' name='L128'></a> 128         put_user_ns(ns-&gt;user_ns);
+<a id='L129' name='L129'></a> 129 
+<a id='L130' name='L130'></a> 130         kmem_cache_free(pid_ns_cachep, ns);
+<a id='L131' name='L131'></a> 131 <em class='brace'>}</em>
+<a id='L132' name='L132'></a> 132 
+<a id='L133' name='L133'></a> 133 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/195.html#L156' title='Referred from 156 in pid_namespace.c.'>destroy_pid_namespace</a>(<strong class='reserved'>struct</strong> pid_namespace *ns)
+<a id='L134' name='L134'></a> 134 <em class='brace'>{</em>
+<a id='L135' name='L135'></a> 135         ns_free_inum(&amp;ns-&gt;ns);
+<a id='L136' name='L136'></a> 136 
+<a id='L137' name='L137'></a> 137         idr_destroy(&amp;ns-&gt;idr);
+<a id='L138' name='L138'></a> 138         <a href='../D/4450.html' title='Multiple defined in 2 places.'>call_rcu</a>(&amp;ns-&gt;rcu, <a href='../S/195.html#L123' title='Defined at 123 in pid_namespace.c.'>delayed_free_pidns</a>);
+<a id='L139' name='L139'></a> 139 <em class='brace'>}</em>
+<a id='L140' name='L140'></a> 140 
+<a id='L141' name='L141'></a> 141 <strong class='reserved'>struct</strong> pid_namespace *<a href='../S/80.html#L97' title='Referred from 97 in nsproxy.c.'>copy_pid_ns</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> flags,
+<a id='L142' name='L142'></a> 142         <strong class='reserved'>struct</strong> user_namespace *user_ns, <strong class='reserved'>struct</strong> pid_namespace *old_ns)
+<a id='L143' name='L143'></a> 143 <em class='brace'>{</em>
+<a id='L144' name='L144'></a> 144         <strong class='reserved'>if</strong> (!(flags &amp; CLONE_NEWPID))
+<a id='L145' name='L145'></a> 145                 <strong class='reserved'>return</strong> get_pid_ns(old_ns);
+<a id='L146' name='L146'></a> 146         <strong class='reserved'>if</strong> (<a href='../S/79.html#L508' title='Defined at 508 in pid.c.'>task_active_pid_ns</a>(current) != old_ns)
+<a id='L147' name='L147'></a> 147                 <strong class='reserved'>return</strong> ERR_PTR(-EINVAL);
+<a id='L148' name='L148'></a> 148         <strong class='reserved'>return</strong> <a href='../S/195.html#L70' title='Defined at 70 in pid_namespace.c.'>create_pid_namespace</a>(user_ns, old_ns);
+<a id='L149' name='L149'></a> 149 <em class='brace'>}</em>
+<a id='L150' name='L150'></a> 150 
+<a id='L151' name='L151'></a> 151 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/195.html#L165' title='Referred from 165 in pid_namespace.c.'>free_pid_ns</a>(<strong class='reserved'>struct</strong> kref *kref)
+<a id='L152' name='L152'></a> 152 <em class='brace'>{</em>
+<a id='L153' name='L153'></a> 153         <strong class='reserved'>struct</strong> pid_namespace *ns;
+<a id='L154' name='L154'></a> 154 
+<a id='L155' name='L155'></a> 155         ns = container_of(kref, <strong class='reserved'>struct</strong> pid_namespace, kref);
+<a id='L156' name='L156'></a> 156         <a href='../S/195.html#L133' title='Defined at 133 in pid_namespace.c.'>destroy_pid_namespace</a>(ns);
+<a id='L157' name='L157'></a> 157 <em class='brace'>}</em>
+<a id='L158' name='L158'></a> 158 
+<a id='L159' name='L159'></a> 159 <strong class='reserved'>void</strong> <a href='../R/10624.html' title='Multiple referred from 13 places.'>put_pid_ns</a>(<strong class='reserved'>struct</strong> pid_namespace *ns)
+<a id='L160' name='L160'></a> 160 <em class='brace'>{</em>
+<a id='L161' name='L161'></a> 161         <strong class='reserved'>struct</strong> pid_namespace *<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>;
+<a id='L162' name='L162'></a> 162 
+<a id='L163' name='L163'></a> 163         <strong class='reserved'>while</strong> (ns != &amp;init_pid_ns) <em class='brace'>{</em>
+<a id='L164' name='L164'></a> 164                 <a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a> = ns-&gt;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>;
+<a id='L165' name='L165'></a> 165                 <strong class='reserved'>if</strong> (!kref_put(&amp;ns-&gt;kref, <a href='../S/195.html#L151' title='Defined at 151 in pid_namespace.c.'>free_pid_ns</a>))
+<a id='L166' name='L166'></a> 166                         <strong class='reserved'>break</strong>;
+<a id='L167' name='L167'></a> 167                 ns = <a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>;
+<a id='L168' name='L168'></a> 168         <em class='brace'>}</em>
+<a id='L169' name='L169'></a> 169 <em class='brace'>}</em>
+<a id='L170' name='L170'></a> 170 EXPORT_SYMBOL_GPL(<a href='../S/195.html#L159' title='Defined at 159 in pid_namespace.c.'>put_pid_ns</a>);
+<a id='L171' name='L171'></a> 171 
+<a id='L172' name='L172'></a> 172 <strong class='reserved'>void</strong> <a href='../S/63.html#L530' title='Referred from 530 in exit.c.'>zap_pid_ns_processes</a>(<strong class='reserved'>struct</strong> pid_namespace *pid_ns)
+<a id='L173' name='L173'></a> 173 <em class='brace'>{</em>
+<a id='L174' name='L174'></a> 174         <strong class='reserved'>int</strong> nr;
+<a id='L175' name='L175'></a> 175         <strong class='reserved'>int</strong> rc;
+<a id='L176' name='L176'></a> 176         <strong class='reserved'>struct</strong> task_struct *task, *me = current;
+<a id='L177' name='L177'></a> 177         <strong class='reserved'>int</strong> init_pids = thread_group_leader(me) ? 1 : 2;
+<a id='L178' name='L178'></a> 178         <strong class='reserved'>struct</strong> pid *pid;
+<a id='L179' name='L179'></a> 179 
+<a id='L180' name='L180'></a> 180         <em class='comment'>/* Don't allow any more processes into the pid namespace */</em>
+<a id='L181' name='L181'></a> 181         <a href='../S/79.html#L302' title='Defined at 302 in pid.c.'>disable_pid_allocation</a>(pid_ns);
+<a id='L182' name='L182'></a> 182 
+<a id='L183' name='L183'></a> 183         <em class='comment'>/*</em>
+<a id='L184' name='L184'></a> 184 <em class='comment'>         * Ignore SIGCHLD causing any terminated children to autoreap.</em>
+<a id='L185' name='L185'></a> 185 <em class='comment'>         * This speeds up the namespace shutdown, plus see the comment</em>
+<a id='L186' name='L186'></a> 186 <em class='comment'>         * below.</em>
+<a id='L187' name='L187'></a> 187 <em class='comment'>         */</em>
+<a id='L188' name='L188'></a> 188         spin_lock_irq(&amp;me-&gt;sighand-&gt;siglock);
+<a id='L189' name='L189'></a> 189         me-&gt;sighand-&gt;action[SIGCHLD - 1].sa.sa_handler = SIG_IGN;
+<a id='L190' name='L190'></a> 190         spin_unlock_irq(&amp;me-&gt;sighand-&gt;siglock);
+<a id='L191' name='L191'></a> 191 
+<a id='L192' name='L192'></a> 192         <em class='comment'>/*</em>
+<a id='L193' name='L193'></a> 193 <em class='comment'>         * The last thread in the cgroup-init thread group is terminating.</em>
+<a id='L194' name='L194'></a> 194 <em class='comment'>         * Find remaining pid_ts in the namespace, signal and wait for them</em>
+<a id='L195' name='L195'></a> 195 <em class='comment'>         * to exit.</em>
+<a id='L196' name='L196'></a> 196 <em class='comment'>         *</em>
+<a id='L197' name='L197'></a> 197 <em class='comment'>         * Note:  This signals each threads in the namespace - even those that</em>
+<a id='L198' name='L198'></a> 198 <em class='comment'>         *        belong to the same thread group, To avoid this, we would have</em>
+<a id='L199' name='L199'></a> 199 <em class='comment'>         *        to walk the entire tasklist looking a processes in this</em>
+<a id='L200' name='L200'></a> 200 <em class='comment'>         *        namespace, but that could be unnecessarily expensive if the</em>
+<a id='L201' name='L201'></a> 201 <em class='comment'>         *        pid namespace has just a few processes. Or we need to</em>
+<a id='L202' name='L202'></a> 202 <em class='comment'>         *        maintain a tasklist for each pid namespace.</em>
+<a id='L203' name='L203'></a> 203 <em class='comment'>         *</em>
+<a id='L204' name='L204'></a> 204 <em class='comment'>         */</em>
+<a id='L205' name='L205'></a> 205         rcu_read_lock();
+<a id='L206' name='L206'></a> 206         read_lock(&amp;tasklist_lock);
+<a id='L207' name='L207'></a> 207         nr = 2;
+<a id='L208' name='L208'></a> 208         idr_for_each_entry_continue(&amp;pid_ns-&gt;idr, pid, nr) <em class='brace'>{</em>
+<a id='L209' name='L209'></a> 209                 task = <a href='../S/79.html#L396' title='Defined at 396 in pid.c.'>pid_task</a>(pid, PIDTYPE_PID);
+<a id='L210' name='L210'></a> 210                 <strong class='reserved'>if</strong> (task &amp;&amp; !__fatal_signal_pending(task))
+<a id='L211' name='L211'></a> 211                         <a href='../S/246.html#L1408' title='Defined at 1408 in signal.c.'>group_send_sig_info</a>(SIGKILL, SEND_SIG_PRIV, task, PIDTYPE_MAX);
+<a id='L212' name='L212'></a> 212         <em class='brace'>}</em>
+<a id='L213' name='L213'></a> 213         read_unlock(&amp;tasklist_lock);
+<a id='L214' name='L214'></a> 214         rcu_read_unlock();
+<a id='L215' name='L215'></a> 215 
+<a id='L216' name='L216'></a> 216         <em class='comment'>/*</em>
+<a id='L217' name='L217'></a> 217 <em class='comment'>         * Reap the EXIT_ZOMBIE children we had before we ignored SIGCHLD.</em>
+<a id='L218' name='L218'></a> 218 <em class='comment'>         * kernel_wait4() will also block until our children traced from the</em>
+<a id='L219' name='L219'></a> 219 <em class='comment'>         * parent namespace are detached and become EXIT_DEAD.</em>
+<a id='L220' name='L220'></a> 220 <em class='comment'>         */</em>
+<a id='L221' name='L221'></a> 221         <strong class='reserved'>do</strong> <em class='brace'>{</em>
+<a id='L222' name='L222'></a> 222                 clear_thread_flag(TIF_SIGPENDING);
+<a id='L223' name='L223'></a> 223                 rc = <a href='../S/63.html#L1583' title='Defined at 1583 in exit.c.'>kernel_wait4</a>(-1, NULL, __WALL, NULL);
+<a id='L224' name='L224'></a> 224         <em class='brace'>}</em> <strong class='reserved'>while</strong> (rc != -ECHILD);
+<a id='L225' name='L225'></a> 225 
+<a id='L226' name='L226'></a> 226         <em class='comment'>/*</em>
+<a id='L227' name='L227'></a> 227 <em class='comment'>         * kernel_wait4() misses EXIT_DEAD children, and EXIT_ZOMBIE</em>
+<a id='L228' name='L228'></a> 228 <em class='comment'>         * process whose parents processes are outside of the pid</em>
+<a id='L229' name='L229'></a> 229 <em class='comment'>         * namespace.  Such processes are created with setns()+fork().</em>
+<a id='L230' name='L230'></a> 230 <em class='comment'>         *</em>
+<a id='L231' name='L231'></a> 231 <em class='comment'>         * If those EXIT_ZOMBIE processes are not reaped by their</em>
+<a id='L232' name='L232'></a> 232 <em class='comment'>         * parents before their parents exit, they will be reparented</em>
+<a id='L233' name='L233'></a> 233 <em class='comment'>         * to pid_ns-&gt;child_reaper.  Thus pidns-&gt;child_reaper needs to</em>
+<a id='L234' name='L234'></a> 234 <em class='comment'>         * stay valid until they all go away.</em>
+<a id='L235' name='L235'></a> 235 <em class='comment'>         *</em>
+<a id='L236' name='L236'></a> 236 <em class='comment'>         * The code relies on the pid_ns-&gt;child_reaper ignoring</em>
+<a id='L237' name='L237'></a> 237 <em class='comment'>         * SIGCHILD to cause those EXIT_ZOMBIE processes to be</em>
+<a id='L238' name='L238'></a> 238 <em class='comment'>         * autoreaped if reparented.</em>
+<a id='L239' name='L239'></a> 239 <em class='comment'>         *</em>
+<a id='L240' name='L240'></a> 240 <em class='comment'>         * Semantically it is also desirable to wait for EXIT_ZOMBIE</em>
+<a id='L241' name='L241'></a> 241 <em class='comment'>         * processes before allowing the child_reaper to be reaped, as</em>
+<a id='L242' name='L242'></a> 242 <em class='comment'>         * that gives the invariant that when the init process of a</em>
+<a id='L243' name='L243'></a> 243 <em class='comment'>         * pid namespace is reaped all of the processes in the pid</em>
+<a id='L244' name='L244'></a> 244 <em class='comment'>         * namespace are gone.</em>
+<a id='L245' name='L245'></a> 245 <em class='comment'>         *</em>
+<a id='L246' name='L246'></a> 246 <em class='comment'>         * Once all of the other tasks are gone from the pid_namespace</em>
+<a id='L247' name='L247'></a> 247 <em class='comment'>         * free_pid() will awaken this task.</em>
+<a id='L248' name='L248'></a> 248 <em class='comment'>         */</em>
+<a id='L249' name='L249'></a> 249         <strong class='reserved'>for</strong> (;;) <em class='brace'>{</em>
+<a id='L250' name='L250'></a> 250                 set_current_state(TASK_INTERRUPTIBLE);
+<a id='L251' name='L251'></a> 251                 <strong class='reserved'>if</strong> (pid_ns-&gt;pid_allocated == init_pids)
+<a id='L252' name='L252'></a> 252                         <strong class='reserved'>break</strong>;
+<a id='L253' name='L253'></a> 253                 <a href='../S/441.html#L4832' title='Defined at 4832 in sched/core.c.'>schedule</a>();
+<a id='L254' name='L254'></a> 254         <em class='brace'>}</em>
+<a id='L255' name='L255'></a> 255         __set_current_state(TASK_RUNNING);
+<a id='L256' name='L256'></a> 256 
+<a id='L257' name='L257'></a> 257         <strong class='reserved'>if</strong> (pid_ns-&gt;reboot)
+<a id='L258' name='L258'></a> 258                 current-&gt;signal-&gt;group_exit_code = pid_ns-&gt;reboot;
+<a id='L259' name='L259'></a> 259 
+<a id='L260' name='L260'></a> 260         <a href='../S/15.html#L297' title='Defined at 297 in acct.c.'>acct_exit_ns</a>(pid_ns);
+<a id='L261' name='L261'></a> 261         <strong class='reserved'>return</strong>;
+<a id='L262' name='L262'></a> 262 <em class='brace'>}</em>
+<a id='L263' name='L263'></a> 263 
+<a id='L264' name='L264'></a> 264 <em class='sharp'>#ifdef</em> CONFIG_CHECKPOINT_RESTORE
+<a id='L265' name='L265'></a> 265 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/195.html#L297' title='Referred from 297 in pid_namespace.c.'>pid_ns_ctl_handler</a>(<strong class='reserved'>struct</strong> ctl_table *table, <strong class='reserved'>int</strong> write,
+<a id='L266' name='L266'></a> 266                 <strong class='reserved'>void</strong> *buffer, size_t *lenp, loff_t *ppos)
+<a id='L267' name='L267'></a> 267 <em class='brace'>{</em>
+<a id='L268' name='L268'></a> 268         <strong class='reserved'>struct</strong> pid_namespace *pid_ns = <a href='../S/79.html#L508' title='Defined at 508 in pid.c.'>task_active_pid_ns</a>(current);
+<a id='L269' name='L269'></a> 269         <strong class='reserved'>struct</strong> ctl_table tmp = *table;
+<a id='L270' name='L270'></a> 270         <strong class='reserved'>int</strong> ret, next;
+<a id='L271' name='L271'></a> 271 
+<a id='L272' name='L272'></a> 272         <strong class='reserved'>if</strong> (write &amp;&amp; !checkpoint_restore_ns_capable(pid_ns-&gt;user_ns))
+<a id='L273' name='L273'></a> 273                 <strong class='reserved'>return</strong> -EPERM;
+<a id='L274' name='L274'></a> 274 
+<a id='L275' name='L275'></a> 275         <em class='comment'>/*</em>
+<a id='L276' name='L276'></a> 276 <em class='comment'>         * Writing directly to ns' last_pid field is OK, since this field</em>
+<a id='L277' name='L277'></a> 277 <em class='comment'>         * is volatile in a living namespace anyway and a code writing to</em>
+<a id='L278' name='L278'></a> 278 <em class='comment'>         * it should synchronize its usage with external means.</em>
+<a id='L279' name='L279'></a> 279 <em class='comment'>         */</em>
+<a id='L280' name='L280'></a> 280 
+<a id='L281' name='L281'></a> 281         next = idr_get_cursor(&amp;pid_ns-&gt;idr) - 1;
+<a id='L282' name='L282'></a> 282 
+<a id='L283' name='L283'></a> 283         tmp.data = &amp;next;
+<a id='L284' name='L284'></a> 284         ret = <a href='../D/11035.html' title='Multiple defined in 2 places.'>proc_dointvec_minmax</a>(&amp;tmp, write, buffer, lenp, ppos);
+<a id='L285' name='L285'></a> 285         <strong class='reserved'>if</strong> (!ret &amp;&amp; write)
+<a id='L286' name='L286'></a> 286                 idr_set_cursor(&amp;pid_ns-&gt;idr, next + 1);
+<a id='L287' name='L287'></a> 287 
+<a id='L288' name='L288'></a> 288         <strong class='reserved'>return</strong> ret;
+<a id='L289' name='L289'></a> 289 <em class='brace'>}</em>
+<a id='L290' name='L290'></a> 290 
+<a id='L291' name='L291'></a> 291 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> pid_max;
+<a id='L292' name='L292'></a> 292 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> ctl_table pid_ns_ctl_table[] = <em class='brace'>{</em>
+<a id='L293' name='L293'></a> 293         <em class='brace'>{</em>
+<a id='L294' name='L294'></a> 294                 .procname = "ns_last_pid",
+<a id='L295' name='L295'></a> 295                 .maxlen = <strong class='reserved'>sizeof</strong>(<strong class='reserved'>int</strong>),
+<a id='L296' name='L296'></a> 296                 .mode = 0666, <em class='comment'>/* permissions are checked in the handler */</em>
+<a id='L297' name='L297'></a> 297                 .proc_handler = <a href='../S/195.html#L265' title='Defined at 265 in pid_namespace.c.'>pid_ns_ctl_handler</a>,
+<a id='L298' name='L298'></a> 298                 .extra1 = SYSCTL_ZERO,
+<a id='L299' name='L299'></a> 299                 .extra2 = &amp;pid_max,
+<a id='L300' name='L300'></a> 300         <em class='brace'>}</em>,
+<a id='L301' name='L301'></a> 301         <em class='brace'>{</em> <em class='brace'>}</em>
+<a id='L302' name='L302'></a> 302 <em class='brace'>}</em>;
+<a id='L303' name='L303'></a> 303 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> ctl_path kern_path[] = <em class='brace'>{</em> <em class='brace'>{</em> .procname = "kernel", <em class='brace'>}</em>, <em class='brace'>{</em> <em class='brace'>}</em> <em class='brace'>}</em>;
+<a id='L304' name='L304'></a> 304 <em class='sharp'>#endif</em>  <em class='comment'>/* CONFIG_CHECKPOINT_RESTORE */</em>
+<a id='L305' name='L305'></a> 305 
+<a id='L306' name='L306'></a> 306 <strong class='reserved'>int</strong> <a href='../S/214.html#L336' title='Referred from 336 in reboot.c.'>reboot_pid_ns</a>(<strong class='reserved'>struct</strong> pid_namespace *pid_ns, <strong class='reserved'>int</strong> cmd)
+<a id='L307' name='L307'></a> 307 <em class='brace'>{</em>
+<a id='L308' name='L308'></a> 308         <strong class='reserved'>if</strong> (pid_ns == &amp;init_pid_ns)
+<a id='L309' name='L309'></a> 309                 <strong class='reserved'>return</strong> 0;
+<a id='L310' name='L310'></a> 310 
+<a id='L311' name='L311'></a> 311         <strong class='reserved'>switch</strong> (cmd) <em class='brace'>{</em>
+<a id='L312' name='L312'></a> 312         <strong class='reserved'>case</strong> LINUX_REBOOT_CMD_RESTART2:
+<a id='L313' name='L313'></a> 313         <strong class='reserved'>case</strong> LINUX_REBOOT_CMD_RESTART:
+<a id='L314' name='L314'></a> 314                 pid_ns-&gt;reboot = SIGHUP;
+<a id='L315' name='L315'></a> 315                 <strong class='reserved'>break</strong>;
+<a id='L316' name='L316'></a> 316 
+<a id='L317' name='L317'></a> 317         <strong class='reserved'>case</strong> LINUX_REBOOT_CMD_POWER_OFF:
+<a id='L318' name='L318'></a> 318         <strong class='reserved'>case</strong> LINUX_REBOOT_CMD_HALT:
+<a id='L319' name='L319'></a> 319                 pid_ns-&gt;reboot = SIGINT;
+<a id='L320' name='L320'></a> 320                 <strong class='reserved'>break</strong>;
+<a id='L321' name='L321'></a> 321         <strong class='reserved'>default</strong>:
+<a id='L322' name='L322'></a> 322                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L323' name='L323'></a> 323         <em class='brace'>}</em>
+<a id='L324' name='L324'></a> 324 
+<a id='L325' name='L325'></a> 325         read_lock(&amp;tasklist_lock);
+<a id='L326' name='L326'></a> 326         <a href='../S/246.html#L1626' title='Defined at 1626 in signal.c.'>send_sig</a>(SIGKILL, pid_ns-&gt;child_reaper, 1);
+<a id='L327' name='L327'></a> 327         read_unlock(&amp;tasklist_lock);
+<a id='L328' name='L328'></a> 328 
+<a id='L329' name='L329'></a> 329         <a href='../S/63.html#L715' title='Defined at 715 in exit.c.'>do_exit</a>(0);
+<a id='L330' name='L330'></a> 330 
+<a id='L331' name='L331'></a> 331         <em class='comment'>/* Not reached */</em>
+<a id='L332' name='L332'></a> 332         <strong class='reserved'>return</strong> 0;
+<a id='L333' name='L333'></a> 333 <em class='brace'>}</em>
+<a id='L334' name='L334'></a> 334 
+<a id='L335' name='L335'></a> 335 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>struct</strong> pid_namespace *<a href='../R/13495.html' title='Multiple referred from 4 places.'>to_pid_ns</a>(<strong class='reserved'>struct</strong> ns_common *ns)
+<a id='L336' name='L336'></a> 336 <em class='brace'>{</em>
+<a id='L337' name='L337'></a> 337         <strong class='reserved'>return</strong> container_of(ns, <strong class='reserved'>struct</strong> pid_namespace, ns);
+<a id='L338' name='L338'></a> 338 <em class='brace'>}</em>
+<a id='L339' name='L339'></a> 339 
+<a id='L340' name='L340'></a> 340 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> ns_common *<a href='../S/195.html#L439' title='Referred from 439 in pid_namespace.c.'>pidns_get</a>(<strong class='reserved'>struct</strong> task_struct *task)
+<a id='L341' name='L341'></a> 341 <em class='brace'>{</em>
+<a id='L342' name='L342'></a> 342         <strong class='reserved'>struct</strong> pid_namespace *ns;
+<a id='L343' name='L343'></a> 343 
+<a id='L344' name='L344'></a> 344         rcu_read_lock();
+<a id='L345' name='L345'></a> 345         ns = <a href='../S/79.html#L508' title='Defined at 508 in pid.c.'>task_active_pid_ns</a>(task);
+<a id='L346' name='L346'></a> 346         <strong class='reserved'>if</strong> (ns)
+<a id='L347' name='L347'></a> 347                 get_pid_ns(ns);
+<a id='L348' name='L348'></a> 348         rcu_read_unlock();
+<a id='L349' name='L349'></a> 349 
+<a id='L350' name='L350'></a> 350         <strong class='reserved'>return</strong> ns ? &amp;ns-&gt;ns : NULL;
+<a id='L351' name='L351'></a> 351 <em class='brace'>}</em>
+<a id='L352' name='L352'></a> 352 
+<a id='L353' name='L353'></a> 353 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> ns_common *<a href='../S/195.html#L450' title='Referred from 450 in pid_namespace.c.'>pidns_for_children_get</a>(<strong class='reserved'>struct</strong> task_struct *task)
+<a id='L354' name='L354'></a> 354 <em class='brace'>{</em>
+<a id='L355' name='L355'></a> 355         <strong class='reserved'>struct</strong> pid_namespace *ns = NULL;
+<a id='L356' name='L356'></a> 356 
+<a id='L357' name='L357'></a> 357         task_lock(task);
+<a id='L358' name='L358'></a> 358         <strong class='reserved'>if</strong> (task-&gt;nsproxy) <em class='brace'>{</em>
+<a id='L359' name='L359'></a> 359                 ns = task-&gt;nsproxy-&gt;pid_ns_for_children;
+<a id='L360' name='L360'></a> 360                 get_pid_ns(ns);
+<a id='L361' name='L361'></a> 361         <em class='brace'>}</em>
+<a id='L362' name='L362'></a> 362         task_unlock(task);
+<a id='L363' name='L363'></a> 363 
+<a id='L364' name='L364'></a> 364         <strong class='reserved'>if</strong> (ns) <em class='brace'>{</em>
+<a id='L365' name='L365'></a> 365                 read_lock(&amp;tasklist_lock);
+<a id='L366' name='L366'></a> 366                 <strong class='reserved'>if</strong> (!ns-&gt;child_reaper) <em class='brace'>{</em>
+<a id='L367' name='L367'></a> 367                         <a href='../S/195.html#L159' title='Defined at 159 in pid_namespace.c.'>put_pid_ns</a>(ns);
+<a id='L368' name='L368'></a> 368                         ns = NULL;
+<a id='L369' name='L369'></a> 369                 <em class='brace'>}</em>
+<a id='L370' name='L370'></a> 370                 read_unlock(&amp;tasklist_lock);
+<a id='L371' name='L371'></a> 371         <em class='brace'>}</em>
+<a id='L372' name='L372'></a> 372 
+<a id='L373' name='L373'></a> 373         <strong class='reserved'>return</strong> ns ? &amp;ns-&gt;ns : NULL;
+<a id='L374' name='L374'></a> 374 <em class='brace'>}</em>
+<a id='L375' name='L375'></a> 375 
+<a id='L376' name='L376'></a> 376 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/9994.html' title='Multiple referred from 2 places.'>pidns_put</a>(<strong class='reserved'>struct</strong> ns_common *ns)
+<a id='L377' name='L377'></a> 377 <em class='brace'>{</em>
+<a id='L378' name='L378'></a> 378         <a href='../S/195.html#L159' title='Defined at 159 in pid_namespace.c.'>put_pid_ns</a>(<a href='../S/195.html#L335' title='Defined at 335 in pid_namespace.c.'>to_pid_ns</a>(ns));
+<a id='L379' name='L379'></a> 379 <em class='brace'>}</em>
+<a id='L380' name='L380'></a> 380 
+<a id='L381' name='L381'></a> 381 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../R/9992.html' title='Multiple referred from 2 places.'>pidns_install</a>(<strong class='reserved'>struct</strong> nsset *nsset, <strong class='reserved'>struct</strong> ns_common *ns)
+<a id='L382' name='L382'></a> 382 <em class='brace'>{</em>
+<a id='L383' name='L383'></a> 383         <strong class='reserved'>struct</strong> nsproxy *nsproxy = nsset-&gt;nsproxy;
+<a id='L384' name='L384'></a> 384         <strong class='reserved'>struct</strong> pid_namespace *active = <a href='../S/79.html#L508' title='Defined at 508 in pid.c.'>task_active_pid_ns</a>(current);
+<a id='L385' name='L385'></a> 385         <strong class='reserved'>struct</strong> pid_namespace *ancestor, *new = <a href='../S/195.html#L335' title='Defined at 335 in pid_namespace.c.'>to_pid_ns</a>(ns);
+<a id='L386' name='L386'></a> 386 
+<a id='L387' name='L387'></a> 387         <strong class='reserved'>if</strong> (!<a href='../S/321.html#L394' title='Defined at 394 in capability.c.'>ns_capable</a>(new-&gt;user_ns, CAP_SYS_ADMIN) ||
+<a id='L388' name='L388'></a> 388             !<a href='../S/321.html#L394' title='Defined at 394 in capability.c.'>ns_capable</a>(nsset-&gt;cred-&gt;user_ns, CAP_SYS_ADMIN))
+<a id='L389' name='L389'></a> 389                 <strong class='reserved'>return</strong> -EPERM;
+<a id='L390' name='L390'></a> 390 
+<a id='L391' name='L391'></a> 391         <em class='comment'>/*</em>
+<a id='L392' name='L392'></a> 392 <em class='comment'>         * Only allow entering the current active pid namespace</em>
+<a id='L393' name='L393'></a> 393 <em class='comment'>         * or a child of the current active pid namespace.</em>
+<a id='L394' name='L394'></a> 394 <em class='comment'>         *</em>
+<a id='L395' name='L395'></a> 395 <em class='comment'>         * This is required for fork to return a usable pid value and</em>
+<a id='L396' name='L396'></a> 396 <em class='comment'>         * this maintains the property that processes and their</em>
+<a id='L397' name='L397'></a> 397 <em class='comment'>         * children can not escape their current pid namespace.</em>
+<a id='L398' name='L398'></a> 398 <em class='comment'>         */</em>
+<a id='L399' name='L399'></a> 399         <strong class='reserved'>if</strong> (new-&gt;level &lt; active-&gt;level)
+<a id='L400' name='L400'></a> 400                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L401' name='L401'></a> 401 
+<a id='L402' name='L402'></a> 402         ancestor = new;
+<a id='L403' name='L403'></a> 403         <strong class='reserved'>while</strong> (ancestor-&gt;level &gt; active-&gt;level)
+<a id='L404' name='L404'></a> 404                 ancestor = ancestor-&gt;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>;
+<a id='L405' name='L405'></a> 405         <strong class='reserved'>if</strong> (ancestor != active)
+<a id='L406' name='L406'></a> 406                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L407' name='L407'></a> 407 
+<a id='L408' name='L408'></a> 408         <a href='../S/195.html#L159' title='Defined at 159 in pid_namespace.c.'>put_pid_ns</a>(nsproxy-&gt;pid_ns_for_children);
+<a id='L409' name='L409'></a> 409         nsproxy-&gt;pid_ns_for_children = get_pid_ns(new);
+<a id='L410' name='L410'></a> 410         <strong class='reserved'>return</strong> 0;
+<a id='L411' name='L411'></a> 411 <em class='brace'>}</em>
+<a id='L412' name='L412'></a> 412 
+<a id='L413' name='L413'></a> 413 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> ns_common *<a href='../R/9991.html' title='Multiple referred from 2 places.'>pidns_get_parent</a>(<strong class='reserved'>struct</strong> ns_common *ns)
+<a id='L414' name='L414'></a> 414 <em class='brace'>{</em>
+<a id='L415' name='L415'></a> 415         <strong class='reserved'>struct</strong> pid_namespace *active = <a href='../S/79.html#L508' title='Defined at 508 in pid.c.'>task_active_pid_ns</a>(current);
+<a id='L416' name='L416'></a> 416         <strong class='reserved'>struct</strong> pid_namespace *pid_ns, *p;
+<a id='L417' name='L417'></a> 417 
+<a id='L418' name='L418'></a> 418         <em class='comment'>/* See if the parent is in the current namespace */</em>
+<a id='L419' name='L419'></a> 419         pid_ns = p = <a href='../S/195.html#L335' title='Defined at 335 in pid_namespace.c.'>to_pid_ns</a>(ns)-&gt;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>;
+<a id='L420' name='L420'></a> 420         <strong class='reserved'>for</strong> (;;) <em class='brace'>{</em>
+<a id='L421' name='L421'></a> 421                 <strong class='reserved'>if</strong> (!p)
+<a id='L422' name='L422'></a> 422                         <strong class='reserved'>return</strong> ERR_PTR(-EPERM);
+<a id='L423' name='L423'></a> 423                 <strong class='reserved'>if</strong> (p == active)
+<a id='L424' name='L424'></a> 424                         <strong class='reserved'>break</strong>;
+<a id='L425' name='L425'></a> 425                 p = p-&gt;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>;
+<a id='L426' name='L426'></a> 426         <em class='brace'>}</em>
+<a id='L427' name='L427'></a> 427 
+<a id='L428' name='L428'></a> 428         <strong class='reserved'>return</strong> &amp;get_pid_ns(pid_ns)-&gt;ns;
+<a id='L429' name='L429'></a> 429 <em class='brace'>}</em>
+<a id='L430' name='L430'></a> 430 
+<a id='L431' name='L431'></a> 431 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> user_namespace *<a href='../R/9993.html' title='Multiple referred from 2 places.'>pidns_owner</a>(<strong class='reserved'>struct</strong> ns_common *ns)
+<a id='L432' name='L432'></a> 432 <em class='brace'>{</em>
+<a id='L433' name='L433'></a> 433         <strong class='reserved'>return</strong> <a href='../S/195.html#L335' title='Defined at 335 in pid_namespace.c.'>to_pid_ns</a>(ns)-&gt;user_ns;
+<a id='L434' name='L434'></a> 434 <em class='brace'>}</em>
+<a id='L435' name='L435'></a> 435 
+<a id='L436' name='L436'></a> 436 <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> proc_ns_operations pidns_operations = <em class='brace'>{</em>
+<a id='L437' name='L437'></a> 437         .name           = "pid",
+<a id='L438' name='L438'></a> 438         .type           = CLONE_NEWPID,
+<a id='L439' name='L439'></a> 439         .get            = <a href='../S/195.html#L340' title='Defined at 340 in pid_namespace.c.'>pidns_get</a>,
+<a id='L440' name='L440'></a> 440         .put            = <a href='../S/195.html#L376' title='Defined at 376 in pid_namespace.c.'>pidns_put</a>,
+<a id='L441' name='L441'></a> 441         .install        = <a href='../S/195.html#L381' title='Defined at 381 in pid_namespace.c.'>pidns_install</a>,
+<a id='L442' name='L442'></a> 442         .owner          = <a href='../S/195.html#L431' title='Defined at 431 in pid_namespace.c.'>pidns_owner</a>,
+<a id='L443' name='L443'></a> 443         .get_parent     = <a href='../S/195.html#L413' title='Defined at 413 in pid_namespace.c.'>pidns_get_parent</a>,
+<a id='L444' name='L444'></a> 444 <em class='brace'>}</em>;
+<a id='L445' name='L445'></a> 445 
+<a id='L446' name='L446'></a> 446 <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> proc_ns_operations pidns_for_children_operations = <em class='brace'>{</em>
+<a id='L447' name='L447'></a> 447         .name           = "pid_for_children",
+<a id='L448' name='L448'></a> 448         .real_ns_name   = "pid",
+<a id='L449' name='L449'></a> 449         .type           = CLONE_NEWPID,
+<a id='L450' name='L450'></a> 450         .get            = <a href='../S/195.html#L353' title='Defined at 353 in pid_namespace.c.'>pidns_for_children_get</a>,
+<a id='L451' name='L451'></a> 451         .put            = <a href='../S/195.html#L376' title='Defined at 376 in pid_namespace.c.'>pidns_put</a>,
+<a id='L452' name='L452'></a> 452         .install        = <a href='../S/195.html#L381' title='Defined at 381 in pid_namespace.c.'>pidns_install</a>,
+<a id='L453' name='L453'></a> 453         .owner          = <a href='../S/195.html#L431' title='Defined at 431 in pid_namespace.c.'>pidns_owner</a>,
+<a id='L454' name='L454'></a> 454         .get_parent     = <a href='../S/195.html#L413' title='Defined at 413 in pid_namespace.c.'>pidns_get_parent</a>,
+<a id='L455' name='L455'></a> 455 <em class='brace'>}</em>;
+<a id='L456' name='L456'></a> 456 
+<a id='L457' name='L457'></a> 457 <strong class='reserved'>static</strong> __init <strong class='reserved'>int</strong> <a href='../S/195.html#L467' title='Referred from 467 in pid_namespace.c.'>pid_namespaces_init</a>(<strong class='reserved'>void</strong>)
+<a id='L458' name='L458'></a> 458 <em class='brace'>{</em>
+<a id='L459' name='L459'></a> 459         pid_ns_cachep = KMEM_CACHE(pid_namespace, SLAB_PANIC);
+<a id='L460' name='L460'></a> 460 
+<a id='L461' name='L461'></a> 461 <em class='sharp'>#ifdef</em> CONFIG_CHECKPOINT_RESTORE
+<a id='L462' name='L462'></a> 462         register_sysctl_paths(kern_path, pid_ns_ctl_table);
+<a id='L463' name='L463'></a> 463 <em class='sharp'>#endif</em>
+<a id='L464' name='L464'></a> 464         <strong class='reserved'>return</strong> 0;
+<a id='L465' name='L465'></a> 465 <em class='brace'>}</em>
+<a id='L466' name='L466'></a> 466 
+<a id='L467' name='L467'></a> 467 __initcall(<a href='../S/195.html#L457' title='Defined at 457 in pid_namespace.c.'>pid_namespaces_init</a>);
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L37'>[^]</a><a href='#L457'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

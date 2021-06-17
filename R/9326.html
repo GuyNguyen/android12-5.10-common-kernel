@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>nohz_flags</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/441.html#L785'>nohz_flags</a>        785 sched/core.c   	flags = atomic_fetch_andnot(NOHZ_KICK_MASK, nohz_flags(cpu));</span>
+<span class='curline'><a href='../S/441.html#L7552'>nohz_flags</a>       7552 sched/core.c   		atomic_set(&amp;rq-&gt;nohz_flags, 0);</span>
+<span class='curline'><a href='../S/464.html#L10302'>nohz_flags</a>       10302 sched/fair.c   	flags = atomic_fetch_or(flags, nohz_flags(ilb_cpu));</span>
+<span class='curline'><a href='../S/447.html#L935'>nohz_flags</a>        935 sched/sched.h  	atomic_t		nohz_flags;</span>
+<span class='curline'><a href='../S/447.html#L2336'>nohz_flags</a>       2336 sched/sched.h  #define nohz_flags(cpu)	(&amp;cpu_rq(cpu)-&gt;nohz_flags)</span>
+</pre>
+</body>
+</html>

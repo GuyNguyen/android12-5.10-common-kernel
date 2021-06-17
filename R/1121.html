@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>RCU_DYNTICK_CTRL_CTR</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/144.html#L85'>RCU_DYNTICK_CTRL_CTR</a>   85 rcu/tree.c     	.dynticks = ATOMIC_INIT(RCU_DYNTICK_CTRL_CTR),</span>
+<span class='curline'><a href='../S/144.html#L258'>RCU_DYNTICK_CTRL_CTR</a>  258 rcu/tree.c     	seq = arch_atomic_add_return(RCU_DYNTICK_CTRL_CTR, &amp;rdp-&gt;dynticks);</span>
+<span class='curline'><a href='../S/144.html#L261'>RCU_DYNTICK_CTRL_CTR</a>  261 rcu/tree.c     		     (seq &amp; RCU_DYNTICK_CTRL_CTR));</span>
+<span class='curline'><a href='../S/144.html#L282'>RCU_DYNTICK_CTRL_CTR</a>  282 rcu/tree.c     	seq = arch_atomic_add_return(RCU_DYNTICK_CTRL_CTR, &amp;rdp-&gt;dynticks);</span>
+<span class='curline'><a href='../S/144.html#L286'>RCU_DYNTICK_CTRL_CTR</a>  286 rcu/tree.c     		     !(seq &amp; RCU_DYNTICK_CTRL_CTR));</span>
+<span class='curline'><a href='../S/144.html#L307'>RCU_DYNTICK_CTRL_CTR</a>  307 rcu/tree.c     	if (atomic_read(&amp;rdp-&gt;dynticks) &amp; RCU_DYNTICK_CTRL_CTR)</span>
+<span class='curline'><a href='../S/144.html#L309'>RCU_DYNTICK_CTRL_CTR</a>  309 rcu/tree.c     	atomic_add(RCU_DYNTICK_CTRL_CTR, &amp;rdp-&gt;dynticks);</span>
+<span class='curline'><a href='../S/144.html#L321'>RCU_DYNTICK_CTRL_CTR</a>  321 rcu/tree.c     	return !(arch_atomic_read(&amp;rdp-&gt;dynticks) &amp; RCU_DYNTICK_CTRL_CTR);</span>
+<span class='curline'><a href='../S/144.html#L341'>RCU_DYNTICK_CTRL_CTR</a>  341 rcu/tree.c     	return !(snap &amp; RCU_DYNTICK_CTRL_CTR);</span>
+<span class='curline'><a href='../S/144.html#L365'>RCU_DYNTICK_CTRL_CTR</a>  365 rcu/tree.c     					       RCU_DYNTICK_CTRL_CTR);</span>
+<span class='curline'><a href='../S/144.html#L393'>RCU_DYNTICK_CTRL_CTR</a>  393 rcu/tree.c     		if (old &amp; RCU_DYNTICK_CTRL_CTR)</span>
+<span class='curline'><a href='../S/144.html#L417'>RCU_DYNTICK_CTRL_CTR</a>  417 rcu/tree.c     	special = atomic_add_return(2 * RCU_DYNTICK_CTRL_CTR,</span>
+<span class='curline'><a href='../S/144.html#L420'>RCU_DYNTICK_CTRL_CTR</a>  420 rcu/tree.c     	WARN_ON_ONCE(!(special &amp; RCU_DYNTICK_CTRL_CTR));</span>
+</pre>
+</body>
+</html>

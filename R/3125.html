@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>audit_chunk</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/120.html#L43'>audit_chunk</a>        43 audit.h        struct audit_chunk;</span>
+<span class='curline'><a href='../S/120.html#L276'>audit_chunk</a>       276 audit.h        extern struct audit_chunk *audit_tree_lookup(const struct inode *inode);</span>
+<span class='curline'><a href='../S/120.html#L277'>audit_chunk</a>       277 audit.h        extern void audit_put_chunk(struct audit_chunk *chunk);</span>
+<span class='curline'><a href='../S/120.html#L278'>audit_chunk</a>       278 audit.h        extern bool audit_tree_match(struct audit_chunk *chunk,</span>
+<span class='curline'><a href='../S/72.html#L11'>audit_chunk</a>        11 audit_tree.c   struct audit_chunk;</span>
+<span class='curline'><a href='../S/72.html#L16'>audit_chunk</a>        16 audit_tree.c   	struct audit_chunk *root;</span>
+<span class='curline'><a href='../S/72.html#L42'>audit_chunk</a>        42 audit_tree.c   	struct audit_chunk *chunk;</span>
+<span class='curline'><a href='../S/72.html#L128'>audit_chunk</a>       128 audit_tree.c   static void free_chunk(struct audit_chunk *chunk)</span>
+<span class='curline'><a href='../S/72.html#L139'>audit_chunk</a>       139 audit_tree.c   void audit_put_chunk(struct audit_chunk *chunk)</span>
+<span class='curline'><a href='../S/72.html#L147'>audit_chunk</a>       147 audit_tree.c   	struct audit_chunk *chunk = container_of(rcu, struct audit_chunk, head);</span>
+<span class='curline'><a href='../S/72.html#L156'>audit_chunk</a>       156 audit_tree.c   static void audit_mark_put_chunk(struct audit_chunk *chunk)</span>
+<span class='curline'><a href='../S/72.html#L166'>audit_chunk</a>       166 audit_tree.c   static struct audit_chunk *mark_chunk(struct fsnotify_mark *mark)</span>
+<span class='curline'><a href='../S/72.html#L188'>audit_chunk</a>       188 audit_tree.c   static struct audit_chunk *alloc_chunk(int count)</span>
+<span class='curline'><a href='../S/72.html#L190'>audit_chunk</a>       190 audit_tree.c   	struct audit_chunk *chunk;</span>
+<span class='curline'><a href='../S/72.html#L226'>audit_chunk</a>       226 audit_tree.c   static void insert_hash(struct audit_chunk *chunk)</span>
+<span class='curline'><a href='../S/72.html#L242'>audit_chunk</a>       242 audit_tree.c   struct audit_chunk *audit_tree_lookup(const struct inode *inode)</span>
+<span class='curline'><a href='../S/72.html#L246'>audit_chunk</a>       246 audit_tree.c   	struct audit_chunk *p;</span>
+<span class='curline'><a href='../S/72.html#L261'>audit_chunk</a>       261 audit_tree.c   bool audit_tree_match(struct audit_chunk *chunk, struct audit_tree *tree)</span>
+<span class='curline'><a href='../S/72.html#L272'>audit_chunk</a>       272 audit_tree.c   static struct audit_chunk *find_chunk(struct node *p)</span>
+<span class='curline'><a href='../S/72.html#L276'>audit_chunk</a>       276 audit_tree.c   	return container_of(p, struct audit_chunk, owners[0]);</span>
+<span class='curline'><a href='../S/72.html#L280'>audit_chunk</a>       280 audit_tree.c   			       struct audit_chunk *chunk)</span>
+<span class='curline'><a href='../S/72.html#L282'>audit_chunk</a>       282 audit_tree.c   	struct audit_chunk *old;</span>
+<span class='curline'><a href='../S/72.html#L293'>audit_chunk</a>       293 audit_tree.c   static void replace_chunk(struct audit_chunk *new, struct audit_chunk *old)</span>
+<span class='curline'><a href='../S/72.html#L325'>audit_chunk</a>       325 audit_tree.c   static void remove_chunk_node(struct audit_chunk *chunk, struct node *p)</span>
+<span class='curline'><a href='../S/72.html#L338'>audit_chunk</a>       338 audit_tree.c   static int chunk_count_trees(struct audit_chunk *chunk)</span>
+<span class='curline'><a href='../S/72.html#L349'>audit_chunk</a>       349 audit_tree.c   static void untag_chunk(struct audit_chunk *chunk, struct fsnotify_mark *mark)</span>
+<span class='curline'><a href='../S/72.html#L351'>audit_chunk</a>       351 audit_tree.c   	struct audit_chunk *new;</span>
+<span class='curline'><a href='../S/72.html#L400'>audit_chunk</a>       400 audit_tree.c   	struct audit_chunk *chunk = alloc_chunk(1);</span>
+<span class='curline'><a href='../S/72.html#L461'>audit_chunk</a>       461 audit_tree.c   	struct audit_chunk *chunk, *old;</span>
+<span class='curline'><a href='../S/72.html#L574'>audit_chunk</a>       574 audit_tree.c   		struct audit_chunk *chunk;</span>
+<span class='curline'><a href='../S/72.html#L707'>audit_chunk</a>       707 audit_tree.c   			struct audit_chunk *chunk = find_chunk(node);</span>
+<span class='curline'><a href='../S/72.html#L1004'>audit_chunk</a>      1004 audit_tree.c   static void evict_chunk(struct audit_chunk *chunk)</span>
+<span class='curline'><a href='../S/72.html#L1048'>audit_chunk</a>      1048 audit_tree.c   	struct audit_chunk *chunk;</span>
+<span class='curline'><a href='../S/200.html#L131'>audit_chunk</a>       131 auditsc.c      	struct audit_chunk *c[31];</span>
+<span class='curline'><a href='../S/200.html#L240'>audit_chunk</a>       240 auditsc.c      static int put_tree_ref(struct audit_context *ctx, struct audit_chunk *chunk)</span>
+<span class='curline'><a href='../S/200.html#L1769'>audit_chunk</a>      1769 auditsc.c      	struct audit_chunk *chunk;</span>
+<span class='curline'><a href='../S/200.html#L1798'>audit_chunk</a>      1798 auditsc.c      	struct audit_chunk *drop;</span>
+<span class='curline'><a href='../S/200.html#L1813'>audit_chunk</a>      1813 auditsc.c      			struct audit_chunk *chunk;</span>
+</pre>
+</body>
+</html>

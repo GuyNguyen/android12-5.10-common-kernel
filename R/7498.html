@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>hwlat_data</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/297.html#L99'>hwlat_data</a>         99 trace/trace_hwlat.c } hwlat_data = {</span>
+<span class='curline'><a href='../S/297.html#L240'>hwlat_data</a>        240 trace/trace_hwlat.c 	} while (total &lt;= hwlat_data.sample_width);</span>
+<span class='curline'><a href='../S/297.html#L258'>hwlat_data</a>        258 trace/trace_hwlat.c 		hwlat_data.count++;</span>
+<span class='curline'><a href='../S/297.html#L259'>hwlat_data</a>        259 trace/trace_hwlat.c 		s.seqnum = hwlat_data.count;</span>
+<span class='curline'><a href='../S/297.html#L342'>hwlat_data</a>        342 trace/trace_hwlat.c 		mutex_lock(&amp;hwlat_data.lock);</span>
+<span class='curline'><a href='../S/297.html#L343'>hwlat_data</a>        343 trace/trace_hwlat.c 		interval = hwlat_data.sample_window - hwlat_data.sample_width;</span>
+<span class='curline'><a href='../S/297.html#L344'>hwlat_data</a>        344 trace/trace_hwlat.c 		mutex_unlock(&amp;hwlat_data.lock);</span>
+<span class='curline'><a href='../S/297.html#L467'>hwlat_data</a>        467 trace/trace_hwlat.c 	mutex_lock(&amp;hwlat_data.lock);</span>
+<span class='curline'><a href='../S/297.html#L468'>hwlat_data</a>        468 trace/trace_hwlat.c 	if (val &lt; hwlat_data.sample_window)</span>
+<span class='curline'><a href='../S/297.html#L469'>hwlat_data</a>        469 trace/trace_hwlat.c 		hwlat_data.sample_width = val;</span>
+<span class='curline'><a href='../S/297.html#L472'>hwlat_data</a>        472 trace/trace_hwlat.c 	mutex_unlock(&amp;hwlat_data.lock);</span>
+<span class='curline'><a href='../S/297.html#L506'>hwlat_data</a>        506 trace/trace_hwlat.c 	mutex_lock(&amp;hwlat_data.lock);</span>
+<span class='curline'><a href='../S/297.html#L507'>hwlat_data</a>        507 trace/trace_hwlat.c 	if (hwlat_data.sample_width &lt; val)</span>
+<span class='curline'><a href='../S/297.html#L508'>hwlat_data</a>        508 trace/trace_hwlat.c 		hwlat_data.sample_window = val;</span>
+<span class='curline'><a href='../S/297.html#L511'>hwlat_data</a>        511 trace/trace_hwlat.c 	mutex_unlock(&amp;hwlat_data.lock);</span>
+<span class='curline'><a href='../S/297.html#L554'>hwlat_data</a>        554 trace/trace_hwlat.c 						  &amp;hwlat_data.sample_window,</span>
+<span class='curline'><a href='../S/297.html#L561'>hwlat_data</a>        561 trace/trace_hwlat.c 						 &amp;hwlat_data.sample_width,</span>
+<span class='curline'><a href='../S/297.html#L598'>hwlat_data</a>        598 trace/trace_hwlat.c 	hwlat_data.count = 0;</span>
+<span class='curline'><a href='../S/297.html#L639'>hwlat_data</a>        639 trace/trace_hwlat.c 	mutex_init(&amp;hwlat_data.lock);</span>
+</pre>
+</body>
+</html>

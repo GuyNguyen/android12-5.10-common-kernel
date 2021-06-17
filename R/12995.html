@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>task_active_pid_ns</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/15.html#L197'>task_active_pid_ns</a>  197 acct.c         	struct pid_namespace *ns = task_active_pid_ns(current);</span>
+<span class='curline'><a href='../S/15.html#L291'>task_active_pid_ns</a>  291 acct.c         		pin_kill(task_active_pid_ns(current)-&gt;bacct);</span>
+<span class='curline'><a href='../S/15.html#L600'>task_active_pid_ns</a>  600 acct.c         	for (ns = task_active_pid_ns(current); ns != NULL; ns = ns-&gt;parent) {</span>
+<span class='curline'><a href='../S/162.html#L1037'>task_active_pid_ns</a> 1037 audit.c        		if (task_active_pid_ns(current) != &amp;init_pid_ns)</span>
+<span class='curline'><a href='../S/375.html#L552'>task_active_pid_ns</a>  552 bpf/helpers.c  	pidns = task_active_pid_ns(task);</span>
+<span class='curline'><a href='../S/421.html#L290'>task_active_pid_ns</a>  290 bpf/task_iter.c 	common-&gt;ns = get_pid_ns(task_active_pid_ns(current));</span>
+<span class='curline'><a href='../S/234.html#L282'>task_active_pid_ns</a>  282 cgroup/cgroup-v1.c 	struct pid_namespace *ns = task_active_pid_ns(current);</span>
+<span class='curline'><a href='../S/234.html#L317'>task_active_pid_ns</a>  317 cgroup/cgroup-v1.c 	l-&gt;key.ns = get_pid_ns(task_active_pid_ns(current));</span>
+<span class='curline'><a href='../S/331.html#L11235'>task_active_pid_ns</a> 11235 events/core.c  	event-&gt;ns		= get_pid_ns(task_active_pid_ns(current));</span>
+<span class='curline'><a href='../S/63.html#L510'>task_active_pid_ns</a>  510 exit.c         	struct pid_namespace *pid_ns = task_active_pid_ns(father);</span>
+<span class='curline'><a href='../S/48.html#L1941'>task_active_pid_ns</a> 1941 fork.c         		    (task_active_pid_ns(current) != nsp-&gt;pid_ns_for_children))</span>
+<span class='curline'><a href='../S/80.html#L395'>task_active_pid_ns</a>  395 nsproxy.c      		pid_ns = task_active_pid_ns(tsk);</span>
+<span class='curline'><a href='../S/79.html#L317'>task_active_pid_ns</a>  317 pid.c          	return find_pid_ns(nr, task_active_pid_ns(current));</span>
+<span class='curline'><a href='../S/79.html#L422'>task_active_pid_ns</a>  422 pid.c          	return find_task_by_pid_ns(vnr, task_active_pid_ns(current));</span>
+<span class='curline'><a href='../S/79.html#L489'>task_active_pid_ns</a>  489 pid.c          	return pid_nr_ns(pid, task_active_pid_ns(current));</span>
+<span class='curline'><a href='../S/79.html#L500'>task_active_pid_ns</a>  500 pid.c          		ns = task_active_pid_ns(current);</span>
+<span class='curline'><a href='../S/79.html#L512'>task_active_pid_ns</a>  512 pid.c          EXPORT_SYMBOL_GPL(task_active_pid_ns);</span>
+<span class='curline'><a href='../S/195.html#L146'>task_active_pid_ns</a>  146 pid_namespace.c 	if (task_active_pid_ns(current) != old_ns)</span>
+<span class='curline'><a href='../S/195.html#L268'>task_active_pid_ns</a>  268 pid_namespace.c 	struct pid_namespace *pid_ns = task_active_pid_ns(current);</span>
+<span class='curline'><a href='../S/195.html#L345'>task_active_pid_ns</a>  345 pid_namespace.c 	ns = task_active_pid_ns(task);</span>
+<span class='curline'><a href='../S/195.html#L384'>task_active_pid_ns</a>  384 pid_namespace.c 	struct pid_namespace *active = task_active_pid_ns(current);</span>
+<span class='curline'><a href='../S/195.html#L415'>task_active_pid_ns</a>  415 pid_namespace.c 	struct pid_namespace *active = task_active_pid_ns(current);</span>
+<span class='curline'><a href='../S/214.html#L315'>task_active_pid_ns</a>  315 reboot.c       	struct pid_namespace *pid_ns = task_active_pid_ns(current);</span>
+<span class='curline'><a href='../S/246.html#L1129'>task_active_pid_ns</a> 1129 signal.c       							task_active_pid_ns(t));</span>
+<span class='curline'><a href='../S/246.html#L1220'>task_active_pid_ns</a> 1220 signal.c       		force = !task_pid_nr_ns(current, task_active_pid_ns(t));</span>
+<span class='curline'><a href='../S/246.html#L1240'>task_active_pid_ns</a> 1240 signal.c       		if (!task_pid_nr_ns(current, task_active_pid_ns(t))) {</span>
+<span class='curline'><a href='../S/246.html#L1962'>task_active_pid_ns</a> 1962 signal.c       	info.si_pid = task_pid_nr_ns(tsk, task_active_pid_ns(tsk-&gt;parent));</span>
+<span class='curline'><a href='../S/246.html#L2053'>task_active_pid_ns</a> 2053 signal.c       	info.si_pid = task_pid_nr_ns(tsk, task_active_pid_ns(parent));</span>
+<span class='curline'><a href='../S/246.html#L3710'>task_active_pid_ns</a> 3710 signal.c       	struct pid_namespace *active = task_active_pid_ns(current);</span>
+<span class='curline'><a href='../S/145.html#L186'>task_active_pid_ns</a>  186 taskstats.c    	fill_stats(current_user_ns(), task_active_pid_ns(current), tsk, stats);</span>
+<span class='curline'><a href='../S/145.html#L287'>task_active_pid_ns</a>  287 taskstats.c    	if (task_active_pid_ns(current) != &amp;init_pid_ns)</span>
+</pre>
+</body>
+</html>

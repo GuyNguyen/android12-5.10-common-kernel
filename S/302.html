@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>trace/trace_benchmark.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/513.html'>trace</a>/trace_benchmark.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L37'>[^]</a><a href='#L222'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L37' title='Defined at 37.'>trace_do_benchmark</a></li>
+<li><a href='#L147' title='Defined at 147.'>benchmark_event_kthread</a></li>
+<li><a href='#L178' title='Defined at 178.'>trace_benchmark_reg</a></li>
+<li><a href='#L200' title='Defined at 200.'>trace_benchmark_unreg</a></li>
+<li><a href='#L222' title='Defined at 222.'>ok_to_run_trace_benchmark</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='sharp'>#include</em> &lt;linux/delay.h&gt;
+<a id='L3' name='L3'></a>   3 <em class='sharp'>#include</em> &lt;linux/module.h&gt;
+<a id='L4' name='L4'></a>   4 <em class='sharp'>#include</em> &lt;linux/kthread.h&gt;
+<a id='L5' name='L5'></a>   5 <em class='sharp'>#include</em> &lt;linux/trace_clock.h&gt;
+<a id='L6' name='L6'></a>   6 
+<a id='L7' name='L7'></a>   7 <em class='sharp'>#define</em> CREATE_TRACE_POINTS
+<a id='L8' name='L8'></a>   8 <em class='sharp'>#include</em> "<a href='261.html'>trace_benchmark.h</a>"
+<a id='L9' name='L9'></a>   9 
+<a id='L10' name='L10'></a>  10 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> task_struct *bm_event_thread;
+<a id='L11' name='L11'></a>  11 
+<a id='L12' name='L12'></a>  12 <strong class='reserved'>static</strong> <strong class='reserved'>char</strong> bm_str[<a href='../S/261.html#L13' title='Defined at 13 in trace/trace_benchmark.h.'>BENCHMARK_EVENT_STRLEN</a>] = "START";
+<a id='L13' name='L13'></a>  13 
+<a id='L14' name='L14'></a>  14 <strong class='reserved'>static</strong> u64 bm_total;
+<a id='L15' name='L15'></a>  15 <strong class='reserved'>static</strong> u64 bm_totalsq;
+<a id='L16' name='L16'></a>  16 <strong class='reserved'>static</strong> u64 bm_last;
+<a id='L17' name='L17'></a>  17 <strong class='reserved'>static</strong> u64 bm_max;
+<a id='L18' name='L18'></a>  18 <strong class='reserved'>static</strong> u64 bm_min;
+<a id='L19' name='L19'></a>  19 <strong class='reserved'>static</strong> u64 bm_first;
+<a id='L20' name='L20'></a>  20 <strong class='reserved'>static</strong> u64 bm_cnt;
+<a id='L21' name='L21'></a>  21 <strong class='reserved'>static</strong> u64 bm_stddev;
+<a id='L22' name='L22'></a>  22 <strong class='reserved'>static</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> bm_avg;
+<a id='L23' name='L23'></a>  23 <strong class='reserved'>static</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> bm_std;
+<a id='L24' name='L24'></a>  24 
+<a id='L25' name='L25'></a>  25 <strong class='reserved'>static</strong> bool ok_to_run;
+<a id='L26' name='L26'></a>  26 
+<a id='L27' name='L27'></a>  27 <em class='comment'>/*</em>
+<a id='L28' name='L28'></a>  28 <em class='comment'> * This gets called in a loop recording the time it took to write</em>
+<a id='L29' name='L29'></a>  29 <em class='comment'> * the tracepoint. What it writes is the time statistics of the last</em>
+<a id='L30' name='L30'></a>  30 <em class='comment'> * tracepoint write. As there is nothing to write the first time</em>
+<a id='L31' name='L31'></a>  31 <em class='comment'> * it simply writes "START". As the first write is cold cache and</em>
+<a id='L32' name='L32'></a>  32 <em class='comment'> * the rest is hot, we save off that time in bm_first and it is</em>
+<a id='L33' name='L33'></a>  33 <em class='comment'> * reported as "first", which is shown in the second write to the</em>
+<a id='L34' name='L34'></a>  34 <em class='comment'> * tracepoint. The "first" field is writen within the statics from</em>
+<a id='L35' name='L35'></a>  35 <em class='comment'> * then on but never changes.</em>
+<a id='L36' name='L36'></a>  36 <em class='comment'> */</em>
+<a id='L37' name='L37'></a>  37 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/302.html#L154' title='Referred from 154 in trace/trace_benchmark.c.'>trace_do_benchmark</a>(<strong class='reserved'>void</strong>)
+<a id='L38' name='L38'></a>  38 <em class='brace'>{</em>
+<a id='L39' name='L39'></a>  39         u64 start;
+<a id='L40' name='L40'></a>  40         u64 stop;
+<a id='L41' name='L41'></a>  41         u64 delta;
+<a id='L42' name='L42'></a>  42         u64 stddev;
+<a id='L43' name='L43'></a>  43         u64 seed;
+<a id='L44' name='L44'></a>  44         u64 last_seed;
+<a id='L45' name='L45'></a>  45         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> avg;
+<a id='L46' name='L46'></a>  46         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> std = 0;
+<a id='L47' name='L47'></a>  47 
+<a id='L48' name='L48'></a>  48         <em class='comment'>/* Only run if the tracepoint is actually active */</em>
+<a id='L49' name='L49'></a>  49         <strong class='reserved'>if</strong> (!trace_benchmark_event_enabled() || !<a href='../S/271.html#L1477' title='Defined at 1477 in trace/trace.c.'>tracing_is_on</a>())
+<a id='L50' name='L50'></a>  50                 <strong class='reserved'>return</strong>;
+<a id='L51' name='L51'></a>  51 
+<a id='L52' name='L52'></a>  52         local_irq_disable();
+<a id='L53' name='L53'></a>  53         start = <a href='../S/283.html#L32' title='Defined at 32 in trace/trace_clock.c.'>trace_clock_local</a>();
+<a id='L54' name='L54'></a>  54         trace_benchmark_event(bm_str);
+<a id='L55' name='L55'></a>  55         stop = <a href='../S/283.html#L32' title='Defined at 32 in trace/trace_clock.c.'>trace_clock_local</a>();
+<a id='L56' name='L56'></a>  56         local_irq_enable();
+<a id='L57' name='L57'></a>  57 
+<a id='L58' name='L58'></a>  58         bm_cnt++;
+<a id='L59' name='L59'></a>  59 
+<a id='L60' name='L60'></a>  60         delta = stop - start;
+<a id='L61' name='L61'></a>  61 
+<a id='L62' name='L62'></a>  62         <em class='comment'>/*</em>
+<a id='L63' name='L63'></a>  63 <em class='comment'>         * The first read is cold cached, keep it separate from the</em>
+<a id='L64' name='L64'></a>  64 <em class='comment'>         * other calculations.</em>
+<a id='L65' name='L65'></a>  65 <em class='comment'>         */</em>
+<a id='L66' name='L66'></a>  66         <strong class='reserved'>if</strong> (bm_cnt == 1) <em class='brace'>{</em>
+<a id='L67' name='L67'></a>  67                 bm_first = delta;
+<a id='L68' name='L68'></a>  68                 scnprintf(bm_str, <a href='../S/261.html#L13' title='Defined at 13 in trace/trace_benchmark.h.'>BENCHMARK_EVENT_STRLEN</a>,
+<a id='L69' name='L69'></a>  69                           "first=%llu [COLD CACHED]", bm_first);
+<a id='L70' name='L70'></a>  70                 <strong class='reserved'>return</strong>;
+<a id='L71' name='L71'></a>  71         <em class='brace'>}</em>
+<a id='L72' name='L72'></a>  72 
+<a id='L73' name='L73'></a>  73         bm_last = delta;
+<a id='L74' name='L74'></a>  74 
+<a id='L75' name='L75'></a>  75         <strong class='reserved'>if</strong> (delta &gt; bm_max)
+<a id='L76' name='L76'></a>  76                 bm_max = delta;
+<a id='L77' name='L77'></a>  77         <strong class='reserved'>if</strong> (!bm_min || delta &lt; bm_min)
+<a id='L78' name='L78'></a>  78                 bm_min = delta;
+<a id='L79' name='L79'></a>  79 
+<a id='L80' name='L80'></a>  80         <em class='comment'>/*</em>
+<a id='L81' name='L81'></a>  81 <em class='comment'>         * When bm_cnt is greater than UINT_MAX, it breaks the statistics</em>
+<a id='L82' name='L82'></a>  82 <em class='comment'>         * accounting. Freeze the statistics when that happens.</em>
+<a id='L83' name='L83'></a>  83 <em class='comment'>         * We should have enough data for the avg and stddev anyway.</em>
+<a id='L84' name='L84'></a>  84 <em class='comment'>         */</em>
+<a id='L85' name='L85'></a>  85         <strong class='reserved'>if</strong> (bm_cnt &gt; UINT_MAX) <em class='brace'>{</em>
+<a id='L86' name='L86'></a>  86                 scnprintf(bm_str, <a href='../S/261.html#L13' title='Defined at 13 in trace/trace_benchmark.h.'>BENCHMARK_EVENT_STRLEN</a>,
+<a id='L87' name='L87'></a>  87                     "last=%llu first=%llu max=%llu min=%llu ** avg=%u std=%d std^2=%lld",
+<a id='L88' name='L88'></a>  88                           bm_last, bm_first, bm_max, bm_min, bm_avg, bm_std, bm_stddev);
+<a id='L89' name='L89'></a>  89                 <strong class='reserved'>return</strong>;
+<a id='L90' name='L90'></a>  90         <em class='brace'>}</em>
+<a id='L91' name='L91'></a>  91 
+<a id='L92' name='L92'></a>  92         bm_total += delta;
+<a id='L93' name='L93'></a>  93         bm_totalsq += delta * delta;
+<a id='L94' name='L94'></a>  94 
+<a id='L95' name='L95'></a>  95 
+<a id='L96' name='L96'></a>  96         <strong class='reserved'>if</strong> (bm_cnt &gt; 1) <em class='brace'>{</em>
+<a id='L97' name='L97'></a>  97                 <em class='comment'>/*</em>
+<a id='L98' name='L98'></a>  98 <em class='comment'>                 * Apply Welford's method to calculate standard deviation:</em>
+<a id='L99' name='L99'></a>  99 <em class='comment'>                 * s^2 = 1 / (n * (n-1)) * (n * \Sum (x_i)^2 - (\Sum x_i)^2)</em>
+<a id='L100' name='L100'></a> 100 <em class='comment'>                 */</em>
+<a id='L101' name='L101'></a> 101                 stddev = (u64)bm_cnt * bm_totalsq - bm_total * bm_total;
+<a id='L102' name='L102'></a> 102                 do_div(stddev, (u32)bm_cnt);
+<a id='L103' name='L103'></a> 103                 do_div(stddev, (u32)bm_cnt - 1);
+<a id='L104' name='L104'></a> 104         <em class='brace'>}</em> <strong class='reserved'>else</strong>
+<a id='L105' name='L105'></a> 105                 stddev = 0;
+<a id='L106' name='L106'></a> 106 
+<a id='L107' name='L107'></a> 107         delta = bm_total;
+<a id='L108' name='L108'></a> 108         do_div(delta, bm_cnt);
+<a id='L109' name='L109'></a> 109         avg = delta;
+<a id='L110' name='L110'></a> 110 
+<a id='L111' name='L111'></a> 111         <strong class='reserved'>if</strong> (stddev &gt; 0) <em class='brace'>{</em>
+<a id='L112' name='L112'></a> 112                 <strong class='reserved'>int</strong> i = 0;
+<a id='L113' name='L113'></a> 113                 <em class='comment'>/*</em>
+<a id='L114' name='L114'></a> 114 <em class='comment'>                 * stddev is the square of standard deviation but</em>
+<a id='L115' name='L115'></a> 115 <em class='comment'>                 * we want the actualy number. Use the average</em>
+<a id='L116' name='L116'></a> 116 <em class='comment'>                 * as our seed to find the std.</em>
+<a id='L117' name='L117'></a> 117 <em class='comment'>                 *</em>
+<a id='L118' name='L118'></a> 118 <em class='comment'>                 * The next try is:</em>
+<a id='L119' name='L119'></a> 119 <em class='comment'>                 *  x = (x + N/x) / 2</em>
+<a id='L120' name='L120'></a> 120 <em class='comment'>                 *</em>
+<a id='L121' name='L121'></a> 121 <em class='comment'>                 * Where N is the squared number to find the square</em>
+<a id='L122' name='L122'></a> 122 <em class='comment'>                 * root of.</em>
+<a id='L123' name='L123'></a> 123 <em class='comment'>                 */</em>
+<a id='L124' name='L124'></a> 124                 seed = avg;
+<a id='L125' name='L125'></a> 125                 <strong class='reserved'>do</strong> <em class='brace'>{</em>
+<a id='L126' name='L126'></a> 126                         last_seed = seed;
+<a id='L127' name='L127'></a> 127                         seed = stddev;
+<a id='L128' name='L128'></a> 128                         <strong class='reserved'>if</strong> (!last_seed)
+<a id='L129' name='L129'></a> 129                                 <strong class='reserved'>break</strong>;
+<a id='L130' name='L130'></a> 130                         do_div(seed, last_seed);
+<a id='L131' name='L131'></a> 131                         seed += last_seed;
+<a id='L132' name='L132'></a> 132                         do_div(seed, 2);
+<a id='L133' name='L133'></a> 133                 <em class='brace'>}</em> <strong class='reserved'>while</strong> (i++ &lt; 10 &amp;&amp; last_seed != seed);
+<a id='L134' name='L134'></a> 134 
+<a id='L135' name='L135'></a> 135                 std = seed;
+<a id='L136' name='L136'></a> 136         <em class='brace'>}</em>
+<a id='L137' name='L137'></a> 137 
+<a id='L138' name='L138'></a> 138         scnprintf(bm_str, <a href='../S/261.html#L13' title='Defined at 13 in trace/trace_benchmark.h.'>BENCHMARK_EVENT_STRLEN</a>,
+<a id='L139' name='L139'></a> 139                   "last=%llu first=%llu max=%llu min=%llu avg=%u std=%d std^2=%lld",
+<a id='L140' name='L140'></a> 140                   bm_last, bm_first, bm_max, bm_min, avg, std, stddev);
+<a id='L141' name='L141'></a> 141 
+<a id='L142' name='L142'></a> 142         bm_std = std;
+<a id='L143' name='L143'></a> 143         bm_avg = avg;
+<a id='L144' name='L144'></a> 144         bm_stddev = stddev;
+<a id='L145' name='L145'></a> 145 <em class='brace'>}</em>
+<a id='L146' name='L146'></a> 146 
+<a id='L147' name='L147'></a> 147 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/302.html#L185' title='Referred from 185 in trace/trace_benchmark.c.'>benchmark_event_kthread</a>(<strong class='reserved'>void</strong> *arg)
+<a id='L148' name='L148'></a> 148 <em class='brace'>{</em>
+<a id='L149' name='L149'></a> 149         <em class='comment'>/* sleep a bit to make sure the tracepoint gets activated */</em>
+<a id='L150' name='L150'></a> 150         <a href='../S/115.html#L2026' title='Defined at 2026 in time/timer.c.'>msleep</a>(100);
+<a id='L151' name='L151'></a> 151 
+<a id='L152' name='L152'></a> 152         <strong class='reserved'>while</strong> (!<a href='../S/435.html#L109' title='Defined at 109 in kthread.c.'>kthread_should_stop</a>()) <em class='brace'>{</em>
+<a id='L153' name='L153'></a> 153 
+<a id='L154' name='L154'></a> 154                 <a href='../S/302.html#L37' title='Defined at 37 in trace/trace_benchmark.c.'>trace_do_benchmark</a>();
+<a id='L155' name='L155'></a> 155 
+<a id='L156' name='L156'></a> 156                 <em class='comment'>/*</em>
+<a id='L157' name='L157'></a> 157 <em class='comment'>                 * We don't go to sleep, but let others run as well.</em>
+<a id='L158' name='L158'></a> 158 <em class='comment'>                 * This is bascially a "yield()" to let any task that</em>
+<a id='L159' name='L159'></a> 159 <em class='comment'>                 * wants to run, schedule in, but if the CPU is idle,</em>
+<a id='L160' name='L160'></a> 160 <em class='comment'>                 * we'll keep burning cycles.</em>
+<a id='L161' name='L161'></a> 161 <em class='comment'>                 *</em>
+<a id='L162' name='L162'></a> 162 <em class='comment'>                 * Note the tasks_rcu_qs() version of cond_resched() will</em>
+<a id='L163' name='L163'></a> 163 <em class='comment'>                 * notify synchronize_rcu_tasks() that this thread has</em>
+<a id='L164' name='L164'></a> 164 <em class='comment'>                 * passed a quiescent state for rcu_tasks. Otherwise</em>
+<a id='L165' name='L165'></a> 165 <em class='comment'>                 * this thread will never voluntarily schedule which would</em>
+<a id='L166' name='L166'></a> 166 <em class='comment'>                 * block synchronize_rcu_tasks() indefinitely.</em>
+<a id='L167' name='L167'></a> 167 <em class='comment'>                 */</em>
+<a id='L168' name='L168'></a> 168                 cond_resched_tasks_rcu_qs();
+<a id='L169' name='L169'></a> 169         <em class='brace'>}</em>
+<a id='L170' name='L170'></a> 170 
+<a id='L171' name='L171'></a> 171         <strong class='reserved'>return</strong> 0;
+<a id='L172' name='L172'></a> 172 <em class='brace'>}</em>
+<a id='L173' name='L173'></a> 173 
+<a id='L174' name='L174'></a> 174 <em class='comment'>/*</em>
+<a id='L175' name='L175'></a> 175 <em class='comment'> * When the benchmark tracepoint is enabled, it calls this</em>
+<a id='L176' name='L176'></a> 176 <em class='comment'> * function and the thread that calls the tracepoint is created.</em>
+<a id='L177' name='L177'></a> 177 <em class='comment'> */</em>
+<a id='L178' name='L178'></a> 178 <strong class='reserved'>int</strong> <a href='../R/13610.html' title='Multiple referred from 2 places.'>trace_benchmark_reg</a>(<strong class='reserved'>void</strong>)
+<a id='L179' name='L179'></a> 179 <em class='brace'>{</em>
+<a id='L180' name='L180'></a> 180         <strong class='reserved'>if</strong> (!ok_to_run) <em class='brace'>{</em>
+<a id='L181' name='L181'></a> 181                 pr_warn("trace benchmark cannot be started via kernel command line\n");
+<a id='L182' name='L182'></a> 182                 <strong class='reserved'>return</strong> -EBUSY;
+<a id='L183' name='L183'></a> 183         <em class='brace'>}</em>
+<a id='L184' name='L184'></a> 184 
+<a id='L185' name='L185'></a> 185         bm_event_thread = kthread_run(<a href='../S/302.html#L147' title='Defined at 147 in trace/trace_benchmark.c.'>benchmark_event_kthread</a>,
+<a id='L186' name='L186'></a> 186                                       NULL, "event_benchmark");
+<a id='L187' name='L187'></a> 187         <strong class='reserved'>if</strong> (IS_ERR(bm_event_thread)) <em class='brace'>{</em>
+<a id='L188' name='L188'></a> 188                 pr_warn("trace benchmark failed to create kernel thread\n");
+<a id='L189' name='L189'></a> 189                 <strong class='reserved'>return</strong> PTR_ERR(bm_event_thread);
+<a id='L190' name='L190'></a> 190         <em class='brace'>}</em>
+<a id='L191' name='L191'></a> 191 
+<a id='L192' name='L192'></a> 192         <strong class='reserved'>return</strong> 0;
+<a id='L193' name='L193'></a> 193 <em class='brace'>}</em>
+<a id='L194' name='L194'></a> 194 
+<a id='L195' name='L195'></a> 195 <em class='comment'>/*</em>
+<a id='L196' name='L196'></a> 196 <em class='comment'> * When the benchmark tracepoint is disabled, it calls this</em>
+<a id='L197' name='L197'></a> 197 <em class='comment'> * function and the thread that calls the tracepoint is deleted</em>
+<a id='L198' name='L198'></a> 198 <em class='comment'> * and all the numbers are reset.</em>
+<a id='L199' name='L199'></a> 199 <em class='comment'> */</em>
+<a id='L200' name='L200'></a> 200 <strong class='reserved'>void</strong> <a href='../R/13611.html' title='Multiple referred from 2 places.'>trace_benchmark_unreg</a>(<strong class='reserved'>void</strong>)
+<a id='L201' name='L201'></a> 201 <em class='brace'>{</em>
+<a id='L202' name='L202'></a> 202         <strong class='reserved'>if</strong> (!bm_event_thread)
+<a id='L203' name='L203'></a> 203                 <strong class='reserved'>return</strong>;
+<a id='L204' name='L204'></a> 204 
+<a id='L205' name='L205'></a> 205         <a href='../S/435.html#L610' title='Defined at 610 in kthread.c.'>kthread_stop</a>(bm_event_thread);
+<a id='L206' name='L206'></a> 206         bm_event_thread = NULL;
+<a id='L207' name='L207'></a> 207 
+<a id='L208' name='L208'></a> 208         strcpy(bm_str, "START");
+<a id='L209' name='L209'></a> 209         bm_total = 0;
+<a id='L210' name='L210'></a> 210         bm_totalsq = 0;
+<a id='L211' name='L211'></a> 211         bm_last = 0;
+<a id='L212' name='L212'></a> 212         bm_max = 0;
+<a id='L213' name='L213'></a> 213         bm_min = 0;
+<a id='L214' name='L214'></a> 214         bm_cnt = 0;
+<a id='L215' name='L215'></a> 215         <em class='comment'>/* These don't need to be reset but reset them anyway */</em>
+<a id='L216' name='L216'></a> 216         bm_first = 0;
+<a id='L217' name='L217'></a> 217         bm_std = 0;
+<a id='L218' name='L218'></a> 218         bm_avg = 0;
+<a id='L219' name='L219'></a> 219         bm_stddev = 0;
+<a id='L220' name='L220'></a> 220 <em class='brace'>}</em>
+<a id='L221' name='L221'></a> 221 
+<a id='L222' name='L222'></a> 222 <strong class='reserved'>static</strong> __init <strong class='reserved'>int</strong> <a href='../S/302.html#L229' title='Referred from 229 in trace/trace_benchmark.c.'>ok_to_run_trace_benchmark</a>(<strong class='reserved'>void</strong>)
+<a id='L223' name='L223'></a> 223 <em class='brace'>{</em>
+<a id='L224' name='L224'></a> 224         ok_to_run = true;
+<a id='L225' name='L225'></a> 225 
+<a id='L226' name='L226'></a> 226         <strong class='reserved'>return</strong> 0;
+<a id='L227' name='L227'></a> 227 <em class='brace'>}</em>
+<a id='L228' name='L228'></a> 228 
+<a id='L229' name='L229'></a> 229 early_initcall(<a href='../S/302.html#L222' title='Defined at 222 in trace/trace_benchmark.c.'>ok_to_run_trace_benchmark</a>);
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L37'>[^]</a><a href='#L222'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

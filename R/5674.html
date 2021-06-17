@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>dl_rq</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/451.html#L28'>dl_rq</a>              28 sched/deadline.c static inline struct rq *rq_of_dl_rq(struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L30'>dl_rq</a>              30 sched/deadline.c 	return container_of(dl_rq, struct rq, dl);</span>
+<span class='curline'><a href='../S/451.html#L33'>dl_rq</a>              33 sched/deadline.c static inline struct dl_rq *dl_rq_of_se(struct sched_dl_entity *dl_se)</span>
+<span class='curline'><a href='../S/451.html#L140'>dl_rq</a>             140 sched/deadline.c void __add_running_bw(u64 dl_bw, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L142'>dl_rq</a>             142 sched/deadline.c 	u64 old = dl_rq-&gt;running_bw;</span>
+<span class='curline'><a href='../S/451.html#L144'>dl_rq</a>             144 sched/deadline.c 	lockdep_assert_held(&amp;(rq_of_dl_rq(dl_rq))-&gt;lock);</span>
+<span class='curline'><a href='../S/451.html#L145'>dl_rq</a>             145 sched/deadline.c 	dl_rq-&gt;running_bw += dl_bw;</span>
+<span class='curline'><a href='../S/451.html#L146'>dl_rq</a>             146 sched/deadline.c 	SCHED_WARN_ON(dl_rq-&gt;running_bw &lt; old); /* overflow */</span>
+<span class='curline'><a href='../S/451.html#L147'>dl_rq</a>             147 sched/deadline.c 	SCHED_WARN_ON(dl_rq-&gt;running_bw &gt; dl_rq-&gt;this_bw);</span>
+<span class='curline'><a href='../S/451.html#L149'>dl_rq</a>             149 sched/deadline.c 	cpufreq_update_util(rq_of_dl_rq(dl_rq), 0);</span>
+<span class='curline'><a href='../S/451.html#L153'>dl_rq</a>             153 sched/deadline.c void __sub_running_bw(u64 dl_bw, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L155'>dl_rq</a>             155 sched/deadline.c 	u64 old = dl_rq-&gt;running_bw;</span>
+<span class='curline'><a href='../S/451.html#L157'>dl_rq</a>             157 sched/deadline.c 	lockdep_assert_held(&amp;(rq_of_dl_rq(dl_rq))-&gt;lock);</span>
+<span class='curline'><a href='../S/451.html#L158'>dl_rq</a>             158 sched/deadline.c 	dl_rq-&gt;running_bw -= dl_bw;</span>
+<span class='curline'><a href='../S/451.html#L159'>dl_rq</a>             159 sched/deadline.c 	SCHED_WARN_ON(dl_rq-&gt;running_bw &gt; old); /* underflow */</span>
+<span class='curline'><a href='../S/451.html#L160'>dl_rq</a>             160 sched/deadline.c 	if (dl_rq-&gt;running_bw &gt; old)</span>
+<span class='curline'><a href='../S/451.html#L161'>dl_rq</a>             161 sched/deadline.c 		dl_rq-&gt;running_bw = 0;</span>
+<span class='curline'><a href='../S/451.html#L163'>dl_rq</a>             163 sched/deadline.c 	cpufreq_update_util(rq_of_dl_rq(dl_rq), 0);</span>
+<span class='curline'><a href='../S/451.html#L167'>dl_rq</a>             167 sched/deadline.c void __add_rq_bw(u64 dl_bw, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L169'>dl_rq</a>             169 sched/deadline.c 	u64 old = dl_rq-&gt;this_bw;</span>
+<span class='curline'><a href='../S/451.html#L171'>dl_rq</a>             171 sched/deadline.c 	lockdep_assert_held(&amp;(rq_of_dl_rq(dl_rq))-&gt;lock);</span>
+<span class='curline'><a href='../S/451.html#L172'>dl_rq</a>             172 sched/deadline.c 	dl_rq-&gt;this_bw += dl_bw;</span>
+<span class='curline'><a href='../S/451.html#L173'>dl_rq</a>             173 sched/deadline.c 	SCHED_WARN_ON(dl_rq-&gt;this_bw &lt; old); /* overflow */</span>
+<span class='curline'><a href='../S/451.html#L177'>dl_rq</a>             177 sched/deadline.c void __sub_rq_bw(u64 dl_bw, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L179'>dl_rq</a>             179 sched/deadline.c 	u64 old = dl_rq-&gt;this_bw;</span>
+<span class='curline'><a href='../S/451.html#L181'>dl_rq</a>             181 sched/deadline.c 	lockdep_assert_held(&amp;(rq_of_dl_rq(dl_rq))-&gt;lock);</span>
+<span class='curline'><a href='../S/451.html#L182'>dl_rq</a>             182 sched/deadline.c 	dl_rq-&gt;this_bw -= dl_bw;</span>
+<span class='curline'><a href='../S/451.html#L183'>dl_rq</a>             183 sched/deadline.c 	SCHED_WARN_ON(dl_rq-&gt;this_bw &gt; old); /* underflow */</span>
+<span class='curline'><a href='../S/451.html#L184'>dl_rq</a>             184 sched/deadline.c 	if (dl_rq-&gt;this_bw &gt; old)</span>
+<span class='curline'><a href='../S/451.html#L185'>dl_rq</a>             185 sched/deadline.c 		dl_rq-&gt;this_bw = 0;</span>
+<span class='curline'><a href='../S/451.html#L186'>dl_rq</a>             186 sched/deadline.c 	SCHED_WARN_ON(dl_rq-&gt;running_bw &gt; dl_rq-&gt;this_bw);</span>
+<span class='curline'><a href='../S/451.html#L190'>dl_rq</a>             190 sched/deadline.c void add_rq_bw(struct sched_dl_entity *dl_se, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L193'>dl_rq</a>             193 sched/deadline.c 		__add_rq_bw(dl_se-&gt;dl_bw, dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L197'>dl_rq</a>             197 sched/deadline.c void sub_rq_bw(struct sched_dl_entity *dl_se, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L200'>dl_rq</a>             200 sched/deadline.c 		__sub_rq_bw(dl_se-&gt;dl_bw, dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L204'>dl_rq</a>             204 sched/deadline.c void add_running_bw(struct sched_dl_entity *dl_se, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L207'>dl_rq</a>             207 sched/deadline.c 		__add_running_bw(dl_se-&gt;dl_bw, dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L211'>dl_rq</a>             211 sched/deadline.c void sub_running_bw(struct sched_dl_entity *dl_se, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L214'>dl_rq</a>             214 sched/deadline.c 		__sub_running_bw(dl_se-&gt;dl_bw, dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L302'>dl_rq</a>             302 sched/deadline.c 	struct dl_rq *dl_rq = dl_rq_of_se(dl_se);</span>
+<span class='curline'><a href='../S/451.html#L303'>dl_rq</a>             303 sched/deadline.c 	struct rq *rq = rq_of_dl_rq(dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L334'>dl_rq</a>             334 sched/deadline.c 			sub_running_bw(dl_se, dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L356'>dl_rq</a>             356 sched/deadline.c 	struct dl_rq *dl_rq = dl_rq_of_se(dl_se);</span>
+<span class='curline'><a href='../S/451.html#L366'>dl_rq</a>             366 sched/deadline.c 		add_rq_bw(dl_se, dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L387'>dl_rq</a>             387 sched/deadline.c 		add_running_bw(dl_se, dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L391'>dl_rq</a>             391 sched/deadline.c static inline int is_leftmost(struct task_struct *p, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L395'>dl_rq</a>             395 sched/deadline.c 	return dl_rq-&gt;root.rb_leftmost == &amp;dl_se-&gt;rb_node;</span>
+<span class='curline'><a href='../S/451.html#L398'>dl_rq</a>             398 sched/deadline.c static void init_dl_rq_bw_ratio(struct dl_rq *dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L419'>dl_rq</a>             419 sched/deadline.c void init_dl_rq(struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L421'>dl_rq</a>             421 sched/deadline.c 	dl_rq-&gt;root = RB_ROOT_CACHED;</span>
+<span class='curline'><a href='../S/451.html#L425'>dl_rq</a>             425 sched/deadline.c 	dl_rq-&gt;earliest_dl.curr = dl_rq-&gt;earliest_dl.next = 0;</span>
+<span class='curline'><a href='../S/451.html#L427'>dl_rq</a>             427 sched/deadline.c 	dl_rq-&gt;dl_nr_migratory = 0;</span>
+<span class='curline'><a href='../S/451.html#L428'>dl_rq</a>             428 sched/deadline.c 	dl_rq-&gt;overloaded = 0;</span>
+<span class='curline'><a href='../S/451.html#L429'>dl_rq</a>             429 sched/deadline.c 	dl_rq-&gt;pushable_dl_tasks_root = RB_ROOT_CACHED;</span>
+<span class='curline'><a href='../S/451.html#L431'>dl_rq</a>             431 sched/deadline.c 	init_dl_bw(&amp;dl_rq-&gt;dl_bw);</span>
+<span class='curline'><a href='../S/451.html#L434'>dl_rq</a>             434 sched/deadline.c 	dl_rq-&gt;running_bw = 0;</span>
+<span class='curline'><a href='../S/451.html#L435'>dl_rq</a>             435 sched/deadline.c 	dl_rq-&gt;this_bw = 0;</span>
+<span class='curline'><a href='../S/451.html#L436'>dl_rq</a>             436 sched/deadline.c 	init_dl_rq_bw_ratio(dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L471'>dl_rq</a>             471 sched/deadline.c static void update_dl_migration(struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L473'>dl_rq</a>             473 sched/deadline.c 	if (dl_rq-&gt;dl_nr_migratory &amp;&amp; dl_rq-&gt;dl_nr_running &gt; 1) {</span>
+<span class='curline'><a href='../S/451.html#L474'>dl_rq</a>             474 sched/deadline.c 		if (!dl_rq-&gt;overloaded) {</span>
+<span class='curline'><a href='../S/451.html#L475'>dl_rq</a>             475 sched/deadline.c 			dl_set_overload(rq_of_dl_rq(dl_rq));</span>
+<span class='curline'><a href='../S/451.html#L476'>dl_rq</a>             476 sched/deadline.c 			dl_rq-&gt;overloaded = 1;</span>
+<span class='curline'><a href='../S/451.html#L478'>dl_rq</a>             478 sched/deadline.c 	} else if (dl_rq-&gt;overloaded) {</span>
+<span class='curline'><a href='../S/451.html#L479'>dl_rq</a>             479 sched/deadline.c 		dl_clear_overload(rq_of_dl_rq(dl_rq));</span>
+<span class='curline'><a href='../S/451.html#L480'>dl_rq</a>             480 sched/deadline.c 		dl_rq-&gt;overloaded = 0;</span>
+<span class='curline'><a href='../S/451.html#L484'>dl_rq</a>             484 sched/deadline.c static void inc_dl_migration(struct sched_dl_entity *dl_se, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L489'>dl_rq</a>             489 sched/deadline.c 		dl_rq-&gt;dl_nr_migratory++;</span>
+<span class='curline'><a href='../S/451.html#L491'>dl_rq</a>             491 sched/deadline.c 	update_dl_migration(dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L494'>dl_rq</a>             494 sched/deadline.c static void dec_dl_migration(struct sched_dl_entity *dl_se, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L499'>dl_rq</a>             499 sched/deadline.c 		dl_rq-&gt;dl_nr_migratory--;</span>
+<span class='curline'><a href='../S/451.html#L501'>dl_rq</a>             501 sched/deadline.c 	update_dl_migration(dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L510'>dl_rq</a>             510 sched/deadline.c 	struct dl_rq *dl_rq = &amp;rq-&gt;dl;</span>
+<span class='curline'><a href='../S/451.html#L511'>dl_rq</a>             511 sched/deadline.c 	struct rb_node **link = &amp;dl_rq-&gt;pushable_dl_tasks_root.rb_root.rb_node;</span>
+<span class='curline'><a href='../S/451.html#L531'>dl_rq</a>             531 sched/deadline.c 		dl_rq-&gt;earliest_dl.next = p-&gt;dl.deadline;</span>
+<span class='curline'><a href='../S/451.html#L535'>dl_rq</a>             535 sched/deadline.c 			       &amp;dl_rq-&gt;pushable_dl_tasks_root, leftmost);</span>
+<span class='curline'><a href='../S/451.html#L540'>dl_rq</a>             540 sched/deadline.c 	struct dl_rq *dl_rq = &amp;rq-&gt;dl;</span>
+<span class='curline'><a href='../S/451.html#L545'>dl_rq</a>             545 sched/deadline.c 	if (dl_rq-&gt;pushable_dl_tasks_root.rb_leftmost == &amp;p-&gt;pushable_dl_tasks) {</span>
+<span class='curline'><a href='../S/451.html#L550'>dl_rq</a>             550 sched/deadline.c 			dl_rq-&gt;earliest_dl.next = rb_entry(next_node,</span>
+<span class='curline'><a href='../S/451.html#L555'>dl_rq</a>             555 sched/deadline.c 	rb_erase_cached(&amp;p-&gt;pushable_dl_tasks, &amp;dl_rq-&gt;pushable_dl_tasks_root);</span>
+<span class='curline'><a href='../S/451.html#L675'>dl_rq</a>             675 sched/deadline.c void inc_dl_migration(struct sched_dl_entity *dl_se, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L680'>dl_rq</a>             680 sched/deadline.c void dec_dl_migration(struct sched_dl_entity *dl_se, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L720'>dl_rq</a>             720 sched/deadline.c 	struct dl_rq *dl_rq = dl_rq_of_se(dl_se);</span>
+<span class='curline'><a href='../S/451.html#L721'>dl_rq</a>             721 sched/deadline.c 	struct rq *rq = rq_of_dl_rq(dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L763'>dl_rq</a>             763 sched/deadline.c 	struct dl_rq *dl_rq = dl_rq_of_se(dl_se);</span>
+<span class='curline'><a href='../S/451.html#L764'>dl_rq</a>             764 sched/deadline.c 	struct rq *rq = rq_of_dl_rq(dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L947'>dl_rq</a>             947 sched/deadline.c 	struct dl_rq *dl_rq = dl_rq_of_se(dl_se);</span>
+<span class='curline'><a href='../S/451.html#L948'>dl_rq</a>             948 sched/deadline.c 	struct rq *rq = rq_of_dl_rq(dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L1394'>dl_rq</a>            1394 sched/deadline.c static void inc_dl_deadline(struct dl_rq *dl_rq, u64 deadline)</span>
+<span class='curline'><a href='../S/451.html#L1396'>dl_rq</a>            1396 sched/deadline.c 	struct rq *rq = rq_of_dl_rq(dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L1398'>dl_rq</a>            1398 sched/deadline.c 	if (dl_rq-&gt;earliest_dl.curr == 0 ||</span>
+<span class='curline'><a href='../S/451.html#L1399'>dl_rq</a>            1399 sched/deadline.c 	    dl_time_before(deadline, dl_rq-&gt;earliest_dl.curr)) {</span>
+<span class='curline'><a href='../S/451.html#L1400'>dl_rq</a>            1400 sched/deadline.c 		dl_rq-&gt;earliest_dl.curr = deadline;</span>
+<span class='curline'><a href='../S/451.html#L1405'>dl_rq</a>            1405 sched/deadline.c static void dec_dl_deadline(struct dl_rq *dl_rq, u64 deadline)</span>
+<span class='curline'><a href='../S/451.html#L1407'>dl_rq</a>            1407 sched/deadline.c 	struct rq *rq = rq_of_dl_rq(dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L1413'>dl_rq</a>            1413 sched/deadline.c 	if (!dl_rq-&gt;dl_nr_running) {</span>
+<span class='curline'><a href='../S/451.html#L1414'>dl_rq</a>            1414 sched/deadline.c 		dl_rq-&gt;earliest_dl.curr = 0;</span>
+<span class='curline'><a href='../S/451.html#L1415'>dl_rq</a>            1415 sched/deadline.c 		dl_rq-&gt;earliest_dl.next = 0;</span>
+<span class='curline'><a href='../S/451.html#L1418'>dl_rq</a>            1418 sched/deadline.c 		struct rb_node *leftmost = dl_rq-&gt;root.rb_leftmost;</span>
+<span class='curline'><a href='../S/451.html#L1422'>dl_rq</a>            1422 sched/deadline.c 		dl_rq-&gt;earliest_dl.curr = entry-&gt;deadline;</span>
+<span class='curline'><a href='../S/451.html#L1429'>dl_rq</a>            1429 sched/deadline.c static inline void inc_dl_deadline(struct dl_rq *dl_rq, u64 deadline) {}</span>
+<span class='curline'><a href='../S/451.html#L1430'>dl_rq</a>            1430 sched/deadline.c static inline void dec_dl_deadline(struct dl_rq *dl_rq, u64 deadline) {}</span>
+<span class='curline'><a href='../S/451.html#L1435'>dl_rq</a>            1435 sched/deadline.c void inc_dl_tasks(struct sched_dl_entity *dl_se, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L1441'>dl_rq</a>            1441 sched/deadline.c 	dl_rq-&gt;dl_nr_running++;</span>
+<span class='curline'><a href='../S/451.html#L1442'>dl_rq</a>            1442 sched/deadline.c 	add_nr_running(rq_of_dl_rq(dl_rq), 1);</span>
+<span class='curline'><a href='../S/451.html#L1444'>dl_rq</a>            1444 sched/deadline.c 	inc_dl_deadline(dl_rq, deadline);</span>
+<span class='curline'><a href='../S/451.html#L1445'>dl_rq</a>            1445 sched/deadline.c 	inc_dl_migration(dl_se, dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L1449'>dl_rq</a>            1449 sched/deadline.c void dec_dl_tasks(struct sched_dl_entity *dl_se, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L1454'>dl_rq</a>            1454 sched/deadline.c 	WARN_ON(!dl_rq-&gt;dl_nr_running);</span>
+<span class='curline'><a href='../S/451.html#L1455'>dl_rq</a>            1455 sched/deadline.c 	dl_rq-&gt;dl_nr_running--;</span>
+<span class='curline'><a href='../S/451.html#L1456'>dl_rq</a>            1456 sched/deadline.c 	sub_nr_running(rq_of_dl_rq(dl_rq), 1);</span>
+<span class='curline'><a href='../S/451.html#L1458'>dl_rq</a>            1458 sched/deadline.c 	dec_dl_deadline(dl_rq, dl_se-&gt;deadline);</span>
+<span class='curline'><a href='../S/451.html#L1459'>dl_rq</a>            1459 sched/deadline.c 	dec_dl_migration(dl_se, dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L1464'>dl_rq</a>            1464 sched/deadline.c 	struct dl_rq *dl_rq = dl_rq_of_se(dl_se);</span>
+<span class='curline'><a href='../S/451.html#L1465'>dl_rq</a>            1465 sched/deadline.c 	struct rb_node **link = &amp;dl_rq-&gt;root.rb_root.rb_node;</span>
+<span class='curline'><a href='../S/451.html#L1484'>dl_rq</a>            1484 sched/deadline.c 	rb_insert_color_cached(&amp;dl_se-&gt;rb_node, &amp;dl_rq-&gt;root, leftmost);</span>
+<span class='curline'><a href='../S/451.html#L1486'>dl_rq</a>            1486 sched/deadline.c 	inc_dl_tasks(dl_se, dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L1491'>dl_rq</a>            1491 sched/deadline.c 	struct dl_rq *dl_rq = dl_rq_of_se(dl_se);</span>
+<span class='curline'><a href='../S/451.html#L1496'>dl_rq</a>            1496 sched/deadline.c 	rb_erase_cached(&amp;dl_se-&gt;rb_node, &amp;dl_rq-&gt;root);</span>
+<span class='curline'><a href='../S/451.html#L1499'>dl_rq</a>            1499 sched/deadline.c 	dec_dl_tasks(dl_se, dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L1847'>dl_rq</a>            1847 sched/deadline.c 						   struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L1849'>dl_rq</a>            1849 sched/deadline.c 	struct rb_node *left = rb_first_cached(&amp;dl_rq-&gt;root);</span>
+<span class='curline'><a href='../S/451.html#L1860'>dl_rq</a>            1860 sched/deadline.c 	struct dl_rq *dl_rq = &amp;rq-&gt;dl;</span>
+<span class='curline'><a href='../S/451.html#L1866'>dl_rq</a>            1866 sched/deadline.c 	dl_se = pick_next_dl_entity(rq, dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L2584'>dl_rq</a>            2584 sched/deadline.c static void init_dl_rq_bw_ratio(struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L2587'>dl_rq</a>            2587 sched/deadline.c 		dl_rq-&gt;bw_ratio = 1 &lt;&lt; RATIO_SHIFT;</span>
+<span class='curline'><a href='../S/451.html#L2588'>dl_rq</a>            2588 sched/deadline.c 		dl_rq-&gt;extra_bw = 1 &lt;&lt; BW_SHIFT;</span>
+<span class='curline'><a href='../S/451.html#L2590'>dl_rq</a>            2590 sched/deadline.c 		dl_rq-&gt;bw_ratio = to_ratio(global_rt_runtime(),</span>
+<span class='curline'><a href='../S/451.html#L2592'>dl_rq</a>            2592 sched/deadline.c 		dl_rq-&gt;extra_bw = to_ratio(global_rt_period(),</span>
+<span class='curline'><a href='../S/460.html#L664'>dl_rq</a>             664 sched/debug.c  void print_dl_rq(struct seq_file *m, int cpu, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/460.html#L672'>dl_rq</a>             672 sched/debug.c  	SEQ_printf(m, "  .%-30s: %lu\n", #x, (unsigned long)(dl_rq-&gt;x))</span>
+<span class='curline'><a href='../S/460.html#L679'>dl_rq</a>             679 sched/debug.c  	dl_bw = &amp;dl_rq-&gt;dl_bw;</span>
+<span class='curline'><a href='../S/447.html#L952'>dl_rq</a>             952 sched/sched.h  	struct dl_rq		dl;</span>
+<span class='curline'><a href='../S/447.html#L2310'>dl_rq</a>            2310 sched/sched.h  extern void print_dl_rq(struct seq_file *m, int cpu, struct dl_rq *dl_rq);</span>
+<span class='curline'><a href='../S/447.html#L2322'>dl_rq</a>            2322 sched/sched.h  extern void init_dl_rq(struct dl_rq *dl_rq);</span>
+<span class='curline'><a href='../S/447.html#L2363'>dl_rq</a>            2363 sched/sched.h  	struct dl_rq *dl = container_of(dl_b, struct dl_rq, dl_bw);</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>cpu_of</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/441.html#L271'>cpu_of</a>            271 sched/core.c   	irq_delta = irq_time_read(cpu_of(rq)) - rq-&gt;prev_irq_time;</span>
+<span class='curline'><a href='../S/441.html#L296'>cpu_of</a>            296 sched/core.c   		steal = paravirt_steal_clock(cpu_of(rq));</span>
+<span class='curline'><a href='../S/441.html#L331'>cpu_of</a>            331 sched/core.c   	delta = sched_clock_cpu(cpu_of(rq)) - rq-&gt;clock;</span>
+<span class='curline'><a href='../S/441.html#L367'>cpu_of</a>            367 sched/core.c   	WARN_ON_ONCE(cpu_of(rq) != smp_processor_id());</span>
+<span class='curline'><a href='../S/441.html#L420'>cpu_of</a>            420 sched/core.c   		smp_call_function_single_async(cpu_of(rq), &amp;rq-&gt;hrtick_csd);</span>
+<span class='curline'><a href='../S/441.html#L636'>cpu_of</a>            636 sched/core.c   	cpu = cpu_of(rq);</span>
+<span class='curline'><a href='../S/441.html#L779'>cpu_of</a>            779 sched/core.c   	int cpu = cpu_of(rq);</span>
+<span class='curline'><a href='../S/441.html#L2029'>cpu_of</a>           2029 sched/core.c   		stop_one_cpu(cpu_of(rq), migration_cpu_stop, &amp;arg);</span>
+<span class='curline'><a href='../S/441.html#L2773'>cpu_of</a>           2773 sched/core.c   		if (WARN_ON_ONCE(task_cpu(p) != cpu_of(rq)))</span>
+<span class='curline'><a href='../S/441.html#L2774'>cpu_of</a>           2774 sched/core.c   			set_task_cpu(p, cpu_of(rq));</span>
+<span class='curline'><a href='../S/441.html#L4226'>cpu_of</a>           4226 sched/core.c   	thermal_pressure = arch_scale_thermal_pressure(cpu_of(rq));</span>
+<span class='curline'><a href='../S/451.html#L1244'>cpu_of</a>           1244 sched/deadline.c 	int cpu = cpu_of(rq);</span>
+<span class='curline'><a href='../S/451.html#L2328'>cpu_of</a>           2328 sched/deadline.c 		src_dl_b = dl_bw_of(cpu_of(rq));</span>
+<span class='curline'><a href='../S/464.html#L308'>cpu_of</a>            308 sched/fair.c   	int cpu = cpu_of(rq);</span>
+<span class='curline'><a href='../S/464.html#L808'>cpu_of</a>            808 sched/fair.c   	long cpu_scale = arch_scale_cpu_capacity(cpu_of(rq_of(cfs_rq)));</span>
+<span class='curline'><a href='../S/464.html#L4049'>cpu_of</a>           4049 sched/fair.c   	if (task_util(p) &gt; capacity_orig_of(cpu_of(rq_of(cfs_rq))))</span>
+<span class='curline'><a href='../S/464.html#L4096'>cpu_of</a>           4096 sched/fair.c   	if (task_fits_capacity(p, capacity_of(cpu_of(rq)))) {</span>
+<span class='curline'><a href='../S/464.html#L4774'>cpu_of</a>           4774 sched/fair.c   	struct cfs_rq *cfs_rq = tg-&gt;cfs_rq[cpu_of(rq)];</span>
+<span class='curline'><a href='../S/464.html#L4792'>cpu_of</a>           4792 sched/fair.c   	struct cfs_rq *cfs_rq = tg-&gt;cfs_rq[cpu_of(rq)];</span>
+<span class='curline'><a href='../S/464.html#L4832'>cpu_of</a>           4832 sched/fair.c   	se = cfs_rq-&gt;tg-&gt;se[cpu_of(rq_of(cfs_rq))];</span>
+<span class='curline'><a href='../S/464.html#L4880'>cpu_of</a>           4880 sched/fair.c   	se = cfs_rq-&gt;tg-&gt;se[cpu_of(rq)];</span>
+<span class='curline'><a href='../S/464.html#L5362'>cpu_of</a>           5362 sched/fair.c   		struct cfs_rq *cfs_rq = tg-&gt;cfs_rq[cpu_of(rq)];</span>
+<span class='curline'><a href='../S/464.html#L5380'>cpu_of</a>           5380 sched/fair.c   		struct cfs_rq *cfs_rq = tg-&gt;cfs_rq[cpu_of(rq)];</span>
+<span class='curline'><a href='../S/464.html#L5764'>cpu_of</a>           5764 sched/fair.c   	if (cpu_of(rq) != task_cpu(p) || !READ_ONCE(p-&gt;se.avg.last_update_time))</span>
+<span class='curline'><a href='../S/464.html#L5787'>cpu_of</a>           5787 sched/fair.c   	if (cpu_of(rq) != task_cpu(p) || !READ_ONCE(p-&gt;se.avg.last_update_time))</span>
+<span class='curline'><a href='../S/464.html#L6095'>cpu_of</a>           6095 sched/fair.c   	int core = cpu_of(rq);</span>
+<span class='curline'><a href='../S/464.html#L8054'>cpu_of</a>           8054 sched/fair.c   	thermal_pressure = arch_scale_thermal_pressure(cpu_of(rq));</span>
+<span class='curline'><a href='../S/464.html#L8090'>cpu_of</a>           8090 sched/fair.c   	int cpu = cpu_of(rq);</span>
+<span class='curline'><a href='../S/464.html#L8134'>cpu_of</a>           8134 sched/fair.c   	struct sched_entity *se = cfs_rq-&gt;tg-&gt;se[cpu_of(rq)];</span>
+<span class='curline'><a href='../S/464.html#L9588'>cpu_of</a>           9588 sched/fair.c   			util = cpu_util(cpu_of(rq));</span>
+<span class='curline'><a href='../S/464.html#L9867'>cpu_of</a>           9867 sched/fair.c   			__cpumask_clear_cpu(cpu_of(busiest), cpus);</span>
+<span class='curline'><a href='../S/464.html#L9926'>cpu_of</a>           9926 sched/fair.c   				stop_one_cpu_nowait(cpu_of(busiest),</span>
+<span class='curline'><a href='../S/464.html#L10043'>cpu_of</a>           10043 sched/fair.c   	int busiest_cpu = cpu_of(busiest_rq);</span>
+<span class='curline'><a href='../S/464.html#L11534'>cpu_of</a>           11534 sched/fair.c   	return cfs_rq ? cpu_of(rq_of(cfs_rq)) : -1;</span>
+<span class='curline'><a href='../S/464.html#L11570'>cpu_of</a>           11570 sched/fair.c   	return rq ? cpu_of(rq) : -1;</span>
+<span class='curline'><a href='../S/463.html#L480'>cpu_of</a>            480 sched/pelt.c   	running = cap_scale(running, arch_scale_freq_capacity(cpu_of(rq)));</span>
+<span class='curline'><a href='../S/463.html#L481'>cpu_of</a>            481 sched/pelt.c   	running = cap_scale(running, arch_scale_cpu_capacity(cpu_of(rq)));</span>
+<span class='curline'><a href='../S/468.html#L107'>cpu_of</a>            107 sched/pelt.h   	delta = cap_scale(delta, arch_scale_cpu_capacity(cpu_of(rq)));</span>
+<span class='curline'><a href='../S/468.html#L108'>cpu_of</a>            108 sched/pelt.h   	delta = cap_scale(delta, arch_scale_freq_capacity(cpu_of(rq)));</span>
+<span class='curline'><a href='../S/450.html#L516'>cpu_of</a>            516 sched/rt.c     		(rt_rq = iter-&gt;rt_rq[cpu_of(rq)]);)</span>
+<span class='curline'><a href='../S/450.html#L535'>cpu_of</a>            535 sched/rt.c     	int cpu = cpu_of(rq);</span>
+<span class='curline'><a href='../S/450.html#L553'>cpu_of</a>            553 sched/rt.c     	int cpu = cpu_of(rq_of_rt_rq(rt_rq));</span>
+<span class='curline'><a href='../S/450.html#L2399'>cpu_of</a>           2399 sched/rt.c     		if (p-&gt;prio &lt; rq-&gt;curr-&gt;prio &amp;&amp; cpu_online(cpu_of(rq)))</span>
+<span class='curline'><a href='../S/447.html#L2010'>cpu_of</a>           2010 sched/sched.h  	int cpu = cpu_of(rq);</span>
+<span class='curline'><a href='../S/447.html#L2074'>cpu_of</a>           2074 sched/sched.h  	if (!cpu_active(cpu_of(rq)))</span>
+<span class='curline'><a href='../S/447.html#L2430'>cpu_of</a>           2430 sched/sched.h  						  cpu_of(rq)));</span>
+<span class='curline'><a href='../S/461.html#L153'>cpu_of</a>            153 sched/stats.h  		psi_memstall_tick(rq-&gt;curr, cpu_of(rq));</span>
+</pre>
+</body>
+</html>

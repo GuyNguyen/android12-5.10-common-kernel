@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>RWSEM_FLAG_HANDOFF</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/27.html#L167'>RWSEM_FLAG_HANDOFF</a>  167 locking/rwsem.c 				 RWSEM_FLAG_HANDOFF|RWSEM_FLAG_READFAIL)</span>
+<span class='curline'><a href='../S/27.html#L445'>RWSEM_FLAG_HANDOFF</a>  445 locking/rwsem.c 			if (!(oldcount &amp; RWSEM_FLAG_HANDOFF) &amp;&amp;</span>
+<span class='curline'><a href='../S/27.html#L447'>RWSEM_FLAG_HANDOFF</a>  447 locking/rwsem.c 				adjustment -= RWSEM_FLAG_HANDOFF;</span>
+<span class='curline'><a href='../S/27.html#L517'>RWSEM_FLAG_HANDOFF</a>  517 locking/rwsem.c 	if (woken &amp;&amp; (atomic_long_read(&amp;sem-&gt;count) &amp; RWSEM_FLAG_HANDOFF))</span>
+<span class='curline'><a href='../S/27.html#L518'>RWSEM_FLAG_HANDOFF</a>  518 locking/rwsem.c 		adjustment -= RWSEM_FLAG_HANDOFF;</span>
+<span class='curline'><a href='../S/27.html#L562'>RWSEM_FLAG_HANDOFF</a>  562 locking/rwsem.c 		bool has_handoff = !!(count &amp; RWSEM_FLAG_HANDOFF);</span>
+<span class='curline'><a href='../S/27.html#L573'>RWSEM_FLAG_HANDOFF</a>  573 locking/rwsem.c 			new |= RWSEM_FLAG_HANDOFF;</span>
+<span class='curline'><a href='../S/27.html#L576'>RWSEM_FLAG_HANDOFF</a>  576 locking/rwsem.c 			new &amp;= ~RWSEM_FLAG_HANDOFF;</span>
+<span class='curline'><a href='../S/27.html#L587'>RWSEM_FLAG_HANDOFF</a>  587 locking/rwsem.c 	if (new &amp; RWSEM_FLAG_HANDOFF)</span>
+<span class='curline'><a href='../S/27.html#L604'>RWSEM_FLAG_HANDOFF</a>  604 locking/rwsem.c 	if (count &amp; (RWSEM_WRITER_MASK | RWSEM_FLAG_HANDOFF))</span>
+<span class='curline'><a href='../S/27.html#L608'>RWSEM_FLAG_HANDOFF</a>  608 locking/rwsem.c 	if (!(count &amp; (RWSEM_WRITER_MASK | RWSEM_FLAG_HANDOFF))) {</span>
+<span class='curline'><a href='../S/27.html#L626'>RWSEM_FLAG_HANDOFF</a>  626 locking/rwsem.c 	while (!(count &amp; (RWSEM_LOCK_MASK|RWSEM_FLAG_HANDOFF))) {</span>
+<span class='curline'><a href='../S/27.html#L1041'>RWSEM_FLAG_HANDOFF</a> 1041 locking/rwsem.c 		     (RWSEM_WRITER_MASK | RWSEM_FLAG_HANDOFF))) {</span>
+<span class='curline'><a href='../S/27.html#L1109'>RWSEM_FLAG_HANDOFF</a> 1109 locking/rwsem.c 		atomic_long_andnot(RWSEM_FLAG_WAITERS|RWSEM_FLAG_HANDOFF,</span>
+<span class='curline'><a href='../S/27.html#L1290'>RWSEM_FLAG_HANDOFF</a> 1290 locking/rwsem.c 		atomic_long_add(-RWSEM_FLAG_HANDOFF,  &amp;sem-&gt;count);</span>
+</pre>
+</body>
+</html>

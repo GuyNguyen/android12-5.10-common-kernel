@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>new_node</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/405.html#L304'>new_node</a>          304 bpf/lpm_trie.c 	struct lpm_trie_node *node, *im_node = NULL, *new_node = NULL;</span>
+<span class='curline'><a href='../S/405.html#L327'>new_node</a>          327 bpf/lpm_trie.c 	new_node = lpm_trie_node_alloc(trie, value);</span>
+<span class='curline'><a href='../S/405.html#L328'>new_node</a>          328 bpf/lpm_trie.c 	if (!new_node) {</span>
+<span class='curline'><a href='../S/405.html#L335'>new_node</a>          335 bpf/lpm_trie.c 	new_node-&gt;prefixlen = key-&gt;prefixlen;</span>
+<span class='curline'><a href='../S/405.html#L336'>new_node</a>          336 bpf/lpm_trie.c 	RCU_INIT_POINTER(new_node-&gt;child[0], NULL);</span>
+<span class='curline'><a href='../S/405.html#L337'>new_node</a>          337 bpf/lpm_trie.c 	RCU_INIT_POINTER(new_node-&gt;child[1], NULL);</span>
+<span class='curline'><a href='../S/405.html#L338'>new_node</a>          338 bpf/lpm_trie.c 	memcpy(new_node-&gt;data, key-&gt;data, trie-&gt;data_size);</span>
+<span class='curline'><a href='../S/405.html#L364'>new_node</a>          364 bpf/lpm_trie.c 		rcu_assign_pointer(*slot, new_node);</span>
+<span class='curline'><a href='../S/405.html#L372'>new_node</a>          372 bpf/lpm_trie.c 		new_node-&gt;child[0] = node-&gt;child[0];</span>
+<span class='curline'><a href='../S/405.html#L373'>new_node</a>          373 bpf/lpm_trie.c 		new_node-&gt;child[1] = node-&gt;child[1];</span>
+<span class='curline'><a href='../S/405.html#L378'>new_node</a>          378 bpf/lpm_trie.c 		rcu_assign_pointer(*slot, new_node);</span>
+<span class='curline'><a href='../S/405.html#L389'>new_node</a>          389 bpf/lpm_trie.c 		rcu_assign_pointer(new_node-&gt;child[next_bit], node);</span>
+<span class='curline'><a href='../S/405.html#L390'>new_node</a>          390 bpf/lpm_trie.c 		rcu_assign_pointer(*slot, new_node);</span>
+<span class='curline'><a href='../S/405.html#L407'>new_node</a>          407 bpf/lpm_trie.c 		rcu_assign_pointer(im_node-&gt;child[1], new_node);</span>
+<span class='curline'><a href='../S/405.html#L409'>new_node</a>          409 bpf/lpm_trie.c 		rcu_assign_pointer(im_node-&gt;child[0], new_node);</span>
+<span class='curline'><a href='../S/405.html#L418'>new_node</a>          418 bpf/lpm_trie.c 		if (new_node)</span>
+<span class='curline'><a href='../S/405.html#L421'>new_node</a>          421 bpf/lpm_trie.c 		kfree(new_node);</span>
+<span class='curline'><a href='../S/65.html#L591'>new_node</a>          591 gcov/fs.c      			node = new_node(parent, NULL, curr);</span>
+<span class='curline'><a href='../S/65.html#L598'>new_node</a>          598 gcov/fs.c      	node = new_node(parent, info, curr);</span>
+</pre>
+</body>
+</html>

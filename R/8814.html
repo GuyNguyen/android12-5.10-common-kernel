@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>listener</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/11.html#L1783'>listener</a>         1783 seccomp.c      	int listener = -1;</span>
+<span class='curline'><a href='../S/11.html#L1808'>listener</a>         1808 seccomp.c      		listener = get_unused_fd_flags(O_CLOEXEC);</span>
+<span class='curline'><a href='../S/11.html#L1809'>listener</a>         1809 seccomp.c      		if (listener &lt; 0) {</span>
+<span class='curline'><a href='../S/11.html#L1810'>listener</a>         1810 seccomp.c      			ret = listener;</span>
+<span class='curline'><a href='../S/11.html#L1816'>listener</a>         1816 seccomp.c      			put_unused_fd(listener);</span>
+<span class='curline'><a href='../S/11.html#L1856'>listener</a>         1856 seccomp.c      			put_unused_fd(listener);</span>
+<span class='curline'><a href='../S/11.html#L1859'>listener</a>         1859 seccomp.c      			fd_install(listener, listener_f);</span>
+<span class='curline'><a href='../S/11.html#L1860'>listener</a>         1860 seccomp.c      			ret = listener;</span>
+<span class='curline'><a href='../S/145.html#L113'>listener</a>          113 taskstats.c    	struct listener *s, *tmp;</span>
+<span class='curline'><a href='../S/145.html#L277'>listener</a>          277 taskstats.c    	struct listener *s, *tmp, *s2;</span>
+<span class='curline'><a href='../S/145.html#L292'>listener</a>          292 taskstats.c    			s = kmalloc_node(sizeof(struct listener),</span>
+</pre>
+</body>
+</html>

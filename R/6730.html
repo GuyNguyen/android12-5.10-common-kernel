@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>ftrace_hash</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/270.html#L1033'>ftrace_hash</a>      1033 trace/ftrace.c static const struct ftrace_hash empty_hash = {</span>
+<span class='curline'><a href='../S/270.html#L1036'>ftrace_hash</a>      1036 trace/ftrace.c #define EMPTY_HASH	((struct ftrace_hash *)&amp;empty_hash)</span>
+<span class='curline'><a href='../S/270.html#L1104'>ftrace_hash</a>      1104 trace/ftrace.c ftrace_hash_key(struct ftrace_hash *hash, unsigned long ip)</span>
+<span class='curline'><a href='../S/270.html#L1114'>ftrace_hash</a>      1114 trace/ftrace.c __ftrace_lookup_ip(struct ftrace_hash *hash, unsigned long ip)</span>
+<span class='curline'><a href='../S/270.html#L1141'>ftrace_hash</a>      1141 trace/ftrace.c ftrace_lookup_ip(struct ftrace_hash *hash, unsigned long ip)</span>
+<span class='curline'><a href='../S/270.html#L1149'>ftrace_hash</a>      1149 trace/ftrace.c static void __add_hash_entry(struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/270.html#L1161'>ftrace_hash</a>      1161 trace/ftrace.c static int add_hash_entry(struct ftrace_hash *hash, unsigned long ip)</span>
+<span class='curline'><a href='../S/270.html#L1176'>ftrace_hash</a>      1176 trace/ftrace.c free_hash_entry(struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/270.html#L1185'>ftrace_hash</a>      1185 trace/ftrace.c remove_hash_entry(struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/270.html#L1192'>ftrace_hash</a>      1192 trace/ftrace.c static void ftrace_hash_clear(struct ftrace_hash *hash)</span>
+<span class='curline'><a href='../S/270.html#L1233'>ftrace_hash</a>      1233 trace/ftrace.c static void free_ftrace_hash(struct ftrace_hash *hash)</span>
+<span class='curline'><a href='../S/270.html#L1244'>ftrace_hash</a>      1244 trace/ftrace.c 	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/270.html#L1246'>ftrace_hash</a>      1246 trace/ftrace.c 	hash = container_of(rcu, struct ftrace_hash, rcu);</span>
+<span class='curline'><a href='../S/270.html#L1250'>ftrace_hash</a>      1250 trace/ftrace.c static void free_ftrace_hash_rcu(struct ftrace_hash *hash)</span>
+<span class='curline'><a href='../S/270.html#L1264'>ftrace_hash</a>      1264 trace/ftrace.c static struct ftrace_hash *alloc_ftrace_hash(int size_bits)</span>
+<span class='curline'><a href='../S/270.html#L1266'>ftrace_hash</a>      1266 trace/ftrace.c 	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/270.html#L1315'>ftrace_hash</a>      1315 trace/ftrace.c static struct ftrace_hash *</span>
+<span class='curline'><a href='../S/270.html#L1316'>ftrace_hash</a>      1316 trace/ftrace.c alloc_and_copy_ftrace_hash(int size_bits, struct ftrace_hash *hash)</span>
+<span class='curline'><a href='../S/270.html#L1319'>ftrace_hash</a>      1319 trace/ftrace.c 	struct ftrace_hash *new_hash;</span>
+<span class='curline'><a href='../S/270.html#L1359'>ftrace_hash</a>      1359 trace/ftrace.c 				       struct ftrace_hash *new_hash);</span>
+<span class='curline'><a href='../S/270.html#L1361'>ftrace_hash</a>      1361 trace/ftrace.c static struct ftrace_hash *dup_hash(struct ftrace_hash *src, int size)</span>
+<span class='curline'><a href='../S/270.html#L1364'>ftrace_hash</a>      1364 trace/ftrace.c 	struct ftrace_hash *new_hash;</span>
+<span class='curline'><a href='../S/270.html#L1397'>ftrace_hash</a>      1397 trace/ftrace.c static struct ftrace_hash *</span>
+<span class='curline'><a href='../S/270.html#L1398'>ftrace_hash</a>      1398 trace/ftrace.c __ftrace_hash_move(struct ftrace_hash *src)</span>
+<span class='curline'><a href='../S/270.html#L1413'>ftrace_hash</a>      1413 trace/ftrace.c 		 struct ftrace_hash **dst, struct ftrace_hash *src)</span>
+<span class='curline'><a href='../S/270.html#L1415'>ftrace_hash</a>      1415 trace/ftrace.c 	struct ftrace_hash *new_hash;</span>
+<span class='curline'><a href='../S/270.html#L1640'>ftrace_hash</a>      1640 trace/ftrace.c 	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/270.html#L1641'>ftrace_hash</a>      1641 trace/ftrace.c 	struct ftrace_hash *other_hash;</span>
+<span class='curline'><a href='../S/270.html#L1863'>ftrace_hash</a>      1863 trace/ftrace.c 					 struct ftrace_hash *old_hash,</span>
+<span class='curline'><a href='../S/270.html#L1864'>ftrace_hash</a>      1864 trace/ftrace.c 					 struct ftrace_hash *new_hash)</span>
+<span class='curline'><a href='../S/270.html#L1936'>ftrace_hash</a>      1936 trace/ftrace.c 	struct ftrace_hash *hash = ops-&gt;func_hash-&gt;filter_hash;</span>
+<span class='curline'><a href='../S/270.html#L1947'>ftrace_hash</a>      1947 trace/ftrace.c 	struct ftrace_hash *hash = ops-&gt;func_hash-&gt;filter_hash;</span>
+<span class='curline'><a href='../S/270.html#L1956'>ftrace_hash</a>      1956 trace/ftrace.c 				       struct ftrace_hash *new_hash)</span>
+<span class='curline'><a href='../S/270.html#L1958'>ftrace_hash</a>      1958 trace/ftrace.c 	struct ftrace_hash *old_hash = ops-&gt;func_hash-&gt;filter_hash;</span>
+<span class='curline'><a href='../S/270.html#L2372'>ftrace_hash</a>      2372 trace/ftrace.c static struct ftrace_hash *direct_functions = EMPTY_HASH;</span>
+<span class='curline'><a href='../S/270.html#L3256'>ftrace_hash</a>      3256 trace/ftrace.c 	struct ftrace_hash		*hash;</span>
+<span class='curline'><a href='../S/270.html#L3271'>ftrace_hash</a>      3271 trace/ftrace.c 	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/270.html#L3760'>ftrace_hash</a>      3760 trace/ftrace.c 	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/270.html#L3917'>ftrace_hash</a>      3917 trace/ftrace.c enter_record(struct ftrace_hash *hash, struct dyn_ftrace *rec, int clear_filter)</span>
+<span class='curline'><a href='../S/270.html#L3940'>ftrace_hash</a>      3940 trace/ftrace.c add_rec_by_index(struct ftrace_hash *hash, struct ftrace_glob *func_g,</span>
+<span class='curline'><a href='../S/270.html#L4003'>ftrace_hash</a>      4003 trace/ftrace.c match_records(struct ftrace_hash *hash, char *func, int len, char *mod)</span>
+<span class='curline'><a href='../S/270.html#L4058'>ftrace_hash</a>      4058 trace/ftrace.c ftrace_match_records(struct ftrace_hash *hash, char *buff, int len)</span>
+<span class='curline'><a href='../S/270.html#L4095'>ftrace_hash</a>      4095 trace/ftrace.c 					   struct ftrace_hash **orig_hash,</span>
+<span class='curline'><a href='../S/270.html#L4096'>ftrace_hash</a>      4096 trace/ftrace.c 					   struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/270.html#L4100'>ftrace_hash</a>      4100 trace/ftrace.c 	struct ftrace_hash *old_hash;</span>
+<span class='curline'><a href='../S/270.html#L4184'>ftrace_hash</a>      4184 trace/ftrace.c 	struct ftrace_hash **orig_hash, *new_hash;</span>
+<span class='curline'><a href='../S/270.html#L4278'>ftrace_hash</a>      4278 trace/ftrace.c ftrace_mod_callback(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/270.html#L4342'>ftrace_hash</a>      4342 trace/ftrace.c 	struct ftrace_hash		hash;</span>
+<span class='curline'><a href='../S/270.html#L4352'>ftrace_hash</a>      4352 trace/ftrace.c 	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/270.html#L4521'>ftrace_hash</a>      4521 trace/ftrace.c 	struct ftrace_hash **orig_hash;</span>
+<span class='curline'><a href='../S/270.html#L4522'>ftrace_hash</a>      4522 trace/ftrace.c 	struct ftrace_hash *old_hash;</span>
+<span class='curline'><a href='../S/270.html#L4523'>ftrace_hash</a>      4523 trace/ftrace.c 	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/270.html#L4665'>ftrace_hash</a>      4665 trace/ftrace.c 	struct ftrace_hash **orig_hash;</span>
+<span class='curline'><a href='../S/270.html#L4666'>ftrace_hash</a>      4666 trace/ftrace.c 	struct ftrace_hash *old_hash;</span>
+<span class='curline'><a href='../S/270.html#L4667'>ftrace_hash</a>      4667 trace/ftrace.c 	struct ftrace_hash *hash = NULL;</span>
+<span class='curline'><a href='../S/270.html#L4846'>ftrace_hash</a>      4846 trace/ftrace.c 	struct ftrace_hash *hash = iter-&gt;hash;</span>
+<span class='curline'><a href='../S/270.html#L4934'>ftrace_hash</a>      4934 trace/ftrace.c ftrace_match_addr(struct ftrace_hash *hash, unsigned long ip, int remove)</span>
+<span class='curline'><a href='../S/270.html#L4956'>ftrace_hash</a>      4956 trace/ftrace.c 	struct ftrace_hash **orig_hash;</span>
+<span class='curline'><a href='../S/270.html#L4957'>ftrace_hash</a>      4957 trace/ftrace.c 	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/270.html#L5084'>ftrace_hash</a>      5084 trace/ftrace.c 	struct ftrace_hash *free_hash = NULL;</span>
+<span class='curline'><a href='../S/270.html#L5117'>ftrace_hash</a>      5117 trace/ftrace.c 		struct ftrace_hash *new_hash;</span>
+<span class='curline'><a href='../S/270.html#L5540'>ftrace_hash</a>      5540 trace/ftrace.c static int ftrace_graph_set_hash(struct ftrace_hash *hash, char *buffer);</span>
+<span class='curline'><a href='../S/270.html#L5569'>ftrace_hash</a>      5569 trace/ftrace.c 	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/270.html#L5622'>ftrace_hash</a>      5622 trace/ftrace.c 	struct ftrace_hash **orig_hash;</span>
+<span class='curline'><a href='../S/270.html#L5707'>ftrace_hash</a>      5707 trace/ftrace.c struct ftrace_hash __rcu *ftrace_graph_hash = EMPTY_HASH;</span>
+<span class='curline'><a href='../S/270.html#L5708'>ftrace_hash</a>      5708 trace/ftrace.c struct ftrace_hash __rcu *ftrace_graph_notrace_hash = EMPTY_HASH;</span>
+<span class='curline'><a href='../S/270.html#L5718'>ftrace_hash</a>      5718 trace/ftrace.c 	struct ftrace_hash		*hash;</span>
+<span class='curline'><a href='../S/270.html#L5722'>ftrace_hash</a>      5722 trace/ftrace.c 	struct ftrace_hash		*new_hash;</span>
+<span class='curline'><a href='../S/270.html#L5826'>ftrace_hash</a>      5826 trace/ftrace.c 	struct ftrace_hash *new_hash = NULL;</span>
+<span class='curline'><a href='../S/270.html#L5938'>ftrace_hash</a>      5938 trace/ftrace.c 	struct ftrace_hash *old_hash, *new_hash;</span>
+<span class='curline'><a href='../S/270.html#L6004'>ftrace_hash</a>      6004 trace/ftrace.c ftrace_graph_set_hash(struct ftrace_hash *hash, char *buffer)</span>
+<span class='curline'><a href='../S/270.html#L6344'>ftrace_hash</a>      6344 trace/ftrace.c clear_mod_from_hash(struct ftrace_page *pg, struct ftrace_hash *hash)</span>
+<span class='curline'><a href='../S/270.html#L6724'>ftrace_hash</a>      6724 trace/ftrace.c clear_func_from_hash(struct ftrace_init_func *func, struct ftrace_hash *hash)</span>
+<span class='curline'><a href='../S/271.html#L7982'>ftrace_hash</a>      7982 trace/trace.c  ftrace_trace_snapshot_callback(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/256.html#L947'>ftrace_hash</a>       947 trace/trace.h  struct ftrace_hash;</span>
+<span class='curline'><a href='../S/256.html#L969'>ftrace_hash</a>       969 trace/trace.h  ftrace_lookup_ip(struct ftrace_hash *hash, unsigned long ip);</span>
+<span class='curline'><a href='../S/256.html#L971'>ftrace_hash</a>       971 trace/trace.h  static __always_inline bool ftrace_hash_empty(struct ftrace_hash *hash)</span>
+<span class='curline'><a href='../S/256.html#L1017'>ftrace_hash</a>      1017 trace/trace.h  extern struct ftrace_hash __rcu *ftrace_graph_hash;</span>
+<span class='curline'><a href='../S/256.html#L1018'>ftrace_hash</a>      1018 trace/trace.h  extern struct ftrace_hash __rcu *ftrace_graph_notrace_hash;</span>
+<span class='curline'><a href='../S/256.html#L1024'>ftrace_hash</a>      1024 trace/trace.h  	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/256.html#L1077'>ftrace_hash</a>      1077 trace/trace.h  	struct ftrace_hash *notrace_hash;</span>
+<span class='curline'><a href='../S/256.html#L1140'>ftrace_hash</a>      1140 trace/trace.h  					struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/267.html#L2999'>ftrace_hash</a>      2999 trace/trace_events.c event_enable_func(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/307.html#L645'>ftrace_hash</a>       645 trace/trace_functions.c 			    struct ftrace_hash *hash, char *glob,</span>
+<span class='curline'><a href='../S/307.html#L682'>ftrace_hash</a>       682 trace/trace_functions.c ftrace_trace_onoff_callback(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/307.html#L701'>ftrace_hash</a>       701 trace/trace_functions.c ftrace_stacktrace_callback(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/307.html#L716'>ftrace_hash</a>       716 trace/trace_functions.c ftrace_dump_callback(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/307.html#L732'>ftrace_hash</a>       732 trace/trace_functions.c ftrace_cpudump_callback(struct trace_array *tr, struct ftrace_hash *hash,</span>
+</pre>
+</body>
+</html>

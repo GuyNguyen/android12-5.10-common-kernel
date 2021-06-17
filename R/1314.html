@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>SEQ_printf</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/460.html#L433'>SEQ_printf</a>        433 sched/debug.c  #define P(F)		SEQ_printf(m, "  .%-30s: %lld\n",	#F, (long long)F)</span>
+<span class='curline'><a href='../S/460.html#L434'>SEQ_printf</a>        434 sched/debug.c  #define P_SCHEDSTAT(F)	SEQ_printf(m, "  .%-30s: %lld\n",	#F, (long long)schedstat_val(F))</span>
+<span class='curline'><a href='../S/460.html#L435'>SEQ_printf</a>        435 sched/debug.c  #define PN(F)		SEQ_printf(m, "  .%-30s: %lld.%06ld\n", #F, SPLIT_NS((long long)F))</span>
+<span class='curline'><a href='../S/460.html#L436'>SEQ_printf</a>        436 sched/debug.c  #define PN_SCHEDSTAT(F)	SEQ_printf(m, "  .%-30s: %lld.%06ld\n", #F, SPLIT_NS((long long)schedstat_val(F)))</span>
+<span class='curline'><a href='../S/460.html#L495'>SEQ_printf</a>        495 sched/debug.c  		SEQ_printf(m, fmt, group_path);				\</span>
+<span class='curline'><a href='../S/460.html#L502'>SEQ_printf</a>        502 sched/debug.c  		SEQ_printf(m, fmt, buf);				\</span>
+<span class='curline'><a href='../S/460.html#L511'>SEQ_printf</a>        511 sched/debug.c  		SEQ_printf(m, "&gt;R");</span>
+<span class='curline'><a href='../S/460.html#L513'>SEQ_printf</a>        513 sched/debug.c  		SEQ_printf(m, " %c", task_state_to_char(p));</span>
+<span class='curline'><a href='../S/460.html#L515'>SEQ_printf</a>        515 sched/debug.c  	SEQ_printf(m, " %15s %5d %9Ld.%06ld %9Ld %5d ",</span>
+<span class='curline'><a href='../S/460.html#L521'>SEQ_printf</a>        521 sched/debug.c  	SEQ_printf(m, "%9Ld.%06ld %9Ld.%06ld %9Ld.%06ld",</span>
+<span class='curline'><a href='../S/460.html#L527'>SEQ_printf</a>        527 sched/debug.c  	SEQ_printf(m, " %d %d", task_node(p), task_numa_group_id(p));</span>
+<span class='curline'><a href='../S/460.html#L533'>SEQ_printf</a>        533 sched/debug.c  	SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/460.html#L540'>SEQ_printf</a>        540 sched/debug.c  	SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/460.html#L541'>SEQ_printf</a>        541 sched/debug.c  	SEQ_printf(m, "runnable tasks:\n");</span>
+<span class='curline'><a href='../S/460.html#L542'>SEQ_printf</a>        542 sched/debug.c  	SEQ_printf(m, " S            task   PID         tree-key  switches  prio"</span>
+<span class='curline'><a href='../S/460.html#L544'>SEQ_printf</a>        544 sched/debug.c  	SEQ_printf(m, "-------------------------------------------------------"</span>
+<span class='curline'><a href='../S/460.html#L566'>SEQ_printf</a>        566 sched/debug.c  	SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/460.html#L569'>SEQ_printf</a>        569 sched/debug.c  	SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/460.html#L570'>SEQ_printf</a>        570 sched/debug.c  	SEQ_printf(m, "cfs_rq[%d]:\n", cpu);</span>
+<span class='curline'><a href='../S/460.html#L572'>SEQ_printf</a>        572 sched/debug.c  	SEQ_printf(m, "  .%-30s: %Ld.%06ld\n", "exec_clock",</span>
+<span class='curline'><a href='../S/460.html#L584'>SEQ_printf</a>        584 sched/debug.c  	SEQ_printf(m, "  .%-30s: %Ld.%06ld\n", "MIN_vruntime",</span>
+<span class='curline'><a href='../S/460.html#L586'>SEQ_printf</a>        586 sched/debug.c  	SEQ_printf(m, "  .%-30s: %Ld.%06ld\n", "min_vruntime",</span>
+<span class='curline'><a href='../S/460.html#L588'>SEQ_printf</a>        588 sched/debug.c  	SEQ_printf(m, "  .%-30s: %Ld.%06ld\n", "max_vruntime",</span>
+<span class='curline'><a href='../S/460.html#L591'>SEQ_printf</a>        591 sched/debug.c  	SEQ_printf(m, "  .%-30s: %Ld.%06ld\n", "spread",</span>
+<span class='curline'><a href='../S/460.html#L594'>SEQ_printf</a>        594 sched/debug.c  	SEQ_printf(m, "  .%-30s: %Ld.%06ld\n", "spread0",</span>
+<span class='curline'><a href='../S/460.html#L596'>SEQ_printf</a>        596 sched/debug.c  	SEQ_printf(m, "  .%-30s: %d\n", "nr_spread_over",</span>
+<span class='curline'><a href='../S/460.html#L598'>SEQ_printf</a>        598 sched/debug.c  	SEQ_printf(m, "  .%-30s: %d\n", "nr_running", cfs_rq-&gt;nr_running);</span>
+<span class='curline'><a href='../S/460.html#L599'>SEQ_printf</a>        599 sched/debug.c  	SEQ_printf(m, "  .%-30s: %ld\n", "load", cfs_rq-&gt;load.weight);</span>
+<span class='curline'><a href='../S/460.html#L601'>SEQ_printf</a>        601 sched/debug.c  	SEQ_printf(m, "  .%-30s: %lu\n", "load_avg",</span>
+<span class='curline'><a href='../S/460.html#L603'>SEQ_printf</a>        603 sched/debug.c  	SEQ_printf(m, "  .%-30s: %lu\n", "runnable_avg",</span>
+<span class='curline'><a href='../S/460.html#L605'>SEQ_printf</a>        605 sched/debug.c  	SEQ_printf(m, "  .%-30s: %lu\n", "util_avg",</span>
+<span class='curline'><a href='../S/460.html#L607'>SEQ_printf</a>        607 sched/debug.c  	SEQ_printf(m, "  .%-30s: %u\n", "util_est_enqueued",</span>
+<span class='curline'><a href='../S/460.html#L609'>SEQ_printf</a>        609 sched/debug.c  	SEQ_printf(m, "  .%-30s: %ld\n", "removed.load_avg",</span>
+<span class='curline'><a href='../S/460.html#L611'>SEQ_printf</a>        611 sched/debug.c  	SEQ_printf(m, "  .%-30s: %ld\n", "removed.util_avg",</span>
+<span class='curline'><a href='../S/460.html#L613'>SEQ_printf</a>        613 sched/debug.c  	SEQ_printf(m, "  .%-30s: %ld\n", "removed.runnable_avg",</span>
+<span class='curline'><a href='../S/460.html#L616'>SEQ_printf</a>        616 sched/debug.c  	SEQ_printf(m, "  .%-30s: %lu\n", "tg_load_avg_contrib",</span>
+<span class='curline'><a href='../S/460.html#L618'>SEQ_printf</a>        618 sched/debug.c  	SEQ_printf(m, "  .%-30s: %ld\n", "tg_load_avg",</span>
+<span class='curline'><a href='../S/460.html#L623'>SEQ_printf</a>        623 sched/debug.c  	SEQ_printf(m, "  .%-30s: %d\n", "throttled",</span>
+<span class='curline'><a href='../S/460.html#L625'>SEQ_printf</a>        625 sched/debug.c  	SEQ_printf(m, "  .%-30s: %d\n", "throttle_count",</span>
+<span class='curline'><a href='../S/460.html#L637'>SEQ_printf</a>        637 sched/debug.c  	SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/460.html#L640'>SEQ_printf</a>        640 sched/debug.c  	SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/460.html#L641'>SEQ_printf</a>        641 sched/debug.c  	SEQ_printf(m, "rt_rq[%d]:\n", cpu);</span>
+<span class='curline'><a href='../S/460.html#L645'>SEQ_printf</a>        645 sched/debug.c  	SEQ_printf(m, "  .%-30s: %Ld\n", #x, (long long)(rt_rq-&gt;x))</span>
+<span class='curline'><a href='../S/460.html#L647'>SEQ_printf</a>        647 sched/debug.c  	SEQ_printf(m, "  .%-30s: %lu\n", #x, (unsigned long)(rt_rq-&gt;x))</span>
+<span class='curline'><a href='../S/460.html#L649'>SEQ_printf</a>        649 sched/debug.c  	SEQ_printf(m, "  .%-30s: %Ld.%06ld\n", #x, SPLIT_NS(rt_rq-&gt;x))</span>
+<span class='curline'><a href='../S/460.html#L668'>SEQ_printf</a>        668 sched/debug.c  	SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/460.html#L669'>SEQ_printf</a>        669 sched/debug.c  	SEQ_printf(m, "dl_rq[%d]:\n", cpu);</span>
+<span class='curline'><a href='../S/460.html#L672'>SEQ_printf</a>        672 sched/debug.c  	SEQ_printf(m, "  .%-30s: %lu\n", #x, (unsigned long)(dl_rq-&gt;x))</span>
+<span class='curline'><a href='../S/460.html#L681'>SEQ_printf</a>        681 sched/debug.c  	SEQ_printf(m, "  .%-30s: %lld\n", "dl_bw-&gt;bw", dl_bw-&gt;bw);</span>
+<span class='curline'><a href='../S/460.html#L682'>SEQ_printf</a>        682 sched/debug.c  	SEQ_printf(m, "  .%-30s: %lld\n", "dl_bw-&gt;total_bw", dl_bw-&gt;total_bw);</span>
+<span class='curline'><a href='../S/460.html#L695'>SEQ_printf</a>        695 sched/debug.c  		SEQ_printf(m, "cpu#%d, %u.%03u MHz\n",</span>
+<span class='curline'><a href='../S/460.html#L699'>SEQ_printf</a>        699 sched/debug.c  	SEQ_printf(m, "cpu#%d\n", cpu);</span>
+<span class='curline'><a href='../S/460.html#L705'>SEQ_printf</a>        705 sched/debug.c  		SEQ_printf(m, "  .%-30s: %ld\n", #x, (long)(rq-&gt;x));	\</span>
+<span class='curline'><a href='../S/460.html#L707'>SEQ_printf</a>        707 sched/debug.c  		SEQ_printf(m, "  .%-30s: %Ld\n", #x, (long long)(rq-&gt;x));\</span>
+<span class='curline'><a href='../S/460.html#L711'>SEQ_printf</a>        711 sched/debug.c  	SEQ_printf(m, "  .%-30s: %Ld.%06ld\n", #x, SPLIT_NS(rq-&gt;x))</span>
+<span class='curline'><a href='../S/460.html#L717'>SEQ_printf</a>        717 sched/debug.c  	SEQ_printf(m, "  .%-30s: %ld\n", "curr-&gt;pid", (long)(task_pid_nr(rq-&gt;curr)));</span>
+<span class='curline'><a href='../S/460.html#L724'>SEQ_printf</a>        724 sched/debug.c  #define P64(n) SEQ_printf(m, "  .%-30s: %Ld\n", #n, rq-&gt;n);</span>
+<span class='curline'><a href='../S/460.html#L730'>SEQ_printf</a>        730 sched/debug.c  #define P(n) SEQ_printf(m, "  .%-30s: %d\n", #n, schedstat_val(rq-&gt;n));</span>
+<span class='curline'><a href='../S/460.html#L745'>SEQ_printf</a>        745 sched/debug.c  	SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/460.html#L765'>SEQ_printf</a>        765 sched/debug.c  	SEQ_printf(m, "Sched Debug Version: v0.11, %s %.*s\n",</span>
+<span class='curline'><a href='../S/460.html#L771'>SEQ_printf</a>        771 sched/debug.c  	SEQ_printf(m, "%-40s: %Ld\n", #x, (long long)(x))</span>
+<span class='curline'><a href='../S/460.html#L773'>SEQ_printf</a>        773 sched/debug.c  	SEQ_printf(m, "%-40s: %Ld.%06ld\n", #x, SPLIT_NS(x))</span>
+<span class='curline'><a href='../S/460.html#L784'>SEQ_printf</a>        784 sched/debug.c  	SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/460.html#L785'>SEQ_printf</a>        785 sched/debug.c  	SEQ_printf(m, "sysctl_sched\n");</span>
+<span class='curline'><a href='../S/460.html#L788'>SEQ_printf</a>        788 sched/debug.c  	SEQ_printf(m, "  .%-40s: %Ld\n", #x, (long long)(x))</span>
+<span class='curline'><a href='../S/460.html#L790'>SEQ_printf</a>        790 sched/debug.c  	SEQ_printf(m, "  .%-40s: %Ld.%06ld\n", #x, SPLIT_NS(x))</span>
+<span class='curline'><a href='../S/460.html#L799'>SEQ_printf</a>        799 sched/debug.c  	SEQ_printf(m, "  .%-40s: %d (%s)\n",</span>
+<span class='curline'><a href='../S/460.html#L803'>SEQ_printf</a>        803 sched/debug.c  	SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/460.html#L890'>SEQ_printf</a>        890 sched/debug.c  #define __PS(S, F) SEQ_printf(m, "%-45s:%21Ld\n", S, (long long)(F))</span>
+<span class='curline'><a href='../S/460.html#L893'>SEQ_printf</a>        893 sched/debug.c  #define __PSN(S, F) SEQ_printf(m, "%-45s:%14Ld.%06ld\n", S, SPLIT_NS((long long)(F)))</span>
+<span class='curline'><a href='../S/460.html#L902'>SEQ_printf</a>        902 sched/debug.c  	SEQ_printf(m, "numa_faults node=%d ", node);</span>
+<span class='curline'><a href='../S/460.html#L903'>SEQ_printf</a>        903 sched/debug.c  	SEQ_printf(m, "task_private=%lu task_shared=%lu ", tpf, tsf);</span>
+<span class='curline'><a href='../S/460.html#L904'>SEQ_printf</a>        904 sched/debug.c  	SEQ_printf(m, "group_private=%lu group_shared=%lu\n", gpf, gsf);</span>
+<span class='curline'><a href='../S/460.html#L927'>SEQ_printf</a>        927 sched/debug.c  	SEQ_printf(m, "current_node=%d, numa_group_id=%d\n",</span>
+<span class='curline'><a href='../S/460.html#L939'>SEQ_printf</a>        939 sched/debug.c  	SEQ_printf(m, "%s (%d, #threads: %d)\n", p-&gt;comm, task_pid_nr_ns(p, ns),</span>
+<span class='curline'><a href='../S/460.html#L941'>SEQ_printf</a>        941 sched/debug.c  	SEQ_printf(m,</span>
+<span class='curline'><a href='../S/98.html#L31'>SEQ_printf</a>         31 time/timer_list.c static void SEQ_printf(struct seq_file *m, const char *fmt, ...)</span>
+<span class='curline'><a href='../S/98.html#L50'>SEQ_printf</a>         50 time/timer_list.c 		SEQ_printf(m, "&lt;%pK&gt;", sym);</span>
+<span class='curline'><a href='../S/98.html#L52'>SEQ_printf</a>         52 time/timer_list.c 		SEQ_printf(m, "%s", symname);</span>
+<span class='curline'><a href='../S/98.html#L59'>SEQ_printf</a>         59 time/timer_list.c 	SEQ_printf(m, " #%d: ", idx);</span>
+<span class='curline'><a href='../S/98.html#L61'>SEQ_printf</a>         61 time/timer_list.c 	SEQ_printf(m, ", ");</span>
+<span class='curline'><a href='../S/98.html#L63'>SEQ_printf</a>         63 time/timer_list.c 	SEQ_printf(m, ", S:%02x", timer-&gt;state);</span>
+<span class='curline'><a href='../S/98.html#L64'>SEQ_printf</a>         64 time/timer_list.c 	SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/98.html#L65'>SEQ_printf</a>         65 time/timer_list.c 	SEQ_printf(m, " # expires at %Lu-%Lu nsecs [in %Ld to %Ld nsecs]\n",</span>
+<span class='curline'><a href='../S/98.html#L114'>SEQ_printf</a>        114 time/timer_list.c 	SEQ_printf(m, "  .base:       %pK\n", base);</span>
+<span class='curline'><a href='../S/98.html#L115'>SEQ_printf</a>        115 time/timer_list.c 	SEQ_printf(m, "  .index:      %d\n", base-&gt;index);</span>
+<span class='curline'><a href='../S/98.html#L117'>SEQ_printf</a>        117 time/timer_list.c 	SEQ_printf(m, "  .resolution: %u nsecs\n", hrtimer_resolution);</span>
+<span class='curline'><a href='../S/98.html#L119'>SEQ_printf</a>        119 time/timer_list.c 	SEQ_printf(m,   "  .get_time:   ");</span>
+<span class='curline'><a href='../S/98.html#L121'>SEQ_printf</a>        121 time/timer_list.c 	SEQ_printf(m,   "\n");</span>
+<span class='curline'><a href='../S/98.html#L123'>SEQ_printf</a>        123 time/timer_list.c 	SEQ_printf(m, "  .offset:     %Lu nsecs\n",</span>
+<span class='curline'><a href='../S/98.html#L126'>SEQ_printf</a>        126 time/timer_list.c 	SEQ_printf(m,   "active timers:\n");</span>
+<span class='curline'><a href='../S/98.html#L135'>SEQ_printf</a>        135 time/timer_list.c 	SEQ_printf(m, "cpu: %d\n", cpu);</span>
+<span class='curline'><a href='../S/98.html#L137'>SEQ_printf</a>        137 time/timer_list.c 		SEQ_printf(m, " clock %d:\n", i);</span>
+<span class='curline'><a href='../S/98.html#L141'>SEQ_printf</a>        141 time/timer_list.c 	SEQ_printf(m, "  .%-15s: %Lu\n", #x, \</span>
+<span class='curline'><a href='../S/98.html#L144'>SEQ_printf</a>        144 time/timer_list.c 	SEQ_printf(m, "  .%-15s: %Lu nsecs\n", #x, \</span>
+<span class='curline'><a href='../S/98.html#L160'>SEQ_printf</a>        160 time/timer_list.c 	SEQ_printf(m, "  .%-15s: %Lu\n", #x, \</span>
+<span class='curline'><a href='../S/98.html#L163'>SEQ_printf</a>        163 time/timer_list.c 	SEQ_printf(m, "  .%-15s: %Lu nsecs\n", #x, \</span>
+<span class='curline'><a href='../S/98.html#L181'>SEQ_printf</a>        181 time/timer_list.c 		SEQ_printf(m, "jiffies: %Lu\n",</span>
+<span class='curline'><a href='../S/98.html#L188'>SEQ_printf</a>        188 time/timer_list.c 	SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/98.html#L199'>SEQ_printf</a>        199 time/timer_list.c 	SEQ_printf(m, "Tick Device: mode:     %d\n", td-&gt;mode);</span>
+<span class='curline'><a href='../S/98.html#L201'>SEQ_printf</a>        201 time/timer_list.c 		SEQ_printf(m, "Broadcast device\n");</span>
+<span class='curline'><a href='../S/98.html#L203'>SEQ_printf</a>        203 time/timer_list.c 		SEQ_printf(m, "Per CPU device: %d\n", cpu);</span>
+<span class='curline'><a href='../S/98.html#L205'>SEQ_printf</a>        205 time/timer_list.c 	SEQ_printf(m, "Clock Event Device: ");</span>
+<span class='curline'><a href='../S/98.html#L207'>SEQ_printf</a>        207 time/timer_list.c 		SEQ_printf(m, "&lt;NULL&gt;\n");</span>
+<span class='curline'><a href='../S/98.html#L210'>SEQ_printf</a>        210 time/timer_list.c 	SEQ_printf(m, "%s\n", dev-&gt;name);</span>
+<span class='curline'><a href='../S/98.html#L211'>SEQ_printf</a>        211 time/timer_list.c 	SEQ_printf(m, " max_delta_ns:   %llu\n",</span>
+<span class='curline'><a href='../S/98.html#L213'>SEQ_printf</a>        213 time/timer_list.c 	SEQ_printf(m, " min_delta_ns:   %llu\n",</span>
+<span class='curline'><a href='../S/98.html#L215'>SEQ_printf</a>        215 time/timer_list.c 	SEQ_printf(m, " mult:           %u\n", dev-&gt;mult);</span>
+<span class='curline'><a href='../S/98.html#L216'>SEQ_printf</a>        216 time/timer_list.c 	SEQ_printf(m, " shift:          %u\n", dev-&gt;shift);</span>
+<span class='curline'><a href='../S/98.html#L217'>SEQ_printf</a>        217 time/timer_list.c 	SEQ_printf(m, " mode:           %d\n", clockevent_get_state(dev));</span>
+<span class='curline'><a href='../S/98.html#L218'>SEQ_printf</a>        218 time/timer_list.c 	SEQ_printf(m, " next_event:     %Ld nsecs\n",</span>
+<span class='curline'><a href='../S/98.html#L221'>SEQ_printf</a>        221 time/timer_list.c 	SEQ_printf(m, " set_next_event: ");</span>
+<span class='curline'><a href='../S/98.html#L223'>SEQ_printf</a>        223 time/timer_list.c 	SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/98.html#L226'>SEQ_printf</a>        226 time/timer_list.c 		SEQ_printf(m, " shutdown: ");</span>
+<span class='curline'><a href='../S/98.html#L228'>SEQ_printf</a>        228 time/timer_list.c 		SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/98.html#L232'>SEQ_printf</a>        232 time/timer_list.c 		SEQ_printf(m, " periodic: ");</span>
+<span class='curline'><a href='../S/98.html#L234'>SEQ_printf</a>        234 time/timer_list.c 		SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/98.html#L238'>SEQ_printf</a>        238 time/timer_list.c 		SEQ_printf(m, " oneshot:  ");</span>
+<span class='curline'><a href='../S/98.html#L240'>SEQ_printf</a>        240 time/timer_list.c 		SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/98.html#L244'>SEQ_printf</a>        244 time/timer_list.c 		SEQ_printf(m, " oneshot stopped: ");</span>
+<span class='curline'><a href='../S/98.html#L246'>SEQ_printf</a>        246 time/timer_list.c 		SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/98.html#L250'>SEQ_printf</a>        250 time/timer_list.c 		SEQ_printf(m, " resume:   ");</span>
+<span class='curline'><a href='../S/98.html#L252'>SEQ_printf</a>        252 time/timer_list.c 		SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/98.html#L255'>SEQ_printf</a>        255 time/timer_list.c 	SEQ_printf(m, " event_handler:  ");</span>
+<span class='curline'><a href='../S/98.html#L257'>SEQ_printf</a>        257 time/timer_list.c 	SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/98.html#L258'>SEQ_printf</a>        258 time/timer_list.c 	SEQ_printf(m, " retries:        %lu\n", dev-&gt;retries);</span>
+<span class='curline'><a href='../S/98.html#L264'>SEQ_printf</a>        264 time/timer_list.c 		SEQ_printf(m, "Wakeup Device: %s\n", wd ? wd-&gt;name : "&lt;NULL&gt;");</span>
+<span class='curline'><a href='../S/98.html#L267'>SEQ_printf</a>        267 time/timer_list.c 	SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/98.html#L274'>SEQ_printf</a>        274 time/timer_list.c 	SEQ_printf(m, "tick_broadcast_mask: %*pb\n",</span>
+<span class='curline'><a href='../S/98.html#L277'>SEQ_printf</a>        277 time/timer_list.c 	SEQ_printf(m, "tick_broadcast_oneshot_mask: %*pb\n",</span>
+<span class='curline'><a href='../S/98.html#L280'>SEQ_printf</a>        280 time/timer_list.c 	SEQ_printf(m, "\n");</span>
+<span class='curline'><a href='../S/98.html#L287'>SEQ_printf</a>        287 time/timer_list.c 	SEQ_printf(m, "Timer List Version: v0.9\n");</span>
+<span class='curline'><a href='../S/98.html#L288'>SEQ_printf</a>        288 time/timer_list.c 	SEQ_printf(m, "HRTIMER_MAX_CLOCK_BASES: %d\n", HRTIMER_MAX_CLOCK_BASES);</span>
+<span class='curline'><a href='../S/98.html#L289'>SEQ_printf</a>        289 time/timer_list.c 	SEQ_printf(m, "now at %Ld nsecs\n", (unsigned long long)now);</span>
+<span class='curline'><a href='../S/98.html#L290'>SEQ_printf</a>        290 time/timer_list.c 	SEQ_printf(m, "\n");</span>
+</pre>
+</body>
+</html>

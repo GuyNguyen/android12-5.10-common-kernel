@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>sched_setaffinity</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/225.html#L124'>sched_setaffinity</a>  124 compat.c       COMPAT_SYSCALL_DEFINE3(sched_setaffinity, compat_pid_t, pid,</span>
+<span class='curline'><a href='../S/225.html#L138'>sched_setaffinity</a>  138 compat.c       	retval = sched_setaffinity(pid, new_mask);</span>
+<span class='curline'><a href='../S/126.html#L2385'>sched_setaffinity</a> 2385 rcu/tree_plugin.h 		WARN_ON(sched_setaffinity(current-&gt;pid, rcu_nocb_mask));</span>
+<span class='curline'><a href='../S/140.html#L485'>sched_setaffinity</a>  485 rcu/update.c   	ret = sched_setaffinity(pid, in_mask);</span>
+<span class='curline'><a href='../S/441.html#L6240'>sched_setaffinity</a> 6240 sched/core.c   SYSCALL_DEFINE3(sched_setaffinity, pid_t, pid, unsigned int, len,</span>
+<span class='curline'><a href='../S/441.html#L6251'>sched_setaffinity</a> 6251 sched/core.c   		retval = sched_setaffinity(pid, new_mask);</span>
+<span class='curline'><a href='../S/297.html#L313'>sched_setaffinity</a>  313 trace/trace_hwlat.c 	sched_setaffinity(0, current_mask);</span>
+<span class='curline'><a href='../S/297.html#L388'>sched_setaffinity</a>  388 trace/trace_hwlat.c 	sched_setaffinity(kthread-&gt;pid, current_mask);</span>
+</pre>
+</body>
+</html>

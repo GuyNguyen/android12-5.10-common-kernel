@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>is_atomic</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/482.html#L261'>is_atomic</a>         261 kcsan/core.c   	if (is_atomic(ptr, size, type, ctx))</span>
+<span class='curline'><a href='../S/482.html#L870'>is_atomic</a>         870 kcsan/core.c   		const bool is_atomic = size &lt;= sizeof(long long) &amp;&amp;            \</span>
+<span class='curline'><a href='../S/482.html#L872'>is_atomic</a>         872 kcsan/core.c   		if (IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS) &amp;&amp; is_atomic)      \</span>
+<span class='curline'><a href='../S/482.html#L874'>is_atomic</a>         874 kcsan/core.c   		check_access(ptr, size, is_atomic ? KCSAN_ACCESS_ATOMIC : 0);  \</span>
+<span class='curline'><a href='../S/482.html#L883'>is_atomic</a>         883 kcsan/core.c   		const bool is_atomic = size &lt;= sizeof(long long) &amp;&amp;            \</span>
+<span class='curline'><a href='../S/482.html#L885'>is_atomic</a>         885 kcsan/core.c   		if (IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS) &amp;&amp; is_atomic)      \</span>
+<span class='curline'><a href='../S/482.html#L889'>is_atomic</a>         889 kcsan/core.c   				     (is_atomic ? KCSAN_ACCESS_ATOMIC : 0));   \</span>
+</pre>
+</body>
+</html>

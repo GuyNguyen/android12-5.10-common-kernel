@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>to_ratio</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/441.html#L8468'>to_ratio</a>         8468 sched/core.c   	return to_ratio(period, quota);</span>
+<span class='curline'><a href='../S/451.html#L414'>to_ratio</a>          414 sched/deadline.c 		dl_b-&gt;bw = to_ratio(global_rt_period(), global_rt_runtime());</span>
+<span class='curline'><a href='../S/451.html#L2551'>to_ratio</a>         2551 sched/deadline.c 	u64 new_bw = to_ratio(period, runtime);</span>
+<span class='curline'><a href='../S/451.html#L2590'>to_ratio</a>         2590 sched/deadline.c 		dl_rq-&gt;bw_ratio = to_ratio(global_rt_runtime(),</span>
+<span class='curline'><a href='../S/451.html#L2592'>to_ratio</a>         2592 sched/deadline.c 		dl_rq-&gt;extra_bw = to_ratio(global_rt_period(),</span>
+<span class='curline'><a href='../S/451.html#L2608'>to_ratio</a>         2608 sched/deadline.c 		new_bw = to_ratio(global_rt_period(), global_rt_runtime());</span>
+<span class='curline'><a href='../S/451.html#L2639'>to_ratio</a>         2639 sched/deadline.c 	u64 new_bw = dl_policy(policy) ? to_ratio(period, runtime) : 0;</span>
+<span class='curline'><a href='../S/451.html#L2708'>to_ratio</a>         2708 sched/deadline.c 	dl_se-&gt;dl_bw = to_ratio(dl_se-&gt;dl_period, dl_se-&gt;dl_runtime);</span>
+<span class='curline'><a href='../S/451.html#L2709'>to_ratio</a>         2709 sched/deadline.c 	dl_se-&gt;dl_density = to_ratio(dl_se-&gt;dl_deadline, dl_se-&gt;dl_runtime);</span>
+<span class='curline'><a href='../S/450.html#L2622'>to_ratio</a>         2622 sched/rt.c     	total = to_ratio(period, runtime);</span>
+<span class='curline'><a href='../S/450.html#L2627'>to_ratio</a>         2627 sched/rt.c     	if (total &gt; to_ratio(global_rt_period(), global_rt_runtime()))</span>
+<span class='curline'><a href='../S/450.html#L2642'>to_ratio</a>         2642 sched/rt.c     		sum += to_ratio(period, runtime);</span>
+<span class='curline'><a href='../S/447.html#L1994'>to_ratio</a>         1994 sched/sched.h  unsigned long to_ratio(u64 period, u64 runtime);</span>
+</pre>
+</body>
+</html>

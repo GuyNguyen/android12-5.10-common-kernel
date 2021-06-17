@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>hist_field</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/291.html#L80'>hist_field</a>         80 trace/trace_events_hist.c struct hist_field;</span>
+<span class='curline'><a href='../S/291.html#L82'>hist_field</a>         82 trace/trace_events_hist.c typedef u64 (*hist_field_fn_t) (struct hist_field *field,</span>
+<span class='curline'><a href='../S/291.html#L123'>hist_field</a>        123 trace/trace_events_hist.c 	struct hist_field		*operands[HIST_FIELD_OPERANDS_MAX];</span>
+<span class='curline'><a href='../S/291.html#L154'>hist_field</a>        154 trace/trace_events_hist.c static u64 hist_field_none(struct hist_field *field,</span>
+<span class='curline'><a href='../S/291.html#L162'>hist_field</a>        162 trace/trace_events_hist.c static u64 hist_field_counter(struct hist_field *field,</span>
+<span class='curline'><a href='../S/291.html#L170'>hist_field</a>        170 trace/trace_events_hist.c static u64 hist_field_string(struct hist_field *hist_field,</span>
+<span class='curline'><a href='../S/291.html#L175'>hist_field</a>        175 trace/trace_events_hist.c 	char *addr = (char *)(event + hist_field-&gt;field-&gt;offset);</span>
+<span class='curline'><a href='../S/291.html#L180'>hist_field</a>        180 trace/trace_events_hist.c static u64 hist_field_dynstring(struct hist_field *hist_field,</span>
+<span class='curline'><a href='../S/291.html#L185'>hist_field</a>        185 trace/trace_events_hist.c 	u32 str_item = *(u32 *)(event + hist_field-&gt;field-&gt;offset);</span>
+<span class='curline'><a href='../S/291.html#L192'>hist_field</a>        192 trace/trace_events_hist.c static u64 hist_field_pstring(struct hist_field *hist_field,</span>
+<span class='curline'><a href='../S/291.html#L197'>hist_field</a>        197 trace/trace_events_hist.c 	char **addr = (char **)(event + hist_field-&gt;field-&gt;offset);</span>
+<span class='curline'><a href='../S/291.html#L202'>hist_field</a>        202 trace/trace_events_hist.c static u64 hist_field_log2(struct hist_field *hist_field,</span>
+<span class='curline'><a href='../S/291.html#L207'>hist_field</a>        207 trace/trace_events_hist.c 	struct hist_field *operand = hist_field-&gt;operands[0];</span>
+<span class='curline'><a href='../S/291.html#L214'>hist_field</a>        214 trace/trace_events_hist.c static u64 hist_field_plus(struct hist_field *hist_field,</span>
+<span class='curline'><a href='../S/291.html#L219'>hist_field</a>        219 trace/trace_events_hist.c 	struct hist_field *operand1 = hist_field-&gt;operands[0];</span>
+<span class='curline'><a href='../S/291.html#L220'>hist_field</a>        220 trace/trace_events_hist.c 	struct hist_field *operand2 = hist_field-&gt;operands[1];</span>
+<span class='curline'><a href='../S/291.html#L228'>hist_field</a>        228 trace/trace_events_hist.c static u64 hist_field_minus(struct hist_field *hist_field,</span>
+<span class='curline'><a href='../S/291.html#L233'>hist_field</a>        233 trace/trace_events_hist.c 	struct hist_field *operand1 = hist_field-&gt;operands[0];</span>
+<span class='curline'><a href='../S/291.html#L234'>hist_field</a>        234 trace/trace_events_hist.c 	struct hist_field *operand2 = hist_field-&gt;operands[1];</span>
+<span class='curline'><a href='../S/291.html#L242'>hist_field</a>        242 trace/trace_events_hist.c static u64 hist_field_unary_minus(struct hist_field *hist_field,</span>
+<span class='curline'><a href='../S/291.html#L247'>hist_field</a>        247 trace/trace_events_hist.c 	struct hist_field *operand = hist_field-&gt;operands[0];</span>
+<span class='curline'><a href='../S/291.html#L256'>hist_field</a>        256 trace/trace_events_hist.c 	static u64 hist_field_##type(struct hist_field *hist_field,	\</span>
+<span class='curline'><a href='../S/291.html#L261'>hist_field</a>        261 trace/trace_events_hist.c 	type *addr = (type *)(event + hist_field-&gt;field-&gt;offset);	\</span>
+<span class='curline'><a href='../S/291.html#L339'>hist_field</a>        339 trace/trace_events_hist.c 	struct hist_field	*var;</span>
+<span class='curline'><a href='../S/291.html#L340'>hist_field</a>        340 trace/trace_events_hist.c 	struct hist_field	*val;</span>
+<span class='curline'><a href='../S/291.html#L349'>hist_field</a>        349 trace/trace_events_hist.c 	struct hist_field               *fields[HIST_FIELDS_MAX];</span>
+<span class='curline'><a href='../S/291.html#L363'>hist_field</a>        363 trace/trace_events_hist.c 	struct hist_field               *var_refs[TRACING_MAP_VARS_MAX];</span>
+<span class='curline'><a href='../S/291.html#L445'>hist_field</a>        445 trace/trace_events_hist.c 			struct hist_field	*var_ref;</span>
+<span class='curline'><a href='../S/291.html#L452'>hist_field</a>        452 trace/trace_events_hist.c 			struct hist_field	*track_var;</span>
+<span class='curline'><a href='../S/291.html#L625'>hist_field</a>        625 trace/trace_events_hist.c static u64 hist_field_timestamp(struct hist_field *hist_field,</span>
+<span class='curline'><a href='../S/291.html#L630'>hist_field</a>        630 trace/trace_events_hist.c 	struct hist_trigger_data *hist_data = hist_field-&gt;hist_data;</span>
+<span class='curline'><a href='../S/291.html#L641'>hist_field</a>        641 trace/trace_events_hist.c static u64 hist_field_cpu(struct hist_field *hist_field,</span>
+<span class='curline'><a href='../S/291.html#L662'>hist_field</a>        662 trace/trace_events_hist.c static struct hist_field *</span>
+<span class='curline'><a href='../S/291.html#L663'>hist_field</a>        663 trace/trace_events_hist.c check_field_for_var_ref(struct hist_field *hist_field,</span>
+<span class='curline'><a href='../S/291.html#L667'>hist_field</a>        667 trace/trace_events_hist.c 	WARN_ON(!(hist_field &amp;&amp; hist_field-&gt;flags &amp; HIST_FIELD_FL_VAR_REF));</span>
+<span class='curline'><a href='../S/291.html#L669'>hist_field</a>        669 trace/trace_events_hist.c 	if (hist_field &amp;&amp; hist_field-&gt;var.idx == var_idx &amp;&amp;</span>
+<span class='curline'><a href='../S/291.html#L670'>hist_field</a>        670 trace/trace_events_hist.c 	    hist_field-&gt;var.hist_data == var_data)</span>
+<span class='curline'><a href='../S/291.html#L671'>hist_field</a>        671 trace/trace_events_hist.c 		return hist_field;</span>
+<span class='curline'><a href='../S/291.html#L688'>hist_field</a>        688 trace/trace_events_hist.c static struct hist_field *find_var_ref(struct hist_trigger_data *hist_data,</span>
+<span class='curline'><a href='../S/291.html#L692'>hist_field</a>        692 trace/trace_events_hist.c 	struct hist_field *hist_field;</span>
+<span class='curline'><a href='../S/291.html#L696'>hist_field</a>        696 trace/trace_events_hist.c 		hist_field = hist_data-&gt;var_refs[i];</span>
+<span class='curline'><a href='../S/291.html#L697'>hist_field</a>        697 trace/trace_events_hist.c 		if (check_field_for_var_ref(hist_field, var_data, var_idx))</span>
+<span class='curline'><a href='../S/291.html#L698'>hist_field</a>        698 trace/trace_events_hist.c 			return hist_field;</span>
+<span class='curline'><a href='../S/291.html#L718'>hist_field</a>        718 trace/trace_events_hist.c static struct hist_field *find_any_var_ref(struct hist_trigger_data *hist_data,</span>
+<span class='curline'><a href='../S/291.html#L722'>hist_field</a>        722 trace/trace_events_hist.c 	struct hist_field *found = NULL;</span>
+<span class='curline'><a href='../S/291.html#L751'>hist_field</a>        751 trace/trace_events_hist.c 	struct hist_field *field;</span>
+<span class='curline'><a href='../S/291.html#L783'>hist_field</a>        783 trace/trace_events_hist.c static bool field_has_hist_vars(struct hist_field *hist_field,</span>
+<span class='curline'><a href='../S/291.html#L791'>hist_field</a>        791 trace/trace_events_hist.c 	if (!hist_field)</span>
+<span class='curline'><a href='../S/291.html#L794'>hist_field</a>        794 trace/trace_events_hist.c 	if (hist_field-&gt;flags &amp; HIST_FIELD_FL_VAR ||</span>
+<span class='curline'><a href='../S/291.html#L795'>hist_field</a>        795 trace/trace_events_hist.c 	    hist_field-&gt;flags &amp; HIST_FIELD_FL_VAR_REF)</span>
+<span class='curline'><a href='../S/291.html#L799'>hist_field</a>        799 trace/trace_events_hist.c 		struct hist_field *operand;</span>
+<span class='curline'><a href='../S/291.html#L801'>hist_field</a>        801 trace/trace_events_hist.c 		operand = hist_field-&gt;operands[i];</span>
+<span class='curline'><a href='../S/291.html#L811'>hist_field</a>        811 trace/trace_events_hist.c 	struct hist_field *hist_field;</span>
+<span class='curline'><a href='../S/291.html#L815'>hist_field</a>        815 trace/trace_events_hist.c 		hist_field = hist_data-&gt;fields[i];</span>
+<span class='curline'><a href='../S/291.html#L816'>hist_field</a>        816 trace/trace_events_hist.c 		if (field_has_hist_vars(hist_field, 0))</span>
+<span class='curline'><a href='../S/291.html#L866'>hist_field</a>        866 trace/trace_events_hist.c static struct hist_field *find_var_field(struct hist_trigger_data *hist_data,</span>
+<span class='curline'><a href='../S/291.html#L869'>hist_field</a>        869 trace/trace_events_hist.c 	struct hist_field *hist_field, *found = NULL;</span>
+<span class='curline'><a href='../S/291.html#L873'>hist_field</a>        873 trace/trace_events_hist.c 		hist_field = hist_data-&gt;fields[i];</span>
+<span class='curline'><a href='../S/291.html#L874'>hist_field</a>        874 trace/trace_events_hist.c 		if (hist_field &amp;&amp; hist_field-&gt;flags &amp; HIST_FIELD_FL_VAR &amp;&amp;</span>
+<span class='curline'><a href='../S/291.html#L875'>hist_field</a>        875 trace/trace_events_hist.c 		    strcmp(hist_field-&gt;var.name, var_name) == 0) {</span>
+<span class='curline'><a href='../S/291.html#L876'>hist_field</a>        876 trace/trace_events_hist.c 			found = hist_field;</span>
+<span class='curline'><a href='../S/291.html#L884'>hist_field</a>        884 trace/trace_events_hist.c static struct hist_field *find_var(struct hist_trigger_data *hist_data,</span>
+<span class='curline'><a href='../S/291.html#L890'>hist_field</a>        890 trace/trace_events_hist.c 	struct hist_field *hist_field;</span>
+<span class='curline'><a href='../S/291.html#L894'>hist_field</a>        894 trace/trace_events_hist.c 	hist_field = find_var_field(hist_data, var_name);</span>
+<span class='curline'><a href='../S/291.html#L895'>hist_field</a>        895 trace/trace_events_hist.c 	if (hist_field)</span>
+<span class='curline'><a href='../S/291.html#L896'>hist_field</a>        896 trace/trace_events_hist.c 		return hist_field;</span>
+<span class='curline'><a href='../S/291.html#L901'>hist_field</a>        901 trace/trace_events_hist.c 			hist_field = find_var_field(test_data, var_name);</span>
+<span class='curline'><a href='../S/291.html#L902'>hist_field</a>        902 trace/trace_events_hist.c 			if (hist_field)</span>
+<span class='curline'><a href='../S/291.html#L903'>hist_field</a>        903 trace/trace_events_hist.c 				return hist_field;</span>
+<span class='curline'><a href='../S/291.html#L941'>hist_field</a>        941 trace/trace_events_hist.c static struct hist_field *find_file_var(struct trace_event_file *file,</span>
+<span class='curline'><a href='../S/291.html#L946'>hist_field</a>        946 trace/trace_events_hist.c 	struct hist_field *hist_field;</span>
+<span class='curline'><a href='../S/291.html#L953'>hist_field</a>        953 trace/trace_events_hist.c 			hist_field = find_var_field(test_data, var_name);</span>
+<span class='curline'><a href='../S/291.html#L954'>hist_field</a>        954 trace/trace_events_hist.c 			if (hist_field)</span>
+<span class='curline'><a href='../S/291.html#L955'>hist_field</a>        955 trace/trace_events_hist.c 				return hist_field;</span>
+<span class='curline'><a href='../S/291.html#L962'>hist_field</a>        962 trace/trace_events_hist.c static struct hist_field *</span>
+<span class='curline'><a href='../S/291.html#L966'>hist_field</a>        966 trace/trace_events_hist.c 	struct hist_field *hist_field, *found = NULL;</span>
+<span class='curline'><a href='../S/291.html#L980'>hist_field</a>        980 trace/trace_events_hist.c 			hist_field = find_file_var(file, var_name);</span>
+<span class='curline'><a href='../S/291.html#L981'>hist_field</a>        981 trace/trace_events_hist.c 			if (hist_field) {</span>
+<span class='curline'><a href='../S/291.html#L988'>hist_field</a>        988 trace/trace_events_hist.c 				found = hist_field;</span>
+<span class='curline'><a href='../S/291.html#L995'>hist_field</a>        995 trace/trace_events_hist.c static struct hist_field *find_event_var(struct hist_trigger_data *hist_data,</span>
+<span class='curline'><a href='../S/291.html#L1001'>hist_field</a>       1001 trace/trace_events_hist.c 	struct hist_field *hist_field = NULL;</span>
+<span class='curline'><a href='../S/291.html#L1005'>hist_field</a>       1005 trace/trace_events_hist.c 		hist_field = find_match_var(hist_data, var_name);</span>
+<span class='curline'><a href='../S/291.html#L1006'>hist_field</a>       1006 trace/trace_events_hist.c 		if (IS_ERR(hist_field))</span>
+<span class='curline'><a href='../S/291.html#L1008'>hist_field</a>       1008 trace/trace_events_hist.c 		if (hist_field)</span>
+<span class='curline'><a href='../S/291.html#L1009'>hist_field</a>       1009 trace/trace_events_hist.c 			return hist_field;</span>
+<span class='curline'><a href='../S/291.html#L1016'>hist_field</a>       1016 trace/trace_events_hist.c 	hist_field = find_file_var(file, var_name);</span>
+<span class='curline'><a href='../S/291.html#L1018'>hist_field</a>       1018 trace/trace_events_hist.c 	return hist_field;</span>
+<span class='curline'><a href='../S/291.html#L1021'>hist_field</a>       1021 trace/trace_events_hist.c static u64 hist_field_var_ref(struct hist_field *hist_field,</span>
+<span class='curline'><a href='../S/291.html#L1033'>hist_field</a>       1033 trace/trace_events_hist.c 	var_val = elt_data-&gt;var_ref_vals[hist_field-&gt;var_ref_idx];</span>
+<span class='curline'><a href='../S/291.html#L1043'>hist_field</a>       1043 trace/trace_events_hist.c 	struct hist_field *hist_field;</span>
+<span class='curline'><a href='../S/291.html#L1049'>hist_field</a>       1049 trace/trace_events_hist.c 		hist_field = hist_data-&gt;var_refs[i];</span>
+<span class='curline'><a href='../S/291.html#L1050'>hist_field</a>       1050 trace/trace_events_hist.c 		var_idx = hist_field-&gt;var.idx;</span>
+<span class='curline'><a href='../S/291.html#L1051'>hist_field</a>       1051 trace/trace_events_hist.c 		var_data = hist_field-&gt;var.hist_data;</span>
+<span class='curline'><a href='../S/291.html#L1073'>hist_field</a>       1073 trace/trace_events_hist.c 		if (self || !hist_field-&gt;read_once)</span>
+<span class='curline'><a href='../S/291.html#L1084'>hist_field</a>       1084 trace/trace_events_hist.c static const char *hist_field_name(struct hist_field *field,</span>
+<span class='curline'><a href='../S/291.html#L1382'>hist_field</a>       1382 trace/trace_events_hist.c 	struct hist_field *key_field;</span>
+<span class='curline'><a href='../S/291.html#L1440'>hist_field</a>       1440 trace/trace_events_hist.c static const char *get_hist_field_flags(struct hist_field *hist_field)</span>
+<span class='curline'><a href='../S/291.html#L1444'>hist_field</a>       1444 trace/trace_events_hist.c 	if (hist_field-&gt;flags &amp; HIST_FIELD_FL_HEX)</span>
+<span class='curline'><a href='../S/291.html#L1446'>hist_field</a>       1446 trace/trace_events_hist.c 	else if (hist_field-&gt;flags &amp; HIST_FIELD_FL_SYM)</span>
+<span class='curline'><a href='../S/291.html#L1448'>hist_field</a>       1448 trace/trace_events_hist.c 	else if (hist_field-&gt;flags &amp; HIST_FIELD_FL_SYM_OFFSET)</span>
+<span class='curline'><a href='../S/291.html#L1450'>hist_field</a>       1450 trace/trace_events_hist.c 	else if (hist_field-&gt;flags &amp; HIST_FIELD_FL_EXECNAME)</span>
+<span class='curline'><a href='../S/291.html#L1452'>hist_field</a>       1452 trace/trace_events_hist.c 	else if (hist_field-&gt;flags &amp; HIST_FIELD_FL_SYSCALL)</span>
+<span class='curline'><a href='../S/291.html#L1454'>hist_field</a>       1454 trace/trace_events_hist.c 	else if (hist_field-&gt;flags &amp; HIST_FIELD_FL_LOG2)</span>
+<span class='curline'><a href='../S/291.html#L1456'>hist_field</a>       1456 trace/trace_events_hist.c 	else if (hist_field-&gt;flags &amp; HIST_FIELD_FL_TIMESTAMP_USECS)</span>
+<span class='curline'><a href='../S/291.html#L1462'>hist_field</a>       1462 trace/trace_events_hist.c static void expr_field_str(struct hist_field *field, char *expr)</span>
+<span class='curline'><a href='../S/291.html#L1479'>hist_field</a>       1479 trace/trace_events_hist.c static char *expr_str(struct hist_field *field, unsigned int level)</span>
+<span class='curline'><a href='../S/291.html#L1557'>hist_field</a>       1557 trace/trace_events_hist.c static void get_hist_field(struct hist_field *hist_field)</span>
+<span class='curline'><a href='../S/291.html#L1559'>hist_field</a>       1559 trace/trace_events_hist.c 	hist_field-&gt;ref++;</span>
+<span class='curline'><a href='../S/291.html#L1562'>hist_field</a>       1562 trace/trace_events_hist.c static void __destroy_hist_field(struct hist_field *hist_field)</span>
+<span class='curline'><a href='../S/291.html#L1564'>hist_field</a>       1564 trace/trace_events_hist.c 	if (--hist_field-&gt;ref &gt; 1)</span>
+<span class='curline'><a href='../S/291.html#L1567'>hist_field</a>       1567 trace/trace_events_hist.c 	kfree(hist_field-&gt;var.name);</span>
+<span class='curline'><a href='../S/291.html#L1568'>hist_field</a>       1568 trace/trace_events_hist.c 	kfree(hist_field-&gt;name);</span>
+<span class='curline'><a href='../S/291.html#L1569'>hist_field</a>       1569 trace/trace_events_hist.c 	kfree(hist_field-&gt;type);</span>
+<span class='curline'><a href='../S/291.html#L1571'>hist_field</a>       1571 trace/trace_events_hist.c 	kfree(hist_field-&gt;system);</span>
+<span class='curline'><a href='../S/291.html#L1572'>hist_field</a>       1572 trace/trace_events_hist.c 	kfree(hist_field-&gt;event_name);</span>
+<span class='curline'><a href='../S/291.html#L1574'>hist_field</a>       1574 trace/trace_events_hist.c 	kfree(hist_field);</span>
+<span class='curline'><a href='../S/291.html#L1577'>hist_field</a>       1577 trace/trace_events_hist.c static void destroy_hist_field(struct hist_field *hist_field,</span>
+<span class='curline'><a href='../S/291.html#L1585'>hist_field</a>       1585 trace/trace_events_hist.c 	if (!hist_field)</span>
+<span class='curline'><a href='../S/291.html#L1588'>hist_field</a>       1588 trace/trace_events_hist.c 	if (hist_field-&gt;flags &amp; HIST_FIELD_FL_VAR_REF)</span>
+<span class='curline'><a href='../S/291.html#L1592'>hist_field</a>       1592 trace/trace_events_hist.c 		destroy_hist_field(hist_field-&gt;operands[i], level + 1);</span>
+<span class='curline'><a href='../S/291.html#L1594'>hist_field</a>       1594 trace/trace_events_hist.c 	__destroy_hist_field(hist_field);</span>
+<span class='curline'><a href='../S/291.html#L1597'>hist_field</a>       1597 trace/trace_events_hist.c static struct hist_field *create_hist_field(struct hist_trigger_data *hist_data,</span>
+<span class='curline'><a href='../S/291.html#L1602'>hist_field</a>       1602 trace/trace_events_hist.c 	struct hist_field *hist_field;</span>
+<span class='curline'><a href='../S/291.html#L1607'>hist_field</a>       1607 trace/trace_events_hist.c 	hist_field = kzalloc(sizeof(struct hist_field), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/291.html#L1608'>hist_field</a>       1608 trace/trace_events_hist.c 	if (!hist_field)</span>
+<span class='curline'><a href='../S/291.html#L1611'>hist_field</a>       1611 trace/trace_events_hist.c 	hist_field-&gt;ref = 1;</span>
+<span class='curline'><a href='../S/291.html#L1613'>hist_field</a>       1613 trace/trace_events_hist.c 	hist_field-&gt;hist_data = hist_data;</span>
+<span class='curline'><a href='../S/291.html#L1619'>hist_field</a>       1619 trace/trace_events_hist.c 		hist_field-&gt;fn = hist_field_var_ref;</span>
+<span class='curline'><a href='../S/291.html#L1624'>hist_field</a>       1624 trace/trace_events_hist.c 		hist_field-&gt;fn = hist_field_counter;</span>
+<span class='curline'><a href='../S/291.html#L1625'>hist_field</a>       1625 trace/trace_events_hist.c 		hist_field-&gt;size = sizeof(u64);</span>
+<span class='curline'><a href='../S/291.html#L1626'>hist_field</a>       1626 trace/trace_events_hist.c 		hist_field-&gt;type = kstrdup("u64", GFP_KERNEL);</span>
+<span class='curline'><a href='../S/291.html#L1627'>hist_field</a>       1627 trace/trace_events_hist.c 		if (!hist_field-&gt;type)</span>
+<span class='curline'><a href='../S/291.html#L1633'>hist_field</a>       1633 trace/trace_events_hist.c 		hist_field-&gt;fn = hist_field_none;</span>
+<span class='curline'><a href='../S/291.html#L1639'>hist_field</a>       1639 trace/trace_events_hist.c 		hist_field-&gt;fn = hist_field_log2;</span>
+<span class='curline'><a href='../S/291.html#L1640'>hist_field</a>       1640 trace/trace_events_hist.c 		hist_field-&gt;operands[0] = create_hist_field(hist_data, field, fl, NULL);</span>
+<span class='curline'><a href='../S/291.html#L1641'>hist_field</a>       1641 trace/trace_events_hist.c 		hist_field-&gt;size = hist_field-&gt;operands[0]-&gt;size;</span>
+<span class='curline'><a href='../S/291.html#L1642'>hist_field</a>       1642 trace/trace_events_hist.c 		hist_field-&gt;type = kstrdup(hist_field-&gt;operands[0]-&gt;type, GFP_KERNEL);</span>
+<span class='curline'><a href='../S/291.html#L1643'>hist_field</a>       1643 trace/trace_events_hist.c 		if (!hist_field-&gt;type)</span>
+<span class='curline'><a href='../S/291.html#L1649'>hist_field</a>       1649 trace/trace_events_hist.c 		hist_field-&gt;fn = hist_field_timestamp;</span>
+<span class='curline'><a href='../S/291.html#L1650'>hist_field</a>       1650 trace/trace_events_hist.c 		hist_field-&gt;size = sizeof(u64);</span>
+<span class='curline'><a href='../S/291.html#L1651'>hist_field</a>       1651 trace/trace_events_hist.c 		hist_field-&gt;type = kstrdup("u64", GFP_KERNEL);</span>
+<span class='curline'><a href='../S/291.html#L1652'>hist_field</a>       1652 trace/trace_events_hist.c 		if (!hist_field-&gt;type)</span>
+<span class='curline'><a href='../S/291.html#L1658'>hist_field</a>       1658 trace/trace_events_hist.c 		hist_field-&gt;fn = hist_field_cpu;</span>
+<span class='curline'><a href='../S/291.html#L1659'>hist_field</a>       1659 trace/trace_events_hist.c 		hist_field-&gt;size = sizeof(int);</span>
+<span class='curline'><a href='../S/291.html#L1660'>hist_field</a>       1660 trace/trace_events_hist.c 		hist_field-&gt;type = kstrdup("unsigned int", GFP_KERNEL);</span>
+<span class='curline'><a href='../S/291.html#L1661'>hist_field</a>       1661 trace/trace_events_hist.c 		if (!hist_field-&gt;type)</span>
+<span class='curline'><a href='../S/291.html#L1672'>hist_field</a>       1672 trace/trace_events_hist.c 		hist_field-&gt;size = MAX_FILTER_STR_VAL;</span>
+<span class='curline'><a href='../S/291.html#L1673'>hist_field</a>       1673 trace/trace_events_hist.c 		hist_field-&gt;type = kstrdup(field-&gt;type, GFP_KERNEL);</span>
+<span class='curline'><a href='../S/291.html#L1674'>hist_field</a>       1674 trace/trace_events_hist.c 		if (!hist_field-&gt;type)</span>
+<span class='curline'><a href='../S/291.html#L1678'>hist_field</a>       1678 trace/trace_events_hist.c 			hist_field-&gt;fn = hist_field_string;</span>
+<span class='curline'><a href='../S/291.html#L1680'>hist_field</a>       1680 trace/trace_events_hist.c 			hist_field-&gt;fn = hist_field_dynstring;</span>
+<span class='curline'><a href='../S/291.html#L1682'>hist_field</a>       1682 trace/trace_events_hist.c 			hist_field-&gt;fn = hist_field_pstring;</span>
+<span class='curline'><a href='../S/291.html#L1684'>hist_field</a>       1684 trace/trace_events_hist.c 		hist_field-&gt;size = field-&gt;size;</span>
+<span class='curline'><a href='../S/291.html#L1685'>hist_field</a>       1685 trace/trace_events_hist.c 		hist_field-&gt;is_signed = field-&gt;is_signed;</span>
+<span class='curline'><a href='../S/291.html#L1686'>hist_field</a>       1686 trace/trace_events_hist.c 		hist_field-&gt;type = kstrdup(field-&gt;type, GFP_KERNEL);</span>
+<span class='curline'><a href='../S/291.html#L1687'>hist_field</a>       1687 trace/trace_events_hist.c 		if (!hist_field-&gt;type)</span>
+<span class='curline'><a href='../S/291.html#L1690'>hist_field</a>       1690 trace/trace_events_hist.c 		hist_field-&gt;fn = select_value_fn(field-&gt;size,</span>
+<span class='curline'><a href='../S/291.html#L1692'>hist_field</a>       1692 trace/trace_events_hist.c 		if (!hist_field-&gt;fn) {</span>
+<span class='curline'><a href='../S/291.html#L1693'>hist_field</a>       1693 trace/trace_events_hist.c 			destroy_hist_field(hist_field, 0);</span>
+<span class='curline'><a href='../S/291.html#L1698'>hist_field</a>       1698 trace/trace_events_hist.c 	hist_field-&gt;field = field;</span>
+<span class='curline'><a href='../S/291.html#L1699'>hist_field</a>       1699 trace/trace_events_hist.c 	hist_field-&gt;flags = flags;</span>
+<span class='curline'><a href='../S/291.html#L1702'>hist_field</a>       1702 trace/trace_events_hist.c 		hist_field-&gt;var.name = kstrdup(var_name, GFP_KERNEL);</span>
+<span class='curline'><a href='../S/291.html#L1703'>hist_field</a>       1703 trace/trace_events_hist.c 		if (!hist_field-&gt;var.name)</span>
+<span class='curline'><a href='../S/291.html#L1707'>hist_field</a>       1707 trace/trace_events_hist.c 	return hist_field;</span>
+<span class='curline'><a href='../S/291.html#L1709'>hist_field</a>       1709 trace/trace_events_hist.c 	destroy_hist_field(hist_field, 0);</span>
+<span class='curline'><a href='../S/291.html#L1731'>hist_field</a>       1731 trace/trace_events_hist.c static int init_var_ref(struct hist_field *ref_field,</span>
+<span class='curline'><a href='../S/291.html#L1732'>hist_field</a>       1732 trace/trace_events_hist.c 			struct hist_field *var_field,</span>
+<span class='curline'><a href='../S/291.html#L1788'>hist_field</a>       1788 trace/trace_events_hist.c 			    struct hist_field *var_field)</span>
+<span class='curline'><a href='../S/291.html#L1790'>hist_field</a>       1790 trace/trace_events_hist.c 	struct hist_field *ref_field;</span>
+<span class='curline'><a href='../S/291.html#L1818'>hist_field</a>       1818 trace/trace_events_hist.c static struct hist_field *create_var_ref(struct hist_trigger_data *hist_data,</span>
+<span class='curline'><a href='../S/291.html#L1819'>hist_field</a>       1819 trace/trace_events_hist.c 					 struct hist_field *var_field,</span>
+<span class='curline'><a href='../S/291.html#L1823'>hist_field</a>       1823 trace/trace_events_hist.c 	struct hist_field *ref_field;</span>
+<span class='curline'><a href='../S/291.html#L1905'>hist_field</a>       1905 trace/trace_events_hist.c static struct hist_field *parse_var_ref(struct hist_trigger_data *hist_data,</span>
+<span class='curline'><a href='../S/291.html#L1909'>hist_field</a>       1909 trace/trace_events_hist.c 	struct hist_field *var_field = NULL, *ref_field = NULL;</span>
+<span class='curline'><a href='../S/291.html#L1985'>hist_field</a>       1985 trace/trace_events_hist.c static struct hist_field *create_alias(struct hist_trigger_data *hist_data,</span>
+<span class='curline'><a href='../S/291.html#L1986'>hist_field</a>       1986 trace/trace_events_hist.c 				       struct hist_field *var_ref,</span>
+<span class='curline'><a href='../S/291.html#L1989'>hist_field</a>       1989 trace/trace_events_hist.c 	struct hist_field *alias = NULL;</span>
+<span class='curline'><a href='../S/291.html#L2009'>hist_field</a>       2009 trace/trace_events_hist.c static struct hist_field *parse_atom(struct hist_trigger_data *hist_data,</span>
+<span class='curline'><a href='../S/291.html#L2015'>hist_field</a>       2015 trace/trace_events_hist.c 	struct hist_field *hist_field = NULL;</span>
+<span class='curline'><a href='../S/291.html#L2038'>hist_field</a>       2038 trace/trace_events_hist.c 		hist_field = parse_var_ref(hist_data, ref_system,</span>
+<span class='curline'><a href='../S/291.html#L2040'>hist_field</a>       2040 trace/trace_events_hist.c 		if (hist_field) {</span>
+<span class='curline'><a href='../S/291.html#L2042'>hist_field</a>       2042 trace/trace_events_hist.c 				hist_field = create_alias(hist_data, hist_field, var_name);</span>
+<span class='curline'><a href='../S/291.html#L2043'>hist_field</a>       2043 trace/trace_events_hist.c 				if (!hist_field) {</span>
+<span class='curline'><a href='../S/291.html#L2048'>hist_field</a>       2048 trace/trace_events_hist.c 			return hist_field;</span>
+<span class='curline'><a href='../S/291.html#L2059'>hist_field</a>       2059 trace/trace_events_hist.c 	hist_field = create_hist_field(hist_data, field, *flags, var_name);</span>
+<span class='curline'><a href='../S/291.html#L2060'>hist_field</a>       2060 trace/trace_events_hist.c 	if (!hist_field) {</span>
+<span class='curline'><a href='../S/291.html#L2065'>hist_field</a>       2065 trace/trace_events_hist.c 	return hist_field;</span>
+<span class='curline'><a href='../S/291.html#L2070'>hist_field</a>       2070 trace/trace_events_hist.c static struct hist_field *parse_expr(struct hist_trigger_data *hist_data,</span>
+<span class='curline'><a href='../S/291.html#L2075'>hist_field</a>       2075 trace/trace_events_hist.c static struct hist_field *parse_unary(struct hist_trigger_data *hist_data,</span>
+<span class='curline'><a href='../S/291.html#L2080'>hist_field</a>       2080 trace/trace_events_hist.c 	struct hist_field *operand1, *expr = NULL;</span>
+<span class='curline'><a href='../S/291.html#L2144'>hist_field</a>       2144 trace/trace_events_hist.c 			       struct hist_field *operand1,</span>
+<span class='curline'><a href='../S/291.html#L2145'>hist_field</a>       2145 trace/trace_events_hist.c 			       struct hist_field *operand2)</span>
+<span class='curline'><a href='../S/291.html#L2152'>hist_field</a>       2152 trace/trace_events_hist.c 		struct hist_field *var;</span>
+<span class='curline'><a href='../S/291.html#L2162'>hist_field</a>       2162 trace/trace_events_hist.c 		struct hist_field *var;</span>
+<span class='curline'><a href='../S/291.html#L2179'>hist_field</a>       2179 trace/trace_events_hist.c static struct hist_field *parse_expr(struct hist_trigger_data *hist_data,</span>
+<span class='curline'><a href='../S/291.html#L2184'>hist_field</a>       2184 trace/trace_events_hist.c 	struct hist_field *operand1 = NULL, *operand2 = NULL, *expr = NULL;</span>
+<span class='curline'><a href='../S/291.html#L2310'>hist_field</a>       2310 trace/trace_events_hist.c 	struct hist_field *target_hist_field, *hist_field;</span>
+<span class='curline'><a href='../S/291.html#L2320'>hist_field</a>       2320 trace/trace_events_hist.c 		hist_field = hist_data-&gt;fields[i + n];</span>
+<span class='curline'><a href='../S/291.html#L2323'>hist_field</a>       2323 trace/trace_events_hist.c 		if (strcmp(hist_field-&gt;type, target_hist_field-&gt;type) != 0)</span>
+<span class='curline'><a href='../S/291.html#L2325'>hist_field</a>       2325 trace/trace_events_hist.c 		if (hist_field-&gt;size != target_hist_field-&gt;size)</span>
+<span class='curline'><a href='../S/291.html#L2327'>hist_field</a>       2327 trace/trace_events_hist.c 		if (hist_field-&gt;is_signed != target_hist_field-&gt;is_signed)</span>
+<span class='curline'><a href='../S/291.html#L2370'>hist_field</a>       2370 trace/trace_events_hist.c static struct hist_field *</span>
+<span class='curline'><a href='../S/291.html#L2374'>hist_field</a>       2374 trace/trace_events_hist.c 	struct hist_field *event_var;</span>
+<span class='curline'><a href='../S/291.html#L2416'>hist_field</a>       2416 trace/trace_events_hist.c static struct hist_field *</span>
+<span class='curline'><a href='../S/291.html#L2421'>hist_field</a>       2421 trace/trace_events_hist.c 	struct hist_field *event_var = ERR_PTR(-EINVAL);</span>
+<span class='curline'><a href='../S/291.html#L2426'>hist_field</a>       2426 trace/trace_events_hist.c 	struct hist_field *key_field;</span>
+<span class='curline'><a href='../S/291.html#L2536'>hist_field</a>       2536 trace/trace_events_hist.c static struct hist_field *</span>
+<span class='curline'><a href='../S/291.html#L2541'>hist_field</a>       2541 trace/trace_events_hist.c 	struct hist_field *hist_field = NULL;</span>
+<span class='curline'><a href='../S/291.html#L2558'>hist_field</a>       2558 trace/trace_events_hist.c 	hist_field = find_var_field(hist_data, var_name);</span>
+<span class='curline'><a href='../S/291.html#L2560'>hist_field</a>       2560 trace/trace_events_hist.c 	return hist_field;</span>
+<span class='curline'><a href='../S/291.html#L2576'>hist_field</a>       2576 trace/trace_events_hist.c 		struct hist_field *var = field_var-&gt;var;</span>
+<span class='curline'><a href='../S/291.html#L2577'>hist_field</a>       2577 trace/trace_events_hist.c 		struct hist_field *val = field_var-&gt;val;</span>
+<span class='curline'><a href='../S/291.html#L2611'>hist_field</a>       2611 trace/trace_events_hist.c static struct hist_field *create_var(struct hist_trigger_data *hist_data,</span>
+<span class='curline'><a href='../S/291.html#L2615'>hist_field</a>       2615 trace/trace_events_hist.c 	struct hist_field *var;</span>
+<span class='curline'><a href='../S/291.html#L2623'>hist_field</a>       2623 trace/trace_events_hist.c 	var = kzalloc(sizeof(struct hist_field), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/291.html#L2657'>hist_field</a>       2657 trace/trace_events_hist.c 	struct hist_field *val = NULL, *var = NULL;</span>
+<span class='curline'><a href='../S/291.html#L2933'>hist_field</a>       2933 trace/trace_events_hist.c 		struct hist_field *save_val = hist_data-&gt;save_vars[i]-&gt;val;</span>
+<span class='curline'><a href='../S/291.html#L2934'>hist_field</a>       2934 trace/trace_events_hist.c 		struct hist_field *save_var = hist_data-&gt;save_vars[i]-&gt;var;</span>
+<span class='curline'><a href='../S/291.html#L3009'>hist_field</a>       3009 trace/trace_events_hist.c 	struct hist_field *var_field, *ref_field, *track_var = NULL;</span>
+<span class='curline'><a href='../S/291.html#L3282'>hist_field</a>       3282 trace/trace_events_hist.c 			     struct hist_field *hist_field,</span>
+<span class='curline'><a href='../S/291.html#L3297'>hist_field</a>       3297 trace/trace_events_hist.c 	if (strstr(hist_field-&gt;type, "char[") &amp;&amp; field-&gt;is_string</span>
+<span class='curline'><a href='../S/291.html#L3301'>hist_field</a>       3301 trace/trace_events_hist.c 	if (strcmp(field-&gt;type, hist_field-&gt;type) != 0) {</span>
+<span class='curline'><a href='../S/291.html#L3302'>hist_field</a>       3302 trace/trace_events_hist.c 		if (field-&gt;size != hist_field-&gt;size ||</span>
+<span class='curline'><a href='../S/291.html#L3303'>hist_field</a>       3303 trace/trace_events_hist.c 		    field-&gt;is_signed != hist_field-&gt;is_signed)</span>
+<span class='curline'><a href='../S/291.html#L3310'>hist_field</a>       3310 trace/trace_events_hist.c static struct hist_field *</span>
+<span class='curline'><a href='../S/291.html#L3316'>hist_field</a>       3316 trace/trace_events_hist.c 	struct hist_field *hist_field;</span>
+<span class='curline'><a href='../S/291.html#L3320'>hist_field</a>       3320 trace/trace_events_hist.c 	hist_field = find_target_event_var(hist_data, system, event, var);</span>
+<span class='curline'><a href='../S/291.html#L3321'>hist_field</a>       3321 trace/trace_events_hist.c 	if (!hist_field) {</span>
+<span class='curline'><a href='../S/291.html#L3327'>hist_field</a>       3327 trace/trace_events_hist.c 		hist_field = find_event_var(hist_data, system, event, var);</span>
+<span class='curline'><a href='../S/291.html#L3330'>hist_field</a>       3330 trace/trace_events_hist.c 	if (!hist_field)</span>
+<span class='curline'><a href='../S/291.html#L3333'>hist_field</a>       3333 trace/trace_events_hist.c 	return hist_field;</span>
+<span class='curline'><a href='../S/291.html#L3336'>hist_field</a>       3336 trace/trace_events_hist.c static struct hist_field *</span>
+<span class='curline'><a href='../S/291.html#L3341'>hist_field</a>       3341 trace/trace_events_hist.c 	struct hist_field *hist_field = NULL;</span>
+<span class='curline'><a href='../S/291.html#L3354'>hist_field</a>       3354 trace/trace_events_hist.c 		hist_field = field_var-&gt;var;</span>
+<span class='curline'><a href='../S/291.html#L3374'>hist_field</a>       3374 trace/trace_events_hist.c 		hist_field = create_field_var_hist(hist_data, system, event, var);</span>
+<span class='curline'><a href='../S/291.html#L3375'>hist_field</a>       3375 trace/trace_events_hist.c 		if (IS_ERR(hist_field))</span>
+<span class='curline'><a href='../S/291.html#L3379'>hist_field</a>       3379 trace/trace_events_hist.c 	return hist_field;</span>
+<span class='curline'><a href='../S/291.html#L3382'>hist_field</a>       3382 trace/trace_events_hist.c 	hist_field = NULL;</span>
+<span class='curline'><a href='../S/291.html#L3391'>hist_field</a>       3391 trace/trace_events_hist.c 	struct hist_field *hist_field, *var_ref;</span>
+<span class='curline'><a href='../S/291.html#L3436'>hist_field</a>       3436 trace/trace_events_hist.c 			hist_field = trace_action_find_var(hist_data, data,</span>
+<span class='curline'><a href='../S/291.html#L3440'>hist_field</a>       3440 trace/trace_events_hist.c 			hist_field = trace_action_create_field_var(hist_data,</span>
+<span class='curline'><a href='../S/291.html#L3446'>hist_field</a>       3446 trace/trace_events_hist.c 		if (!hist_field) {</span>
+<span class='curline'><a href='../S/291.html#L3452'>hist_field</a>       3452 trace/trace_events_hist.c 		if (check_synth_field(event, hist_field, field_pos) == 0) {</span>
+<span class='curline'><a href='../S/291.html#L3453'>hist_field</a>       3453 trace/trace_events_hist.c 			var_ref = create_var_ref(hist_data, hist_field,</span>
+<span class='curline'><a href='../S/291.html#L3635'>hist_field</a>       3635 trace/trace_events_hist.c 	struct hist_field *hist_field;</span>
+<span class='curline'><a href='../S/291.html#L3638'>hist_field</a>       3638 trace/trace_events_hist.c 	hist_field = parse_expr(hist_data, file, field_str, flags, var_name, 0);</span>
+<span class='curline'><a href='../S/291.html#L3639'>hist_field</a>       3639 trace/trace_events_hist.c 	if (IS_ERR(hist_field)) {</span>
+<span class='curline'><a href='../S/291.html#L3640'>hist_field</a>       3640 trace/trace_events_hist.c 		ret = PTR_ERR(hist_field);</span>
+<span class='curline'><a href='../S/291.html#L3644'>hist_field</a>       3644 trace/trace_events_hist.c 	hist_data-&gt;fields[val_idx] = hist_field;</span>
+<span class='curline'><a href='../S/291.html#L3738'>hist_field</a>       3738 trace/trace_events_hist.c 	struct hist_field *hist_field = NULL;</span>
+<span class='curline'><a href='../S/291.html#L3751'>hist_field</a>       3751 trace/trace_events_hist.c 		hist_field = create_hist_field(hist_data, NULL, flags, NULL);</span>
+<span class='curline'><a href='../S/291.html#L3753'>hist_field</a>       3753 trace/trace_events_hist.c 		hist_field = parse_expr(hist_data, file, field_str, flags,</span>
+<span class='curline'><a href='../S/291.html#L3755'>hist_field</a>       3755 trace/trace_events_hist.c 		if (IS_ERR(hist_field)) {</span>
+<span class='curline'><a href='../S/291.html#L3756'>hist_field</a>       3756 trace/trace_events_hist.c 			ret = PTR_ERR(hist_field);</span>
+<span class='curline'><a href='../S/291.html#L3760'>hist_field</a>       3760 trace/trace_events_hist.c 		if (field_has_hist_vars(hist_field, 0))	{</span>
+<span class='curline'><a href='../S/291.html#L3762'>hist_field</a>       3762 trace/trace_events_hist.c 			destroy_hist_field(hist_field, 0);</span>
+<span class='curline'><a href='../S/291.html#L3767'>hist_field</a>       3767 trace/trace_events_hist.c 		key_size = hist_field-&gt;size;</span>
+<span class='curline'><a href='../S/291.html#L3770'>hist_field</a>       3770 trace/trace_events_hist.c 	hist_data-&gt;fields[key_idx] = hist_field;</span>
+<span class='curline'><a href='../S/291.html#L3965'>hist_field</a>       3965 trace/trace_events_hist.c 		struct hist_field *hist_field;</span>
+<span class='curline'><a href='../S/291.html#L4007'>hist_field</a>       4007 trace/trace_events_hist.c 			hist_field = hist_data-&gt;fields[j];</span>
+<span class='curline'><a href='../S/291.html#L4008'>hist_field</a>       4008 trace/trace_events_hist.c 			if (hist_field-&gt;flags &amp; HIST_FIELD_FL_VAR)</span>
+<span class='curline'><a href='../S/291.html#L4013'>hist_field</a>       4013 trace/trace_events_hist.c 			test_name = hist_field_name(hist_field, 0);</span>
+<span class='curline'><a href='../S/291.html#L4306'>hist_field</a>       4306 trace/trace_events_hist.c 	struct hist_field *hist_field;</span>
+<span class='curline'><a href='../S/291.html#L4310'>hist_field</a>       4310 trace/trace_events_hist.c 		hist_field = hist_data-&gt;fields[i];</span>
+<span class='curline'><a href='../S/291.html#L4311'>hist_field</a>       4311 trace/trace_events_hist.c 		if (hist_field-&gt;flags &amp; HIST_FIELD_FL_KEY) {</span>
+<span class='curline'><a href='../S/291.html#L4314'>hist_field</a>       4314 trace/trace_events_hist.c 			field = hist_field-&gt;field;</span>
+<span class='curline'><a href='../S/291.html#L4316'>hist_field</a>       4316 trace/trace_events_hist.c 			if (hist_field-&gt;flags &amp; HIST_FIELD_FL_STACKTRACE)</span>
+<span class='curline'><a href='../S/291.html#L4319'>hist_field</a>       4319 trace/trace_events_hist.c 				cmp_fn = tracing_map_cmp_num(hist_field-&gt;size,</span>
+<span class='curline'><a href='../S/291.html#L4320'>hist_field</a>       4320 trace/trace_events_hist.c 							     hist_field-&gt;is_signed);</span>
+<span class='curline'><a href='../S/291.html#L4327'>hist_field</a>       4327 trace/trace_events_hist.c 							hist_field-&gt;offset,</span>
+<span class='curline'><a href='../S/291.html#L4329'>hist_field</a>       4329 trace/trace_events_hist.c 		} else if (!(hist_field-&gt;flags &amp; HIST_FIELD_FL_VAR))</span>
+<span class='curline'><a href='../S/291.html#L4335'>hist_field</a>       4335 trace/trace_events_hist.c 		if (hist_field-&gt;flags &amp; HIST_FIELD_FL_VAR) {</span>
+<span class='curline'><a href='../S/291.html#L4339'>hist_field</a>       4339 trace/trace_events_hist.c 			hist_field-&gt;var.idx = idx;</span>
+<span class='curline'><a href='../S/291.html#L4340'>hist_field</a>       4340 trace/trace_events_hist.c 			hist_field-&gt;var.hist_data = hist_data;</span>
+<span class='curline'><a href='../S/291.html#L4408'>hist_field</a>       4408 trace/trace_events_hist.c 	struct hist_field *hist_field;</span>
+<span class='curline'><a href='../S/291.html#L4416'>hist_field</a>       4416 trace/trace_events_hist.c 		hist_field = hist_data-&gt;fields[i];</span>
+<span class='curline'><a href='../S/291.html#L4417'>hist_field</a>       4417 trace/trace_events_hist.c 		hist_val = hist_field-&gt;fn(hist_field, elt, rbe, rec);</span>
+<span class='curline'><a href='../S/291.html#L4418'>hist_field</a>       4418 trace/trace_events_hist.c 		if (hist_field-&gt;flags &amp; HIST_FIELD_FL_VAR) {</span>
+<span class='curline'><a href='../S/291.html#L4419'>hist_field</a>       4419 trace/trace_events_hist.c 			var_idx = hist_field-&gt;var.idx;</span>
+<span class='curline'><a href='../S/291.html#L4421'>hist_field</a>       4421 trace/trace_events_hist.c 			if (hist_field-&gt;flags &amp; HIST_FIELD_FL_STRING) {</span>
+<span class='curline'><a href='../S/291.html#L4427'>hist_field</a>       4427 trace/trace_events_hist.c 				var_str_idx = hist_field-&gt;var_str_idx;</span>
+<span class='curline'><a href='../S/291.html#L4443'>hist_field</a>       4443 trace/trace_events_hist.c 		hist_field = hist_data-&gt;fields[i];</span>
+<span class='curline'><a href='../S/291.html#L4444'>hist_field</a>       4444 trace/trace_events_hist.c 		if (hist_field-&gt;flags &amp; HIST_FIELD_FL_VAR) {</span>
+<span class='curline'><a href='../S/291.html#L4445'>hist_field</a>       4445 trace/trace_events_hist.c 			hist_val = hist_field-&gt;fn(hist_field, elt, rbe, rec);</span>
+<span class='curline'><a href='../S/291.html#L4446'>hist_field</a>       4446 trace/trace_events_hist.c 			var_idx = hist_field-&gt;var.idx;</span>
+<span class='curline'><a href='../S/291.html#L4455'>hist_field</a>       4455 trace/trace_events_hist.c 			      struct hist_field *key_field, void *rec)</span>
+<span class='curline'><a href='../S/291.html#L4503'>hist_field</a>       4503 trace/trace_events_hist.c 	struct hist_field *key_field;</span>
+<span class='curline'><a href='../S/291.html#L4571'>hist_field</a>       4571 trace/trace_events_hist.c 	struct hist_field *key_field;</span>
+<span class='curline'><a href='../S/291.html#L4794'>hist_field</a>       4794 trace/trace_events_hist.c 				 struct hist_field *field, unsigned long flags)</span>
+<span class='curline'><a href='../S/291.html#L4841'>hist_field</a>       4841 trace/trace_events_hist.c 	struct hist_field *field;</span>
+<span class='curline'><a href='../S/291.html#L5045'>hist_field</a>       5045 trace/trace_events_hist.c static void hist_field_print(struct seq_file *m, struct hist_field *hist_field)</span>
+<span class='curline'><a href='../S/291.html#L5047'>hist_field</a>       5047 trace/trace_events_hist.c 	const char *field_name = hist_field_name(hist_field, 0);</span>
+<span class='curline'><a href='../S/291.html#L5049'>hist_field</a>       5049 trace/trace_events_hist.c 	if (hist_field-&gt;var.name)</span>
+<span class='curline'><a href='../S/291.html#L5050'>hist_field</a>       5050 trace/trace_events_hist.c 		seq_printf(m, "%s=", hist_field-&gt;var.name);</span>
+<span class='curline'><a href='../S/291.html#L5052'>hist_field</a>       5052 trace/trace_events_hist.c 	if (hist_field-&gt;flags &amp; HIST_FIELD_FL_CPU)</span>
+<span class='curline'><a href='../S/291.html#L5055'>hist_field</a>       5055 trace/trace_events_hist.c 		if (hist_field-&gt;flags &amp; HIST_FIELD_FL_VAR_REF ||</span>
+<span class='curline'><a href='../S/291.html#L5056'>hist_field</a>       5056 trace/trace_events_hist.c 		    hist_field-&gt;flags &amp; HIST_FIELD_FL_ALIAS)</span>
+<span class='curline'><a href='../S/291.html#L5059'>hist_field</a>       5059 trace/trace_events_hist.c 	} else if (hist_field-&gt;flags &amp; HIST_FIELD_FL_TIMESTAMP)</span>
+<span class='curline'><a href='../S/291.html#L5062'>hist_field</a>       5062 trace/trace_events_hist.c 	if (hist_field-&gt;flags) {</span>
+<span class='curline'><a href='../S/291.html#L5063'>hist_field</a>       5063 trace/trace_events_hist.c 		if (!(hist_field-&gt;flags &amp; HIST_FIELD_FL_VAR_REF) &amp;&amp;</span>
+<span class='curline'><a href='../S/291.html#L5064'>hist_field</a>       5064 trace/trace_events_hist.c 		    !(hist_field-&gt;flags &amp; HIST_FIELD_FL_EXPR)) {</span>
+<span class='curline'><a href='../S/291.html#L5065'>hist_field</a>       5065 trace/trace_events_hist.c 			const char *flags = get_hist_field_flags(hist_field);</span>
+<span class='curline'><a href='../S/291.html#L5078'>hist_field</a>       5078 trace/trace_events_hist.c 	struct hist_field *field;</span>
+<span class='curline'><a href='../S/291.html#L5321'>hist_field</a>       5321 trace/trace_events_hist.c 	struct hist_field *key_field, *key_field_test;</span>
+</pre>
+</body>
+</html>

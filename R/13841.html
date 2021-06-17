@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>trace_probe_log</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/272.html#L143'>trace_probe_log</a>   143 trace/trace_probe.c static struct trace_probe_log trace_probe_log;</span>
+<span class='curline'><a href='../S/272.html#L147'>trace_probe_log</a>   147 trace/trace_probe.c 	trace_probe_log.subsystem = subsystem;</span>
+<span class='curline'><a href='../S/272.html#L148'>trace_probe_log</a>   148 trace/trace_probe.c 	trace_probe_log.argc = argc;</span>
+<span class='curline'><a href='../S/272.html#L149'>trace_probe_log</a>   149 trace/trace_probe.c 	trace_probe_log.argv = argv;</span>
+<span class='curline'><a href='../S/272.html#L150'>trace_probe_log</a>   150 trace/trace_probe.c 	trace_probe_log.index = 0;</span>
+<span class='curline'><a href='../S/272.html#L155'>trace_probe_log</a>   155 trace/trace_probe.c 	memset(&amp;trace_probe_log, 0, sizeof(trace_probe_log));</span>
+<span class='curline'><a href='../S/272.html#L160'>trace_probe_log</a>   160 trace/trace_probe.c 	trace_probe_log.index = index;</span>
+<span class='curline'><a href='../S/272.html#L168'>trace_probe_log</a>   168 trace/trace_probe.c 	if (!trace_probe_log.argv)</span>
+<span class='curline'><a href='../S/272.html#L172'>trace_probe_log</a>   172 trace/trace_probe.c 	for (i = 0; i &lt; trace_probe_log.argc; i++) {</span>
+<span class='curline'><a href='../S/272.html#L173'>trace_probe_log</a>   173 trace/trace_probe.c 		if (i == trace_probe_log.index)</span>
+<span class='curline'><a href='../S/272.html#L175'>trace_probe_log</a>   175 trace/trace_probe.c 		len += strlen(trace_probe_log.argv[i]) + 1;</span>
+<span class='curline'><a href='../S/272.html#L181'>trace_probe_log</a>   181 trace/trace_probe.c 	if (trace_probe_log.index &gt;= trace_probe_log.argc) {</span>
+<span class='curline'><a href='../S/272.html#L193'>trace_probe_log</a>   193 trace/trace_probe.c 	for (i = 0; i &lt; trace_probe_log.argc; i++) {</span>
+<span class='curline'><a href='../S/272.html#L194'>trace_probe_log</a>   194 trace/trace_probe.c 		len = strlen(trace_probe_log.argv[i]);</span>
+<span class='curline'><a href='../S/272.html#L195'>trace_probe_log</a>   195 trace/trace_probe.c 		strcpy(p, trace_probe_log.argv[i]);</span>
+<span class='curline'><a href='../S/272.html#L201'>trace_probe_log</a>   201 trace/trace_probe.c 	tracing_log_err(NULL, trace_probe_log.subsystem, command,</span>
+</pre>
+</body>
+</html>

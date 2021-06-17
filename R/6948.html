@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>gcov_info</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/67.html#L38'>gcov_info</a>          38 gcov/base.c    	struct gcov_info *info = NULL;</span>
+<span class='curline'><a href='../S/67.html#L58'>gcov_info</a>          58 gcov/base.c    	struct gcov_info *info = NULL;</span>
+<span class='curline'><a href='../S/67.html#L59'>gcov_info</a>          59 gcov/base.c    	struct gcov_info *prev = NULL;</span>
+<span class='curline'><a href='../S/66.html#L85'>gcov_info</a>          85 gcov/clang.c   static struct gcov_info *current_info;</span>
+<span class='curline'><a href='../S/66.html#L91'>gcov_info</a>          91 gcov/clang.c   	struct gcov_info *info = kzalloc(sizeof(*info), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/66.html#L191'>gcov_info</a>         191 gcov/clang.c   const char *gcov_info_filename(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/66.html#L200'>gcov_info</a>         200 gcov/clang.c   unsigned int gcov_info_version(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/66.html#L212'>gcov_info</a>         212 gcov/clang.c   struct gcov_info *gcov_info_next(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/66.html#L216'>gcov_info</a>         216 gcov/clang.c   				struct gcov_info, head);</span>
+<span class='curline'><a href='../S/66.html#L226'>gcov_info</a>         226 gcov/clang.c   void gcov_info_link(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/66.html#L236'>gcov_info</a>         236 gcov/clang.c   void gcov_info_unlink(struct gcov_info *prev, struct gcov_info *info)</span>
+<span class='curline'><a href='../S/66.html#L249'>gcov_info</a>         249 gcov/clang.c   bool gcov_info_within_module(struct gcov_info *info, struct module *mod)</span>
+<span class='curline'><a href='../S/66.html#L264'>gcov_info</a>         264 gcov/clang.c   void gcov_info_reset(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/66.html#L280'>gcov_info</a>         280 gcov/clang.c   int gcov_info_is_compatible(struct gcov_info *info1, struct gcov_info *info2)</span>
+<span class='curline'><a href='../S/66.html#L319'>gcov_info</a>         319 gcov/clang.c   void gcov_info_add(struct gcov_info *dst, struct gcov_info *src)</span>
+<span class='curline'><a href='../S/66.html#L390'>gcov_info</a>         390 gcov/clang.c   struct gcov_info *gcov_info_dup(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/66.html#L392'>gcov_info</a>         392 gcov/clang.c   	struct gcov_info *dup;</span>
+<span class='curline'><a href='../S/66.html#L424'>gcov_info</a>         424 gcov/clang.c   void gcov_info_free(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/66.html#L438'>gcov_info</a>         438 gcov/clang.c   void gcov_info_free(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/66.html#L462'>gcov_info</a>         462 gcov/clang.c   	struct gcov_info *info;</span>
+<span class='curline'><a href='../S/66.html#L524'>gcov_info</a>         524 gcov/clang.c   static size_t convert_to_gcda(char *buffer, struct gcov_info *info)</span>
+<span class='curline'><a href='../S/66.html#L568'>gcov_info</a>         568 gcov/clang.c   struct gcov_iterator *gcov_iter_new(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/66.html#L607'>gcov_info</a>         607 gcov/clang.c   struct gcov_info *gcov_iter_get_info(struct gcov_iterator *iter)</span>
+<span class='curline'><a href='../S/65.html#L56'>gcov_info</a>          56 gcov/fs.c      	struct gcov_info **loaded_info;</span>
+<span class='curline'><a href='../S/65.html#L57'>gcov_info</a>          57 gcov/fs.c      	struct gcov_info *unloaded_info;</span>
+<span class='curline'><a href='../S/65.html#L145'>gcov_info</a>         145 gcov/fs.c      static struct gcov_info *get_node_info(struct gcov_node *node)</span>
+<span class='curline'><a href='../S/65.html#L157'>gcov_info</a>         157 gcov/fs.c      static struct gcov_info *get_accumulated_info(struct gcov_node *node)</span>
+<span class='curline'><a href='../S/65.html#L159'>gcov_info</a>         159 gcov/fs.c      	struct gcov_info *info;</span>
+<span class='curline'><a href='../S/65.html#L183'>gcov_info</a>         183 gcov/fs.c      	struct gcov_info *info;</span>
+<span class='curline'><a href='../S/65.html#L221'>gcov_info</a>         221 gcov/fs.c      	struct gcov_info *info;</span>
+<span class='curline'><a href='../S/65.html#L241'>gcov_info</a>         241 gcov/fs.c      	struct gcov_info *info;</span>
+<span class='curline'><a href='../S/65.html#L276'>gcov_info</a>         276 gcov/fs.c      	struct gcov_info *info;</span>
+<span class='curline'><a href='../S/65.html#L410'>gcov_info</a>         410 gcov/fs.c      static void init_node(struct gcov_node *node, struct gcov_info *info,</span>
+<span class='curline'><a href='../S/65.html#L430'>gcov_info</a>         430 gcov/fs.c      				  struct gcov_info *info, const char *name)</span>
+<span class='curline'><a href='../S/65.html#L438'>gcov_info</a>         438 gcov/fs.c      		node-&gt;loaded_info = kcalloc(1, sizeof(struct gcov_info *),</span>
+<span class='curline'><a href='../S/65.html#L564'>gcov_info</a>         564 gcov/fs.c      static void add_node(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/65.html#L614'>gcov_info</a>         614 gcov/fs.c      static void add_info(struct gcov_node *node, struct gcov_info *info)</span>
+<span class='curline'><a href='../S/65.html#L616'>gcov_info</a>         616 gcov/fs.c      	struct gcov_info **loaded_info;</span>
+<span class='curline'><a href='../S/65.html#L624'>gcov_info</a>         624 gcov/fs.c      	loaded_info = kcalloc(num + 1, sizeof(struct gcov_info *), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/65.html#L631'>gcov_info</a>         631 gcov/fs.c      	       num * sizeof(struct gcov_info *));</span>
+<span class='curline'><a href='../S/65.html#L667'>gcov_info</a>         667 gcov/fs.c      static int get_info_index(struct gcov_node *node, struct gcov_info *info)</span>
+<span class='curline'><a href='../S/65.html#L681'>gcov_info</a>         681 gcov/fs.c      static void save_info(struct gcov_node *node, struct gcov_info *info)</span>
+<span class='curline'><a href='../S/65.html#L699'>gcov_info</a>         699 gcov/fs.c      static void remove_info(struct gcov_node *node, struct gcov_info *info)</span>
+<span class='curline'><a href='../S/65.html#L728'>gcov_info</a>         728 gcov/fs.c      void gcov_event(enum gcov_action action, struct gcov_info *info)</span>
+<span class='curline'><a href='../S/71.html#L36'>gcov_info</a>          36 gcov/gcc_4_7.c static struct gcov_info *gcov_info_head;</span>
+<span class='curline'><a href='../S/71.html#L69'>gcov_info</a>          69 gcov/gcc_4_7.c 	const struct gcov_info *key;</span>
+<span class='curline'><a href='../S/71.html#L91'>gcov_info</a>          91 gcov/gcc_4_7.c 	struct gcov_info *next;</span>
+<span class='curline'><a href='../S/71.html#L103'>gcov_info</a>         103 gcov/gcc_4_7.c const char *gcov_info_filename(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/71.html#L112'>gcov_info</a>         112 gcov/gcc_4_7.c unsigned int gcov_info_version(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/71.html#L124'>gcov_info</a>         124 gcov/gcc_4_7.c struct gcov_info *gcov_info_next(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/71.html#L136'>gcov_info</a>         136 gcov/gcc_4_7.c void gcov_info_link(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/71.html#L147'>gcov_info</a>         147 gcov/gcc_4_7.c void gcov_info_unlink(struct gcov_info *prev, struct gcov_info *info)</span>
+<span class='curline'><a href='../S/71.html#L162'>gcov_info</a>         162 gcov/gcc_4_7.c bool gcov_info_within_module(struct gcov_info *info, struct module *mod)</span>
+<span class='curline'><a href='../S/71.html#L176'>gcov_info</a>         176 gcov/gcc_4_7.c static int counter_active(struct gcov_info *info, unsigned int type)</span>
+<span class='curline'><a href='../S/71.html#L182'>gcov_info</a>         182 gcov/gcc_4_7.c static unsigned int num_counter_active(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/71.html#L198'>gcov_info</a>         198 gcov/gcc_4_7.c void gcov_info_reset(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/71.html#L225'>gcov_info</a>         225 gcov/gcc_4_7.c int gcov_info_is_compatible(struct gcov_info *info1, struct gcov_info *info2)</span>
+<span class='curline'><a href='../S/71.html#L237'>gcov_info</a>         237 gcov/gcc_4_7.c void gcov_info_add(struct gcov_info *dst, struct gcov_info *src)</span>
+<span class='curline'><a href='../S/71.html#L269'>gcov_info</a>         269 gcov/gcc_4_7.c struct gcov_info *gcov_info_dup(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/71.html#L271'>gcov_info</a>         271 gcov/gcc_4_7.c 	struct gcov_info *dup;</span>
+<span class='curline'><a href='../S/71.html#L338'>gcov_info</a>         338 gcov/gcc_4_7.c void gcov_info_free(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/71.html#L378'>gcov_info</a>         378 gcov/gcc_4_7.c 	struct gcov_info *info;</span>
+<span class='curline'><a href='../S/71.html#L440'>gcov_info</a>         440 gcov/gcc_4_7.c static size_t convert_to_gcda(char *buffer, struct gcov_info *info)</span>
+<span class='curline'><a href='../S/71.html#L493'>gcov_info</a>         493 gcov/gcc_4_7.c struct gcov_iterator *gcov_iter_new(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/71.html#L532'>gcov_info</a>         532 gcov/gcc_4_7.c struct gcov_info *gcov_iter_get_info(struct gcov_iterator *iter)</span>
+<span class='curline'><a href='../S/68.html#L12'>gcov_info</a>          12 gcov/gcc_base.c void __gcov_init(struct gcov_info *info)</span>
+<span class='curline'><a href='../S/69.html#L42'>gcov_info</a>          42 gcov/gcov.h    struct gcov_info;</span>
+<span class='curline'><a href='../S/69.html#L45'>gcov_info</a>          45 gcov/gcov.h    const char *gcov_info_filename(struct gcov_info *info);</span>
+<span class='curline'><a href='../S/69.html#L46'>gcov_info</a>          46 gcov/gcov.h    unsigned int gcov_info_version(struct gcov_info *info);</span>
+<span class='curline'><a href='../S/69.html#L47'>gcov_info</a>          47 gcov/gcov.h    struct gcov_info *gcov_info_next(struct gcov_info *info);</span>
+<span class='curline'><a href='../S/69.html#L48'>gcov_info</a>          48 gcov/gcov.h    void gcov_info_link(struct gcov_info *info);</span>
+<span class='curline'><a href='../S/69.html#L49'>gcov_info</a>          49 gcov/gcov.h    void gcov_info_unlink(struct gcov_info *prev, struct gcov_info *info);</span>
+<span class='curline'><a href='../S/69.html#L50'>gcov_info</a>          50 gcov/gcov.h    bool gcov_info_within_module(struct gcov_info *info, struct module *mod);</span>
+<span class='curline'><a href='../S/69.html#L58'>gcov_info</a>          58 gcov/gcov.h    void gcov_event(enum gcov_action action, struct gcov_info *info);</span>
+<span class='curline'><a href='../S/69.html#L65'>gcov_info</a>          65 gcov/gcov.h    struct gcov_iterator *gcov_iter_new(struct gcov_info *info);</span>
+<span class='curline'><a href='../S/69.html#L70'>gcov_info</a>          70 gcov/gcov.h    struct gcov_info *gcov_iter_get_info(struct gcov_iterator *iter);</span>
+<span class='curline'><a href='../S/69.html#L73'>gcov_info</a>          73 gcov/gcov.h    void gcov_info_reset(struct gcov_info *info);</span>
+<span class='curline'><a href='../S/69.html#L74'>gcov_info</a>          74 gcov/gcov.h    int gcov_info_is_compatible(struct gcov_info *info1, struct gcov_info *info2);</span>
+<span class='curline'><a href='../S/69.html#L75'>gcov_info</a>          75 gcov/gcov.h    void gcov_info_add(struct gcov_info *dest, struct gcov_info *source);</span>
+<span class='curline'><a href='../S/69.html#L76'>gcov_info</a>          76 gcov/gcov.h    struct gcov_info *gcov_info_dup(struct gcov_info *info);</span>
+<span class='curline'><a href='../S/69.html#L77'>gcov_info</a>          77 gcov/gcov.h    void gcov_info_free(struct gcov_info *info);</span>
+</pre>
+</body>
+</html>

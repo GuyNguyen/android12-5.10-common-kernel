@@ -1,0 +1,386 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>bpf_map</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/416.html#L81'>bpf_map</a>            81 bpf/arraymap.c static struct bpf_map *array_map_alloc(union bpf_attr *attr)</span>
+<span class='curline'><a href='../S/416.html#L175'>bpf_map</a>           175 bpf/arraymap.c static void *array_map_lookup_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/416.html#L186'>bpf_map</a>           186 bpf/arraymap.c static int array_map_direct_value_addr(const struct bpf_map *map, u64 *imm,</span>
+<span class='curline'><a href='../S/416.html#L200'>bpf_map</a>           200 bpf/arraymap.c static int array_map_direct_value_meta(const struct bpf_map *map, u64 imm,</span>
+<span class='curline'><a href='../S/416.html#L217'>bpf_map</a>           217 bpf/arraymap.c static int array_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)</span>
+<span class='curline'><a href='../S/416.html#L250'>bpf_map</a>           250 bpf/arraymap.c static void *percpu_array_map_lookup_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/416.html#L261'>bpf_map</a>           261 bpf/arraymap.c int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value)</span>
+<span class='curline'><a href='../S/416.html#L288'>bpf_map</a>           288 bpf/arraymap.c static int array_map_get_next_key(struct bpf_map *map, void *key, void *next_key)</span>
+<span class='curline'><a href='../S/416.html#L307'>bpf_map</a>           307 bpf/arraymap.c static int array_map_update_elem(struct bpf_map *map, void *key, void *value,</span>
+<span class='curline'><a href='../S/416.html#L344'>bpf_map</a>           344 bpf/arraymap.c int bpf_percpu_array_update(struct bpf_map *map, void *key, void *value,</span>
+<span class='curline'><a href='../S/416.html#L383'>bpf_map</a>           383 bpf/arraymap.c static int array_map_delete_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/416.html#L394'>bpf_map</a>           394 bpf/arraymap.c static void array_map_free(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/416.html#L407'>bpf_map</a>           407 bpf/arraymap.c static void array_map_seq_show_elem(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/416.html#L428'>bpf_map</a>           428 bpf/arraymap.c static void percpu_array_map_seq_show_elem(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/416.html#L451'>bpf_map</a>           451 bpf/arraymap.c static int array_map_check_btf(const struct bpf_map *map,</span>
+<span class='curline'><a href='../S/416.html#L483'>bpf_map</a>           483 bpf/arraymap.c static int array_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)</span>
+<span class='curline'><a href='../S/416.html#L499'>bpf_map</a>           499 bpf/arraymap.c static bool array_map_meta_equal(const struct bpf_map *meta0,</span>
+<span class='curline'><a href='../S/416.html#L500'>bpf_map</a>           500 bpf/arraymap.c 				 const struct bpf_map *meta1)</span>
+<span class='curline'><a href='../S/416.html#L509'>bpf_map</a>           509 bpf/arraymap.c 	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/416.html#L517'>bpf_map</a>           517 bpf/arraymap.c 	struct bpf_map *map = info-&gt;map;</span>
+<span class='curline'><a href='../S/416.html#L536'>bpf_map</a>           536 bpf/arraymap.c 	struct bpf_map *map = info-&gt;map;</span>
+<span class='curline'><a href='../S/416.html#L556'>bpf_map</a>           556 bpf/arraymap.c 	struct bpf_map *map = info-&gt;map;</span>
+<span class='curline'><a href='../S/416.html#L606'>bpf_map</a>           606 bpf/arraymap.c 	struct bpf_map *map = aux-&gt;map;</span>
+<span class='curline'><a href='../S/416.html#L695'>bpf_map</a>           695 bpf/arraymap.c static void fd_array_map_free(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/416.html#L707'>bpf_map</a>           707 bpf/arraymap.c static void *fd_array_map_lookup_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/416.html#L713'>bpf_map</a>           713 bpf/arraymap.c int bpf_fd_array_map_lookup_elem(struct bpf_map *map, void *key, u32 *value)</span>
+<span class='curline'><a href='../S/416.html#L733'>bpf_map</a>           733 bpf/arraymap.c int bpf_fd_array_map_update_elem(struct bpf_map *map, struct file *map_file,</span>
+<span class='curline'><a href='../S/416.html#L765'>bpf_map</a>           765 bpf/arraymap.c static int fd_array_map_delete_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/416.html#L791'>bpf_map</a>           791 bpf/arraymap.c static void *prog_fd_array_get_ptr(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/416.html#L819'>bpf_map</a>           819 bpf/arraymap.c static void bpf_fd_array_map_clear(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/416.html#L828'>bpf_map</a>           828 bpf/arraymap.c static void prog_array_map_seq_show_elem(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/416.html#L856'>bpf_map</a>           856 bpf/arraymap.c static int prog_array_map_poke_track(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/416.html#L889'>bpf_map</a>           889 bpf/arraymap.c static void prog_array_map_poke_untrack(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/416.html#L907'>bpf_map</a>           907 bpf/arraymap.c static void prog_array_map_poke_run(struct bpf_map *map, u32 key,</span>
+<span class='curline'><a href='../S/416.html#L1002'>bpf_map</a>          1002 bpf/arraymap.c 	struct bpf_map *map = container_of(work, struct bpf_array_aux,</span>
+<span class='curline'><a href='../S/416.html#L1008'>bpf_map</a>          1008 bpf/arraymap.c static void prog_array_map_clear(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/416.html#L1016'>bpf_map</a>          1016 bpf/arraymap.c static struct bpf_map *prog_array_map_alloc(union bpf_attr *attr)</span>
+<span class='curline'><a href='../S/416.html#L1019'>bpf_map</a>          1019 bpf/arraymap.c 	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/416.html#L1041'>bpf_map</a>          1041 bpf/arraymap.c static void prog_array_map_free(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/416.html#L1109'>bpf_map</a>          1109 bpf/arraymap.c static void *perf_event_fd_array_get_ptr(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/416.html#L1140'>bpf_map</a>          1140 bpf/arraymap.c static void perf_event_fd_array_release(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/416.html#L1159'>bpf_map</a>          1159 bpf/arraymap.c static void perf_event_fd_array_map_free(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/416.html#L1184'>bpf_map</a>          1184 bpf/arraymap.c static void *cgroup_fd_array_get_ptr(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/416.html#L1197'>bpf_map</a>          1197 bpf/arraymap.c static void cgroup_fd_array_free(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/416.html#L1220'>bpf_map</a>          1220 bpf/arraymap.c static struct bpf_map *array_of_map_alloc(union bpf_attr *attr)</span>
+<span class='curline'><a href='../S/416.html#L1222'>bpf_map</a>          1222 bpf/arraymap.c 	struct bpf_map *map, *inner_map_meta;</span>
+<span class='curline'><a href='../S/416.html#L1239'>bpf_map</a>          1239 bpf/arraymap.c static void array_of_map_free(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/416.html#L1249'>bpf_map</a>          1249 bpf/arraymap.c static void *array_of_map_lookup_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/416.html#L1251'>bpf_map</a>          1251 bpf/arraymap.c 	struct bpf_map **inner_map = array_map_lookup_elem(map, key);</span>
+<span class='curline'><a href='../S/416.html#L1259'>bpf_map</a>          1259 bpf/arraymap.c static int array_of_map_gen_lookup(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/382.html#L36'>bpf_map</a>            36 bpf/bpf_inode_storage.c 							   struct bpf_map *map,</span>
+<span class='curline'><a href='../S/382.html#L103'>bpf_map</a>           103 bpf/bpf_inode_storage.c static void *bpf_fd_inode_storage_lookup_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/382.html#L119'>bpf_map</a>           119 bpf/bpf_inode_storage.c static int bpf_fd_inode_storage_update_elem(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/382.html#L142'>bpf_map</a>           142 bpf/bpf_inode_storage.c static int inode_storage_delete(struct inode *inode, struct bpf_map *map)</span>
+<span class='curline'><a href='../S/382.html#L155'>bpf_map</a>           155 bpf/bpf_inode_storage.c static int bpf_fd_inode_storage_delete_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/382.html#L170'>bpf_map</a>           170 bpf/bpf_inode_storage.c BPF_CALL_4(bpf_inode_storage_get, struct bpf_map *, map, struct inode *, inode,</span>
+<span class='curline'><a href='../S/382.html#L205'>bpf_map</a>           205 bpf/bpf_inode_storage.c 	   struct bpf_map *, map, struct inode *, inode)</span>
+<span class='curline'><a href='../S/382.html#L216'>bpf_map</a>           216 bpf/bpf_inode_storage.c static int notsupp_get_next_key(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/382.html#L222'>bpf_map</a>           222 bpf/bpf_inode_storage.c static struct bpf_map *inode_storage_map_alloc(union bpf_attr *attr)</span>
+<span class='curline'><a href='../S/382.html#L234'>bpf_map</a>           234 bpf/bpf_inode_storage.c static void inode_storage_map_free(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/378.html#L26'>bpf_map</a>            26 bpf/bpf_local_storage.c 	struct bpf_map *map = &amp;smap-&gt;map;</span>
+<span class='curline'><a href='../S/378.html#L37'>bpf_map</a>            37 bpf/bpf_local_storage.c 	struct bpf_map *map = &amp;smap-&gt;map;</span>
+<span class='curline'><a href='../S/378.html#L46'>bpf_map</a>            46 bpf/bpf_local_storage.c 	struct bpf_map *map = &amp;smap-&gt;map;</span>
+<span class='curline'><a href='../S/378.html#L585'>bpf_map</a>           585 bpf/bpf_local_storage.c int bpf_local_storage_map_check_btf(const struct bpf_map *map,</span>
+<span class='curline'><a href='../S/399.html#L31'>bpf_map</a>            31 bpf/bpf_struct_ops.c 	struct bpf_map map;</span>
+<span class='curline'><a href='../S/399.html#L232'>bpf_map</a>           232 bpf/bpf_struct_ops.c static int bpf_struct_ops_map_get_next_key(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/399.html#L242'>bpf_map</a>           242 bpf/bpf_struct_ops.c int bpf_struct_ops_map_sys_lookup_elem(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/399.html#L271'>bpf_map</a>           271 bpf/bpf_struct_ops.c static void *bpf_struct_ops_map_lookup_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/399.html#L315'>bpf_map</a>           315 bpf/bpf_struct_ops.c static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/399.html#L485'>bpf_map</a>           485 bpf/bpf_struct_ops.c static int bpf_struct_ops_map_delete_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/399.html#L511'>bpf_map</a>           511 bpf/bpf_struct_ops.c static void bpf_struct_ops_map_seq_show_elem(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/399.html#L531'>bpf_map</a>           531 bpf/bpf_struct_ops.c static void bpf_struct_ops_map_free(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/399.html#L553'>bpf_map</a>           553 bpf/bpf_struct_ops.c static struct bpf_map *bpf_struct_ops_map_alloc(union bpf_attr *attr)</span>
+<span class='curline'><a href='../S/399.html#L560'>bpf_map</a>           560 bpf/bpf_struct_ops.c 	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/417.html#L47'>bpf_map</a>            47 bpf/cgroup.c   	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/371.html#L1537'>bpf_map</a>          1537 bpf/core.c     		struct bpf_map *map = (struct bpf_map *) (unsigned long) BPF_R2;</span>
+<span class='curline'><a href='../S/371.html#L1763'>bpf_map</a>          1763 bpf/core.c     		struct bpf_map *map = aux-&gt;used_maps[i];</span>
+<span class='curline'><a href='../S/371.html#L2115'>bpf_map</a>          2115 bpf/core.c     			  struct bpf_map **used_maps, u32 len)</span>
+<span class='curline'><a href='../S/371.html#L2117'>bpf_map</a>          2117 bpf/core.c     	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/371.html#L2235'>bpf_map</a>          2235 bpf/core.c     bpf_event_output(struct bpf_map *map, u64 flags, void *meta, u64 meta_size,</span>
+<span class='curline'><a href='../S/407.html#L75'>bpf_map</a>            75 bpf/cpumap.c   	struct bpf_map map;</span>
+<span class='curline'><a href='../S/407.html#L82'>bpf_map</a>            82 bpf/cpumap.c   static struct bpf_map *cpu_map_alloc(union bpf_attr *attr)</span>
+<span class='curline'><a href='../S/407.html#L389'>bpf_map</a>           389 bpf/cpumap.c   bool cpu_map_prog_allowed(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/407.html#L533'>bpf_map</a>           533 bpf/cpumap.c   static int cpu_map_delete_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/407.html#L546'>bpf_map</a>           546 bpf/cpumap.c   static int cpu_map_update_elem(struct bpf_map *map, void *key, void *value,</span>
+<span class='curline'><a href='../S/407.html#L585'>bpf_map</a>           585 bpf/cpumap.c   static void cpu_map_free(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/407.html#L619'>bpf_map</a>           619 bpf/cpumap.c   struct bpf_cpu_map_entry *__cpu_map_lookup_elem(struct bpf_map *map, u32 key)</span>
+<span class='curline'><a href='../S/407.html#L631'>bpf_map</a>           631 bpf/cpumap.c   static void *cpu_map_lookup_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/407.html#L639'>bpf_map</a>           639 bpf/cpumap.c   static int cpu_map_get_next_key(struct bpf_map *map, void *key, void *next_key)</span>
+<span class='curline'><a href='../S/413.html#L74'>bpf_map</a>            74 bpf/devmap.c   	struct bpf_map map;</span>
+<span class='curline'><a href='../S/413.html#L170'>bpf_map</a>           170 bpf/devmap.c   static struct bpf_map *dev_map_alloc(union bpf_attr *attr)</span>
+<span class='curline'><a href='../S/413.html#L195'>bpf_map</a>           195 bpf/devmap.c   static void dev_map_free(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/413.html#L258'>bpf_map</a>           258 bpf/devmap.c   static int dev_map_get_next_key(struct bpf_map *map, void *key, void *next_key)</span>
+<span class='curline'><a href='../S/413.html#L275'>bpf_map</a>           275 bpf/devmap.c   struct bpf_dtab_netdev *__dev_map_hash_lookup_elem(struct bpf_map *map, u32 key)</span>
+<span class='curline'><a href='../S/413.html#L289'>bpf_map</a>           289 bpf/devmap.c   static int dev_map_hash_get_next_key(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/413.html#L334'>bpf_map</a>           334 bpf/devmap.c   bool dev_map_can_have_prog(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/413.html#L409'>bpf_map</a>           409 bpf/devmap.c   struct bpf_dtab_netdev *__dev_map_lookup_elem(struct bpf_map *map, u32 key)</span>
+<span class='curline'><a href='../S/413.html#L528'>bpf_map</a>           528 bpf/devmap.c   static void *dev_map_lookup_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/413.html#L535'>bpf_map</a>           535 bpf/devmap.c   static void *dev_map_hash_lookup_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/413.html#L553'>bpf_map</a>           553 bpf/devmap.c   static int dev_map_delete_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/413.html#L575'>bpf_map</a>           575 bpf/devmap.c   static int dev_map_hash_delete_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/413.html#L644'>bpf_map</a>           644 bpf/devmap.c   static int __dev_map_update_elem(struct net *net, struct bpf_map *map,</span>
+<span class='curline'><a href='../S/413.html#L684'>bpf_map</a>           684 bpf/devmap.c   static int dev_map_update_elem(struct bpf_map *map, void *key, void *value,</span>
+<span class='curline'><a href='../S/413.html#L691'>bpf_map</a>           691 bpf/devmap.c   static int __dev_map_hash_update_elem(struct net *net, struct bpf_map *map,</span>
+<span class='curline'><a href='../S/413.html#L744'>bpf_map</a>           744 bpf/devmap.c   static int dev_map_hash_update_elem(struct bpf_map *map, void *key, void *value,</span>
+<span class='curline'><a href='../S/383.html#L90'>bpf_map</a>            90 bpf/hashtab.c  	struct bpf_map map;</span>
+<span class='curline'><a href='../S/383.html#L195'>bpf_map</a>           195 bpf/hashtab.c  static void *fd_htab_map_get_ptr(const struct bpf_map *map, struct htab_elem *l)</span>
+<span class='curline'><a href='../S/383.html#L411'>bpf_map</a>           411 bpf/hashtab.c  static struct bpf_map *htab_map_alloc(union bpf_attr *attr)</span>
+<span class='curline'><a href='../S/383.html#L574'>bpf_map</a>           574 bpf/hashtab.c  static void *__htab_map_lookup_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/383.html#L594'>bpf_map</a>           594 bpf/hashtab.c  static void *htab_map_lookup_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/383.html#L615'>bpf_map</a>           615 bpf/hashtab.c  static int htab_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)</span>
+<span class='curline'><a href='../S/383.html#L621'>bpf_map</a>           621 bpf/hashtab.c  		     (void *(*)(struct bpf_map *map, void *key))NULL));</span>
+<span class='curline'><a href='../S/383.html#L630'>bpf_map</a>           630 bpf/hashtab.c  static __always_inline void *__htab_lru_map_lookup_elem(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/383.html#L644'>bpf_map</a>           644 bpf/hashtab.c  static void *htab_lru_map_lookup_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/383.html#L649'>bpf_map</a>           649 bpf/hashtab.c  static void *htab_lru_map_lookup_elem_sys(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/383.html#L654'>bpf_map</a>           654 bpf/hashtab.c  static int htab_lru_map_gen_lookup(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/383.html#L662'>bpf_map</a>           662 bpf/hashtab.c  		     (void *(*)(struct bpf_map *map, void *key))NULL));</span>
+<span class='curline'><a href='../S/383.html#L709'>bpf_map</a>           709 bpf/hashtab.c  static int htab_map_get_next_key(struct bpf_map *map, void *key, void *next_key)</span>
+<span class='curline'><a href='../S/383.html#L784'>bpf_map</a>           784 bpf/hashtab.c  	struct bpf_map *map = &amp;htab-&gt;map;</span>
+<span class='curline'><a href='../S/383.html#L955'>bpf_map</a>           955 bpf/hashtab.c  static int htab_map_update_elem(struct bpf_map *map, void *key, void *value,</span>
+<span class='curline'><a href='../S/383.html#L1046'>bpf_map</a>          1046 bpf/hashtab.c  static int htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value,</span>
+<span class='curline'><a href='../S/383.html#L1109'>bpf_map</a>          1109 bpf/hashtab.c  static int __htab_percpu_map_update_elem(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/383.html#L1161'>bpf_map</a>          1161 bpf/hashtab.c  static int __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/383.html#L1225'>bpf_map</a>          1225 bpf/hashtab.c  static int htab_percpu_map_update_elem(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/383.html#L1231'>bpf_map</a>          1231 bpf/hashtab.c  static int htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/383.html#L1239'>bpf_map</a>          1239 bpf/hashtab.c  static int htab_map_delete_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/383.html#L1271'>bpf_map</a>          1271 bpf/hashtab.c  static int htab_lru_map_delete_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/383.html#L1321'>bpf_map</a>          1321 bpf/hashtab.c  static void htab_map_free(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/383.html#L1344'>bpf_map</a>          1344 bpf/hashtab.c  static void htab_map_seq_show_elem(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/383.html#L1366'>bpf_map</a>          1366 bpf/hashtab.c  __htab_map_lookup_and_delete_batch(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/383.html#L1579'>bpf_map</a>          1579 bpf/hashtab.c  htab_percpu_map_lookup_batch(struct bpf_map *map, const union bpf_attr *attr,</span>
+<span class='curline'><a href='../S/383.html#L1587'>bpf_map</a>          1587 bpf/hashtab.c  htab_percpu_map_lookup_and_delete_batch(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/383.html#L1596'>bpf_map</a>          1596 bpf/hashtab.c  htab_map_lookup_batch(struct bpf_map *map, const union bpf_attr *attr,</span>
+<span class='curline'><a href='../S/383.html#L1604'>bpf_map</a>          1604 bpf/hashtab.c  htab_map_lookup_and_delete_batch(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/383.html#L1613'>bpf_map</a>          1613 bpf/hashtab.c  htab_lru_percpu_map_lookup_batch(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/383.html#L1622'>bpf_map</a>          1622 bpf/hashtab.c  htab_lru_percpu_map_lookup_and_delete_batch(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/383.html#L1631'>bpf_map</a>          1631 bpf/hashtab.c  htab_lru_map_lookup_batch(struct bpf_map *map, const union bpf_attr *attr,</span>
+<span class='curline'><a href='../S/383.html#L1639'>bpf_map</a>          1639 bpf/hashtab.c  htab_lru_map_lookup_and_delete_batch(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/383.html#L1648'>bpf_map</a>          1648 bpf/hashtab.c  	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/383.html#L1739'>bpf_map</a>          1739 bpf/hashtab.c  	struct bpf_map *map = info-&gt;map;</span>
+<span class='curline'><a href='../S/383.html#L1790'>bpf_map</a>          1790 bpf/hashtab.c  	struct bpf_map *map = aux-&gt;map;</span>
+<span class='curline'><a href='../S/383.html#L1868'>bpf_map</a>          1868 bpf/hashtab.c  static void *htab_percpu_map_lookup_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/383.html#L1878'>bpf_map</a>          1878 bpf/hashtab.c  static void *htab_lru_percpu_map_lookup_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/383.html#L1890'>bpf_map</a>          1890 bpf/hashtab.c  int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value)</span>
+<span class='curline'><a href='../S/383.html#L1922'>bpf_map</a>          1922 bpf/hashtab.c  int bpf_percpu_hash_update(struct bpf_map *map, void *key, void *value,</span>
+<span class='curline'><a href='../S/383.html#L1940'>bpf_map</a>          1940 bpf/hashtab.c  static void htab_percpu_map_seq_show_elem(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/383.html#L2010'>bpf_map</a>          2010 bpf/hashtab.c  static void fd_htab_map_free(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/383.html#L2032'>bpf_map</a>          2032 bpf/hashtab.c  int bpf_fd_htab_map_lookup_elem(struct bpf_map *map, void *key, u32 *value)</span>
+<span class='curline'><a href='../S/383.html#L2052'>bpf_map</a>          2052 bpf/hashtab.c  int bpf_fd_htab_map_update_elem(struct bpf_map *map, struct file *map_file,</span>
+<span class='curline'><a href='../S/383.html#L2070'>bpf_map</a>          2070 bpf/hashtab.c  static struct bpf_map *htab_of_map_alloc(union bpf_attr *attr)</span>
+<span class='curline'><a href='../S/383.html#L2072'>bpf_map</a>          2072 bpf/hashtab.c  	struct bpf_map *map, *inner_map_meta;</span>
+<span class='curline'><a href='../S/383.html#L2089'>bpf_map</a>          2089 bpf/hashtab.c  static void *htab_of_map_lookup_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/383.html#L2091'>bpf_map</a>          2091 bpf/hashtab.c  	struct bpf_map **inner_map  = htab_map_lookup_elem(map, key);</span>
+<span class='curline'><a href='../S/383.html#L2099'>bpf_map</a>          2099 bpf/hashtab.c  static int htab_of_map_gen_lookup(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/383.html#L2106'>bpf_map</a>          2106 bpf/hashtab.c  		     (void *(*)(struct bpf_map *map, void *key))NULL));</span>
+<span class='curline'><a href='../S/383.html#L2117'>bpf_map</a>          2117 bpf/hashtab.c  static void htab_of_map_free(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/375.html#L30'>bpf_map</a>            30 bpf/helpers.c  BPF_CALL_2(bpf_map_lookup_elem, struct bpf_map *, map, void *, key)</span>
+<span class='curline'><a href='../S/375.html#L45'>bpf_map</a>            45 bpf/helpers.c  BPF_CALL_4(bpf_map_update_elem, struct bpf_map *, map, void *, key,</span>
+<span class='curline'><a href='../S/375.html#L63'>bpf_map</a>            63 bpf/helpers.c  BPF_CALL_2(bpf_map_delete_elem, struct bpf_map *, map, void *, key)</span>
+<span class='curline'><a href='../S/375.html#L78'>bpf_map</a>            78 bpf/helpers.c  BPF_CALL_3(bpf_map_push_elem, struct bpf_map *, map, void *, value, u64, flags)</span>
+<span class='curline'><a href='../S/375.html#L93'>bpf_map</a>            93 bpf/helpers.c  BPF_CALL_2(bpf_map_pop_elem, struct bpf_map *, map, void *, value)</span>
+<span class='curline'><a href='../S/375.html#L106'>bpf_map</a>           106 bpf/helpers.c  BPF_CALL_2(bpf_map_peek_elem, struct bpf_map *, map, void *, value)</span>
+<span class='curline'><a href='../S/375.html#L315'>bpf_map</a>           315 bpf/helpers.c  void copy_map_value_locked(struct bpf_map *map, void *dst, void *src,</span>
+<span class='curline'><a href='../S/375.html#L378'>bpf_map</a>           378 bpf/helpers.c  BPF_CALL_2(bpf_get_local_storage, struct bpf_map *, map, u64, flags)</span>
+<span class='curline'><a href='../S/375.html#L585'>bpf_map</a>           585 bpf/helpers.c  BPF_CALL_5(bpf_event_output_data, void *, ctx, struct bpf_map *, map,</span>
+<span class='curline'><a href='../S/398.html#L183'>bpf_map</a>           183 bpf/inode.c    static struct bpf_map *seq_file_to_map(struct seq_file *m)</span>
+<span class='curline'><a href='../S/398.html#L196'>bpf_map</a>           196 bpf/inode.c    static struct map_iter *map_iter_alloc(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/398.html#L217'>bpf_map</a>           217 bpf/inode.c    	struct bpf_map *map = seq_file_to_map(m);</span>
+<span class='curline'><a href='../S/398.html#L253'>bpf_map</a>           253 bpf/inode.c    	struct bpf_map *map = seq_file_to_map(m);</span>
+<span class='curline'><a href='../S/398.html#L275'>bpf_map</a>           275 bpf/inode.c    	struct bpf_map *map = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/398.html#L355'>bpf_map</a>           355 bpf/inode.c    	struct bpf_map *map = arg;</span>
+<span class='curline'><a href='../S/402.html#L22'>bpf_map</a>            22 bpf/local_storage.c 	struct bpf_map map;</span>
+<span class='curline'><a href='../S/402.html#L29'>bpf_map</a>            29 bpf/local_storage.c static struct bpf_cgroup_storage_map *map_to_storage(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/402.html#L34'>bpf_map</a>            34 bpf/local_storage.c static bool attach_type_isolated(const struct bpf_map *map)</span>
+<span class='curline'><a href='../S/402.html#L132'>bpf_map</a>           132 bpf/local_storage.c static void *cgroup_storage_lookup_elem(struct bpf_map *_map, void *key)</span>
+<span class='curline'><a href='../S/402.html#L144'>bpf_map</a>           144 bpf/local_storage.c static int cgroup_storage_update_elem(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/402.html#L183'>bpf_map</a>           183 bpf/local_storage.c int bpf_percpu_cgroup_storage_copy(struct bpf_map *_map, void *key,</span>
+<span class='curline'><a href='../S/402.html#L212'>bpf_map</a>           212 bpf/local_storage.c int bpf_percpu_cgroup_storage_update(struct bpf_map *_map, void *key,</span>
+<span class='curline'><a href='../S/402.html#L246'>bpf_map</a>           246 bpf/local_storage.c static int cgroup_storage_get_next_key(struct bpf_map *_map, void *key,</span>
+<span class='curline'><a href='../S/402.html#L286'>bpf_map</a>           286 bpf/local_storage.c static struct bpf_map *cgroup_storage_map_alloc(union bpf_attr *attr)</span>
+<span class='curline'><a href='../S/402.html#L334'>bpf_map</a>           334 bpf/local_storage.c static void cgroup_storage_map_free(struct bpf_map *_map)</span>
+<span class='curline'><a href='../S/402.html#L355'>bpf_map</a>           355 bpf/local_storage.c static int cgroup_storage_delete_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/402.html#L360'>bpf_map</a>           360 bpf/local_storage.c static int cgroup_storage_check_btf(const struct bpf_map *map,</span>
+<span class='curline'><a href='../S/402.html#L418'>bpf_map</a>           418 bpf/local_storage.c static void cgroup_storage_seq_show_elem(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/402.html#L467'>bpf_map</a>           467 bpf/local_storage.c int bpf_cgroup_storage_assign(struct bpf_prog_aux *aux, struct bpf_map *_map)</span>
+<span class='curline'><a href='../S/402.html#L479'>bpf_map</a>           479 bpf/local_storage.c static size_t bpf_cgroup_storage_calculate_size(struct bpf_map *map, u32 *pages)</span>
+<span class='curline'><a href='../S/402.html#L500'>bpf_map</a>           500 bpf/local_storage.c 	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/402.html#L563'>bpf_map</a>           563 bpf/local_storage.c 	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/405.html#L32'>bpf_map</a>            32 bpf/lpm_trie.c 	struct bpf_map			map;</span>
+<span class='curline'><a href='../S/405.html#L227'>bpf_map</a>           227 bpf/lpm_trie.c static void *trie_lookup_elem(struct bpf_map *map, void *_key)</span>
+<span class='curline'><a href='../S/405.html#L300'>bpf_map</a>           300 bpf/lpm_trie.c static int trie_update_elem(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/405.html#L431'>bpf_map</a>           431 bpf/lpm_trie.c static int trie_delete_elem(struct bpf_map *map, void *_key)</span>
+<span class='curline'><a href='../S/405.html#L540'>bpf_map</a>           540 bpf/lpm_trie.c static struct bpf_map *trie_alloc(union bpf_attr *attr)</span>
+<span class='curline'><a href='../S/405.html#L586'>bpf_map</a>           586 bpf/lpm_trie.c static void trie_free(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/405.html#L625'>bpf_map</a>           625 bpf/lpm_trie.c static int trie_get_next_key(struct bpf_map *map, void *_key, void *_next_key)</span>
+<span class='curline'><a href='../S/405.html#L723'>bpf_map</a>           723 bpf/lpm_trie.c static int trie_check_btf(const struct bpf_map *map,</span>
+<span class='curline'><a href='../S/372.html#L9'>bpf_map</a>             9 bpf/map_in_map.c struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd)</span>
+<span class='curline'><a href='../S/372.html#L11'>bpf_map</a>            11 bpf/map_in_map.c 	struct bpf_map *inner_map, *inner_map_meta;</span>
+<span class='curline'><a href='../S/372.html#L66'>bpf_map</a>            66 bpf/map_in_map.c void bpf_map_meta_free(struct bpf_map *map_meta)</span>
+<span class='curline'><a href='../S/372.html#L71'>bpf_map</a>            71 bpf/map_in_map.c bool bpf_map_meta_equal(const struct bpf_map *meta0,</span>
+<span class='curline'><a href='../S/372.html#L72'>bpf_map</a>            72 bpf/map_in_map.c 			const struct bpf_map *meta1)</span>
+<span class='curline'><a href='../S/372.html#L81'>bpf_map</a>            81 bpf/map_in_map.c void *bpf_map_fd_get_ptr(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/372.html#L85'>bpf_map</a>            85 bpf/map_in_map.c 	struct bpf_map *inner_map, *inner_map_meta;</span>
+<span class='curline'><a href='../S/372.html#L113'>bpf_map</a>           113 bpf/map_in_map.c 	return ((struct bpf_map *)ptr)-&gt;id;</span>
+<span class='curline'><a href='../S/397.html#L10'>bpf_map</a>            10 bpf/map_in_map.h struct bpf_map;</span>
+<span class='curline'><a href='../S/397.html#L12'>bpf_map</a>            12 bpf/map_in_map.h struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd);</span>
+<span class='curline'><a href='../S/397.html#L13'>bpf_map</a>            13 bpf/map_in_map.h void bpf_map_meta_free(struct bpf_map *map_meta);</span>
+<span class='curline'><a href='../S/397.html#L14'>bpf_map</a>            14 bpf/map_in_map.h void *bpf_map_fd_get_ptr(struct bpf_map *map, struct file *map_file,</span>
+<span class='curline'><a href='../S/400.html#L16'>bpf_map</a>            16 bpf/map_iter.c 	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/400.html#L33'>bpf_map</a>            33 bpf/map_iter.c 	bpf_map_put((struct bpf_map *)v);</span>
+<span class='curline'><a href='../S/400.html#L39'>bpf_map</a>            39 bpf/map_iter.c 	__bpf_md_ptr(struct bpf_map *, map);</span>
+<span class='curline'><a href='../S/400.html#L42'>bpf_map</a>            42 bpf/map_iter.c DEFINE_BPF_ITER_FUNC(bpf_map, struct bpf_iter_meta *meta, struct bpf_map *map)</span>
+<span class='curline'><a href='../S/400.html#L71'>bpf_map</a>            71 bpf/map_iter.c 		bpf_map_put((struct bpf_map *)v);</span>
+<span class='curline'><a href='../S/400.html#L82'>bpf_map</a>            82 bpf/map_iter.c BTF_ID(struct, bpf_map)</span>
+<span class='curline'><a href='../S/400.html#L106'>bpf_map</a>           106 bpf/map_iter.c 	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/400.html#L166'>bpf_map</a>           166 bpf/map_iter.c 		     struct bpf_map *map, void *key, void *value)</span>
+<span class='curline'><a href='../S/377.html#L362'>bpf_map</a>           362 bpf/offload.c  struct bpf_map *bpf_map_offload_map_alloc(union bpf_attr *attr)</span>
+<span class='curline'><a href='../S/377.html#L420'>bpf_map</a>           420 bpf/offload.c  void bpf_map_offload_map_free(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/377.html#L434'>bpf_map</a>           434 bpf/offload.c  int bpf_map_offload_lookup_elem(struct bpf_map *map, void *key, void *value)</span>
+<span class='curline'><a href='../S/377.html#L447'>bpf_map</a>           447 bpf/offload.c  int bpf_map_offload_update_elem(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/377.html#L465'>bpf_map</a>           465 bpf/offload.c  int bpf_map_offload_delete_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/377.html#L478'>bpf_map</a>           478 bpf/offload.c  int bpf_map_offload_get_next_key(struct bpf_map *map, void *key, void *next_key)</span>
+<span class='curline'><a href='../S/377.html#L521'>bpf_map</a>           521 bpf/offload.c  int bpf_map_offload_info_fill(struct bpf_map_info *info, struct bpf_map *map)</span>
+<span class='curline'><a href='../S/377.html#L579'>bpf_map</a>           579 bpf/offload.c  bool bpf_offload_prog_map_match(struct bpf_prog *prog, struct bpf_map *map)</span>
+<span class='curline'><a href='../S/387.html#L24'>bpf_map</a>            24 bpf/preload/iterators/iterators.bpf.c 	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/387.html#L82'>bpf_map</a>            82 bpf/preload/iterators/iterators.bpf.c 	struct bpf_map *map = ctx-&gt;map;</span>
+<span class='curline'><a href='../S/389.html#L14'>bpf_map</a>            14 bpf/preload/iterators/iterators.skel.h 		struct bpf_map *rodata;</span>
+<span class='curline'><a href='../S/410.html#L17'>bpf_map</a>            17 bpf/queue_stack_maps.c 	struct bpf_map map;</span>
+<span class='curline'><a href='../S/410.html#L25'>bpf_map</a>            25 bpf/queue_stack_maps.c static struct bpf_queue_stack *bpf_queue_stack(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/410.html#L67'>bpf_map</a>            67 bpf/queue_stack_maps.c static struct bpf_map *queue_stack_map_alloc(union bpf_attr *attr)</span>
+<span class='curline'><a href='../S/410.html#L100'>bpf_map</a>           100 bpf/queue_stack_maps.c static void queue_stack_map_free(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/410.html#L107'>bpf_map</a>           107 bpf/queue_stack_maps.c static int __queue_map_get(struct bpf_map *map, void *value, bool delete)</span>
+<span class='curline'><a href='../S/410.html#L136'>bpf_map</a>           136 bpf/queue_stack_maps.c static int __stack_map_get(struct bpf_map *map, void *value, bool delete)</span>
+<span class='curline'><a href='../S/410.html#L168'>bpf_map</a>           168 bpf/queue_stack_maps.c static int queue_map_peek_elem(struct bpf_map *map, void *value)</span>
+<span class='curline'><a href='../S/410.html#L174'>bpf_map</a>           174 bpf/queue_stack_maps.c static int stack_map_peek_elem(struct bpf_map *map, void *value)</span>
+<span class='curline'><a href='../S/410.html#L180'>bpf_map</a>           180 bpf/queue_stack_maps.c static int queue_map_pop_elem(struct bpf_map *map, void *value)</span>
+<span class='curline'><a href='../S/410.html#L186'>bpf_map</a>           186 bpf/queue_stack_maps.c static int stack_map_pop_elem(struct bpf_map *map, void *value)</span>
+<span class='curline'><a href='../S/410.html#L192'>bpf_map</a>           192 bpf/queue_stack_maps.c static int queue_stack_map_push_elem(struct bpf_map *map, void *value,</span>
+<span class='curline'><a href='../S/410.html#L233'>bpf_map</a>           233 bpf/queue_stack_maps.c static void *queue_stack_map_lookup_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/410.html#L239'>bpf_map</a>           239 bpf/queue_stack_maps.c static int queue_stack_map_update_elem(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/410.html#L246'>bpf_map</a>           246 bpf/queue_stack_maps.c static int queue_stack_map_delete_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/410.html#L252'>bpf_map</a>           252 bpf/queue_stack_maps.c static int queue_stack_map_get_next_key(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/408.html#L11'>bpf_map</a>            11 bpf/reuseport_array.c 	struct bpf_map map;</span>
+<span class='curline'><a href='../S/408.html#L15'>bpf_map</a>            15 bpf/reuseport_array.c static struct reuseport_array *reuseport_array(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/408.html#L52'>bpf_map</a>            52 bpf/reuseport_array.c static void *reuseport_array_lookup_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/408.html#L64'>bpf_map</a>            64 bpf/reuseport_array.c static int reuseport_array_delete_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/408.html#L96'>bpf_map</a>            96 bpf/reuseport_array.c static void reuseport_array_free(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/408.html#L151'>bpf_map</a>           151 bpf/reuseport_array.c static struct bpf_map *reuseport_array_alloc(union bpf_attr *attr)</span>
+<span class='curline'><a href='../S/408.html#L182'>bpf_map</a>           182 bpf/reuseport_array.c int bpf_fd_reuseport_array_lookup_elem(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/408.html#L249'>bpf_map</a>           249 bpf/reuseport_array.c int bpf_fd_reuseport_array_update_elem(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/408.html#L333'>bpf_map</a>           333 bpf/reuseport_array.c static int reuseport_array_get_next_key(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/412.html#L50'>bpf_map</a>            50 bpf/ringbuf.c  	struct bpf_map map;</span>
+<span class='curline'><a href='../S/412.html#L150'>bpf_map</a>           150 bpf/ringbuf.c  static struct bpf_map *ringbuf_map_alloc(union bpf_attr *attr)</span>
+<span class='curline'><a href='../S/412.html#L212'>bpf_map</a>           212 bpf/ringbuf.c  static void ringbuf_map_free(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/412.html#L221'>bpf_map</a>           221 bpf/ringbuf.c  static void *ringbuf_map_lookup_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/412.html#L226'>bpf_map</a>           226 bpf/ringbuf.c  static int ringbuf_map_update_elem(struct bpf_map *map, void *key, void *value,</span>
+<span class='curline'><a href='../S/412.html#L232'>bpf_map</a>           232 bpf/ringbuf.c  static int ringbuf_map_delete_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/412.html#L237'>bpf_map</a>           237 bpf/ringbuf.c  static int ringbuf_map_get_next_key(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/412.html#L243'>bpf_map</a>           243 bpf/ringbuf.c  static int ringbuf_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)</span>
+<span class='curline'><a href='../S/412.html#L270'>bpf_map</a>           270 bpf/ringbuf.c  static __poll_t ringbuf_map_poll(struct bpf_map *map, struct file *filp,</span>
+<span class='curline'><a href='../S/412.html#L368'>bpf_map</a>           368 bpf/ringbuf.c  BPF_CALL_3(bpf_ringbuf_reserve, struct bpf_map *, map, u64, size, u64, flags)</span>
+<span class='curline'><a href='../S/412.html#L441'>bpf_map</a>           441 bpf/ringbuf.c  BPF_CALL_4(bpf_ringbuf_output, struct bpf_map *, map, void *, data, u64, size,</span>
+<span class='curline'><a href='../S/412.html#L469'>bpf_map</a>           469 bpf/ringbuf.c  BPF_CALL_2(bpf_ringbuf_query, struct bpf_map *, map, u64, flags)</span>
+<span class='curline'><a href='../S/406.html#L28'>bpf_map</a>            28 bpf/stackmap.c 	struct bpf_map map;</span>
+<span class='curline'><a href='../S/406.html#L54'>bpf_map</a>            54 bpf/stackmap.c static inline bool stack_map_use_build_id(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/406.html#L59'>bpf_map</a>            59 bpf/stackmap.c static inline int stack_map_data_size(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/406.html#L89'>bpf_map</a>            89 bpf/stackmap.c static struct bpf_map *stack_map_alloc(union bpf_attr *attr)</span>
+<span class='curline'><a href='../S/406.html#L397'>bpf_map</a>           397 bpf/stackmap.c static long __bpf_get_stackid(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/406.html#L475'>bpf_map</a>           475 bpf/stackmap.c BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, map,</span>
+<span class='curline'><a href='../S/406.html#L521'>bpf_map</a>           521 bpf/stackmap.c 	   struct bpf_map *, map, u64, flags)</span>
+<span class='curline'><a href='../S/406.html#L755'>bpf_map</a>           755 bpf/stackmap.c static void *stack_map_lookup_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/406.html#L761'>bpf_map</a>           761 bpf/stackmap.c int bpf_stackmap_copy(struct bpf_map *map, void *key, void *value)</span>
+<span class='curline'><a href='../S/406.html#L784'>bpf_map</a>           784 bpf/stackmap.c static int stack_map_get_next_key(struct bpf_map *map, void *key,</span>
+<span class='curline'><a href='../S/406.html#L813'>bpf_map</a>           813 bpf/stackmap.c static int stack_map_update_elem(struct bpf_map *map, void *key, void *value,</span>
+<span class='curline'><a href='../S/406.html#L820'>bpf_map</a>           820 bpf/stackmap.c static int stack_map_delete_elem(struct bpf_map *map, void *key)</span>
+<span class='curline'><a href='../S/406.html#L839'>bpf_map</a>           839 bpf/stackmap.c static void stack_map_free(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/418.html#L101'>bpf_map</a>           101 bpf/syscall.c  static struct bpf_map *find_and_alloc_map(union bpf_attr *attr)</span>
+<span class='curline'><a href='../S/418.html#L105'>bpf_map</a>           105 bpf/syscall.c  	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/418.html#L130'>bpf_map</a>           130 bpf/syscall.c  static u32 bpf_map_value_size(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/418.html#L143'>bpf_map</a>           143 bpf/syscall.c  static void maybe_wait_bpf_programs(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/418.html#L154'>bpf_map</a>           154 bpf/syscall.c  static int bpf_map_update_value(struct bpf_map *map, struct fd f, void *key,</span>
+<span class='curline'><a href='../S/418.html#L210'>bpf_map</a>           210 bpf/syscall.c  static int bpf_map_copy_value(struct bpf_map *map, void *key, void *value,</span>
+<span class='curline'><a href='../S/418.html#L334'>bpf_map</a>           334 bpf/syscall.c  void bpf_map_init_from_attr(struct bpf_map *map, union bpf_attr *attr)</span>
+<span class='curline'><a href='../S/418.html#L398'>bpf_map</a>           398 bpf/syscall.c  int bpf_map_charge_memlock(struct bpf_map *map, u32 pages)</span>
+<span class='curline'><a href='../S/418.html#L409'>bpf_map</a>           409 bpf/syscall.c  void bpf_map_uncharge_memlock(struct bpf_map *map, u32 pages)</span>
+<span class='curline'><a href='../S/418.html#L415'>bpf_map</a>           415 bpf/syscall.c  static int bpf_map_alloc_id(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/418.html#L433'>bpf_map</a>           433 bpf/syscall.c  void bpf_map_free_id(struct bpf_map *map, bool do_idr_lock)</span>
+<span class='curline'><a href='../S/418.html#L462'>bpf_map</a>           462 bpf/syscall.c  	struct bpf_map *map = container_of(work, struct bpf_map, work);</span>
+<span class='curline'><a href='../S/418.html#L472'>bpf_map</a>           472 bpf/syscall.c  static void bpf_map_put_uref(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/418.html#L483'>bpf_map</a>           483 bpf/syscall.c  static void __bpf_map_put(struct bpf_map *map, bool do_idr_lock)</span>
+<span class='curline'><a href='../S/418.html#L494'>bpf_map</a>           494 bpf/syscall.c  void bpf_map_put(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/418.html#L500'>bpf_map</a>           500 bpf/syscall.c  void bpf_map_put_with_uref(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/418.html#L508'>bpf_map</a>           508 bpf/syscall.c  	struct bpf_map *map = filp-&gt;private_data;</span>
+<span class='curline'><a href='../S/418.html#L517'>bpf_map</a>           517 bpf/syscall.c  static fmode_t map_get_sys_perms(struct bpf_map *map, struct fd f)</span>
+<span class='curline'><a href='../S/418.html#L532'>bpf_map</a>           532 bpf/syscall.c  	const struct bpf_map *map = filp-&gt;private_data;</span>
+<span class='curline'><a href='../S/418.html#L587'>bpf_map</a>           587 bpf/syscall.c  	struct bpf_map *map = vma-&gt;vm_file-&gt;private_data;</span>
+<span class='curline'><a href='../S/418.html#L599'>bpf_map</a>           599 bpf/syscall.c  	struct bpf_map *map = vma-&gt;vm_file-&gt;private_data;</span>
+<span class='curline'><a href='../S/418.html#L615'>bpf_map</a>           615 bpf/syscall.c  	struct bpf_map *map = filp-&gt;private_data;</span>
+<span class='curline'><a href='../S/418.html#L663'>bpf_map</a>           663 bpf/syscall.c  	struct bpf_map *map = filp-&gt;private_data;</span>
+<span class='curline'><a href='../S/418.html#L682'>bpf_map</a>           682 bpf/syscall.c  int bpf_map_new_fd(struct bpf_map *map, int flags)</span>
+<span class='curline'><a href='../S/418.html#L737'>bpf_map</a>           737 bpf/syscall.c  int map_check_no_btf(const struct bpf_map *map,</span>
+<span class='curline'><a href='../S/418.html#L745'>bpf_map</a>           745 bpf/syscall.c  static int map_check_btf(struct bpf_map *map, const struct btf *btf,</span>
+<span class='curline'><a href='../S/418.html#L799'>bpf_map</a>           799 bpf/syscall.c  	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/418.html#L904'>bpf_map</a>           904 bpf/syscall.c  struct bpf_map *__bpf_map_get(struct fd f)</span>
+<span class='curline'><a href='../S/418.html#L916'>bpf_map</a>           916 bpf/syscall.c  void bpf_map_inc(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/418.html#L922'>bpf_map</a>           922 bpf/syscall.c  void bpf_map_inc_with_uref(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/418.html#L929'>bpf_map</a>           929 bpf/syscall.c  struct bpf_map *bpf_map_get(u32 ufd)</span>
+<span class='curline'><a href='../S/418.html#L932'>bpf_map</a>           932 bpf/syscall.c  	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/418.html#L944'>bpf_map</a>           944 bpf/syscall.c  struct bpf_map *bpf_map_get_with_uref(u32 ufd)</span>
+<span class='curline'><a href='../S/418.html#L947'>bpf_map</a>           947 bpf/syscall.c  	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/418.html#L960'>bpf_map</a>           960 bpf/syscall.c  static struct bpf_map *__bpf_map_inc_not_zero(struct bpf_map *map, bool uref)</span>
+<span class='curline'><a href='../S/418.html#L973'>bpf_map</a>           973 bpf/syscall.c  struct bpf_map *bpf_map_inc_not_zero(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/418.html#L983'>bpf_map</a>           983 bpf/syscall.c  int __weak bpf_stackmap_copy(struct bpf_map *map, void *key, void *value)</span>
+<span class='curline'><a href='../S/418.html#L1007'>bpf_map</a>          1007 bpf/syscall.c  	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/418.html#L1074'>bpf_map</a>          1074 bpf/syscall.c  	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/418.html#L1138'>bpf_map</a>          1138 bpf/syscall.c  	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/418.html#L1192'>bpf_map</a>          1192 bpf/syscall.c  	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/418.html#L1251'>bpf_map</a>          1251 bpf/syscall.c  int generic_map_delete_batch(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/418.html#L1303'>bpf_map</a>          1303 bpf/syscall.c  int generic_map_update_batch(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/418.html#L1364'>bpf_map</a>          1364 bpf/syscall.c  int generic_map_lookup_batch(struct bpf_map *map,</span>
+<span class='curline'><a href='../S/418.html#L1470'>bpf_map</a>          1470 bpf/syscall.c  	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/418.html#L1533'>bpf_map</a>          1533 bpf/syscall.c  	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/418.html#L3161'>bpf_map</a>          3161 bpf/syscall.c  struct bpf_map *bpf_map_get_curr_or_next(u32 *id)</span>
+<span class='curline'><a href='../S/418.html#L3163'>bpf_map</a>          3163 bpf/syscall.c  	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/418.html#L3245'>bpf_map</a>          3245 bpf/syscall.c  	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/418.html#L3279'>bpf_map</a>          3279 bpf/syscall.c  static const struct bpf_map *bpf_map_from_imm(const struct bpf_prog *prog,</span>
+<span class='curline'><a href='../S/418.html#L3283'>bpf_map</a>          3283 bpf/syscall.c  	const struct bpf_map *map;</span>
+<span class='curline'><a href='../S/418.html#L3310'>bpf_map</a>          3310 bpf/syscall.c  	const struct bpf_map *map;</span>
+<span class='curline'><a href='../S/418.html#L3672'>bpf_map</a>          3672 bpf/syscall.c  				  struct bpf_map *map,</span>
+<span class='curline'><a href='../S/418.html#L3976'>bpf_map</a>          3976 bpf/syscall.c  	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/418.html#L4302'>bpf_map</a>          4302 bpf/syscall.c  	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/418.html#L4303'>bpf_map</a>          4303 bpf/syscall.c  	struct bpf_map **used_maps_old, **used_maps_new;</span>
+<span class='curline'><a href='../S/401.html#L187'>bpf_map</a>           187 bpf/verifier.c #define BPF_MAP_PTR(X)		((struct bpf_map *)((X) &amp; ~BPF_MAP_PTR_UNPRIV))</span>
+<span class='curline'><a href='../S/401.html#L200'>bpf_map</a>           200 bpf/verifier.c 			      const struct bpf_map *map, bool unpriv)</span>
+<span class='curline'><a href='../S/401.html#L232'>bpf_map</a>           232 bpf/verifier.c 	struct bpf_map *map_ptr;</span>
+<span class='curline'><a href='../S/401.html#L470'>bpf_map</a>           470 bpf/verifier.c 				const struct bpf_map *map)</span>
+<span class='curline'><a href='../S/401.html#L2790'>bpf_map</a>          2790 bpf/verifier.c 	struct bpf_map *map = regs[regno].map_ptr;</span>
+<span class='curline'><a href='../S/401.html#L2906'>bpf_map</a>          2906 bpf/verifier.c 	struct bpf_map *map = reg-&gt;map_ptr;</span>
+<span class='curline'><a href='../S/401.html#L3509'>bpf_map</a>          3509 bpf/verifier.c static bool bpf_map_is_rdonly(const struct bpf_map *map)</span>
+<span class='curline'><a href='../S/401.html#L3514'>bpf_map</a>          3514 bpf/verifier.c static int bpf_map_direct_read(struct bpf_map *map, int off, int size, u64 *val)</span>
+<span class='curline'><a href='../S/401.html#L3601'>bpf_map</a>          3601 bpf/verifier.c 	struct bpf_map *map = reg-&gt;map_ptr;</span>
+<span class='curline'><a href='../S/401.html#L3773'>bpf_map</a>          3773 bpf/verifier.c 			struct bpf_map *map = reg-&gt;map_ptr;</span>
+<span class='curline'><a href='../S/401.html#L4196'>bpf_map</a>          4196 bpf/verifier.c 	struct bpf_map *map = reg-&gt;map_ptr;</span>
+<span class='curline'><a href='../S/401.html#L4696'>bpf_map</a>          4696 bpf/verifier.c 					struct bpf_map *map, int func_id)</span>
+<span class='curline'><a href='../S/401.html#L5240'>bpf_map</a>          5240 bpf/verifier.c 	struct bpf_map *map = meta-&gt;map_ptr;</span>
+<span class='curline'><a href='../S/401.html#L5284'>bpf_map</a>          5284 bpf/verifier.c 	struct bpf_map *map = meta-&gt;map_ptr;</span>
+<span class='curline'><a href='../S/401.html#L7693'>bpf_map</a>          7693 bpf/verifier.c 			const struct bpf_map *map = reg-&gt;map_ptr;</span>
+<span class='curline'><a href='../S/401.html#L8079'>bpf_map</a>          8079 bpf/verifier.c 	struct bpf_map *map;</span>
+<span class='curline'><a href='../S/401.html#L10137'>bpf_map</a>          10137 bpf/verifier.c static int check_map_prealloc(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/401.html#L10158'>bpf_map</a>          10158 bpf/verifier.c static bool is_preallocated_map(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/401.html#L10168'>bpf_map</a>          10168 bpf/verifier.c 					struct bpf_map *map,</span>
+<span class='curline'><a href='../S/401.html#L10241'>bpf_map</a>          10241 bpf/verifier.c static bool bpf_map_is_cgroup_storage(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/401.html#L10280'>bpf_map</a>          10280 bpf/verifier.c 			struct bpf_map *map;</span>
+<span class='curline'><a href='../S/401.html#L11043'>bpf_map</a>          11043 bpf/verifier.c 	struct bpf_map *map_ptr;</span>
+<span class='curline'><a href='../S/401.html#L11323'>bpf_map</a>          11323 bpf/verifier.c 	struct bpf_map *map_ptr;</span>
+<span class='curline'><a href='../S/401.html#L11564'>bpf_map</a>          11564 bpf/verifier.c 				     (void *(*)(struct bpf_map *map, void *key))NULL));</span>
+<span class='curline'><a href='../S/401.html#L11566'>bpf_map</a>          11566 bpf/verifier.c 				     (int (*)(struct bpf_map *map, void *key))NULL));</span>
+<span class='curline'><a href='../S/401.html#L11568'>bpf_map</a>          11568 bpf/verifier.c 				     (int (*)(struct bpf_map *map, void *key, void *value,</span>
+<span class='curline'><a href='../S/401.html#L11571'>bpf_map</a>          11571 bpf/verifier.c 				     (int (*)(struct bpf_map *map, void *value,</span>
+<span class='curline'><a href='../S/401.html#L11574'>bpf_map</a>          11574 bpf/verifier.c 				     (int (*)(struct bpf_map *map, void *value))NULL));</span>
+<span class='curline'><a href='../S/401.html#L11576'>bpf_map</a>          11576 bpf/verifier.c 				     (int (*)(struct bpf_map *map, void *value))NULL));</span>
+<span class='curline'><a href='../S/284.html#L804'>bpf_map</a>           804 trace/bpf_trace.c get_map_perf_counter(struct bpf_map *map, u64 flags,</span>
+<span class='curline'><a href='../S/284.html#L826'>bpf_map</a>           826 trace/bpf_trace.c BPF_CALL_2(bpf_perf_event_read, struct bpf_map *, map, u64, flags)</span>
+<span class='curline'><a href='../S/284.html#L849'>bpf_map</a>           849 trace/bpf_trace.c BPF_CALL_4(bpf_perf_event_read_value, struct bpf_map *, map, u64, flags,</span>
+<span class='curline'><a href='../S/284.html#L877'>bpf_map</a>           877 trace/bpf_trace.c __bpf_perf_event_output(struct pt_regs *regs, struct bpf_map *map,</span>
+<span class='curline'><a href='../S/284.html#L916'>bpf_map</a>           916 trace/bpf_trace.c BPF_CALL_5(bpf_perf_event_output, struct pt_regs *, regs, struct bpf_map *, map,</span>
+<span class='curline'><a href='../S/284.html#L970'>bpf_map</a>           970 trace/bpf_trace.c u64 bpf_event_output(struct bpf_map *map, u64 flags, void *meta, u64 meta_size,</span>
+<span class='curline'><a href='../S/284.html#L1020'>bpf_map</a>          1020 trace/bpf_trace.c BPF_CALL_2(bpf_current_task_under_cgroup, struct bpf_map *, map, u32, idx)</span>
+<span class='curline'><a href='../S/284.html#L1386'>bpf_map</a>          1386 trace/bpf_trace.c BPF_CALL_5(bpf_perf_event_output_tp, void *, tp_buff, struct bpf_map *, map,</span>
+<span class='curline'><a href='../S/284.html#L1410'>bpf_map</a>          1410 trace/bpf_trace.c BPF_CALL_3(bpf_get_stackid_tp, void *, tp_buff, struct bpf_map *, map,</span>
+<span class='curline'><a href='../S/284.html#L1606'>bpf_map</a>          1606 trace/bpf_trace.c 	   struct bpf_map *, map, u64, flags, void *, data, u64, size)</span>
+<span class='curline'><a href='../S/284.html#L1636'>bpf_map</a>          1636 trace/bpf_trace.c 	   struct bpf_map *, map, u64, flags)</span>
+</pre>
+</body>
+</html>

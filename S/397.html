@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>bpf/map_in_map.h</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/494.html'>bpf</a>/map_in_map.h</h2>
+<em class='comment'>/* [&lt;][&gt;][^][v][top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'><a href='../J/35.html' title='Multiple included from 3 places.'>INCLUDED FROM</a></h2>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>/* SPDX-License-Identifier: GPL-2.0-only */</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/* Copyright (c) 2017 Facebook</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> */</em>
+<a id='L4' name='L4'></a>   4 <em class='sharp'>#ifndef</em> <a href='../S/397.html#L5' title='Defined at 5 in bpf/map_in_map.h.'>__MAP_IN_MAP_H__</a>
+<a id='L5' name='L5'></a>   5 <em class='sharp'>#define</em> <a href='../S/397.html#L4' title='Referred from 4 in bpf/map_in_map.h.'>__MAP_IN_MAP_H__</a>
+<a id='L6' name='L6'></a>   6 
+<a id='L7' name='L7'></a>   7 <em class='sharp'>#include</em> &lt;linux/types.h&gt;
+<a id='L8' name='L8'></a>   8 
+<a id='L9' name='L9'></a>   9 <strong class='reserved'>struct</strong> file;
+<a id='L10' name='L10'></a>  10 <strong class='reserved'>struct</strong> <a href='../S/387.html#L16' title='Defined at 16 in bpf/preload/iterators/iterators.bpf.c.'>bpf_map</a>;
+<a id='L11' name='L11'></a>  11 
+<a id='L12' name='L12'></a>  12 <strong class='reserved'>struct</strong> <a href='../S/387.html#L16' title='Defined at 16 in bpf/preload/iterators/iterators.bpf.c.'>bpf_map</a> *<a href='../S/372.html#L9' title='Defined at 9 in bpf/map_in_map.c.'>bpf_map_meta_alloc</a>(<strong class='reserved'>int</strong> inner_map_ufd);
+<a id='L13' name='L13'></a>  13 <strong class='reserved'>void</strong> <a href='../S/372.html#L66' title='Defined at 66 in bpf/map_in_map.c.'>bpf_map_meta_free</a>(<strong class='reserved'>struct</strong> <a href='../S/387.html#L16' title='Defined at 16 in bpf/preload/iterators/iterators.bpf.c.'>bpf_map</a> *map_meta);
+<a id='L14' name='L14'></a>  14 <strong class='reserved'>void</strong> *<a href='../S/372.html#L81' title='Defined at 81 in bpf/map_in_map.c.'>bpf_map_fd_get_ptr</a>(<strong class='reserved'>struct</strong> <a href='../S/387.html#L16' title='Defined at 16 in bpf/preload/iterators/iterators.bpf.c.'>bpf_map</a> *map, <strong class='reserved'>struct</strong> file *map_file,
+<a id='L15' name='L15'></a>  15                          <strong class='reserved'>int</strong> ufd);
+<a id='L16' name='L16'></a>  16 <strong class='reserved'>void</strong> <a href='../S/372.html#L103' title='Defined at 103 in bpf/map_in_map.c.'>bpf_map_fd_put_ptr</a>(<strong class='reserved'>void</strong> *ptr);
+<a id='L17' name='L17'></a>  17 u32 <a href='../S/372.html#L111' title='Defined at 111 in bpf/map_in_map.c.'>bpf_map_fd_sys_lookup_elem</a>(<strong class='reserved'>void</strong> *ptr);
+<a id='L18' name='L18'></a>  18 
+<a id='L19' name='L19'></a>  19 <em class='sharp'>#endif</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;][^][v]<a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

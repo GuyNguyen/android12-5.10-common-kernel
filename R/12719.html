@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>string</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/162.html#L2005'>string</a>           2005 audit.c        void audit_log_n_string(struct audit_buffer *ab, const char *string,</span>
+<span class='curline'><a href='../S/162.html#L2026'>string</a>           2026 audit.c        	memcpy(ptr, string, slen);</span>
+<span class='curline'><a href='../S/162.html#L2038'>string</a>           2038 audit.c        bool audit_string_contains_control(const char *string, size_t len)</span>
+<span class='curline'><a href='../S/162.html#L2041'>string</a>           2041 audit.c        	for (p = string; p &lt; (const unsigned char *)string + len; p++) {</span>
+<span class='curline'><a href='../S/162.html#L2062'>string</a>           2062 audit.c        void audit_log_n_untrustedstring(struct audit_buffer *ab, const char *string,</span>
+<span class='curline'><a href='../S/162.html#L2065'>string</a>           2065 audit.c        	if (audit_string_contains_control(string, len))</span>
+<span class='curline'><a href='../S/162.html#L2066'>string</a>           2066 audit.c        		audit_log_n_hex(ab, string, len);</span>
+<span class='curline'><a href='../S/162.html#L2068'>string</a>           2068 audit.c        		audit_log_n_string(ab, string, len);</span>
+<span class='curline'><a href='../S/162.html#L2079'>string</a>           2079 audit.c        void audit_log_untrustedstring(struct audit_buffer *ab, const char *string)</span>
+<span class='curline'><a href='../S/162.html#L2081'>string</a>           2081 audit.c        	audit_log_n_untrustedstring(ab, string, strlen(string));</span>
+<span class='curline'><a href='../S/234.html#L916'>string</a>            916 cgroup/cgroup-v1.c 			fc-&gt;source = param-&gt;string;</span>
+<span class='curline'><a href='../S/234.html#L917'>string</a>            917 cgroup/cgroup-v1.c 			param-&gt;string = NULL;</span>
+<span class='curline'><a href='../S/234.html#L958'>string</a>            958 cgroup/cgroup-v1.c 		ctx-&gt;release_agent = param-&gt;string;</span>
+<span class='curline'><a href='../S/234.html#L959'>string</a>            959 cgroup/cgroup-v1.c 		param-&gt;string = NULL;</span>
+<span class='curline'><a href='../S/234.html#L972'>string</a>            972 cgroup/cgroup-v1.c 			char c = param-&gt;string[i];</span>
+<span class='curline'><a href='../S/234.html#L982'>string</a>            982 cgroup/cgroup-v1.c 		ctx-&gt;name = param-&gt;string;</span>
+<span class='curline'><a href='../S/234.html#L983'>string</a>            983 cgroup/cgroup-v1.c 		param-&gt;string = NULL;</span>
+<span class='curline'><a href='../S/476.html#L2582'>string</a>           2582 module.c       static char *next_string(char *string, unsigned long *secsize)</span>
+<span class='curline'><a href='../S/476.html#L2585'>string</a>           2585 module.c       	while (string[0]) {</span>
+<span class='curline'><a href='../S/476.html#L2586'>string</a>           2586 module.c       		string++;</span>
+<span class='curline'><a href='../S/476.html#L2592'>string</a>           2592 module.c       	while (!string[0]) {</span>
+<span class='curline'><a href='../S/476.html#L2593'>string</a>           2593 module.c       		string++;</span>
+<span class='curline'><a href='../S/476.html#L2597'>string</a>           2597 module.c       	return string;</span>
+<span class='curline'><a href='../S/216.html#L501'>string</a>            501 params.c       	strcpy(kps-&gt;string, val);</span>
+<span class='curline'><a href='../S/216.html#L509'>string</a>            509 params.c       	return scnprintf(buffer, PAGE_SIZE, "%s\n", kps-&gt;string);</span>
+<span class='curline'><a href='../S/272.html#L62'>string</a>             62 trace/trace_probe.c int PRINT_TYPE_FUNC_NAME(string)(struct trace_seq *s, void *data, void *ent)</span>
+<span class='curline'><a href='../S/272.html#L74'>string</a>             74 trace/trace_probe.c const char PRINT_TYPE_FMT_NAME(string)[] = "\\\"%s\\\"";</span>
+<span class='curline'><a href='../S/272.html#L79'>string</a>             79 trace/trace_probe.c 	__ASSIGN_FETCH_TYPE("string", string, string, sizeof(u32), 1,</span>
+<span class='curline'><a href='../S/272.html#L81'>string</a>             81 trace/trace_probe.c 	__ASSIGN_FETCH_TYPE("ustring", string, string, sizeof(u32), 1,</span>
+<span class='curline'><a href='../S/265.html#L166'>string</a>            166 trace/trace_probe.h DECLARE_BASIC_PRINT_TYPE_FUNC(string);</span>
+</pre>
+</body>
+</html>

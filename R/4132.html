@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>btf_verifier_env</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/411.html#L368'>btf_verifier_env</a>  368 bpf/btf.c      	s32 (*check_meta)(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L371'>btf_verifier_env</a>  371 bpf/btf.c      	int (*resolve)(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L373'>btf_verifier_env</a>  373 bpf/btf.c      	int (*check_member)(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L377'>btf_verifier_env</a>  377 bpf/btf.c      	int (*check_kflag_member)(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L381'>btf_verifier_env</a>  381 bpf/btf.c      	void (*log_details)(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L391'>btf_verifier_env</a>  391 bpf/btf.c      static int btf_resolve(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L1234'>btf_verifier_env</a> 1234 bpf/btf.c      __printf(2, 3) static void btf_verifier_log(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L1248'>btf_verifier_env</a> 1248 bpf/btf.c      __printf(4, 5) static void __btf_verifier_log_type(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L1293'>btf_verifier_env</a> 1293 bpf/btf.c      static void btf_verifier_log_member(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L1339'>btf_verifier_env</a> 1339 bpf/btf.c      static void btf_verifier_log_vsi(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L1366'>btf_verifier_env</a> 1366 bpf/btf.c      static void btf_verifier_log_hdr(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L1390'>btf_verifier_env</a> 1390 bpf/btf.c      static int btf_add_type(struct btf_verifier_env *env, struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L1494'>btf_verifier_env</a> 1494 bpf/btf.c      static int env_resolve_init(struct btf_verifier_env *env)</span>
+<span class='curline'><a href='../S/411.html#L1531'>btf_verifier_env</a> 1531 bpf/btf.c      static void btf_verifier_env_free(struct btf_verifier_env *env)</span>
+<span class='curline'><a href='../S/411.html#L1537'>btf_verifier_env</a> 1537 bpf/btf.c      static bool env_type_is_resolve_sink(const struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L1562'>btf_verifier_env</a> 1562 bpf/btf.c      static bool env_type_is_resolved(const struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L1568'>btf_verifier_env</a> 1568 bpf/btf.c      static int env_stack_push(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L1596'>btf_verifier_env</a> 1596 bpf/btf.c      static void env_stack_set_next_member(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L1602'>btf_verifier_env</a> 1602 bpf/btf.c      static void env_stack_pop_resolved(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L1614'>btf_verifier_env</a> 1614 bpf/btf.c      static const struct resolve_vertex *env_stack_peak(struct btf_verifier_env *env)</span>
+<span class='curline'><a href='../S/411.html#L1764'>btf_verifier_env</a> 1764 bpf/btf.c      static int btf_df_check_member(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L1774'>btf_verifier_env</a> 1774 bpf/btf.c      static int btf_df_check_kflag_member(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L1787'>btf_verifier_env</a> 1787 bpf/btf.c      static int btf_generic_check_kflag_member(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L1806'>btf_verifier_env</a> 1806 bpf/btf.c      static int btf_df_resolve(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L1820'>btf_verifier_env</a> 1820 bpf/btf.c      static int btf_int_check_member(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L1858'>btf_verifier_env</a> 1858 bpf/btf.c      static int btf_int_check_kflag_member(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L1914'>btf_verifier_env</a> 1914 bpf/btf.c      static s32 btf_int_check_meta(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L1978'>btf_verifier_env</a> 1978 bpf/btf.c      static void btf_int_log(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L2179'>btf_verifier_env</a> 2179 bpf/btf.c      static int btf_modifier_check_member(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L2204'>btf_verifier_env</a> 2204 bpf/btf.c      static int btf_modifier_check_kflag_member(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L2229'>btf_verifier_env</a> 2229 bpf/btf.c      static int btf_ptr_check_member(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L2255'>btf_verifier_env</a> 2255 bpf/btf.c      static int btf_ref_type_check_meta(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L2295'>btf_verifier_env</a> 2295 bpf/btf.c      static int btf_modifier_resolve(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L2337'>btf_verifier_env</a> 2337 bpf/btf.c      static int btf_var_resolve(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L2383'>btf_verifier_env</a> 2383 bpf/btf.c      static int btf_ptr_resolve(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L2480'>btf_verifier_env</a> 2480 bpf/btf.c      static void btf_ref_type_log(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L2504'>btf_verifier_env</a> 2504 bpf/btf.c      static s32 btf_fwd_check_meta(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L2530'>btf_verifier_env</a> 2530 bpf/btf.c      static void btf_fwd_type_log(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L2545'>btf_verifier_env</a> 2545 bpf/btf.c      static int btf_array_check_member(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L2574'>btf_verifier_env</a> 2574 bpf/btf.c      static s32 btf_array_check_meta(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L2627'>btf_verifier_env</a> 2627 bpf/btf.c      static int btf_array_resolve(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L2692'>btf_verifier_env</a> 2692 bpf/btf.c      static void btf_array_log(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L2796'>btf_verifier_env</a> 2796 bpf/btf.c      static int btf_struct_check_member(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L2821'>btf_verifier_env</a> 2821 bpf/btf.c      static s32 btf_struct_check_meta(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L2902'>btf_verifier_env</a> 2902 bpf/btf.c      static int btf_struct_resolve(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L2973'>btf_verifier_env</a> 2973 bpf/btf.c      static void btf_struct_log(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L3106'>btf_verifier_env</a> 3106 bpf/btf.c      static int btf_enum_check_member(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L3131'>btf_verifier_env</a> 3131 bpf/btf.c      static int btf_enum_check_kflag_member(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L3166'>btf_verifier_env</a> 3166 bpf/btf.c      static s32 btf_enum_check_meta(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L3228'>btf_verifier_env</a> 3228 bpf/btf.c      static void btf_enum_log(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L3274'>btf_verifier_env</a> 3274 bpf/btf.c      static s32 btf_func_proto_check_meta(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L3302'>btf_verifier_env</a> 3302 bpf/btf.c      static void btf_func_proto_log(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L3361'>btf_verifier_env</a> 3361 bpf/btf.c      static s32 btf_func_check_meta(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L3395'>btf_verifier_env</a> 3395 bpf/btf.c      static s32 btf_var_check_meta(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L3443'>btf_verifier_env</a> 3443 bpf/btf.c      static void btf_var_log(struct btf_verifier_env *env, const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L3459'>btf_verifier_env</a> 3459 bpf/btf.c      static s32 btf_datasec_check_meta(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L3537'>btf_verifier_env</a> 3537 bpf/btf.c      static int btf_datasec_resolve(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L3576'>btf_verifier_env</a> 3576 bpf/btf.c      static void btf_datasec_log(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L3615'>btf_verifier_env</a> 3615 bpf/btf.c      static int btf_func_proto_check(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L3704'>btf_verifier_env</a> 3704 bpf/btf.c      static int btf_func_check(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L3750'>btf_verifier_env</a> 3750 bpf/btf.c      static s32 btf_check_meta(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L3792'>btf_verifier_env</a> 3792 bpf/btf.c      static int btf_check_all_metas(struct btf_verifier_env *env)</span>
+<span class='curline'><a href='../S/411.html#L3819'>btf_verifier_env</a> 3819 bpf/btf.c      static bool btf_resolve_valid(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L3856'>btf_verifier_env</a> 3856 bpf/btf.c      static int btf_resolve(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L3889'>btf_verifier_env</a> 3889 bpf/btf.c      static int btf_check_all_types(struct btf_verifier_env *env)</span>
+<span class='curline'><a href='../S/411.html#L3927'>btf_verifier_env</a> 3927 bpf/btf.c      static int btf_parse_type_sec(struct btf_verifier_env *env)</span>
+<span class='curline'><a href='../S/411.html#L3950'>btf_verifier_env</a> 3950 bpf/btf.c      static int btf_parse_str_sec(struct btf_verifier_env *env)</span>
+<span class='curline'><a href='../S/411.html#L3989'>btf_verifier_env</a> 3989 bpf/btf.c      static int btf_check_sec_info(struct btf_verifier_env *env,</span>
+<span class='curline'><a href='../S/411.html#L4042'>btf_verifier_env</a> 4042 bpf/btf.c      static int btf_parse_hdr(struct btf_verifier_env *env)</span>
+<span class='curline'><a href='../S/411.html#L4115'>btf_verifier_env</a> 4115 bpf/btf.c      	struct btf_verifier_env *env = NULL;</span>
+<span class='curline'><a href='../S/411.html#L4345'>btf_verifier_env</a> 4345 bpf/btf.c      	struct btf_verifier_env *env = NULL;</span>
+</pre>
+</body>
+</html>

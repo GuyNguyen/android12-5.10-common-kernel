@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>futex_hash_bucket</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/76.html#L249'>futex_hash_bucket</a>  249 futex.c        	struct futex_hash_bucket *queues;</span>
+<span class='curline'><a href='../S/76.html#L321'>futex_hash_bucket</a>  321 futex.c        static inline void hb_waiters_inc(struct futex_hash_bucket *hb)</span>
+<span class='curline'><a href='../S/76.html#L336'>futex_hash_bucket</a>  336 futex.c        static inline void hb_waiters_dec(struct futex_hash_bucket *hb)</span>
+<span class='curline'><a href='../S/76.html#L343'>futex_hash_bucket</a>  343 futex.c        static inline int hb_waiters_pending(struct futex_hash_bucket *hb)</span>
+<span class='curline'><a href='../S/76.html#L363'>futex_hash_bucket</a>  363 futex.c        static struct futex_hash_bucket *hash_futex(union futex_key *key)</span>
+<span class='curline'><a href='../S/76.html#L697'>futex_hash_bucket</a>  697 futex.c        static struct futex_q *futex_top_waiter(struct futex_hash_bucket *hb,</span>
+<span class='curline'><a href='../S/76.html#L847'>futex_hash_bucket</a>  847 futex.c        	struct futex_hash_bucket *hb;</span>
+<span class='curline'><a href='../S/76.html#L1306'>futex_hash_bucket</a> 1306 futex.c        			   struct futex_hash_bucket *hb,</span>
+<span class='curline'><a href='../S/76.html#L1366'>futex_hash_bucket</a> 1366 futex.c        static int futex_lock_pi_atomic(u32 __user *uaddr, struct futex_hash_bucket *hb,</span>
+<span class='curline'><a href='../S/76.html#L1452'>futex_hash_bucket</a> 1452 futex.c        	struct futex_hash_bucket *hb;</span>
+<span class='curline'><a href='../S/76.html#L1458'>futex_hash_bucket</a> 1458 futex.c        	hb = container_of(q-&gt;lock_ptr, struct futex_hash_bucket, lock);</span>
+<span class='curline'><a href='../S/76.html#L1568'>futex_hash_bucket</a> 1568 futex.c        double_lock_hb(struct futex_hash_bucket *hb1, struct futex_hash_bucket *hb2)</span>
+<span class='curline'><a href='../S/76.html#L1581'>futex_hash_bucket</a> 1581 futex.c        double_unlock_hb(struct futex_hash_bucket *hb1, struct futex_hash_bucket *hb2)</span>
+<span class='curline'><a href='../S/76.html#L1594'>futex_hash_bucket</a> 1594 futex.c        	struct futex_hash_bucket *hb;</span>
+<span class='curline'><a href='../S/76.html#L1692'>futex_hash_bucket</a> 1692 futex.c        	struct futex_hash_bucket *hb1, *hb2;</span>
+<span class='curline'><a href='../S/76.html#L1781'>futex_hash_bucket</a> 1781 futex.c        void requeue_futex(struct futex_q *q, struct futex_hash_bucket *hb1,</span>
+<span class='curline'><a href='../S/76.html#L1782'>futex_hash_bucket</a> 1782 futex.c        		   struct futex_hash_bucket *hb2, union futex_key *key2)</span>
+<span class='curline'><a href='../S/76.html#L1815'>futex_hash_bucket</a> 1815 futex.c        			   struct futex_hash_bucket *hb)</span>
+<span class='curline'><a href='../S/76.html#L1856'>futex_hash_bucket</a> 1856 futex.c        futex_proxy_trylock_atomic(u32 __user *pifutex, struct futex_hash_bucket *hb1,</span>
+<span class='curline'><a href='../S/76.html#L1857'>futex_hash_bucket</a> 1857 futex.c        			   struct futex_hash_bucket *hb2, union futex_key *key1,</span>
+<span class='curline'><a href='../S/76.html#L1929'>futex_hash_bucket</a> 1929 futex.c        	struct futex_hash_bucket *hb1, *hb2;</span>
+<span class='curline'><a href='../S/76.html#L2196'>futex_hash_bucket</a> 2196 futex.c        static inline struct futex_hash_bucket *queue_lock(struct futex_q *q)</span>
+<span class='curline'><a href='../S/76.html#L2199'>futex_hash_bucket</a> 2199 futex.c        	struct futex_hash_bucket *hb;</span>
+<span class='curline'><a href='../S/76.html#L2220'>futex_hash_bucket</a> 2220 futex.c        queue_unlock(struct futex_hash_bucket *hb)</span>
+<span class='curline'><a href='../S/76.html#L2227'>futex_hash_bucket</a> 2227 futex.c        static inline void __queue_me(struct futex_q *q, struct futex_hash_bucket *hb)</span>
+<span class='curline'><a href='../S/76.html#L2261'>futex_hash_bucket</a> 2261 futex.c        static inline void queue_me(struct futex_q *q, struct futex_hash_bucket *hb)</span>
+<span class='curline'><a href='../S/76.html#L2585'>futex_hash_bucket</a> 2585 futex.c        static void futex_wait_queue_me(struct futex_hash_bucket *hb, struct futex_q *q,</span>
+<span class='curline'><a href='../S/76.html#L2635'>futex_hash_bucket</a> 2635 futex.c        			   struct futex_q *q, struct futex_hash_bucket **hb)</span>
+<span class='curline'><a href='../S/76.html#L2694'>futex_hash_bucket</a> 2694 futex.c        	struct futex_hash_bucket *hb;</span>
+<span class='curline'><a href='../S/76.html#L2785'>futex_hash_bucket</a> 2785 futex.c        	struct futex_hash_bucket *hb;</span>
+<span class='curline'><a href='../S/76.html#L2954'>futex_hash_bucket</a> 2954 futex.c        	struct futex_hash_bucket *hb;</span>
+<span class='curline'><a href='../S/76.html#L3102'>futex_hash_bucket</a> 3102 futex.c        int handle_early_requeue_pi_wakeup(struct futex_hash_bucket *hb,</span>
+<span class='curline'><a href='../S/76.html#L3180'>futex_hash_bucket</a> 3180 futex.c        	struct futex_hash_bucket *hb;</span>
+</pre>
+</body>
+</html>

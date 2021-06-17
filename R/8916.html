@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>lockdep_stats</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/35.html#L607'>lockdep_stats</a>     607 locking/lockdep.c DEFINE_PER_CPU(struct lockdep_stats, lockdep_stats);</span>
+<span class='curline'><a href='../S/46.html#L207'>lockdep_stats</a>     207 locking/lockdep_internals.h DECLARE_PER_CPU(struct lockdep_stats, lockdep_stats);</span>
+<span class='curline'><a href='../S/46.html#L211'>lockdep_stats</a>     211 locking/lockdep_internals.h 	this_cpu_inc(lockdep_stats.ptr);</span>
+<span class='curline'><a href='../S/46.html#L215'>lockdep_stats</a>     215 locking/lockdep_internals.h 	__this_cpu_inc(lockdep_stats.ptr);			\</span>
+<span class='curline'><a href='../S/46.html#L220'>lockdep_stats</a>     220 locking/lockdep_internals.h 	__this_cpu_dec(lockdep_stats.ptr);			\</span>
+<span class='curline'><a href='../S/46.html#L224'>lockdep_stats</a>     224 locking/lockdep_internals.h 	struct lockdep_stats *__cpu_lockdep_stats;			\</span>
+<span class='curline'><a href='../S/46.html#L228'>lockdep_stats</a>     228 locking/lockdep_internals.h 		__cpu_lockdep_stats = &amp;per_cpu(lockdep_stats, __cpu);	\</span>
+<span class='curline'><a href='../S/46.html#L249'>lockdep_stats</a>     249 locking/lockdep_internals.h 		ops += per_cpu(lockdep_stats.lock_class_ops[idx], cpu);</span>
+</pre>
+</body>
+</html>

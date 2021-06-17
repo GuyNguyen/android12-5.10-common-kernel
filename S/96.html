@@ -1,0 +1,339 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>time/sched_clock.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/512.html'>time</a>/sched_clock.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L52'>[^]</a><a href='#L294'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L52' title='Defined at 52.'>jiffy_sched_clock_read</a></li>
+<li><a href='#L67' title='Defined at 67.'>cyc_to_ns</a></li>
+<li><a href='#L72' title='Defined at 72.'>sched_clock_read_begin</a></li>
+<li><a href='#L78' title='Defined at 78.'>sched_clock_read_retry</a></li>
+<li><a href='#L83' title='Defined at 83.'>sched_clock</a></li>
+<li><a href='#L110' title='Defined at 110.'>update_clock_read_data</a></li>
+<li><a href='#L128' title='Defined at 128.'>update_sched_clock</a></li>
+<li><a href='#L145' title='Defined at 145.'>sched_clock_poll</a></li>
+<li><a href='#L154' title='Defined at 154.'>sched_clock_register</a></li>
+<li><a href='#L229' title='Defined at 229.'>generic_sched_clock_init</a></li>
+<li><a href='#L260' title='Defined at 260.'>suspended_sched_clock_read</a></li>
+<li><a href='#L267' title='Defined at 267.'>sched_clock_suspend</a></li>
+<li><a href='#L279' title='Defined at 279.'>sched_clock_resume</a></li>
+<li><a href='#L294' title='Defined at 294.'>sched_clock_syscore_init</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * Generic sched_clock() support, to extend low level hardware time</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> * counters to full 64-bit ns values.</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> */</em>
+<a id='L6' name='L6'></a>   6 <em class='sharp'>#include</em> &lt;linux/clocksource.h&gt;
+<a id='L7' name='L7'></a>   7 <em class='sharp'>#include</em> &lt;linux/init.h&gt;
+<a id='L8' name='L8'></a>   8 <em class='sharp'>#include</em> &lt;linux/jiffies.h&gt;
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> &lt;linux/ktime.h&gt;
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;linux/kernel.h&gt;
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;linux/moduleparam.h&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;<a href='447.html'>linux/sched.h</a>&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;linux/sched/clock.h&gt;
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> &lt;linux/syscore_ops.h&gt;
+<a id='L15' name='L15'></a>  15 <em class='sharp'>#include</em> &lt;linux/hrtimer.h&gt;
+<a id='L16' name='L16'></a>  16 <em class='sharp'>#include</em> &lt;linux/sched_clock.h&gt;
+<a id='L17' name='L17'></a>  17 <em class='sharp'>#include</em> &lt;linux/seqlock.h&gt;
+<a id='L18' name='L18'></a>  18 <em class='sharp'>#include</em> &lt;linux/bitops.h&gt;
+<a id='L19' name='L19'></a>  19 <em class='sharp'>#include</em> &lt;trace/hooks/epoch.h&gt;
+<a id='L20' name='L20'></a>  20 
+<a id='L21' name='L21'></a>  21 <em class='sharp'>#include</em> "<a href='102.html'>timekeeping.h</a>"
+<a id='L22' name='L22'></a>  22 
+<a id='L23' name='L23'></a>  23 <em class='comment'>/**</em>
+<a id='L24' name='L24'></a>  24 <em class='comment'> * struct clock_data - all data needed for sched_clock() (including</em>
+<a id='L25' name='L25'></a>  25 <em class='comment'> *                     registration of a new clock source)</em>
+<a id='L26' name='L26'></a>  26 <em class='comment'> *</em>
+<a id='L27' name='L27'></a>  27 <em class='comment'> * @seq:                Sequence counter for protecting updates. The lowest</em>
+<a id='L28' name='L28'></a>  28 <em class='comment'> *                      bit is the index for @read_data.</em>
+<a id='L29' name='L29'></a>  29 <em class='comment'> * @read_data:          Data required to read from sched_clock.</em>
+<a id='L30' name='L30'></a>  30 <em class='comment'> * @wrap_kt:            Duration for which clock can run before wrapping.</em>
+<a id='L31' name='L31'></a>  31 <em class='comment'> * @rate:               Tick rate of the registered clock.</em>
+<a id='L32' name='L32'></a>  32 <em class='comment'> * @actual_read_sched_clock: Registered hardware level clock read function.</em>
+<a id='L33' name='L33'></a>  33 <em class='comment'> *</em>
+<a id='L34' name='L34'></a>  34 <em class='comment'> * The ordering of this structure has been chosen to optimize cache</em>
+<a id='L35' name='L35'></a>  35 <em class='comment'> * performance. In particular 'seq' and 'read_data[0]' (combined) should fit</em>
+<a id='L36' name='L36'></a>  36 <em class='comment'> * into a single 64-byte cache line.</em>
+<a id='L37' name='L37'></a>  37 <em class='comment'> */</em>
+<a id='L38' name='L38'></a>  38 <strong class='reserved'>struct</strong> <a href='../S/96.html#L61' title='Referred from 61 in time/sched_clock.c.'>clock_data</a> <em class='brace'>{</em>
+<a id='L39' name='L39'></a>  39         seqcount_latch_t        seq;
+<a id='L40' name='L40'></a>  40         <strong class='reserved'>struct</strong> clock_read_data  read_data[2];
+<a id='L41' name='L41'></a>  41         ktime_t                 wrap_kt;
+<a id='L42' name='L42'></a>  42         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>           rate;
+<a id='L43' name='L43'></a>  43 
+<a id='L44' name='L44'></a>  44         u64 (*actual_read_sched_clock)(<strong class='reserved'>void</strong>);
+<a id='L45' name='L45'></a>  45 <em class='brace'>}</em>;
+<a id='L46' name='L46'></a>  46 
+<a id='L47' name='L47'></a>  47 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> hrtimer sched_clock_timer;
+<a id='L48' name='L48'></a>  48 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/447.html#L2371' title='Defined at 2371 in sched/sched.h.'>irqtime</a> = -1;
+<a id='L49' name='L49'></a>  49 
+<a id='L50' name='L50'></a>  50 core_param(<a href='../S/447.html#L2371' title='Defined at 2371 in sched/sched.h.'>irqtime</a>, <a href='../S/447.html#L2371' title='Defined at 2371 in sched/sched.h.'>irqtime</a>, <strong class='reserved'>int</strong>, 0400);
+<a id='L51' name='L51'></a>  51 
+<a id='L52' name='L52'></a>  52 <strong class='reserved'>static</strong> u64 notrace <a href='../R/8176.html' title='Multiple referred from 4 places.'>jiffy_sched_clock_read</a>(<strong class='reserved'>void</strong>)
+<a id='L53' name='L53'></a>  53 <em class='brace'>{</em>
+<a id='L54' name='L54'></a>  54         <em class='comment'>/*</em>
+<a id='L55' name='L55'></a>  55 <em class='comment'>         * We don't need to use get_jiffies_64 on 32-bit arches here</em>
+<a id='L56' name='L56'></a>  56 <em class='comment'>         * because we register with BITS_PER_LONG</em>
+<a id='L57' name='L57'></a>  57 <em class='comment'>         */</em>
+<a id='L58' name='L58'></a>  58         <strong class='reserved'>return</strong> (u64)(jiffies - INITIAL_JIFFIES);
+<a id='L59' name='L59'></a>  59 <em class='brace'>}</em>
+<a id='L60' name='L60'></a>  60 
+<a id='L61' name='L61'></a>  61 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../S/96.html#L38' title='Defined at 38 in time/sched_clock.c.'>clock_data</a> cd ____cacheline_aligned = <em class='brace'>{</em>
+<a id='L62' name='L62'></a>  62         .read_data[0] = <em class='brace'>{</em> .mult = NSEC_PER_SEC / HZ,
+<a id='L63' name='L63'></a>  63                           .read_sched_clock = <a href='../S/96.html#L52' title='Defined at 52 in time/sched_clock.c.'>jiffy_sched_clock_read</a>, <em class='brace'>}</em>,
+<a id='L64' name='L64'></a>  64         .actual_read_sched_clock = <a href='../S/96.html#L52' title='Defined at 52 in time/sched_clock.c.'>jiffy_sched_clock_read</a>,
+<a id='L65' name='L65'></a>  65 <em class='brace'>}</em>;
+<a id='L66' name='L66'></a>  66 
+<a id='L67' name='L67'></a>  67 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> u64 notrace <a href='../R/5343.html' title='Multiple referred from 4 places.'>cyc_to_ns</a>(u64 cyc, u32 mult, u32 shift)
+<a id='L68' name='L68'></a>  68 <em class='brace'>{</em>
+<a id='L69' name='L69'></a>  69         <strong class='reserved'>return</strong> (cyc * mult) &gt;&gt; shift;
+<a id='L70' name='L70'></a>  70 <em class='brace'>}</em>
+<a id='L71' name='L71'></a>  71 
+<a id='L72' name='L72'></a>  72 notrace <strong class='reserved'>struct</strong> clock_read_data *<a href='../S/96.html#L90' title='Referred from 90 in time/sched_clock.c.'>sched_clock_read_begin</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> *seq)
+<a id='L73' name='L73'></a>  73 <em class='brace'>{</em>
+<a id='L74' name='L74'></a>  74         *seq = raw_read_seqcount_latch(&amp;cd.seq);
+<a id='L75' name='L75'></a>  75         <strong class='reserved'>return</strong> cd.read_data + (*seq &amp; 1);
+<a id='L76' name='L76'></a>  76 <em class='brace'>}</em>
+<a id='L77' name='L77'></a>  77 
+<a id='L78' name='L78'></a>  78 notrace <strong class='reserved'>int</strong> <a href='../S/96.html#L95' title='Referred from 95 in time/sched_clock.c.'>sched_clock_read_retry</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> seq)
+<a id='L79' name='L79'></a>  79 <em class='brace'>{</em>
+<a id='L80' name='L80'></a>  80         <strong class='reserved'>return</strong> read_seqcount_latch_retry(&amp;cd.seq, seq);
+<a id='L81' name='L81'></a>  81 <em class='brace'>}</em>
+<a id='L82' name='L82'></a>  82 
+<a id='L83' name='L83'></a>  83 <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <strong class='reserved'>long</strong> notrace <a href='../R/11952.html' title='Multiple referred from 27 places.'>sched_clock</a>(<strong class='reserved'>void</strong>)
+<a id='L84' name='L84'></a>  84 <em class='brace'>{</em>
+<a id='L85' name='L85'></a>  85         u64 cyc, res;
+<a id='L86' name='L86'></a>  86         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> seq;
+<a id='L87' name='L87'></a>  87         <strong class='reserved'>struct</strong> clock_read_data *rd;
+<a id='L88' name='L88'></a>  88 
+<a id='L89' name='L89'></a>  89         <strong class='reserved'>do</strong> <em class='brace'>{</em>
+<a id='L90' name='L90'></a>  90                 rd = <a href='../S/96.html#L72' title='Defined at 72 in time/sched_clock.c.'>sched_clock_read_begin</a>(&amp;seq);
+<a id='L91' name='L91'></a>  91 
+<a id='L92' name='L92'></a>  92                 cyc = (rd-&gt;read_sched_clock() - rd-&gt;epoch_cyc) &amp;
+<a id='L93' name='L93'></a>  93                       rd-&gt;sched_clock_mask;
+<a id='L94' name='L94'></a>  94                 res = rd-&gt;epoch_ns + <a href='../S/96.html#L67' title='Defined at 67 in time/sched_clock.c.'>cyc_to_ns</a>(cyc, rd-&gt;mult, rd-&gt;shift);
+<a id='L95' name='L95'></a>  95         <em class='brace'>}</em> <strong class='reserved'>while</strong> (<a href='../S/96.html#L78' title='Defined at 78 in time/sched_clock.c.'>sched_clock_read_retry</a>(seq));
+<a id='L96' name='L96'></a>  96 
+<a id='L97' name='L97'></a>  97         <strong class='reserved'>return</strong> res;
+<a id='L98' name='L98'></a>  98 <em class='brace'>}</em>
+<a id='L99' name='L99'></a>  99 
+<a id='L100' name='L100'></a> 100 <em class='comment'>/*</em>
+<a id='L101' name='L101'></a> 101 <em class='comment'> * Updating the data required to read the clock.</em>
+<a id='L102' name='L102'></a> 102 <em class='comment'> *</em>
+<a id='L103' name='L103'></a> 103 <em class='comment'> * sched_clock() will never observe mis-matched data even if called from</em>
+<a id='L104' name='L104'></a> 104 <em class='comment'> * an NMI. We do this by maintaining an odd/even copy of the data and</em>
+<a id='L105' name='L105'></a> 105 <em class='comment'> * steering sched_clock() to one or the other using a sequence counter.</em>
+<a id='L106' name='L106'></a> 106 <em class='comment'> * In order to preserve the data cache profile of sched_clock() as much</em>
+<a id='L107' name='L107'></a> 107 <em class='comment'> * as possible the system reverts back to the even copy when the update</em>
+<a id='L108' name='L108'></a> 108 <em class='comment'> * completes; the odd copy is used *only* during an update.</em>
+<a id='L109' name='L109'></a> 109 <em class='comment'> */</em>
+<a id='L110' name='L110'></a> 110 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/14362.html' title='Multiple referred from 2 places.'>update_clock_read_data</a>(<strong class='reserved'>struct</strong> clock_read_data *rd)
+<a id='L111' name='L111'></a> 111 <em class='brace'>{</em>
+<a id='L112' name='L112'></a> 112         <em class='comment'>/* update the backup (odd) copy with the new data */</em>
+<a id='L113' name='L113'></a> 113         cd.read_data[1] = *rd;
+<a id='L114' name='L114'></a> 114 
+<a id='L115' name='L115'></a> 115         <em class='comment'>/* steer readers towards the odd copy */</em>
+<a id='L116' name='L116'></a> 116         raw_write_seqcount_latch(&amp;cd.seq);
+<a id='L117' name='L117'></a> 117 
+<a id='L118' name='L118'></a> 118         <em class='comment'>/* now its safe for us to update the normal (even) copy */</em>
+<a id='L119' name='L119'></a> 119         cd.read_data[0] = *rd;
+<a id='L120' name='L120'></a> 120 
+<a id='L121' name='L121'></a> 121         <em class='comment'>/* switch readers back to the even copy */</em>
+<a id='L122' name='L122'></a> 122         raw_write_seqcount_latch(&amp;cd.seq);
+<a id='L123' name='L123'></a> 123 <em class='brace'>}</em>
+<a id='L124' name='L124'></a> 124 
+<a id='L125' name='L125'></a> 125 <em class='comment'>/*</em>
+<a id='L126' name='L126'></a> 126 <em class='comment'> * Atomically update the sched_clock() epoch.</em>
+<a id='L127' name='L127'></a> 127 <em class='comment'> */</em>
+<a id='L128' name='L128'></a> 128 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/14437.html' title='Multiple referred from 3 places.'>update_sched_clock</a>(<strong class='reserved'>void</strong>)
+<a id='L129' name='L129'></a> 129 <em class='brace'>{</em>
+<a id='L130' name='L130'></a> 130         u64 cyc;
+<a id='L131' name='L131'></a> 131         u64 ns;
+<a id='L132' name='L132'></a> 132         <strong class='reserved'>struct</strong> clock_read_data rd;
+<a id='L133' name='L133'></a> 133 
+<a id='L134' name='L134'></a> 134         rd = cd.read_data[0];
+<a id='L135' name='L135'></a> 135 
+<a id='L136' name='L136'></a> 136         cyc = cd.actual_read_sched_clock();
+<a id='L137' name='L137'></a> 137         ns = rd.epoch_ns + <a href='../S/96.html#L67' title='Defined at 67 in time/sched_clock.c.'>cyc_to_ns</a>((cyc - rd.epoch_cyc) &amp; rd.sched_clock_mask, rd.mult, rd.shift);
+<a id='L138' name='L138'></a> 138 
+<a id='L139' name='L139'></a> 139         rd.epoch_ns = ns;
+<a id='L140' name='L140'></a> 140         rd.epoch_cyc = cyc;
+<a id='L141' name='L141'></a> 141 
+<a id='L142' name='L142'></a> 142         <a href='../S/96.html#L110' title='Defined at 110 in time/sched_clock.c.'>update_clock_read_data</a>(&amp;rd);
+<a id='L143' name='L143'></a> 143 <em class='brace'>}</em>
+<a id='L144' name='L144'></a> 144 
+<a id='L145' name='L145'></a> 145 <strong class='reserved'>static</strong> <strong class='reserved'>enum</strong> hrtimer_restart <a href='../S/96.html#L245' title='Referred from 245 in time/sched_clock.c.'>sched_clock_poll</a>(<strong class='reserved'>struct</strong> hrtimer *hrt)
+<a id='L146' name='L146'></a> 146 <em class='brace'>{</em>
+<a id='L147' name='L147'></a> 147         <a href='../S/96.html#L128' title='Defined at 128 in time/sched_clock.c.'>update_sched_clock</a>();
+<a id='L148' name='L148'></a> 148         hrtimer_forward_now(hrt, cd.wrap_kt);
+<a id='L149' name='L149'></a> 149 
+<a id='L150' name='L150'></a> 150         <strong class='reserved'>return</strong> HRTIMER_RESTART;
+<a id='L151' name='L151'></a> 151 <em class='brace'>}</em>
+<a id='L152' name='L152'></a> 152 
+<a id='L153' name='L153'></a> 153 <strong class='reserved'>void</strong> __init
+<a id='L154' name='L154'></a> 154 <a href='../S/96.html#L236' title='Referred from 236 in time/sched_clock.c.'>sched_clock_register</a>(u64 (*read)(<strong class='reserved'>void</strong>), <strong class='reserved'>int</strong> bits, <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> rate)
+<a id='L155' name='L155'></a> 155 <em class='brace'>{</em>
+<a id='L156' name='L156'></a> 156         u64 res, wrap, new_mask, new_epoch, cyc, ns;
+<a id='L157' name='L157'></a> 157         u32 new_mult, new_shift;
+<a id='L158' name='L158'></a> 158         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> r, flags;
+<a id='L159' name='L159'></a> 159         <strong class='reserved'>char</strong> r_unit;
+<a id='L160' name='L160'></a> 160         <strong class='reserved'>struct</strong> clock_read_data rd;
+<a id='L161' name='L161'></a> 161 
+<a id='L162' name='L162'></a> 162         <strong class='reserved'>if</strong> (cd.rate &gt; rate)
+<a id='L163' name='L163'></a> 163                 <strong class='reserved'>return</strong>;
+<a id='L164' name='L164'></a> 164 
+<a id='L165' name='L165'></a> 165         <em class='comment'>/* Cannot register a sched_clock with interrupts on */</em>
+<a id='L166' name='L166'></a> 166         local_irq_save(flags);
+<a id='L167' name='L167'></a> 167 
+<a id='L168' name='L168'></a> 168         <em class='comment'>/* Calculate the mult/shift to convert counter ticks to ns. */</em>
+<a id='L169' name='L169'></a> 169         <a href='../S/100.html#L45' title='Defined at 45 in time/clocksource.c.'>clocks_calc_mult_shift</a>(&amp;new_mult, &amp;new_shift, rate, NSEC_PER_SEC, 3600);
+<a id='L170' name='L170'></a> 170 
+<a id='L171' name='L171'></a> 171         new_mask = CLOCKSOURCE_MASK(bits);
+<a id='L172' name='L172'></a> 172         cd.rate = rate;
+<a id='L173' name='L173'></a> 173 
+<a id='L174' name='L174'></a> 174         <em class='comment'>/* Calculate how many nanosecs until we risk wrapping */</em>
+<a id='L175' name='L175'></a> 175         wrap = <a href='../S/100.html#L666' title='Defined at 666 in time/clocksource.c.'>clocks_calc_max_nsecs</a>(new_mult, new_shift, 0, new_mask, NULL);
+<a id='L176' name='L176'></a> 176         cd.wrap_kt = ns_to_ktime(wrap);
+<a id='L177' name='L177'></a> 177 
+<a id='L178' name='L178'></a> 178         rd = cd.read_data[0];
+<a id='L179' name='L179'></a> 179 
+<a id='L180' name='L180'></a> 180         <em class='comment'>/* Update epoch for new counter and update 'epoch_ns' from old counter*/</em>
+<a id='L181' name='L181'></a> 181         new_epoch = read();
+<a id='L182' name='L182'></a> 182         cyc = cd.actual_read_sched_clock();
+<a id='L183' name='L183'></a> 183         ns = rd.epoch_ns + <a href='../S/96.html#L67' title='Defined at 67 in time/sched_clock.c.'>cyc_to_ns</a>((cyc - rd.epoch_cyc) &amp; rd.sched_clock_mask, rd.mult, rd.shift);
+<a id='L184' name='L184'></a> 184         cd.actual_read_sched_clock = read;
+<a id='L185' name='L185'></a> 185 
+<a id='L186' name='L186'></a> 186         rd.read_sched_clock     = read;
+<a id='L187' name='L187'></a> 187         rd.sched_clock_mask     = new_mask;
+<a id='L188' name='L188'></a> 188         rd.mult                 = new_mult;
+<a id='L189' name='L189'></a> 189         rd.shift                = new_shift;
+<a id='L190' name='L190'></a> 190         rd.epoch_cyc            = new_epoch;
+<a id='L191' name='L191'></a> 191         rd.epoch_ns             = ns;
+<a id='L192' name='L192'></a> 192 
+<a id='L193' name='L193'></a> 193         <a href='../S/96.html#L110' title='Defined at 110 in time/sched_clock.c.'>update_clock_read_data</a>(&amp;rd);
+<a id='L194' name='L194'></a> 194 
+<a id='L195' name='L195'></a> 195         <strong class='reserved'>if</strong> (sched_clock_timer.function != NULL) <em class='brace'>{</em>
+<a id='L196' name='L196'></a> 196                 <em class='comment'>/* update timeout for clock wrap */</em>
+<a id='L197' name='L197'></a> 197                 hrtimer_start(&amp;sched_clock_timer, cd.wrap_kt,
+<a id='L198' name='L198'></a> 198                               HRTIMER_MODE_REL_HARD);
+<a id='L199' name='L199'></a> 199         <em class='brace'>}</em>
+<a id='L200' name='L200'></a> 200 
+<a id='L201' name='L201'></a> 201         r = rate;
+<a id='L202' name='L202'></a> 202         <strong class='reserved'>if</strong> (r &gt;= 4000000) <em class='brace'>{</em>
+<a id='L203' name='L203'></a> 203                 r /= 1000000;
+<a id='L204' name='L204'></a> 204                 r_unit = 'M';
+<a id='L205' name='L205'></a> 205         <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L206' name='L206'></a> 206                 <strong class='reserved'>if</strong> (r &gt;= 1000) <em class='brace'>{</em>
+<a id='L207' name='L207'></a> 207                         r /= 1000;
+<a id='L208' name='L208'></a> 208                         r_unit = 'k';
+<a id='L209' name='L209'></a> 209                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L210' name='L210'></a> 210                         r_unit = ' ';
+<a id='L211' name='L211'></a> 211                 <em class='brace'>}</em>
+<a id='L212' name='L212'></a> 212         <em class='brace'>}</em>
+<a id='L213' name='L213'></a> 213 
+<a id='L214' name='L214'></a> 214         <em class='comment'>/* Calculate the ns resolution of this counter */</em>
+<a id='L215' name='L215'></a> 215         res = <a href='../S/96.html#L67' title='Defined at 67 in time/sched_clock.c.'>cyc_to_ns</a>(1ULL, new_mult, new_shift);
+<a id='L216' name='L216'></a> 216 
+<a id='L217' name='L217'></a> 217         pr_info("sched_clock: %u bits at %lu%cHz, resolution %lluns, wraps every %lluns\n",
+<a id='L218' name='L218'></a> 218                 bits, r, r_unit, res, wrap);
+<a id='L219' name='L219'></a> 219 
+<a id='L220' name='L220'></a> 220         <em class='comment'>/* Enable IRQ time accounting if we have a fast enough sched_clock() */</em>
+<a id='L221' name='L221'></a> 221         <strong class='reserved'>if</strong> (<a href='../S/447.html#L2371' title='Defined at 2371 in sched/sched.h.'>irqtime</a> &gt; 0 || (<a href='../S/447.html#L2371' title='Defined at 2371 in sched/sched.h.'>irqtime</a> == -1 &amp;&amp; rate &gt;= 1000000))
+<a id='L222' name='L222'></a> 222                 <a href='../S/473.html#L27' title='Defined at 27 in sched/cputime.c.'>enable_sched_clock_irqtime</a>();
+<a id='L223' name='L223'></a> 223 
+<a id='L224' name='L224'></a> 224         local_irq_restore(flags);
+<a id='L225' name='L225'></a> 225 
+<a id='L226' name='L226'></a> 226         pr_debug("Registered %pS as sched_clock source\n", read);
+<a id='L227' name='L227'></a> 227 <em class='brace'>}</em>
+<a id='L228' name='L228'></a> 228 
+<a id='L229' name='L229'></a> 229 <strong class='reserved'>void</strong> __init <a href='../S/474.html#L457' title='Referred from 457 in sched/clock.c.'>generic_sched_clock_init</a>(<strong class='reserved'>void</strong>)
+<a id='L230' name='L230'></a> 230 <em class='brace'>{</em>
+<a id='L231' name='L231'></a> 231         <em class='comment'>/*</em>
+<a id='L232' name='L232'></a> 232 <em class='comment'>         * If no sched_clock() function has been provided at that point,</em>
+<a id='L233' name='L233'></a> 233 <em class='comment'>         * make it the final one.</em>
+<a id='L234' name='L234'></a> 234 <em class='comment'>         */</em>
+<a id='L235' name='L235'></a> 235         <strong class='reserved'>if</strong> (cd.actual_read_sched_clock == <a href='../S/96.html#L52' title='Defined at 52 in time/sched_clock.c.'>jiffy_sched_clock_read</a>)
+<a id='L236' name='L236'></a> 236                 <a href='../S/96.html#L154' title='Defined at 154 in time/sched_clock.c.'>sched_clock_register</a>(<a href='../S/96.html#L52' title='Defined at 52 in time/sched_clock.c.'>jiffy_sched_clock_read</a>, BITS_PER_LONG, HZ);
+<a id='L237' name='L237'></a> 237 
+<a id='L238' name='L238'></a> 238         <a href='../S/96.html#L128' title='Defined at 128 in time/sched_clock.c.'>update_sched_clock</a>();
+<a id='L239' name='L239'></a> 239 
+<a id='L240' name='L240'></a> 240         <em class='comment'>/*</em>
+<a id='L241' name='L241'></a> 241 <em class='comment'>         * Start the timer to keep sched_clock() properly updated and</em>
+<a id='L242' name='L242'></a> 242 <em class='comment'>         * sets the initial epoch.</em>
+<a id='L243' name='L243'></a> 243 <em class='comment'>         */</em>
+<a id='L244' name='L244'></a> 244         <a href='../S/88.html#L1441' title='Defined at 1441 in time/hrtimer.c.'>hrtimer_init</a>(&amp;sched_clock_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_HARD);
+<a id='L245' name='L245'></a> 245         sched_clock_timer.function = <a href='../S/96.html#L145' title='Defined at 145 in time/sched_clock.c.'>sched_clock_poll</a>;
+<a id='L246' name='L246'></a> 246         hrtimer_start(&amp;sched_clock_timer, cd.wrap_kt, HRTIMER_MODE_REL_HARD);
+<a id='L247' name='L247'></a> 247 <em class='brace'>}</em>
+<a id='L248' name='L248'></a> 248 
+<a id='L249' name='L249'></a> 249 <em class='comment'>/*</em>
+<a id='L250' name='L250'></a> 250 <em class='comment'> * Clock read function for use when the clock is suspended.</em>
+<a id='L251' name='L251'></a> 251 <em class='comment'> *</em>
+<a id='L252' name='L252'></a> 252 <em class='comment'> * This function makes it appear to sched_clock() as if the clock</em>
+<a id='L253' name='L253'></a> 253 <em class='comment'> * stopped counting at its last update.</em>
+<a id='L254' name='L254'></a> 254 <em class='comment'> *</em>
+<a id='L255' name='L255'></a> 255 <em class='comment'> * This function must only be called from the critical</em>
+<a id='L256' name='L256'></a> 256 <em class='comment'> * section in sched_clock(). It relies on the read_seqcount_retry()</em>
+<a id='L257' name='L257'></a> 257 <em class='comment'> * at the end of the critical section to be sure we observe the</em>
+<a id='L258' name='L258'></a> 258 <em class='comment'> * correct copy of 'epoch_cyc'.</em>
+<a id='L259' name='L259'></a> 259 <em class='comment'> */</em>
+<a id='L260' name='L260'></a> 260 <strong class='reserved'>static</strong> u64 notrace <a href='../S/96.html#L273' title='Referred from 273 in time/sched_clock.c.'>suspended_sched_clock_read</a>(<strong class='reserved'>void</strong>)
+<a id='L261' name='L261'></a> 261 <em class='brace'>{</em>
+<a id='L262' name='L262'></a> 262         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> seq = raw_read_seqcount_latch(&amp;cd.seq);
+<a id='L263' name='L263'></a> 263 
+<a id='L264' name='L264'></a> 264         <strong class='reserved'>return</strong> cd.read_data[seq &amp; 1].epoch_cyc;
+<a id='L265' name='L265'></a> 265 <em class='brace'>}</em>
+<a id='L266' name='L266'></a> 266 
+<a id='L267' name='L267'></a> 267 <strong class='reserved'>int</strong> <a href='../R/11967.html' title='Multiple referred from 3 places.'>sched_clock_suspend</a>(<strong class='reserved'>void</strong>)
+<a id='L268' name='L268'></a> 268 <em class='brace'>{</em>
+<a id='L269' name='L269'></a> 269         <strong class='reserved'>struct</strong> clock_read_data *rd = &amp;cd.read_data[0];
+<a id='L270' name='L270'></a> 270 
+<a id='L271' name='L271'></a> 271         <a href='../S/96.html#L128' title='Defined at 128 in time/sched_clock.c.'>update_sched_clock</a>();
+<a id='L272' name='L272'></a> 272         <a href='../S/88.html#L1290' title='Defined at 1290 in time/hrtimer.c.'>hrtimer_cancel</a>(&amp;sched_clock_timer);
+<a id='L273' name='L273'></a> 273         rd-&gt;read_sched_clock = <a href='../S/96.html#L260' title='Defined at 260 in time/sched_clock.c.'>suspended_sched_clock_read</a>;
+<a id='L274' name='L274'></a> 274         trace_android_vh_show_suspend_epoch_val(rd-&gt;epoch_ns, rd-&gt;epoch_cyc);
+<a id='L275' name='L275'></a> 275 
+<a id='L276' name='L276'></a> 276         <strong class='reserved'>return</strong> 0;
+<a id='L277' name='L277'></a> 277 <em class='brace'>}</em>
+<a id='L278' name='L278'></a> 278 
+<a id='L279' name='L279'></a> 279 <strong class='reserved'>void</strong> <a href='../R/11965.html' title='Multiple referred from 3 places.'>sched_clock_resume</a>(<strong class='reserved'>void</strong>)
+<a id='L280' name='L280'></a> 280 <em class='brace'>{</em>
+<a id='L281' name='L281'></a> 281         <strong class='reserved'>struct</strong> clock_read_data *rd = &amp;cd.read_data[0];
+<a id='L282' name='L282'></a> 282 
+<a id='L283' name='L283'></a> 283         rd-&gt;epoch_cyc = cd.actual_read_sched_clock();
+<a id='L284' name='L284'></a> 284         hrtimer_start(&amp;sched_clock_timer, cd.wrap_kt, HRTIMER_MODE_REL_HARD);
+<a id='L285' name='L285'></a> 285         rd-&gt;read_sched_clock = cd.actual_read_sched_clock;
+<a id='L286' name='L286'></a> 286         trace_android_vh_show_resume_epoch_val(rd-&gt;epoch_cyc);
+<a id='L287' name='L287'></a> 287 <em class='brace'>}</em>
+<a id='L288' name='L288'></a> 288 
+<a id='L289' name='L289'></a> 289 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> syscore_ops sched_clock_ops = <em class='brace'>{</em>
+<a id='L290' name='L290'></a> 290         .suspend        = <a href='../D/12630.html' title='Multiple defined in 2 places.'>sched_clock_suspend</a>,
+<a id='L291' name='L291'></a> 291         .resume         = <a href='../D/12628.html' title='Multiple defined in 2 places.'>sched_clock_resume</a>,
+<a id='L292' name='L292'></a> 292 <em class='brace'>}</em>;
+<a id='L293' name='L293'></a> 293 
+<a id='L294' name='L294'></a> 294 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __init <a href='../S/96.html#L300' title='Referred from 300 in time/sched_clock.c.'>sched_clock_syscore_init</a>(<strong class='reserved'>void</strong>)
+<a id='L295' name='L295'></a> 295 <em class='brace'>{</em>
+<a id='L296' name='L296'></a> 296         register_syscore_ops(&amp;sched_clock_ops);
+<a id='L297' name='L297'></a> 297 
+<a id='L298' name='L298'></a> 298         <strong class='reserved'>return</strong> 0;
+<a id='L299' name='L299'></a> 299 <em class='brace'>}</em>
+<a id='L300' name='L300'></a> 300 device_initcall(<a href='../S/96.html#L294' title='Defined at 294 in time/sched_clock.c.'>sched_clock_syscore_init</a>);
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L52'>[^]</a><a href='#L294'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

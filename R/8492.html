@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>kgdb_state</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/62.html#L530'>kgdb_state</a>        530 debug/debug_core.c static int kgdb_reenter_check(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/62.html#L586'>kgdb_state</a>        586 debug/debug_core.c static int kgdb_cpu_enter(struct kgdb_state *ks, struct pt_regs *regs,</span>
+<span class='curline'><a href='../S/62.html#L830'>kgdb_state</a>        830 debug/debug_core.c 	struct kgdb_state kgdb_var;</span>
+<span class='curline'><a href='../S/62.html#L831'>kgdb_state</a>        831 debug/debug_core.c 	struct kgdb_state *ks = &amp;kgdb_var;</span>
+<span class='curline'><a href='../S/62.html#L845'>kgdb_state</a>        845 debug/debug_core.c 	memset(ks, 0, sizeof(struct kgdb_state));</span>
+<span class='curline'><a href='../S/62.html#L881'>kgdb_state</a>        881 debug/debug_core.c 	struct kgdb_state kgdb_var;</span>
+<span class='curline'><a href='../S/62.html#L882'>kgdb_state</a>        882 debug/debug_core.c 	struct kgdb_state *ks = &amp;kgdb_var;</span>
+<span class='curline'><a href='../S/62.html#L886'>kgdb_state</a>        886 debug/debug_core.c 	memset(ks, 0, sizeof(struct kgdb_state));</span>
+<span class='curline'><a href='../S/62.html#L908'>kgdb_state</a>        908 debug/debug_core.c 		struct kgdb_state kgdb_var;</span>
+<span class='curline'><a href='../S/62.html#L909'>kgdb_state</a>        909 debug/debug_core.c 		struct kgdb_state *ks = &amp;kgdb_var;</span>
+<span class='curline'><a href='../S/62.html#L911'>kgdb_state</a>        911 debug/debug_core.c 		memset(ks, 0, sizeof(struct kgdb_state));</span>
+<span class='curline'><a href='../S/61.html#L67'>kgdb_state</a>         67 debug/debug_core.h extern int gdb_serial_stub(struct kgdb_state *ks);</span>
+<span class='curline'><a href='../S/61.html#L71'>kgdb_state</a>         71 debug/debug_core.h extern int gdbstub_state(struct kgdb_state *ks, char *cmd);</span>
+<span class='curline'><a href='../S/61.html#L75'>kgdb_state</a>         75 debug/debug_core.h extern int kdb_stub(struct kgdb_state *ks);</span>
+<span class='curline'><a href='../S/61.html#L77'>kgdb_state</a>         77 debug/debug_core.h extern int kdb_common_init_state(struct kgdb_state *ks);</span>
+<span class='curline'><a href='../S/61.html#L81'>kgdb_state</a>         81 debug/debug_core.h static inline int kdb_stub(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/49.html#L480'>kgdb_state</a>        480 debug/gdbstub.c static void gdb_cmd_status(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/49.html#L494'>kgdb_state</a>        494 debug/gdbstub.c static void gdb_get_regs_helper(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/49.html#L538'>kgdb_state</a>        538 debug/gdbstub.c static void gdb_cmd_getregs(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/49.html#L545'>kgdb_state</a>        545 debug/gdbstub.c static void gdb_cmd_setregs(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/49.html#L558'>kgdb_state</a>        558 debug/gdbstub.c static void gdb_cmd_memread(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/49.html#L576'>kgdb_state</a>        576 debug/gdbstub.c static void gdb_cmd_memwrite(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/49.html#L599'>kgdb_state</a>        599 debug/gdbstub.c static void gdb_cmd_reg_get(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/49.html#L614'>kgdb_state</a>        614 debug/gdbstub.c static void gdb_cmd_reg_set(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/49.html#L641'>kgdb_state</a>        641 debug/gdbstub.c static void gdb_cmd_binwrite(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/49.html#L652'>kgdb_state</a>        652 debug/gdbstub.c static void gdb_cmd_detachkill(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/49.html#L677'>kgdb_state</a>        677 debug/gdbstub.c static int gdb_cmd_reboot(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/49.html#L698'>kgdb_state</a>        698 debug/gdbstub.c static void gdb_cmd_query(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/49.html#L812'>kgdb_state</a>        812 debug/gdbstub.c static void gdb_cmd_task(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/49.html#L849'>kgdb_state</a>        849 debug/gdbstub.c static void gdb_cmd_thread(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/49.html#L863'>kgdb_state</a>        863 debug/gdbstub.c static void gdb_cmd_break(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/49.html#L925'>kgdb_state</a>        925 debug/gdbstub.c static int gdb_cmd_exception_pass(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/49.html#L957'>kgdb_state</a>        957 debug/gdbstub.c int gdb_serial_stub(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/49.html#L1095'>kgdb_state</a>       1095 debug/gdbstub.c int gdbstub_state(struct kgdb_state *ks, char *cmd)</span>
+<span class='curline'><a href='../S/54.html#L35'>kgdb_state</a>         35 debug/kdb/kdb_debugger.c static struct kgdb_state *kdb_ks;</span>
+<span class='curline'><a href='../S/54.html#L37'>kgdb_state</a>         37 debug/kdb/kdb_debugger.c int kdb_common_init_state(struct kgdb_state *ks)</span>
+<span class='curline'><a href='../S/54.html#L53'>kgdb_state</a>         53 debug/kdb/kdb_debugger.c int kdb_stub(struct kgdb_state *ks)</span>
+</pre>
+</body>
+</html>

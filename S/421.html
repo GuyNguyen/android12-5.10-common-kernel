@@ -1,0 +1,401 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>bpf/task_iter.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/494.html'>bpf</a>/task_iter.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L24'>[^]</a><a href='#L348'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L24' title='Defined at 24.'>task_seq_get_next</a></li>
+<li><a href='#L53' title='Defined at 53.'>task_seq_start</a></li>
+<li><a href='#L67' title='Defined at 67.'>task_seq_next</a></li>
+<li><a href='#L87' title='Defined at 87.'>DEFINE_BPF_ITER_FUNC</a></li>
+<li><a href='#L107' title='Defined at 107.'>task_seq_show</a></li>
+<li><a href='#L112' title='Defined at 112.'>task_seq_stop</a></li>
+<li><a href='#L139' title='Defined at 139.'>task_file_seq_get_next</a></li>
+<li><a href='#L211' title='Defined at 211.'>task_file_seq_start</a></li>
+<li><a href='#L225' title='Defined at 225.'>task_file_seq_next</a></li>
+<li><a href='#L242' title='Defined at 242.'>DEFINE_BPF_ITER_FUNC</a></li>
+<li><a href='#L266' title='Defined at 266.'>task_file_seq_show</a></li>
+<li><a href='#L271' title='Defined at 271.'>task_file_seq_stop</a></li>
+<li><a href='#L286' title='Defined at 286.'>init_seq_pidns</a></li>
+<li><a href='#L294' title='Defined at 294.'>fini_seq_pidns</a></li>
+<li><a href='#L348' title='Defined at 348.'>task_iter_init</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0-only</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/* Copyright (c) 2020 Facebook */</em>
+<a id='L3' name='L3'></a>   3 
+<a id='L4' name='L4'></a>   4 <em class='sharp'>#include</em> &lt;linux/init.h&gt;
+<a id='L5' name='L5'></a>   5 <em class='sharp'>#include</em> &lt;linux/namei.h&gt;
+<a id='L6' name='L6'></a>   6 <em class='sharp'>#include</em> &lt;linux/pid_namespace.h&gt;
+<a id='L7' name='L7'></a>   7 <em class='sharp'>#include</em> &lt;linux/fs.h&gt;
+<a id='L8' name='L8'></a>   8 <em class='sharp'>#include</em> &lt;linux/fdtable.h&gt;
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> &lt;linux/filter.h&gt;
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;linux/btf_ids.h&gt;
+<a id='L11' name='L11'></a>  11 
+<a id='L12' name='L12'></a>  12 <strong class='reserved'>struct</strong> <a href='../R/3593.html' title='Multiple referred from 4 places.'>bpf_iter_seq_task_common</a> <em class='brace'>{</em>
+<a id='L13' name='L13'></a>  13         <strong class='reserved'>struct</strong> pid_namespace *ns;
+<a id='L14' name='L14'></a>  14 <em class='brace'>}</em>;
+<a id='L15' name='L15'></a>  15 
+<a id='L16' name='L16'></a>  16 <strong class='reserved'>struct</strong> <a href='../R/3595.html' title='Multiple referred from 3 places.'>bpf_iter_seq_task_info</a> <em class='brace'>{</em>
+<a id='L17' name='L17'></a>  17         <em class='comment'>/* The first field must be struct bpf_iter_seq_task_common.</em>
+<a id='L18' name='L18'></a>  18 <em class='comment'>         * this is assumed by {init, fini}_seq_pidns() callback functions.</em>
+<a id='L19' name='L19'></a>  19 <em class='comment'>         */</em>
+<a id='L20' name='L20'></a>  20         <strong class='reserved'>struct</strong> <a href='../S/421.html#L12' title='Defined at 12 in bpf/task_iter.c.'>bpf_iter_seq_task_common</a> common;
+<a id='L21' name='L21'></a>  21         u32 tid;
+<a id='L22' name='L22'></a>  22 <em class='brace'>}</em>;
+<a id='L23' name='L23'></a>  23 
+<a id='L24' name='L24'></a>  24 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> task_struct *<a href='../R/13080.html' title='Multiple referred from 3 places.'>task_seq_get_next</a>(<strong class='reserved'>struct</strong> pid_namespace *ns,
+<a id='L25' name='L25'></a>  25                                              u32 *tid,
+<a id='L26' name='L26'></a>  26                                              bool skip_if_dup_files)
+<a id='L27' name='L27'></a>  27 <em class='brace'>{</em>
+<a id='L28' name='L28'></a>  28         <strong class='reserved'>struct</strong> task_struct *task = NULL;
+<a id='L29' name='L29'></a>  29         <strong class='reserved'>struct</strong> pid *pid;
+<a id='L30' name='L30'></a>  30 
+<a id='L31' name='L31'></a>  31         rcu_read_lock();
+<a id='L32' name='L32'></a>  32 retry:
+<a id='L33' name='L33'></a>  33         pid = <a href='../S/79.html#L519' title='Defined at 519 in pid.c.'>find_ge_pid</a>(*tid, ns);
+<a id='L34' name='L34'></a>  34         <strong class='reserved'>if</strong> (pid) <em class='brace'>{</em>
+<a id='L35' name='L35'></a>  35                 *tid = <a href='../S/79.html#L473' title='Defined at 473 in pid.c.'>pid_nr_ns</a>(pid, ns);
+<a id='L36' name='L36'></a>  36                 task = <a href='../S/79.html#L449' title='Defined at 449 in pid.c.'>get_pid_task</a>(pid, PIDTYPE_PID);
+<a id='L37' name='L37'></a>  37                 <strong class='reserved'>if</strong> (!task) <em class='brace'>{</em>
+<a id='L38' name='L38'></a>  38                         ++*tid;
+<a id='L39' name='L39'></a>  39                         <strong class='reserved'>goto</strong> retry;
+<a id='L40' name='L40'></a>  40                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (skip_if_dup_files &amp;&amp; task-&gt;tgid != task-&gt;pid &amp;&amp;
+<a id='L41' name='L41'></a>  41                            task-&gt;files == task-&gt;group_leader-&gt;files) <em class='brace'>{</em>
+<a id='L42' name='L42'></a>  42                         put_task_struct(task);
+<a id='L43' name='L43'></a>  43                         task = NULL;
+<a id='L44' name='L44'></a>  44                         ++*tid;
+<a id='L45' name='L45'></a>  45                         <strong class='reserved'>goto</strong> retry;
+<a id='L46' name='L46'></a>  46                 <em class='brace'>}</em>
+<a id='L47' name='L47'></a>  47         <em class='brace'>}</em>
+<a id='L48' name='L48'></a>  48         rcu_read_unlock();
+<a id='L49' name='L49'></a>  49 
+<a id='L50' name='L50'></a>  50         <strong class='reserved'>return</strong> task;
+<a id='L51' name='L51'></a>  51 <em class='brace'>}</em>
+<a id='L52' name='L52'></a>  52 
+<a id='L53' name='L53'></a>  53 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> *<a href='../S/421.html#L121' title='Referred from 121 in bpf/task_iter.c.'>task_seq_start</a>(<strong class='reserved'>struct</strong> seq_file *seq, loff_t *pos)
+<a id='L54' name='L54'></a>  54 <em class='brace'>{</em>
+<a id='L55' name='L55'></a>  55         <strong class='reserved'>struct</strong> <a href='../S/421.html#L16' title='Defined at 16 in bpf/task_iter.c.'>bpf_iter_seq_task_info</a> *info = seq-&gt;private;
+<a id='L56' name='L56'></a>  56         <strong class='reserved'>struct</strong> task_struct *task;
+<a id='L57' name='L57'></a>  57 
+<a id='L58' name='L58'></a>  58         task = <a href='../S/421.html#L24' title='Defined at 24 in bpf/task_iter.c.'>task_seq_get_next</a>(info-&gt;common.ns, &amp;info-&gt;tid, false);
+<a id='L59' name='L59'></a>  59         <strong class='reserved'>if</strong> (!task)
+<a id='L60' name='L60'></a>  60                 <strong class='reserved'>return</strong> NULL;
+<a id='L61' name='L61'></a>  61 
+<a id='L62' name='L62'></a>  62         <strong class='reserved'>if</strong> (*pos == 0)
+<a id='L63' name='L63'></a>  63                 ++*pos;
+<a id='L64' name='L64'></a>  64         <strong class='reserved'>return</strong> task;
+<a id='L65' name='L65'></a>  65 <em class='brace'>}</em>
+<a id='L66' name='L66'></a>  66 
+<a id='L67' name='L67'></a>  67 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> *<a href='../S/421.html#L122' title='Referred from 122 in bpf/task_iter.c.'>task_seq_next</a>(<strong class='reserved'>struct</strong> seq_file *seq, <strong class='reserved'>void</strong> *v, loff_t *pos)
+<a id='L68' name='L68'></a>  68 <em class='brace'>{</em>
+<a id='L69' name='L69'></a>  69         <strong class='reserved'>struct</strong> <a href='../S/421.html#L16' title='Defined at 16 in bpf/task_iter.c.'>bpf_iter_seq_task_info</a> *info = seq-&gt;private;
+<a id='L70' name='L70'></a>  70         <strong class='reserved'>struct</strong> task_struct *task;
+<a id='L71' name='L71'></a>  71 
+<a id='L72' name='L72'></a>  72         ++*pos;
+<a id='L73' name='L73'></a>  73         ++info-&gt;tid;
+<a id='L74' name='L74'></a>  74         put_task_struct((<strong class='reserved'>struct</strong> task_struct *)v);
+<a id='L75' name='L75'></a>  75         task = <a href='../S/421.html#L24' title='Defined at 24 in bpf/task_iter.c.'>task_seq_get_next</a>(info-&gt;common.ns, &amp;info-&gt;tid, false);
+<a id='L76' name='L76'></a>  76         <strong class='reserved'>if</strong> (!task)
+<a id='L77' name='L77'></a>  77                 <strong class='reserved'>return</strong> NULL;
+<a id='L78' name='L78'></a>  78 
+<a id='L79' name='L79'></a>  79         <strong class='reserved'>return</strong> task;
+<a id='L80' name='L80'></a>  80 <em class='brace'>}</em>
+<a id='L81' name='L81'></a>  81 
+<a id='L82' name='L82'></a>  82 <strong class='reserved'>struct</strong> <a href='../R/3560.html' title='Multiple referred from 2 places.'>bpf_iter__task</a> <em class='brace'>{</em>
+<a id='L83' name='L83'></a>  83         __bpf_md_ptr(<strong class='reserved'>struct</strong> <a href='../S/387.html#L10' title='Defined at 10 in bpf/preload/iterators/iterators.bpf.c.'>bpf_iter_meta</a> *, meta);
+<a id='L84' name='L84'></a>  84         __bpf_md_ptr(<strong class='reserved'>struct</strong> task_struct *, task);
+<a id='L85' name='L85'></a>  85 <em class='brace'>}</em>;
+<a id='L86' name='L86'></a>  86 
+<a id='L87' name='L87'></a>  87 <a href='../S/400.html#L165' title='Referred from 165 in bpf/map_iter.c.'>DEFINE_BPF_ITER_FUNC</a>(task, <strong class='reserved'>struct</strong> <a href='../S/387.html#L10' title='Defined at 10 in bpf/preload/iterators/iterators.bpf.c.'>bpf_iter_meta</a> *meta, <strong class='reserved'>struct</strong> task_struct *task)
+<a id='L88' name='L88'></a>  88 
+<a id='L89' name='L89'></a>  89 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __task_seq_show(<strong class='reserved'>struct</strong> seq_file *seq, <strong class='reserved'>struct</strong> task_struct *task,
+<a id='L90' name='L90'></a>  90                            bool in_stop)
+<a id='L91' name='L91'></a>  91 <em class='brace'>{</em>
+<a id='L92' name='L92'></a>  92         <strong class='reserved'>struct</strong> <a href='../S/387.html#L10' title='Defined at 10 in bpf/preload/iterators/iterators.bpf.c.'>bpf_iter_meta</a> meta;
+<a id='L93' name='L93'></a>  93         <strong class='reserved'>struct</strong> <a href='../S/421.html#L82' title='Defined at 82 in bpf/task_iter.c.'>bpf_iter__task</a> ctx;
+<a id='L94' name='L94'></a>  94         <strong class='reserved'>struct</strong> <a href='../S/387.html#L50' title='Defined at 50 in bpf/preload/iterators/iterators.bpf.c.'>bpf_prog</a> *prog;
+<a id='L95' name='L95'></a>  95 
+<a id='L96' name='L96'></a>  96         meta.seq = seq;
+<a id='L97' name='L97'></a>  97         prog = <a href='../S/419.html#L623' title='Defined at 623 in bpf/bpf_iter.c.'>bpf_iter_get_info</a>(&amp;meta, in_stop);
+<a id='L98' name='L98'></a>  98         <strong class='reserved'>if</strong> (!prog)
+<a id='L99' name='L99'></a>  99                 <strong class='reserved'>return</strong> 0;
+<a id='L100' name='L100'></a> 100 
+<a id='L101' name='L101'></a> 101         meta.seq = seq;
+<a id='L102' name='L102'></a> 102         ctx.meta = &amp;meta;
+<a id='L103' name='L103'></a> 103         ctx.task = task;
+<a id='L104' name='L104'></a> 104         <strong class='reserved'>return</strong> <a href='../S/419.html#L646' title='Defined at 646 in bpf/bpf_iter.c.'>bpf_iter_run_prog</a>(prog, &amp;ctx);
+<a id='L105' name='L105'></a> 105 <em class='brace'>}</em>
+<a id='L106' name='L106'></a> 106 
+<a id='L107' name='L107'></a> 107 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/421.html#L124' title='Referred from 124 in bpf/task_iter.c.'>task_seq_show</a>(<strong class='reserved'>struct</strong> seq_file *seq, <strong class='reserved'>void</strong> *v)
+<a id='L108' name='L108'></a> 108 <em class='brace'>{</em>
+<a id='L109' name='L109'></a> 109         <strong class='reserved'>return</strong> __task_seq_show(seq, v, false);
+<a id='L110' name='L110'></a> 110 <em class='brace'>}</em>
+<a id='L111' name='L111'></a> 111 
+<a id='L112' name='L112'></a> 112 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/421.html#L123' title='Referred from 123 in bpf/task_iter.c.'>task_seq_stop</a>(<strong class='reserved'>struct</strong> seq_file *seq, <strong class='reserved'>void</strong> *v)
+<a id='L113' name='L113'></a> 113 <em class='brace'>{</em>
+<a id='L114' name='L114'></a> 114         <strong class='reserved'>if</strong> (!v)
+<a id='L115' name='L115'></a> 115                 (<strong class='reserved'>void</strong>)__task_seq_show(seq, v, true);
+<a id='L116' name='L116'></a> 116         <strong class='reserved'>else</strong>
+<a id='L117' name='L117'></a> 117                 put_task_struct((<strong class='reserved'>struct</strong> task_struct *)v);
+<a id='L118' name='L118'></a> 118 <em class='brace'>}</em>
+<a id='L119' name='L119'></a> 119 
+<a id='L120' name='L120'></a> 120 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> seq_operations task_seq_ops = <em class='brace'>{</em>
+<a id='L121' name='L121'></a> 121         .start  = <a href='../S/421.html#L53' title='Defined at 53 in bpf/task_iter.c.'>task_seq_start</a>,
+<a id='L122' name='L122'></a> 122         .next   = <a href='../S/421.html#L67' title='Defined at 67 in bpf/task_iter.c.'>task_seq_next</a>,
+<a id='L123' name='L123'></a> 123         .stop   = <a href='../S/421.html#L112' title='Defined at 112 in bpf/task_iter.c.'>task_seq_stop</a>,
+<a id='L124' name='L124'></a> 124         .show   = <a href='../S/421.html#L107' title='Defined at 107 in bpf/task_iter.c.'>task_seq_show</a>,
+<a id='L125' name='L125'></a> 125 <em class='brace'>}</em>;
+<a id='L126' name='L126'></a> 126 
+<a id='L127' name='L127'></a> 127 <strong class='reserved'>struct</strong> <a href='../R/3594.html' title='Multiple referred from 6 places.'>bpf_iter_seq_task_file_info</a> <em class='brace'>{</em>
+<a id='L128' name='L128'></a> 128         <em class='comment'>/* The first field must be struct bpf_iter_seq_task_common.</em>
+<a id='L129' name='L129'></a> 129 <em class='comment'>         * this is assumed by {init, fini}_seq_pidns() callback functions.</em>
+<a id='L130' name='L130'></a> 130 <em class='comment'>         */</em>
+<a id='L131' name='L131'></a> 131         <strong class='reserved'>struct</strong> <a href='../S/421.html#L12' title='Defined at 12 in bpf/task_iter.c.'>bpf_iter_seq_task_common</a> common;
+<a id='L132' name='L132'></a> 132         <strong class='reserved'>struct</strong> task_struct *task;
+<a id='L133' name='L133'></a> 133         <strong class='reserved'>struct</strong> files_struct *files;
+<a id='L134' name='L134'></a> 134         u32 tid;
+<a id='L135' name='L135'></a> 135         u32 fd;
+<a id='L136' name='L136'></a> 136 <em class='brace'>}</em>;
+<a id='L137' name='L137'></a> 137 
+<a id='L138' name='L138'></a> 138 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> file *
+<a id='L139' name='L139'></a> 139 <a href='../R/13025.html' title='Multiple referred from 2 places.'>task_file_seq_get_next</a>(<strong class='reserved'>struct</strong> <a href='../S/421.html#L127' title='Defined at 127 in bpf/task_iter.c.'>bpf_iter_seq_task_file_info</a> *info)
+<a id='L140' name='L140'></a> 140 <em class='brace'>{</em>
+<a id='L141' name='L141'></a> 141         <strong class='reserved'>struct</strong> pid_namespace *ns = info-&gt;common.ns;
+<a id='L142' name='L142'></a> 142         u32 curr_tid = info-&gt;tid, max_fds;
+<a id='L143' name='L143'></a> 143         <strong class='reserved'>struct</strong> files_struct *curr_files;
+<a id='L144' name='L144'></a> 144         <strong class='reserved'>struct</strong> task_struct *<a href='../S/441.html#L7755' title='Defined at 7755 in sched/core.c.'>curr_task</a>;
+<a id='L145' name='L145'></a> 145         <strong class='reserved'>int</strong> curr_fd = info-&gt;fd;
+<a id='L146' name='L146'></a> 146 
+<a id='L147' name='L147'></a> 147         <em class='comment'>/* If this function returns a non-NULL file object,</em>
+<a id='L148' name='L148'></a> 148 <em class='comment'>         * it held a reference to the task/files_struct/file.</em>
+<a id='L149' name='L149'></a> 149 <em class='comment'>         * Otherwise, it does not hold any reference.</em>
+<a id='L150' name='L150'></a> 150 <em class='comment'>         */</em>
+<a id='L151' name='L151'></a> 151 again:
+<a id='L152' name='L152'></a> 152         <strong class='reserved'>if</strong> (info-&gt;task) <em class='brace'>{</em>
+<a id='L153' name='L153'></a> 153                 <a href='../S/441.html#L7755' title='Defined at 7755 in sched/core.c.'>curr_task</a> = info-&gt;task;
+<a id='L154' name='L154'></a> 154                 curr_files = info-&gt;files;
+<a id='L155' name='L155'></a> 155                 curr_fd = info-&gt;fd;
+<a id='L156' name='L156'></a> 156         <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L157' name='L157'></a> 157                 <a href='../S/441.html#L7755' title='Defined at 7755 in sched/core.c.'>curr_task</a> = <a href='../S/421.html#L24' title='Defined at 24 in bpf/task_iter.c.'>task_seq_get_next</a>(ns, &amp;curr_tid, true);
+<a id='L158' name='L158'></a> 158                 <strong class='reserved'>if</strong> (!<a href='../S/441.html#L7755' title='Defined at 7755 in sched/core.c.'>curr_task</a>) <em class='brace'>{</em>
+<a id='L159' name='L159'></a> 159                         info-&gt;task = NULL;
+<a id='L160' name='L160'></a> 160                         info-&gt;files = NULL;
+<a id='L161' name='L161'></a> 161                         info-&gt;tid = curr_tid;
+<a id='L162' name='L162'></a> 162                         <strong class='reserved'>return</strong> NULL;
+<a id='L163' name='L163'></a> 163                 <em class='brace'>}</em>
+<a id='L164' name='L164'></a> 164 
+<a id='L165' name='L165'></a> 165                 curr_files = get_files_struct(<a href='../S/441.html#L7755' title='Defined at 7755 in sched/core.c.'>curr_task</a>);
+<a id='L166' name='L166'></a> 166                 <strong class='reserved'>if</strong> (!curr_files) <em class='brace'>{</em>
+<a id='L167' name='L167'></a> 167                         put_task_struct(<a href='../S/441.html#L7755' title='Defined at 7755 in sched/core.c.'>curr_task</a>);
+<a id='L168' name='L168'></a> 168                         curr_tid = curr_tid + 1;
+<a id='L169' name='L169'></a> 169                         info-&gt;fd = 0;
+<a id='L170' name='L170'></a> 170                         <strong class='reserved'>goto</strong> again;
+<a id='L171' name='L171'></a> 171                 <em class='brace'>}</em>
+<a id='L172' name='L172'></a> 172 
+<a id='L173' name='L173'></a> 173                 info-&gt;files = curr_files;
+<a id='L174' name='L174'></a> 174                 info-&gt;task = <a href='../S/441.html#L7755' title='Defined at 7755 in sched/core.c.'>curr_task</a>;
+<a id='L175' name='L175'></a> 175                 <strong class='reserved'>if</strong> (curr_tid == info-&gt;tid) <em class='brace'>{</em>
+<a id='L176' name='L176'></a> 176                         curr_fd = info-&gt;fd;
+<a id='L177' name='L177'></a> 177                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L178' name='L178'></a> 178                         info-&gt;tid = curr_tid;
+<a id='L179' name='L179'></a> 179                         curr_fd = 0;
+<a id='L180' name='L180'></a> 180                 <em class='brace'>}</em>
+<a id='L181' name='L181'></a> 181         <em class='brace'>}</em>
+<a id='L182' name='L182'></a> 182 
+<a id='L183' name='L183'></a> 183         rcu_read_lock();
+<a id='L184' name='L184'></a> 184         max_fds = files_fdtable(curr_files)-&gt;max_fds;
+<a id='L185' name='L185'></a> 185         <strong class='reserved'>for</strong> (; curr_fd &lt; max_fds; curr_fd++) <em class='brace'>{</em>
+<a id='L186' name='L186'></a> 186                 <strong class='reserved'>struct</strong> file *f;
+<a id='L187' name='L187'></a> 187 
+<a id='L188' name='L188'></a> 188                 f = fcheck_files(curr_files, curr_fd);
+<a id='L189' name='L189'></a> 189                 <strong class='reserved'>if</strong> (!f)
+<a id='L190' name='L190'></a> 190                         <strong class='reserved'>continue</strong>;
+<a id='L191' name='L191'></a> 191                 <strong class='reserved'>if</strong> (!get_file_rcu(f))
+<a id='L192' name='L192'></a> 192                         <strong class='reserved'>continue</strong>;
+<a id='L193' name='L193'></a> 193 
+<a id='L194' name='L194'></a> 194                 <em class='comment'>/* set info-&gt;fd */</em>
+<a id='L195' name='L195'></a> 195                 info-&gt;fd = curr_fd;
+<a id='L196' name='L196'></a> 196                 rcu_read_unlock();
+<a id='L197' name='L197'></a> 197                 <strong class='reserved'>return</strong> f;
+<a id='L198' name='L198'></a> 198         <em class='brace'>}</em>
+<a id='L199' name='L199'></a> 199 
+<a id='L200' name='L200'></a> 200         <em class='comment'>/* the current task is done, go to the next task */</em>
+<a id='L201' name='L201'></a> 201         rcu_read_unlock();
+<a id='L202' name='L202'></a> 202         put_files_struct(curr_files);
+<a id='L203' name='L203'></a> 203         put_task_struct(<a href='../S/441.html#L7755' title='Defined at 7755 in sched/core.c.'>curr_task</a>);
+<a id='L204' name='L204'></a> 204         info-&gt;task = NULL;
+<a id='L205' name='L205'></a> 205         info-&gt;files = NULL;
+<a id='L206' name='L206'></a> 206         info-&gt;fd = 0;
+<a id='L207' name='L207'></a> 207         curr_tid = ++(info-&gt;tid);
+<a id='L208' name='L208'></a> 208         <strong class='reserved'>goto</strong> again;
+<a id='L209' name='L209'></a> 209 <em class='brace'>}</em>
+<a id='L210' name='L210'></a> 210 
+<a id='L211' name='L211'></a> 211 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> *<a href='../S/421.html#L302' title='Referred from 302 in bpf/task_iter.c.'>task_file_seq_start</a>(<strong class='reserved'>struct</strong> seq_file *seq, loff_t *pos)
+<a id='L212' name='L212'></a> 212 <em class='brace'>{</em>
+<a id='L213' name='L213'></a> 213         <strong class='reserved'>struct</strong> <a href='../S/421.html#L127' title='Defined at 127 in bpf/task_iter.c.'>bpf_iter_seq_task_file_info</a> *info = seq-&gt;private;
+<a id='L214' name='L214'></a> 214         <strong class='reserved'>struct</strong> file *file;
+<a id='L215' name='L215'></a> 215 
+<a id='L216' name='L216'></a> 216         info-&gt;task = NULL;
+<a id='L217' name='L217'></a> 217         info-&gt;files = NULL;
+<a id='L218' name='L218'></a> 218         file = <a href='../S/421.html#L139' title='Defined at 139 in bpf/task_iter.c.'>task_file_seq_get_next</a>(info);
+<a id='L219' name='L219'></a> 219         <strong class='reserved'>if</strong> (file &amp;&amp; *pos == 0)
+<a id='L220' name='L220'></a> 220                 ++*pos;
+<a id='L221' name='L221'></a> 221 
+<a id='L222' name='L222'></a> 222         <strong class='reserved'>return</strong> file;
+<a id='L223' name='L223'></a> 223 <em class='brace'>}</em>
+<a id='L224' name='L224'></a> 224 
+<a id='L225' name='L225'></a> 225 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> *<a href='../S/421.html#L303' title='Referred from 303 in bpf/task_iter.c.'>task_file_seq_next</a>(<strong class='reserved'>struct</strong> seq_file *seq, <strong class='reserved'>void</strong> *v, loff_t *pos)
+<a id='L226' name='L226'></a> 226 <em class='brace'>{</em>
+<a id='L227' name='L227'></a> 227         <strong class='reserved'>struct</strong> <a href='../S/421.html#L127' title='Defined at 127 in bpf/task_iter.c.'>bpf_iter_seq_task_file_info</a> *info = seq-&gt;private;
+<a id='L228' name='L228'></a> 228 
+<a id='L229' name='L229'></a> 229         ++*pos;
+<a id='L230' name='L230'></a> 230         ++info-&gt;fd;
+<a id='L231' name='L231'></a> 231         fput((<strong class='reserved'>struct</strong> file *)v);
+<a id='L232' name='L232'></a> 232         <strong class='reserved'>return</strong> <a href='../S/421.html#L139' title='Defined at 139 in bpf/task_iter.c.'>task_file_seq_get_next</a>(info);
+<a id='L233' name='L233'></a> 233 <em class='brace'>}</em>
+<a id='L234' name='L234'></a> 234 
+<a id='L235' name='L235'></a> 235 <strong class='reserved'>struct</strong> <a href='../R/3561.html' title='Multiple referred from 3 places.'>bpf_iter__task_file</a> <em class='brace'>{</em>
+<a id='L236' name='L236'></a> 236         __bpf_md_ptr(<strong class='reserved'>struct</strong> <a href='../S/387.html#L10' title='Defined at 10 in bpf/preload/iterators/iterators.bpf.c.'>bpf_iter_meta</a> *, meta);
+<a id='L237' name='L237'></a> 237         __bpf_md_ptr(<strong class='reserved'>struct</strong> task_struct *, task);
+<a id='L238' name='L238'></a> 238         u32 fd __aligned(8);
+<a id='L239' name='L239'></a> 239         __bpf_md_ptr(<strong class='reserved'>struct</strong> file *, file);
+<a id='L240' name='L240'></a> 240 <em class='brace'>}</em>;
+<a id='L241' name='L241'></a> 241 
+<a id='L242' name='L242'></a> 242 <a href='../S/400.html#L165' title='Referred from 165 in bpf/map_iter.c.'>DEFINE_BPF_ITER_FUNC</a>(task_file, <strong class='reserved'>struct</strong> <a href='../S/387.html#L10' title='Defined at 10 in bpf/preload/iterators/iterators.bpf.c.'>bpf_iter_meta</a> *meta,
+<a id='L243' name='L243'></a> 243                      <strong class='reserved'>struct</strong> task_struct *task, u32 fd,
+<a id='L244' name='L244'></a> 244                      <strong class='reserved'>struct</strong> file *file)
+<a id='L245' name='L245'></a> 245 
+<a id='L246' name='L246'></a> 246 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __task_file_seq_show(<strong class='reserved'>struct</strong> seq_file *seq, <strong class='reserved'>struct</strong> file *file,
+<a id='L247' name='L247'></a> 247                                 bool in_stop)
+<a id='L248' name='L248'></a> 248 <em class='brace'>{</em>
+<a id='L249' name='L249'></a> 249         <strong class='reserved'>struct</strong> <a href='../S/421.html#L127' title='Defined at 127 in bpf/task_iter.c.'>bpf_iter_seq_task_file_info</a> *info = seq-&gt;private;
+<a id='L250' name='L250'></a> 250         <strong class='reserved'>struct</strong> <a href='../S/421.html#L235' title='Defined at 235 in bpf/task_iter.c.'>bpf_iter__task_file</a> ctx;
+<a id='L251' name='L251'></a> 251         <strong class='reserved'>struct</strong> <a href='../S/387.html#L10' title='Defined at 10 in bpf/preload/iterators/iterators.bpf.c.'>bpf_iter_meta</a> meta;
+<a id='L252' name='L252'></a> 252         <strong class='reserved'>struct</strong> <a href='../S/387.html#L50' title='Defined at 50 in bpf/preload/iterators/iterators.bpf.c.'>bpf_prog</a> *prog;
+<a id='L253' name='L253'></a> 253 
+<a id='L254' name='L254'></a> 254         meta.seq = seq;
+<a id='L255' name='L255'></a> 255         prog = <a href='../S/419.html#L623' title='Defined at 623 in bpf/bpf_iter.c.'>bpf_iter_get_info</a>(&amp;meta, in_stop);
+<a id='L256' name='L256'></a> 256         <strong class='reserved'>if</strong> (!prog)
+<a id='L257' name='L257'></a> 257                 <strong class='reserved'>return</strong> 0;
+<a id='L258' name='L258'></a> 258 
+<a id='L259' name='L259'></a> 259         ctx.meta = &amp;meta;
+<a id='L260' name='L260'></a> 260         ctx.task = info-&gt;task;
+<a id='L261' name='L261'></a> 261         ctx.fd = info-&gt;fd;
+<a id='L262' name='L262'></a> 262         ctx.file = file;
+<a id='L263' name='L263'></a> 263         <strong class='reserved'>return</strong> <a href='../S/419.html#L646' title='Defined at 646 in bpf/bpf_iter.c.'>bpf_iter_run_prog</a>(prog, &amp;ctx);
+<a id='L264' name='L264'></a> 264 <em class='brace'>}</em>
+<a id='L265' name='L265'></a> 265 
+<a id='L266' name='L266'></a> 266 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/421.html#L305' title='Referred from 305 in bpf/task_iter.c.'>task_file_seq_show</a>(<strong class='reserved'>struct</strong> seq_file *seq, <strong class='reserved'>void</strong> *v)
+<a id='L267' name='L267'></a> 267 <em class='brace'>{</em>
+<a id='L268' name='L268'></a> 268         <strong class='reserved'>return</strong> __task_file_seq_show(seq, v, false);
+<a id='L269' name='L269'></a> 269 <em class='brace'>}</em>
+<a id='L270' name='L270'></a> 270 
+<a id='L271' name='L271'></a> 271 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/421.html#L304' title='Referred from 304 in bpf/task_iter.c.'>task_file_seq_stop</a>(<strong class='reserved'>struct</strong> seq_file *seq, <strong class='reserved'>void</strong> *v)
+<a id='L272' name='L272'></a> 272 <em class='brace'>{</em>
+<a id='L273' name='L273'></a> 273         <strong class='reserved'>struct</strong> <a href='../S/421.html#L127' title='Defined at 127 in bpf/task_iter.c.'>bpf_iter_seq_task_file_info</a> *info = seq-&gt;private;
+<a id='L274' name='L274'></a> 274 
+<a id='L275' name='L275'></a> 275         <strong class='reserved'>if</strong> (!v) <em class='brace'>{</em>
+<a id='L276' name='L276'></a> 276                 (<strong class='reserved'>void</strong>)__task_file_seq_show(seq, v, true);
+<a id='L277' name='L277'></a> 277         <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L278' name='L278'></a> 278                 fput((<strong class='reserved'>struct</strong> file *)v);
+<a id='L279' name='L279'></a> 279                 put_files_struct(info-&gt;files);
+<a id='L280' name='L280'></a> 280                 put_task_struct(info-&gt;task);
+<a id='L281' name='L281'></a> 281                 info-&gt;files = NULL;
+<a id='L282' name='L282'></a> 282                 info-&gt;task = NULL;
+<a id='L283' name='L283'></a> 283         <em class='brace'>}</em>
+<a id='L284' name='L284'></a> 284 <em class='brace'>}</em>
+<a id='L285' name='L285'></a> 285 
+<a id='L286' name='L286'></a> 286 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../R/7639.html' title='Multiple referred from 2 places.'>init_seq_pidns</a>(<strong class='reserved'>void</strong> *priv_data, <strong class='reserved'>struct</strong> bpf_iter_aux_info *aux)
+<a id='L287' name='L287'></a> 287 <em class='brace'>{</em>
+<a id='L288' name='L288'></a> 288         <strong class='reserved'>struct</strong> <a href='../S/421.html#L12' title='Defined at 12 in bpf/task_iter.c.'>bpf_iter_seq_task_common</a> *common = priv_data;
+<a id='L289' name='L289'></a> 289 
+<a id='L290' name='L290'></a> 290         common-&gt;ns = get_pid_ns(<a href='../S/79.html#L508' title='Defined at 508 in pid.c.'>task_active_pid_ns</a>(current));
+<a id='L291' name='L291'></a> 291         <strong class='reserved'>return</strong> 0;
+<a id='L292' name='L292'></a> 292 <em class='brace'>}</em>
+<a id='L293' name='L293'></a> 293 
+<a id='L294' name='L294'></a> 294 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/6393.html' title='Multiple referred from 2 places.'>fini_seq_pidns</a>(<strong class='reserved'>void</strong> *priv_data)
+<a id='L295' name='L295'></a> 295 <em class='brace'>{</em>
+<a id='L296' name='L296'></a> 296         <strong class='reserved'>struct</strong> <a href='../S/421.html#L12' title='Defined at 12 in bpf/task_iter.c.'>bpf_iter_seq_task_common</a> *common = priv_data;
+<a id='L297' name='L297'></a> 297 
+<a id='L298' name='L298'></a> 298         <a href='../S/195.html#L159' title='Defined at 159 in pid_namespace.c.'>put_pid_ns</a>(common-&gt;ns);
+<a id='L299' name='L299'></a> 299 <em class='brace'>}</em>
+<a id='L300' name='L300'></a> 300 
+<a id='L301' name='L301'></a> 301 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> seq_operations task_file_seq_ops = <em class='brace'>{</em>
+<a id='L302' name='L302'></a> 302         .start  = <a href='../S/421.html#L211' title='Defined at 211 in bpf/task_iter.c.'>task_file_seq_start</a>,
+<a id='L303' name='L303'></a> 303         .next   = <a href='../S/421.html#L225' title='Defined at 225 in bpf/task_iter.c.'>task_file_seq_next</a>,
+<a id='L304' name='L304'></a> 304         .stop   = <a href='../S/421.html#L271' title='Defined at 271 in bpf/task_iter.c.'>task_file_seq_stop</a>,
+<a id='L305' name='L305'></a> 305         .show   = <a href='../S/421.html#L266' title='Defined at 266 in bpf/task_iter.c.'>task_file_seq_show</a>,
+<a id='L306' name='L306'></a> 306 <em class='brace'>}</em>;
+<a id='L307' name='L307'></a> 307 
+<a id='L308' name='L308'></a> 308 <a href='../S/411.html#L4340' title='Defined at 4340 in bpf/btf.c.'>BTF_ID_LIST</a>(btf_task_file_ids)
+<a id='L309' name='L309'></a> 309 BTF_ID(<strong class='reserved'>struct</strong>, task_struct)
+<a id='L310' name='L310'></a> 310 BTF_ID(<strong class='reserved'>struct</strong>, file)
+<a id='L311' name='L311'></a> 311 
+<a id='L312' name='L312'></a> 312 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> bpf_iter_seq_info task_seq_info = <em class='brace'>{</em>
+<a id='L313' name='L313'></a> 313         .seq_ops                = &amp;task_seq_ops,
+<a id='L314' name='L314'></a> 314         .init_seq_private       = <a href='../S/421.html#L286' title='Defined at 286 in bpf/task_iter.c.'>init_seq_pidns</a>,
+<a id='L315' name='L315'></a> 315         .fini_seq_private       = <a href='../S/421.html#L294' title='Defined at 294 in bpf/task_iter.c.'>fini_seq_pidns</a>,
+<a id='L316' name='L316'></a> 316         .seq_priv_size          = <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> <a href='../S/421.html#L16' title='Defined at 16 in bpf/task_iter.c.'>bpf_iter_seq_task_info</a>),
+<a id='L317' name='L317'></a> 317 <em class='brace'>}</em>;
+<a id='L318' name='L318'></a> 318 
+<a id='L319' name='L319'></a> 319 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> bpf_iter_reg task_reg_info = <em class='brace'>{</em>
+<a id='L320' name='L320'></a> 320         .target                 = "task",
+<a id='L321' name='L321'></a> 321         .ctx_arg_info_size      = 1,
+<a id='L322' name='L322'></a> 322         .ctx_arg_info           = <em class='brace'>{</em>
+<a id='L323' name='L323'></a> 323                 <em class='brace'>{</em> offsetof(<strong class='reserved'>struct</strong> <a href='../S/421.html#L82' title='Defined at 82 in bpf/task_iter.c.'>bpf_iter__task</a>, task),
+<a id='L324' name='L324'></a> 324                   PTR_TO_BTF_ID_OR_NULL <em class='brace'>}</em>,
+<a id='L325' name='L325'></a> 325         <em class='brace'>}</em>,
+<a id='L326' name='L326'></a> 326         .seq_info               = &amp;task_seq_info,
+<a id='L327' name='L327'></a> 327 <em class='brace'>}</em>;
+<a id='L328' name='L328'></a> 328 
+<a id='L329' name='L329'></a> 329 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> bpf_iter_seq_info task_file_seq_info = <em class='brace'>{</em>
+<a id='L330' name='L330'></a> 330         .seq_ops                = &amp;task_file_seq_ops,
+<a id='L331' name='L331'></a> 331         .init_seq_private       = <a href='../S/421.html#L286' title='Defined at 286 in bpf/task_iter.c.'>init_seq_pidns</a>,
+<a id='L332' name='L332'></a> 332         .fini_seq_private       = <a href='../S/421.html#L294' title='Defined at 294 in bpf/task_iter.c.'>fini_seq_pidns</a>,
+<a id='L333' name='L333'></a> 333         .seq_priv_size          = <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> <a href='../S/421.html#L127' title='Defined at 127 in bpf/task_iter.c.'>bpf_iter_seq_task_file_info</a>),
+<a id='L334' name='L334'></a> 334 <em class='brace'>}</em>;
+<a id='L335' name='L335'></a> 335 
+<a id='L336' name='L336'></a> 336 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> bpf_iter_reg task_file_reg_info = <em class='brace'>{</em>
+<a id='L337' name='L337'></a> 337         .target                 = "task_file",
+<a id='L338' name='L338'></a> 338         .ctx_arg_info_size      = 2,
+<a id='L339' name='L339'></a> 339         .ctx_arg_info           = <em class='brace'>{</em>
+<a id='L340' name='L340'></a> 340                 <em class='brace'>{</em> offsetof(<strong class='reserved'>struct</strong> <a href='../S/421.html#L235' title='Defined at 235 in bpf/task_iter.c.'>bpf_iter__task_file</a>, task),
+<a id='L341' name='L341'></a> 341                   PTR_TO_BTF_ID_OR_NULL <em class='brace'>}</em>,
+<a id='L342' name='L342'></a> 342                 <em class='brace'>{</em> offsetof(<strong class='reserved'>struct</strong> <a href='../S/421.html#L235' title='Defined at 235 in bpf/task_iter.c.'>bpf_iter__task_file</a>, file),
+<a id='L343' name='L343'></a> 343                   PTR_TO_BTF_ID_OR_NULL <em class='brace'>}</em>,
+<a id='L344' name='L344'></a> 344         <em class='brace'>}</em>,
+<a id='L345' name='L345'></a> 345         .seq_info               = &amp;task_file_seq_info,
+<a id='L346' name='L346'></a> 346 <em class='brace'>}</em>;
+<a id='L347' name='L347'></a> 347 
+<a id='L348' name='L348'></a> 348 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __init <a href='../S/421.html#L361' title='Referred from 361 in bpf/task_iter.c.'>task_iter_init</a>(<strong class='reserved'>void</strong>)
+<a id='L349' name='L349'></a> 349 <em class='brace'>{</em>
+<a id='L350' name='L350'></a> 350         <strong class='reserved'>int</strong> ret;
+<a id='L351' name='L351'></a> 351 
+<a id='L352' name='L352'></a> 352         task_reg_info.ctx_arg_info[0].<a href='../S/411.html#L5535' title='Defined at 5535 in bpf/btf.c.'>btf_id</a> = btf_task_file_ids[0];
+<a id='L353' name='L353'></a> 353         ret = <a href='../S/419.html#L272' title='Defined at 272 in bpf/bpf_iter.c.'>bpf_iter_reg_target</a>(&amp;task_reg_info);
+<a id='L354' name='L354'></a> 354         <strong class='reserved'>if</strong> (ret)
+<a id='L355' name='L355'></a> 355                 <strong class='reserved'>return</strong> ret;
+<a id='L356' name='L356'></a> 356 
+<a id='L357' name='L357'></a> 357         task_file_reg_info.ctx_arg_info[0].<a href='../S/411.html#L5535' title='Defined at 5535 in bpf/btf.c.'>btf_id</a> = btf_task_file_ids[0];
+<a id='L358' name='L358'></a> 358         task_file_reg_info.ctx_arg_info[1].<a href='../S/411.html#L5535' title='Defined at 5535 in bpf/btf.c.'>btf_id</a> = btf_task_file_ids[1];
+<a id='L359' name='L359'></a> 359         <strong class='reserved'>return</strong> <a href='../S/419.html#L272' title='Defined at 272 in bpf/bpf_iter.c.'>bpf_iter_reg_target</a>(&amp;task_file_reg_info);
+<a id='L360' name='L360'></a> 360 <em class='brace'>}</em>
+<a id='L361' name='L361'></a> 361 late_initcall(<a href='../S/421.html#L348' title='Defined at 348 in bpf/task_iter.c.'>task_iter_init</a>);
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L24'>[^]</a><a href='#L348'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

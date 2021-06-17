@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>hlock_id</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/35.html#L403'>hlock_id</a>          403 locking/lockdep.c static inline unsigned int chain_hlock_class_idx(u16 hlock_id)</span>
+<span class='curline'><a href='../S/35.html#L405'>hlock_id</a>          405 locking/lockdep.c 	return hlock_id &amp; (MAX_LOCKDEP_KEYS - 1);</span>
+<span class='curline'><a href='../S/35.html#L3299'>hlock_id</a>         3299 locking/lockdep.c static u64 print_chain_key_iteration(u16 hlock_id, u64 chain_key)</span>
+<span class='curline'><a href='../S/35.html#L3301'>hlock_id</a>         3301 locking/lockdep.c 	u64 new_chain_key = iterate_chain_key(chain_key, hlock_id);</span>
+<span class='curline'><a href='../S/35.html#L3304'>hlock_id</a>         3304 locking/lockdep.c 		(unsigned int)hlock_id,</span>
+<span class='curline'><a href='../S/35.html#L3321'>hlock_id</a>         3321 locking/lockdep.c 		chain_key = print_chain_key_iteration(hlock_id(hlock), chain_key);</span>
+<span class='curline'><a href='../S/35.html#L3326'>hlock_id</a>         3326 locking/lockdep.c 	print_chain_key_iteration(hlock_id(hlock_next), chain_key);</span>
+<span class='curline'><a href='../S/35.html#L3334'>hlock_id</a>         3334 locking/lockdep.c 	u16 hlock_id;</span>
+<span class='curline'><a href='../S/35.html#L3338'>hlock_id</a>         3338 locking/lockdep.c 		hlock_id = chain_hlocks[chain-&gt;base + i];</span>
+<span class='curline'><a href='../S/35.html#L3339'>hlock_id</a>         3339 locking/lockdep.c 		chain_key = print_chain_key_iteration(hlock_id, chain_key);</span>
+<span class='curline'><a href='../S/35.html#L3341'>hlock_id</a>         3341 locking/lockdep.c 		print_lock_name(lock_classes + chain_hlock_class_idx(hlock_id) - 1);</span>
+<span class='curline'><a href='../S/35.html#L3390'>hlock_id</a>         3390 locking/lockdep.c 		id = hlock_id(&amp;curr-&gt;held_locks[i]);</span>
+<span class='curline'><a href='../S/35.html#L3481'>hlock_id</a>         3481 locking/lockdep.c 		int lock_id = hlock_id(curr-&gt;held_locks + i);</span>
+<span class='curline'><a href='../S/35.html#L3485'>hlock_id</a>         3485 locking/lockdep.c 	chain_hlocks[chain-&gt;base + j] = hlock_id(hlock);</span>
+<span class='curline'><a href='../S/35.html#L3669'>hlock_id</a>         3669 locking/lockdep.c 		chain_key = iterate_chain_key(chain_key, hlock_id(hlock));</span>
+<span class='curline'><a href='../S/35.html#L4822'>hlock_id</a>         4822 locking/lockdep.c 	chain_key = iterate_chain_key(chain_key, hlock_id(hlock));</span>
+</pre>
+</body>
+</html>

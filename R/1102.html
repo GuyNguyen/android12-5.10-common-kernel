@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>RB_TIME_VAL_MASK</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/258.html#L613'>RB_TIME_VAL_MASK</a>  613 trace/ring_buffer.c 	val = top &amp; RB_TIME_VAL_MASK;</span>
+<span class='curline'><a href='../S/258.html#L615'>RB_TIME_VAL_MASK</a>  615 trace/ring_buffer.c 	val |= bottom &amp; RB_TIME_VAL_MASK;</span>
+<span class='curline'><a href='../S/258.html#L655'>RB_TIME_VAL_MASK</a>  655 trace/ring_buffer.c 	return (val &amp; RB_TIME_VAL_MASK) | ((cnt &amp; 3) &lt;&lt; RB_TIME_SHIFT);</span>
+<span class='curline'><a href='../S/258.html#L660'>RB_TIME_VAL_MASK</a>  660 trace/ring_buffer.c 	*top = (unsigned long)((val &gt;&gt; RB_TIME_SHIFT) &amp; RB_TIME_VAL_MASK);</span>
+<span class='curline'><a href='../S/258.html#L661'>RB_TIME_VAL_MASK</a>  661 trace/ring_buffer.c 	*bottom = (unsigned long)(val &amp; RB_TIME_VAL_MASK);</span>
+</pre>
+</body>
+</html>

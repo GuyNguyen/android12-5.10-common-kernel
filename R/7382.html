@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>hlock_class</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/35.html#L322'>hlock_class</a>       322 locking/lockdep.c 	stats = get_lock_stats(hlock_class(hlock));</span>
+<span class='curline'><a href='../S/35.html#L737'>hlock_class</a>       737 locking/lockdep.c 	struct lock_class *lock = hlock_class(hlock);</span>
+<span class='curline'><a href='../S/35.html#L1618'>hlock_class</a>      1618 locking/lockdep.c 	__bfs_init_root(lock, hlock_class(hlock));</span>
+<span class='curline'><a href='../S/35.html#L1632'>hlock_class</a>      1632 locking/lockdep.c 	__bfs_init_root(lock, hlock_class(hlock));</span>
+<span class='curline'><a href='../S/35.html#L1822'>hlock_class</a>      1822 locking/lockdep.c 	struct lock_class *source = hlock_class(src);</span>
+<span class='curline'><a href='../S/35.html#L1823'>hlock_class</a>      1823 locking/lockdep.c 	struct lock_class *target = hlock_class(tgt);</span>
+<span class='curline'><a href='../S/35.html#L1929'>hlock_class</a>      1929 locking/lockdep.c 	return hlock_class(hlock) == entry-&gt;class &amp;&amp; /* Found A -&gt; .. -&gt; B */</span>
+<span class='curline'><a href='../S/35.html#L1956'>hlock_class</a>      1956 locking/lockdep.c 	return hlock_class(hlock) == entry-&gt;class &amp;&amp; /* Found A -&gt; .. -&gt; B */</span>
+<span class='curline'><a href='../S/35.html#L2414'>hlock_class</a>      2414 locking/lockdep.c 	print_lock_name(hlock_class(prev));</span>
+<span class='curline'><a href='../S/35.html#L2416'>hlock_class</a>      2416 locking/lockdep.c 	print_lock_name(hlock_class(next));</span>
+<span class='curline'><a href='../S/35.html#L2435'>hlock_class</a>      2435 locking/lockdep.c 				hlock_class(prev), hlock_class(next));</span>
+<span class='curline'><a href='../S/35.html#L2723'>hlock_class</a>      2723 locking/lockdep.c 	struct lock_class *next = hlock_class(nxt);</span>
+<span class='curline'><a href='../S/35.html#L2724'>hlock_class</a>      2724 locking/lockdep.c 	struct lock_class *prev = hlock_class(prv);</span>
+<span class='curline'><a href='../S/35.html#L2788'>hlock_class</a>      2788 locking/lockdep.c 		if (hlock_class(prev) != hlock_class(next))</span>
+<span class='curline'><a href='../S/35.html#L2841'>hlock_class</a>      2841 locking/lockdep.c 	if (!hlock_class(prev)-&gt;key || !hlock_class(next)-&gt;key) {</span>
+<span class='curline'><a href='../S/35.html#L2848'>hlock_class</a>      2848 locking/lockdep.c 		WARN_ONCE(!debug_locks_silent &amp;&amp; !hlock_class(prev)-&gt;key,</span>
+<span class='curline'><a href='../S/35.html#L2850'>hlock_class</a>      2850 locking/lockdep.c 			  hlock_class(prev),</span>
+<span class='curline'><a href='../S/35.html#L2851'>hlock_class</a>      2851 locking/lockdep.c 			  hlock_class(prev)-&gt;name);</span>
+<span class='curline'><a href='../S/35.html#L2852'>hlock_class</a>      2852 locking/lockdep.c 		WARN_ONCE(!debug_locks_silent &amp;&amp; !hlock_class(next)-&gt;key,</span>
+<span class='curline'><a href='../S/35.html#L2854'>hlock_class</a>      2854 locking/lockdep.c 			  hlock_class(next),</span>
+<span class='curline'><a href='../S/35.html#L2855'>hlock_class</a>      2855 locking/lockdep.c 			  hlock_class(next)-&gt;name);</span>
+<span class='curline'><a href='../S/35.html#L2884'>hlock_class</a>      2884 locking/lockdep.c 	list_for_each_entry(entry, &amp;hlock_class(prev)-&gt;locks_after, entry) {</span>
+<span class='curline'><a href='../S/35.html#L2885'>hlock_class</a>      2885 locking/lockdep.c 		if (entry-&gt;class == hlock_class(next)) {</span>
+<span class='curline'><a href='../S/35.html#L2906'>hlock_class</a>      2906 locking/lockdep.c 			list_for_each_entry(entry, &amp;hlock_class(next)-&gt;locks_before, entry) {</span>
+<span class='curline'><a href='../S/35.html#L2907'>hlock_class</a>      2907 locking/lockdep.c 				if (entry-&gt;class == hlock_class(prev)) {</span>
+<span class='curline'><a href='../S/35.html#L2941'>hlock_class</a>      2941 locking/lockdep.c 	ret = add_lock_to_list(hlock_class(next), hlock_class(prev),</span>
+<span class='curline'><a href='../S/35.html#L2942'>hlock_class</a>      2942 locking/lockdep.c 			       &amp;hlock_class(prev)-&gt;locks_after,</span>
+<span class='curline'><a href='../S/35.html#L2950'>hlock_class</a>      2950 locking/lockdep.c 	ret = add_lock_to_list(hlock_class(prev), hlock_class(next),</span>
+<span class='curline'><a href='../S/35.html#L2951'>hlock_class</a>      2951 locking/lockdep.c 			       &amp;hlock_class(next)-&gt;locks_before,</span>
+<span class='curline'><a href='../S/35.html#L3521'>hlock_class</a>      3521 locking/lockdep.c 	struct lock_class *class = hlock_class(hlock);</span>
+<span class='curline'><a href='../S/35.html#L3692'>hlock_class</a>      3692 locking/lockdep.c 	struct lock_class *class = hlock_class(lock);</span>
+<span class='curline'><a href='../S/35.html#L3732'>hlock_class</a>      3732 locking/lockdep.c 	print_lock_trace(hlock_class(this)-&gt;usage_traces[prev_bit], 1);</span>
+<span class='curline'><a href='../S/35.html#L3751'>hlock_class</a>      3751 locking/lockdep.c 	if (unlikely(hlock_class(this)-&gt;usage_mask &amp; (1 &lt;&lt; bad_bit))) {</span>
+<span class='curline'><a href='../S/35.html#L3987'>hlock_class</a>      3987 locking/lockdep.c 	if (state_verbose(new_bit, hlock_class(this)))</span>
+<span class='curline'><a href='../S/35.html#L4391'>hlock_class</a>      4391 locking/lockdep.c 	if (likely(hlock_class(this)-&gt;usage_mask &amp; new_mask))</span>
+<span class='curline'><a href='../S/35.html#L4399'>hlock_class</a>      4399 locking/lockdep.c 	if (unlikely(hlock_class(this)-&gt;usage_mask &amp; new_mask))</span>
+<span class='curline'><a href='../S/35.html#L4402'>hlock_class</a>      4402 locking/lockdep.c 	if (!hlock_class(this)-&gt;usage_mask)</span>
+<span class='curline'><a href='../S/35.html#L4405'>hlock_class</a>      4405 locking/lockdep.c 	hlock_class(this)-&gt;usage_mask |= new_mask;</span>
+<span class='curline'><a href='../S/35.html#L4408'>hlock_class</a>      4408 locking/lockdep.c 		if (!(hlock_class(this)-&gt;usage_traces[new_bit] = save_trace()))</span>
+<span class='curline'><a href='../S/35.html#L4508'>hlock_class</a>      4508 locking/lockdep.c 	short next_inner = hlock_class(next)-&gt;wait_type_inner;</span>
+<span class='curline'><a href='../S/35.html#L4509'>hlock_class</a>      4509 locking/lockdep.c 	short next_outer = hlock_class(next)-&gt;wait_type_outer;</span>
+<span class='curline'><a href='../S/35.html#L4533'>hlock_class</a>      4533 locking/lockdep.c 		short prev_inner = hlock_class(prev)-&gt;wait_type_inner;</span>
+<span class='curline'><a href='../S/35.html#L4830'>hlock_class</a>      4830 locking/lockdep.c 		WARN_ON_ONCE(depth &amp;&amp; !hlock_class(hlock - 1)-&gt;key);</span>
+<span class='curline'><a href='../S/35.html#L4831'>hlock_class</a>      4831 locking/lockdep.c 		WARN_ON_ONCE(!hlock_class(hlock)-&gt;key);</span>
+<span class='curline'><a href='../S/35.html#L4973'>hlock_class</a>      4973 locking/lockdep.c 				    hlock_class(hlock)-&gt;subclass,</span>
+<span class='curline'><a href='../S/35.html#L5602'>hlock_class</a>      5602 locking/lockdep.c 	contention_point = lock_point(hlock_class(hlock)-&gt;contention_point, ip);</span>
+<span class='curline'><a href='../S/35.html#L5603'>hlock_class</a>      5603 locking/lockdep.c 	contending_point = lock_point(hlock_class(hlock)-&gt;contending_point,</span>
+<span class='curline'><a href='../S/35.html#L5606'>hlock_class</a>      5606 locking/lockdep.c 	stats = get_lock_stats(hlock_class(hlock));</span>
+<span class='curline'><a href='../S/35.html#L5649'>hlock_class</a>      5649 locking/lockdep.c 	stats = get_lock_stats(hlock_class(hlock));</span>
+</pre>
+</body>
+</html>

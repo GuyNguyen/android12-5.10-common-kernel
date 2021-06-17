@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>event_filter</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/256.html#L1457'>event_filter</a>     1457 trace/trace.h  	struct event_filter	*filter;</span>
+<span class='curline'><a href='../S/256.html#L1675'>event_filter</a>     1675 trace/trace.h  			       struct event_filter **filterp);</span>
+<span class='curline'><a href='../S/256.html#L1676'>event_filter</a>     1676 trace/trace.h  extern void free_event_filter(struct event_filter *filter);</span>
+<span class='curline'><a href='../S/256.html#L1725'>event_filter</a>     1725 trace/trace.h  	struct event_filter __rcu	*filter;</span>
+<span class='curline'><a href='../S/267.html#L695'>event_filter</a>      695 trace/trace_events.c 	struct event_filter *filter = system-&gt;filter;</span>
+<span class='curline'><a href='../S/267.html#L2039'>event_filter</a>     2039 trace/trace_events.c 	system-&gt;filter = kzalloc(sizeof(struct event_filter), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/304.html#L896'>event_filter</a>      896 trace/trace_events_filter.c int filter_match_preds(struct event_filter *filter, void *rec)</span>
+<span class='curline'><a href='../S/304.html#L920'>event_filter</a>      920 trace/trace_events_filter.c static void remove_filter_string(struct event_filter *filter)</span>
+<span class='curline'><a href='../S/304.html#L931'>event_filter</a>      931 trace/trace_events_filter.c 			      struct event_filter *filter)</span>
+<span class='curline'><a href='../S/304.html#L976'>event_filter</a>      976 trace/trace_events_filter.c static inline struct event_filter *event_filter(struct trace_event_file *file)</span>
+<span class='curline'><a href='../S/304.html#L984'>event_filter</a>      984 trace/trace_events_filter.c 	struct event_filter *filter = event_filter(file);</span>
+<span class='curline'><a href='../S/304.html#L995'>event_filter</a>      995 trace/trace_events_filter.c 	struct event_filter *filter;</span>
+<span class='curline'><a href='../S/304.html#L1006'>event_filter</a>     1006 trace/trace_events_filter.c static void free_prog(struct event_filter *filter)</span>
+<span class='curline'><a href='../S/304.html#L1030'>event_filter</a>     1030 trace/trace_events_filter.c static void __free_filter(struct event_filter *filter)</span>
+<span class='curline'><a href='../S/304.html#L1040'>event_filter</a>     1040 trace/trace_events_filter.c void free_event_filter(struct event_filter *filter)</span>
+<span class='curline'><a href='../S/304.html#L1507'>event_filter</a>     1507 trace/trace_events_filter.c 			 struct event_filter *filter,</span>
+<span class='curline'><a href='../S/304.html#L1554'>event_filter</a>     1554 trace/trace_events_filter.c 				    struct event_filter *filter)</span>
+<span class='curline'><a href='../S/304.html#L1587'>event_filter</a>     1587 trace/trace_events_filter.c 	struct event_filter	*filter;</span>
+<span class='curline'><a href='../S/304.html#L1597'>event_filter</a>     1597 trace/trace_events_filter.c 	struct event_filter *filter = NULL;</span>
+<span class='curline'><a href='../S/304.html#L1634'>event_filter</a>     1634 trace/trace_events_filter.c 		filter_item-&gt;filter = event_filter(file);</span>
+<span class='curline'><a href='../S/304.html#L1679'>event_filter</a>     1679 trace/trace_events_filter.c 			       struct event_filter **filterp)</span>
+<span class='curline'><a href='../S/304.html#L1681'>event_filter</a>     1681 trace/trace_events_filter.c 	struct event_filter *filter;</span>
+<span class='curline'><a href='../S/304.html#L1735'>event_filter</a>     1735 trace/trace_events_filter.c 			 struct event_filter **filterp)</span>
+<span class='curline'><a href='../S/304.html#L1759'>event_filter</a>     1759 trace/trace_events_filter.c 			struct event_filter **filterp)</span>
+<span class='curline'><a href='../S/304.html#L1775'>event_filter</a>     1775 trace/trace_events_filter.c 				char *filter_str, struct event_filter **filterp)</span>
+<span class='curline'><a href='../S/304.html#L1800'>event_filter</a>     1800 trace/trace_events_filter.c 	struct event_filter *filter = NULL;</span>
+<span class='curline'><a href='../S/304.html#L1805'>event_filter</a>     1805 trace/trace_events_filter.c 		filter = event_filter(file);</span>
+<span class='curline'><a href='../S/304.html#L1828'>event_filter</a>     1828 trace/trace_events_filter.c 		struct event_filter *tmp;</span>
+<span class='curline'><a href='../S/304.html#L1830'>event_filter</a>     1830 trace/trace_events_filter.c 		tmp = event_filter(file);</span>
+<span class='curline'><a href='../S/304.html#L1853'>event_filter</a>     1853 trace/trace_events_filter.c 	struct event_filter *filter = NULL;</span>
+<span class='curline'><a href='../S/304.html#L1895'>event_filter</a>     1895 trace/trace_events_filter.c 	struct event_filter *filter = event-&gt;filter;</span>
+<span class='curline'><a href='../S/304.html#L2026'>event_filter</a>     2026 trace/trace_events_filter.c 				      struct event_filter *filter)</span>
+<span class='curline'><a href='../S/304.html#L2050'>event_filter</a>     2050 trace/trace_events_filter.c 				      struct event_filter *filter)</span>
+<span class='curline'><a href='../S/304.html#L2060'>event_filter</a>     2060 trace/trace_events_filter.c 	struct event_filter *filter = NULL;</span>
+<span class='curline'><a href='../S/304.html#L2189'>event_filter</a>     2189 trace/trace_events_filter.c static void update_pred_fn(struct event_filter *filter, char *fields)</span>
+<span class='curline'><a href='../S/304.html#L2220'>event_filter</a>     2220 trace/trace_events_filter.c 		struct event_filter *filter = NULL;</span>
+<span class='curline'><a href='../S/260.html#L61'>event_filter</a>       61 trace/trace_events_trigger.c 	struct event_filter *filter;</span>
+<span class='curline'><a href='../S/260.html#L743'>event_filter</a>      743 trace/trace_events_trigger.c 	struct event_filter *filter = NULL, *tmp;</span>
+</pre>
+</body>
+</html>

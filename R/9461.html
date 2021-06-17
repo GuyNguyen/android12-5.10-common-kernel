@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>owner_state</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/27.html#L693'>owner_state</a>       693 locking/rwsem.c static inline enum owner_state</span>
+<span class='curline'><a href='../S/27.html#L705'>owner_state</a>       705 locking/rwsem.c static noinline enum owner_state</span>
+<span class='curline'><a href='../S/27.html#L710'>owner_state</a>       710 locking/rwsem.c 	enum owner_state state;</span>
+<span class='curline'><a href='../S/27.html#L798'>owner_state</a>       798 locking/rwsem.c 		enum owner_state owner_state;</span>
+<span class='curline'><a href='../S/27.html#L800'>owner_state</a>       800 locking/rwsem.c 		owner_state = rwsem_spin_on_owner(sem, nonspinnable);</span>
+<span class='curline'><a href='../S/27.html#L801'>owner_state</a>       801 locking/rwsem.c 		if (!(owner_state &amp; OWNER_SPINNABLE))</span>
+<span class='curline'><a href='../S/27.html#L816'>owner_state</a>       816 locking/rwsem.c 		if (wlock &amp;&amp; (owner_state == OWNER_READER)) {</span>
+<span class='curline'><a href='../S/27.html#L876'>owner_state</a>       876 locking/rwsem.c 		if (owner_state != OWNER_WRITER) {</span>
+<span class='curline'><a href='../S/27.html#L883'>owner_state</a>       883 locking/rwsem.c 		prev_owner_state = owner_state;</span>
+</pre>
+</body>
+</html>

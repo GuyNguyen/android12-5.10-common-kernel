@@ -1,0 +1,275 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>locking/spinlock_debug.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/507.html'>locking</a>/spinlock_debug.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L16'>[^]</a><a href='#L226'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L16' title='Defined at 16.'>__raw_spin_lock_init</a></li>
+<li><a href='#L34' title='Defined at 34.'>__rwlock_init</a></li>
+<li><a href='#L52' title='Defined at 52.'>spin_dump</a></li>
+<li><a href='#L70' title='Defined at 70.'>spin_bug</a></li>
+<li><a href='#L81' title='Defined at 81.'>debug_spin_lock_before</a></li>
+<li><a href='#L89' title='Defined at 89.'>debug_spin_lock_after</a></li>
+<li><a href='#L95' title='Defined at 95.'>debug_spin_unlock</a></li>
+<li><a href='#L110' title='Defined at 110.'>do_raw_spin_lock</a></li>
+<li><a href='#L118' title='Defined at 118.'>do_raw_spin_trylock</a></li>
+<li><a href='#L135' title='Defined at 135.'>do_raw_spin_unlock</a></li>
+<li><a href='#L142' title='Defined at 142.'>rwlock_bug</a></li>
+<li><a href='#L155' title='Defined at 155.'>do_raw_read_lock</a></li>
+<li><a href='#L161' title='Defined at 161.'>do_raw_read_trylock</a></li>
+<li><a href='#L174' title='Defined at 174.'>do_raw_read_unlock</a></li>
+<li><a href='#L180' title='Defined at 180.'>debug_write_lock_before</a></li>
+<li><a href='#L188' title='Defined at 188.'>debug_write_lock_after</a></li>
+<li><a href='#L194' title='Defined at 194.'>debug_write_unlock</a></li>
+<li><a href='#L204' title='Defined at 204.'>do_raw_write_lock</a></li>
+<li><a href='#L211' title='Defined at 211.'>do_raw_write_trylock</a></li>
+<li><a href='#L226' title='Defined at 226.'>do_raw_write_unlock</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>/*</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'> * Copyright 2005, Red Hat, Inc., Ingo Molnar</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * Released under the General Public License (GPL).</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> *</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * This file contains the spinlock/rwlock implementations for</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> * DEBUG_SPINLOCK.</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> */</em>
+<a id='L8' name='L8'></a>   8 
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> &lt;linux/spinlock.h&gt;
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;linux/nmi.h&gt;
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;linux/interrupt.h&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;linux/debug_locks.h&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;linux/delay.h&gt;
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> &lt;linux/export.h&gt;
+<a id='L15' name='L15'></a>  15 
+<a id='L16' name='L16'></a>  16 <strong class='reserved'>void</strong> <a href='../S/22.html#L32' title='Referred from 32 in locking/spinlock_debug.c.'>__raw_spin_lock_init</a>(raw_spinlock_t *lock, <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *name,
+<a id='L17' name='L17'></a>  17                           <strong class='reserved'>struct</strong> lock_class_key *key, <strong class='reserved'>short</strong> inner)
+<a id='L18' name='L18'></a>  18 <em class='brace'>{</em>
+<a id='L19' name='L19'></a>  19 <em class='sharp'>#ifdef</em> CONFIG_DEBUG_LOCK_ALLOC
+<a id='L20' name='L20'></a>  20         <em class='comment'>/*</em>
+<a id='L21' name='L21'></a>  21 <em class='comment'>         * Make sure we are not reinitializing a held lock:</em>
+<a id='L22' name='L22'></a>  22 <em class='comment'>         */</em>
+<a id='L23' name='L23'></a>  23         <a href='../S/35.html#L6206' title='Defined at 6206 in locking/lockdep.c.'>debug_check_no_locks_freed</a>((<strong class='reserved'>void</strong> *)lock, <strong class='reserved'>sizeof</strong>(*lock));
+<a id='L24' name='L24'></a>  24         lockdep_init_map_wait(&amp;lock-&gt;dep_map, name, key, 0, inner);
+<a id='L25' name='L25'></a>  25 <em class='sharp'>#endif</em>
+<a id='L26' name='L26'></a>  26         lock-&gt;raw_lock = (arch_spinlock_t)__ARCH_SPIN_LOCK_UNLOCKED;
+<a id='L27' name='L27'></a>  27         lock-&gt;magic = SPINLOCK_MAGIC;
+<a id='L28' name='L28'></a>  28         lock-&gt;owner = SPINLOCK_OWNER_INIT;
+<a id='L29' name='L29'></a>  29         lock-&gt;owner_cpu = -1;
+<a id='L30' name='L30'></a>  30 <em class='brace'>}</em>
+<a id='L31' name='L31'></a>  31 
+<a id='L32' name='L32'></a>  32 EXPORT_SYMBOL(<a href='../S/22.html#L16' title='Defined at 16 in locking/spinlock_debug.c.'>__raw_spin_lock_init</a>);
+<a id='L33' name='L33'></a>  33 
+<a id='L34' name='L34'></a>  34 <strong class='reserved'>void</strong> <a href='../S/22.html#L50' title='Referred from 50 in locking/spinlock_debug.c.'>__rwlock_init</a>(rwlock_t *lock, <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *name,
+<a id='L35' name='L35'></a>  35                    <strong class='reserved'>struct</strong> lock_class_key *key)
+<a id='L36' name='L36'></a>  36 <em class='brace'>{</em>
+<a id='L37' name='L37'></a>  37 <em class='sharp'>#ifdef</em> CONFIG_DEBUG_LOCK_ALLOC
+<a id='L38' name='L38'></a>  38         <em class='comment'>/*</em>
+<a id='L39' name='L39'></a>  39 <em class='comment'>         * Make sure we are not reinitializing a held lock:</em>
+<a id='L40' name='L40'></a>  40 <em class='comment'>         */</em>
+<a id='L41' name='L41'></a>  41         <a href='../S/35.html#L6206' title='Defined at 6206 in locking/lockdep.c.'>debug_check_no_locks_freed</a>((<strong class='reserved'>void</strong> *)lock, <strong class='reserved'>sizeof</strong>(*lock));
+<a id='L42' name='L42'></a>  42         lockdep_init_map_wait(&amp;lock-&gt;dep_map, name, key, 0, LD_WAIT_CONFIG);
+<a id='L43' name='L43'></a>  43 <em class='sharp'>#endif</em>
+<a id='L44' name='L44'></a>  44         lock-&gt;raw_lock = (arch_rwlock_t) __ARCH_RW_LOCK_UNLOCKED;
+<a id='L45' name='L45'></a>  45         lock-&gt;magic = RWLOCK_MAGIC;
+<a id='L46' name='L46'></a>  46         lock-&gt;owner = SPINLOCK_OWNER_INIT;
+<a id='L47' name='L47'></a>  47         lock-&gt;owner_cpu = -1;
+<a id='L48' name='L48'></a>  48 <em class='brace'>}</em>
+<a id='L49' name='L49'></a>  49 
+<a id='L50' name='L50'></a>  50 EXPORT_SYMBOL(<a href='../S/22.html#L34' title='Defined at 34 in locking/spinlock_debug.c.'>__rwlock_init</a>);
+<a id='L51' name='L51'></a>  51 
+<a id='L52' name='L52'></a>  52 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/22.html#L75' title='Referred from 75 in locking/spinlock_debug.c.'>spin_dump</a>(raw_spinlock_t *lock, <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *msg)
+<a id='L53' name='L53'></a>  53 <em class='brace'>{</em>
+<a id='L54' name='L54'></a>  54         <strong class='reserved'>struct</strong> task_struct *owner = READ_ONCE(lock-&gt;owner);
+<a id='L55' name='L55'></a>  55 
+<a id='L56' name='L56'></a>  56         <strong class='reserved'>if</strong> (owner == SPINLOCK_OWNER_INIT)
+<a id='L57' name='L57'></a>  57                 owner = NULL;
+<a id='L58' name='L58'></a>  58         <a href='../S/6.html#L2101' title='Defined at 2101 in printk/printk.c.'>printk</a>(KERN_EMERG "BUG: spinlock %s on CPU#%d, %s/%d\n",
+<a id='L59' name='L59'></a>  59                 msg, raw_smp_processor_id(),
+<a id='L60' name='L60'></a>  60                 current-&gt;comm, task_pid_nr(current));
+<a id='L61' name='L61'></a>  61         <a href='../S/6.html#L2101' title='Defined at 2101 in printk/printk.c.'>printk</a>(KERN_EMERG " lock: %pS, .magic: %08x, .owner: %s/%d, "
+<a id='L62' name='L62'></a>  62                         ".owner_cpu: %d\n",
+<a id='L63' name='L63'></a>  63                 lock, READ_ONCE(lock-&gt;magic),
+<a id='L64' name='L64'></a>  64                 owner ? owner-&gt;comm : "&lt;none&gt;",
+<a id='L65' name='L65'></a>  65                 owner ? task_pid_nr(owner) : -1,
+<a id='L66' name='L66'></a>  66                 READ_ONCE(lock-&gt;owner_cpu));
+<a id='L67' name='L67'></a>  67         dump_stack();
+<a id='L68' name='L68'></a>  68 <em class='brace'>}</em>
+<a id='L69' name='L69'></a>  69 
+<a id='L70' name='L70'></a>  70 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/22.html#L78' title='Referred from 78 in locking/spinlock_debug.c.'>spin_bug</a>(raw_spinlock_t *lock, <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *msg)
+<a id='L71' name='L71'></a>  71 <em class='brace'>{</em>
+<a id='L72' name='L72'></a>  72         <strong class='reserved'>if</strong> (!debug_locks_off())
+<a id='L73' name='L73'></a>  73                 <strong class='reserved'>return</strong>;
+<a id='L74' name='L74'></a>  74 
+<a id='L75' name='L75'></a>  75         <a href='../S/22.html#L52' title='Defined at 52 in locking/spinlock_debug.c.'>spin_dump</a>(lock, msg);
+<a id='L76' name='L76'></a>  76 <em class='brace'>}</em>
+<a id='L77' name='L77'></a>  77 
+<a id='L78' name='L78'></a>  78 <em class='sharp'>#define</em> <a href='../R/1355.html' title='Multiple referred from 8 places.'>SPIN_BUG_ON</a>(cond, lock, msg) <strong class='reserved'>if</strong> (unlikely(cond)) <a href='../S/22.html#L70' title='Defined at 70 in locking/spinlock_debug.c.'>spin_bug</a>(lock, msg)
+<a id='L79' name='L79'></a>  79 
+<a id='L80' name='L80'></a>  80 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong>
+<a id='L81' name='L81'></a>  81 <a href='../S/22.html#L112' title='Referred from 112 in locking/spinlock_debug.c.'>debug_spin_lock_before</a>(raw_spinlock_t *lock)
+<a id='L82' name='L82'></a>  82 <em class='brace'>{</em>
+<a id='L83' name='L83'></a>  83         <a href='../S/22.html#L78' title='Defined at 78 in locking/spinlock_debug.c.'>SPIN_BUG_ON</a>(READ_ONCE(lock-&gt;magic) != SPINLOCK_MAGIC, lock, "bad magic");
+<a id='L84' name='L84'></a>  84         <a href='../S/22.html#L78' title='Defined at 78 in locking/spinlock_debug.c.'>SPIN_BUG_ON</a>(READ_ONCE(lock-&gt;owner) == current, lock, "recursion");
+<a id='L85' name='L85'></a>  85         <a href='../S/22.html#L78' title='Defined at 78 in locking/spinlock_debug.c.'>SPIN_BUG_ON</a>(READ_ONCE(lock-&gt;owner_cpu) == raw_smp_processor_id(),
+<a id='L86' name='L86'></a>  86                                                         lock, "cpu recursion");
+<a id='L87' name='L87'></a>  87 <em class='brace'>}</em>
+<a id='L88' name='L88'></a>  88 
+<a id='L89' name='L89'></a>  89 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/5427.html' title='Multiple referred from 2 places.'>debug_spin_lock_after</a>(raw_spinlock_t *lock)
+<a id='L90' name='L90'></a>  90 <em class='brace'>{</em>
+<a id='L91' name='L91'></a>  91         WRITE_ONCE(lock-&gt;owner_cpu, raw_smp_processor_id());
+<a id='L92' name='L92'></a>  92         WRITE_ONCE(lock-&gt;owner, current);
+<a id='L93' name='L93'></a>  93 <em class='brace'>}</em>
+<a id='L94' name='L94'></a>  94 
+<a id='L95' name='L95'></a>  95 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/22.html#L138' title='Referred from 138 in locking/spinlock_debug.c.'>debug_spin_unlock</a>(raw_spinlock_t *lock)
+<a id='L96' name='L96'></a>  96 <em class='brace'>{</em>
+<a id='L97' name='L97'></a>  97         <a href='../S/22.html#L78' title='Defined at 78 in locking/spinlock_debug.c.'>SPIN_BUG_ON</a>(lock-&gt;magic != SPINLOCK_MAGIC, lock, "bad magic");
+<a id='L98' name='L98'></a>  98         <a href='../S/22.html#L78' title='Defined at 78 in locking/spinlock_debug.c.'>SPIN_BUG_ON</a>(!raw_spin_is_locked(lock), lock, "already unlocked");
+<a id='L99' name='L99'></a>  99         <a href='../S/22.html#L78' title='Defined at 78 in locking/spinlock_debug.c.'>SPIN_BUG_ON</a>(lock-&gt;owner != current, lock, "wrong owner");
+<a id='L100' name='L100'></a> 100         <a href='../S/22.html#L78' title='Defined at 78 in locking/spinlock_debug.c.'>SPIN_BUG_ON</a>(lock-&gt;owner_cpu != raw_smp_processor_id(),
+<a id='L101' name='L101'></a> 101                                                         lock, "wrong CPU");
+<a id='L102' name='L102'></a> 102         WRITE_ONCE(lock-&gt;owner, SPINLOCK_OWNER_INIT);
+<a id='L103' name='L103'></a> 103         WRITE_ONCE(lock-&gt;owner_cpu, -1);
+<a id='L104' name='L104'></a> 104 <em class='brace'>}</em>
+<a id='L105' name='L105'></a> 105 
+<a id='L106' name='L106'></a> 106 <em class='comment'>/*</em>
+<a id='L107' name='L107'></a> 107 <em class='comment'> * We are now relying on the NMI watchdog to detect lockup instead of doing</em>
+<a id='L108' name='L108'></a> 108 <em class='comment'> * the detection here with an unfair lock which can cause problem of its own.</em>
+<a id='L109' name='L109'></a> 109 <em class='comment'> */</em>
+<a id='L110' name='L110'></a> 110 <strong class='reserved'>void</strong> <a href='../R/5857.html' title='Multiple referred from 3 places.'>do_raw_spin_lock</a>(raw_spinlock_t *lock)
+<a id='L111' name='L111'></a> 111 <em class='brace'>{</em>
+<a id='L112' name='L112'></a> 112         <a href='../S/22.html#L81' title='Defined at 81 in locking/spinlock_debug.c.'>debug_spin_lock_before</a>(lock);
+<a id='L113' name='L113'></a> 113         arch_spin_lock(&amp;lock-&gt;raw_lock);
+<a id='L114' name='L114'></a> 114         mmiowb_spin_lock();
+<a id='L115' name='L115'></a> 115         <a href='../S/22.html#L89' title='Defined at 89 in locking/spinlock_debug.c.'>debug_spin_lock_after</a>(lock);
+<a id='L116' name='L116'></a> 116 <em class='brace'>}</em>
+<a id='L117' name='L117'></a> 117 
+<a id='L118' name='L118'></a> 118 <strong class='reserved'>int</strong> <a href='../R/5858.html' title='Multiple referred from 3 places.'>do_raw_spin_trylock</a>(raw_spinlock_t *lock)
+<a id='L119' name='L119'></a> 119 <em class='brace'>{</em>
+<a id='L120' name='L120'></a> 120         <strong class='reserved'>int</strong> ret = arch_spin_trylock(&amp;lock-&gt;raw_lock);
+<a id='L121' name='L121'></a> 121 
+<a id='L122' name='L122'></a> 122         <strong class='reserved'>if</strong> (ret) <em class='brace'>{</em>
+<a id='L123' name='L123'></a> 123                 mmiowb_spin_lock();
+<a id='L124' name='L124'></a> 124                 <a href='../S/22.html#L89' title='Defined at 89 in locking/spinlock_debug.c.'>debug_spin_lock_after</a>(lock);
+<a id='L125' name='L125'></a> 125         <em class='brace'>}</em>
+<a id='L126' name='L126'></a> 126 <em class='sharp'>#ifndef</em> CONFIG_SMP
+<a id='L127' name='L127'></a> 127         <em class='comment'>/*</em>
+<a id='L128' name='L128'></a> 128 <em class='comment'>         * Must not happen on UP:</em>
+<a id='L129' name='L129'></a> 129 <em class='comment'>         */</em>
+<a id='L130' name='L130'></a> 130         <a href='../S/22.html#L78' title='Defined at 78 in locking/spinlock_debug.c.'>SPIN_BUG_ON</a>(!ret, lock, "trylock failure on UP");
+<a id='L131' name='L131'></a> 131 <em class='sharp'>#endif</em>
+<a id='L132' name='L132'></a> 132         <strong class='reserved'>return</strong> ret;
+<a id='L133' name='L133'></a> 133 <em class='brace'>}</em>
+<a id='L134' name='L134'></a> 134 
+<a id='L135' name='L135'></a> 135 <strong class='reserved'>void</strong> do_raw_spin_unlock(raw_spinlock_t *lock)
+<a id='L136' name='L136'></a> 136 <em class='brace'>{</em>
+<a id='L137' name='L137'></a> 137         mmiowb_spin_unlock();
+<a id='L138' name='L138'></a> 138         <a href='../S/22.html#L95' title='Defined at 95 in locking/spinlock_debug.c.'>debug_spin_unlock</a>(lock);
+<a id='L139' name='L139'></a> 139         arch_spin_unlock(&amp;lock-&gt;raw_lock);
+<a id='L140' name='L140'></a> 140 <em class='brace'>}</em>
+<a id='L141' name='L141'></a> 141 
+<a id='L142' name='L142'></a> 142 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/22.html#L153' title='Referred from 153 in locking/spinlock_debug.c.'>rwlock_bug</a>(rwlock_t *lock, <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *msg)
+<a id='L143' name='L143'></a> 143 <em class='brace'>{</em>
+<a id='L144' name='L144'></a> 144         <strong class='reserved'>if</strong> (!debug_locks_off())
+<a id='L145' name='L145'></a> 145                 <strong class='reserved'>return</strong>;
+<a id='L146' name='L146'></a> 146 
+<a id='L147' name='L147'></a> 147         <a href='../S/6.html#L2101' title='Defined at 2101 in printk/printk.c.'>printk</a>(KERN_EMERG "BUG: rwlock %s on CPU#%d, %s/%d, %p\n",
+<a id='L148' name='L148'></a> 148                 msg, raw_smp_processor_id(), current-&gt;comm,
+<a id='L149' name='L149'></a> 149                 task_pid_nr(current), lock);
+<a id='L150' name='L150'></a> 150         dump_stack();
+<a id='L151' name='L151'></a> 151 <em class='brace'>}</em>
+<a id='L152' name='L152'></a> 152 
+<a id='L153' name='L153'></a> 153 <em class='sharp'>#define</em> <a href='../R/1251.html' title='Multiple referred from 10 places.'>RWLOCK_BUG_ON</a>(cond, lock, msg) <strong class='reserved'>if</strong> (unlikely(cond)) <a href='../S/22.html#L142' title='Defined at 142 in locking/spinlock_debug.c.'>rwlock_bug</a>(lock, msg)
+<a id='L154' name='L154'></a> 154 
+<a id='L155' name='L155'></a> 155 <strong class='reserved'>void</strong> do_raw_read_lock(rwlock_t *lock)
+<a id='L156' name='L156'></a> 156 <em class='brace'>{</em>
+<a id='L157' name='L157'></a> 157         <a href='../S/22.html#L153' title='Defined at 153 in locking/spinlock_debug.c.'>RWLOCK_BUG_ON</a>(lock-&gt;magic != RWLOCK_MAGIC, lock, "bad magic");
+<a id='L158' name='L158'></a> 158         arch_read_lock(&amp;lock-&gt;raw_lock);
+<a id='L159' name='L159'></a> 159 <em class='brace'>}</em>
+<a id='L160' name='L160'></a> 160 
+<a id='L161' name='L161'></a> 161 <strong class='reserved'>int</strong> do_raw_read_trylock(rwlock_t *lock)
+<a id='L162' name='L162'></a> 162 <em class='brace'>{</em>
+<a id='L163' name='L163'></a> 163         <strong class='reserved'>int</strong> ret = arch_read_trylock(&amp;lock-&gt;raw_lock);
+<a id='L164' name='L164'></a> 164 
+<a id='L165' name='L165'></a> 165 <em class='sharp'>#ifndef</em> CONFIG_SMP
+<a id='L166' name='L166'></a> 166         <em class='comment'>/*</em>
+<a id='L167' name='L167'></a> 167 <em class='comment'>         * Must not happen on UP:</em>
+<a id='L168' name='L168'></a> 168 <em class='comment'>         */</em>
+<a id='L169' name='L169'></a> 169         <a href='../S/22.html#L153' title='Defined at 153 in locking/spinlock_debug.c.'>RWLOCK_BUG_ON</a>(!ret, lock, "trylock failure on UP");
+<a id='L170' name='L170'></a> 170 <em class='sharp'>#endif</em>
+<a id='L171' name='L171'></a> 171         <strong class='reserved'>return</strong> ret;
+<a id='L172' name='L172'></a> 172 <em class='brace'>}</em>
+<a id='L173' name='L173'></a> 173 
+<a id='L174' name='L174'></a> 174 <strong class='reserved'>void</strong> do_raw_read_unlock(rwlock_t *lock)
+<a id='L175' name='L175'></a> 175 <em class='brace'>{</em>
+<a id='L176' name='L176'></a> 176         <a href='../S/22.html#L153' title='Defined at 153 in locking/spinlock_debug.c.'>RWLOCK_BUG_ON</a>(lock-&gt;magic != RWLOCK_MAGIC, lock, "bad magic");
+<a id='L177' name='L177'></a> 177         arch_read_unlock(&amp;lock-&gt;raw_lock);
+<a id='L178' name='L178'></a> 178 <em class='brace'>}</em>
+<a id='L179' name='L179'></a> 179 
+<a id='L180' name='L180'></a> 180 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/22.html#L206' title='Referred from 206 in locking/spinlock_debug.c.'>debug_write_lock_before</a>(rwlock_t *lock)
+<a id='L181' name='L181'></a> 181 <em class='brace'>{</em>
+<a id='L182' name='L182'></a> 182         <a href='../S/22.html#L153' title='Defined at 153 in locking/spinlock_debug.c.'>RWLOCK_BUG_ON</a>(lock-&gt;magic != RWLOCK_MAGIC, lock, "bad magic");
+<a id='L183' name='L183'></a> 183         <a href='../S/22.html#L153' title='Defined at 153 in locking/spinlock_debug.c.'>RWLOCK_BUG_ON</a>(lock-&gt;owner == current, lock, "recursion");
+<a id='L184' name='L184'></a> 184         <a href='../S/22.html#L153' title='Defined at 153 in locking/spinlock_debug.c.'>RWLOCK_BUG_ON</a>(lock-&gt;owner_cpu == raw_smp_processor_id(),
+<a id='L185' name='L185'></a> 185                                                         lock, "cpu recursion");
+<a id='L186' name='L186'></a> 186 <em class='brace'>}</em>
+<a id='L187' name='L187'></a> 187 
+<a id='L188' name='L188'></a> 188 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/5437.html' title='Multiple referred from 2 places.'>debug_write_lock_after</a>(rwlock_t *lock)
+<a id='L189' name='L189'></a> 189 <em class='brace'>{</em>
+<a id='L190' name='L190'></a> 190         WRITE_ONCE(lock-&gt;owner_cpu, raw_smp_processor_id());
+<a id='L191' name='L191'></a> 191         WRITE_ONCE(lock-&gt;owner, current);
+<a id='L192' name='L192'></a> 192 <em class='brace'>}</em>
+<a id='L193' name='L193'></a> 193 
+<a id='L194' name='L194'></a> 194 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/22.html#L228' title='Referred from 228 in locking/spinlock_debug.c.'>debug_write_unlock</a>(rwlock_t *lock)
+<a id='L195' name='L195'></a> 195 <em class='brace'>{</em>
+<a id='L196' name='L196'></a> 196         <a href='../S/22.html#L153' title='Defined at 153 in locking/spinlock_debug.c.'>RWLOCK_BUG_ON</a>(lock-&gt;magic != RWLOCK_MAGIC, lock, "bad magic");
+<a id='L197' name='L197'></a> 197         <a href='../S/22.html#L153' title='Defined at 153 in locking/spinlock_debug.c.'>RWLOCK_BUG_ON</a>(lock-&gt;owner != current, lock, "wrong owner");
+<a id='L198' name='L198'></a> 198         <a href='../S/22.html#L153' title='Defined at 153 in locking/spinlock_debug.c.'>RWLOCK_BUG_ON</a>(lock-&gt;owner_cpu != raw_smp_processor_id(),
+<a id='L199' name='L199'></a> 199                                                         lock, "wrong CPU");
+<a id='L200' name='L200'></a> 200         WRITE_ONCE(lock-&gt;owner, SPINLOCK_OWNER_INIT);
+<a id='L201' name='L201'></a> 201         WRITE_ONCE(lock-&gt;owner_cpu, -1);
+<a id='L202' name='L202'></a> 202 <em class='brace'>}</em>
+<a id='L203' name='L203'></a> 203 
+<a id='L204' name='L204'></a> 204 <strong class='reserved'>void</strong> do_raw_write_lock(rwlock_t *lock)
+<a id='L205' name='L205'></a> 205 <em class='brace'>{</em>
+<a id='L206' name='L206'></a> 206         <a href='../S/22.html#L180' title='Defined at 180 in locking/spinlock_debug.c.'>debug_write_lock_before</a>(lock);
+<a id='L207' name='L207'></a> 207         arch_write_lock(&amp;lock-&gt;raw_lock);
+<a id='L208' name='L208'></a> 208         <a href='../S/22.html#L188' title='Defined at 188 in locking/spinlock_debug.c.'>debug_write_lock_after</a>(lock);
+<a id='L209' name='L209'></a> 209 <em class='brace'>}</em>
+<a id='L210' name='L210'></a> 210 
+<a id='L211' name='L211'></a> 211 <strong class='reserved'>int</strong> do_raw_write_trylock(rwlock_t *lock)
+<a id='L212' name='L212'></a> 212 <em class='brace'>{</em>
+<a id='L213' name='L213'></a> 213         <strong class='reserved'>int</strong> ret = arch_write_trylock(&amp;lock-&gt;raw_lock);
+<a id='L214' name='L214'></a> 214 
+<a id='L215' name='L215'></a> 215         <strong class='reserved'>if</strong> (ret)
+<a id='L216' name='L216'></a> 216                 <a href='../S/22.html#L188' title='Defined at 188 in locking/spinlock_debug.c.'>debug_write_lock_after</a>(lock);
+<a id='L217' name='L217'></a> 217 <em class='sharp'>#ifndef</em> CONFIG_SMP
+<a id='L218' name='L218'></a> 218         <em class='comment'>/*</em>
+<a id='L219' name='L219'></a> 219 <em class='comment'>         * Must not happen on UP:</em>
+<a id='L220' name='L220'></a> 220 <em class='comment'>         */</em>
+<a id='L221' name='L221'></a> 221         <a href='../S/22.html#L153' title='Defined at 153 in locking/spinlock_debug.c.'>RWLOCK_BUG_ON</a>(!ret, lock, "trylock failure on UP");
+<a id='L222' name='L222'></a> 222 <em class='sharp'>#endif</em>
+<a id='L223' name='L223'></a> 223         <strong class='reserved'>return</strong> ret;
+<a id='L224' name='L224'></a> 224 <em class='brace'>}</em>
+<a id='L225' name='L225'></a> 225 
+<a id='L226' name='L226'></a> 226 <strong class='reserved'>void</strong> do_raw_write_unlock(rwlock_t *lock)
+<a id='L227' name='L227'></a> 227 <em class='brace'>{</em>
+<a id='L228' name='L228'></a> 228         <a href='../S/22.html#L194' title='Defined at 194 in locking/spinlock_debug.c.'>debug_write_unlock</a>(lock);
+<a id='L229' name='L229'></a> 229         arch_write_unlock(&amp;lock-&gt;raw_lock);
+<a id='L230' name='L230'></a> 230 <em class='brace'>}</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L16'>[^]</a><a href='#L226'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

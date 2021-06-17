@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>SRC</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/371.html#L1405'>SRC</a>              1405 bpf/core.c     		DST = DST OP SRC;	\</span>
+<span class='curline'><a href='../S/371.html#L1408'>SRC</a>              1408 bpf/core.c     		DST = (u32) DST OP (u32) SRC;	\</span>
+<span class='curline'><a href='../S/371.html#L1433'>SRC</a>              1433 bpf/core.c     		DST = (u32) SRC;</span>
+<span class='curline'><a href='../S/371.html#L1439'>SRC</a>              1439 bpf/core.c     		DST = SRC;</span>
+<span class='curline'><a href='../S/371.html#L1449'>SRC</a>              1449 bpf/core.c     		DST = (u64) (u32) (((s32) DST) &gt;&gt; SRC);</span>
+<span class='curline'><a href='../S/371.html#L1455'>SRC</a>              1455 bpf/core.c     		(*(s64 *) &amp;DST) &gt;&gt;= SRC;</span>
+<span class='curline'><a href='../S/371.html#L1461'>SRC</a>              1461 bpf/core.c     		div64_u64_rem(DST, SRC, &amp;AX);</span>
+<span class='curline'><a href='../S/371.html#L1466'>SRC</a>              1466 bpf/core.c     		DST = do_div(AX, (u32) SRC);</span>
+<span class='curline'><a href='../S/371.html#L1477'>SRC</a>              1477 bpf/core.c     		DST = div64_u64(DST, SRC);</span>
+<span class='curline'><a href='../S/371.html#L1481'>SRC</a>              1481 bpf/core.c     		do_div(AX, (u32) SRC);</span>
+<span class='curline'><a href='../S/371.html#L1571'>SRC</a>              1571 bpf/core.c     		if ((SIGN##64) DST CMP_OP (SIGN##64) SRC) {	\</span>
+<span class='curline'><a href='../S/371.html#L1577'>SRC</a>              1577 bpf/core.c     		if ((SIGN##32) DST CMP_OP (SIGN##32) SRC) {	\</span>
+<span class='curline'><a href='../S/371.html#L1609'>SRC</a>              1609 bpf/core.c     		*(SIZE *)(unsigned long) (DST + insn-&gt;off) = SRC;	\</span>
+<span class='curline'><a href='../S/371.html#L1615'>SRC</a>              1615 bpf/core.c     		DST = *(SIZE *)(unsigned long) (SRC + insn-&gt;off);	\</span>
+<span class='curline'><a href='../S/371.html#L1625'>SRC</a>              1625 bpf/core.c     		bpf_probe_read_kernel(&amp;DST, SIZE, (const void *)(long) (SRC + insn-&gt;off));	\</span>
+<span class='curline'><a href='../S/371.html#L1634'>SRC</a>              1634 bpf/core.c     		atomic_add((u32) SRC, (atomic_t *)(unsigned long)</span>
+<span class='curline'><a href='../S/371.html#L1638'>SRC</a>              1638 bpf/core.c     		atomic64_add((u64) SRC, (atomic64_t *)(unsigned long)</span>
+</pre>
+</body>
+</html>

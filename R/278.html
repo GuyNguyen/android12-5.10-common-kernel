@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>DEQUEUE_SLEEP</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/441.html#L1659'>DEQUEUE_SLEEP</a>    1659 sched/core.c   		psi_dequeue(p, flags &amp; DEQUEUE_SLEEP);</span>
+<span class='curline'><a href='../S/441.html#L1678'>DEQUEUE_SLEEP</a>    1678 sched/core.c   	p-&gt;on_rq = (flags &amp; DEQUEUE_SLEEP) ? 0 : TASK_ON_RQ_MIGRATING;</span>
+<span class='curline'><a href='../S/441.html#L4718'>DEQUEUE_SLEEP</a>    4718 sched/core.c   			deactivate_task(rq, prev, DEQUEUE_SLEEP | DEQUEUE_NOCLOCK);</span>
+<span class='curline'><a href='../S/451.html#L1634'>DEQUEUE_SLEEP</a>    1634 sched/deadline.c 	if (flags &amp; DEQUEUE_SLEEP)</span>
+<span class='curline'><a href='../S/464.html#L1053'>DEQUEUE_SLEEP</a>    1053 sched/fair.c   	if ((flags &amp; DEQUEUE_SLEEP) &amp;&amp; entity_is_task(se)) {</span>
+<span class='curline'><a href='../S/464.html#L4384'>DEQUEUE_SLEEP</a>    4384 sched/fair.c   	if (!(flags &amp; DEQUEUE_SLEEP))</span>
+<span class='curline'><a href='../S/464.html#L4848'>DEQUEUE_SLEEP</a>    4848 sched/fair.c   			dequeue_entity(qcfs_rq, se, DEQUEUE_SLEEP);</span>
+<span class='curline'><a href='../S/464.html#L5661'>DEQUEUE_SLEEP</a>    5661 sched/fair.c   	int task_sleep = flags &amp; DEQUEUE_SLEEP;</span>
+<span class='curline'><a href='../S/464.html#L5690'>DEQUEUE_SLEEP</a>    5690 sched/fair.c   		flags |= DEQUEUE_SLEEP;</span>
+</pre>
+</body>
+</html>

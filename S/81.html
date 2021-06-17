@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>time/vsyscall.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/512.html'>time</a>/vsyscall.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L18'>[^]</a><a href='#L163'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L18' title='Defined at 18.'>update_vdso_data</a></li>
+<li><a href='#L72' title='Defined at 72.'>update_vsyscall</a></li>
+<li><a href='#L123' title='Defined at 123.'>update_vsyscall_tz</a></li>
+<li><a href='#L145' title='Defined at 145.'>vdso_update_begin</a></li>
+<li><a href='#L163' title='Defined at 163.'>vdso_update_end</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * Copyright 2019 ARM Ltd.</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> *</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * Generic implementation of update_vsyscall and update_vsyscall_tz.</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> *</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> * Based on the x86 specific implementation.</em>
+<a id='L8' name='L8'></a>   8 <em class='comment'> */</em>
+<a id='L9' name='L9'></a>   9 
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;linux/hrtimer.h&gt;
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;linux/timekeeper_internal.h&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;vdso/datapage.h&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;vdso/helpers.h&gt;
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> &lt;vdso/vsyscall.h&gt;
+<a id='L15' name='L15'></a>  15 
+<a id='L16' name='L16'></a>  16 <em class='sharp'>#include</em> "<a href='106.html'>timekeeping_internal.h</a>"
+<a id='L17' name='L17'></a>  17 
+<a id='L18' name='L18'></a>  18 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/81.html#L114' title='Referred from 114 in time/vsyscall.c.'>update_vdso_data</a>(<strong class='reserved'>struct</strong> vdso_data *vdata,
+<a id='L19' name='L19'></a>  19                                     <strong class='reserved'>struct</strong> timekeeper *tk)
+<a id='L20' name='L20'></a>  20 <em class='brace'>{</em>
+<a id='L21' name='L21'></a>  21         <strong class='reserved'>struct</strong> vdso_timestamp *vdso_ts;
+<a id='L22' name='L22'></a>  22         u64 nsec, sec;
+<a id='L23' name='L23'></a>  23 
+<a id='L24' name='L24'></a>  24         vdata[CS_HRES_COARSE].cycle_last        = tk-&gt;tkr_mono.cycle_last;
+<a id='L25' name='L25'></a>  25         vdata[CS_HRES_COARSE].mask              = tk-&gt;tkr_mono.mask;
+<a id='L26' name='L26'></a>  26         vdata[CS_HRES_COARSE].mult              = tk-&gt;tkr_mono.mult;
+<a id='L27' name='L27'></a>  27         vdata[CS_HRES_COARSE].shift             = tk-&gt;tkr_mono.shift;
+<a id='L28' name='L28'></a>  28         vdata[CS_RAW].cycle_last                = tk-&gt;tkr_raw.cycle_last;
+<a id='L29' name='L29'></a>  29         vdata[CS_RAW].mask                      = tk-&gt;tkr_raw.mask;
+<a id='L30' name='L30'></a>  30         vdata[CS_RAW].mult                      = tk-&gt;tkr_raw.mult;
+<a id='L31' name='L31'></a>  31         vdata[CS_RAW].shift                     = tk-&gt;tkr_raw.shift;
+<a id='L32' name='L32'></a>  32 
+<a id='L33' name='L33'></a>  33         <em class='comment'>/* CLOCK_MONOTONIC */</em>
+<a id='L34' name='L34'></a>  34         vdso_ts         = &amp;vdata[CS_HRES_COARSE].basetime[CLOCK_MONOTONIC];
+<a id='L35' name='L35'></a>  35         vdso_ts-&gt;sec    = tk-&gt;xtime_sec + tk-&gt;wall_to_monotonic.tv_sec;
+<a id='L36' name='L36'></a>  36 
+<a id='L37' name='L37'></a>  37         nsec = tk-&gt;tkr_mono.xtime_nsec;
+<a id='L38' name='L38'></a>  38         nsec += ((u64)tk-&gt;wall_to_monotonic.tv_nsec &lt;&lt; tk-&gt;tkr_mono.shift);
+<a id='L39' name='L39'></a>  39         <strong class='reserved'>while</strong> (nsec &gt;= (((u64)NSEC_PER_SEC) &lt;&lt; tk-&gt;tkr_mono.shift)) <em class='brace'>{</em>
+<a id='L40' name='L40'></a>  40                 nsec -= (((u64)NSEC_PER_SEC) &lt;&lt; tk-&gt;tkr_mono.shift);
+<a id='L41' name='L41'></a>  41                 vdso_ts-&gt;sec++;
+<a id='L42' name='L42'></a>  42         <em class='brace'>}</em>
+<a id='L43' name='L43'></a>  43         vdso_ts-&gt;nsec   = nsec;
+<a id='L44' name='L44'></a>  44 
+<a id='L45' name='L45'></a>  45         <em class='comment'>/* Copy MONOTONIC time for BOOTTIME */</em>
+<a id='L46' name='L46'></a>  46         sec     = vdso_ts-&gt;sec;
+<a id='L47' name='L47'></a>  47         <em class='comment'>/* Add the boot offset */</em>
+<a id='L48' name='L48'></a>  48         sec     += tk-&gt;monotonic_to_boot.tv_sec;
+<a id='L49' name='L49'></a>  49         nsec    += (u64)tk-&gt;monotonic_to_boot.tv_nsec &lt;&lt; tk-&gt;tkr_mono.shift;
+<a id='L50' name='L50'></a>  50 
+<a id='L51' name='L51'></a>  51         <em class='comment'>/* CLOCK_BOOTTIME */</em>
+<a id='L52' name='L52'></a>  52         vdso_ts         = &amp;vdata[CS_HRES_COARSE].basetime[CLOCK_BOOTTIME];
+<a id='L53' name='L53'></a>  53         vdso_ts-&gt;sec    = sec;
+<a id='L54' name='L54'></a>  54 
+<a id='L55' name='L55'></a>  55         <strong class='reserved'>while</strong> (nsec &gt;= (((u64)NSEC_PER_SEC) &lt;&lt; tk-&gt;tkr_mono.shift)) <em class='brace'>{</em>
+<a id='L56' name='L56'></a>  56                 nsec -= (((u64)NSEC_PER_SEC) &lt;&lt; tk-&gt;tkr_mono.shift);
+<a id='L57' name='L57'></a>  57                 vdso_ts-&gt;sec++;
+<a id='L58' name='L58'></a>  58         <em class='brace'>}</em>
+<a id='L59' name='L59'></a>  59         vdso_ts-&gt;nsec   = nsec;
+<a id='L60' name='L60'></a>  60 
+<a id='L61' name='L61'></a>  61         <em class='comment'>/* CLOCK_MONOTONIC_RAW */</em>
+<a id='L62' name='L62'></a>  62         vdso_ts         = &amp;vdata[CS_RAW].basetime[CLOCK_MONOTONIC_RAW];
+<a id='L63' name='L63'></a>  63         vdso_ts-&gt;sec    = tk-&gt;raw_sec;
+<a id='L64' name='L64'></a>  64         vdso_ts-&gt;nsec   = tk-&gt;tkr_raw.xtime_nsec;
+<a id='L65' name='L65'></a>  65 
+<a id='L66' name='L66'></a>  66         <em class='comment'>/* CLOCK_TAI */</em>
+<a id='L67' name='L67'></a>  67         vdso_ts         = &amp;vdata[CS_HRES_COARSE].basetime[CLOCK_TAI];
+<a id='L68' name='L68'></a>  68         vdso_ts-&gt;sec    = tk-&gt;xtime_sec + (s64)tk-&gt;tai_offset;
+<a id='L69' name='L69'></a>  69         vdso_ts-&gt;nsec   = tk-&gt;tkr_mono.xtime_nsec;
+<a id='L70' name='L70'></a>  70 <em class='brace'>}</em>
+<a id='L71' name='L71'></a>  71 
+<a id='L72' name='L72'></a>  72 <strong class='reserved'>void</strong> <a href='../S/82.html#L745' title='Referred from 745 in time/timekeeping.c.'>update_vsyscall</a>(<strong class='reserved'>struct</strong> timekeeper *tk)
+<a id='L73' name='L73'></a>  73 <em class='brace'>{</em>
+<a id='L74' name='L74'></a>  74         <strong class='reserved'>struct</strong> vdso_data *vdata = __arch_get_k_vdso_data();
+<a id='L75' name='L75'></a>  75         <strong class='reserved'>struct</strong> vdso_timestamp *vdso_ts;
+<a id='L76' name='L76'></a>  76         s32 clock_mode;
+<a id='L77' name='L77'></a>  77         u64 nsec;
+<a id='L78' name='L78'></a>  78 
+<a id='L79' name='L79'></a>  79         <em class='comment'>/* copy vsyscall data */</em>
+<a id='L80' name='L80'></a>  80         vdso_write_begin(vdata);
+<a id='L81' name='L81'></a>  81 
+<a id='L82' name='L82'></a>  82         clock_mode = tk-&gt;tkr_mono.clock-&gt;vdso_clock_mode;
+<a id='L83' name='L83'></a>  83         vdata[CS_HRES_COARSE].clock_mode        = clock_mode;
+<a id='L84' name='L84'></a>  84         vdata[CS_RAW].clock_mode                = clock_mode;
+<a id='L85' name='L85'></a>  85 
+<a id='L86' name='L86'></a>  86         <em class='comment'>/* CLOCK_REALTIME also required for time() */</em>
+<a id='L87' name='L87'></a>  87         vdso_ts         = &amp;vdata[CS_HRES_COARSE].basetime[CLOCK_REALTIME];
+<a id='L88' name='L88'></a>  88         vdso_ts-&gt;sec    = tk-&gt;xtime_sec;
+<a id='L89' name='L89'></a>  89         vdso_ts-&gt;nsec   = tk-&gt;tkr_mono.xtime_nsec;
+<a id='L90' name='L90'></a>  90 
+<a id='L91' name='L91'></a>  91         <em class='comment'>/* CLOCK_REALTIME_COARSE */</em>
+<a id='L92' name='L92'></a>  92         vdso_ts         = &amp;vdata[CS_HRES_COARSE].basetime[CLOCK_REALTIME_COARSE];
+<a id='L93' name='L93'></a>  93         vdso_ts-&gt;sec    = tk-&gt;xtime_sec;
+<a id='L94' name='L94'></a>  94         vdso_ts-&gt;nsec   = tk-&gt;tkr_mono.xtime_nsec &gt;&gt; tk-&gt;tkr_mono.shift;
+<a id='L95' name='L95'></a>  95 
+<a id='L96' name='L96'></a>  96         <em class='comment'>/* CLOCK_MONOTONIC_COARSE */</em>
+<a id='L97' name='L97'></a>  97         vdso_ts         = &amp;vdata[CS_HRES_COARSE].basetime[CLOCK_MONOTONIC_COARSE];
+<a id='L98' name='L98'></a>  98         vdso_ts-&gt;sec    = tk-&gt;xtime_sec + tk-&gt;wall_to_monotonic.tv_sec;
+<a id='L99' name='L99'></a>  99         nsec            = tk-&gt;tkr_mono.xtime_nsec &gt;&gt; tk-&gt;tkr_mono.shift;
+<a id='L100' name='L100'></a> 100         nsec            = nsec + tk-&gt;wall_to_monotonic.tv_nsec;
+<a id='L101' name='L101'></a> 101         vdso_ts-&gt;sec    += __iter_div_u64_rem(nsec, NSEC_PER_SEC, &amp;vdso_ts-&gt;nsec);
+<a id='L102' name='L102'></a> 102 
+<a id='L103' name='L103'></a> 103         <em class='comment'>/*</em>
+<a id='L104' name='L104'></a> 104 <em class='comment'>         * Read without the seqlock held by clock_getres().</em>
+<a id='L105' name='L105'></a> 105 <em class='comment'>         * Note: No need to have a second copy.</em>
+<a id='L106' name='L106'></a> 106 <em class='comment'>         */</em>
+<a id='L107' name='L107'></a> 107         WRITE_ONCE(vdata[CS_HRES_COARSE].hrtimer_res, hrtimer_resolution);
+<a id='L108' name='L108'></a> 108 
+<a id='L109' name='L109'></a> 109         <em class='comment'>/*</em>
+<a id='L110' name='L110'></a> 110 <em class='comment'>         * If the current clocksource is not VDSO capable, then spare the</em>
+<a id='L111' name='L111'></a> 111 <em class='comment'>         * update of the high reolution parts.</em>
+<a id='L112' name='L112'></a> 112 <em class='comment'>         */</em>
+<a id='L113' name='L113'></a> 113         <strong class='reserved'>if</strong> (clock_mode != VDSO_CLOCKMODE_NONE)
+<a id='L114' name='L114'></a> 114                 <a href='../S/81.html#L18' title='Defined at 18 in time/vsyscall.c.'>update_vdso_data</a>(vdata, tk);
+<a id='L115' name='L115'></a> 115 
+<a id='L116' name='L116'></a> 116         __arch_update_vsyscall(vdata, tk);
+<a id='L117' name='L117'></a> 117 
+<a id='L118' name='L118'></a> 118         vdso_write_end(vdata);
+<a id='L119' name='L119'></a> 119 
+<a id='L120' name='L120'></a> 120         __arch_sync_vdso_data(vdata);
+<a id='L121' name='L121'></a> 121 <em class='brace'>}</em>
+<a id='L122' name='L122'></a> 122 
+<a id='L123' name='L123'></a> 123 <strong class='reserved'>void</strong> <a href='../S/101.html#L187' title='Referred from 187 in time/time.c.'>update_vsyscall_tz</a>(<strong class='reserved'>void</strong>)
+<a id='L124' name='L124'></a> 124 <em class='brace'>{</em>
+<a id='L125' name='L125'></a> 125         <strong class='reserved'>struct</strong> vdso_data *vdata = __arch_get_k_vdso_data();
+<a id='L126' name='L126'></a> 126 
+<a id='L127' name='L127'></a> 127         vdata[CS_HRES_COARSE].tz_minuteswest = sys_tz.tz_minuteswest;
+<a id='L128' name='L128'></a> 128         vdata[CS_HRES_COARSE].tz_dsttime = sys_tz.tz_dsttime;
+<a id='L129' name='L129'></a> 129 
+<a id='L130' name='L130'></a> 130         __arch_sync_vdso_data(vdata);
+<a id='L131' name='L131'></a> 131 <em class='brace'>}</em>
+<a id='L132' name='L132'></a> 132 
+<a id='L133' name='L133'></a> 133 <em class='comment'>/**</em>
+<a id='L134' name='L134'></a> 134 <em class='comment'> * vdso_update_begin - Start of a VDSO update section</em>
+<a id='L135' name='L135'></a> 135 <em class='comment'> *</em>
+<a id='L136' name='L136'></a> 136 <em class='comment'> * Allows architecture code to safely update the architecture specific VDSO</em>
+<a id='L137' name='L137'></a> 137 <em class='comment'> * data. Disables interrupts, acquires timekeeper lock to serialize against</em>
+<a id='L138' name='L138'></a> 138 <em class='comment'> * concurrent updates from timekeeping and invalidates the VDSO data</em>
+<a id='L139' name='L139'></a> 139 <em class='comment'> * sequence counter to prevent concurrent readers from accessing</em>
+<a id='L140' name='L140'></a> 140 <em class='comment'> * inconsistent data.</em>
+<a id='L141' name='L141'></a> 141 <em class='comment'> *</em>
+<a id='L142' name='L142'></a> 142 <em class='comment'> * Returns: Saved interrupt flags which need to be handed in to</em>
+<a id='L143' name='L143'></a> 143 <em class='comment'> * vdso_update_end().</em>
+<a id='L144' name='L144'></a> 144 <em class='comment'> */</em>
+<a id='L145' name='L145'></a> 145 <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> vdso_update_begin(<strong class='reserved'>void</strong>)
+<a id='L146' name='L146'></a> 146 <em class='brace'>{</em>
+<a id='L147' name='L147'></a> 147         <strong class='reserved'>struct</strong> vdso_data *vdata = __arch_get_k_vdso_data();
+<a id='L148' name='L148'></a> 148         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> flags;
+<a id='L149' name='L149'></a> 149 
+<a id='L150' name='L150'></a> 150         raw_spin_lock_irqsave(&amp;timekeeper_lock, flags);
+<a id='L151' name='L151'></a> 151         vdso_write_begin(vdata);
+<a id='L152' name='L152'></a> 152         <strong class='reserved'>return</strong> flags;
+<a id='L153' name='L153'></a> 153 <em class='brace'>}</em>
+<a id='L154' name='L154'></a> 154 
+<a id='L155' name='L155'></a> 155 <em class='comment'>/**</em>
+<a id='L156' name='L156'></a> 156 <em class='comment'> * vdso_update_end - End of a VDSO update section</em>
+<a id='L157' name='L157'></a> 157 <em class='comment'> * @flags:      Interrupt flags as returned from vdso_update_begin()</em>
+<a id='L158' name='L158'></a> 158 <em class='comment'> *</em>
+<a id='L159' name='L159'></a> 159 <em class='comment'> * Pairs with vdso_update_begin(). Marks vdso data consistent, invokes data</em>
+<a id='L160' name='L160'></a> 160 <em class='comment'> * synchronization if the architecture requires it, drops timekeeper lock</em>
+<a id='L161' name='L161'></a> 161 <em class='comment'> * and restores interrupt flags.</em>
+<a id='L162' name='L162'></a> 162 <em class='comment'> */</em>
+<a id='L163' name='L163'></a> 163 <strong class='reserved'>void</strong> vdso_update_end(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> flags)
+<a id='L164' name='L164'></a> 164 <em class='brace'>{</em>
+<a id='L165' name='L165'></a> 165         <strong class='reserved'>struct</strong> vdso_data *vdata = __arch_get_k_vdso_data();
+<a id='L166' name='L166'></a> 166 
+<a id='L167' name='L167'></a> 167         vdso_write_end(vdata);
+<a id='L168' name='L168'></a> 168         __arch_sync_vdso_data(vdata);
+<a id='L169' name='L169'></a> 169         raw_spin_unlock_irqrestore(&amp;timekeeper_lock, flags);
+<a id='L170' name='L170'></a> 170 <em class='brace'>}</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L18'>[^]</a><a href='#L163'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

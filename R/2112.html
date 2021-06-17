@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>__irqd_to_state</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/356.html#L197'>__irqd_to_state</a>   197 irq/internals.h 	return __irqd_to_state(d);</span>
+<span class='curline'><a href='../S/356.html#L205'>__irqd_to_state</a>   205 irq/internals.h 	__irqd_to_state(d) |= IRQD_SETAFFINITY_PENDING;</span>
+<span class='curline'><a href='../S/356.html#L210'>__irqd_to_state</a>   210 irq/internals.h 	__irqd_to_state(d) &amp;= ~IRQD_SETAFFINITY_PENDING;</span>
+<span class='curline'><a href='../S/356.html#L215'>__irqd_to_state</a>   215 irq/internals.h 	__irqd_to_state(d) |= IRQD_MANAGED_SHUTDOWN;</span>
+<span class='curline'><a href='../S/356.html#L220'>__irqd_to_state</a>   220 irq/internals.h 	__irqd_to_state(d) &amp;= ~IRQD_MANAGED_SHUTDOWN;</span>
+<span class='curline'><a href='../S/356.html#L225'>__irqd_to_state</a>   225 irq/internals.h 	__irqd_to_state(d) &amp;= ~mask;</span>
+<span class='curline'><a href='../S/356.html#L230'>__irqd_to_state</a>   230 irq/internals.h 	__irqd_to_state(d) |= mask;</span>
+<span class='curline'><a href='../S/356.html#L235'>__irqd_to_state</a>   235 irq/internals.h 	return __irqd_to_state(d) &amp; mask;</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>old_itimerval32</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/104.html#L129'>old_itimerval32</a>   129 time/itimer.c  static int put_old_itimerval32(struct old_itimerval32 __user *o,</span>
+<span class='curline'><a href='../S/104.html#L132'>old_itimerval32</a>   132 time/itimer.c  	struct old_itimerval32 v32;</span>
+<span class='curline'><a href='../S/104.html#L138'>old_itimerval32</a>   138 time/itimer.c  	return copy_to_user(o, &amp;v32, sizeof(struct old_itimerval32)) ? -EFAULT : 0;</span>
+<span class='curline'><a href='../S/104.html#L142'>old_itimerval32</a>   142 time/itimer.c  		       struct old_itimerval32 __user *, value)</span>
+<span class='curline'><a href='../S/104.html#L359'>old_itimerval32</a>   359 time/itimer.c  static int get_old_itimerval32(struct itimerspec64 *o, const struct old_itimerval32 __user *i)</span>
+<span class='curline'><a href='../S/104.html#L361'>old_itimerval32</a>   361 time/itimer.c  	struct old_itimerval32 v32;</span>
+<span class='curline'><a href='../S/104.html#L363'>old_itimerval32</a>   363 time/itimer.c  	if (copy_from_user(&amp;v32, i, sizeof(struct old_itimerval32)))</span>
+<span class='curline'><a href='../S/104.html#L379'>old_itimerval32</a>   379 time/itimer.c  		       struct old_itimerval32 __user *, value,</span>
+<span class='curline'><a href='../S/104.html#L380'>old_itimerval32</a>   380 time/itimer.c  		       struct old_itimerval32 __user *, ovalue)</span>
+</pre>
+</body>
+</html>

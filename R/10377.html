@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>printk_ringbuffer</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/6.html#L442'>printk_ringbuffer</a>  442 printk/printk.c static struct printk_ringbuffer printk_rb_dynamic;</span>
+<span class='curline'><a href='../S/6.html#L444'>printk_ringbuffer</a>  444 printk/printk.c static struct printk_ringbuffer *prb = &amp;printk_rb_static;</span>
+<span class='curline'><a href='../S/6.html#L971'>printk_ringbuffer</a>  971 printk/printk.c 	VMCOREINFO_STRUCT_SIZE(printk_ringbuffer);</span>
+<span class='curline'><a href='../S/6.html#L972'>printk_ringbuffer</a>  972 printk/printk.c 	VMCOREINFO_OFFSET(printk_ringbuffer, desc_ring);</span>
+<span class='curline'><a href='../S/6.html#L973'>printk_ringbuffer</a>  973 printk/printk.c 	VMCOREINFO_OFFSET(printk_ringbuffer, text_data_ring);</span>
+<span class='curline'><a href='../S/6.html#L974'>printk_ringbuffer</a>  974 printk/printk.c 	VMCOREINFO_OFFSET(printk_ringbuffer, fail);</span>
+<span class='curline'><a href='../S/6.html#L1089'>printk_ringbuffer</a> 1089 printk/printk.c static unsigned int __init add_to_rb(struct printk_ringbuffer *rb,</span>
+<span class='curline'><a href='../S/9.html#L561'>printk_ringbuffer</a>  561 printk/printk_ringbuffer.c static bool data_make_reusable(struct printk_ringbuffer *rb,</span>
+<span class='curline'><a href='../S/9.html#L628'>printk_ringbuffer</a>  628 printk/printk_ringbuffer.c static bool data_push_tail(struct printk_ringbuffer *rb,</span>
+<span class='curline'><a href='../S/9.html#L765'>printk_ringbuffer</a>  765 printk/printk_ringbuffer.c static bool desc_push_tail(struct printk_ringbuffer *rb,</span>
+<span class='curline'><a href='../S/9.html#L873'>printk_ringbuffer</a>  873 printk/printk_ringbuffer.c static bool desc_reserve(struct printk_ringbuffer *rb, unsigned long *id_out)</span>
+<span class='curline'><a href='../S/9.html#L1022'>printk_ringbuffer</a> 1022 printk/printk_ringbuffer.c static char *data_alloc(struct printk_ringbuffer *rb,</span>
+<span class='curline'><a href='../S/9.html#L1103'>printk_ringbuffer</a> 1103 printk/printk_ringbuffer.c static char *data_realloc(struct printk_ringbuffer *rb,</span>
+<span class='curline'><a href='../S/9.html#L1348'>printk_ringbuffer</a> 1348 printk/printk_ringbuffer.c bool prb_reserve_in_last(struct prb_reserved_entry *e, struct printk_ringbuffer *rb,</span>
+<span class='curline'><a href='../S/9.html#L1480'>printk_ringbuffer</a> 1480 printk/printk_ringbuffer.c bool prb_reserve(struct prb_reserved_entry *e, struct printk_ringbuffer *rb,</span>
+<span class='curline'><a href='../S/9.html#L1787'>printk_ringbuffer</a> 1787 printk/printk_ringbuffer.c static int prb_read(struct printk_ringbuffer *rb, u64 seq,</span>
+<span class='curline'><a href='../S/9.html#L1826'>printk_ringbuffer</a> 1826 printk/printk_ringbuffer.c static u64 prb_first_seq(struct printk_ringbuffer *rb)</span>
+<span class='curline'><a href='../S/9.html#L1876'>printk_ringbuffer</a> 1876 printk/printk_ringbuffer.c static bool _prb_read_valid(struct printk_ringbuffer *rb, u64 *seq,</span>
+<span class='curline'><a href='../S/9.html#L1928'>printk_ringbuffer</a> 1928 printk/printk_ringbuffer.c bool prb_read_valid(struct printk_ringbuffer *rb, u64 seq,</span>
+<span class='curline'><a href='../S/9.html#L1958'>printk_ringbuffer</a> 1958 printk/printk_ringbuffer.c bool prb_read_valid_info(struct printk_ringbuffer *rb, u64 seq,</span>
+<span class='curline'><a href='../S/9.html#L1983'>printk_ringbuffer</a> 1983 printk/printk_ringbuffer.c u64 prb_first_valid_seq(struct printk_ringbuffer *rb)</span>
+<span class='curline'><a href='../S/9.html#L2008'>printk_ringbuffer</a> 2008 printk/printk_ringbuffer.c u64 prb_next_seq(struct printk_ringbuffer *rb)</span>
+<span class='curline'><a href='../S/9.html#L2036'>printk_ringbuffer</a> 2036 printk/printk_ringbuffer.c void prb_init(struct printk_ringbuffer *rb,</span>
+<span class='curline'><a href='../S/8.html#L105'>printk_ringbuffer</a>  105 printk/printk_ringbuffer.h 	struct printk_ringbuffer	*rb;</span>
+<span class='curline'><a href='../S/8.html#L254'>printk_ringbuffer</a>  254 printk/printk_ringbuffer.h static struct printk_ringbuffer name = {							\</span>
+<span class='curline'><a href='../S/8.html#L303'>printk_ringbuffer</a>  303 printk/printk_ringbuffer.h bool prb_reserve(struct prb_reserved_entry *e, struct printk_ringbuffer *rb,</span>
+<span class='curline'><a href='../S/8.html#L305'>printk_ringbuffer</a>  305 printk/printk_ringbuffer.h bool prb_reserve_in_last(struct prb_reserved_entry *e, struct printk_ringbuffer *rb,</span>
+<span class='curline'><a href='../S/8.html#L310'>printk_ringbuffer</a>  310 printk/printk_ringbuffer.h void prb_init(struct printk_ringbuffer *rb,</span>
+<span class='curline'><a href='../S/8.html#L374'>printk_ringbuffer</a>  374 printk/printk_ringbuffer.h bool prb_read_valid(struct printk_ringbuffer *rb, u64 seq,</span>
+<span class='curline'><a href='../S/8.html#L376'>printk_ringbuffer</a>  376 printk/printk_ringbuffer.h bool prb_read_valid_info(struct printk_ringbuffer *rb, u64 seq,</span>
+<span class='curline'><a href='../S/8.html#L379'>printk_ringbuffer</a>  379 printk/printk_ringbuffer.h u64 prb_first_valid_seq(struct printk_ringbuffer *rb);</span>
+<span class='curline'><a href='../S/8.html#L380'>printk_ringbuffer</a>  380 printk/printk_ringbuffer.h u64 prb_next_seq(struct printk_ringbuffer *rb);</span>
+</pre>
+</body>
+</html>

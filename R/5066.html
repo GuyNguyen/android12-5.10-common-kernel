@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>cpu_stopper</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/202.html#L38'>cpu_stopper</a>        38 stop_machine.c static DEFINE_PER_CPU(struct cpu_stopper, cpu_stopper);</span>
+<span class='curline'><a href='../S/202.html#L59'>cpu_stopper</a>        59 stop_machine.c static void __cpu_stop_queue_work(struct cpu_stopper *stopper,</span>
+<span class='curline'><a href='../S/202.html#L70'>cpu_stopper</a>        70 stop_machine.c 	struct cpu_stopper *stopper = &amp;per_cpu(cpu_stopper, cpu);</span>
+<span class='curline'><a href='../S/202.html#L239'>cpu_stopper</a>       239 stop_machine.c 	struct cpu_stopper *stopper1 = per_cpu_ptr(&amp;cpu_stopper, cpu1);</span>
+<span class='curline'><a href='../S/202.html#L240'>cpu_stopper</a>       240 stop_machine.c 	struct cpu_stopper *stopper2 = per_cpu_ptr(&amp;cpu_stopper, cpu2);</span>
+<span class='curline'><a href='../S/202.html#L431'>cpu_stopper</a>       431 stop_machine.c 		work = &amp;per_cpu(cpu_stopper.stop_work, cpu);</span>
+<span class='curline'><a href='../S/202.html#L498'>cpu_stopper</a>       498 stop_machine.c 	struct cpu_stopper *stopper = &amp;per_cpu(cpu_stopper, cpu);</span>
+<span class='curline'><a href='../S/202.html#L510'>cpu_stopper</a>       510 stop_machine.c 	struct cpu_stopper *stopper = &amp;per_cpu(cpu_stopper, cpu);</span>
+<span class='curline'><a href='../S/202.html#L546'>cpu_stopper</a>       546 stop_machine.c 	struct cpu_stopper *stopper = &amp;per_cpu(cpu_stopper, cpu);</span>
+<span class='curline'><a href='../S/202.html#L560'>cpu_stopper</a>       560 stop_machine.c 	sched_set_stop_task(cpu, per_cpu(cpu_stopper.thread, cpu));</span>
+<span class='curline'><a href='../S/202.html#L565'>cpu_stopper</a>       565 stop_machine.c 	struct cpu_stopper *stopper = &amp;per_cpu(cpu_stopper, cpu);</span>
+<span class='curline'><a href='../S/202.html#L572'>cpu_stopper</a>       572 stop_machine.c 	struct cpu_stopper *stopper = &amp;per_cpu(cpu_stopper, cpu);</span>
+<span class='curline'><a href='../S/202.html#L579'>cpu_stopper</a>       579 stop_machine.c 	.store			= &amp;cpu_stopper.thread,</span>
+<span class='curline'><a href='../S/202.html#L593'>cpu_stopper</a>       593 stop_machine.c 		struct cpu_stopper *stopper = &amp;per_cpu(cpu_stopper, cpu);</span>
+</pre>
+</body>
+</html>

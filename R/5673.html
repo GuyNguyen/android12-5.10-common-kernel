@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>dl_policy</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/441.html#L5389'>dl_policy</a>        5389 sched/core.c   	if (dl_policy(policy))</span>
+<span class='curline'><a href='../S/441.html#L5455'>dl_policy</a>        5455 sched/core.c   	int newprio = dl_policy(attr-&gt;sched_policy) ? MAX_DL_PRIO - 1 :</span>
+<span class='curline'><a href='../S/441.html#L5490'>dl_policy</a>        5490 sched/core.c   	if ((dl_policy(policy) &amp;&amp; !__checkparam_dl(attr)) ||</span>
+<span class='curline'><a href='../S/441.html#L5524'>dl_policy</a>        5524 sched/core.c   		if (dl_policy(policy))</span>
+<span class='curline'><a href='../S/441.html#L5588'>dl_policy</a>        5588 sched/core.c   		if (dl_policy(policy) &amp;&amp; dl_param_changed(p, attr))</span>
+<span class='curline'><a href='../S/441.html#L5613'>dl_policy</a>        5613 sched/core.c   		if (dl_bandwidth_enabled() &amp;&amp; dl_policy(policy) &amp;&amp;</span>
+<span class='curline'><a href='../S/441.html#L5643'>dl_policy</a>        5643 sched/core.c   	if ((dl_policy(policy) || dl_task(p)) &amp;&amp; sched_dl_overflow(p, policy, attr)) {</span>
+<span class='curline'><a href='../S/451.html#L2639'>dl_policy</a>        2639 sched/deadline.c 	u64 new_bw = dl_policy(policy) ? to_ratio(period, runtime) : 0;</span>
+<span class='curline'><a href='../S/451.html#L2660'>dl_policy</a>        2660 sched/deadline.c 	if (dl_policy(policy) &amp;&amp; !task_has_dl_policy(p) &amp;&amp;</span>
+<span class='curline'><a href='../S/451.html#L2666'>dl_policy</a>        2666 sched/deadline.c 	} else if (dl_policy(policy) &amp;&amp; task_has_dl_policy(p) &amp;&amp;</span>
+<span class='curline'><a href='../S/451.html#L2679'>dl_policy</a>        2679 sched/deadline.c 	} else if (!dl_policy(policy) &amp;&amp; task_has_dl_policy(p)) {</span>
+<span class='curline'><a href='../S/447.html#L184'>dl_policy</a>         184 sched/sched.h  		rt_policy(policy) || dl_policy(policy);</span>
+<span class='curline'><a href='../S/447.html#L199'>dl_policy</a>         199 sched/sched.h  	return dl_policy(p-&gt;policy);</span>
+</pre>
+</body>
+</html>

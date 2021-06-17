@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>SYSCALL_DEFINE2</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/321.html#L148'>SYSCALL_DEFINE2</a>   148 capability.c   SYSCALL_DEFINE2(capget, cap_user_header_t, header, cap_user_data_t, dataptr)</span>
+<span class='curline'><a href='../S/321.html#L222'>SYSCALL_DEFINE2</a>   222 capability.c   SYSCALL_DEFINE2(capset, cap_user_header_t, header, const cap_user_data_t, data)</span>
+<span class='curline'><a href='../S/48.html#L2764'>SYSCALL_DEFINE2</a>  2764 fork.c         SYSCALL_DEFINE2(clone3, struct clone_args __user *, uargs, size_t, size)</span>
+<span class='curline'><a href='../S/76.html#L3340'>SYSCALL_DEFINE2</a>  3340 futex.c        SYSCALL_DEFINE2(set_robust_list, struct robust_list_head __user *, head,</span>
+<span class='curline'><a href='../S/197.html#L153'>SYSCALL_DEFINE2</a>   153 groups.c       SYSCALL_DEFINE2(getgroups, int, gidsetsize, gid_t __user *, grouplist)</span>
+<span class='curline'><a href='../S/197.html#L190'>SYSCALL_DEFINE2</a>   190 groups.c       SYSCALL_DEFINE2(setgroups, int, gidsetsize, gid_t __user *, grouplist)</span>
+<span class='curline'><a href='../S/476.html#L980'>SYSCALL_DEFINE2</a>   980 module.c       SYSCALL_DEFINE2(delete_module, const char __user *, name_user,</span>
+<span class='curline'><a href='../S/80.html#L532'>SYSCALL_DEFINE2</a>   532 nsproxy.c      SYSCALL_DEFINE2(setns, int, fd, int, flags)</span>
+<span class='curline'><a href='../S/79.html#L585'>SYSCALL_DEFINE2</a>   585 pid.c          SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)</span>
+<span class='curline'><a href='../S/441.html#L5913'>SYSCALL_DEFINE2</a>  5913 sched/core.c   SYSCALL_DEFINE2(sched_setparam, pid_t, pid, struct sched_param __user *, param)</span>
+<span class='curline'><a href='../S/441.html#L5994'>SYSCALL_DEFINE2</a>  5994 sched/core.c   SYSCALL_DEFINE2(sched_getparam, pid_t, pid, struct sched_param __user *, param)</span>
+<span class='curline'><a href='../S/441.html#L6637'>SYSCALL_DEFINE2</a>  6637 sched/core.c   SYSCALL_DEFINE2(sched_rr_get_interval, pid_t, pid,</span>
+<span class='curline'><a href='../S/441.html#L6650'>SYSCALL_DEFINE2</a>  6650 sched/core.c   SYSCALL_DEFINE2(sched_rr_get_interval_time32, pid_t, pid,</span>
+<span class='curline'><a href='../S/246.html#L3142'>SYSCALL_DEFINE2</a>  3142 signal.c       SYSCALL_DEFINE2(rt_sigpending, sigset_t __user *, uset, size_t, sigsetsize)</span>
+<span class='curline'><a href='../S/246.html#L3694'>SYSCALL_DEFINE2</a>  3694 signal.c       SYSCALL_DEFINE2(kill, pid_t, pid, int, sig)</span>
+<span class='curline'><a href='../S/246.html#L3890'>SYSCALL_DEFINE2</a>  3890 signal.c       SYSCALL_DEFINE2(tkill, pid_t, pid, int, sig)</span>
+<span class='curline'><a href='../S/246.html#L4113'>SYSCALL_DEFINE2</a>  4113 signal.c       SYSCALL_DEFINE2(sigaltstack,const stack_t __user *,uss, stack_t __user *,uoss)</span>
+<span class='curline'><a href='../S/246.html#L4480'>SYSCALL_DEFINE2</a>  4480 signal.c       SYSCALL_DEFINE2(signal, int, sig, __sighandler_t, handler)</span>
+<span class='curline'><a href='../S/246.html#L4527'>SYSCALL_DEFINE2</a>  4527 signal.c       SYSCALL_DEFINE2(rt_sigsuspend, sigset_t __user *, unewset, size_t, sigsetsize)</span>
+<span class='curline'><a href='../S/492.html#L271'>SYSCALL_DEFINE2</a>   271 sys.c          SYSCALL_DEFINE2(getpriority, int, which, int, who)</span>
+<span class='curline'><a href='../S/492.html#L411'>SYSCALL_DEFINE2</a>   411 sys.c          SYSCALL_DEFINE2(setregid, gid_t, rgid, gid_t, egid)</span>
+<span class='curline'><a href='../S/492.html#L566'>SYSCALL_DEFINE2</a>   566 sys.c          SYSCALL_DEFINE2(setreuid, uid_t, ruid, uid_t, euid)</span>
+<span class='curline'><a href='../S/492.html#L1024'>SYSCALL_DEFINE2</a>  1024 sys.c          SYSCALL_DEFINE2(setpgid, pid_t, pid, pid_t, pgid)</span>
+<span class='curline'><a href='../S/492.html#L1325'>SYSCALL_DEFINE2</a>  1325 sys.c          SYSCALL_DEFINE2(sethostname, char __user *, name, int, len)</span>
+<span class='curline'><a href='../S/492.html#L1352'>SYSCALL_DEFINE2</a>  1352 sys.c          SYSCALL_DEFINE2(gethostname, char __user *, name, int, len)</span>
+<span class='curline'><a href='../S/492.html#L1378'>SYSCALL_DEFINE2</a>  1378 sys.c          SYSCALL_DEFINE2(setdomainname, char __user *, name, int, len)</span>
+<span class='curline'><a href='../S/492.html#L1403'>SYSCALL_DEFINE2</a>  1403 sys.c          SYSCALL_DEFINE2(getrlimit, unsigned int, resource, struct rlimit __user *, rlim)</span>
+<span class='curline'><a href='../S/492.html#L1468'>SYSCALL_DEFINE2</a>  1468 sys.c          SYSCALL_DEFINE2(old_getrlimit, unsigned int, resource,</span>
+<span class='curline'><a href='../S/492.html#L1673'>SYSCALL_DEFINE2</a>  1673 sys.c          SYSCALL_DEFINE2(setrlimit, unsigned int, resource, struct rlimit __user *, rlim)</span>
+<span class='curline'><a href='../S/492.html#L1800'>SYSCALL_DEFINE2</a>  1800 sys.c          SYSCALL_DEFINE2(getrusage, int, who, struct rusage __user *, ru)</span>
+<span class='curline'><a href='../S/88.html#L1970'>SYSCALL_DEFINE2</a>  1970 time/hrtimer.c SYSCALL_DEFINE2(nanosleep, struct __kernel_timespec __user *, rqtp,</span>
+<span class='curline'><a href='../S/88.html#L1991'>SYSCALL_DEFINE2</a>  1991 time/hrtimer.c SYSCALL_DEFINE2(nanosleep_time32, struct old_timespec32 __user *, rqtp,</span>
+<span class='curline'><a href='../S/104.html#L113'>SYSCALL_DEFINE2</a>   113 time/itimer.c  SYSCALL_DEFINE2(getitimer, int, which, struct __kernel_old_itimerval __user *, value)</span>
+<span class='curline'><a href='../S/112.html#L60'>SYSCALL_DEFINE2</a>    60 time/posix-stubs.c SYSCALL_DEFINE2(clock_settime, const clockid_t, which_clock,</span>
+<span class='curline'><a href='../S/112.html#L93'>SYSCALL_DEFINE2</a>    93 time/posix-stubs.c SYSCALL_DEFINE2(clock_gettime, const clockid_t, which_clock,</span>
+<span class='curline'><a href='../S/112.html#L108'>SYSCALL_DEFINE2</a>   108 time/posix-stubs.c SYSCALL_DEFINE2(clock_getres, const clockid_t, which_clock, struct __kernel_timespec __user *, tp)</span>
+<span class='curline'><a href='../S/112.html#L172'>SYSCALL_DEFINE2</a>   172 time/posix-stubs.c SYSCALL_DEFINE2(clock_settime32, const clockid_t, which_clock,</span>
+<span class='curline'><a href='../S/112.html#L185'>SYSCALL_DEFINE2</a>   185 time/posix-stubs.c SYSCALL_DEFINE2(clock_gettime32, clockid_t, which_clock,</span>
+<span class='curline'><a href='../S/112.html#L200'>SYSCALL_DEFINE2</a>   200 time/posix-stubs.c SYSCALL_DEFINE2(clock_getres_time32, clockid_t, which_clock,</span>
+<span class='curline'><a href='../S/103.html#L738'>SYSCALL_DEFINE2</a>   738 time/posix-timers.c SYSCALL_DEFINE2(timer_gettime, timer_t, timer_id,</span>
+<span class='curline'><a href='../S/103.html#L753'>SYSCALL_DEFINE2</a>   753 time/posix-timers.c SYSCALL_DEFINE2(timer_gettime32, timer_t, timer_id,</span>
+<span class='curline'><a href='../S/103.html#L1067'>SYSCALL_DEFINE2</a>  1067 time/posix-timers.c SYSCALL_DEFINE2(clock_settime, const clockid_t, which_clock,</span>
+<span class='curline'><a href='../S/103.html#L1082'>SYSCALL_DEFINE2</a>  1082 time/posix-timers.c SYSCALL_DEFINE2(clock_gettime, const clockid_t, which_clock,</span>
+<span class='curline'><a href='../S/103.html#L1112'>SYSCALL_DEFINE2</a>  1112 time/posix-timers.c SYSCALL_DEFINE2(clock_adjtime, const clockid_t, which_clock,</span>
+<span class='curline'><a href='../S/103.html#L1129'>SYSCALL_DEFINE2</a>  1129 time/posix-timers.c SYSCALL_DEFINE2(clock_getres, const clockid_t, which_clock,</span>
+<span class='curline'><a href='../S/103.html#L1149'>SYSCALL_DEFINE2</a>  1149 time/posix-timers.c SYSCALL_DEFINE2(clock_settime32, clockid_t, which_clock,</span>
+<span class='curline'><a href='../S/103.html#L1164'>SYSCALL_DEFINE2</a>  1164 time/posix-timers.c SYSCALL_DEFINE2(clock_gettime32, clockid_t, which_clock,</span>
+<span class='curline'><a href='../S/103.html#L1182'>SYSCALL_DEFINE2</a>  1182 time/posix-timers.c SYSCALL_DEFINE2(clock_adjtime32, clockid_t, which_clock,</span>
+<span class='curline'><a href='../S/103.html#L1200'>SYSCALL_DEFINE2</a>  1200 time/posix-timers.c SYSCALL_DEFINE2(clock_getres_time32, clockid_t, which_clock,</span>
+<span class='curline'><a href='../S/101.html#L140'>SYSCALL_DEFINE2</a>   140 time/time.c    SYSCALL_DEFINE2(gettimeofday, struct __kernel_old_timeval __user *, tv,</span>
+<span class='curline'><a href='../S/101.html#L199'>SYSCALL_DEFINE2</a>   199 time/time.c    SYSCALL_DEFINE2(settimeofday, struct __kernel_old_timeval __user *, tv,</span>
+<span class='curline'><a href='../S/78.html#L38'>SYSCALL_DEFINE2</a>    38 uid16.c        SYSCALL_DEFINE2(setregid16, old_gid_t, rgid, old_gid_t, egid)</span>
+<span class='curline'><a href='../S/78.html#L48'>SYSCALL_DEFINE2</a>    48 uid16.c        SYSCALL_DEFINE2(setreuid16, old_uid_t, ruid, old_uid_t, euid)</span>
+<span class='curline'><a href='../S/78.html#L154'>SYSCALL_DEFINE2</a>   154 uid16.c        SYSCALL_DEFINE2(getgroups16, int, gidsetsize, old_gid_t __user *, grouplist)</span>
+<span class='curline'><a href='../S/78.html#L177'>SYSCALL_DEFINE2</a>   177 uid16.c        SYSCALL_DEFINE2(setgroups16, int, gidsetsize, old_gid_t __user *, grouplist)</span>
+</pre>
+</body>
+</html>

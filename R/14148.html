@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>track_data</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/291.html#L456'>track_data</a>        456 trace/trace_events_hist.c 		} track_data;</span>
+<span class='curline'><a href='../S/291.html#L483'>track_data</a>        483 trace/trace_events_hist.c static void track_data_free(struct track_data *track_data)</span>
+<span class='curline'><a href='../S/291.html#L487'>track_data</a>        487 trace/trace_events_hist.c 	if (!track_data)</span>
+<span class='curline'><a href='../S/291.html#L490'>track_data</a>        490 trace/trace_events_hist.c 	kfree(track_data-&gt;key);</span>
+<span class='curline'><a href='../S/291.html#L492'>track_data</a>        492 trace/trace_events_hist.c 	elt_data = track_data-&gt;elt.private_data;</span>
+<span class='curline'><a href='../S/291.html#L498'>track_data</a>        498 trace/trace_events_hist.c 	kfree(track_data);</span>
+<span class='curline'><a href='../S/291.html#L501'>track_data</a>        501 trace/trace_events_hist.c static struct track_data *track_data_alloc(unsigned int key_len,</span>
+<span class='curline'><a href='../S/291.html#L505'>track_data</a>        505 trace/trace_events_hist.c 	struct track_data *data = kzalloc(sizeof(*data), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/291.html#L2765'>track_data</a>       2765 trace/trace_events_hist.c 	unsigned int track_var_idx = data-&gt;track_data.track_var-&gt;var.idx;</span>
+<span class='curline'><a href='../S/291.html#L2777'>track_data</a>       2777 trace/trace_events_hist.c 	unsigned int track_var_idx = data-&gt;track_data.track_var-&gt;var.idx;</span>
+<span class='curline'><a href='../S/291.html#L2787'>track_data</a>       2787 trace/trace_events_hist.c 	if (data-&gt;track_data.save_data)</span>
+<span class='curline'><a href='../S/291.html#L2788'>track_data</a>       2788 trace/trace_events_hist.c 		data-&gt;track_data.save_data(hist_data, elt, rec, rbe, key, data, var_ref_vals);</span>
+<span class='curline'><a href='../S/291.html#L2798'>track_data</a>       2798 trace/trace_events_hist.c 	hist_data = data-&gt;track_data.track_var-&gt;hist_data;</span>
+<span class='curline'><a href='../S/291.html#L2801'>track_data</a>       2801 trace/trace_events_hist.c 	return data-&gt;track_data.check_val(track_val, var_val);</span>
+<span class='curline'><a href='../S/291.html#L2808'>track_data</a>       2808 trace/trace_events_hist.c 	struct track_data *track_data = tr-&gt;cond_snapshot-&gt;cond_data;</span>
+<span class='curline'><a href='../S/291.html#L2814'>track_data</a>       2814 trace/trace_events_hist.c 	if (!track_data)</span>
+<span class='curline'><a href='../S/291.html#L2817'>track_data</a>       2817 trace/trace_events_hist.c 	action = track_data-&gt;action_data;</span>
+<span class='curline'><a href='../S/291.html#L2819'>track_data</a>       2819 trace/trace_events_hist.c 	track_val = get_track_val(track_data-&gt;hist_data, context-&gt;elt,</span>
+<span class='curline'><a href='../S/291.html#L2820'>track_data</a>       2820 trace/trace_events_hist.c 				  track_data-&gt;action_data);</span>
+<span class='curline'><a href='../S/291.html#L2822'>track_data</a>       2822 trace/trace_events_hist.c 	if (!action-&gt;track_data.check_val(track_data-&gt;track_val, track_val))</span>
+<span class='curline'><a href='../S/291.html#L2825'>track_data</a>       2825 trace/trace_events_hist.c 	track_data-&gt;track_val = track_val;</span>
+<span class='curline'><a href='../S/291.html#L2826'>track_data</a>       2826 trace/trace_events_hist.c 	memcpy(track_data-&gt;key, context-&gt;key, track_data-&gt;key_len);</span>
+<span class='curline'><a href='../S/291.html#L2829'>track_data</a>       2829 trace/trace_events_hist.c 	track_elt_data = track_data-&gt;elt.private_data;</span>
+<span class='curline'><a href='../S/291.html#L2833'>track_data</a>       2833 trace/trace_events_hist.c 	track_data-&gt;updated = true;</span>
+<span class='curline'><a href='../S/291.html#L2879'>track_data</a>       2879 trace/trace_events_hist.c 	struct track_data *track_data;</span>
+<span class='curline'><a href='../S/291.html#L2882'>track_data</a>       2882 trace/trace_events_hist.c 	track_data = tracing_cond_snapshot_data(file-&gt;tr);</span>
+<span class='curline'><a href='../S/291.html#L2883'>track_data</a>       2883 trace/trace_events_hist.c 	if (!track_data)</span>
+<span class='curline'><a href='../S/291.html#L2886'>track_data</a>       2886 trace/trace_events_hist.c 	if (!track_data-&gt;updated)</span>
+<span class='curline'><a href='../S/291.html#L2896'>track_data</a>       2896 trace/trace_events_hist.c 		   action-&gt;track_data.var_str, track_data-&gt;track_val);</span>
+<span class='curline'><a href='../S/291.html#L2899'>track_data</a>       2899 trace/trace_events_hist.c 	hist_trigger_print_key(m, hist_data, track_data-&gt;key, &amp;track_data-&gt;elt);</span>
+<span class='curline'><a href='../S/291.html#L2954'>track_data</a>       2954 trace/trace_events_hist.c 	u64 var_val = var_ref_vals[data-&gt;track_data.var_ref-&gt;var_ref_idx];</span>
+<span class='curline'><a href='../S/291.html#L2986'>track_data</a>       2986 trace/trace_events_hist.c 	destroy_hist_field(data-&gt;track_data.track_var, 0);</span>
+<span class='curline'><a href='../S/291.html#L2989'>track_data</a>       2989 trace/trace_events_hist.c 		struct track_data *track_data;</span>
+<span class='curline'><a href='../S/291.html#L2991'>track_data</a>       2991 trace/trace_events_hist.c 		track_data = tracing_cond_snapshot_data(file-&gt;tr);</span>
+<span class='curline'><a href='../S/291.html#L2992'>track_data</a>       2992 trace/trace_events_hist.c 		if (track_data &amp;&amp; track_data-&gt;hist_data == hist_data) {</span>
+<span class='curline'><a href='../S/291.html#L2994'>track_data</a>       2994 trace/trace_events_hist.c 			track_data_free(track_data);</span>
+<span class='curline'><a href='../S/291.html#L2998'>track_data</a>       2998 trace/trace_events_hist.c 	kfree(data-&gt;track_data.var_str);</span>
+<span class='curline'><a href='../S/291.html#L3015'>track_data</a>       3015 trace/trace_events_hist.c 	track_data_var_str = data-&gt;track_data.var_str;</span>
+<span class='curline'><a href='../S/291.html#L3032'>track_data</a>       3032 trace/trace_events_hist.c 	data-&gt;track_data.var_ref = ref_field;</span>
+<span class='curline'><a href='../S/291.html#L3049'>track_data</a>       3049 trace/trace_events_hist.c 	data-&gt;track_data.track_var = track_var;</span>
+<span class='curline'><a href='../S/291.html#L3136'>track_data</a>       3136 trace/trace_events_hist.c 			data-&gt;track_data.check_val = check_track_val_max;</span>
+<span class='curline'><a href='../S/291.html#L3138'>track_data</a>       3138 trace/trace_events_hist.c 			data-&gt;track_data.check_val = check_track_val_changed;</span>
+<span class='curline'><a href='../S/291.html#L3145'>track_data</a>       3145 trace/trace_events_hist.c 		data-&gt;track_data.save_data = save_track_data_vars;</span>
+<span class='curline'><a href='../S/291.html#L3158'>track_data</a>       3158 trace/trace_events_hist.c 			data-&gt;track_data.check_val = check_track_val_max;</span>
+<span class='curline'><a href='../S/291.html#L3160'>track_data</a>       3160 trace/trace_events_hist.c 			data-&gt;track_data.check_val = check_track_val_changed;</span>
+<span class='curline'><a href='../S/291.html#L3167'>track_data</a>       3167 trace/trace_events_hist.c 		data-&gt;track_data.save_data = save_track_data_snapshot;</span>
+<span class='curline'><a href='../S/291.html#L3183'>track_data</a>       3183 trace/trace_events_hist.c 			data-&gt;track_data.check_val = check_track_val_max;</span>
+<span class='curline'><a href='../S/291.html#L3185'>track_data</a>       3185 trace/trace_events_hist.c 			data-&gt;track_data.check_val = check_track_val_changed;</span>
+<span class='curline'><a href='../S/291.html#L3188'>track_data</a>       3188 trace/trace_events_hist.c 			data-&gt;track_data.save_data = action_trace;</span>
+<span class='curline'><a href='../S/291.html#L3224'>track_data</a>       3224 trace/trace_events_hist.c 	data-&gt;track_data.var_str = kstrdup(var_str, GFP_KERNEL);</span>
+<span class='curline'><a href='../S/291.html#L3225'>track_data</a>       3225 trace/trace_events_hist.c 	if (!data-&gt;track_data.var_str) {</span>
+<span class='curline'><a href='../S/291.html#L3500'>track_data</a>       3500 trace/trace_events_hist.c 	struct track_data *track_data;</span>
+<span class='curline'><a href='../S/291.html#L3510'>track_data</a>       3510 trace/trace_events_hist.c 		track_data = track_data_alloc(hist_data-&gt;key_size, data, hist_data);</span>
+<span class='curline'><a href='../S/291.html#L3511'>track_data</a>       3511 trace/trace_events_hist.c 		if (IS_ERR(track_data)) {</span>
+<span class='curline'><a href='../S/291.html#L3512'>track_data</a>       3512 trace/trace_events_hist.c 			ret = PTR_ERR(track_data);</span>
+<span class='curline'><a href='../S/291.html#L3516'>track_data</a>       3516 trace/trace_events_hist.c 		ret = tracing_snapshot_cond_enable(file-&gt;tr, track_data,</span>
+<span class='curline'><a href='../S/291.html#L3519'>track_data</a>       3519 trace/trace_events_hist.c 			track_data_free(track_data);</span>
+<span class='curline'><a href='../S/291.html#L4180'>track_data</a>       4180 trace/trace_events_hist.c 	seq_printf(m, "%s", data-&gt;track_data.var_str);</span>
+<span class='curline'><a href='../S/291.html#L4250'>track_data</a>       4250 trace/trace_events_hist.c 			if (strcmp(data-&gt;track_data.var_str,</span>
+<span class='curline'><a href='../S/291.html#L4251'>track_data</a>       4251 trace/trace_events_hist.c 				   data_test-&gt;track_data.var_str) != 0)</span>
+<span class='curline'><a href='../S/291.html#L4881'>track_data</a>       4881 trace/trace_events_hist.c 		ret = hist_field_debug_show(m, data-&gt;track_data.var_ref,</span>
+<span class='curline'><a href='../S/291.html#L4887'>track_data</a>       4887 trace/trace_events_hist.c 		ret = hist_field_debug_show(m, data-&gt;track_data.track_var,</span>
+</pre>
+</body>
+</html>

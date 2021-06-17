@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>SYSCALL_DEFINE3</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/418.html#L4359'>SYSCALL_DEFINE3</a>  4359 bpf/syscall.c  SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, size)</span>
+<span class='curline'><a href='../S/63.html#L1661'>SYSCALL_DEFINE3</a>  1661 exit.c         SYSCALL_DEFINE3(waitpid, pid_t, pid, int __user *, stat_addr, int, options)</span>
+<span class='curline'><a href='../S/76.html#L3362'>SYSCALL_DEFINE3</a>  3362 futex.c        SYSCALL_DEFINE3(get_robust_list, int, pid,</span>
+<span class='curline'><a href='../S/476.html#L4191'>SYSCALL_DEFINE3</a>  4191 module.c       SYSCALL_DEFINE3(init_module, void __user *, umod,</span>
+<span class='curline'><a href='../S/476.html#L4211'>SYSCALL_DEFINE3</a>  4211 module.c       SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)</span>
+<span class='curline'><a href='../S/79.html#L683'>SYSCALL_DEFINE3</a>   683 pid.c          SYSCALL_DEFINE3(pidfd_getfd, int, pidfd, int, fd,</span>
+<span class='curline'><a href='../S/6.html#L1732'>SYSCALL_DEFINE3</a>  1732 printk/printk.c SYSCALL_DEFINE3(syslog, int, type, char __user *, buf, int, len)</span>
+<span class='curline'><a href='../S/441.html#L5898'>SYSCALL_DEFINE3</a>  5898 sched/core.c   SYSCALL_DEFINE3(sched_setscheduler, pid_t, pid, int, policy, struct sched_param __user *, param)</span>
+<span class='curline'><a href='../S/441.html#L5924'>SYSCALL_DEFINE3</a>  5924 sched/core.c   SYSCALL_DEFINE3(sched_setattr, pid_t, pid, struct sched_attr __user *, uattr,</span>
+<span class='curline'><a href='../S/441.html#L6240'>SYSCALL_DEFINE3</a>  6240 sched/core.c   SYSCALL_DEFINE3(sched_setaffinity, pid_t, pid, unsigned int, len,</span>
+<span class='curline'><a href='../S/441.html#L6292'>SYSCALL_DEFINE3</a>  6292 sched/core.c   SYSCALL_DEFINE3(sched_getaffinity, pid_t, pid, unsigned int, len,</span>
+<span class='curline'><a href='../S/444.html#L440'>SYSCALL_DEFINE3</a>   440 sched/membarrier.c SYSCALL_DEFINE3(membarrier, int, cmd, unsigned int, flags, int, cpu_id)</span>
+<span class='curline'><a href='../S/11.html#L1939'>SYSCALL_DEFINE3</a>  1939 seccomp.c      SYSCALL_DEFINE3(seccomp, unsigned int, op, unsigned int, flags,</span>
+<span class='curline'><a href='../S/246.html#L3874'>SYSCALL_DEFINE3</a>  3874 signal.c       SYSCALL_DEFINE3(tgkill, pid_t, tgid, pid_t, pid, int, sig)</span>
+<span class='curline'><a href='../S/246.html#L3918'>SYSCALL_DEFINE3</a>  3918 signal.c       SYSCALL_DEFINE3(rt_sigqueueinfo, pid_t, pid, int, sig,</span>
+<span class='curline'><a href='../S/246.html#L4256'>SYSCALL_DEFINE3</a>  4256 signal.c       SYSCALL_DEFINE3(sigprocmask, int, how, old_sigset_t __user *, nset,</span>
+<span class='curline'><a href='../S/246.html#L4376'>SYSCALL_DEFINE3</a>  4376 signal.c       SYSCALL_DEFINE3(sigaction, int, sig,</span>
+<span class='curline'><a href='../S/246.html#L4564'>SYSCALL_DEFINE3</a>  4564 signal.c       SYSCALL_DEFINE3(sigsuspend, int, unused1, int, unused2, old_sigset_t, mask)</span>
+<span class='curline'><a href='../S/492.html#L201'>SYSCALL_DEFINE3</a>   201 sys.c          SYSCALL_DEFINE3(setpriority, int, which, int, who, int, niceval)</span>
+<span class='curline'><a href='../S/492.html#L699'>SYSCALL_DEFINE3</a>   699 sys.c          SYSCALL_DEFINE3(setresuid, uid_t, ruid, uid_t, euid, uid_t, suid)</span>
+<span class='curline'><a href='../S/492.html#L704'>SYSCALL_DEFINE3</a>   704 sys.c          SYSCALL_DEFINE3(getresuid, uid_t __user *, ruidp, uid_t __user *, euidp, uid_t __user *, suidp)</span>
+<span class='curline'><a href='../S/492.html#L782'>SYSCALL_DEFINE3</a>   782 sys.c          SYSCALL_DEFINE3(setresgid, gid_t, rgid, gid_t, egid, gid_t, sgid)</span>
+<span class='curline'><a href='../S/492.html#L787'>SYSCALL_DEFINE3</a>   787 sys.c          SYSCALL_DEFINE3(getresgid, gid_t __user *, rgidp, gid_t __user *, egidp, gid_t __user *, sgidp)</span>
+<span class='curline'><a href='../S/492.html#L2695'>SYSCALL_DEFINE3</a>  2695 sys.c          SYSCALL_DEFINE3(getcpu, unsigned __user *, cpup, unsigned __user *, nodep,</span>
+<span class='curline'><a href='../S/104.html#L332'>SYSCALL_DEFINE3</a>   332 time/itimer.c  SYSCALL_DEFINE3(setitimer, int, which, struct __kernel_old_itimerval __user *, value,</span>
+<span class='curline'><a href='../S/103.html#L577'>SYSCALL_DEFINE3</a>   577 time/posix-timers.c SYSCALL_DEFINE3(timer_create, const clockid_t, which_clock,</span>
+<span class='curline'><a href='../S/78.html#L23'>SYSCALL_DEFINE3</a>    23 uid16.c        SYSCALL_DEFINE3(chown16, const char __user *, filename, old_uid_t, user, old_gid_t, group)</span>
+<span class='curline'><a href='../S/78.html#L28'>SYSCALL_DEFINE3</a>    28 uid16.c        SYSCALL_DEFINE3(lchown16, const char __user *, filename, old_uid_t, user, old_gid_t, group)</span>
+<span class='curline'><a href='../S/78.html#L33'>SYSCALL_DEFINE3</a>    33 uid16.c        SYSCALL_DEFINE3(fchown16, unsigned int, fd, old_uid_t, user, old_gid_t, group)</span>
+<span class='curline'><a href='../S/78.html#L58'>SYSCALL_DEFINE3</a>    58 uid16.c        SYSCALL_DEFINE3(setresuid16, old_uid_t, ruid, old_uid_t, euid, old_uid_t, suid)</span>
+<span class='curline'><a href='../S/78.html#L64'>SYSCALL_DEFINE3</a>    64 uid16.c        SYSCALL_DEFINE3(getresuid16, old_uid_t __user *, ruidp, old_uid_t __user *, euidp, old_uid_t __user *, suidp)</span>
+<span class='curline'><a href='../S/78.html#L81'>SYSCALL_DEFINE3</a>    81 uid16.c        SYSCALL_DEFINE3(setresgid16, old_gid_t, rgid, old_gid_t, egid, old_gid_t, sgid)</span>
+<span class='curline'><a href='../S/78.html#L87'>SYSCALL_DEFINE3</a>    87 uid16.c        SYSCALL_DEFINE3(getresgid16, old_gid_t __user *, rgidp, old_gid_t __user *, egidp, old_gid_t __user *, sgidp)</span>
+</pre>
+</body>
+</html>

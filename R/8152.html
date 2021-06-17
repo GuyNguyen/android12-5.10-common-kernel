@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>istate</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/342.html#L71'>istate</a>             71 irq/autoprobe.c 			desc-&gt;istate |= IRQS_AUTODETECT | IRQS_WAITING;</span>
+<span class='curline'><a href='../S/342.html#L73'>istate</a>             73 irq/autoprobe.c 				desc-&gt;istate |= IRQS_PENDING;</span>
+<span class='curline'><a href='../S/342.html#L89'>istate</a>             89 irq/autoprobe.c 		if (desc-&gt;istate &amp; IRQS_AUTODETECT) {</span>
+<span class='curline'><a href='../S/342.html#L91'>istate</a>             91 irq/autoprobe.c 			if (!(desc-&gt;istate &amp; IRQS_WAITING)) {</span>
+<span class='curline'><a href='../S/342.html#L92'>istate</a>             92 irq/autoprobe.c 				desc-&gt;istate &amp;= ~IRQS_AUTODETECT;</span>
+<span class='curline'><a href='../S/342.html#L125'>istate</a>            125 irq/autoprobe.c 		if (desc-&gt;istate &amp; IRQS_AUTODETECT) {</span>
+<span class='curline'><a href='../S/342.html#L126'>istate</a>            126 irq/autoprobe.c 			if (i &lt; 16 &amp;&amp; !(desc-&gt;istate &amp; IRQS_WAITING))</span>
+<span class='curline'><a href='../S/342.html#L129'>istate</a>            129 irq/autoprobe.c 			desc-&gt;istate &amp;= ~IRQS_AUTODETECT;</span>
+<span class='curline'><a href='../S/342.html#L165'>istate</a>            165 irq/autoprobe.c 		if (desc-&gt;istate &amp; IRQS_AUTODETECT) {</span>
+<span class='curline'><a href='../S/342.html#L166'>istate</a>            166 irq/autoprobe.c 			if (!(desc-&gt;istate &amp; IRQS_WAITING)) {</span>
+<span class='curline'><a href='../S/342.html#L171'>istate</a>            171 irq/autoprobe.c 			desc-&gt;istate &amp;= ~IRQS_AUTODETECT;</span>
+<span class='curline'><a href='../S/361.html#L469'>istate</a>            469 irq/chip.c     	desc-&gt;istate &amp;= ~(IRQS_REPLAY | IRQS_WAITING);</span>
+<span class='curline'><a href='../S/361.html#L473'>istate</a>            473 irq/chip.c     		desc-&gt;istate |= IRQS_PENDING;</span>
+<span class='curline'><a href='../S/361.html#L498'>istate</a>            498 irq/chip.c     	if (!(desc-&gt;istate &amp; IRQS_POLL_INPROGRESS))</span>
+<span class='curline'><a href='../S/361.html#L560'>istate</a>            560 irq/chip.c     	desc-&gt;istate &amp;= ~(IRQS_REPLAY | IRQS_WAITING);</span>
+<span class='curline'><a href='../S/361.html#L563'>istate</a>            563 irq/chip.c     		desc-&gt;istate |= IRQS_PENDING;</span>
+<span class='curline'><a href='../S/361.html#L597'>istate</a>            597 irq/chip.c     	desc-&gt;istate &amp;= ~(IRQS_REPLAY | IRQS_WAITING);</span>
+<span class='curline'><a href='../S/361.html#L600'>istate</a>            600 irq/chip.c     		desc-&gt;istate |= IRQS_PENDING;</span>
+<span class='curline'><a href='../S/361.html#L604'>istate</a>            604 irq/chip.c     	desc-&gt;istate &amp;= ~IRQS_PENDING;</span>
+<span class='curline'><a href='../S/361.html#L653'>istate</a>            653 irq/chip.c     	desc-&gt;istate &amp;= ~(IRQS_REPLAY | IRQS_WAITING);</span>
+<span class='curline'><a href='../S/361.html#L660'>istate</a>            660 irq/chip.c     		desc-&gt;istate |= IRQS_PENDING;</span>
+<span class='curline'><a href='../S/361.html#L676'>istate</a>            676 irq/chip.c     	if (!(desc-&gt;istate &amp; IRQS_ONESHOT)) {</span>
+<span class='curline'><a href='../S/361.html#L713'>istate</a>            713 irq/chip.c     	desc-&gt;istate &amp;= ~(IRQS_REPLAY | IRQS_WAITING);</span>
+<span class='curline'><a href='../S/361.html#L720'>istate</a>            720 irq/chip.c     		desc-&gt;istate |= IRQS_PENDING;</span>
+<span class='curline'><a href='../S/361.html#L726'>istate</a>            726 irq/chip.c     	if (desc-&gt;istate &amp; IRQS_ONESHOT)</span>
+<span class='curline'><a href='../S/361.html#L794'>istate</a>            794 irq/chip.c     	desc-&gt;istate &amp;= ~(IRQS_REPLAY | IRQS_WAITING);</span>
+<span class='curline'><a href='../S/361.html#L797'>istate</a>            797 irq/chip.c     		desc-&gt;istate |= IRQS_PENDING;</span>
+<span class='curline'><a href='../S/361.html#L807'>istate</a>            807 irq/chip.c     		desc-&gt;istate |= IRQS_PENDING;</span>
+<span class='curline'><a href='../S/361.html#L828'>istate</a>            828 irq/chip.c     		if (unlikely(desc-&gt;istate &amp; IRQS_PENDING)) {</span>
+<span class='curline'><a href='../S/361.html#L836'>istate</a>            836 irq/chip.c     	} while ((desc-&gt;istate &amp; IRQS_PENDING) &amp;&amp;</span>
+<span class='curline'><a href='../S/361.html#L858'>istate</a>            858 irq/chip.c     	desc-&gt;istate &amp;= ~(IRQS_REPLAY | IRQS_WAITING);</span>
+<span class='curline'><a href='../S/361.html#L861'>istate</a>            861 irq/chip.c     		desc-&gt;istate |= IRQS_PENDING;</span>
+<span class='curline'><a href='../S/361.html#L870'>istate</a>            870 irq/chip.c     		desc-&gt;istate |= IRQS_PENDING;</span>
+<span class='curline'><a href='../S/361.html#L882'>istate</a>            882 irq/chip.c     	} while ((desc-&gt;istate &amp; IRQS_PENDING) &amp;&amp;</span>
+<span class='curline'><a href='../S/361.html#L1246'>istate</a>           1246 irq/chip.c     	desc-&gt;istate &amp;= ~(IRQS_REPLAY | IRQS_WAITING);</span>
+<span class='curline'><a href='../S/361.html#L1253'>istate</a>           1253 irq/chip.c     		desc-&gt;istate |= IRQS_PENDING;</span>
+<span class='curline'><a href='../S/361.html#L1259'>istate</a>           1259 irq/chip.c     	if (desc-&gt;istate &amp; IRQS_ONESHOT)</span>
+<span class='curline'><a href='../S/361.html#L1298'>istate</a>           1298 irq/chip.c     	desc-&gt;istate &amp;= ~(IRQS_REPLAY | IRQS_WAITING);</span>
+<span class='curline'><a href='../S/361.html#L1305'>istate</a>           1305 irq/chip.c     		desc-&gt;istate |= IRQS_PENDING;</span>
+<span class='curline'><a href='../S/361.html#L1311'>istate</a>           1311 irq/chip.c     	if (desc-&gt;istate &amp; IRQS_ONESHOT)</span>
+<span class='curline'><a href='../S/348.html#L7'>istate</a>              7 irq/debug.h    #define ___PS(f) if (desc-&gt;istate &amp; f) printk("%14s set\n", #f)</span>
+<span class='curline'><a href='../S/363.html#L170'>istate</a>            170 irq/debugfs.c  	seq_printf(m, "istate:   0x%08x\n", desc-&gt;istate);</span>
+<span class='curline'><a href='../S/363.html#L171'>istate</a>            171 irq/debugfs.c  	irq_debug_show_bits(m, 0, desc-&gt;istate, irqdesc_istates,</span>
+<span class='curline'><a href='../S/347.html#L209'>istate</a>            209 irq/handle.c   	desc-&gt;istate &amp;= ~IRQS_PENDING;</span>
+<span class='curline'><a href='../S/356.html#L307'>istate</a>            307 irq/internals.h 	desc-&gt;istate &amp;= ~IRQS_TIMINGS;</span>
+<span class='curline'><a href='../S/356.html#L335'>istate</a>            335 irq/internals.h 	desc-&gt;istate |= IRQS_TIMINGS;</span>
+<span class='curline'><a href='../S/356.html#L383'>istate</a>            383 irq/internals.h 	if (desc-&gt;istate &amp; IRQS_TIMINGS)</span>
+<span class='curline'><a href='../S/343.html#L976'>istate</a>            976 irq/irqdesc.c  	return desc-&gt;istate &amp; IRQS_NMI;</span>
+<span class='curline'><a href='../S/338.html#L452'>istate</a>            452 irq/manage.c   	if (!desc || desc-&gt;istate &amp; IRQS_NMI)</span>
+<span class='curline'><a href='../S/338.html#L679'>istate</a>            679 irq/manage.c   		if (desc-&gt;istate &amp; IRQS_SUSPENDED)</span>
+<span class='curline'><a href='../S/338.html#L783'>istate</a>            783 irq/manage.c   	if (desc-&gt;istate &amp; IRQS_NMI) {</span>
+<span class='curline'><a href='../S/338.html#L971'>istate</a>            971 irq/manage.c   	if (!(desc-&gt;istate &amp; IRQS_ONESHOT) ||</span>
+<span class='curline'><a href='../S/338.html#L1485'>istate</a>           1485 irq/manage.c   		if (desc-&gt;istate &amp; IRQS_NMI) {</span>
+<span class='curline'><a href='../S/338.html#L1613'>istate</a>           1613 irq/manage.c   		desc-&gt;istate &amp;= ~(IRQS_AUTODETECT | IRQS_SPURIOUS_DISABLED | \</span>
+<span class='curline'><a href='../S/338.html#L1623'>istate</a>           1623 irq/manage.c   			desc-&gt;istate |= IRQS_ONESHOT;</span>
+<span class='curline'><a href='../S/338.html#L1667'>istate</a>           1667 irq/manage.c   	if (shared &amp;&amp; (desc-&gt;istate &amp; IRQS_SPURIOUS_DISABLED)) {</span>
+<span class='curline'><a href='../S/338.html#L1668'>istate</a>           1668 irq/manage.c   		desc-&gt;istate &amp;= ~IRQS_SPURIOUS_DISABLED;</span>
+<span class='curline'><a href='../S/338.html#L1917'>istate</a>           1917 irq/manage.c   	desc-&gt;istate &amp;= ~IRQS_NMI;</span>
+<span class='curline'><a href='../S/338.html#L1945'>istate</a>           1945 irq/manage.c   	if (!desc || WARN_ON(!(desc-&gt;istate &amp; IRQS_NMI)))</span>
+<span class='curline'><a href='../S/338.html#L2209'>istate</a>           2209 irq/manage.c   	desc-&gt;istate |= IRQS_NMI;</span>
+<span class='curline'><a href='../S/338.html#L2343'>istate</a>           2343 irq/manage.c   	desc-&gt;istate &amp;= ~IRQS_NMI;</span>
+<span class='curline'><a href='../S/338.html#L2405'>istate</a>           2405 irq/manage.c   	if (WARN_ON(!(desc-&gt;istate &amp; IRQS_NMI)))</span>
+<span class='curline'><a href='../S/338.html#L2541'>istate</a>           2541 irq/manage.c   	if (desc-&gt;istate &amp; IRQS_NMI)</span>
+<span class='curline'><a href='../S/338.html#L2563'>istate</a>           2563 irq/manage.c   	desc-&gt;istate |= IRQS_NMI;</span>
+<span class='curline'><a href='../S/338.html#L2602'>istate</a>           2602 irq/manage.c   	if (WARN(!(desc-&gt;istate &amp; IRQS_NMI),</span>
+<span class='curline'><a href='../S/338.html#L2644'>istate</a>           2644 irq/manage.c   	if (WARN_ON(!(desc-&gt;istate &amp; IRQS_NMI)))</span>
+<span class='curline'><a href='../S/357.html#L20'>istate</a>             20 irq/pm.c       		desc-&gt;istate |= IRQS_SUSPENDED | IRQS_PENDING;</span>
+<span class='curline'><a href='../S/357.html#L101'>istate</a>            101 irq/pm.c       	desc-&gt;istate |= IRQS_SUSPENDED;</span>
+<span class='curline'><a href='../S/357.html#L168'>istate</a>            168 irq/pm.c       	if (desc-&gt;istate &amp; IRQS_SUSPENDED)</span>
+<span class='curline'><a href='../S/357.html#L180'>istate</a>            180 irq/pm.c       	desc-&gt;istate &amp;= ~IRQS_SUSPENDED;</span>
+<span class='curline'><a href='../S/357.html#L217'>istate</a>            217 irq/pm.c       	if (!(desc-&gt;istate &amp; IRQS_SUSPENDED) ||</span>
+<span class='curline'><a href='../S/357.html#L221'>istate</a>            221 irq/pm.c       	desc-&gt;istate &amp;= ~IRQS_SUSPENDED;</span>
+<span class='curline'><a href='../S/354.html#L116'>istate</a>            116 irq/resend.c   		desc-&gt;istate &amp;= ~IRQS_PENDING;</span>
+<span class='curline'><a href='../S/354.html#L120'>istate</a>            120 irq/resend.c   	if (desc-&gt;istate &amp; IRQS_REPLAY)</span>
+<span class='curline'><a href='../S/354.html#L123'>istate</a>            123 irq/resend.c   	if (!(desc-&gt;istate &amp; IRQS_PENDING) &amp;&amp; !inject)</span>
+<span class='curline'><a href='../S/354.html#L126'>istate</a>            126 irq/resend.c   	desc-&gt;istate &amp;= ~IRQS_PENDING;</span>
+<span class='curline'><a href='../S/354.html#L133'>istate</a>            133 irq/resend.c   		desc-&gt;istate |= IRQS_REPLAY;</span>
+<span class='curline'><a href='../S/354.html#L175'>istate</a>            175 irq/resend.c   	if ((desc-&gt;istate &amp; IRQS_NMI) || !irqd_is_activated(&amp;desc-&gt;irq_data))</span>
+<span class='curline'><a href='../S/344.html#L100'>istate</a>            100 irq/spurious.c 		desc-&gt;istate |= IRQS_PENDING;</span>
+<span class='curline'><a href='../S/344.html#L105'>istate</a>            105 irq/spurious.c 	desc-&gt;istate |= IRQS_POLL_INPROGRESS;</span>
+<span class='curline'><a href='../S/344.html#L111'>istate</a>            111 irq/spurious.c 	} while ((desc-&gt;istate &amp; IRQS_PENDING) &amp;&amp; action);</span>
+<span class='curline'><a href='../S/344.html#L112'>istate</a>            112 irq/spurious.c 	desc-&gt;istate &amp;= ~IRQS_POLL_INPROGRESS;</span>
+<span class='curline'><a href='../S/344.html#L160'>istate</a>            160 irq/spurious.c 		state = desc-&gt;istate;</span>
+<span class='curline'><a href='../S/344.html#L276'>istate</a>            276 irq/spurious.c 	if (desc-&gt;istate &amp; IRQS_POLL_INPROGRESS ||</span>
+<span class='curline'><a href='../S/344.html#L420'>istate</a>            420 irq/spurious.c 		desc-&gt;istate |= IRQS_SPURIOUS_DISABLED;</span>
+</pre>
+</body>
+</html>

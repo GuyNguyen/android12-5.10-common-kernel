@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>COND_SYSCALL_COMPAT</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/183.html#L29'>COND_SYSCALL_COMPAT</a>   29 sys_ni.c       #ifndef COND_SYSCALL_COMPAT</span>
+<span class='curline'><a href='../S/183.html#L40'>COND_SYSCALL_COMPAT</a>   40 sys_ni.c       COND_SYSCALL_COMPAT(io_setup);</span>
+<span class='curline'><a href='../S/183.html#L43'>COND_SYSCALL_COMPAT</a>   43 sys_ni.c       COND_SYSCALL_COMPAT(io_submit);</span>
+<span class='curline'><a href='../S/183.html#L49'>COND_SYSCALL_COMPAT</a>   49 sys_ni.c       COND_SYSCALL_COMPAT(io_pgetevents_time32);</span>
+<span class='curline'><a href='../S/183.html#L50'>COND_SYSCALL_COMPAT</a>   50 sys_ni.c       COND_SYSCALL_COMPAT(io_pgetevents);</span>
+<span class='curline'><a href='../S/183.html#L61'>COND_SYSCALL_COMPAT</a>   61 sys_ni.c       COND_SYSCALL_COMPAT(lookup_dcookie);</span>
+<span class='curline'><a href='../S/183.html#L70'>COND_SYSCALL_COMPAT</a>   70 sys_ni.c       COND_SYSCALL_COMPAT(epoll_pwait);</span>
+<span class='curline'><a href='../S/183.html#L111'>COND_SYSCALL_COMPAT</a>  111 sys_ni.c       COND_SYSCALL_COMPAT(signalfd4);</span>
+<span class='curline'><a href='../S/183.html#L147'>COND_SYSCALL_COMPAT</a>  147 sys_ni.c       COND_SYSCALL_COMPAT(set_robust_list);</span>
+<span class='curline'><a href='../S/183.html#L149'>COND_SYSCALL_COMPAT</a>  149 sys_ni.c       COND_SYSCALL_COMPAT(get_robust_list);</span>
+<span class='curline'><a href='../S/183.html#L157'>COND_SYSCALL_COMPAT</a>  157 sys_ni.c       COND_SYSCALL_COMPAT(kexec_load);</span>
+<span class='curline'><a href='../S/183.html#L192'>COND_SYSCALL_COMPAT</a>  192 sys_ni.c       COND_SYSCALL_COMPAT(mq_open);</span>
+<span class='curline'><a href='../S/183.html#L199'>COND_SYSCALL_COMPAT</a>  199 sys_ni.c       COND_SYSCALL_COMPAT(mq_notify);</span>
+<span class='curline'><a href='../S/183.html#L201'>COND_SYSCALL_COMPAT</a>  201 sys_ni.c       COND_SYSCALL_COMPAT(mq_getsetattr);</span>
+<span class='curline'><a href='../S/183.html#L207'>COND_SYSCALL_COMPAT</a>  207 sys_ni.c       COND_SYSCALL_COMPAT(msgctl);</span>
+<span class='curline'><a href='../S/183.html#L208'>COND_SYSCALL_COMPAT</a>  208 sys_ni.c       COND_SYSCALL_COMPAT(old_msgctl);</span>
+<span class='curline'><a href='../S/183.html#L210'>COND_SYSCALL_COMPAT</a>  210 sys_ni.c       COND_SYSCALL_COMPAT(msgrcv);</span>
+<span class='curline'><a href='../S/183.html#L212'>COND_SYSCALL_COMPAT</a>  212 sys_ni.c       COND_SYSCALL_COMPAT(msgsnd);</span>
+<span class='curline'><a href='../S/183.html#L218'>COND_SYSCALL_COMPAT</a>  218 sys_ni.c       COND_SYSCALL_COMPAT(semctl);</span>
+<span class='curline'><a href='../S/183.html#L219'>COND_SYSCALL_COMPAT</a>  219 sys_ni.c       COND_SYSCALL_COMPAT(old_semctl);</span>
+<span class='curline'><a href='../S/183.html#L228'>COND_SYSCALL_COMPAT</a>  228 sys_ni.c       COND_SYSCALL_COMPAT(shmctl);</span>
+<span class='curline'><a href='../S/183.html#L229'>COND_SYSCALL_COMPAT</a>  229 sys_ni.c       COND_SYSCALL_COMPAT(old_shmctl);</span>
+<span class='curline'><a href='../S/183.html#L231'>COND_SYSCALL_COMPAT</a>  231 sys_ni.c       COND_SYSCALL_COMPAT(shmat);</span>
+<span class='curline'><a href='../S/183.html#L244'>COND_SYSCALL_COMPAT</a>  244 sys_ni.c       COND_SYSCALL_COMPAT(setsockopt);</span>
+<span class='curline'><a href='../S/183.html#L246'>COND_SYSCALL_COMPAT</a>  246 sys_ni.c       COND_SYSCALL_COMPAT(getsockopt);</span>
+<span class='curline'><a href='../S/183.html#L250'>COND_SYSCALL_COMPAT</a>  250 sys_ni.c       COND_SYSCALL_COMPAT(recvfrom);</span>
+<span class='curline'><a href='../S/183.html#L252'>COND_SYSCALL_COMPAT</a>  252 sys_ni.c       COND_SYSCALL_COMPAT(sendmsg);</span>
+<span class='curline'><a href='../S/183.html#L254'>COND_SYSCALL_COMPAT</a>  254 sys_ni.c       COND_SYSCALL_COMPAT(recvmsg);</span>
+<span class='curline'><a href='../S/183.html#L265'>COND_SYSCALL_COMPAT</a>  265 sys_ni.c       COND_SYSCALL_COMPAT(keyctl);</span>
+<span class='curline'><a href='../S/183.html#L286'>COND_SYSCALL_COMPAT</a>  286 sys_ni.c       COND_SYSCALL_COMPAT(mbind);</span>
+<span class='curline'><a href='../S/183.html#L288'>COND_SYSCALL_COMPAT</a>  288 sys_ni.c       COND_SYSCALL_COMPAT(get_mempolicy);</span>
+<span class='curline'><a href='../S/183.html#L290'>COND_SYSCALL_COMPAT</a>  290 sys_ni.c       COND_SYSCALL_COMPAT(set_mempolicy);</span>
+<span class='curline'><a href='../S/183.html#L292'>COND_SYSCALL_COMPAT</a>  292 sys_ni.c       COND_SYSCALL_COMPAT(migrate_pages);</span>
+<span class='curline'><a href='../S/183.html#L294'>COND_SYSCALL_COMPAT</a>  294 sys_ni.c       COND_SYSCALL_COMPAT(move_pages);</span>
+<span class='curline'><a href='../S/183.html#L300'>COND_SYSCALL_COMPAT</a>  300 sys_ni.c       COND_SYSCALL_COMPAT(recvmmsg_time32);</span>
+<span class='curline'><a href='../S/183.html#L301'>COND_SYSCALL_COMPAT</a>  301 sys_ni.c       COND_SYSCALL_COMPAT(recvmmsg_time64);</span>
+<span class='curline'><a href='../S/183.html#L314'>COND_SYSCALL_COMPAT</a>  314 sys_ni.c       COND_SYSCALL_COMPAT(open_by_handle_at);</span>
+<span class='curline'><a href='../S/183.html#L317'>COND_SYSCALL_COMPAT</a>  317 sys_ni.c       COND_SYSCALL_COMPAT(sendmmsg);</span>
+<span class='curline'><a href='../S/183.html#L319'>COND_SYSCALL_COMPAT</a>  319 sys_ni.c       COND_SYSCALL_COMPAT(process_vm_readv);</span>
+<span class='curline'><a href='../S/183.html#L321'>COND_SYSCALL_COMPAT</a>  321 sys_ni.c       COND_SYSCALL_COMPAT(process_vm_writev);</span>
+<span class='curline'><a href='../S/183.html#L365'>COND_SYSCALL_COMPAT</a>  365 sys_ni.c       COND_SYSCALL_COMPAT(socketcall);</span>
+<span class='curline'><a href='../S/183.html#L368'>COND_SYSCALL_COMPAT</a>  368 sys_ni.c       COND_SYSCALL_COMPAT(fanotify_mark);</span>
+<span class='curline'><a href='../S/183.html#L380'>COND_SYSCALL_COMPAT</a>  380 sys_ni.c       COND_SYSCALL_COMPAT(s390_ipc);</span>
+<span class='curline'><a href='../S/183.html#L399'>COND_SYSCALL_COMPAT</a>  399 sys_ni.c       COND_SYSCALL_COMPAT(signalfd);</span>
+<span class='curline'><a href='../S/183.html#L407'>COND_SYSCALL_COMPAT</a>  407 sys_ni.c       COND_SYSCALL_COMPAT(recv);</span>
+<span class='curline'><a href='../S/183.html#L420'>COND_SYSCALL_COMPAT</a>  420 sys_ni.c       COND_SYSCALL_COMPAT(rt_sigtimedwait_time32);</span>
+<span class='curline'><a href='../S/183.html#L430'>COND_SYSCALL_COMPAT</a>  430 sys_ni.c       COND_SYSCALL_COMPAT(pselect6_time32);</span>
+<span class='curline'><a href='../S/183.html#L432'>COND_SYSCALL_COMPAT</a>  432 sys_ni.c       COND_SYSCALL_COMPAT(ppoll_time32);</span>
+<span class='curline'><a href='../S/183.html#L449'>COND_SYSCALL_COMPAT</a>  449 sys_ni.c       COND_SYSCALL_COMPAT(ipc);</span>
+</pre>
+</body>
+</html>

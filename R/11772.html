@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rt_mutex_top_waiter</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/40.html#L643'>rt_mutex_top_waiter</a>  643 locking/rtmutex.c 		top_waiter = rt_mutex_top_waiter(lock);</span>
+<span class='curline'><a href='../S/40.html#L660'>rt_mutex_top_waiter</a>  660 locking/rtmutex.c 	prerequeue_top_waiter = rt_mutex_top_waiter(lock);</span>
+<span class='curline'><a href='../S/40.html#L703'>rt_mutex_top_waiter</a>  703 locking/rtmutex.c 		if (prerequeue_top_waiter != rt_mutex_top_waiter(lock))</span>
+<span class='curline'><a href='../S/40.html#L704'>rt_mutex_top_waiter</a>  704 locking/rtmutex.c 			wake_up_process(rt_mutex_top_waiter(lock)-&gt;task);</span>
+<span class='curline'><a href='../S/40.html#L714'>rt_mutex_top_waiter</a>  714 locking/rtmutex.c 	if (waiter == rt_mutex_top_waiter(lock)) {</span>
+<span class='curline'><a href='../S/40.html#L737'>rt_mutex_top_waiter</a>  737 locking/rtmutex.c 		waiter = rt_mutex_top_waiter(lock);</span>
+<span class='curline'><a href='../S/40.html#L762'>rt_mutex_top_waiter</a>  762 locking/rtmutex.c 	top_waiter = rt_mutex_top_waiter(lock);</span>
+<span class='curline'><a href='../S/40.html#L846'>rt_mutex_top_waiter</a>  846 locking/rtmutex.c 		if (waiter != rt_mutex_top_waiter(lock))</span>
+<span class='curline'><a href='../S/40.html#L871'>rt_mutex_top_waiter</a>  871 locking/rtmutex.c 						  rt_mutex_top_waiter(lock)))</span>
+<span class='curline'><a href='../S/40.html#L904'>rt_mutex_top_waiter</a>  904 locking/rtmutex.c 		rt_mutex_enqueue_pi(task, rt_mutex_top_waiter(lock));</span>
+<span class='curline'><a href='../S/40.html#L959'>rt_mutex_top_waiter</a>  959 locking/rtmutex.c 		top_waiter = rt_mutex_top_waiter(lock);</span>
+<span class='curline'><a href='../S/40.html#L970'>rt_mutex_top_waiter</a>  970 locking/rtmutex.c 	if (waiter == rt_mutex_top_waiter(lock)) {</span>
+<span class='curline'><a href='../S/40.html#L1023'>rt_mutex_top_waiter</a> 1023 locking/rtmutex.c 	waiter = rt_mutex_top_waiter(lock);</span>
+<span class='curline'><a href='../S/40.html#L1069'>rt_mutex_top_waiter</a> 1069 locking/rtmutex.c 	bool is_top_waiter = (waiter == rt_mutex_top_waiter(lock));</span>
+<span class='curline'><a href='../S/40.html#L1092'>rt_mutex_top_waiter</a> 1092 locking/rtmutex.c 		rt_mutex_enqueue_pi(owner, rt_mutex_top_waiter(lock));</span>
+<span class='curline'><a href='../S/40.html#L1828'>rt_mutex_top_waiter</a> 1828 locking/rtmutex.c 	return rt_mutex_top_waiter(lock)-&gt;task;</span>
+</pre>
+</body>
+</html>

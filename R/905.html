@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>MUTEX_FLAG_WAITERS</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/25.html#L220'>MUTEX_FLAG_WAITERS</a>  220 locking/mutex.c 		__mutex_set_flag(lock, MUTEX_FLAG_WAITERS);</span>
+<span class='curline'><a href='../S/25.html#L251'>MUTEX_FLAG_WAITERS</a>  251 locking/mutex.c 		new = (owner &amp; MUTEX_FLAG_WAITERS);</span>
+<span class='curline'><a href='../S/25.html#L502'>MUTEX_FLAG_WAITERS</a>  502 locking/mutex.c 	if (likely(!(atomic_long_read(&amp;lock-&gt;base.owner) &amp; MUTEX_FLAG_WAITERS)))</span>
+<span class='curline'><a href='../S/25.html#L545'>MUTEX_FLAG_WAITERS</a>  545 locking/mutex.c 	if (!waiter &amp;&amp; (atomic_long_read(&amp;lock-&gt;owner) &amp; MUTEX_FLAG_WAITERS))</span>
+<span class='curline'><a href='../S/25.html#L1271'>MUTEX_FLAG_WAITERS</a> 1271 locking/mutex.c 			if (owner &amp; MUTEX_FLAG_WAITERS)</span>
+</pre>
+</body>
+</html>

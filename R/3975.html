@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>bsd_acct_struct</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/15.html#L96'>bsd_acct_struct</a>    96 acct.c         static void do_acct_process(struct bsd_acct_struct *acct);</span>
+<span class='curline'><a href='../S/15.html#L101'>bsd_acct_struct</a>   101 acct.c         static int check_free_space(struct bsd_acct_struct *acct)</span>
+<span class='curline'><a href='../S/15.html#L133'>bsd_acct_struct</a>   133 acct.c         static void acct_put(struct bsd_acct_struct *p)</span>
+<span class='curline'><a href='../S/15.html#L139'>bsd_acct_struct</a>   139 acct.c         static inline struct bsd_acct_struct *to_acct(struct fs_pin *p)</span>
+<span class='curline'><a href='../S/15.html#L141'>bsd_acct_struct</a>   141 acct.c         	return p ? container_of(p, struct bsd_acct_struct, pin) : NULL;</span>
+<span class='curline'><a href='../S/15.html#L144'>bsd_acct_struct</a>   144 acct.c         static struct bsd_acct_struct *acct_get(struct pid_namespace *ns)</span>
+<span class='curline'><a href='../S/15.html#L146'>bsd_acct_struct</a>   146 acct.c         	struct bsd_acct_struct *res;</span>
+<span class='curline'><a href='../S/15.html#L172'>bsd_acct_struct</a>   172 acct.c         	struct bsd_acct_struct *acct = to_acct(pin);</span>
+<span class='curline'><a href='../S/15.html#L185'>bsd_acct_struct</a>   185 acct.c         	struct bsd_acct_struct *acct = container_of(work, struct bsd_acct_struct, work);</span>
+<span class='curline'><a href='../S/15.html#L198'>bsd_acct_struct</a>   198 acct.c         	struct bsd_acct_struct *acct;</span>
+<span class='curline'><a href='../S/15.html#L202'>bsd_acct_struct</a>   202 acct.c         	acct = kzalloc(sizeof(struct bsd_acct_struct), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/15.html#L473'>bsd_acct_struct</a>   473 acct.c         static void do_acct_process(struct bsd_acct_struct *acct)</span>
+<span class='curline'><a href='../S/15.html#L579'>bsd_acct_struct</a>   579 acct.c         		struct bsd_acct_struct *acct = acct_get(ns);</span>
+</pre>
+</body>
+</html>

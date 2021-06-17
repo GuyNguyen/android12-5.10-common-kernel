@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>AUDIT_AUX_PIDS</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/200.html#L112'>AUDIT_AUX_PIDS</a>    112 auditsc.c      	pid_t			target_pid[AUDIT_AUX_PIDS];</span>
+<span class='curline'><a href='../S/200.html#L113'>AUDIT_AUX_PIDS</a>    113 auditsc.c      	kuid_t			target_auid[AUDIT_AUX_PIDS];</span>
+<span class='curline'><a href='../S/200.html#L114'>AUDIT_AUX_PIDS</a>    114 auditsc.c      	kuid_t			target_uid[AUDIT_AUX_PIDS];</span>
+<span class='curline'><a href='../S/200.html#L115'>AUDIT_AUX_PIDS</a>    115 auditsc.c      	unsigned int		target_sessionid[AUDIT_AUX_PIDS];</span>
+<span class='curline'><a href='../S/200.html#L116'>AUDIT_AUX_PIDS</a>    116 auditsc.c      	u32			target_sid[AUDIT_AUX_PIDS];</span>
+<span class='curline'><a href='../S/200.html#L117'>AUDIT_AUX_PIDS</a>    117 auditsc.c      	char 			target_comm[AUDIT_AUX_PIDS][TASK_COMM_LEN];</span>
+<span class='curline'><a href='../S/200.html#L2450'>AUDIT_AUX_PIDS</a>   2450 auditsc.c      	if (!axp || axp-&gt;pid_count == AUDIT_AUX_PIDS) {</span>
+<span class='curline'><a href='../S/200.html#L2459'>AUDIT_AUX_PIDS</a>   2459 auditsc.c      	BUG_ON(axp-&gt;pid_count &gt;= AUDIT_AUX_PIDS);</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>audit_entry</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/120.html#L237'>audit_entry</a>       237 audit.h        extern int audit_del_rule(struct audit_entry *entry);</span>
+<span class='curline'><a href='../S/120.html#L241'>audit_entry</a>       241 audit.h        extern struct audit_entry *audit_dupe_rule(struct audit_krule *old);</span>
+<span class='curline'><a href='../S/367.html#L148'>audit_entry</a>       148 audit_fsnotify.c 	struct audit_entry *entry = container_of(rule, struct audit_entry, rule);</span>
+<span class='curline'><a href='../S/72.html#L545'>audit_entry</a>       545 audit_tree.c   	struct audit_entry *entry;</span>
+<span class='curline'><a href='../S/72.html#L548'>audit_entry</a>       548 audit_tree.c   		entry = container_of(rule, struct audit_entry, rule);</span>
+<span class='curline'><a href='../S/181.html#L250'>audit_entry</a>       250 audit_watch.c  	struct audit_entry *oentry, *nentry;</span>
+<span class='curline'><a href='../S/181.html#L278'>audit_entry</a>       278 audit_watch.c  			oentry = container_of(r, struct audit_entry, rule);</span>
+<span class='curline'><a href='../S/181.html#L325'>audit_entry</a>       325 audit_watch.c  	struct audit_entry *e;</span>
+<span class='curline'><a href='../S/181.html#L330'>audit_entry</a>       330 audit_watch.c  			e = container_of(r, struct audit_entry, rule);</span>
+<span class='curline'><a href='../S/219.html#L81'>audit_entry</a>        81 auditfilter.c  static inline void audit_free_rule(struct audit_entry *e)</span>
+<span class='curline'><a href='../S/219.html#L99'>audit_entry</a>        99 auditfilter.c  	struct audit_entry *e = container_of(head, struct audit_entry, rcu);</span>
+<span class='curline'><a href='../S/219.html#L104'>audit_entry</a>       104 auditfilter.c  static inline struct audit_entry *audit_init_entry(u32 field_count)</span>
+<span class='curline'><a href='../S/219.html#L106'>audit_entry</a>       106 auditfilter.c  	struct audit_entry *entry;</span>
+<span class='curline'><a href='../S/219.html#L208'>audit_entry</a>       208 auditfilter.c  static int audit_match_signal(struct audit_entry *entry)</span>
+<span class='curline'><a href='../S/219.html#L235'>audit_entry</a>       235 auditfilter.c  static inline struct audit_entry *audit_to_entry_common(struct audit_rule_data *rule)</span>
+<span class='curline'><a href='../S/219.html#L238'>audit_entry</a>       238 auditfilter.c  	struct audit_entry *entry;</span>
+<span class='curline'><a href='../S/219.html#L323'>audit_entry</a>       323 auditfilter.c  static int audit_field_valid(struct audit_entry *entry, struct audit_field *f)</span>
+<span class='curline'><a href='../S/219.html#L441'>audit_entry</a>       441 auditfilter.c  static struct audit_entry *audit_data_to_entry(struct audit_rule_data *data,</span>
+<span class='curline'><a href='../S/219.html#L445'>audit_entry</a>       445 auditfilter.c  	struct audit_entry *entry;</span>
+<span class='curline'><a href='../S/219.html#L811'>audit_entry</a>       811 auditfilter.c  struct audit_entry *audit_dupe_rule(struct audit_krule *old)</span>
+<span class='curline'><a href='../S/219.html#L814'>audit_entry</a>       814 auditfilter.c  	struct audit_entry *entry;</span>
+<span class='curline'><a href='../S/219.html#L891'>audit_entry</a>       891 auditfilter.c  static struct audit_entry *audit_find_rule(struct audit_entry *entry,</span>
+<span class='curline'><a href='../S/219.html#L894'>audit_entry</a>       894 auditfilter.c  	struct audit_entry *e, *found = NULL;</span>
+<span class='curline'><a href='../S/219.html#L930'>audit_entry</a>       930 auditfilter.c  static inline int audit_add_rule(struct audit_entry *entry)</span>
+<span class='curline'><a href='../S/219.html#L932'>audit_entry</a>       932 auditfilter.c  	struct audit_entry *e;</span>
+<span class='curline'><a href='../S/219.html#L1013'>audit_entry</a>      1013 auditfilter.c  int audit_del_rule(struct audit_entry *entry)</span>
+<span class='curline'><a href='../S/219.html#L1015'>audit_entry</a>      1015 auditfilter.c  	struct audit_entry  *e;</span>
+<span class='curline'><a href='../S/219.html#L1126'>audit_entry</a>      1126 auditfilter.c  	struct audit_entry *entry;</span>
+<span class='curline'><a href='../S/219.html#L1322'>audit_entry</a>      1322 auditfilter.c  	struct audit_entry *e;</span>
+<span class='curline'><a href='../S/219.html#L1393'>audit_entry</a>      1393 auditfilter.c  	struct audit_entry *entry = container_of(r, struct audit_entry, rule);</span>
+<span class='curline'><a href='../S/219.html#L1394'>audit_entry</a>      1394 auditfilter.c  	struct audit_entry *nentry;</span>
+<span class='curline'><a href='../S/200.html#L771'>audit_entry</a>       771 auditsc.c      	struct audit_entry *e;</span>
+<span class='curline'><a href='../S/200.html#L813'>audit_entry</a>       813 auditsc.c      	struct audit_entry *e;</span>
+<span class='curline'><a href='../S/200.html#L842'>audit_entry</a>       842 auditsc.c      	struct audit_entry *e;</span>
+<span class='curline'><a href='../S/200.html#L1993'>audit_entry</a>      1993 auditsc.c      	struct audit_entry *e;</span>
+<span class='curline'><a href='../S/200.html#L2111'>audit_entry</a>      2111 auditsc.c      	struct audit_entry *e;</span>
+</pre>
+</body>
+</html>

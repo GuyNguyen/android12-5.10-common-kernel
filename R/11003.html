@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rcu_node</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/144.html#L145'>rcu_node</a>          145 rcu/tree.c     static void rcu_report_qs_rnp(unsigned long mask, struct rcu_node *rnp,</span>
+<span class='curline'><a href='../S/144.html#L147'>rcu_node</a>          147 rcu/tree.c     static void rcu_init_new_rnp(struct rcu_node *rnp_leaf);</span>
+<span class='curline'><a href='../S/144.html#L148'>rcu_node</a>          148 rcu/tree.c     static void rcu_cleanup_dead_rnp(struct rcu_node *rnp_leaf);</span>
+<span class='curline'><a href='../S/144.html#L149'>rcu_node</a>          149 rcu/tree.c     static void rcu_boost_kthread_setaffinity(struct rcu_node *rnp, int outgoingcpu);</span>
+<span class='curline'><a href='../S/144.html#L153'>rcu_node</a>          153 rcu/tree.c     static void check_cb_ovld_locked(struct rcu_data *rdp, struct rcu_node *rnp);</span>
+<span class='curline'><a href='../S/144.html#L207'>rcu_node</a>          207 rcu/tree.c     static unsigned long rcu_rnp_online_cpus(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/144.html#L590'>rcu_node</a>          590 rcu/tree.c     static struct rcu_node *rcu_get_root(void)</span>
+<span class='curline'><a href='../S/144.html#L1152'>rcu_node</a>         1152 rcu/tree.c     	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/144.html#L1176'>rcu_node</a>         1176 rcu/tree.c     static void rcu_gpnum_ovf(struct rcu_node *rnp, struct rcu_data *rdp)</span>
+<span class='curline'><a href='../S/144.html#L1213'>rcu_node</a>         1213 rcu/tree.c     	struct rcu_node *rnp = rdp-&gt;mynode;</span>
+<span class='curline'><a href='../S/144.html#L1249'>rcu_node</a>         1249 rcu/tree.c     		struct rcu_node *rnp1;</span>
+<span class='curline'><a href='../S/144.html#L1334'>rcu_node</a>         1334 rcu/tree.c     static void trace_rcu_this_gp(struct rcu_node *rnp, struct rcu_data *rdp,</span>
+<span class='curline'><a href='../S/144.html#L1358'>rcu_node</a>         1358 rcu/tree.c     static bool rcu_start_this_gp(struct rcu_node *rnp_start, struct rcu_data *rdp,</span>
+<span class='curline'><a href='../S/144.html#L1362'>rcu_node</a>         1362 rcu/tree.c     	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/144.html#L1433'>rcu_node</a>         1433 rcu/tree.c     static bool rcu_future_gp_cleanup(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/144.html#L1485'>rcu_node</a>         1485 rcu/tree.c     static bool rcu_accelerate_cbs(struct rcu_node *rnp, struct rcu_data *rdp)</span>
+<span class='curline'><a href='../S/144.html#L1527'>rcu_node</a>         1527 rcu/tree.c     static void rcu_accelerate_cbs_unlocked(struct rcu_node *rnp,</span>
+<span class='curline'><a href='../S/144.html#L1557'>rcu_node</a>         1557 rcu/tree.c     static bool rcu_advance_cbs(struct rcu_node *rnp, struct rcu_data *rdp)</span>
+<span class='curline'><a href='../S/144.html#L1580'>rcu_node</a>         1580 rcu/tree.c     static void __maybe_unused rcu_advance_cbs_nowake(struct rcu_node *rnp,</span>
+<span class='curline'><a href='../S/144.html#L1610'>rcu_node</a>         1610 rcu/tree.c     static bool __note_gp_changes(struct rcu_node *rnp, struct rcu_data *rdp)</span>
+<span class='curline'><a href='../S/144.html#L1662'>rcu_node</a>         1662 rcu/tree.c     	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/144.html#L1730'>rcu_node</a>         1730 rcu/tree.c     	struct rcu_node *rnp = rcu_get_root();</span>
+<span class='curline'><a href='../S/144.html#L1865'>rcu_node</a>         1865 rcu/tree.c     	struct rcu_node *rnp = rcu_get_root();</span>
+<span class='curline'><a href='../S/144.html#L1888'>rcu_node</a>         1888 rcu/tree.c     	struct rcu_node *rnp = rcu_get_root();</span>
+<span class='curline'><a href='../S/144.html#L1917'>rcu_node</a>         1917 rcu/tree.c     	struct rcu_node *rnp = rcu_get_root();</span>
+<span class='curline'><a href='../S/144.html#L1988'>rcu_node</a>         1988 rcu/tree.c     	struct rcu_node *rnp = rcu_get_root();</span>
+<span class='curline'><a href='../S/144.html#L2150'>rcu_node</a>         2150 rcu/tree.c     static void rcu_report_qs_rnp(unsigned long mask, struct rcu_node *rnp,</span>
+<span class='curline'><a href='../S/144.html#L2155'>rcu_node</a>         2155 rcu/tree.c     	struct rcu_node *rnp_c;</span>
+<span class='curline'><a href='../S/144.html#L2215'>rcu_node</a>         2215 rcu/tree.c     rcu_report_unblock_qs_rnp(struct rcu_node *rnp, unsigned long flags)</span>
+<span class='curline'><a href='../S/144.html#L2220'>rcu_node</a>         2220 rcu/tree.c     	struct rcu_node *rnp_p;</span>
+<span class='curline'><a href='../S/144.html#L2261'>rcu_node</a>         2261 rcu/tree.c     	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/144.html#L2340'>rcu_node</a>         2340 rcu/tree.c     	struct rcu_node *rnp = rdp-&gt;mynode;</span>
+<span class='curline'><a href='../S/144.html#L2368'>rcu_node</a>         2368 rcu/tree.c     static void rcu_cleanup_dead_rnp(struct rcu_node *rnp_leaf)</span>
+<span class='curline'><a href='../S/144.html#L2371'>rcu_node</a>         2371 rcu/tree.c     	struct rcu_node *rnp = rnp_leaf;</span>
+<span class='curline'><a href='../S/144.html#L2405'>rcu_node</a>         2405 rcu/tree.c     	struct rcu_node *rnp = rdp-&gt;mynode;  /* Outgoing CPU's rdp &amp; rnp. */</span>
+<span class='curline'><a href='../S/144.html#L2594'>rcu_node</a>         2594 rcu/tree.c     	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/144.html#L2642'>rcu_node</a>         2642 rcu/tree.c     	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/144.html#L2643'>rcu_node</a>         2643 rcu/tree.c     	struct rcu_node *rnp_old = NULL;</span>
+<span class='curline'><a href='../S/144.html#L2685'>rcu_node</a>         2685 rcu/tree.c     	struct rcu_node *rnp = rdp-&gt;mynode;</span>
+<span class='curline'><a href='../S/144.html#L2900'>rcu_node</a>         2900 rcu/tree.c     static void check_cb_ovld_locked(struct rcu_data *rdp, struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/144.html#L2925'>rcu_node</a>         2925 rcu/tree.c     	struct rcu_node *const rnp = rdp-&gt;mynode;</span>
+<span class='curline'><a href='../S/144.html#L3732'>rcu_node</a>         3732 rcu/tree.c     	struct rcu_node *rnp = rdp-&gt;mynode;</span>
+<span class='curline'><a href='../S/144.html#L3924'>rcu_node</a>         3924 rcu/tree.c     static void rcu_init_new_rnp(struct rcu_node *rnp_leaf)</span>
+<span class='curline'><a href='../S/144.html#L3928'>rcu_node</a>         3928 rcu/tree.c     	struct rcu_node *rnp = rnp_leaf;</span>
+<span class='curline'><a href='../S/144.html#L3981'>rcu_node</a>         3981 rcu/tree.c     	struct rcu_node *rnp = rcu_get_root();</span>
+<span class='curline'><a href='../S/144.html#L4035'>rcu_node</a>         4035 rcu/tree.c     	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/144.html#L4060'>rcu_node</a>         4060 rcu/tree.c     	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/144.html#L4091'>rcu_node</a>         4091 rcu/tree.c     	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/144.html#L4134'>rcu_node</a>         4134 rcu/tree.c     	struct rcu_node *rnp = rdp-&gt;mynode;  /* Outgoing CPU's rdp &amp; rnp. */</span>
+<span class='curline'><a href='../S/144.html#L4170'>rcu_node</a>         4170 rcu/tree.c     	struct rcu_node *my_rnp;</span>
+<span class='curline'><a href='../S/144.html#L4239'>rcu_node</a>         4239 rcu/tree.c     	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/144.html#L4313'>rcu_node</a>         4313 rcu/tree.c     	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/144.html#L4468'>rcu_node</a>         4468 rcu/tree.c     	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/134.html#L84'>rcu_node</a>           84 rcu/tree.h     	struct rcu_node *parent;</span>
+<span class='curline'><a href='../S/134.html#L160'>rcu_node</a>          160 rcu/tree.h     	struct rcu_node *mynode;	/* This CPU's leaf of hierarchy */</span>
+<span class='curline'><a href='../S/134.html#L296'>rcu_node</a>          296 rcu/tree.h     	struct rcu_node node[NUM_RCU_NODES];	/* Hierarchy. */</span>
+<span class='curline'><a href='../S/134.html#L297'>rcu_node</a>          297 rcu/tree.h     	struct rcu_node *level[RCU_NUM_LVLS + 1];</span>
+<span class='curline'><a href='../S/134.html#L404'>rcu_node</a>          404 rcu/tree.h     static int rcu_preempt_blocked_readers_cgp(struct rcu_node *rnp);</span>
+<span class='curline'><a href='../S/134.html#L406'>rcu_node</a>          406 rcu/tree.h     static bool rcu_preempt_has_tasks(struct rcu_node *rnp);</span>
+<span class='curline'><a href='../S/134.html#L408'>rcu_node</a>          408 rcu/tree.h     static int rcu_print_task_exp_stall(struct rcu_node *rnp);</span>
+<span class='curline'><a href='../S/134.html#L409'>rcu_node</a>          409 rcu/tree.h     static void rcu_preempt_check_blocked_tasks(struct rcu_node *rnp);</span>
+<span class='curline'><a href='../S/134.html#L411'>rcu_node</a>          411 rcu/tree.h     static void dump_blkd_tasks(struct rcu_node *rnp, int ncheck);</span>
+<span class='curline'><a href='../S/134.html#L412'>rcu_node</a>          412 rcu/tree.h     static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags);</span>
+<span class='curline'><a href='../S/134.html#L413'>rcu_node</a>          413 rcu/tree.h     static void rcu_preempt_boost_start_gp(struct rcu_node *rnp);</span>
+<span class='curline'><a href='../S/134.html#L420'>rcu_node</a>          420 rcu/tree.h     static bool rcu_preempt_has_tasks(struct rcu_node *rnp);</span>
+<span class='curline'><a href='../S/134.html#L424'>rcu_node</a>          424 rcu/tree.h     static struct swait_queue_head *rcu_nocb_gp_get(struct rcu_node *rnp);</span>
+<span class='curline'><a href='../S/134.html#L426'>rcu_node</a>          426 rcu/tree.h     static void rcu_init_one_nocb(struct rcu_node *rnp);</span>
+<span class='curline'><a href='../S/134.html#L468'>rcu_node</a>          468 rcu/tree.h     static void rcu_check_gp_start_stall(struct rcu_node *rnp, struct rcu_data *rdp,</span>
+<span class='curline'><a href='../S/131.html#L13'>rcu_node</a>           13 rcu/tree_exp.h static int rcu_print_task_exp_stall(struct rcu_node *rnp);</span>
+<span class='curline'><a href='../S/131.html#L80'>rcu_node</a>           80 rcu/tree_exp.h 	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/131.html#L81'>rcu_node</a>           81 rcu/tree_exp.h 	struct rcu_node *rnp_up;</span>
+<span class='curline'><a href='../S/131.html#L133'>rcu_node</a>          133 rcu/tree_exp.h 	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/131.html#L150'>rcu_node</a>          150 rcu/tree_exp.h static bool sync_rcu_exp_done(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/131.html#L161'>rcu_node</a>          161 rcu/tree_exp.h static bool sync_rcu_exp_done_unlocked(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/131.html#L182'>rcu_node</a>          182 rcu/tree_exp.h static void __rcu_report_exp_rnp(struct rcu_node *rnp,</span>
+<span class='curline'><a href='../S/131.html#L218'>rcu_node</a>          218 rcu/tree_exp.h static void __maybe_unused rcu_report_exp_rnp(struct rcu_node *rnp, bool wake)</span>
+<span class='curline'><a href='../S/131.html#L230'>rcu_node</a>          230 rcu/tree_exp.h static void rcu_report_exp_cpu_mult(struct rcu_node *rnp,</span>
+<span class='curline'><a href='../S/131.html#L283'>rcu_node</a>          283 rcu/tree_exp.h 	struct rcu_node *rnp = rdp-&gt;mynode;</span>
+<span class='curline'><a href='../S/131.html#L284'>rcu_node</a>          284 rcu/tree_exp.h 	struct rcu_node *rnp_root = rcu_get_root();</span>
+<span class='curline'><a href='../S/131.html#L346'>rcu_node</a>          346 rcu/tree_exp.h 	struct rcu_node *rnp = container_of(rewp, struct rcu_node, rew);</span>
+<span class='curline'><a href='../S/131.html#L426'>rcu_node</a>          426 rcu/tree_exp.h 	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/131.html#L469'>rcu_node</a>          469 rcu/tree_exp.h 	struct rcu_node *rnp_root = rcu_get_root();</span>
+<span class='curline'><a href='../S/131.html#L494'>rcu_node</a>          494 rcu/tree_exp.h 	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/131.html#L495'>rcu_node</a>          495 rcu/tree_exp.h 	struct rcu_node *rnp_root = rcu_get_root();</span>
+<span class='curline'><a href='../S/131.html#L582'>rcu_node</a>          582 rcu/tree_exp.h 	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/131.html#L646'>rcu_node</a>          646 rcu/tree_exp.h 	struct rcu_node *rnp = rdp-&gt;mynode;</span>
+<span class='curline'><a href='../S/131.html#L702'>rcu_node</a>          702 rcu/tree_exp.h static int rcu_print_task_exp_stall(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/131.html#L737'>rcu_node</a>          737 rcu/tree_exp.h 	struct rcu_node *rnp = rdp-&gt;mynode;</span>
+<span class='curline'><a href='../S/131.html#L756'>rcu_node</a>          756 rcu/tree_exp.h 	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/131.html#L786'>rcu_node</a>          786 rcu/tree_exp.h static int rcu_print_task_exp_stall(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/131.html#L817'>rcu_node</a>          817 rcu/tree_exp.h 	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/126.html#L88'>rcu_node</a>           88 rcu/tree_plugin.h static void rcu_report_exp_rnp(struct rcu_node *rnp, bool wake);</span>
+<span class='curline'><a href='../S/126.html#L134'>rcu_node</a>          134 rcu/tree_plugin.h static void rcu_preempt_ctxt_queue(struct rcu_node *rnp, struct rcu_data *rdp)</span>
+<span class='curline'><a href='../S/126.html#L293'>rcu_node</a>          293 rcu/tree_plugin.h 	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/126.html#L346'>rcu_node</a>          346 rcu/tree_plugin.h static int rcu_preempt_blocked_readers_cgp(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/126.html#L414'>rcu_node</a>          414 rcu/tree_plugin.h 					     struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/126.html#L428'>rcu_node</a>          428 rcu/tree_plugin.h static bool rcu_preempt_has_tasks(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/126.html#L447'>rcu_node</a>          447 rcu/tree_plugin.h 	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/126.html#L614'>rcu_node</a>          614 rcu/tree_plugin.h 		struct rcu_node *rnp = rdp-&gt;mynode;</span>
+<span class='curline'><a href='../S/126.html#L655'>rcu_node</a>          655 rcu/tree_plugin.h static void rcu_preempt_check_blocked_tasks(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/126.html#L742'>rcu_node</a>          742 rcu/tree_plugin.h dump_blkd_tasks(struct rcu_node *rnp, int ncheck)</span>
+<span class='curline'><a href='../S/126.html#L749'>rcu_node</a>          749 rcu/tree_plugin.h 	struct rcu_node *rnp1;</span>
+<span class='curline'><a href='../S/126.html#L881'>rcu_node</a>          881 rcu/tree_plugin.h static int rcu_preempt_blocked_readers_cgp(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/126.html#L889'>rcu_node</a>          889 rcu/tree_plugin.h static bool rcu_preempt_has_tasks(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/126.html#L909'>rcu_node</a>          909 rcu/tree_plugin.h static void rcu_preempt_check_blocked_tasks(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/126.html#L950'>rcu_node</a>          950 rcu/tree_plugin.h dump_blkd_tasks(struct rcu_node *rnp, int ncheck)</span>
+<span class='curline'><a href='../S/126.html#L980'>rcu_node</a>          980 rcu/tree_plugin.h static int rcu_boost(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/126.html#L1044'>rcu_node</a>         1044 rcu/tree_plugin.h 	struct rcu_node *rnp = (struct rcu_node *)arg;</span>
+<span class='curline'><a href='../S/126.html#L1084'>rcu_node</a>         1084 rcu/tree_plugin.h static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags)</span>
+<span class='curline'><a href='../S/126.html#L1121'>rcu_node</a>         1121 rcu/tree_plugin.h static void rcu_preempt_boost_start_gp(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/126.html#L1131'>rcu_node</a>         1131 rcu/tree_plugin.h static void rcu_spawn_one_boost_kthread(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/126.html#L1171'>rcu_node</a>         1171 rcu/tree_plugin.h static void rcu_boost_kthread_setaffinity(struct rcu_node *rnp, int outgoingcpu)</span>
+<span class='curline'><a href='../S/126.html#L1197'>rcu_node</a>         1197 rcu/tree_plugin.h 	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/126.html#L1206'>rcu_node</a>         1206 rcu/tree_plugin.h 	struct rcu_node *rnp = rdp-&gt;mynode;</span>
+<span class='curline'><a href='../S/126.html#L1215'>rcu_node</a>         1215 rcu/tree_plugin.h static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags)</span>
+<span class='curline'><a href='../S/126.html#L1226'>rcu_node</a>         1226 rcu/tree_plugin.h static void rcu_preempt_boost_start_gp(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/126.html#L1230'>rcu_node</a>         1230 rcu/tree_plugin.h static void rcu_boost_kthread_setaffinity(struct rcu_node *rnp, int outgoingcpu)</span>
+<span class='curline'><a href='../S/126.html#L1313'>rcu_node</a>         1313 rcu/tree_plugin.h 	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/126.html#L1386'>rcu_node</a>         1386 rcu/tree_plugin.h 	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/126.html#L1611'>rcu_node</a>         1611 rcu/tree_plugin.h static struct swait_queue_head *rcu_nocb_gp_get(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/126.html#L1616'>rcu_node</a>         1616 rcu/tree_plugin.h static void rcu_init_one_nocb(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/126.html#L1948'>rcu_node</a>         1948 rcu/tree_plugin.h 	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/126.html#L2093'>rcu_node</a>         2093 rcu/tree_plugin.h 	struct rcu_node *rnp = rdp-&gt;mynode;</span>
+<span class='curline'><a href='../S/126.html#L2395'>rcu_node</a>         2395 rcu/tree_plugin.h 	struct rcu_node *rnp = rdp-&gt;mynode;</span>
+<span class='curline'><a href='../S/126.html#L2490'>rcu_node</a>         2490 rcu/tree_plugin.h static struct swait_queue_head *rcu_nocb_gp_get(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/126.html#L2495'>rcu_node</a>         2495 rcu/tree_plugin.h static void rcu_init_one_nocb(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/130.html#L182'>rcu_node</a>          182 rcu/tree_stall.h 	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/130.html#L204'>rcu_node</a>          204 rcu/tree_stall.h static void rcu_print_detail_task_stall_rnp(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/130.html#L254'>rcu_node</a>          254 rcu/tree_stall.h static int rcu_print_task_stall(struct rcu_node *rnp, unsigned long flags)</span>
+<span class='curline'><a href='../S/130.html#L300'>rcu_node</a>          300 rcu/tree_stall.h static void rcu_print_detail_task_stall_rnp(struct rcu_node *rnp)</span>
+<span class='curline'><a href='../S/130.html#L308'>rcu_node</a>          308 rcu/tree_stall.h static int rcu_print_task_stall(struct rcu_node *rnp, unsigned long flags)</span>
+<span class='curline'><a href='../S/130.html#L325'>rcu_node</a>          325 rcu/tree_stall.h 	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/130.html#L472'>rcu_node</a>          472 rcu/tree_stall.h 	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/130.html#L539'>rcu_node</a>          539 rcu/tree_stall.h 	struct rcu_node *rnp = rcu_get_root();</span>
+<span class='curline'><a href='../S/130.html#L595'>rcu_node</a>          595 rcu/tree_stall.h 	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/130.html#L671'>rcu_node</a>          671 rcu/tree_stall.h 	struct rcu_node *rnp;</span>
+<span class='curline'><a href='../S/130.html#L719'>rcu_node</a>          719 rcu/tree_stall.h static void rcu_check_gp_start_stall(struct rcu_node *rnp, struct rcu_data *rdp,</span>
+<span class='curline'><a href='../S/130.html#L724'>rcu_node</a>          724 rcu/tree_stall.h 	struct rcu_node *rnp_root = rcu_get_root();</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>uprobe</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/334.html#L82'>uprobe</a>             82 events/uprobes.c 	struct uprobe *uprobe;</span>
+<span class='curline'><a href='../S/334.html#L287'>uprobe</a>            287 events/uprobes.c delayed_uprobe_check(struct uprobe *uprobe, struct mm_struct *mm)</span>
+<span class='curline'><a href='../S/334.html#L292'>uprobe</a>            292 events/uprobes.c 		if (du-&gt;uprobe == uprobe &amp;&amp; du-&gt;mm == mm)</span>
+<span class='curline'><a href='../S/334.html#L297'>uprobe</a>            297 events/uprobes.c static int delayed_uprobe_add(struct uprobe *uprobe, struct mm_struct *mm)</span>
+<span class='curline'><a href='../S/334.html#L301'>uprobe</a>            301 events/uprobes.c 	if (delayed_uprobe_check(uprobe, mm))</span>
+<span class='curline'><a href='../S/334.html#L308'>uprobe</a>            308 events/uprobes.c 	du-&gt;uprobe = uprobe;</span>
+<span class='curline'><a href='../S/334.html#L322'>uprobe</a>            322 events/uprobes.c static void delayed_uprobe_remove(struct uprobe *uprobe, struct mm_struct *mm)</span>
+<span class='curline'><a href='../S/334.html#L327'>uprobe</a>            327 events/uprobes.c 	if (!uprobe &amp;&amp; !mm)</span>
+<span class='curline'><a href='../S/334.html#L333'>uprobe</a>            333 events/uprobes.c 		if (uprobe &amp;&amp; du-&gt;uprobe != uprobe)</span>
+<span class='curline'><a href='../S/334.html#L342'>uprobe</a>            342 events/uprobes.c static bool valid_ref_ctr_vma(struct uprobe *uprobe,</span>
+<span class='curline'><a href='../S/334.html#L345'>uprobe</a>            345 events/uprobes.c 	unsigned long vaddr = offset_to_vaddr(vma, uprobe-&gt;ref_ctr_offset);</span>
+<span class='curline'><a href='../S/334.html#L347'>uprobe</a>            347 events/uprobes.c 	return uprobe-&gt;ref_ctr_offset &amp;&amp;</span>
+<span class='curline'><a href='../S/334.html#L349'>uprobe</a>            349 events/uprobes.c 		file_inode(vma-&gt;vm_file) == uprobe-&gt;inode &amp;&amp;</span>
+<span class='curline'><a href='../S/334.html#L356'>uprobe</a>            356 events/uprobes.c find_ref_ctr_vma(struct uprobe *uprobe, struct mm_struct *mm)</span>
+<span class='curline'><a href='../S/334.html#L361'>uprobe</a>            361 events/uprobes.c 		if (valid_ref_ctr_vma(uprobe, tmp))</span>
+<span class='curline'><a href='../S/334.html#L407'>uprobe</a>            407 events/uprobes.c static void update_ref_ctr_warn(struct uprobe *uprobe,</span>
+<span class='curline'><a href='../S/334.html#L412'>uprobe</a>            412 events/uprobes.c 		d &gt; 0 ? "increment" : "decrement", uprobe-&gt;inode-&gt;i_ino,</span>
+<span class='curline'><a href='../S/334.html#L413'>uprobe</a>            413 events/uprobes.c 		(unsigned long long) uprobe-&gt;offset,</span>
+<span class='curline'><a href='../S/334.html#L414'>uprobe</a>            414 events/uprobes.c 		(unsigned long long) uprobe-&gt;ref_ctr_offset, mm);</span>
+<span class='curline'><a href='../S/334.html#L417'>uprobe</a>            417 events/uprobes.c static int update_ref_ctr(struct uprobe *uprobe, struct mm_struct *mm,</span>
+<span class='curline'><a href='../S/334.html#L424'>uprobe</a>            424 events/uprobes.c 	rc_vma = find_ref_ctr_vma(uprobe, mm);</span>
+<span class='curline'><a href='../S/334.html#L427'>uprobe</a>            427 events/uprobes.c 		rc_vaddr = offset_to_vaddr(rc_vma, uprobe-&gt;ref_ctr_offset);</span>
+<span class='curline'><a href='../S/334.html#L430'>uprobe</a>            430 events/uprobes.c 			update_ref_ctr_warn(uprobe, mm, d);</span>
+<span class='curline'><a href='../S/334.html#L438'>uprobe</a>            438 events/uprobes.c 		ret = delayed_uprobe_add(uprobe, mm);</span>
+<span class='curline'><a href='../S/334.html#L440'>uprobe</a>            440 events/uprobes.c 		delayed_uprobe_remove(uprobe, mm);</span>
+<span class='curline'><a href='../S/334.html#L466'>uprobe</a>            466 events/uprobes.c 	struct uprobe *uprobe;</span>
+<span class='curline'><a href='../S/334.html#L474'>uprobe</a>            474 events/uprobes.c 	uprobe = container_of(auprobe, struct uprobe, arch);</span>
+<span class='curline'><a href='../S/334.html#L496'>uprobe</a>            496 events/uprobes.c 	if (!ref_ctr_updated &amp;&amp; uprobe-&gt;ref_ctr_offset) {</span>
+<span class='curline'><a href='../S/334.html#L497'>uprobe</a>            497 events/uprobes.c 		ret = update_ref_ctr(uprobe, mm, is_register ? 1 : -1);</span>
+<span class='curline'><a href='../S/334.html#L556'>uprobe</a>            556 events/uprobes.c 		update_ref_ctr(uprobe, mm, -1);</span>
+<span class='curline'><a href='../S/334.html#L595'>uprobe</a>            595 events/uprobes.c static struct uprobe *get_uprobe(struct uprobe *uprobe)</span>
+<span class='curline'><a href='../S/334.html#L597'>uprobe</a>            597 events/uprobes.c 	refcount_inc(&amp;uprobe-&gt;ref);</span>
+<span class='curline'><a href='../S/334.html#L598'>uprobe</a>            598 events/uprobes.c 	return uprobe;</span>
+<span class='curline'><a href='../S/334.html#L601'>uprobe</a>            601 events/uprobes.c static void put_uprobe(struct uprobe *uprobe)</span>
+<span class='curline'><a href='../S/334.html#L603'>uprobe</a>            603 events/uprobes.c 	if (refcount_dec_and_test(&amp;uprobe-&gt;ref)) {</span>
+<span class='curline'><a href='../S/334.html#L610'>uprobe</a>            610 events/uprobes.c 		delayed_uprobe_remove(uprobe, NULL);</span>
+<span class='curline'><a href='../S/334.html#L612'>uprobe</a>            612 events/uprobes.c 		kfree(uprobe);</span>
+<span class='curline'><a href='../S/334.html#L616'>uprobe</a>            616 events/uprobes.c static int match_uprobe(struct uprobe *l, struct uprobe *r)</span>
+<span class='curline'><a href='../S/334.html#L633'>uprobe</a>            633 events/uprobes.c static struct uprobe *__find_uprobe(struct inode *inode, loff_t offset)</span>
+<span class='curline'><a href='../S/334.html#L635'>uprobe</a>            635 events/uprobes.c 	struct uprobe u = { .inode = inode, .offset = offset };</span>
+<span class='curline'><a href='../S/334.html#L637'>uprobe</a>            637 events/uprobes.c 	struct uprobe *uprobe;</span>
+<span class='curline'><a href='../S/334.html#L641'>uprobe</a>            641 events/uprobes.c 		uprobe = rb_entry(n, struct uprobe, rb_node);</span>
+<span class='curline'><a href='../S/334.html#L642'>uprobe</a>            642 events/uprobes.c 		match = match_uprobe(&amp;u, uprobe);</span>
+<span class='curline'><a href='../S/334.html#L644'>uprobe</a>            644 events/uprobes.c 			return get_uprobe(uprobe);</span>
+<span class='curline'><a href='../S/334.html#L658'>uprobe</a>            658 events/uprobes.c static struct uprobe *find_uprobe(struct inode *inode, loff_t offset)</span>
+<span class='curline'><a href='../S/334.html#L660'>uprobe</a>            660 events/uprobes.c 	struct uprobe *uprobe;</span>
+<span class='curline'><a href='../S/334.html#L663'>uprobe</a>            663 events/uprobes.c 	uprobe = __find_uprobe(inode, offset);</span>
+<span class='curline'><a href='../S/334.html#L666'>uprobe</a>            666 events/uprobes.c 	return uprobe;</span>
+<span class='curline'><a href='../S/334.html#L669'>uprobe</a>            669 events/uprobes.c static struct uprobe *__insert_uprobe(struct uprobe *uprobe)</span>
+<span class='curline'><a href='../S/334.html#L673'>uprobe</a>            673 events/uprobes.c 	struct uprobe *u;</span>
+<span class='curline'><a href='../S/334.html#L678'>uprobe</a>            678 events/uprobes.c 		u = rb_entry(parent, struct uprobe, rb_node);</span>
+<span class='curline'><a href='../S/334.html#L679'>uprobe</a>            679 events/uprobes.c 		match = match_uprobe(uprobe, u);</span>
+<span class='curline'><a href='../S/334.html#L691'>uprobe</a>            691 events/uprobes.c 	rb_link_node(&amp;uprobe-&gt;rb_node, parent, p);</span>
+<span class='curline'><a href='../S/334.html#L692'>uprobe</a>            692 events/uprobes.c 	rb_insert_color(&amp;uprobe-&gt;rb_node, &amp;uprobes_tree);</span>
+<span class='curline'><a href='../S/334.html#L694'>uprobe</a>            694 events/uprobes.c 	refcount_set(&amp;uprobe-&gt;ref, 2);</span>
+<span class='curline'><a href='../S/334.html#L707'>uprobe</a>            707 events/uprobes.c static struct uprobe *insert_uprobe(struct uprobe *uprobe)</span>
+<span class='curline'><a href='../S/334.html#L709'>uprobe</a>            709 events/uprobes.c 	struct uprobe *u;</span>
+<span class='curline'><a href='../S/334.html#L712'>uprobe</a>            712 events/uprobes.c 	u = __insert_uprobe(uprobe);</span>
+<span class='curline'><a href='../S/334.html#L719'>uprobe</a>            719 events/uprobes.c ref_ctr_mismatch_warn(struct uprobe *cur_uprobe, struct uprobe *uprobe)</span>
+<span class='curline'><a href='../S/334.html#L723'>uprobe</a>            723 events/uprobes.c 		uprobe-&gt;inode-&gt;i_ino, (unsigned long long) uprobe-&gt;offset,</span>
+<span class='curline'><a href='../S/334.html#L725'>uprobe</a>            725 events/uprobes.c 		(unsigned long long) uprobe-&gt;ref_ctr_offset);</span>
+<span class='curline'><a href='../S/334.html#L728'>uprobe</a>            728 events/uprobes.c static struct uprobe *alloc_uprobe(struct inode *inode, loff_t offset,</span>
+<span class='curline'><a href='../S/334.html#L731'>uprobe</a>            731 events/uprobes.c 	struct uprobe *uprobe, *cur_uprobe;</span>
+<span class='curline'><a href='../S/334.html#L733'>uprobe</a>            733 events/uprobes.c 	uprobe = kzalloc(sizeof(struct uprobe), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/334.html#L734'>uprobe</a>            734 events/uprobes.c 	if (!uprobe)</span>
+<span class='curline'><a href='../S/334.html#L737'>uprobe</a>            737 events/uprobes.c 	uprobe-&gt;inode = inode;</span>
+<span class='curline'><a href='../S/334.html#L738'>uprobe</a>            738 events/uprobes.c 	uprobe-&gt;offset = offset;</span>
+<span class='curline'><a href='../S/334.html#L739'>uprobe</a>            739 events/uprobes.c 	uprobe-&gt;ref_ctr_offset = ref_ctr_offset;</span>
+<span class='curline'><a href='../S/334.html#L740'>uprobe</a>            740 events/uprobes.c 	init_rwsem(&amp;uprobe-&gt;register_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L741'>uprobe</a>            741 events/uprobes.c 	init_rwsem(&amp;uprobe-&gt;consumer_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L744'>uprobe</a>            744 events/uprobes.c 	cur_uprobe = insert_uprobe(uprobe);</span>
+<span class='curline'><a href='../S/334.html#L747'>uprobe</a>            747 events/uprobes.c 		if (cur_uprobe-&gt;ref_ctr_offset != uprobe-&gt;ref_ctr_offset) {</span>
+<span class='curline'><a href='../S/334.html#L748'>uprobe</a>            748 events/uprobes.c 			ref_ctr_mismatch_warn(cur_uprobe, uprobe);</span>
+<span class='curline'><a href='../S/334.html#L750'>uprobe</a>            750 events/uprobes.c 			kfree(uprobe);</span>
+<span class='curline'><a href='../S/334.html#L753'>uprobe</a>            753 events/uprobes.c 		kfree(uprobe);</span>
+<span class='curline'><a href='../S/334.html#L754'>uprobe</a>            754 events/uprobes.c 		uprobe = cur_uprobe;</span>
+<span class='curline'><a href='../S/334.html#L757'>uprobe</a>            757 events/uprobes.c 	return uprobe;</span>
+<span class='curline'><a href='../S/334.html#L760'>uprobe</a>            760 events/uprobes.c static void consumer_add(struct uprobe *uprobe, struct uprobe_consumer *uc)</span>
+<span class='curline'><a href='../S/334.html#L762'>uprobe</a>            762 events/uprobes.c 	down_write(&amp;uprobe-&gt;consumer_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L763'>uprobe</a>            763 events/uprobes.c 	uc-&gt;next = uprobe-&gt;consumers;</span>
+<span class='curline'><a href='../S/334.html#L764'>uprobe</a>            764 events/uprobes.c 	uprobe-&gt;consumers = uc;</span>
+<span class='curline'><a href='../S/334.html#L765'>uprobe</a>            765 events/uprobes.c 	up_write(&amp;uprobe-&gt;consumer_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L773'>uprobe</a>            773 events/uprobes.c static bool consumer_del(struct uprobe *uprobe, struct uprobe_consumer *uc)</span>
+<span class='curline'><a href='../S/334.html#L778'>uprobe</a>            778 events/uprobes.c 	down_write(&amp;uprobe-&gt;consumer_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L779'>uprobe</a>            779 events/uprobes.c 	for (con = &amp;uprobe-&gt;consumers; *con; con = &amp;(*con)-&gt;next) {</span>
+<span class='curline'><a href='../S/334.html#L786'>uprobe</a>            786 events/uprobes.c 	up_write(&amp;uprobe-&gt;consumer_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L813'>uprobe</a>            813 events/uprobes.c static int copy_insn(struct uprobe *uprobe, struct file *filp)</span>
+<span class='curline'><a href='../S/334.html#L815'>uprobe</a>            815 events/uprobes.c 	struct address_space *mapping = uprobe-&gt;inode-&gt;i_mapping;</span>
+<span class='curline'><a href='../S/334.html#L816'>uprobe</a>            816 events/uprobes.c 	loff_t offs = uprobe-&gt;offset;</span>
+<span class='curline'><a href='../S/334.html#L817'>uprobe</a>            817 events/uprobes.c 	void *insn = &amp;uprobe-&gt;arch.insn;</span>
+<span class='curline'><a href='../S/334.html#L818'>uprobe</a>            818 events/uprobes.c 	int size = sizeof(uprobe-&gt;arch.insn);</span>
+<span class='curline'><a href='../S/334.html#L823'>uprobe</a>            823 events/uprobes.c 		if (offs &gt;= i_size_read(uprobe-&gt;inode))</span>
+<span class='curline'><a href='../S/334.html#L839'>uprobe</a>            839 events/uprobes.c static int prepare_uprobe(struct uprobe *uprobe, struct file *file,</span>
+<span class='curline'><a href='../S/334.html#L844'>uprobe</a>            844 events/uprobes.c 	if (test_bit(UPROBE_COPY_INSN, &amp;uprobe-&gt;flags))</span>
+<span class='curline'><a href='../S/334.html#L848'>uprobe</a>            848 events/uprobes.c 	down_write(&amp;uprobe-&gt;consumer_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L849'>uprobe</a>            849 events/uprobes.c 	if (test_bit(UPROBE_COPY_INSN, &amp;uprobe-&gt;flags))</span>
+<span class='curline'><a href='../S/334.html#L852'>uprobe</a>            852 events/uprobes.c 	ret = copy_insn(uprobe, file);</span>
+<span class='curline'><a href='../S/334.html#L857'>uprobe</a>            857 events/uprobes.c 	if (is_trap_insn((uprobe_opcode_t *)&amp;uprobe-&gt;arch.insn))</span>
+<span class='curline'><a href='../S/334.html#L860'>uprobe</a>            860 events/uprobes.c 	ret = arch_uprobe_analyze_insn(&amp;uprobe-&gt;arch, mm, vaddr);</span>
+<span class='curline'><a href='../S/334.html#L865'>uprobe</a>            865 events/uprobes.c 	set_bit(UPROBE_COPY_INSN, &amp;uprobe-&gt;flags);</span>
+<span class='curline'><a href='../S/334.html#L868'>uprobe</a>            868 events/uprobes.c 	up_write(&amp;uprobe-&gt;consumer_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L879'>uprobe</a>            879 events/uprobes.c static bool filter_chain(struct uprobe *uprobe,</span>
+<span class='curline'><a href='../S/334.html#L885'>uprobe</a>            885 events/uprobes.c 	down_read(&amp;uprobe-&gt;consumer_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L886'>uprobe</a>            886 events/uprobes.c 	for (uc = uprobe-&gt;consumers; uc; uc = uc-&gt;next) {</span>
+<span class='curline'><a href='../S/334.html#L891'>uprobe</a>            891 events/uprobes.c 	up_read(&amp;uprobe-&gt;consumer_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L897'>uprobe</a>            897 events/uprobes.c install_breakpoint(struct uprobe *uprobe, struct mm_struct *mm,</span>
+<span class='curline'><a href='../S/334.html#L903'>uprobe</a>            903 events/uprobes.c 	ret = prepare_uprobe(uprobe, vma-&gt;vm_file, mm, vaddr);</span>
+<span class='curline'><a href='../S/334.html#L915'>uprobe</a>            915 events/uprobes.c 	ret = set_swbp(&amp;uprobe-&gt;arch, mm, vaddr);</span>
+<span class='curline'><a href='../S/334.html#L925'>uprobe</a>            925 events/uprobes.c remove_breakpoint(struct uprobe *uprobe, struct mm_struct *mm, unsigned long vaddr)</span>
+<span class='curline'><a href='../S/334.html#L928'>uprobe</a>            928 events/uprobes.c 	return set_orig_insn(&amp;uprobe-&gt;arch, mm, vaddr);</span>
+<span class='curline'><a href='../S/334.html#L931'>uprobe</a>            931 events/uprobes.c static inline bool uprobe_is_active(struct uprobe *uprobe)</span>
+<span class='curline'><a href='../S/334.html#L933'>uprobe</a>            933 events/uprobes.c 	return !RB_EMPTY_NODE(&amp;uprobe-&gt;rb_node);</span>
+<span class='curline'><a href='../S/334.html#L940'>uprobe</a>            940 events/uprobes.c static void delete_uprobe(struct uprobe *uprobe)</span>
+<span class='curline'><a href='../S/334.html#L942'>uprobe</a>            942 events/uprobes.c 	if (WARN_ON(!uprobe_is_active(uprobe)))</span>
+<span class='curline'><a href='../S/334.html#L946'>uprobe</a>            946 events/uprobes.c 	rb_erase(&amp;uprobe-&gt;rb_node, &amp;uprobes_tree);</span>
+<span class='curline'><a href='../S/334.html#L948'>uprobe</a>            948 events/uprobes.c 	RB_CLEAR_NODE(&amp;uprobe-&gt;rb_node); /* for uprobe_is_active() */</span>
+<span class='curline'><a href='../S/334.html#L949'>uprobe</a>            949 events/uprobes.c 	put_uprobe(uprobe);</span>
+<span class='curline'><a href='../S/334.html#L1036'>uprobe</a>           1036 events/uprobes.c register_for_each_vma(struct uprobe *uprobe, struct uprobe_consumer *new)</span>
+<span class='curline'><a href='../S/334.html#L1043'>uprobe</a>           1043 events/uprobes.c 	info = build_map_info(uprobe-&gt;inode-&gt;i_mapping,</span>
+<span class='curline'><a href='../S/334.html#L1044'>uprobe</a>           1044 events/uprobes.c 					uprobe-&gt;offset, is_register);</span>
+<span class='curline'><a href='../S/334.html#L1060'>uprobe</a>           1060 events/uprobes.c 		    file_inode(vma-&gt;vm_file) != uprobe-&gt;inode)</span>
+<span class='curline'><a href='../S/334.html#L1064'>uprobe</a>           1064 events/uprobes.c 		    vaddr_to_offset(vma, info-&gt;vaddr) != uprobe-&gt;offset)</span>
+<span class='curline'><a href='../S/334.html#L1071'>uprobe</a>           1071 events/uprobes.c 				err = install_breakpoint(uprobe, mm, vma, info-&gt;vaddr);</span>
+<span class='curline'><a href='../S/334.html#L1073'>uprobe</a>           1073 events/uprobes.c 			if (!filter_chain(uprobe,</span>
+<span class='curline'><a href='../S/334.html#L1075'>uprobe</a>           1075 events/uprobes.c 				err |= remove_breakpoint(uprobe, mm, info-&gt;vaddr);</span>
+<span class='curline'><a href='../S/334.html#L1090'>uprobe</a>           1090 events/uprobes.c __uprobe_unregister(struct uprobe *uprobe, struct uprobe_consumer *uc)</span>
+<span class='curline'><a href='../S/334.html#L1094'>uprobe</a>           1094 events/uprobes.c 	if (WARN_ON(!consumer_del(uprobe, uc)))</span>
+<span class='curline'><a href='../S/334.html#L1097'>uprobe</a>           1097 events/uprobes.c 	err = register_for_each_vma(uprobe, NULL);</span>
+<span class='curline'><a href='../S/334.html#L1099'>uprobe</a>           1099 events/uprobes.c 	if (!uprobe-&gt;consumers &amp;&amp; !err)</span>
+<span class='curline'><a href='../S/334.html#L1100'>uprobe</a>           1100 events/uprobes.c 		delete_uprobe(uprobe);</span>
+<span class='curline'><a href='../S/334.html#L1111'>uprobe</a>           1111 events/uprobes.c 	struct uprobe *uprobe;</span>
+<span class='curline'><a href='../S/334.html#L1113'>uprobe</a>           1113 events/uprobes.c 	uprobe = find_uprobe(inode, offset);</span>
+<span class='curline'><a href='../S/334.html#L1114'>uprobe</a>           1114 events/uprobes.c 	if (WARN_ON(!uprobe))</span>
+<span class='curline'><a href='../S/334.html#L1117'>uprobe</a>           1117 events/uprobes.c 	down_write(&amp;uprobe-&gt;register_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L1118'>uprobe</a>           1118 events/uprobes.c 	__uprobe_unregister(uprobe, uc);</span>
+<span class='curline'><a href='../S/334.html#L1119'>uprobe</a>           1119 events/uprobes.c 	up_write(&amp;uprobe-&gt;register_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L1120'>uprobe</a>           1120 events/uprobes.c 	put_uprobe(uprobe);</span>
+<span class='curline'><a href='../S/334.html#L1145'>uprobe</a>           1145 events/uprobes.c 	struct uprobe *uprobe;</span>
+<span class='curline'><a href='../S/334.html#L1169'>uprobe</a>           1169 events/uprobes.c 	uprobe = alloc_uprobe(inode, offset, ref_ctr_offset);</span>
+<span class='curline'><a href='../S/334.html#L1170'>uprobe</a>           1170 events/uprobes.c 	if (!uprobe)</span>
+<span class='curline'><a href='../S/334.html#L1172'>uprobe</a>           1172 events/uprobes.c 	if (IS_ERR(uprobe))</span>
+<span class='curline'><a href='../S/334.html#L1173'>uprobe</a>           1173 events/uprobes.c 		return PTR_ERR(uprobe);</span>
+<span class='curline'><a href='../S/334.html#L1179'>uprobe</a>           1179 events/uprobes.c 	down_write(&amp;uprobe-&gt;register_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L1181'>uprobe</a>           1181 events/uprobes.c 	if (likely(uprobe_is_active(uprobe))) {</span>
+<span class='curline'><a href='../S/334.html#L1182'>uprobe</a>           1182 events/uprobes.c 		consumer_add(uprobe, uc);</span>
+<span class='curline'><a href='../S/334.html#L1183'>uprobe</a>           1183 events/uprobes.c 		ret = register_for_each_vma(uprobe, uc);</span>
+<span class='curline'><a href='../S/334.html#L1185'>uprobe</a>           1185 events/uprobes.c 			__uprobe_unregister(uprobe, uc);</span>
+<span class='curline'><a href='../S/334.html#L1187'>uprobe</a>           1187 events/uprobes.c 	up_write(&amp;uprobe-&gt;register_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L1188'>uprobe</a>           1188 events/uprobes.c 	put_uprobe(uprobe);</span>
+<span class='curline'><a href='../S/334.html#L1219'>uprobe</a>           1219 events/uprobes.c 	struct uprobe *uprobe;</span>
+<span class='curline'><a href='../S/334.html#L1223'>uprobe</a>           1223 events/uprobes.c 	uprobe = find_uprobe(inode, offset);</span>
+<span class='curline'><a href='../S/334.html#L1224'>uprobe</a>           1224 events/uprobes.c 	if (WARN_ON(!uprobe))</span>
+<span class='curline'><a href='../S/334.html#L1227'>uprobe</a>           1227 events/uprobes.c 	down_write(&amp;uprobe-&gt;register_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L1228'>uprobe</a>           1228 events/uprobes.c 	for (con = uprobe-&gt;consumers; con &amp;&amp; con != uc ; con = con-&gt;next)</span>
+<span class='curline'><a href='../S/334.html#L1231'>uprobe</a>           1231 events/uprobes.c 		ret = register_for_each_vma(uprobe, add ? uc : NULL);</span>
+<span class='curline'><a href='../S/334.html#L1232'>uprobe</a>           1232 events/uprobes.c 	up_write(&amp;uprobe-&gt;register_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L1233'>uprobe</a>           1233 events/uprobes.c 	put_uprobe(uprobe);</span>
+<span class='curline'><a href='../S/334.html#L1238'>uprobe</a>           1238 events/uprobes.c static int unapply_uprobe(struct uprobe *uprobe, struct mm_struct *mm)</span>
+<span class='curline'><a href='../S/334.html#L1249'>uprobe</a>           1249 events/uprobes.c 		    file_inode(vma-&gt;vm_file) != uprobe-&gt;inode)</span>
+<span class='curline'><a href='../S/334.html#L1253'>uprobe</a>           1253 events/uprobes.c 		if (uprobe-&gt;offset &lt;  offset ||</span>
+<span class='curline'><a href='../S/334.html#L1254'>uprobe</a>           1254 events/uprobes.c 		    uprobe-&gt;offset &gt;= offset + vma-&gt;vm_end - vma-&gt;vm_start)</span>
+<span class='curline'><a href='../S/334.html#L1257'>uprobe</a>           1257 events/uprobes.c 		vaddr = offset_to_vaddr(vma, uprobe-&gt;offset);</span>
+<span class='curline'><a href='../S/334.html#L1258'>uprobe</a>           1258 events/uprobes.c 		err |= remove_breakpoint(uprobe, mm, vaddr);</span>
+<span class='curline'><a href='../S/334.html#L1271'>uprobe</a>           1271 events/uprobes.c 		struct uprobe *u = rb_entry(n, struct uprobe, rb_node);</span>
+<span class='curline'><a href='../S/334.html#L1300'>uprobe</a>           1300 events/uprobes.c 	struct uprobe *u;</span>
+<span class='curline'><a href='../S/334.html#L1310'>uprobe</a>           1310 events/uprobes.c 			u = rb_entry(t, struct uprobe, rb_node);</span>
+<span class='curline'><a href='../S/334.html#L1317'>uprobe</a>           1317 events/uprobes.c 			u = rb_entry(t, struct uprobe, rb_node);</span>
+<span class='curline'><a href='../S/334.html#L1340'>uprobe</a>           1340 events/uprobes.c 		    !valid_ref_ctr_vma(du-&gt;uprobe, vma))</span>
+<span class='curline'><a href='../S/334.html#L1343'>uprobe</a>           1343 events/uprobes.c 		vaddr = offset_to_vaddr(vma, du-&gt;uprobe-&gt;ref_ctr_offset);</span>
+<span class='curline'><a href='../S/334.html#L1346'>uprobe</a>           1346 events/uprobes.c 			update_ref_ctr_warn(du-&gt;uprobe, vma-&gt;vm_mm, 1);</span>
+<span class='curline'><a href='../S/334.html#L1365'>uprobe</a>           1365 events/uprobes.c 	struct uprobe *uprobe, *u;</span>
+<span class='curline'><a href='../S/334.html#L1390'>uprobe</a>           1390 events/uprobes.c 	list_for_each_entry_safe(uprobe, u, &amp;tmp_list, pending_list) {</span>
+<span class='curline'><a href='../S/334.html#L1392'>uprobe</a>           1392 events/uprobes.c 		    filter_chain(uprobe, UPROBE_FILTER_MMAP, vma-&gt;vm_mm)) {</span>
+<span class='curline'><a href='../S/334.html#L1393'>uprobe</a>           1393 events/uprobes.c 			unsigned long vaddr = offset_to_vaddr(vma, uprobe-&gt;offset);</span>
+<span class='curline'><a href='../S/334.html#L1394'>uprobe</a>           1394 events/uprobes.c 			install_breakpoint(uprobe, vma-&gt;vm_mm, vma, vaddr);</span>
+<span class='curline'><a href='../S/334.html#L1396'>uprobe</a>           1396 events/uprobes.c 		put_uprobe(uprobe);</span>
+<span class='curline'><a href='../S/334.html#L1611'>uprobe</a>           1611 events/uprobes.c static unsigned long xol_get_insn_slot(struct uprobe *uprobe)</span>
+<span class='curline'><a href='../S/334.html#L1625'>uprobe</a>           1625 events/uprobes.c 			      &amp;uprobe-&gt;arch.ixol, sizeof(uprobe-&gt;arch.ixol));</span>
+<span class='curline'><a href='../S/334.html#L1708'>uprobe</a>           1708 events/uprobes.c 	put_uprobe(ri-&gt;uprobe);</span>
+<span class='curline'><a href='../S/334.html#L1769'>uprobe</a>           1769 events/uprobes.c 		get_uprobe(n-&gt;uprobe);</span>
+<span class='curline'><a href='../S/334.html#L1861'>uprobe</a>           1861 events/uprobes.c static void prepare_uretprobe(struct uprobe *uprobe, struct pt_regs *regs)</span>
+<span class='curline'><a href='../S/334.html#L1912'>uprobe</a>           1912 events/uprobes.c 	ri-&gt;uprobe = get_uprobe(uprobe);</span>
+<span class='curline'><a href='../S/334.html#L1929'>uprobe</a>           1929 events/uprobes.c pre_ssout(struct uprobe *uprobe, struct pt_regs *regs, unsigned long bp_vaddr)</span>
+<span class='curline'><a href='../S/334.html#L1939'>uprobe</a>           1939 events/uprobes.c 	xol_vaddr = xol_get_insn_slot(uprobe);</span>
+<span class='curline'><a href='../S/334.html#L1946'>uprobe</a>           1946 events/uprobes.c 	err = arch_uprobe_pre_xol(&amp;uprobe-&gt;arch, regs);</span>
+<span class='curline'><a href='../S/334.html#L1952'>uprobe</a>           1952 events/uprobes.c 	utask-&gt;active_uprobe = uprobe;</span>
+<span class='curline'><a href='../S/334.html#L2044'>uprobe</a>           2044 events/uprobes.c static struct uprobe *find_active_uprobe(unsigned long bp_vaddr, int *is_swbp)</span>
+<span class='curline'><a href='../S/334.html#L2047'>uprobe</a>           2047 events/uprobes.c 	struct uprobe *uprobe = NULL;</span>
+<span class='curline'><a href='../S/334.html#L2057'>uprobe</a>           2057 events/uprobes.c 			uprobe = find_uprobe(inode, offset);</span>
+<span class='curline'><a href='../S/334.html#L2060'>uprobe</a>           2060 events/uprobes.c 		if (!uprobe)</span>
+<span class='curline'><a href='../S/334.html#L2066'>uprobe</a>           2066 events/uprobes.c 	if (!uprobe &amp;&amp; test_and_clear_bit(MMF_RECALC_UPROBES, &amp;mm-&gt;flags))</span>
+<span class='curline'><a href='../S/334.html#L2070'>uprobe</a>           2070 events/uprobes.c 	return uprobe;</span>
+<span class='curline'><a href='../S/334.html#L2073'>uprobe</a>           2073 events/uprobes.c static void handler_chain(struct uprobe *uprobe, struct pt_regs *regs)</span>
+<span class='curline'><a href='../S/334.html#L2079'>uprobe</a>           2079 events/uprobes.c 	down_read(&amp;uprobe-&gt;register_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L2080'>uprobe</a>           2080 events/uprobes.c 	for (uc = uprobe-&gt;consumers; uc; uc = uc-&gt;next) {</span>
+<span class='curline'><a href='../S/334.html#L2096'>uprobe</a>           2096 events/uprobes.c 		prepare_uretprobe(uprobe, regs); /* put bp at return */</span>
+<span class='curline'><a href='../S/334.html#L2098'>uprobe</a>           2098 events/uprobes.c 	if (remove &amp;&amp; uprobe-&gt;consumers) {</span>
+<span class='curline'><a href='../S/334.html#L2099'>uprobe</a>           2099 events/uprobes.c 		WARN_ON(!uprobe_is_active(uprobe));</span>
+<span class='curline'><a href='../S/334.html#L2100'>uprobe</a>           2100 events/uprobes.c 		unapply_uprobe(uprobe, current-&gt;mm);</span>
+<span class='curline'><a href='../S/334.html#L2102'>uprobe</a>           2102 events/uprobes.c 	up_read(&amp;uprobe-&gt;register_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L2108'>uprobe</a>           2108 events/uprobes.c 	struct uprobe *uprobe = ri-&gt;uprobe;</span>
+<span class='curline'><a href='../S/334.html#L2111'>uprobe</a>           2111 events/uprobes.c 	down_read(&amp;uprobe-&gt;register_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L2112'>uprobe</a>           2112 events/uprobes.c 	for (uc = uprobe-&gt;consumers; uc; uc = uc-&gt;next) {</span>
+<span class='curline'><a href='../S/334.html#L2116'>uprobe</a>           2116 events/uprobes.c 	up_read(&amp;uprobe-&gt;register_rwsem);</span>
+<span class='curline'><a href='../S/334.html#L2190'>uprobe</a>           2190 events/uprobes.c 	struct uprobe *uprobe;</span>
+<span class='curline'><a href='../S/334.html#L2198'>uprobe</a>           2198 events/uprobes.c 	uprobe = find_active_uprobe(bp_vaddr, &amp;is_swbp);</span>
+<span class='curline'><a href='../S/334.html#L2199'>uprobe</a>           2199 events/uprobes.c 	if (!uprobe) {</span>
+<span class='curline'><a href='../S/334.html#L2225'>uprobe</a>           2225 events/uprobes.c 	if (unlikely(!test_bit(UPROBE_COPY_INSN, &amp;uprobe-&gt;flags)))</span>
+<span class='curline'><a href='../S/334.html#L2241'>uprobe</a>           2241 events/uprobes.c 	if (arch_uprobe_ignore(&amp;uprobe-&gt;arch, regs))</span>
+<span class='curline'><a href='../S/334.html#L2244'>uprobe</a>           2244 events/uprobes.c 	handler_chain(uprobe, regs);</span>
+<span class='curline'><a href='../S/334.html#L2246'>uprobe</a>           2246 events/uprobes.c 	if (arch_uprobe_skip_sstep(&amp;uprobe-&gt;arch, regs))</span>
+<span class='curline'><a href='../S/334.html#L2249'>uprobe</a>           2249 events/uprobes.c 	if (!pre_ssout(uprobe, regs, bp_vaddr))</span>
+<span class='curline'><a href='../S/334.html#L2254'>uprobe</a>           2254 events/uprobes.c 	put_uprobe(uprobe);</span>
+<span class='curline'><a href='../S/334.html#L2263'>uprobe</a>           2263 events/uprobes.c 	struct uprobe *uprobe;</span>
+<span class='curline'><a href='../S/334.html#L2266'>uprobe</a>           2266 events/uprobes.c 	uprobe = utask-&gt;active_uprobe;</span>
+<span class='curline'><a href='../S/334.html#L2268'>uprobe</a>           2268 events/uprobes.c 		err = arch_uprobe_post_xol(&amp;uprobe-&gt;arch, regs);</span>
+<span class='curline'><a href='../S/334.html#L2270'>uprobe</a>           2270 events/uprobes.c 		arch_uprobe_abort_xol(&amp;uprobe-&gt;arch, regs);</span>
+<span class='curline'><a href='../S/334.html#L2274'>uprobe</a>           2274 events/uprobes.c 	put_uprobe(uprobe);</span>
+</pre>
+</body>
+</html>

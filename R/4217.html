@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>callchain_cpus_entries</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/333.html#L35'>callchain_cpus_entries</a>   35 events/callchain.c static struct callchain_cpus_entries *callchain_cpus_entries;</span>
+<span class='curline'><a href='../S/333.html#L50'>callchain_cpus_entries</a>   50 events/callchain.c 	struct callchain_cpus_entries *entries;</span>
+<span class='curline'><a href='../S/333.html#L53'>callchain_cpus_entries</a>   53 events/callchain.c 	entries = container_of(head, struct callchain_cpus_entries, rcu_head);</span>
+<span class='curline'><a href='../S/333.html#L63'>callchain_cpus_entries</a>   63 events/callchain.c 	struct callchain_cpus_entries *entries;</span>
+<span class='curline'><a href='../S/333.html#L65'>callchain_cpus_entries</a>   65 events/callchain.c 	entries = callchain_cpus_entries;</span>
+<span class='curline'><a href='../S/333.html#L66'>callchain_cpus_entries</a>   66 events/callchain.c 	RCU_INIT_POINTER(callchain_cpus_entries, NULL);</span>
+<span class='curline'><a href='../S/333.html#L74'>callchain_cpus_entries</a>   74 events/callchain.c 	struct callchain_cpus_entries *entries;</span>
+<span class='curline'><a href='../S/333.html#L81'>callchain_cpus_entries</a>   81 events/callchain.c 	size = offsetof(struct callchain_cpus_entries, cpu_entries[nr_cpu_ids]);</span>
+<span class='curline'><a href='../S/333.html#L96'>callchain_cpus_entries</a>   96 events/callchain.c 	rcu_assign_pointer(callchain_cpus_entries, entries);</span>
+<span class='curline'><a href='../S/333.html#L155'>callchain_cpus_entries</a>  155 events/callchain.c 	struct callchain_cpus_entries *entries;</span>
+<span class='curline'><a href='../S/333.html#L161'>callchain_cpus_entries</a>  161 events/callchain.c 	entries = rcu_dereference(callchain_cpus_entries);</span>
+</pre>
+</body>
+</html>

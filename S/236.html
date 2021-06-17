@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>cgroup/cgroup-internal.h</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/497.html'>cgroup</a>/cgroup-internal.h</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L61'>[^]</a><a href='#L200'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'><a href='../J/61.html' title='Multiple included from 8 places.'>INCLUDED FROM</a></h2>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L61' title='Defined at 61.'>cgroup_fc2context</a></li>
+<li><a href='#L168' title='Defined at 168.'>cgroup_is_dead</a></li>
+<li><a href='#L173' title='Defined at 173.'>notify_on_release</a></li>
+<li><a href='#L180' title='Defined at 180.'>put_css_set</a></li>
+<li><a href='#L200' title='Defined at 200.'>get_css_set</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>/* SPDX-License-Identifier: GPL-2.0 */</em>
+<a id='L2' name='L2'></a>   2 <em class='sharp'>#ifndef</em> <a href='../S/236.html#L3' title='Defined at 3 in cgroup/cgroup-internal.h.'>__CGROUP_INTERNAL_H</a>
+<a id='L3' name='L3'></a>   3 <em class='sharp'>#define</em> <a href='../S/236.html#L2' title='Referred from 2 in cgroup/cgroup-internal.h.'>__CGROUP_INTERNAL_H</a>
+<a id='L4' name='L4'></a>   4 
+<a id='L5' name='L5'></a>   5 <em class='sharp'>#include</em> &lt;linux/cgroup.h&gt;
+<a id='L6' name='L6'></a>   6 <em class='sharp'>#include</em> &lt;linux/kernfs.h&gt;
+<a id='L7' name='L7'></a>   7 <em class='sharp'>#include</em> &lt;linux/workqueue.h&gt;
+<a id='L8' name='L8'></a>   8 <em class='sharp'>#include</em> &lt;linux/list.h&gt;
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> &lt;linux/refcount.h&gt;
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;linux/fs_parser.h&gt;
+<a id='L11' name='L11'></a>  11 
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#define</em> <a href='../R/1462.html' title='Multiple referred from 3 places.'>TRACE_CGROUP_PATH_LEN</a> 1024
+<a id='L13' name='L13'></a>  13 <strong class='reserved'>extern</strong> spinlock_t trace_cgroup_path_lock;
+<a id='L14' name='L14'></a>  14 <strong class='reserved'>extern</strong> <strong class='reserved'>char</strong> trace_cgroup_path[<a href='../S/236.html#L12' title='Defined at 12 in cgroup/cgroup-internal.h.'>TRACE_CGROUP_PATH_LEN</a>];
+<a id='L15' name='L15'></a>  15 <strong class='reserved'>extern</strong> bool cgroup_debug;
+<a id='L16' name='L16'></a>  16 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> __init <a href='../D/6372.html' title='Multiple defined in 2 places.'>enable_debug_cgroup</a>(<strong class='reserved'>void</strong>);
+<a id='L17' name='L17'></a>  17 
+<a id='L18' name='L18'></a>  18 <em class='comment'>/*</em>
+<a id='L19' name='L19'></a>  19 <em class='comment'> * cgroup_path() takes a spin lock. It is good practice not to take</em>
+<a id='L20' name='L20'></a>  20 <em class='comment'> * spin locks within trace point handlers, as they are mostly hidden</em>
+<a id='L21' name='L21'></a>  21 <em class='comment'> * from normal view. As cgroup_path() can take the kernfs_rename_lock</em>
+<a id='L22' name='L22'></a>  22 <em class='comment'> * spin lock, it is best to not call that function from the trace event</em>
+<a id='L23' name='L23'></a>  23 <em class='comment'> * handler.</em>
+<a id='L24' name='L24'></a>  24 <em class='comment'> *</em>
+<a id='L25' name='L25'></a>  25 <em class='comment'> * Note: trace_cgroup_##type##_enabled() is a static branch that will only</em>
+<a id='L26' name='L26'></a>  26 <em class='comment'> *       be set when the trace event is enabled.</em>
+<a id='L27' name='L27'></a>  27 <em class='comment'> */</em>
+<a id='L28' name='L28'></a>  28 <em class='sharp'>#define</em> <a href='../R/1461.html' title='Multiple referred from 13 places.'>TRACE_CGROUP_PATH</a>(type, cgrp, ...)                              \
+<a id='L29' name='L29'></a>  29         <strong class='reserved'>do</strong> <em class='brace'>{</em>                                                            \
+<a id='L30' name='L30'></a>  30                 <strong class='reserved'>if</strong> (trace_cgroup_##type##_enabled()) <em class='brace'>{</em>                  \
+<a id='L31' name='L31'></a>  31                         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> flags;                            \
+<a id='L32' name='L32'></a>  32                         spin_lock_irqsave(&amp;trace_cgroup_path_lock,      \
+<a id='L33' name='L33'></a>  33                                           flags);                       \
+<a id='L34' name='L34'></a>  34                         cgroup_path(cgrp, trace_cgroup_path,            \
+<a id='L35' name='L35'></a>  35                                     <a href='../S/236.html#L12' title='Defined at 12 in cgroup/cgroup-internal.h.'>TRACE_CGROUP_PATH_LEN</a>);             \
+<a id='L36' name='L36'></a>  36                         trace_cgroup_##type(cgrp, trace_cgroup_path,    \
+<a id='L37' name='L37'></a>  37                                             ##__VA_ARGS__);             \
+<a id='L38' name='L38'></a>  38                         spin_unlock_irqrestore(&amp;trace_cgroup_path_lock, \
+<a id='L39' name='L39'></a>  39                                                flags);                  \
+<a id='L40' name='L40'></a>  40                 <em class='brace'>}</em>                                                       \
+<a id='L41' name='L41'></a>  41         <em class='brace'>}</em> <strong class='reserved'>while</strong> (0)
+<a id='L42' name='L42'></a>  42 
+<a id='L43' name='L43'></a>  43 <em class='comment'>/*</em>
+<a id='L44' name='L44'></a>  44 <em class='comment'> * The cgroup filesystem superblock creation/mount context.</em>
+<a id='L45' name='L45'></a>  45 <em class='comment'> */</em>
+<a id='L46' name='L46'></a>  46 <strong class='reserved'>struct</strong> <a href='../R/4372.html' title='Multiple referred from 18 places.'>cgroup_fs_context</a> <em class='brace'>{</em>
+<a id='L47' name='L47'></a>  47         <strong class='reserved'>struct</strong> kernfs_fs_context kfc;
+<a id='L48' name='L48'></a>  48         <strong class='reserved'>struct</strong> cgroup_root      *root;
+<a id='L49' name='L49'></a>  49         <strong class='reserved'>struct</strong> cgroup_namespace *ns;
+<a id='L50' name='L50'></a>  50         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>    flags;                  <em class='comment'>/* CGRP_ROOT_* flags */</em>
+<a id='L51' name='L51'></a>  51 
+<a id='L52' name='L52'></a>  52         <em class='comment'>/* cgroup1 bits */</em>
+<a id='L53' name='L53'></a>  53         bool            cpuset_clone_children;
+<a id='L54' name='L54'></a>  54         bool            none;                   <em class='comment'>/* User explicitly requested empty subsystem */</em>
+<a id='L55' name='L55'></a>  55         bool            all_ss;                 <em class='comment'>/* Seen 'all' option */</em>
+<a id='L56' name='L56'></a>  56         u16             subsys_mask;            <em class='comment'>/* Selected subsystems */</em>
+<a id='L57' name='L57'></a>  57         <strong class='reserved'>char</strong>            *name;                  <em class='comment'>/* Hierarchy name */</em>
+<a id='L58' name='L58'></a>  58         <strong class='reserved'>char</strong>            *release_agent;         <em class='comment'>/* Path for release notifications */</em>
+<a id='L59' name='L59'></a>  59 <em class='brace'>}</em>;
+<a id='L60' name='L60'></a>  60 
+<a id='L61' name='L61'></a>  61 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>struct</strong> <a href='../S/236.html#L46' title='Defined at 46 in cgroup/cgroup-internal.h.'>cgroup_fs_context</a> *<a href='../R/4346.html' title='Multiple referred from 11 places.'>cgroup_fc2context</a>(<strong class='reserved'>struct</strong> fs_context *fc)
+<a id='L62' name='L62'></a>  62 <em class='brace'>{</em>
+<a id='L63' name='L63'></a>  63         <strong class='reserved'>struct</strong> kernfs_fs_context *kfc = fc-&gt;fs_private;
+<a id='L64' name='L64'></a>  64 
+<a id='L65' name='L65'></a>  65         <strong class='reserved'>return</strong> container_of(kfc, <strong class='reserved'>struct</strong> <a href='../S/236.html#L46' title='Defined at 46 in cgroup/cgroup-internal.h.'>cgroup_fs_context</a>, kfc);
+<a id='L66' name='L66'></a>  66 <em class='brace'>}</em>
+<a id='L67' name='L67'></a>  67 
+<a id='L68' name='L68'></a>  68 <em class='comment'>/*</em>
+<a id='L69' name='L69'></a>  69 <em class='comment'> * A cgroup can be associated with multiple css_sets as different tasks may</em>
+<a id='L70' name='L70'></a>  70 <em class='comment'> * belong to different cgroups on different hierarchies.  In the other</em>
+<a id='L71' name='L71'></a>  71 <em class='comment'> * direction, a css_set is naturally associated with multiple cgroups.</em>
+<a id='L72' name='L72'></a>  72 <em class='comment'> * This M:N relationship is represented by the following link structure</em>
+<a id='L73' name='L73'></a>  73 <em class='comment'> * which exists for each association and allows traversing the associations</em>
+<a id='L74' name='L74'></a>  74 <em class='comment'> * from both sides.</em>
+<a id='L75' name='L75'></a>  75 <em class='comment'> */</em>
+<a id='L76' name='L76'></a>  76 <strong class='reserved'>struct</strong> <a href='../R/4519.html' title='Multiple referred from 21 places.'>cgrp_cset_link</a> <em class='brace'>{</em>
+<a id='L77' name='L77'></a>  77         <em class='comment'>/* the cgroup and css_set this link associates */</em>
+<a id='L78' name='L78'></a>  78         <strong class='reserved'>struct</strong> cgroup           *cgrp;
+<a id='L79' name='L79'></a>  79         <strong class='reserved'>struct</strong> css_set          *cset;
+<a id='L80' name='L80'></a>  80 
+<a id='L81' name='L81'></a>  81         <em class='comment'>/* list of cgrp_cset_links anchored at cgrp-&gt;cset_links */</em>
+<a id='L82' name='L82'></a>  82         <strong class='reserved'>struct</strong> list_head        cset_link;
+<a id='L83' name='L83'></a>  83 
+<a id='L84' name='L84'></a>  84         <em class='comment'>/* list of cgrp_cset_links anchored at css_set-&gt;cgrp_links */</em>
+<a id='L85' name='L85'></a>  85         <strong class='reserved'>struct</strong> list_head        cgrp_link;
+<a id='L86' name='L86'></a>  86 <em class='brace'>}</em>;
+<a id='L87' name='L87'></a>  87 
+<a id='L88' name='L88'></a>  88 <em class='comment'>/* used to track tasks and csets during migration */</em>
+<a id='L89' name='L89'></a>  89 <strong class='reserved'>struct</strong> <a href='../R/4498.html' title='Multiple referred from 13 places.'>cgroup_taskset</a> <em class='brace'>{</em>
+<a id='L90' name='L90'></a>  90         <em class='comment'>/* the src and dst cset list running through cset-&gt;mg_node */</em>
+<a id='L91' name='L91'></a>  91         <strong class='reserved'>struct</strong> list_head        src_csets;
+<a id='L92' name='L92'></a>  92         <strong class='reserved'>struct</strong> list_head        dst_csets;
+<a id='L93' name='L93'></a>  93 
+<a id='L94' name='L94'></a>  94         <em class='comment'>/* the number of tasks in the set */</em>
+<a id='L95' name='L95'></a>  95         <strong class='reserved'>int</strong>                     nr_tasks;
+<a id='L96' name='L96'></a>  96 
+<a id='L97' name='L97'></a>  97         <em class='comment'>/* the subsys currently being processed */</em>
+<a id='L98' name='L98'></a>  98         <strong class='reserved'>int</strong>                     ssid;
+<a id='L99' name='L99'></a>  99 
+<a id='L100' name='L100'></a> 100         <em class='comment'>/*</em>
+<a id='L101' name='L101'></a> 101 <em class='comment'>         * Fields for cgroup_taskset_*() iteration.</em>
+<a id='L102' name='L102'></a> 102 <em class='comment'>         *</em>
+<a id='L103' name='L103'></a> 103 <em class='comment'>         * Before migration is committed, the target migration tasks are on</em>
+<a id='L104' name='L104'></a> 104 <em class='comment'>         * -&gt;mg_tasks of the csets on -&gt;src_csets.  After, on -&gt;mg_tasks of</em>
+<a id='L105' name='L105'></a> 105 <em class='comment'>         * the csets on -&gt;dst_csets.  -&gt;csets point to either -&gt;src_csets</em>
+<a id='L106' name='L106'></a> 106 <em class='comment'>         * or -&gt;dst_csets depending on whether migration is committed.</em>
+<a id='L107' name='L107'></a> 107 <em class='comment'>         *</em>
+<a id='L108' name='L108'></a> 108 <em class='comment'>         * -&gt;cur_csets and -&gt;cur_task point to the current task position</em>
+<a id='L109' name='L109'></a> 109 <em class='comment'>         * during iteration.</em>
+<a id='L110' name='L110'></a> 110 <em class='comment'>         */</em>
+<a id='L111' name='L111'></a> 111         <strong class='reserved'>struct</strong> list_head        *csets;
+<a id='L112' name='L112'></a> 112         <strong class='reserved'>struct</strong> css_set          *cur_cset;
+<a id='L113' name='L113'></a> 113         <strong class='reserved'>struct</strong> task_struct      *cur_task;
+<a id='L114' name='L114'></a> 114 <em class='brace'>}</em>;
+<a id='L115' name='L115'></a> 115 
+<a id='L116' name='L116'></a> 116 <em class='comment'>/* migration context also tracks preloading */</em>
+<a id='L117' name='L117'></a> 117 <strong class='reserved'>struct</strong> <a href='../R/4410.html' title='Multiple referred from 11 places.'>cgroup_mgctx</a> <em class='brace'>{</em>
+<a id='L118' name='L118'></a> 118         <em class='comment'>/*</em>
+<a id='L119' name='L119'></a> 119 <em class='comment'>         * Preloaded source and destination csets.  Used to guarantee</em>
+<a id='L120' name='L120'></a> 120 <em class='comment'>         * atomic success or failure on actual migration.</em>
+<a id='L121' name='L121'></a> 121 <em class='comment'>         */</em>
+<a id='L122' name='L122'></a> 122         <strong class='reserved'>struct</strong> list_head        preloaded_src_csets;
+<a id='L123' name='L123'></a> 123         <strong class='reserved'>struct</strong> list_head        preloaded_dst_csets;
+<a id='L124' name='L124'></a> 124 
+<a id='L125' name='L125'></a> 125         <em class='comment'>/* tasks and csets to migrate */</em>
+<a id='L126' name='L126'></a> 126         <strong class='reserved'>struct</strong> <a href='../S/236.html#L89' title='Defined at 89 in cgroup/cgroup-internal.h.'>cgroup_taskset</a>   tset;
+<a id='L127' name='L127'></a> 127 
+<a id='L128' name='L128'></a> 128         <em class='comment'>/* subsystems affected by migration */</em>
+<a id='L129' name='L129'></a> 129         u16                     ss_mask;
+<a id='L130' name='L130'></a> 130 <em class='brace'>}</em>;
+<a id='L131' name='L131'></a> 131 
+<a id='L132' name='L132'></a> 132 <em class='sharp'>#define</em> <a href='../S/236.html#L143' title='Referred from 143 in cgroup/cgroup-internal.h.'>CGROUP_TASKSET_INIT</a>(tset)                                               \
+<a id='L133' name='L133'></a> 133 <em class='brace'>{</em>                                                                               \
+<a id='L134' name='L134'></a> 134         .src_csets              = LIST_HEAD_INIT(tset.src_csets),               \
+<a id='L135' name='L135'></a> 135         .dst_csets              = LIST_HEAD_INIT(tset.dst_csets),               \
+<a id='L136' name='L136'></a> 136         .csets                  = &amp;tset.src_csets,                              \
+<a id='L137' name='L137'></a> 137 <em class='brace'>}</em>
+<a id='L138' name='L138'></a> 138 
+<a id='L139' name='L139'></a> 139 <em class='sharp'>#define</em> <a href='../S/236.html#L147' title='Referred from 147 in cgroup/cgroup-internal.h.'>CGROUP_MGCTX_INIT</a>(name)                                                 \
+<a id='L140' name='L140'></a> 140 <em class='brace'>{</em>                                                                               \
+<a id='L141' name='L141'></a> 141         LIST_HEAD_INIT(name.preloaded_src_csets),                               \
+<a id='L142' name='L142'></a> 142         LIST_HEAD_INIT(name.preloaded_dst_csets),                               \
+<a id='L143' name='L143'></a> 143         <a href='../S/236.html#L132' title='Defined at 132 in cgroup/cgroup-internal.h.'>CGROUP_TASKSET_INIT</a>(name.tset),                                         \
+<a id='L144' name='L144'></a> 144 <em class='brace'>}</em>
+<a id='L145' name='L145'></a> 145 
+<a id='L146' name='L146'></a> 146 <em class='sharp'>#define</em> <a href='../R/252.html' title='Multiple referred from 3 places.'>DEFINE_CGROUP_MGCTX</a>(name)                                               \
+<a id='L147' name='L147'></a> 147         <strong class='reserved'>struct</strong> <a href='../S/236.html#L117' title='Defined at 117 in cgroup/cgroup-internal.h.'>cgroup_mgctx</a> name = <a href='../S/236.html#L139' title='Defined at 139 in cgroup/cgroup-internal.h.'>CGROUP_MGCTX_INIT</a>(name)
+<a id='L148' name='L148'></a> 148 
+<a id='L149' name='L149'></a> 149 <strong class='reserved'>extern</strong> <strong class='reserved'>struct</strong> mutex cgroup_mutex;
+<a id='L150' name='L150'></a> 150 <strong class='reserved'>extern</strong> spinlock_t css_set_lock;
+<a id='L151' name='L151'></a> 151 <strong class='reserved'>extern</strong> <strong class='reserved'>struct</strong> cgroup_subsys *cgroup_subsys[];
+<a id='L152' name='L152'></a> 152 <strong class='reserved'>extern</strong> <strong class='reserved'>struct</strong> list_head cgroup_roots;
+<a id='L153' name='L153'></a> 153 <strong class='reserved'>extern</strong> <strong class='reserved'>struct</strong> file_system_type cgroup_fs_type;
+<a id='L154' name='L154'></a> 154 
+<a id='L155' name='L155'></a> 155 <em class='comment'>/* iterate across the hierarchies */</em>
+<a id='L156' name='L156'></a> 156 <em class='sharp'>#define</em> <a href='../R/6463.html' title='Multiple referred from 3 places.'>for_each_root</a>(root)                                             \
+<a id='L157' name='L157'></a> 157         list_for_each_entry((root), &amp;cgroup_roots, root_list)
+<a id='L158' name='L158'></a> 158 
+<a id='L159' name='L159'></a> 159 <em class='comment'>/**</em>
+<a id='L160' name='L160'></a> 160 <em class='comment'> * for_each_subsys - iterate all enabled cgroup subsystems</em>
+<a id='L161' name='L161'></a> 161 <em class='comment'> * @ss: the iteration cursor</em>
+<a id='L162' name='L162'></a> 162 <em class='comment'> * @ssid: the index of @ss, CGROUP_SUBSYS_COUNT after reaching the end</em>
+<a id='L163' name='L163'></a> 163 <em class='comment'> */</em>
+<a id='L164' name='L164'></a> 164 <em class='sharp'>#define</em> <a href='../R/6468.html' title='Multiple referred from 27 places.'>for_each_subsys</a>(ss, ssid)                                       \
+<a id='L165' name='L165'></a> 165         <strong class='reserved'>for</strong> ((ssid) = 0; (ssid) &lt; CGROUP_SUBSYS_COUNT &amp;&amp;                \
+<a id='L166' name='L166'></a> 166              (((ss) = cgroup_subsys[ssid]) || true); (ssid)++)
+<a id='L167' name='L167'></a> 167 
+<a id='L168' name='L168'></a> 168 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> bool <a href='../R/4390.html' title='Multiple referred from 10 places.'>cgroup_is_dead</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> cgroup *cgrp)
+<a id='L169' name='L169'></a> 169 <em class='brace'>{</em>
+<a id='L170' name='L170'></a> 170         <strong class='reserved'>return</strong> !(cgrp-&gt;self.flags &amp; CSS_ONLINE);
+<a id='L171' name='L171'></a> 171 <em class='brace'>}</em>
+<a id='L172' name='L172'></a> 172 
+<a id='L173' name='L173'></a> 173 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> bool <a href='../R/9354.html' title='Multiple referred from 3 places.'>notify_on_release</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> cgroup *cgrp)
+<a id='L174' name='L174'></a> 174 <em class='brace'>{</em>
+<a id='L175' name='L175'></a> 175         <strong class='reserved'>return</strong> test_bit(CGRP_NOTIFY_ON_RELEASE, &amp;cgrp-&gt;flags);
+<a id='L176' name='L176'></a> 176 <em class='brace'>}</em>
+<a id='L177' name='L177'></a> 177 
+<a id='L178' name='L178'></a> 178 <strong class='reserved'>void</strong> <a href='../S/241.html#L929' title='Defined at 929 in cgroup/cgroup.c.'>put_css_set_locked</a>(<strong class='reserved'>struct</strong> css_set *cset);
+<a id='L179' name='L179'></a> 179 
+<a id='L180' name='L180'></a> 180 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/10608.html' title='Multiple referred from 14 places.'>put_css_set</a>(<strong class='reserved'>struct</strong> css_set *cset)
+<a id='L181' name='L181'></a> 181 <em class='brace'>{</em>
+<a id='L182' name='L182'></a> 182         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> flags;
+<a id='L183' name='L183'></a> 183 
+<a id='L184' name='L184'></a> 184         <em class='comment'>/*</em>
+<a id='L185' name='L185'></a> 185 <em class='comment'>         * Ensure that the refcount doesn't hit zero while any readers</em>
+<a id='L186' name='L186'></a> 186 <em class='comment'>         * can see it. Similar to atomic_dec_and_lock(), but for an</em>
+<a id='L187' name='L187'></a> 187 <em class='comment'>         * rwlock</em>
+<a id='L188' name='L188'></a> 188 <em class='comment'>         */</em>
+<a id='L189' name='L189'></a> 189         <strong class='reserved'>if</strong> (refcount_dec_not_one(&amp;cset-&gt;refcount))
+<a id='L190' name='L190'></a> 190                 <strong class='reserved'>return</strong>;
+<a id='L191' name='L191'></a> 191 
+<a id='L192' name='L192'></a> 192         spin_lock_irqsave(&amp;css_set_lock, flags);
+<a id='L193' name='L193'></a> 193         <a href='../S/241.html#L929' title='Defined at 929 in cgroup/cgroup.c.'>put_css_set_locked</a>(cset);
+<a id='L194' name='L194'></a> 194         spin_unlock_irqrestore(&amp;css_set_lock, flags);
+<a id='L195' name='L195'></a> 195 <em class='brace'>}</em>
+<a id='L196' name='L196'></a> 196 
+<a id='L197' name='L197'></a> 197 <em class='comment'>/*</em>
+<a id='L198' name='L198'></a> 198 <em class='comment'> * refcounted get/put for css_set objects</em>
+<a id='L199' name='L199'></a> 199 <em class='comment'> */</em>
+<a id='L200' name='L200'></a> 200 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/7035.html' title='Multiple referred from 8 places.'>get_css_set</a>(<strong class='reserved'>struct</strong> css_set *cset)
+<a id='L201' name='L201'></a> 201 <em class='brace'>{</em>
+<a id='L202' name='L202'></a> 202         refcount_inc(&amp;cset-&gt;refcount);
+<a id='L203' name='L203'></a> 203 <em class='brace'>}</em>
+<a id='L204' name='L204'></a> 204 
+<a id='L205' name='L205'></a> 205 bool <a href='../S/241.html#L236' title='Defined at 236 in cgroup/cgroup.c.'>cgroup_ssid_enabled</a>(<strong class='reserved'>int</strong> ssid);
+<a id='L206' name='L206'></a> 206 bool <a href='../S/241.html#L294' title='Defined at 294 in cgroup/cgroup.c.'>cgroup_on_dfl</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> cgroup *cgrp);
+<a id='L207' name='L207'></a> 207 bool <a href='../S/241.html#L374' title='Defined at 374 in cgroup/cgroup.c.'>cgroup_is_thread_root</a>(<strong class='reserved'>struct</strong> cgroup *cgrp);
+<a id='L208' name='L208'></a> 208 bool <a href='../S/241.html#L335' title='Defined at 335 in cgroup/cgroup.c.'>cgroup_is_threaded</a>(<strong class='reserved'>struct</strong> cgroup *cgrp);
+<a id='L209' name='L209'></a> 209 
+<a id='L210' name='L210'></a> 210 <strong class='reserved'>struct</strong> cgroup_root *<a href='../S/241.html#L1277' title='Defined at 1277 in cgroup/cgroup.c.'>cgroup_root_from_kf</a>(<strong class='reserved'>struct</strong> kernfs_root *kf_root);
+<a id='L211' name='L211'></a> 211 <strong class='reserved'>struct</strong> cgroup *<a href='../S/241.html#L1423' title='Defined at 1423 in cgroup/cgroup.c.'>task_cgroup_from_root</a>(<strong class='reserved'>struct</strong> task_struct *task,
+<a id='L212' name='L212'></a> 212                                      <strong class='reserved'>struct</strong> cgroup_root *root);
+<a id='L213' name='L213'></a> 213 <strong class='reserved'>struct</strong> cgroup *<a href='../S/241.html#L1588' title='Defined at 1588 in cgroup/cgroup.c.'>cgroup_kn_lock_live</a>(<strong class='reserved'>struct</strong> kernfs_node *kn, bool drain_offline);
+<a id='L214' name='L214'></a> 214 <strong class='reserved'>void</strong> <a href='../S/241.html#L1556' title='Defined at 1556 in cgroup/cgroup.c.'>cgroup_kn_unlock</a>(<strong class='reserved'>struct</strong> kernfs_node *kn);
+<a id='L215' name='L215'></a> 215 <strong class='reserved'>int</strong> <a href='../S/241.html#L2219' title='Defined at 2219 in cgroup/cgroup.c.'>cgroup_path_ns_locked</a>(<strong class='reserved'>struct</strong> cgroup *cgrp, <strong class='reserved'>char</strong> *buf, size_t buflen,
+<a id='L216' name='L216'></a> 216                           <strong class='reserved'>struct</strong> cgroup_namespace *ns);
+<a id='L217' name='L217'></a> 217 
+<a id='L218' name='L218'></a> 218 <strong class='reserved'>void</strong> <a href='../S/241.html#L1305' title='Defined at 1305 in cgroup/cgroup.c.'>cgroup_free_root</a>(<strong class='reserved'>struct</strong> cgroup_root *root);
+<a id='L219' name='L219'></a> 219 <strong class='reserved'>void</strong> <a href='../S/241.html#L1911' title='Defined at 1911 in cgroup/cgroup.c.'>init_cgroup_root</a>(<strong class='reserved'>struct</strong> <a href='../S/236.html#L46' title='Defined at 46 in cgroup/cgroup-internal.h.'>cgroup_fs_context</a> *ctx);
+<a id='L220' name='L220'></a> 220 <strong class='reserved'>int</strong> <a href='../S/241.html#L1930' title='Defined at 1930 in cgroup/cgroup.c.'>cgroup_setup_root</a>(<strong class='reserved'>struct</strong> cgroup_root *root, u16 ss_mask);
+<a id='L221' name='L221'></a> 221 <strong class='reserved'>int</strong> <a href='../S/241.html#L1712' title='Defined at 1712 in cgroup/cgroup.c.'>rebind_subsystems</a>(<strong class='reserved'>struct</strong> cgroup_root *dst_root, u16 ss_mask);
+<a id='L222' name='L222'></a> 222 <strong class='reserved'>int</strong> <a href='../S/241.html#L2027' title='Defined at 2027 in cgroup/cgroup.c.'>cgroup_do_get_tree</a>(<strong class='reserved'>struct</strong> fs_context *fc);
+<a id='L223' name='L223'></a> 223 
+<a id='L224' name='L224'></a> 224 <strong class='reserved'>int</strong> <a href='../S/241.html#L2503' title='Defined at 2503 in cgroup/cgroup.c.'>cgroup_migrate_vet_dst</a>(<strong class='reserved'>struct</strong> cgroup *dst_cgrp);
+<a id='L225' name='L225'></a> 225 <strong class='reserved'>void</strong> <a href='../S/241.html#L2538' title='Defined at 2538 in cgroup/cgroup.c.'>cgroup_migrate_finish</a>(<strong class='reserved'>struct</strong> <a href='../S/236.html#L117' title='Defined at 117 in cgroup/cgroup-internal.h.'>cgroup_mgctx</a> *mgctx);
+<a id='L226' name='L226'></a> 226 <strong class='reserved'>void</strong> <a href='../S/241.html#L2577' title='Defined at 2577 in cgroup/cgroup.c.'>cgroup_migrate_add_src</a>(<strong class='reserved'>struct</strong> css_set *src_cset, <strong class='reserved'>struct</strong> cgroup *dst_cgrp,
+<a id='L227' name='L227'></a> 227                             <strong class='reserved'>struct</strong> <a href='../S/236.html#L117' title='Defined at 117 in cgroup/cgroup-internal.h.'>cgroup_mgctx</a> *mgctx);
+<a id='L228' name='L228'></a> 228 <strong class='reserved'>int</strong> <a href='../S/241.html#L2624' title='Defined at 2624 in cgroup/cgroup.c.'>cgroup_migrate_prepare_dst</a>(<strong class='reserved'>struct</strong> <a href='../S/236.html#L117' title='Defined at 117 in cgroup/cgroup-internal.h.'>cgroup_mgctx</a> *mgctx);
+<a id='L229' name='L229'></a> 229 <strong class='reserved'>int</strong> <a href='../S/241.html#L2691' title='Defined at 2691 in cgroup/cgroup.c.'>cgroup_migrate</a>(<strong class='reserved'>struct</strong> task_struct *leader, bool threadgroup,
+<a id='L230' name='L230'></a> 230                    <strong class='reserved'>struct</strong> <a href='../S/236.html#L117' title='Defined at 117 in cgroup/cgroup-internal.h.'>cgroup_mgctx</a> *mgctx);
+<a id='L231' name='L231'></a> 231 
+<a id='L232' name='L232'></a> 232 <strong class='reserved'>int</strong> <a href='../S/241.html#L2723' title='Defined at 2723 in cgroup/cgroup.c.'>cgroup_attach_task</a>(<strong class='reserved'>struct</strong> cgroup *dst_cgrp, <strong class='reserved'>struct</strong> task_struct *leader,
+<a id='L233' name='L233'></a> 233                        bool threadgroup);
+<a id='L234' name='L234'></a> 234 <strong class='reserved'>struct</strong> task_struct *<a href='../S/241.html#L2755' title='Defined at 2755 in cgroup/cgroup.c.'>cgroup_procs_write_start</a>(<strong class='reserved'>char</strong> *buf, bool threadgroup,
+<a id='L235' name='L235'></a> 235                                              bool *locked,
+<a id='L236' name='L236'></a> 236                                              <strong class='reserved'>struct</strong> cgroup *dst_cgrp);
+<a id='L237' name='L237'></a> 237         __acquires(&amp;cgroup_threadgroup_rwsem);
+<a id='L238' name='L238'></a> 238 <strong class='reserved'>void</strong> <a href='../S/241.html#L2824' title='Defined at 2824 in cgroup/cgroup.c.'>cgroup_procs_write_finish</a>(<strong class='reserved'>struct</strong> task_struct *task, bool locked)
+<a id='L239' name='L239'></a> 239         __releases(&amp;cgroup_threadgroup_rwsem);
+<a id='L240' name='L240'></a> 240 
+<a id='L241' name='L241'></a> 241 <strong class='reserved'>void</strong> <a href='../S/241.html#L2935' title='Defined at 2935 in cgroup/cgroup.c.'>cgroup_lock_and_drain_offline</a>(<strong class='reserved'>struct</strong> cgroup *cgrp);
+<a id='L242' name='L242'></a> 242 
+<a id='L243' name='L243'></a> 243 <strong class='reserved'>int</strong> <a href='../S/241.html#L5336' title='Defined at 5336 in cgroup/cgroup.c.'>cgroup_mkdir</a>(<strong class='reserved'>struct</strong> kernfs_node *parent_kn, <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *name, umode_t mode);
+<a id='L244' name='L244'></a> 244 <strong class='reserved'>int</strong> <a href='../S/241.html#L5566' title='Defined at 5566 in cgroup/cgroup.c.'>cgroup_rmdir</a>(<strong class='reserved'>struct</strong> kernfs_node *kn);
+<a id='L245' name='L245'></a> 245 <strong class='reserved'>int</strong> <a href='../S/241.html#L1782' title='Defined at 1782 in cgroup/cgroup.c.'>cgroup_show_path</a>(<strong class='reserved'>struct</strong> seq_file *sf, <strong class='reserved'>struct</strong> kernfs_node *kf_node,
+<a id='L246' name='L246'></a> 246                      <strong class='reserved'>struct</strong> kernfs_root *kf_root);
+<a id='L247' name='L247'></a> 247 
+<a id='L248' name='L248'></a> 248 <strong class='reserved'>int</strong> <a href='../S/241.html#L598' title='Defined at 598 in cgroup/cgroup.c.'>__cgroup_task_count</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> cgroup *cgrp);
+<a id='L249' name='L249'></a> 249 <strong class='reserved'>int</strong> <a href='../S/241.html#L615' title='Defined at 615 in cgroup/cgroup.c.'>cgroup_task_count</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> cgroup *cgrp);
+<a id='L250' name='L250'></a> 250 
+<a id='L251' name='L251'></a> 251 <em class='comment'>/*</em>
+<a id='L252' name='L252'></a> 252 <em class='comment'> * rstat.c</em>
+<a id='L253' name='L253'></a> 253 <em class='comment'> */</em>
+<a id='L254' name='L254'></a> 254 <strong class='reserved'>int</strong> <a href='../S/235.html#L241' title='Defined at 241 in cgroup/rstat.c.'>cgroup_rstat_init</a>(<strong class='reserved'>struct</strong> cgroup *cgrp);
+<a id='L255' name='L255'></a> 255 <strong class='reserved'>void</strong> <a href='../S/235.html#L263' title='Defined at 263 in cgroup/rstat.c.'>cgroup_rstat_exit</a>(<strong class='reserved'>struct</strong> cgroup *cgrp);
+<a id='L256' name='L256'></a> 256 <strong class='reserved'>void</strong> <a href='../S/235.html#L282' title='Defined at 282 in cgroup/rstat.c.'>cgroup_rstat_boot</a>(<strong class='reserved'>void</strong>);
+<a id='L257' name='L257'></a> 257 <strong class='reserved'>void</strong> <a href='../S/235.html#L429' title='Defined at 429 in cgroup/rstat.c.'>cgroup_base_stat_cputime_show</a>(<strong class='reserved'>struct</strong> seq_file *seq);
+<a id='L258' name='L258'></a> 258 
+<a id='L259' name='L259'></a> 259 <em class='comment'>/*</em>
+<a id='L260' name='L260'></a> 260 <em class='comment'> * namespace.c</em>
+<a id='L261' name='L261'></a> 261 <em class='comment'> */</em>
+<a id='L262' name='L262'></a> 262 <strong class='reserved'>extern</strong> <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> proc_ns_operations cgroupns_operations;
+<a id='L263' name='L263'></a> 263 
+<a id='L264' name='L264'></a> 264 <em class='comment'>/*</em>
+<a id='L265' name='L265'></a> 265 <em class='comment'> * cgroup-v1.c</em>
+<a id='L266' name='L266'></a> 266 <em class='comment'> */</em>
+<a id='L267' name='L267'></a> 267 <strong class='reserved'>extern</strong> <strong class='reserved'>struct</strong> cftype cgroup1_base_files[];
+<a id='L268' name='L268'></a> 268 <strong class='reserved'>extern</strong> <strong class='reserved'>struct</strong> kernfs_syscall_ops cgroup1_kf_syscall_ops;
+<a id='L269' name='L269'></a> 269 <strong class='reserved'>extern</strong> <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> fs_parameter_spec cgroup1_fs_parameters[];
+<a id='L270' name='L270'></a> 270 
+<a id='L271' name='L271'></a> 271 <strong class='reserved'>int</strong> <a href='../S/234.html#L657' title='Defined at 657 in cgroup/cgroup-v1.c.'>proc_cgroupstats_show</a>(<strong class='reserved'>struct</strong> seq_file *m, <strong class='reserved'>void</strong> *v);
+<a id='L272' name='L272'></a> 272 bool <a href='../S/234.html#L45' title='Defined at 45 in cgroup/cgroup-v1.c.'>cgroup1_ssid_disabled</a>(<strong class='reserved'>int</strong> ssid);
+<a id='L273' name='L273'></a> 273 <strong class='reserved'>void</strong> <a href='../S/234.html#L196' title='Defined at 196 in cgroup/cgroup-v1.c.'>cgroup1_pidlist_destroy_all</a>(<strong class='reserved'>struct</strong> cgroup *cgrp);
+<a id='L274' name='L274'></a> 274 <strong class='reserved'>void</strong> <a href='../S/234.html#L774' title='Defined at 774 in cgroup/cgroup-v1.c.'>cgroup1_release_agent</a>(<strong class='reserved'>struct</strong> work_struct *work);
+<a id='L275' name='L275'></a> 275 <strong class='reserved'>void</strong> <a href='../S/234.html#L744' title='Defined at 744 in cgroup/cgroup-v1.c.'>cgroup1_check_for_release</a>(<strong class='reserved'>struct</strong> cgroup *cgrp);
+<a id='L276' name='L276'></a> 276 <strong class='reserved'>int</strong> <a href='../S/234.html#L904' title='Defined at 904 in cgroup/cgroup-v1.c.'>cgroup1_parse_param</a>(<strong class='reserved'>struct</strong> fs_context *fc, <strong class='reserved'>struct</strong> fs_parameter *param);
+<a id='L277' name='L277'></a> 277 <strong class='reserved'>int</strong> <a href='../S/234.html#L1204' title='Defined at 1204 in cgroup/cgroup-v1.c.'>cgroup1_get_tree</a>(<strong class='reserved'>struct</strong> fs_context *fc);
+<a id='L278' name='L278'></a> 278 <strong class='reserved'>int</strong> <a href='../S/234.html#L1043' title='Defined at 1043 in cgroup/cgroup-v1.c.'>cgroup1_reconfigure</a>(<strong class='reserved'>struct</strong> fs_context *ctx);
+<a id='L279' name='L279'></a> 279 
+<a id='L280' name='L280'></a> 280 <em class='sharp'>#endif</em> <em class='comment'>/* __CGROUP_INTERNAL_H */</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L61'>[^]</a><a href='#L200'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

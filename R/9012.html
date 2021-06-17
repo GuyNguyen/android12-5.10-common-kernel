@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>map_iter</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/398.html#L178'>map_iter</a>          178 bpf/inode.c    static struct map_iter *map_iter(struct seq_file *m)</span>
+<span class='curline'><a href='../S/398.html#L188'>map_iter</a>          188 bpf/inode.c    static void map_iter_free(struct map_iter *iter)</span>
+<span class='curline'><a href='../S/398.html#L196'>map_iter</a>          196 bpf/inode.c    static struct map_iter *map_iter_alloc(struct bpf_map *map)</span>
+<span class='curline'><a href='../S/398.html#L198'>map_iter</a>          198 bpf/inode.c    	struct map_iter *iter;</span>
+<span class='curline'><a href='../S/398.html#L218'>map_iter</a>          218 bpf/inode.c    	void *key = map_iter(m)-&gt;key;</span>
+<span class='curline'><a href='../S/398.html#L222'>map_iter</a>          222 bpf/inode.c    	if (map_iter(m)-&gt;done)</span>
+<span class='curline'><a href='../S/398.html#L232'>map_iter</a>          232 bpf/inode.c    		map_iter(m)-&gt;done = true;</span>
+<span class='curline'><a href='../S/398.html#L241'>map_iter</a>          241 bpf/inode.c    	if (map_iter(m)-&gt;done)</span>
+<span class='curline'><a href='../S/398.html#L244'>map_iter</a>          244 bpf/inode.c    	return *pos ? map_iter(m)-&gt;key : SEQ_START_TOKEN;</span>
+<span class='curline'><a href='../S/398.html#L254'>map_iter</a>          254 bpf/inode.c    	void *key = map_iter(m)-&gt;key;</span>
+<span class='curline'><a href='../S/398.html#L276'>map_iter</a>          276 bpf/inode.c    	struct map_iter *iter;</span>
+<span class='curline'><a href='../S/398.html#L300'>map_iter</a>          300 bpf/inode.c    	map_iter_free(map_iter(m));</span>
+</pre>
+</body>
+</html>

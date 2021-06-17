@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>cfi_shadow</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/364.html#L64'>cfi_shadow</a>         64 cfi.c          #define SHADOW_ARR_SIZE		(SHADOW_SIZE - offsetof(struct cfi_shadow, shadow))</span>
+<span class='curline'><a href='../S/364.html#L68'>cfi_shadow</a>         68 cfi.c          static struct cfi_shadow __rcu *cfi_shadow __read_mostly;</span>
+<span class='curline'><a href='../S/364.html#L71'>cfi_shadow</a>         71 cfi.c          static inline int ptr_to_shadow(const struct cfi_shadow *s, unsigned long ptr)</span>
+<span class='curline'><a href='../S/364.html#L88'>cfi_shadow</a>         88 cfi.c          static inline unsigned long shadow_to_ptr(const struct cfi_shadow *s,</span>
+<span class='curline'><a href='../S/364.html#L98'>cfi_shadow</a>         98 cfi.c          static inline unsigned long shadow_to_check_fn(const struct cfi_shadow *s,</span>
+<span class='curline'><a href='../S/364.html#L111'>cfi_shadow</a>        111 cfi.c          static void prepare_next_shadow(const struct cfi_shadow __rcu *prev,</span>
+<span class='curline'><a href='../S/364.html#L112'>cfi_shadow</a>        112 cfi.c          		struct cfi_shadow *next)</span>
+<span class='curline'><a href='../S/364.html#L146'>cfi_shadow</a>        146 cfi.c          static void add_module_to_shadow(struct cfi_shadow *s, struct module *mod,</span>
+<span class='curline'><a href='../S/364.html#L174'>cfi_shadow</a>        174 cfi.c          static void remove_module_from_shadow(struct cfi_shadow *s, struct module *mod,</span>
+<span class='curline'><a href='../S/364.html#L187'>cfi_shadow</a>        187 cfi.c          typedef void (*update_shadow_fn)(struct cfi_shadow *, struct module *,</span>
+<span class='curline'><a href='../S/364.html#L193'>cfi_shadow</a>        193 cfi.c          	struct cfi_shadow *prev;</span>
+<span class='curline'><a href='../S/364.html#L194'>cfi_shadow</a>        194 cfi.c          	struct cfi_shadow *next;</span>
+<span class='curline'><a href='../S/364.html#L197'>cfi_shadow</a>        197 cfi.c          	next = (struct cfi_shadow *)vmalloc(SHADOW_SIZE);</span>
+<span class='curline'><a href='../S/364.html#L201'>cfi_shadow</a>        201 cfi.c          	prev = rcu_dereference_protected(cfi_shadow,</span>
+<span class='curline'><a href='../S/364.html#L215'>cfi_shadow</a>        215 cfi.c          	rcu_assign_pointer(cfi_shadow, next);</span>
+<span class='curline'><a href='../S/364.html#L235'>cfi_shadow</a>        235 cfi.c          static inline cfi_check_fn ptr_to_check_fn(const struct cfi_shadow __rcu *s,</span>
+<span class='curline'><a href='../S/364.html#L255'>cfi_shadow</a>        255 cfi.c          	fn = ptr_to_check_fn(rcu_dereference_sched(cfi_shadow), ptr);</span>
+</pre>
+</body>
+</html>

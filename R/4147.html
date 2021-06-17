@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>buffer_page</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/258.html#L362'>buffer_page</a>       362 trace/ring_buffer.c static void free_buffer_page(struct buffer_page *bpage)</span>
+<span class='curline'><a href='../S/258.html#L431'>buffer_page</a>       431 trace/ring_buffer.c 	struct buffer_page	*tail_page;</span>
+<span class='curline'><a href='../S/258.html#L504'>buffer_page</a>       504 trace/ring_buffer.c 	struct buffer_page		*head_page;	/* read from head */</span>
+<span class='curline'><a href='../S/258.html#L505'>buffer_page</a>       505 trace/ring_buffer.c 	struct buffer_page		*tail_page;	/* write to tail */</span>
+<span class='curline'><a href='../S/258.html#L506'>buffer_page</a>       506 trace/ring_buffer.c 	struct buffer_page		*commit_page;	/* committed pages */</span>
+<span class='curline'><a href='../S/258.html#L507'>buffer_page</a>       507 trace/ring_buffer.c 	struct buffer_page		*reader_page;</span>
+<span class='curline'><a href='../S/258.html#L559'>buffer_page</a>       559 trace/ring_buffer.c 	struct buffer_page		*head_page;</span>
+<span class='curline'><a href='../S/258.html#L560'>buffer_page</a>       560 trace/ring_buffer.c 	struct buffer_page		*cache_reader_page;</span>
+<span class='curline'><a href='../S/258.html#L1115'>buffer_page</a>      1115 trace/ring_buffer.c 		struct buffer_page *page, struct list_head *list)</span>
+<span class='curline'><a href='../S/258.html#L1134'>buffer_page</a>      1134 trace/ring_buffer.c static bool rb_is_reader_page(struct buffer_page *page)</span>
+<span class='curline'><a href='../S/258.html#L1159'>buffer_page</a>      1159 trace/ring_buffer.c 	struct buffer_page *head;</span>
+<span class='curline'><a href='../S/258.html#L1194'>buffer_page</a>      1194 trace/ring_buffer.c 			    struct buffer_page *head,</span>
+<span class='curline'><a href='../S/258.html#L1195'>buffer_page</a>      1195 trace/ring_buffer.c 			    struct buffer_page *prev,</span>
+<span class='curline'><a href='../S/258.html#L1217'>buffer_page</a>      1217 trace/ring_buffer.c 				   struct buffer_page *head,</span>
+<span class='curline'><a href='../S/258.html#L1218'>buffer_page</a>      1218 trace/ring_buffer.c 				   struct buffer_page *prev,</span>
+<span class='curline'><a href='../S/258.html#L1226'>buffer_page</a>      1226 trace/ring_buffer.c 				 struct buffer_page *head,</span>
+<span class='curline'><a href='../S/258.html#L1227'>buffer_page</a>      1227 trace/ring_buffer.c 				 struct buffer_page *prev,</span>
+<span class='curline'><a href='../S/258.html#L1235'>buffer_page</a>      1235 trace/ring_buffer.c 				   struct buffer_page *head,</span>
+<span class='curline'><a href='../S/258.html#L1236'>buffer_page</a>      1236 trace/ring_buffer.c 				   struct buffer_page *prev,</span>
+<span class='curline'><a href='../S/258.html#L1244'>buffer_page</a>      1244 trace/ring_buffer.c 			       struct buffer_page **bpage)</span>
+<span class='curline'><a href='../S/258.html#L1248'>buffer_page</a>      1248 trace/ring_buffer.c 	*bpage = list_entry(p, struct buffer_page, list);</span>
+<span class='curline'><a href='../S/258.html#L1251'>buffer_page</a>      1251 trace/ring_buffer.c static struct buffer_page *</span>
+<span class='curline'><a href='../S/258.html#L1254'>buffer_page</a>      1254 trace/ring_buffer.c 	struct buffer_page *head;</span>
+<span class='curline'><a href='../S/258.html#L1255'>buffer_page</a>      1255 trace/ring_buffer.c 	struct buffer_page *page;</span>
+<span class='curline'><a href='../S/258.html#L1289'>buffer_page</a>      1289 trace/ring_buffer.c static int rb_head_page_replace(struct buffer_page *old,</span>
+<span class='curline'><a href='../S/258.html#L1290'>buffer_page</a>      1290 trace/ring_buffer.c 				struct buffer_page *new)</span>
+<span class='curline'><a href='../S/258.html#L1308'>buffer_page</a>      1308 trace/ring_buffer.c 			       struct buffer_page *tail_page,</span>
+<span class='curline'><a href='../S/258.html#L1309'>buffer_page</a>      1309 trace/ring_buffer.c 			       struct buffer_page *next_page)</span>
+<span class='curline'><a href='../S/258.html#L1369'>buffer_page</a>      1369 trace/ring_buffer.c 			  struct buffer_page *bpage)</span>
+<span class='curline'><a href='../S/258.html#L1402'>buffer_page</a>      1402 trace/ring_buffer.c 	struct buffer_page *bpage, *tmp;</span>
+<span class='curline'><a href='../S/258.html#L1436'>buffer_page</a>      1436 trace/ring_buffer.c 	struct buffer_page *bpage, *tmp;</span>
+<span class='curline'><a href='../S/258.html#L1534'>buffer_page</a>      1534 trace/ring_buffer.c 	struct buffer_page *bpage;</span>
+<span class='curline'><a href='../S/258.html#L1576'>buffer_page</a>      1576 trace/ring_buffer.c 		= list_entry(cpu_buffer-&gt;pages, struct buffer_page, list);</span>
+<span class='curline'><a href='../S/258.html#L1594'>buffer_page</a>      1594 trace/ring_buffer.c 	struct buffer_page *bpage, *tmp;</span>
+<span class='curline'><a href='../S/258.html#L1605'>buffer_page</a>      1605 trace/ring_buffer.c 		bpage = list_entry(head, struct buffer_page, list);</span>
+<span class='curline'><a href='../S/258.html#L1730'>buffer_page</a>      1730 trace/ring_buffer.c static inline unsigned long rb_page_entries(struct buffer_page *bpage)</span>
+<span class='curline'><a href='../S/258.html#L1735'>buffer_page</a>      1735 trace/ring_buffer.c static inline unsigned long rb_page_write(struct buffer_page *bpage)</span>
+<span class='curline'><a href='../S/258.html#L1744'>buffer_page</a>      1744 trace/ring_buffer.c 	struct buffer_page *to_remove_page, *tmp_iter_page;</span>
+<span class='curline'><a href='../S/258.html#L1745'>buffer_page</a>      1745 trace/ring_buffer.c 	struct buffer_page *last_page, *first_page;</span>
+<span class='curline'><a href='../S/258.html#L1775'>buffer_page</a>      1775 trace/ring_buffer.c 				struct buffer_page, list);</span>
+<span class='curline'><a href='../S/258.html#L1800'>buffer_page</a>      1800 trace/ring_buffer.c 						struct buffer_page, list);</span>
+<span class='curline'><a href='../S/258.html#L1815'>buffer_page</a>      1815 trace/ring_buffer.c 	last_page = list_entry(rb_list_head(to_remove), struct buffer_page,</span>
+<span class='curline'><a href='../S/258.html#L1919'>buffer_page</a>      1919 trace/ring_buffer.c 		struct buffer_page *bpage, *tmp;</span>
+<span class='curline'><a href='../S/258.html#L2137'>buffer_page</a>      2137 trace/ring_buffer.c 		struct buffer_page *bpage, *tmp;</span>
+<span class='curline'><a href='../S/258.html#L2168'>buffer_page</a>      2168 trace/ring_buffer.c static __always_inline void *__rb_page_index(struct buffer_page *bpage, unsigned index)</span>
+<span class='curline'><a href='../S/258.html#L2180'>buffer_page</a>      2180 trace/ring_buffer.c static __always_inline unsigned rb_page_commit(struct buffer_page *bpage)</span>
+<span class='curline'><a href='../S/258.html#L2189'>buffer_page</a>      2189 trace/ring_buffer.c 	struct buffer_page *iter_head_page = iter-&gt;head_page;</span>
+<span class='curline'><a href='../S/258.html#L2240'>buffer_page</a>      2240 trace/ring_buffer.c static __always_inline unsigned rb_page_size(struct buffer_page *bpage)</span>
+<span class='curline'><a href='../S/258.html#L2288'>buffer_page</a>      2288 trace/ring_buffer.c 		    struct buffer_page *tail_page,</span>
+<span class='curline'><a href='../S/258.html#L2289'>buffer_page</a>      2289 trace/ring_buffer.c 		    struct buffer_page *next_page)</span>
+<span class='curline'><a href='../S/258.html#L2291'>buffer_page</a>      2291 trace/ring_buffer.c 	struct buffer_page *new_head;</span>
+<span class='curline'><a href='../S/258.html#L2409'>buffer_page</a>      2409 trace/ring_buffer.c 		struct buffer_page *buffer_tail_page;</span>
+<span class='curline'><a href='../S/258.html#L2444'>buffer_page</a>      2444 trace/ring_buffer.c 	struct buffer_page *tail_page = info-&gt;tail_page;</span>
+<span class='curline'><a href='../S/258.html#L2519'>buffer_page</a>      2519 trace/ring_buffer.c 	struct buffer_page *tail_page = info-&gt;tail_page;</span>
+<span class='curline'><a href='../S/258.html#L2520'>buffer_page</a>      2520 trace/ring_buffer.c 	struct buffer_page *commit_page = cpu_buffer-&gt;commit_page;</span>
+<span class='curline'><a href='../S/258.html#L2522'>buffer_page</a>      2522 trace/ring_buffer.c 	struct buffer_page *next_page;</span>
+<span class='curline'><a href='../S/258.html#L2808'>buffer_page</a>      2808 trace/ring_buffer.c 	struct buffer_page *bpage;</span>
+<span class='curline'><a href='../S/258.html#L3211'>buffer_page</a>      3211 trace/ring_buffer.c 	struct buffer_page *tail_page;</span>
+<span class='curline'><a href='../S/258.html#L3493'>buffer_page</a>      3493 trace/ring_buffer.c 	struct buffer_page *bpage = cpu_buffer-&gt;commit_page;</span>
+<span class='curline'><a href='../S/258.html#L3494'>buffer_page</a>      3494 trace/ring_buffer.c 	struct buffer_page *start;</span>
+<span class='curline'><a href='../S/258.html#L3644'>buffer_page</a>      3644 trace/ring_buffer.c 	struct buffer_page *reader = cpu_buffer-&gt;reader_page;</span>
+<span class='curline'><a href='../S/258.html#L3645'>buffer_page</a>      3645 trace/ring_buffer.c 	struct buffer_page *head = rb_set_head_page(cpu_buffer);</span>
+<span class='curline'><a href='../S/258.html#L3646'>buffer_page</a>      3646 trace/ring_buffer.c 	struct buffer_page *commit = cpu_buffer-&gt;commit_page;</span>
+<span class='curline'><a href='../S/258.html#L3823'>buffer_page</a>      3823 trace/ring_buffer.c 	struct buffer_page *bpage;</span>
+<span class='curline'><a href='../S/258.html#L4066'>buffer_page</a>      4066 trace/ring_buffer.c 	struct buffer_page *reader;</span>
+<span class='curline'><a href='../S/258.html#L4067'>buffer_page</a>      4067 trace/ring_buffer.c 	struct buffer_page *head_page;</span>
+<span class='curline'><a href='../S/258.html#L4068'>buffer_page</a>      4068 trace/ring_buffer.c 	struct buffer_page *commit_page;</span>
+<span class='curline'><a href='../S/258.html#L4069'>buffer_page</a>      4069 trace/ring_buffer.c 	struct buffer_page *curr_commit_page;</span>
+<span class='curline'><a href='../S/258.html#L4167'>buffer_page</a>      4167 trace/ring_buffer.c static struct buffer_page *</span>
+<span class='curline'><a href='../S/258.html#L4170'>buffer_page</a>      4170 trace/ring_buffer.c 	struct buffer_page *reader = NULL;</span>
+<span class='curline'><a href='../S/258.html#L4305'>buffer_page</a>      4305 trace/ring_buffer.c 	struct buffer_page *reader;</span>
+<span class='curline'><a href='../S/258.html#L4364'>buffer_page</a>      4364 trace/ring_buffer.c 	struct buffer_page *reader;</span>
+<span class='curline'><a href='../S/258.html#L4849'>buffer_page</a>      4849 trace/ring_buffer.c 		= list_entry(cpu_buffer-&gt;pages, struct buffer_page, list);</span>
+<span class='curline'><a href='../S/258.html#L5264'>buffer_page</a>      5264 trace/ring_buffer.c 	struct buffer_page *reader;</span>
+<span class='curline'><a href='../S/256.html#L169'>buffer_page</a>       169 trace/trace.h  	void			*buffer_page;	/* ring buffer spare */</span>
+</pre>
+</body>
+</html>

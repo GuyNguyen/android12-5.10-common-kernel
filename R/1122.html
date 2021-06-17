@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>RCU_DYNTICK_CTRL_MASK</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/144.html#L80'>RCU_DYNTICK_CTRL_MASK</a>   80 rcu/tree.c     #define RCU_DYNTICK_CTRL_CTR  (RCU_DYNTICK_CTRL_MASK + 1)</span>
+<span class='curline'><a href='../S/144.html#L264'>RCU_DYNTICK_CTRL_MASK</a>  264 rcu/tree.c     		     (seq &amp; RCU_DYNTICK_CTRL_MASK));</span>
+<span class='curline'><a href='../S/144.html#L287'>RCU_DYNTICK_CTRL_MASK</a>  287 rcu/tree.c     	if (seq &amp; RCU_DYNTICK_CTRL_MASK) {</span>
+<span class='curline'><a href='../S/144.html#L288'>RCU_DYNTICK_CTRL_MASK</a>  288 rcu/tree.c     		arch_atomic_andnot(RCU_DYNTICK_CTRL_MASK, &amp;rdp-&gt;dynticks);</span>
+<span class='curline'><a href='../S/144.html#L332'>RCU_DYNTICK_CTRL_MASK</a>  332 rcu/tree.c     	return snap &amp; ~RCU_DYNTICK_CTRL_MASK;</span>
+<span class='curline'><a href='../S/144.html#L364'>RCU_DYNTICK_CTRL_MASK</a>  364 rcu/tree.c     	snap = atomic_read(&amp;rdp-&gt;dynticks) &amp; ~(RCU_DYNTICK_CTRL_MASK |</span>
+<span class='curline'><a href='../S/144.html#L373'>RCU_DYNTICK_CTRL_MASK</a>  373 rcu/tree.c     	return snap == (atomic_read(&amp;rdp-&gt;dynticks) &amp; ~RCU_DYNTICK_CTRL_MASK);</span>
+<span class='curline'><a href='../S/144.html#L395'>RCU_DYNTICK_CTRL_MASK</a>  395 rcu/tree.c     		new = old | RCU_DYNTICK_CTRL_MASK;</span>
+</pre>
+</body>
+</html>

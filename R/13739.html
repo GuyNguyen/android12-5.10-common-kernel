@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>trace_kprobe</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/317.html#L69'>trace_kprobe</a>       69 trace/trace_kprobe.c static struct trace_kprobe *to_trace_kprobe(struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/317.html#L71'>trace_kprobe</a>       71 trace/trace_kprobe.c 	return container_of(ev, struct trace_kprobe, devent);</span>
+<span class='curline'><a href='../S/317.html#L84'>trace_kprobe</a>       84 trace/trace_kprobe.c 	(offsetof(struct trace_kprobe, tp.args) +	\</span>
+<span class='curline'><a href='../S/317.html#L87'>trace_kprobe</a>       87 trace/trace_kprobe.c static nokprobe_inline bool trace_kprobe_is_return(struct trace_kprobe *tk)</span>
+<span class='curline'><a href='../S/317.html#L92'>trace_kprobe</a>       92 trace/trace_kprobe.c static nokprobe_inline const char *trace_kprobe_symbol(struct trace_kprobe *tk)</span>
+<span class='curline'><a href='../S/317.html#L97'>trace_kprobe</a>       97 trace/trace_kprobe.c static nokprobe_inline unsigned long trace_kprobe_offset(struct trace_kprobe *tk)</span>
+<span class='curline'><a href='../S/317.html#L102'>trace_kprobe</a>      102 trace/trace_kprobe.c static nokprobe_inline bool trace_kprobe_has_gone(struct trace_kprobe *tk)</span>
+<span class='curline'><a href='../S/317.html#L107'>trace_kprobe</a>      107 trace/trace_kprobe.c static nokprobe_inline bool trace_kprobe_within_module(struct trace_kprobe *tk,</span>
+<span class='curline'><a href='../S/317.html#L116'>trace_kprobe</a>      116 trace/trace_kprobe.c static nokprobe_inline bool trace_kprobe_module_exist(struct trace_kprobe *tk)</span>
+<span class='curline'><a href='../S/317.html#L137'>trace_kprobe</a>      137 trace/trace_kprobe.c 	struct trace_kprobe *tk = to_trace_kprobe(ev);</span>
+<span class='curline'><a href='../S/317.html#L142'>trace_kprobe</a>      142 trace/trace_kprobe.c static bool trace_kprobe_match_command_head(struct trace_kprobe *tk,</span>
+<span class='curline'><a href='../S/317.html#L167'>trace_kprobe</a>      167 trace/trace_kprobe.c 	struct trace_kprobe *tk = to_trace_kprobe(ev);</span>
+<span class='curline'><a href='../S/317.html#L174'>trace_kprobe</a>      174 trace/trace_kprobe.c static nokprobe_inline unsigned long trace_kprobe_nhit(struct trace_kprobe *tk)</span>
+<span class='curline'><a href='../S/317.html#L185'>trace_kprobe</a>      185 trace/trace_kprobe.c static nokprobe_inline bool trace_kprobe_is_registered(struct trace_kprobe *tk)</span>
+<span class='curline'><a href='../S/317.html#L193'>trace_kprobe</a>      193 trace/trace_kprobe.c unsigned long trace_kprobe_address(struct trace_kprobe *tk)</span>
+<span class='curline'><a href='../S/317.html#L208'>trace_kprobe</a>      208 trace/trace_kprobe.c static nokprobe_inline struct trace_kprobe *</span>
+<span class='curline'><a href='../S/317.html#L217'>trace_kprobe</a>      217 trace/trace_kprobe.c 	return container_of(tp, struct trace_kprobe, tp);</span>
+<span class='curline'><a href='../S/317.html#L222'>trace_kprobe</a>      222 trace/trace_kprobe.c 	struct trace_kprobe *tk = trace_kprobe_primary_from_call(call);</span>
+<span class='curline'><a href='../S/317.html#L231'>trace_kprobe</a>      231 trace/trace_kprobe.c 	struct trace_kprobe *tk = trace_kprobe_primary_from_call(call);</span>
+<span class='curline'><a href='../S/317.html#L237'>trace_kprobe</a>      237 trace/trace_kprobe.c static int register_kprobe_event(struct trace_kprobe *tk);</span>
+<span class='curline'><a href='../S/317.html#L238'>trace_kprobe</a>      238 trace/trace_kprobe.c static int unregister_kprobe_event(struct trace_kprobe *tk);</span>
+<span class='curline'><a href='../S/317.html#L244'>trace_kprobe</a>      244 trace/trace_kprobe.c static void free_trace_kprobe(struct trace_kprobe *tk)</span>
+<span class='curline'><a href='../S/317.html#L257'>trace_kprobe</a>      257 trace/trace_kprobe.c static struct trace_kprobe *alloc_trace_kprobe(const char *group,</span>
+<span class='curline'><a href='../S/317.html#L265'>trace_kprobe</a>      265 trace/trace_kprobe.c 	struct trace_kprobe *tk;</span>
+<span class='curline'><a href='../S/317.html#L305'>trace_kprobe</a>      305 trace/trace_kprobe.c static struct trace_kprobe *find_trace_kprobe(const char *event,</span>
+<span class='curline'><a href='../S/317.html#L309'>trace_kprobe</a>      309 trace/trace_kprobe.c 	struct trace_kprobe *tk;</span>
+<span class='curline'><a href='../S/317.html#L318'>trace_kprobe</a>      318 trace/trace_kprobe.c static inline int __enable_trace_kprobe(struct trace_kprobe *tk)</span>
+<span class='curline'><a href='../S/317.html#L335'>trace_kprobe</a>      335 trace/trace_kprobe.c 	struct trace_kprobe *tk;</span>
+<span class='curline'><a href='../S/317.html#L338'>trace_kprobe</a>      338 trace/trace_kprobe.c 		tk = container_of(pos, struct trace_kprobe, tp);</span>
+<span class='curline'><a href='../S/317.html#L356'>trace_kprobe</a>      356 trace/trace_kprobe.c 	struct trace_kprobe *tk;</span>
+<span class='curline'><a href='../S/317.html#L377'>trace_kprobe</a>      377 trace/trace_kprobe.c 		tk = container_of(pos, struct trace_kprobe, tp);</span>
+<span class='curline'><a href='../S/317.html#L456'>trace_kprobe</a>      456 trace/trace_kprobe.c static bool within_notrace_func(struct trace_kprobe *tk)</span>
+<span class='curline'><a href='../S/317.html#L482'>trace_kprobe</a>      482 trace/trace_kprobe.c static int __register_trace_kprobe(struct trace_kprobe *tk)</span>
+<span class='curline'><a href='../S/317.html#L520'>trace_kprobe</a>      520 trace/trace_kprobe.c static void __unregister_trace_kprobe(struct trace_kprobe *tk)</span>
+<span class='curline'><a href='../S/317.html#L536'>trace_kprobe</a>      536 trace/trace_kprobe.c static int unregister_trace_kprobe(struct trace_kprobe *tk)</span>
+<span class='curline'><a href='../S/317.html#L558'>trace_kprobe</a>      558 trace/trace_kprobe.c static bool trace_kprobe_has_same_kprobe(struct trace_kprobe *orig,</span>
+<span class='curline'><a href='../S/317.html#L559'>trace_kprobe</a>      559 trace/trace_kprobe.c 					 struct trace_kprobe *comp)</span>
+<span class='curline'><a href='../S/317.html#L566'>trace_kprobe</a>      566 trace/trace_kprobe.c 		orig = container_of(pos, struct trace_kprobe, tp);</span>
+<span class='curline'><a href='../S/317.html#L589'>trace_kprobe</a>      589 trace/trace_kprobe.c static int append_trace_kprobe(struct trace_kprobe *tk, struct trace_kprobe *to)</span>
+<span class='curline'><a href='../S/317.html#L627'>trace_kprobe</a>      627 trace/trace_kprobe.c static int register_trace_kprobe(struct trace_kprobe *tk)</span>
+<span class='curline'><a href='../S/317.html#L629'>trace_kprobe</a>      629 trace/trace_kprobe.c 	struct trace_kprobe *old_tk;</span>
+<span class='curline'><a href='../S/317.html#L677'>trace_kprobe</a>      677 trace/trace_kprobe.c 	struct trace_kprobe *tk;</span>
+<span class='curline'><a href='../S/317.html#L740'>trace_kprobe</a>      740 trace/trace_kprobe.c 	struct trace_kprobe *tk = NULL;</span>
+<span class='curline'><a href='../S/317.html#L1093'>trace_kprobe</a>     1093 trace/trace_kprobe.c 	struct trace_kprobe *tk = to_trace_kprobe(ev);</span>
+<span class='curline'><a href='../S/317.html#L1103'>trace_kprobe</a>     1103 trace/trace_kprobe.c 	struct trace_kprobe *tk = to_trace_kprobe(ev);</span>
+<span class='curline'><a href='../S/317.html#L1181'>trace_kprobe</a>     1181 trace/trace_kprobe.c 	struct trace_kprobe *tk;</span>
+<span class='curline'><a href='../S/317.html#L1376'>trace_kprobe</a>     1376 trace/trace_kprobe.c __kprobe_trace_func(struct trace_kprobe *tk, struct pt_regs *regs,</span>
+<span class='curline'><a href='../S/317.html#L1412'>trace_kprobe</a>     1412 trace/trace_kprobe.c kprobe_trace_func(struct trace_kprobe *tk, struct pt_regs *regs)</span>
+<span class='curline'><a href='../S/317.html#L1423'>trace_kprobe</a>     1423 trace/trace_kprobe.c __kretprobe_trace_func(struct trace_kprobe *tk, struct kretprobe_instance *ri,</span>
+<span class='curline'><a href='../S/317.html#L1460'>trace_kprobe</a>     1460 trace/trace_kprobe.c kretprobe_trace_func(struct trace_kprobe *tk, struct kretprobe_instance *ri,</span>
+<span class='curline'><a href='../S/317.html#L1573'>trace_kprobe</a>     1573 trace/trace_kprobe.c kprobe_perf_func(struct trace_kprobe *tk, struct pt_regs *regs)</span>
+<span class='curline'><a href='../S/317.html#L1622'>trace_kprobe</a>     1622 trace/trace_kprobe.c kretprobe_perf_func(struct trace_kprobe *tk, struct kretprobe_instance *ri,</span>
+<span class='curline'><a href='../S/317.html#L1661'>trace_kprobe</a>     1661 trace/trace_kprobe.c 	struct trace_kprobe *tk;</span>
+<span class='curline'><a href='../S/317.html#L1719'>trace_kprobe</a>     1719 trace/trace_kprobe.c 	struct trace_kprobe *tk = container_of(kp, struct trace_kprobe, rp.kp);</span>
+<span class='curline'><a href='../S/317.html#L1737'>trace_kprobe</a>     1737 trace/trace_kprobe.c 	struct trace_kprobe *tk = container_of(ri-&gt;rp, struct trace_kprobe, rp);</span>
+<span class='curline'><a href='../S/317.html#L1771'>trace_kprobe</a>     1771 trace/trace_kprobe.c static inline void init_trace_event_call(struct trace_kprobe *tk)</span>
+<span class='curline'><a href='../S/317.html#L1787'>trace_kprobe</a>     1787 trace/trace_kprobe.c static int register_kprobe_event(struct trace_kprobe *tk)</span>
+<span class='curline'><a href='../S/317.html#L1794'>trace_kprobe</a>     1794 trace/trace_kprobe.c static int unregister_kprobe_event(struct trace_kprobe *tk)</span>
+<span class='curline'><a href='../S/317.html#L1805'>trace_kprobe</a>     1805 trace/trace_kprobe.c 	struct trace_kprobe *tk;</span>
+<span class='curline'><a href='../S/317.html#L1845'>trace_kprobe</a>     1845 trace/trace_kprobe.c 	struct trace_kprobe *tk;</span>
+<span class='curline'><a href='../S/317.html#L1866'>trace_kprobe</a>     1866 trace/trace_kprobe.c 	struct trace_kprobe *tk;</span>
+<span class='curline'><a href='../S/317.html#L1952'>trace_kprobe</a>     1952 trace/trace_kprobe.c find_trace_probe_file(struct trace_kprobe *tk, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/317.html#L1971'>trace_kprobe</a>     1971 trace/trace_kprobe.c 	struct trace_kprobe *tk;</span>
+</pre>
+</body>
+</html>

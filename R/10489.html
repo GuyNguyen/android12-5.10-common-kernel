@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>profile_hit</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/194.html#L40'>profile_hit</a>        40 profile.c      #define NR_PROFILE_HIT		(PAGE_SIZE/sizeof(struct profile_hit))</span>
+<span class='curline'><a href='../S/194.html#L51'>profile_hit</a>        51 profile.c      static DEFINE_PER_CPU(struct profile_hit *[2], cpu_profile_hits);</span>
+<span class='curline'><a href='../S/194.html#L256'>profile_hit</a>       256 profile.c      		struct profile_hit *hits = per_cpu(cpu_profile_hits, cpu)[j];</span>
+<span class='curline'><a href='../S/194.html#L279'>profile_hit</a>       279 profile.c      		struct profile_hit *hits = per_cpu(cpu_profile_hits, cpu)[i];</span>
+<span class='curline'><a href='../S/194.html#L280'>profile_hit</a>       280 profile.c      		memset(hits, 0, NR_PROFILE_HIT*sizeof(struct profile_hit));</span>
+<span class='curline'><a href='../S/194.html#L289'>profile_hit</a>       289 profile.c      	struct profile_hit *hits;</span>
+<span class='curline'><a href='../S/194.html#L408'>profile_hit</a>       408 profile.c      		profile_hit(type, (void *)profile_pc(regs));</span>
+<span class='curline'><a href='../S/441.html#L4532'>profile_hit</a>      4532 sched/core.c   	profile_hit(SCHED_PROFILING, __builtin_return_address(0));</span>
+</pre>
+</body>
+</html>

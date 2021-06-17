@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rcu_pending</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/331.html#L5832'>rcu_pending</a>      5832 events/core.c  		WARN_ON_ONCE(event-&gt;rcu_pending);</span>
+<span class='curline'><a href='../S/331.html#L5840'>rcu_pending</a>      5840 events/core.c  		event-&gt;rcu_pending = 1;</span>
+<span class='curline'><a href='../S/331.html#L5844'>rcu_pending</a>      5844 events/core.c  		if (event-&gt;rcu_pending) {</span>
+<span class='curline'><a href='../S/331.html#L5846'>rcu_pending</a>      5846 events/core.c  			event-&gt;rcu_pending = 0;</span>
+<span class='curline'><a href='../S/144.html#L564'>rcu_pending</a>       564 rcu/tree.c     static int rcu_pending(int user);</span>
+<span class='curline'><a href='../S/144.html#L2575'>rcu_pending</a>      2575 rcu/tree.c     	if (rcu_pending(user))</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rcu_advance_cbs</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/144.html#L1587'>rcu_advance_cbs</a>  1587 rcu/tree.c     	WARN_ON_ONCE(rcu_advance_cbs(rnp, rdp));</span>
+<span class='curline'><a href='../S/144.html#L1626'>rcu_advance_cbs</a>  1626 rcu/tree.c     			ret = rcu_advance_cbs(rnp, rdp); /* Advance CBs. */</span>
+<span class='curline'><a href='../S/144.html#L4185'>rcu_advance_cbs</a>  4185 rcu/tree.c     	needwake = rcu_advance_cbs(my_rnp, rdp) ||</span>
+<span class='curline'><a href='../S/144.html#L4186'>rcu_advance_cbs</a>  4186 rcu/tree.c     		   rcu_advance_cbs(my_rnp, my_rdp);</span>
+<span class='curline'><a href='../S/144.html#L4188'>rcu_advance_cbs</a>  4188 rcu/tree.c     	needwake = needwake || rcu_advance_cbs(my_rnp, my_rdp);</span>
+<span class='curline'><a href='../S/126.html#L1990'>rcu_advance_cbs</a>  1990 rcu/tree_plugin.h 			needwake_gp = rcu_advance_cbs(rnp, rdp);</span>
+<span class='curline'><a href='../S/126.html#L2106'>rcu_advance_cbs</a>  2106 rcu/tree_plugin.h 		needwake_gp = rcu_advance_cbs(rdp-&gt;mynode, rdp);</span>
+</pre>
+</body>
+</html>

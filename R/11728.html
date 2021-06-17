@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rt_bandwidth</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/441.html#L5606'>rt_bandwidth</a>     5606 sched/core.c   				task_group(p)-&gt;rt_bandwidth.rt_runtime == 0 &amp;&amp;</span>
+<span class='curline'><a href='../S/441.html#L7480'>rt_bandwidth</a>     7480 sched/core.c   	init_rt_bandwidth(&amp;root_task_group.rt_bandwidth,</span>
+<span class='curline'><a href='../S/450.html#L17'>rt_bandwidth</a>       17 sched/rt.c     static int do_sched_rt_period_timer(struct rt_bandwidth *rt_b, int overrun);</span>
+<span class='curline'><a href='../S/450.html#L19'>rt_bandwidth</a>       19 sched/rt.c     struct rt_bandwidth def_rt_bandwidth;</span>
+<span class='curline'><a href='../S/450.html#L23'>rt_bandwidth</a>       23 sched/rt.c     	struct rt_bandwidth *rt_b =</span>
+<span class='curline'><a href='../S/450.html#L24'>rt_bandwidth</a>       24 sched/rt.c     		container_of(timer, struct rt_bandwidth, rt_period_timer);</span>
+<span class='curline'><a href='../S/450.html#L45'>rt_bandwidth</a>       45 sched/rt.c     void init_rt_bandwidth(struct rt_bandwidth *rt_b, u64 period, u64 runtime)</span>
+<span class='curline'><a href='../S/450.html#L57'>rt_bandwidth</a>       57 sched/rt.c     static void start_rt_bandwidth(struct rt_bandwidth *rt_b)</span>
+<span class='curline'><a href='../S/450.html#L110'>rt_bandwidth</a>      110 sched/rt.c     static void destroy_rt_bandwidth(struct rt_bandwidth *rt_b)</span>
+<span class='curline'><a href='../S/450.html#L147'>rt_bandwidth</a>      147 sched/rt.c     		destroy_rt_bandwidth(&amp;tg-&gt;rt_bandwidth);</span>
+<span class='curline'><a href='../S/450.html#L200'>rt_bandwidth</a>      200 sched/rt.c     	init_rt_bandwidth(&amp;tg-&gt;rt_bandwidth,</span>
+<span class='curline'><a href='../S/450.html#L215'>rt_bandwidth</a>      215 sched/rt.c     		rt_rq-&gt;rt_runtime = tg-&gt;rt_bandwidth.rt_runtime;</span>
+<span class='curline'><a href='../S/450.html#L495'>rt_bandwidth</a>      495 sched/rt.c     	return ktime_to_ns(rt_rq-&gt;tg-&gt;rt_bandwidth.rt_period);</span>
+<span class='curline'><a href='../S/450.html#L596'>rt_bandwidth</a>      596 sched/rt.c     struct rt_rq *sched_rt_period_rt_rq(struct rt_bandwidth *rt_b, int cpu)</span>
+<span class='curline'><a href='../S/450.html#L598'>rt_bandwidth</a>      598 sched/rt.c     	return container_of(rt_b, struct task_group, rt_bandwidth)-&gt;rt_rq[cpu];</span>
+<span class='curline'><a href='../S/450.html#L601'>rt_bandwidth</a>      601 sched/rt.c     static inline struct rt_bandwidth *sched_rt_bandwidth(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L603'>rt_bandwidth</a>      603 sched/rt.c     	return &amp;rt_rq-&gt;tg-&gt;rt_bandwidth;</span>
+<span class='curline'><a href='../S/450.html#L658'>rt_bandwidth</a>      658 sched/rt.c     struct rt_rq *sched_rt_period_rt_rq(struct rt_bandwidth *rt_b, int cpu)</span>
+<span class='curline'><a href='../S/450.html#L663'>rt_bandwidth</a>      663 sched/rt.c     static inline struct rt_bandwidth *sched_rt_bandwidth(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L672'>rt_bandwidth</a>      672 sched/rt.c     	struct rt_bandwidth *rt_b = sched_rt_bandwidth(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L684'>rt_bandwidth</a>      684 sched/rt.c     	struct rt_bandwidth *rt_b = sched_rt_bandwidth(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L744'>rt_bandwidth</a>      744 sched/rt.c     		struct rt_bandwidth *rt_b = sched_rt_bandwidth(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L828'>rt_bandwidth</a>      828 sched/rt.c     		struct rt_bandwidth *rt_b = sched_rt_bandwidth(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L855'>rt_bandwidth</a>      855 sched/rt.c     static int do_sched_rt_period_timer(struct rt_bandwidth *rt_b, int overrun)</span>
+<span class='curline'><a href='../S/450.html#L871'>rt_bandwidth</a>      871 sched/rt.c     	if (rt_b == &amp;root_task_group.rt_bandwidth)</span>
+<span class='curline'><a href='../S/450.html#L967'>rt_bandwidth</a>      967 sched/rt.c     		struct rt_bandwidth *rt_b = sched_rt_bandwidth(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L1181'>rt_bandwidth</a>     1181 sched/rt.c     		start_rt_bandwidth(&amp;rt_rq-&gt;tg-&gt;rt_bandwidth);</span>
+<span class='curline'><a href='../S/450.html#L2601'>rt_bandwidth</a>     2601 sched/rt.c     	period = ktime_to_ns(tg-&gt;rt_bandwidth.rt_period);</span>
+<span class='curline'><a href='../S/450.html#L2602'>rt_bandwidth</a>     2602 sched/rt.c     	runtime = tg-&gt;rt_bandwidth.rt_runtime;</span>
+<span class='curline'><a href='../S/450.html#L2619'>rt_bandwidth</a>     2619 sched/rt.c     	    tg-&gt;rt_bandwidth.rt_runtime &amp;&amp; tg_has_rt_tasks(tg))</span>
+<span class='curline'><a href='../S/450.html#L2634'>rt_bandwidth</a>     2634 sched/rt.c     		period = ktime_to_ns(child-&gt;rt_bandwidth.rt_period);</span>
+<span class='curline'><a href='../S/450.html#L2635'>rt_bandwidth</a>     2635 sched/rt.c     		runtime = child-&gt;rt_bandwidth.rt_runtime;</span>
+<span class='curline'><a href='../S/450.html#L2695'>rt_bandwidth</a>     2695 sched/rt.c     	raw_spin_lock_irq(&amp;tg-&gt;rt_bandwidth.rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L2696'>rt_bandwidth</a>     2696 sched/rt.c     	tg-&gt;rt_bandwidth.rt_period = ns_to_ktime(rt_period);</span>
+<span class='curline'><a href='../S/450.html#L2697'>rt_bandwidth</a>     2697 sched/rt.c     	tg-&gt;rt_bandwidth.rt_runtime = rt_runtime;</span>
+<span class='curline'><a href='../S/450.html#L2706'>rt_bandwidth</a>     2706 sched/rt.c     	raw_spin_unlock_irq(&amp;tg-&gt;rt_bandwidth.rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L2717'>rt_bandwidth</a>     2717 sched/rt.c     	rt_period = ktime_to_ns(tg-&gt;rt_bandwidth.rt_period);</span>
+<span class='curline'><a href='../S/450.html#L2731'>rt_bandwidth</a>     2731 sched/rt.c     	if (tg-&gt;rt_bandwidth.rt_runtime == RUNTIME_INF)</span>
+<span class='curline'><a href='../S/450.html#L2734'>rt_bandwidth</a>     2734 sched/rt.c     	rt_runtime_us = tg-&gt;rt_bandwidth.rt_runtime;</span>
+<span class='curline'><a href='../S/450.html#L2747'>rt_bandwidth</a>     2747 sched/rt.c     	rt_runtime = tg-&gt;rt_bandwidth.rt_runtime;</span>
+<span class='curline'><a href='../S/450.html#L2756'>rt_bandwidth</a>     2756 sched/rt.c     	rt_period_us = ktime_to_ns(tg-&gt;rt_bandwidth.rt_period);</span>
+<span class='curline'><a href='../S/450.html#L2775'>rt_bandwidth</a>     2775 sched/rt.c     	if (rt_task(tsk) &amp;&amp; tg-&gt;rt_bandwidth.rt_runtime == 0)</span>
+<span class='curline'><a href='../S/447.html#L411'>rt_bandwidth</a>      411 sched/sched.h  	struct rt_bandwidth	rt_bandwidth;</span>
+<span class='curline'><a href='../S/447.html#L1981'>rt_bandwidth</a>     1981 sched/sched.h  extern struct rt_bandwidth def_rt_bandwidth;</span>
+<span class='curline'><a href='../S/447.html#L1982'>rt_bandwidth</a>     1982 sched/sched.h  extern void init_rt_bandwidth(struct rt_bandwidth *rt_b, u64 period, u64 runtime);</span>
+</pre>
+</body>
+</html>

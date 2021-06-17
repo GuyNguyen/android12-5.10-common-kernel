@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>event_file</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/331.html#L11679'>event_file</a>       11679 events/core.c  	struct file *event_file = NULL;</span>
+<span class='curline'><a href='../S/331.html#L11894'>event_file</a>       11894 events/core.c  	event_file = anon_inode_getfile("[perf_event]", &amp;perf_fops, event,</span>
+<span class='curline'><a href='../S/331.html#L11896'>event_file</a>       11896 events/core.c  	if (IS_ERR(event_file)) {</span>
+<span class='curline'><a href='../S/331.html#L11897'>event_file</a>       11897 events/core.c  		err = PTR_ERR(event_file);</span>
+<span class='curline'><a href='../S/331.html#L11898'>event_file</a>       11898 events/core.c  		event_file = NULL;</span>
+<span class='curline'><a href='../S/331.html#L12088'>event_file</a>       12088 events/core.c  	fd_install(event_fd, event_file);</span>
+<span class='curline'><a href='../S/331.html#L12099'>event_file</a>       12099 events/core.c  	fput(event_file);</span>
+<span class='curline'><a href='../S/331.html#L12108'>event_file</a>       12108 events/core.c  	if (!event_file)</span>
+<span class='curline'><a href='../S/291.html#L358'>event_file</a>        358 trace/trace_events_hist.c 	struct trace_event_file		*event_file;</span>
+<span class='curline'><a href='../S/291.html#L631'>event_file</a>        631 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L721'>event_file</a>        721 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L770'>event_file</a>        770 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L825'>event_file</a>        825 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L849'>event_file</a>        849 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L924'>event_file</a>        924 trace/trace_events_hist.c 		file = var_hist_data-&gt;event_file;</span>
+<span class='curline'><a href='../S/291.html#L965'>event_file</a>        965 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L1000'>event_file</a>       1000 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L1885'>event_file</a>       1885 trace/trace_events_hist.c 		call = hist_data-&gt;event_file-&gt;event_call;</span>
+<span class='curline'><a href='../S/291.html#L1910'>event_file</a>       1910 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L2420'>event_file</a>       2420 trace/trace_events_hist.c 	struct trace_array *tr = target_hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L2436'>event_file</a>       2436 trace/trace_events_hist.c 	file = event_file(tr, subsys_name, event_name);</span>
+<span class='curline'><a href='../S/291.html#L2540'>event_file</a>       2540 trace/trace_events_hist.c 	struct trace_event_file *file = hist_data-&gt;event_file;</span>
+<span class='curline'><a href='../S/291.html#L2725'>event_file</a>       2725 trace/trace_events_hist.c 	struct trace_event_file *file = target_hist_data-&gt;event_file;</span>
+<span class='curline'><a href='../S/291.html#L2844'>event_file</a>       2844 trace/trace_events_hist.c 	struct trace_event_file *file = hist_data-&gt;event_file;</span>
+<span class='curline'><a href='../S/291.html#L2878'>event_file</a>       2878 trace/trace_events_hist.c 	struct trace_event_file *file = hist_data-&gt;event_file;</span>
+<span class='curline'><a href='../S/291.html#L2984'>event_file</a>       2984 trace/trace_events_hist.c 	struct trace_event_file *file = hist_data-&gt;event_file;</span>
+<span class='curline'><a href='../S/291.html#L3010'>event_file</a>       3010 trace/trace_events_hist.c 	struct trace_event_file *file = hist_data-&gt;event_file;</span>
+<span class='curline'><a href='../S/291.html#L3230'>event_file</a>       3230 trace/trace_events_hist.c 	ret = action_parse(hist_data-&gt;event_file-&gt;tr, str, data, handler);</span>
+<span class='curline'><a href='../S/291.html#L3315'>event_file</a>       3315 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L3389'>event_file</a>       3389 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L3498'>event_file</a>       3498 trace/trace_events_hist.c 	struct trace_event_file *file = hist_data-&gt;event_file;</span>
+<span class='curline'><a href='../S/291.html#L3585'>event_file</a>       3585 trace/trace_events_hist.c 	if (IS_ERR(event_file(tr, match_event_system, match_event))) {</span>
+<span class='curline'><a href='../S/291.html#L3671'>event_file</a>       3671 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L3737'>event_file</a>       3737 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L3858'>event_file</a>       3858 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L3953'>event_file</a>       3953 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L4057'>event_file</a>       4057 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L4363'>event_file</a>       4363 trace/trace_events_hist.c 	hist_data-&gt;event_file = file;</span>
+<span class='curline'><a href='../S/291.html#L4732'>event_file</a>       4732 trace/trace_events_hist.c 	struct trace_event_file *event_file;</span>
+<span class='curline'><a href='../S/291.html#L4737'>event_file</a>       4737 trace/trace_events_hist.c 	event_file = event_file_data(m-&gt;private);</span>
+<span class='curline'><a href='../S/291.html#L4738'>event_file</a>       4738 trace/trace_events_hist.c 	if (unlikely(!event_file)) {</span>
+<span class='curline'><a href='../S/291.html#L4743'>event_file</a>       4743 trace/trace_events_hist.c 	list_for_each_entry(data, &amp;event_file-&gt;triggers, list) {</span>
+<span class='curline'><a href='../S/291.html#L5004'>event_file</a>       5004 trace/trace_events_hist.c 	struct trace_event_file *event_file;</span>
+<span class='curline'><a href='../S/291.html#L5009'>event_file</a>       5009 trace/trace_events_hist.c 	event_file = event_file_data(m-&gt;private);</span>
+<span class='curline'><a href='../S/291.html#L5010'>event_file</a>       5010 trace/trace_events_hist.c 	if (unlikely(!event_file)) {</span>
+<span class='curline'><a href='../S/291.html#L5015'>event_file</a>       5015 trace/trace_events_hist.c 	list_for_each_entry(data, &amp;event_file-&gt;triggers, list) {</span>
+<span class='curline'><a href='../S/291.html#L5203'>event_file</a>       5203 trace/trace_events_hist.c 		file = hist_data-&gt;field_var_hists[i]-&gt;hist_data-&gt;event_file;</span>
+<span class='curline'><a href='../S/260.html#L117'>event_file</a>        117 trace/trace_events_trigger.c 	struct trace_event_file *event_file = event_file_data(m-&gt;private);</span>
+<span class='curline'><a href='../S/260.html#L123'>event_file</a>        123 trace/trace_events_trigger.c 	return seq_list_next(t, &amp;event_file-&gt;triggers, pos);</span>
+<span class='curline'><a href='../S/260.html#L128'>event_file</a>        128 trace/trace_events_trigger.c 	struct trace_event_file *event_file;</span>
+<span class='curline'><a href='../S/260.html#L132'>event_file</a>        132 trace/trace_events_trigger.c 	event_file = event_file_data(m-&gt;private);</span>
+<span class='curline'><a href='../S/260.html#L133'>event_file</a>        133 trace/trace_events_trigger.c 	if (unlikely(!event_file))</span>
+<span class='curline'><a href='../S/260.html#L136'>event_file</a>        136 trace/trace_events_trigger.c 	if (list_empty(&amp;event_file-&gt;triggers))</span>
+<span class='curline'><a href='../S/260.html#L139'>event_file</a>        139 trace/trace_events_trigger.c 	return seq_list_start(&amp;event_file-&gt;triggers, *pos);</span>
+<span class='curline'><a href='../S/260.html#L193'>event_file</a>        193 trace/trace_events_trigger.c 		struct trace_event_file *event_file;</span>
+<span class='curline'><a href='../S/260.html#L196'>event_file</a>        196 trace/trace_events_trigger.c 		event_file = event_file_data(file);</span>
+<span class='curline'><a href='../S/260.html#L200'>event_file</a>        200 trace/trace_events_trigger.c 				p-&gt;unreg_all(event_file);</span>
+<span class='curline'><a href='../S/260.html#L249'>event_file</a>        249 trace/trace_events_trigger.c 	struct trace_event_file *event_file;</span>
+<span class='curline'><a href='../S/260.html#L266'>event_file</a>        266 trace/trace_events_trigger.c 	event_file = event_file_data(file);</span>
+<span class='curline'><a href='../S/260.html#L267'>event_file</a>        267 trace/trace_events_trigger.c 	if (unlikely(!event_file)) {</span>
+<span class='curline'><a href='../S/260.html#L272'>event_file</a>        272 trace/trace_events_trigger.c 	ret = trigger_process_regex(event_file, buf);</span>
+</pre>
+</body>
+</html>

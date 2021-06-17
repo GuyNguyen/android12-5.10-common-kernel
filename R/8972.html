@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>lpm_trie_node</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/405.html#L21'>lpm_trie_node</a>      21 bpf/lpm_trie.c struct lpm_trie_node;</span>
+<span class='curline'><a href='../S/405.html#L25'>lpm_trie_node</a>      25 bpf/lpm_trie.c 	struct lpm_trie_node __rcu	*child[2];</span>
+<span class='curline'><a href='../S/405.html#L33'>lpm_trie_node</a>      33 bpf/lpm_trie.c 	struct lpm_trie_node __rcu	*root;</span>
+<span class='curline'><a href='../S/405.html#L165'>lpm_trie_node</a>     165 bpf/lpm_trie.c 				   const struct lpm_trie_node *node,</span>
+<span class='curline'><a href='../S/405.html#L171'>lpm_trie_node</a>     171 bpf/lpm_trie.c 	BUILD_BUG_ON(offsetof(struct lpm_trie_node, data) % sizeof(u32));</span>
+<span class='curline'><a href='../S/405.html#L230'>lpm_trie_node</a>     230 bpf/lpm_trie.c 	struct lpm_trie_node *node, *found = NULL;</span>
+<span class='curline'><a href='../S/405.html#L276'>lpm_trie_node</a>     276 bpf/lpm_trie.c static struct lpm_trie_node *lpm_trie_node_alloc(const struct lpm_trie *trie,</span>
+<span class='curline'><a href='../S/405.html#L279'>lpm_trie_node</a>     279 bpf/lpm_trie.c 	struct lpm_trie_node *node;</span>
+<span class='curline'><a href='../S/405.html#L280'>lpm_trie_node</a>     280 bpf/lpm_trie.c 	size_t size = sizeof(struct lpm_trie_node) + trie-&gt;data_size;</span>
+<span class='curline'><a href='../S/405.html#L304'>lpm_trie_node</a>     304 bpf/lpm_trie.c 	struct lpm_trie_node *node, *im_node = NULL, *new_node = NULL;</span>
+<span class='curline'><a href='../S/405.html#L305'>lpm_trie_node</a>     305 bpf/lpm_trie.c 	struct lpm_trie_node __rcu **slot;</span>
+<span class='curline'><a href='../S/405.html#L435'>lpm_trie_node</a>     435 bpf/lpm_trie.c 	struct lpm_trie_node __rcu **trim, **trim2;</span>
+<span class='curline'><a href='../S/405.html#L436'>lpm_trie_node</a>     436 bpf/lpm_trie.c 	struct lpm_trie_node *node, *parent;</span>
+<span class='curline'><a href='../S/405.html#L530'>lpm_trie_node</a>     530 bpf/lpm_trie.c 				 sizeof(struct lpm_trie_node))</span>
+<span class='curline'><a href='../S/405.html#L570'>lpm_trie_node</a>     570 bpf/lpm_trie.c 	cost_per_node = sizeof(struct lpm_trie_node) +</span>
+<span class='curline'><a href='../S/405.html#L589'>lpm_trie_node</a>     589 bpf/lpm_trie.c 	struct lpm_trie_node __rcu **slot;</span>
+<span class='curline'><a href='../S/405.html#L590'>lpm_trie_node</a>     590 bpf/lpm_trie.c 	struct lpm_trie_node *node;</span>
+<span class='curline'><a href='../S/405.html#L627'>lpm_trie_node</a>     627 bpf/lpm_trie.c 	struct lpm_trie_node *node, *next_node = NULL, *parent, *search_root;</span>
+<span class='curline'><a href='../S/405.html#L630'>lpm_trie_node</a>     630 bpf/lpm_trie.c 	struct lpm_trie_node **node_stack = NULL;</span>
+<span class='curline'><a href='../S/405.html#L656'>lpm_trie_node</a>     656 bpf/lpm_trie.c 				   sizeof(struct lpm_trie_node *),</span>
+</pre>
+</body>
+</html>

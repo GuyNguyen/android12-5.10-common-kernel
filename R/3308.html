@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>audit_watch</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/120.html#L40'>audit_watch</a>        40 audit.h        struct audit_watch;</span>
+<span class='curline'><a href='../S/120.html#L255'>audit_watch</a>       255 audit.h        extern void audit_put_watch(struct audit_watch *watch);</span>
+<span class='curline'><a href='../S/120.html#L256'>audit_watch</a>       256 audit.h        extern void audit_get_watch(struct audit_watch *watch);</span>
+<span class='curline'><a href='../S/120.html#L261'>audit_watch</a>       261 audit.h        extern char *audit_watch_path(struct audit_watch *watch);</span>
+<span class='curline'><a href='../S/120.html#L262'>audit_watch</a>       262 audit.h        extern int audit_watch_compare(struct audit_watch *watch, unsigned long ino,</span>
+<span class='curline'><a href='../S/181.html#L100'>audit_watch</a>       100 audit_watch.c  void audit_get_watch(struct audit_watch *watch)</span>
+<span class='curline'><a href='../S/181.html#L105'>audit_watch</a>       105 audit_watch.c  void audit_put_watch(struct audit_watch *watch)</span>
+<span class='curline'><a href='../S/181.html#L115'>audit_watch</a>       115 audit_watch.c  static void audit_remove_watch(struct audit_watch *watch)</span>
+<span class='curline'><a href='../S/181.html#L123'>audit_watch</a>       123 audit_watch.c  char *audit_watch_path(struct audit_watch *watch)</span>
+<span class='curline'><a href='../S/181.html#L128'>audit_watch</a>       128 audit_watch.c  int audit_watch_compare(struct audit_watch *watch, unsigned long ino, dev_t dev)</span>
+<span class='curline'><a href='../S/181.html#L160'>audit_watch</a>       160 audit_watch.c  static struct audit_watch *audit_init_watch(char *path)</span>
+<span class='curline'><a href='../S/181.html#L162'>audit_watch</a>       162 audit_watch.c  	struct audit_watch *watch;</span>
+<span class='curline'><a href='../S/181.html#L180'>audit_watch</a>       180 audit_watch.c  	struct audit_watch *watch;</span>
+<span class='curline'><a href='../S/181.html#L202'>audit_watch</a>       202 audit_watch.c  static struct audit_watch *audit_dupe_watch(struct audit_watch *old)</span>
+<span class='curline'><a href='../S/181.html#L205'>audit_watch</a>       205 audit_watch.c  	struct audit_watch *new;</span>
+<span class='curline'><a href='../S/181.html#L226'>audit_watch</a>       226 audit_watch.c  static void audit_watch_log_rule_change(struct audit_krule *r, struct audit_watch *w, char *op)</span>
+<span class='curline'><a href='../S/181.html#L248'>audit_watch</a>       248 audit_watch.c  	struct audit_watch *owatch, *nwatch, *nextw;</span>
+<span class='curline'><a href='../S/181.html#L323'>audit_watch</a>       323 audit_watch.c  	struct audit_watch *w, *nextw;</span>
+<span class='curline'><a href='../S/181.html#L347'>audit_watch</a>       347 audit_watch.c  static int audit_get_nd(struct audit_watch *watch, struct path *parent)</span>
+<span class='curline'><a href='../S/181.html#L367'>audit_watch</a>       367 audit_watch.c  	struct audit_watch *w, *watch = krule-&gt;watch;</span>
+<span class='curline'><a href='../S/181.html#L401'>audit_watch</a>       401 audit_watch.c  	struct audit_watch *watch = krule-&gt;watch;</span>
+<span class='curline'><a href='../S/181.html#L448'>audit_watch</a>       448 audit_watch.c  	struct audit_watch *watch = krule-&gt;watch;</span>
+<span class='curline'><a href='../S/219.html#L933'>audit_watch</a>       933 auditfilter.c  	struct audit_watch *watch = entry-&gt;rule.watch;</span>
+</pre>
+</body>
+</html>

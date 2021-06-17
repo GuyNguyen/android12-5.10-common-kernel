@@ -1,0 +1,311 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>sched/autogroup.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/511.html'>sched</a>/autogroup.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L12'>[^]</a><a href='#L262'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L12' title='Defined at 12.'>autogroup_init</a></li>
+<li><a href='#L20' title='Defined at 20.'>autogroup_free</a></li>
+<li><a href='#L25' title='Defined at 25.'>autogroup_destroy</a></li>
+<li><a href='#L38' title='Defined at 38.'>autogroup_kref_put</a></li>
+<li><a href='#L43' title='Defined at 43.'>autogroup_kref_get</a></li>
+<li><a href='#L49' title='Defined at 49.'>autogroup_task_get</a></li>
+<li><a href='#L63' title='Defined at 63.'>autogroup_create</a></li>
+<li><a href='#L107' title='Defined at 107.'>task_wants_autogroup</a></li>
+<li><a href='#L125' title='Defined at 125.'>sched_autogroup_exit_task</a></li>
+<li><a href='#L136' title='Defined at 136.'>autogroup_move_group</a></li>
+<li><a href='#L170' title='Defined at 170.'>sched_autogroup_create_attach</a></li>
+<li><a href='#L182' title='Defined at 182.'>sched_autogroup_detach</a></li>
+<li><a href='#L188' title='Defined at 188.'>sched_autogroup_fork</a></li>
+<li><a href='#L193' title='Defined at 193.'>sched_autogroup_exit</a></li>
+<li><a href='#L198' title='Defined at 198.'>setup_autogroup</a></li>
+<li><a href='#L208' title='Defined at 208.'>proc_sched_autogroup_set_nice</a></li>
+<li><a href='#L246' title='Defined at 246.'>proc_sched_autogroup_show_task</a></li>
+<li><a href='#L262' title='Defined at 262.'>autogroup_path</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * Auto-group scheduling implementation:</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> */</em>
+<a id='L5' name='L5'></a>   5 <em class='sharp'>#include</em> &lt;linux/nospec.h&gt;
+<a id='L6' name='L6'></a>   6 <em class='sharp'>#include</em> "<a href='447.html'>sched.h</a>"
+<a id='L7' name='L7'></a>   7 
+<a id='L8' name='L8'></a>   8 <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> __read_mostly sysctl_sched_autogroup_enabled = 1;
+<a id='L9' name='L9'></a>   9 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a> autogroup_default;
+<a id='L10' name='L10'></a>  10 <strong class='reserved'>static</strong> atomic_t autogroup_seq_nr;
+<a id='L11' name='L11'></a>  11 
+<a id='L12' name='L12'></a>  12 <strong class='reserved'>void</strong> __init <a href='../R/3327.html' title='Multiple referred from 2 places.'>autogroup_init</a>(<strong class='reserved'>struct</strong> task_struct *init_task)
+<a id='L13' name='L13'></a>  13 <em class='brace'>{</em>
+<a id='L14' name='L14'></a>  14         autogroup_default.tg = &amp;root_task_group;
+<a id='L15' name='L15'></a>  15         kref_init(&amp;autogroup_default.kref);
+<a id='L16' name='L16'></a>  16         init_rwsem(&amp;autogroup_default.lock);
+<a id='L17' name='L17'></a>  17         init_task-&gt;signal-&gt;<a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a> = &amp;autogroup_default;
+<a id='L18' name='L18'></a>  18 <em class='brace'>}</em>
+<a id='L19' name='L19'></a>  19 
+<a id='L20' name='L20'></a>  20 <strong class='reserved'>void</strong> <a href='../R/3326.html' title='Multiple referred from 2 places.'>autogroup_free</a>(<strong class='reserved'>struct</strong> <a href='../D/13750.html' title='Multiple defined in 3 places.'>task_group</a> *tg)
+<a id='L21' name='L21'></a>  21 <em class='brace'>{</em>
+<a id='L22' name='L22'></a>  22         kfree(tg-&gt;<a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a>);
+<a id='L23' name='L23'></a>  23 <em class='brace'>}</em>
+<a id='L24' name='L24'></a>  24 
+<a id='L25' name='L25'></a>  25 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/448.html#L40' title='Referred from 40 in sched/autogroup.c.'>autogroup_destroy</a>(<strong class='reserved'>struct</strong> kref *kref)
+<a id='L26' name='L26'></a>  26 <em class='brace'>{</em>
+<a id='L27' name='L27'></a>  27         <strong class='reserved'>struct</strong> <a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a> *ag = container_of(kref, <strong class='reserved'>struct</strong> <a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a>, kref);
+<a id='L28' name='L28'></a>  28 
+<a id='L29' name='L29'></a>  29 <em class='sharp'>#ifdef</em> CONFIG_RT_GROUP_SCHED
+<a id='L30' name='L30'></a>  30         <em class='comment'>/* We've redirected RT tasks to the root task group... */</em>
+<a id='L31' name='L31'></a>  31         ag-&gt;tg-&gt;rt_se = NULL;
+<a id='L32' name='L32'></a>  32         ag-&gt;tg-&gt;<a href='../S/447.html#L630' title='Defined at 630 in sched/sched.h.'>rt_rq</a> = NULL;
+<a id='L33' name='L33'></a>  33 <em class='sharp'>#endif</em>
+<a id='L34' name='L34'></a>  34         <a href='../S/441.html#L7866' title='Defined at 7866 in sched/core.c.'>sched_offline_group</a>(ag-&gt;tg);
+<a id='L35' name='L35'></a>  35         <a href='../S/441.html#L7860' title='Defined at 7860 in sched/core.c.'>sched_destroy_group</a>(ag-&gt;tg);
+<a id='L36' name='L36'></a>  36 <em class='brace'>}</em>
+<a id='L37' name='L37'></a>  37 
+<a id='L38' name='L38'></a>  38 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/3329.html' title='Multiple referred from 5 places.'>autogroup_kref_put</a>(<strong class='reserved'>struct</strong> <a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a> *ag)
+<a id='L39' name='L39'></a>  39 <em class='brace'>{</em>
+<a id='L40' name='L40'></a>  40         kref_put(&amp;ag-&gt;kref, <a href='../S/448.html#L25' title='Defined at 25 in sched/autogroup.c.'>autogroup_destroy</a>);
+<a id='L41' name='L41'></a>  41 <em class='brace'>}</em>
+<a id='L42' name='L42'></a>  42 
+<a id='L43' name='L43'></a>  43 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>struct</strong> <a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a> *<a href='../R/3328.html' title='Multiple referred from 4 places.'>autogroup_kref_get</a>(<strong class='reserved'>struct</strong> <a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a> *ag)
+<a id='L44' name='L44'></a>  44 <em class='brace'>{</em>
+<a id='L45' name='L45'></a>  45         kref_get(&amp;ag-&gt;kref);
+<a id='L46' name='L46'></a>  46         <strong class='reserved'>return</strong> ag;
+<a id='L47' name='L47'></a>  47 <em class='brace'>}</em>
+<a id='L48' name='L48'></a>  48 
+<a id='L49' name='L49'></a>  49 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>struct</strong> <a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a> *<a href='../R/3332.html' title='Multiple referred from 3 places.'>autogroup_task_get</a>(<strong class='reserved'>struct</strong> task_struct *p)
+<a id='L50' name='L50'></a>  50 <em class='brace'>{</em>
+<a id='L51' name='L51'></a>  51         <strong class='reserved'>struct</strong> <a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a> *ag;
+<a id='L52' name='L52'></a>  52         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> flags;
+<a id='L53' name='L53'></a>  53 
+<a id='L54' name='L54'></a>  54         <strong class='reserved'>if</strong> (!lock_task_sighand(p, &amp;flags))
+<a id='L55' name='L55'></a>  55                 <strong class='reserved'>return</strong> <a href='../S/448.html#L43' title='Defined at 43 in sched/autogroup.c.'>autogroup_kref_get</a>(&amp;autogroup_default);
+<a id='L56' name='L56'></a>  56 
+<a id='L57' name='L57'></a>  57         ag = <a href='../S/448.html#L43' title='Defined at 43 in sched/autogroup.c.'>autogroup_kref_get</a>(p-&gt;signal-&gt;<a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a>);
+<a id='L58' name='L58'></a>  58         unlock_task_sighand(p, &amp;flags);
+<a id='L59' name='L59'></a>  59 
+<a id='L60' name='L60'></a>  60         <strong class='reserved'>return</strong> ag;
+<a id='L61' name='L61'></a>  61 <em class='brace'>}</em>
+<a id='L62' name='L62'></a>  62 
+<a id='L63' name='L63'></a>  63 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>struct</strong> <a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a> *<a href='../S/448.html#L172' title='Referred from 172 in sched/autogroup.c.'>autogroup_create</a>(<strong class='reserved'>void</strong>)
+<a id='L64' name='L64'></a>  64 <em class='brace'>{</em>
+<a id='L65' name='L65'></a>  65         <strong class='reserved'>struct</strong> <a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a> *ag = kzalloc(<strong class='reserved'>sizeof</strong>(*ag), GFP_KERNEL);
+<a id='L66' name='L66'></a>  66         <strong class='reserved'>struct</strong> <a href='../D/13750.html' title='Multiple defined in 3 places.'>task_group</a> *tg;
+<a id='L67' name='L67'></a>  67 
+<a id='L68' name='L68'></a>  68         <strong class='reserved'>if</strong> (!ag)
+<a id='L69' name='L69'></a>  69                 <strong class='reserved'>goto</strong> out_fail;
+<a id='L70' name='L70'></a>  70 
+<a id='L71' name='L71'></a>  71         tg = <a href='../S/441.html#L7812' title='Defined at 7812 in sched/core.c.'>sched_create_group</a>(&amp;root_task_group);
+<a id='L72' name='L72'></a>  72         <strong class='reserved'>if</strong> (IS_ERR(tg))
+<a id='L73' name='L73'></a>  73                 <strong class='reserved'>goto</strong> out_free;
+<a id='L74' name='L74'></a>  74 
+<a id='L75' name='L75'></a>  75         kref_init(&amp;ag-&gt;kref);
+<a id='L76' name='L76'></a>  76         init_rwsem(&amp;ag-&gt;lock);
+<a id='L77' name='L77'></a>  77         ag-&gt;id = atomic_inc_return(&amp;autogroup_seq_nr);
+<a id='L78' name='L78'></a>  78         ag-&gt;tg = tg;
+<a id='L79' name='L79'></a>  79 <em class='sharp'>#ifdef</em> CONFIG_RT_GROUP_SCHED
+<a id='L80' name='L80'></a>  80         <em class='comment'>/*</em>
+<a id='L81' name='L81'></a>  81 <em class='comment'>         * Autogroup RT tasks are redirected to the root task group</em>
+<a id='L82' name='L82'></a>  82 <em class='comment'>         * so we don't have to move tasks around upon policy change,</em>
+<a id='L83' name='L83'></a>  83 <em class='comment'>         * or flail around trying to allocate bandwidth on the fly.</em>
+<a id='L84' name='L84'></a>  84 <em class='comment'>         * A bandwidth exception in __sched_setscheduler() allows</em>
+<a id='L85' name='L85'></a>  85 <em class='comment'>         * the policy change to proceed.</em>
+<a id='L86' name='L86'></a>  86 <em class='comment'>         */</em>
+<a id='L87' name='L87'></a>  87         <a href='../D/6934.html' title='Multiple defined in 2 places.'>free_rt_sched_group</a>(tg);
+<a id='L88' name='L88'></a>  88         tg-&gt;rt_se = root_task_group.rt_se;
+<a id='L89' name='L89'></a>  89         tg-&gt;<a href='../S/447.html#L630' title='Defined at 630 in sched/sched.h.'>rt_rq</a> = root_task_group.<a href='../S/447.html#L630' title='Defined at 630 in sched/sched.h.'>rt_rq</a>;
+<a id='L90' name='L90'></a>  90 <em class='sharp'>#endif</em>
+<a id='L91' name='L91'></a>  91         tg-&gt;<a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a> = ag;
+<a id='L92' name='L92'></a>  92 
+<a id='L93' name='L93'></a>  93         <a href='../S/441.html#L7835' title='Defined at 7835 in sched/core.c.'>sched_online_group</a>(tg, &amp;root_task_group);
+<a id='L94' name='L94'></a>  94         <strong class='reserved'>return</strong> ag;
+<a id='L95' name='L95'></a>  95 
+<a id='L96' name='L96'></a>  96 out_free:
+<a id='L97' name='L97'></a>  97         kfree(ag);
+<a id='L98' name='L98'></a>  98 out_fail:
+<a id='L99' name='L99'></a>  99         <strong class='reserved'>if</strong> (printk_ratelimit()) <em class='brace'>{</em>
+<a id='L100' name='L100'></a> 100                 <a href='../S/6.html#L2101' title='Defined at 2101 in printk/printk.c.'>printk</a>(KERN_WARNING "autogroup_create: %s failure.\n",
+<a id='L101' name='L101'></a> 101                         ag ? "sched_create_group()" : "kzalloc()");
+<a id='L102' name='L102'></a> 102         <em class='brace'>}</em>
+<a id='L103' name='L103'></a> 103 
+<a id='L104' name='L104'></a> 104         <strong class='reserved'>return</strong> <a href='../S/448.html#L43' title='Defined at 43 in sched/autogroup.c.'>autogroup_kref_get</a>(&amp;autogroup_default);
+<a id='L105' name='L105'></a> 105 <em class='brace'>}</em>
+<a id='L106' name='L106'></a> 106 
+<a id='L107' name='L107'></a> 107 bool <a href='../R/13100.html' title='Multiple referred from 2 places.'>task_wants_autogroup</a>(<strong class='reserved'>struct</strong> task_struct *p, <strong class='reserved'>struct</strong> <a href='../D/13750.html' title='Multiple defined in 3 places.'>task_group</a> *tg)
+<a id='L108' name='L108'></a> 108 <em class='brace'>{</em>
+<a id='L109' name='L109'></a> 109         <strong class='reserved'>if</strong> (tg != &amp;root_task_group)
+<a id='L110' name='L110'></a> 110                 <strong class='reserved'>return</strong> false;
+<a id='L111' name='L111'></a> 111         <em class='comment'>/*</em>
+<a id='L112' name='L112'></a> 112 <em class='comment'>         * If we race with autogroup_move_group() the caller can use the old</em>
+<a id='L113' name='L113'></a> 113 <em class='comment'>         * value of signal-&gt;autogroup but in this case sched_move_task() will</em>
+<a id='L114' name='L114'></a> 114 <em class='comment'>         * be called again before autogroup_kref_put().</em>
+<a id='L115' name='L115'></a> 115 <em class='comment'>         *</em>
+<a id='L116' name='L116'></a> 116 <em class='comment'>         * However, there is no way sched_autogroup_exit_task() could tell us</em>
+<a id='L117' name='L117'></a> 117 <em class='comment'>         * to avoid autogroup-&gt;tg, so we abuse PF_EXITING flag for this case.</em>
+<a id='L118' name='L118'></a> 118 <em class='comment'>         */</em>
+<a id='L119' name='L119'></a> 119         <strong class='reserved'>if</strong> (p-&gt;flags &amp; PF_EXITING)
+<a id='L120' name='L120'></a> 120                 <strong class='reserved'>return</strong> false;
+<a id='L121' name='L121'></a> 121 
+<a id='L122' name='L122'></a> 122         <strong class='reserved'>return</strong> true;
+<a id='L123' name='L123'></a> 123 <em class='brace'>}</em>
+<a id='L124' name='L124'></a> 124 
+<a id='L125' name='L125'></a> 125 <strong class='reserved'>void</strong> <a href='../S/63.html#L824' title='Referred from 824 in exit.c.'>sched_autogroup_exit_task</a>(<strong class='reserved'>struct</strong> task_struct *p)
+<a id='L126' name='L126'></a> 126 <em class='brace'>{</em>
+<a id='L127' name='L127'></a> 127         <em class='comment'>/*</em>
+<a id='L128' name='L128'></a> 128 <em class='comment'>         * We are going to call exit_notify() and autogroup_move_group() can't</em>
+<a id='L129' name='L129'></a> 129 <em class='comment'>         * see this thread after that: we can no longer use signal-&gt;autogroup.</em>
+<a id='L130' name='L130'></a> 130 <em class='comment'>         * See the PF_EXITING check in task_wants_autogroup().</em>
+<a id='L131' name='L131'></a> 131 <em class='comment'>         */</em>
+<a id='L132' name='L132'></a> 132         <a href='../S/441.html#L7908' title='Defined at 7908 in sched/core.c.'>sched_move_task</a>(p);
+<a id='L133' name='L133'></a> 133 <em class='brace'>}</em>
+<a id='L134' name='L134'></a> 134 
+<a id='L135' name='L135'></a> 135 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong>
+<a id='L136' name='L136'></a> 136 <a href='../R/3330.html' title='Multiple referred from 2 places.'>autogroup_move_group</a>(<strong class='reserved'>struct</strong> task_struct *p, <strong class='reserved'>struct</strong> <a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a> *ag)
+<a id='L137' name='L137'></a> 137 <em class='brace'>{</em>
+<a id='L138' name='L138'></a> 138         <strong class='reserved'>struct</strong> <a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a> *prev;
+<a id='L139' name='L139'></a> 139         <strong class='reserved'>struct</strong> task_struct *t;
+<a id='L140' name='L140'></a> 140         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> flags;
+<a id='L141' name='L141'></a> 141 
+<a id='L142' name='L142'></a> 142         BUG_ON(!lock_task_sighand(p, &amp;flags));
+<a id='L143' name='L143'></a> 143 
+<a id='L144' name='L144'></a> 144         prev = p-&gt;signal-&gt;<a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a>;
+<a id='L145' name='L145'></a> 145         <strong class='reserved'>if</strong> (prev == ag) <em class='brace'>{</em>
+<a id='L146' name='L146'></a> 146                 unlock_task_sighand(p, &amp;flags);
+<a id='L147' name='L147'></a> 147                 <strong class='reserved'>return</strong>;
+<a id='L148' name='L148'></a> 148         <em class='brace'>}</em>
+<a id='L149' name='L149'></a> 149 
+<a id='L150' name='L150'></a> 150         p-&gt;signal-&gt;<a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a> = <a href='../S/448.html#L43' title='Defined at 43 in sched/autogroup.c.'>autogroup_kref_get</a>(ag);
+<a id='L151' name='L151'></a> 151         <em class='comment'>/*</em>
+<a id='L152' name='L152'></a> 152 <em class='comment'>         * We can't avoid sched_move_task() after we changed signal-&gt;autogroup,</em>
+<a id='L153' name='L153'></a> 153 <em class='comment'>         * this process can already run with task_group() == prev-&gt;tg or we can</em>
+<a id='L154' name='L154'></a> 154 <em class='comment'>         * race with cgroup code which can read autogroup = prev under rq-&gt;lock.</em>
+<a id='L155' name='L155'></a> 155 <em class='comment'>         * In the latter case for_each_thread() can not miss a migrating thread,</em>
+<a id='L156' name='L156'></a> 156 <em class='comment'>         * cpu_cgroup_attach() must not be possible after cgroup_exit() and it</em>
+<a id='L157' name='L157'></a> 157 <em class='comment'>         * can't be removed from thread list, we hold -&gt;siglock.</em>
+<a id='L158' name='L158'></a> 158 <em class='comment'>         *</em>
+<a id='L159' name='L159'></a> 159 <em class='comment'>         * If an exiting thread was already removed from thread list we rely on</em>
+<a id='L160' name='L160'></a> 160 <em class='comment'>         * sched_autogroup_exit_task().</em>
+<a id='L161' name='L161'></a> 161 <em class='comment'>         */</em>
+<a id='L162' name='L162'></a> 162         for_each_thread(p, t)
+<a id='L163' name='L163'></a> 163                 <a href='../S/441.html#L7908' title='Defined at 7908 in sched/core.c.'>sched_move_task</a>(t);
+<a id='L164' name='L164'></a> 164 
+<a id='L165' name='L165'></a> 165         unlock_task_sighand(p, &amp;flags);
+<a id='L166' name='L166'></a> 166         <a href='../S/448.html#L38' title='Defined at 38 in sched/autogroup.c.'>autogroup_kref_put</a>(prev);
+<a id='L167' name='L167'></a> 167 <em class='brace'>}</em>
+<a id='L168' name='L168'></a> 168 
+<a id='L169' name='L169'></a> 169 <em class='comment'>/* Allocates GFP_KERNEL, cannot be called under any spinlock: */</em>
+<a id='L170' name='L170'></a> 170 <strong class='reserved'>void</strong> <a href='../R/11939.html' title='Multiple referred from 2 places.'>sched_autogroup_create_attach</a>(<strong class='reserved'>struct</strong> task_struct *p)
+<a id='L171' name='L171'></a> 171 <em class='brace'>{</em>
+<a id='L172' name='L172'></a> 172         <strong class='reserved'>struct</strong> <a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a> *ag = <a href='../S/448.html#L63' title='Defined at 63 in sched/autogroup.c.'>autogroup_create</a>();
+<a id='L173' name='L173'></a> 173 
+<a id='L174' name='L174'></a> 174         <a href='../S/448.html#L136' title='Defined at 136 in sched/autogroup.c.'>autogroup_move_group</a>(p, ag);
+<a id='L175' name='L175'></a> 175 
+<a id='L176' name='L176'></a> 176         <em class='comment'>/* Drop extra reference added by autogroup_create(): */</em>
+<a id='L177' name='L177'></a> 177         <a href='../S/448.html#L38' title='Defined at 38 in sched/autogroup.c.'>autogroup_kref_put</a>(ag);
+<a id='L178' name='L178'></a> 178 <em class='brace'>}</em>
+<a id='L179' name='L179'></a> 179 EXPORT_SYMBOL(<a href='../S/448.html#L170' title='Defined at 170 in sched/autogroup.c.'>sched_autogroup_create_attach</a>);
+<a id='L180' name='L180'></a> 180 
+<a id='L181' name='L181'></a> 181 <em class='comment'>/* Cannot be called under siglock. Currently has no users: */</em>
+<a id='L182' name='L182'></a> 182 <strong class='reserved'>void</strong> <a href='../S/448.html#L186' title='Referred from 186 in sched/autogroup.c.'>sched_autogroup_detach</a>(<strong class='reserved'>struct</strong> task_struct *p)
+<a id='L183' name='L183'></a> 183 <em class='brace'>{</em>
+<a id='L184' name='L184'></a> 184         <a href='../S/448.html#L136' title='Defined at 136 in sched/autogroup.c.'>autogroup_move_group</a>(p, &amp;autogroup_default);
+<a id='L185' name='L185'></a> 185 <em class='brace'>}</em>
+<a id='L186' name='L186'></a> 186 EXPORT_SYMBOL(<a href='../S/448.html#L182' title='Defined at 182 in sched/autogroup.c.'>sched_autogroup_detach</a>);
+<a id='L187' name='L187'></a> 187 
+<a id='L188' name='L188'></a> 188 <strong class='reserved'>void</strong> <a href='../S/48.html#L1633' title='Referred from 1633 in fork.c.'>sched_autogroup_fork</a>(<strong class='reserved'>struct</strong> signal_struct *sig)
+<a id='L189' name='L189'></a> 189 <em class='brace'>{</em>
+<a id='L190' name='L190'></a> 190         sig-&gt;<a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a> = <a href='../S/448.html#L49' title='Defined at 49 in sched/autogroup.c.'>autogroup_task_get</a>(current);
+<a id='L191' name='L191'></a> 191 <em class='brace'>}</em>
+<a id='L192' name='L192'></a> 192 
+<a id='L193' name='L193'></a> 193 <strong class='reserved'>void</strong> <a href='../S/48.html#L742' title='Referred from 742 in fork.c.'>sched_autogroup_exit</a>(<strong class='reserved'>struct</strong> signal_struct *sig)
+<a id='L194' name='L194'></a> 194 <em class='brace'>{</em>
+<a id='L195' name='L195'></a> 195         <a href='../S/448.html#L38' title='Defined at 38 in sched/autogroup.c.'>autogroup_kref_put</a>(sig-&gt;<a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a>);
+<a id='L196' name='L196'></a> 196 <em class='brace'>}</em>
+<a id='L197' name='L197'></a> 197 
+<a id='L198' name='L198'></a> 198 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __init <a href='../S/448.html#L204' title='Referred from 204 in sched/autogroup.c.'>setup_autogroup</a>(<strong class='reserved'>char</strong> *str)
+<a id='L199' name='L199'></a> 199 <em class='brace'>{</em>
+<a id='L200' name='L200'></a> 200         sysctl_sched_autogroup_enabled = 0;
+<a id='L201' name='L201'></a> 201 
+<a id='L202' name='L202'></a> 202         <strong class='reserved'>return</strong> 1;
+<a id='L203' name='L203'></a> 203 <em class='brace'>}</em>
+<a id='L204' name='L204'></a> 204 __setup("noautogroup", <a href='../S/448.html#L198' title='Defined at 198 in sched/autogroup.c.'>setup_autogroup</a>);
+<a id='L205' name='L205'></a> 205 
+<a id='L206' name='L206'></a> 206 <em class='sharp'>#ifdef</em> CONFIG_PROC_FS
+<a id='L207' name='L207'></a> 207 
+<a id='L208' name='L208'></a> 208 <strong class='reserved'>int</strong> proc_sched_autogroup_set_nice(<strong class='reserved'>struct</strong> task_struct *p, <strong class='reserved'>int</strong> nice)
+<a id='L209' name='L209'></a> 209 <em class='brace'>{</em>
+<a id='L210' name='L210'></a> 210         <strong class='reserved'>static</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> next = INITIAL_JIFFIES;
+<a id='L211' name='L211'></a> 211         <strong class='reserved'>struct</strong> <a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a> *ag;
+<a id='L212' name='L212'></a> 212         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> shares;
+<a id='L213' name='L213'></a> 213         <strong class='reserved'>int</strong> err, idx;
+<a id='L214' name='L214'></a> 214 
+<a id='L215' name='L215'></a> 215         <strong class='reserved'>if</strong> (nice &lt; MIN_NICE || nice &gt; MAX_NICE)
+<a id='L216' name='L216'></a> 216                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L217' name='L217'></a> 217 
+<a id='L218' name='L218'></a> 218         err = security_task_setnice(current, nice);
+<a id='L219' name='L219'></a> 219         <strong class='reserved'>if</strong> (err)
+<a id='L220' name='L220'></a> 220                 <strong class='reserved'>return</strong> err;
+<a id='L221' name='L221'></a> 221 
+<a id='L222' name='L222'></a> 222         <strong class='reserved'>if</strong> (nice &lt; 0 &amp;&amp; !<a href='../S/441.html#L5252' title='Defined at 5252 in sched/core.c.'>can_nice</a>(current, nice))
+<a id='L223' name='L223'></a> 223                 <strong class='reserved'>return</strong> -EPERM;
+<a id='L224' name='L224'></a> 224 
+<a id='L225' name='L225'></a> 225         <em class='comment'>/* This is a heavy operation, taking global locks.. */</em>
+<a id='L226' name='L226'></a> 226         <strong class='reserved'>if</strong> (!<a href='../S/321.html#L447' title='Defined at 447 in capability.c.'>capable</a>(CAP_SYS_ADMIN) &amp;&amp; time_before(jiffies, next))
+<a id='L227' name='L227'></a> 227                 <strong class='reserved'>return</strong> -EAGAIN;
+<a id='L228' name='L228'></a> 228 
+<a id='L229' name='L229'></a> 229         next = HZ / 10 + jiffies;
+<a id='L230' name='L230'></a> 230         ag = <a href='../S/448.html#L49' title='Defined at 49 in sched/autogroup.c.'>autogroup_task_get</a>(p);
+<a id='L231' name='L231'></a> 231 
+<a id='L232' name='L232'></a> 232         idx = array_index_nospec(nice + 20, 40);
+<a id='L233' name='L233'></a> 233         shares = <a href='../D/12580.html' title='Multiple defined in 2 places.'>scale_load</a>(sched_prio_to_weight[idx]);
+<a id='L234' name='L234'></a> 234 
+<a id='L235' name='L235'></a> 235         <a href='../S/27.html#L1564' title='Defined at 1564 in locking/rwsem.c.'>down_write</a>(&amp;ag-&gt;lock);
+<a id='L236' name='L236'></a> 236         err = <a href='../S/464.html#L11339' title='Defined at 11339 in sched/fair.c.'>sched_group_set_shares</a>(ag-&gt;tg, shares);
+<a id='L237' name='L237'></a> 237         <strong class='reserved'>if</strong> (!err)
+<a id='L238' name='L238'></a> 238                 ag-&gt;nice = nice;
+<a id='L239' name='L239'></a> 239         <a href='../S/27.html#L1617' title='Defined at 1617 in locking/rwsem.c.'>up_write</a>(&amp;ag-&gt;lock);
+<a id='L240' name='L240'></a> 240 
+<a id='L241' name='L241'></a> 241         <a href='../S/448.html#L38' title='Defined at 38 in sched/autogroup.c.'>autogroup_kref_put</a>(ag);
+<a id='L242' name='L242'></a> 242 
+<a id='L243' name='L243'></a> 243         <strong class='reserved'>return</strong> err;
+<a id='L244' name='L244'></a> 244 <em class='brace'>}</em>
+<a id='L245' name='L245'></a> 245 
+<a id='L246' name='L246'></a> 246 <strong class='reserved'>void</strong> proc_sched_autogroup_show_task(<strong class='reserved'>struct</strong> task_struct *p, <strong class='reserved'>struct</strong> seq_file *m)
+<a id='L247' name='L247'></a> 247 <em class='brace'>{</em>
+<a id='L248' name='L248'></a> 248         <strong class='reserved'>struct</strong> <a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a> *ag = <a href='../S/448.html#L49' title='Defined at 49 in sched/autogroup.c.'>autogroup_task_get</a>(p);
+<a id='L249' name='L249'></a> 249 
+<a id='L250' name='L250'></a> 250         <strong class='reserved'>if</strong> (!<a href='../D/13752.html' title='Multiple defined in 2 places.'>task_group_is_autogroup</a>(ag-&gt;tg))
+<a id='L251' name='L251'></a> 251                 <strong class='reserved'>goto</strong> out;
+<a id='L252' name='L252'></a> 252 
+<a id='L253' name='L253'></a> 253         <a href='../S/27.html#L1511' title='Defined at 1511 in locking/rwsem.c.'>down_read</a>(&amp;ag-&gt;lock);
+<a id='L254' name='L254'></a> 254         seq_printf(m, "/autogroup-%ld nice %d\n", ag-&gt;id, ag-&gt;nice);
+<a id='L255' name='L255'></a> 255         <a href='../S/27.html#L1607' title='Defined at 1607 in locking/rwsem.c.'>up_read</a>(&amp;ag-&gt;lock);
+<a id='L256' name='L256'></a> 256 
+<a id='L257' name='L257'></a> 257 out:
+<a id='L258' name='L258'></a> 258         <a href='../S/448.html#L38' title='Defined at 38 in sched/autogroup.c.'>autogroup_kref_put</a>(ag);
+<a id='L259' name='L259'></a> 259 <em class='brace'>}</em>
+<a id='L260' name='L260'></a> 260 <em class='sharp'>#endif</em> <em class='comment'>/* CONFIG_PROC_FS */</em>
+<a id='L261' name='L261'></a> 261 
+<a id='L262' name='L262'></a> 262 <strong class='reserved'>int</strong> <a href='../R/3331.html' title='Multiple referred from 3 places.'>autogroup_path</a>(<strong class='reserved'>struct</strong> <a href='../D/13750.html' title='Multiple defined in 3 places.'>task_group</a> *tg, <strong class='reserved'>char</strong> *buf, <strong class='reserved'>int</strong> buflen)
+<a id='L263' name='L263'></a> 263 <em class='brace'>{</em>
+<a id='L264' name='L264'></a> 264         <strong class='reserved'>if</strong> (!<a href='../D/13752.html' title='Multiple defined in 2 places.'>task_group_is_autogroup</a>(tg))
+<a id='L265' name='L265'></a> 265                 <strong class='reserved'>return</strong> 0;
+<a id='L266' name='L266'></a> 266 
+<a id='L267' name='L267'></a> 267         <strong class='reserved'>return</strong> snprintf(buf, buflen, "%s-%ld", "/autogroup", tg-&gt;<a href='../S/443.html#L4' title='Defined at 4 in sched/autogroup.h.'>autogroup</a>-&gt;id);
+<a id='L268' name='L268'></a> 268 <em class='brace'>}</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L12'>[^]</a><a href='#L262'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

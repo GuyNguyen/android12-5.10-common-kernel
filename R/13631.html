@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>trace_buffer</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/290.html#L74'>trace_buffer</a>       74 trace/blktrace.c 	struct trace_buffer *buffer = NULL;</span>
+<span class='curline'><a href='../S/290.html#L221'>trace_buffer</a>      221 trace/blktrace.c 	struct trace_buffer *buffer = NULL;</span>
+<span class='curline'><a href='../S/258.html#L496'>trace_buffer</a>      496 trace/ring_buffer.c 	struct trace_buffer	*buffer;</span>
+<span class='curline'><a href='../S/258.html#L758'>trace_buffer</a>      758 trace/ring_buffer.c size_t ring_buffer_nr_pages(struct trace_buffer *buffer, int cpu)</span>
+<span class='curline'><a href='../S/258.html#L770'>trace_buffer</a>      770 trace/ring_buffer.c size_t ring_buffer_nr_dirty_pages(struct trace_buffer *buffer, int cpu)</span>
+<span class='curline'><a href='../S/258.html#L813'>trace_buffer</a>      813 trace/ring_buffer.c int ring_buffer_wait(struct trace_buffer *buffer, int cpu, int full)</span>
+<span class='curline'><a href='../S/258.html#L924'>trace_buffer</a>      924 trace/ring_buffer.c __poll_t ring_buffer_poll_wait(struct trace_buffer *buffer, int cpu,</span>
+<span class='curline'><a href='../S/258.html#L982'>trace_buffer</a>      982 trace/ring_buffer.c static inline u64 rb_time_stamp(struct trace_buffer *buffer)</span>
+<span class='curline'><a href='../S/258.html#L996'>trace_buffer</a>      996 trace/ring_buffer.c u64 ring_buffer_time_stamp(struct trace_buffer *buffer, int cpu)</span>
+<span class='curline'><a href='../S/258.html#L1008'>trace_buffer</a>     1008 trace/ring_buffer.c void ring_buffer_normalize_time_stamp(struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/258.html#L1531'>trace_buffer</a>     1531 trace/ring_buffer.c rb_allocate_cpu_buffer(struct trace_buffer *buffer, long nr_pages, int cpu)</span>
+<span class='curline'><a href='../S/258.html#L1623'>trace_buffer</a>     1623 trace/ring_buffer.c struct trace_buffer *__ring_buffer_alloc(unsigned long size, unsigned flags,</span>
+<span class='curline'><a href='../S/258.html#L1626'>trace_buffer</a>     1626 trace/ring_buffer.c 	struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/258.html#L1696'>trace_buffer</a>     1696 trace/ring_buffer.c ring_buffer_free(struct trace_buffer *buffer)</span>
+<span class='curline'><a href='../S/258.html#L1712'>trace_buffer</a>     1712 trace/ring_buffer.c void ring_buffer_set_clock(struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/258.html#L1718'>trace_buffer</a>     1718 trace/ring_buffer.c void ring_buffer_set_time_stamp_abs(struct trace_buffer *buffer, bool abs)</span>
+<span class='curline'><a href='../S/258.html#L1723'>trace_buffer</a>     1723 trace/ring_buffer.c bool ring_buffer_time_stamp_abs(struct trace_buffer *buffer)</span>
+<span class='curline'><a href='../S/258.html#L1961'>trace_buffer</a>     1961 trace/ring_buffer.c int ring_buffer_resize(struct trace_buffer *buffer, unsigned long size,</span>
+<span class='curline'><a href='../S/258.html#L2157'>trace_buffer</a>     2157 trace/ring_buffer.c void ring_buffer_change_overwrite(struct trace_buffer *buffer, int val)</span>
+<span class='curline'><a href='../S/258.html#L2521'>trace_buffer</a>     2521 trace/ring_buffer.c 	struct trace_buffer *buffer = cpu_buffer-&gt;buffer;</span>
+<span class='curline'><a href='../S/258.html#L2988'>trace_buffer</a>     2988 trace/ring_buffer.c rb_wakeups(struct trace_buffer *buffer, struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L3144'>trace_buffer</a>     3144 trace/ring_buffer.c void ring_buffer_nest_start(struct trace_buffer *buffer)</span>
+<span class='curline'><a href='../S/258.html#L3164'>trace_buffer</a>     3164 trace/ring_buffer.c void ring_buffer_nest_end(struct trace_buffer *buffer)</span>
+<span class='curline'><a href='../S/258.html#L3186'>trace_buffer</a>     3186 trace/ring_buffer.c int ring_buffer_unlock_commit(struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/258.html#L3357'>trace_buffer</a>     3357 trace/ring_buffer.c rb_reserve_next_event(struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/258.html#L3440'>trace_buffer</a>     3440 trace/ring_buffer.c ring_buffer_lock_reserve(struct trace_buffer *buffer, unsigned long length)</span>
+<span class='curline'><a href='../S/258.html#L3541'>trace_buffer</a>     3541 trace/ring_buffer.c void ring_buffer_discard_commit(struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/258.html#L3587'>trace_buffer</a>     3587 trace/ring_buffer.c int ring_buffer_write(struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/258.html#L3667'>trace_buffer</a>     3667 trace/ring_buffer.c void ring_buffer_record_disable(struct trace_buffer *buffer)</span>
+<span class='curline'><a href='../S/258.html#L3680'>trace_buffer</a>     3680 trace/ring_buffer.c void ring_buffer_record_enable(struct trace_buffer *buffer)</span>
+<span class='curline'><a href='../S/258.html#L3697'>trace_buffer</a>     3697 trace/ring_buffer.c void ring_buffer_record_off(struct trace_buffer *buffer)</span>
+<span class='curline'><a href='../S/258.html#L3720'>trace_buffer</a>     3720 trace/ring_buffer.c void ring_buffer_record_on(struct trace_buffer *buffer)</span>
+<span class='curline'><a href='../S/258.html#L3738'>trace_buffer</a>     3738 trace/ring_buffer.c bool ring_buffer_record_is_on(struct trace_buffer *buffer)</span>
+<span class='curline'><a href='../S/258.html#L3754'>trace_buffer</a>     3754 trace/ring_buffer.c bool ring_buffer_record_is_set_on(struct trace_buffer *buffer)</span>
+<span class='curline'><a href='../S/258.html#L3769'>trace_buffer</a>     3769 trace/ring_buffer.c void ring_buffer_record_disable_cpu(struct trace_buffer *buffer, int cpu)</span>
+<span class='curline'><a href='../S/258.html#L3789'>trace_buffer</a>     3789 trace/ring_buffer.c void ring_buffer_record_enable_cpu(struct trace_buffer *buffer, int cpu)</span>
+<span class='curline'><a href='../S/258.html#L3819'>trace_buffer</a>     3819 trace/ring_buffer.c u64 ring_buffer_oldest_event_ts(struct trace_buffer *buffer, int cpu)</span>
+<span class='curline'><a href='../S/258.html#L3852'>trace_buffer</a>     3852 trace/ring_buffer.c unsigned long ring_buffer_bytes_cpu(struct trace_buffer *buffer, int cpu)</span>
+<span class='curline'><a href='../S/258.html#L3872'>trace_buffer</a>     3872 trace/ring_buffer.c unsigned long ring_buffer_entries_cpu(struct trace_buffer *buffer, int cpu)</span>
+<span class='curline'><a href='../S/258.html#L3891'>trace_buffer</a>     3891 trace/ring_buffer.c unsigned long ring_buffer_overrun_cpu(struct trace_buffer *buffer, int cpu)</span>
+<span class='curline'><a href='../S/258.html#L3914'>trace_buffer</a>     3914 trace/ring_buffer.c ring_buffer_commit_overrun_cpu(struct trace_buffer *buffer, int cpu)</span>
+<span class='curline'><a href='../S/258.html#L3936'>trace_buffer</a>     3936 trace/ring_buffer.c ring_buffer_dropped_events_cpu(struct trace_buffer *buffer, int cpu)</span>
+<span class='curline'><a href='../S/258.html#L3957'>trace_buffer</a>     3957 trace/ring_buffer.c ring_buffer_read_events_cpu(struct trace_buffer *buffer, int cpu)</span>
+<span class='curline'><a href='../S/258.html#L3976'>trace_buffer</a>     3976 trace/ring_buffer.c unsigned long ring_buffer_entries(struct trace_buffer *buffer)</span>
+<span class='curline'><a href='../S/258.html#L3999'>trace_buffer</a>     3999 trace/ring_buffer.c unsigned long ring_buffer_overruns(struct trace_buffer *buffer)</span>
+<span class='curline'><a href='../S/258.html#L4435'>trace_buffer</a>     4435 trace/ring_buffer.c 	struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/258.html#L4564'>trace_buffer</a>     4564 trace/ring_buffer.c ring_buffer_peek(struct trace_buffer *buffer, int cpu, u64 *ts,</span>
+<span class='curline'><a href='../S/258.html#L4642'>trace_buffer</a>     4642 trace/ring_buffer.c ring_buffer_consume(struct trace_buffer *buffer, int cpu, u64 *ts,</span>
+<span class='curline'><a href='../S/258.html#L4702'>trace_buffer</a>     4702 trace/ring_buffer.c ring_buffer_read_prepare(struct trace_buffer *buffer, int cpu, gfp_t flags)</span>
+<span class='curline'><a href='../S/258.html#L4828'>trace_buffer</a>     4828 trace/ring_buffer.c unsigned long ring_buffer_size(struct trace_buffer *buffer, int cpu)</span>
+<span class='curline'><a href='../S/258.html#L4914'>trace_buffer</a>     4914 trace/ring_buffer.c void ring_buffer_reset_cpu(struct trace_buffer *buffer, int cpu)</span>
+<span class='curline'><a href='../S/258.html#L4944'>trace_buffer</a>     4944 trace/ring_buffer.c void ring_buffer_reset_online_cpus(struct trace_buffer *buffer)</span>
+<span class='curline'><a href='../S/258.html#L4978'>trace_buffer</a>     4978 trace/ring_buffer.c void ring_buffer_reset(struct trace_buffer *buffer)</span>
+<span class='curline'><a href='../S/258.html#L5008'>trace_buffer</a>     5008 trace/ring_buffer.c bool ring_buffer_empty(struct trace_buffer *buffer)</span>
+<span class='curline'><a href='../S/258.html#L5038'>trace_buffer</a>     5038 trace/ring_buffer.c bool ring_buffer_empty_cpu(struct trace_buffer *buffer, int cpu)</span>
+<span class='curline'><a href='../S/258.html#L5071'>trace_buffer</a>     5071 trace/ring_buffer.c int ring_buffer_swap_cpu(struct trace_buffer *buffer_a,</span>
+<span class='curline'><a href='../S/258.html#L5072'>trace_buffer</a>     5072 trace/ring_buffer.c 			 struct trace_buffer *buffer_b, int cpu)</span>
+<span class='curline'><a href='../S/258.html#L5151'>trace_buffer</a>     5151 trace/ring_buffer.c void *ring_buffer_alloc_read_page(struct trace_buffer *buffer, int cpu)</span>
+<span class='curline'><a href='../S/258.html#L5198'>trace_buffer</a>     5198 trace/ring_buffer.c void ring_buffer_free_read_page(struct trace_buffer *buffer, int cpu, void *data)</span>
+<span class='curline'><a href='../S/258.html#L5258'>trace_buffer</a>     5258 trace/ring_buffer.c int ring_buffer_read_page(struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/258.html#L5429'>trace_buffer</a>     5429 trace/ring_buffer.c 	struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/258.html#L5434'>trace_buffer</a>     5434 trace/ring_buffer.c 	buffer = container_of(node, struct trace_buffer, node);</span>
+<span class='curline'><a href='../S/258.html#L5484'>trace_buffer</a>     5484 trace/ring_buffer.c 	struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/258.html#L5626'>trace_buffer</a>     5626 trace/ring_buffer.c 	struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/278.html#L32'>trace_buffer</a>       32 trace/ring_buffer_benchmark.c static struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/271.html#L179'>trace_buffer</a>      179 trace/trace.c  				   struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/271.html#L493'>trace_buffer</a>      493 trace/trace.c  			      struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/271.html#L908'>trace_buffer</a>      908 trace/trace.c  static void __ftrace_trace_stack(struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/271.html#L912'>trace_buffer</a>      912 trace/trace.c  				      struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/271.html#L917'>trace_buffer</a>      917 trace/trace.c  static inline void __ftrace_trace_stack(struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/271.html#L923'>trace_buffer</a>      923 trace/trace.c  				      struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/271.html#L941'>trace_buffer</a>      941 trace/trace.c  __trace_buffer_lock_reserve(struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/271.html#L986'>trace_buffer</a>      986 trace/trace.c  __buffer_unlock_commit(struct trace_buffer *buffer, struct ring_buffer_event *event)</span>
+<span class='curline'><a href='../S/271.html#L1009'>trace_buffer</a>     1009 trace/trace.c  	struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/271.html#L1063'>trace_buffer</a>     1063 trace/trace.c  	struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/271.html#L2136'>trace_buffer</a>     2136 trace/trace.c  	struct trace_buffer *buffer = buf-&gt;buffer;</span>
+<span class='curline'><a href='../S/271.html#L2152'>trace_buffer</a>     2152 trace/trace.c  	struct trace_buffer *buffer = buf-&gt;buffer;</span>
+<span class='curline'><a href='../S/271.html#L2268'>trace_buffer</a>     2268 trace/trace.c  	struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/271.html#L2305'>trace_buffer</a>     2305 trace/trace.c  	struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/271.html#L2342'>trace_buffer</a>     2342 trace/trace.c  	struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/271.html#L2370'>trace_buffer</a>     2370 trace/trace.c  	struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/271.html#L2601'>trace_buffer</a>     2601 trace/trace.c  trace_buffer_lock_reserve(struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/271.html#L2720'>trace_buffer</a>     2720 trace/trace.c  static struct trace_buffer *temp_buffer;</span>
+<span class='curline'><a href='../S/271.html#L2723'>trace_buffer</a>     2723 trace/trace.c  trace_event_buffer_lock_reserve(struct trace_buffer **current_rb,</span>
+<span class='curline'><a href='../S/271.html#L2857'>trace_buffer</a>     2857 trace/trace.c  				     struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/271.html#L2878'>trace_buffer</a>     2878 trace/trace.c  trace_buffer_unlock_commit_nostack(struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/271.html#L2890'>trace_buffer</a>     2890 trace/trace.c  	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/271.html#L2928'>trace_buffer</a>     2928 trace/trace.c  static void __ftrace_trace_stack(struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/271.html#L2998'>trace_buffer</a>     2998 trace/trace.c  				      struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/271.html#L3011'>trace_buffer</a>     3011 trace/trace.c  	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/271.html#L3059'>trace_buffer</a>     3059 trace/trace.c  		       struct trace_buffer *buffer, unsigned long flags, int pc)</span>
+<span class='curline'><a href='../S/271.html#L3105'>trace_buffer</a>     3105 trace/trace.c  				   struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/271.html#L3233'>trace_buffer</a>     3233 trace/trace.c  	struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/271.html#L3293'>trace_buffer</a>     3293 trace/trace.c  __trace_array_vprintk(struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/271.html#L3421'>trace_buffer</a>     3421 trace/trace.c  int trace_array_printk_buf(struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/271.html#L3481'>trace_buffer</a>     3481 trace/trace.c  	struct trace_buffer *buffer = iter-&gt;array_buffer-&gt;buffer;</span>
+<span class='curline'><a href='../S/271.html#L6645'>trace_buffer</a>     6645 trace/trace.c  	struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/271.html#L6726'>trace_buffer</a>     6726 trace/trace.c  	struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/271.html#L7609'>trace_buffer</a>     7609 trace/trace.c  	struct trace_buffer	*buffer;</span>
+<span class='curline'><a href='../S/271.html#L8446'>trace_buffer</a>     8446 trace/trace.c  	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/256.html#L196'>trace_buffer</a>      196 trace/trace.h  	struct trace_buffer		*buffer;</span>
+<span class='curline'><a href='../S/256.html#L766'>trace_buffer</a>      766 trace/trace.h  trace_buffer_lock_reserve(struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/256.html#L778'>trace_buffer</a>      778 trace/trace.h  void trace_buffer_unlock_commit_nostack(struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/256.html#L940'>trace_buffer</a>      940 trace/trace.h  int trace_array_printk_buf(struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/256.html#L1471'>trace_buffer</a>     1471 trace/trace.h  				     struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/256.html#L1475'>trace_buffer</a>     1475 trace/trace.h  				     struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/256.html#L1481'>trace_buffer</a>     1481 trace/trace.h  					      struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/256.html#L1494'>trace_buffer</a>     1494 trace/trace.h  __trace_event_discard_commit(struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/256.html#L1520'>trace_buffer</a>     1520 trace/trace.h  			     struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/256.html#L1555'>trace_buffer</a>     1555 trace/trace.h  			    struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/256.html#L1586'>trace_buffer</a>     1586 trace/trace.h  				 struct trace_buffer *buffer,</span>
+<span class='curline'><a href='../S/309.html#L35'>trace_buffer</a>       35 trace/trace_branch.c 	struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/267.html#L3679'>trace_buffer</a>     3679 trace/trace_events.c 	struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/255.html#L438'>trace_buffer</a>      438 trace/trace_events_synth.c 	struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/287.html#L104'>trace_buffer</a>      104 trace/trace_functions_graph.c 	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/287.html#L224'>trace_buffer</a>      224 trace/trace_functions_graph.c 	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/297.html#L108'>trace_buffer</a>      108 trace/trace_hwlat.c 	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/286.html#L300'>trace_buffer</a>      300 trace/trace_mmiotrace.c 	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/286.html#L330'>trace_buffer</a>      330 trace/trace_mmiotrace.c 	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/295.html#L381'>trace_buffer</a>      381 trace/trace_sched_wakeup.c 	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/295.html#L411'>trace_buffer</a>      411 trace/trace_sched_wakeup.c 	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/264.html#L300'>trace_buffer</a>      300 trace/trace_syscalls.c 	struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/264.html#L350'>trace_buffer</a>      350 trace/trace_syscalls.c 	struct trace_buffer *buffer;</span>
+<span class='curline'><a href='../S/301.html#L947'>trace_buffer</a>      947 trace/trace_uprobe.c 	struct trace_buffer *buffer;</span>
+</pre>
+</body>
+</html>

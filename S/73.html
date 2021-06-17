@@ -1,0 +1,613 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>scftorture.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/scftorture.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L140'>[^]</a><a href='#L474'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L140' title='Defined at 140.'>scf_torture_stats_print</a></li>
+<li><a href='#L176' title='Defined at 176.'>scf_torture_stats</a></li>
+<li><a href='#L189' title='Defined at 189.'>scf_sel_add</a></li>
+<li><a href='#L209' title='Defined at 209.'>scf_sel_dump</a></li>
+<li><a href='#L227' title='Defined at 227.'>scf_sel_rand</a></li>
+<li><a href='#L242' title='Defined at 242.'>scf_handler</a></li>
+<li><a href='#L284' title='Defined at 284.'>scf_handler_1</a></li>
+<li><a href='#L295' title='Defined at 295.'>scftorture_invoke_one</a></li>
+<li><a href='#L383' title='Defined at 383.'>scftorture_invoker</a></li>
+<li><a href='#L433' title='Defined at 433.'>scftorture_print_module_parms</a></li>
+<li><a href='#L440' title='Defined at 440.'>scf_cleanup_handler</a></li>
+<li><a href='#L444' title='Defined at 444.'>scf_torture_cleanup</a></li>
+<li><a href='#L474' title='Defined at 474.'>scf_torture_init</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0+</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>//</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'>// Torture test for smp_call_function() and friends.</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'>//</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'>// Copyright (C) Facebook, 2020.</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'>//</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'>// Author: Paul E. McKenney &lt;paulmck@kernel.org&gt;</em>
+<a id='L8' name='L8'></a>   8 
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#define</em> <a href='../R/10143.html' title='Multiple referred from 2 places.'>pr_fmt</a>(fmt) fmt
+<a id='L10' name='L10'></a>  10 
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;<a href='484.html'>linux/atomic.h</a>&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;linux/bitops.h&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;linux/completion.h&gt;
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> &lt;linux/cpu.h&gt;
+<a id='L15' name='L15'></a>  15 <em class='sharp'>#include</em> &lt;linux/delay.h&gt;
+<a id='L16' name='L16'></a>  16 <em class='sharp'>#include</em> &lt;linux/err.h&gt;
+<a id='L17' name='L17'></a>  17 <em class='sharp'>#include</em> &lt;linux/init.h&gt;
+<a id='L18' name='L18'></a>  18 <em class='sharp'>#include</em> &lt;linux/interrupt.h&gt;
+<a id='L19' name='L19'></a>  19 <em class='sharp'>#include</em> &lt;linux/kthread.h&gt;
+<a id='L20' name='L20'></a>  20 <em class='sharp'>#include</em> &lt;linux/kernel.h&gt;
+<a id='L21' name='L21'></a>  21 <em class='sharp'>#include</em> &lt;linux/mm.h&gt;
+<a id='L22' name='L22'></a>  22 <em class='sharp'>#include</em> &lt;linux/module.h&gt;
+<a id='L23' name='L23'></a>  23 <em class='sharp'>#include</em> &lt;linux/moduleparam.h&gt;
+<a id='L24' name='L24'></a>  24 <em class='sharp'>#include</em> &lt;linux/notifier.h&gt;
+<a id='L25' name='L25'></a>  25 <em class='sharp'>#include</em> &lt;linux/percpu.h&gt;
+<a id='L26' name='L26'></a>  26 <em class='sharp'>#include</em> &lt;linux/rcupdate.h&gt;
+<a id='L27' name='L27'></a>  27 <em class='sharp'>#include</em> &lt;linux/rcupdate_trace.h&gt;
+<a id='L28' name='L28'></a>  28 <em class='sharp'>#include</em> &lt;linux/reboot.h&gt;
+<a id='L29' name='L29'></a>  29 <em class='sharp'>#include</em> &lt;<a href='447.html'>linux/sched.h</a>&gt;
+<a id='L30' name='L30'></a>  30 <em class='sharp'>#include</em> &lt;linux/spinlock.h&gt;
+<a id='L31' name='L31'></a>  31 <em class='sharp'>#include</em> &lt;<a href='470.html'>linux/smp.h</a>&gt;
+<a id='L32' name='L32'></a>  32 <em class='sharp'>#include</em> &lt;linux/stat.h&gt;
+<a id='L33' name='L33'></a>  33 <em class='sharp'>#include</em> &lt;linux/srcu.h&gt;
+<a id='L34' name='L34'></a>  34 <em class='sharp'>#include</em> &lt;linux/slab.h&gt;
+<a id='L35' name='L35'></a>  35 <em class='sharp'>#include</em> &lt;linux/torture.h&gt;
+<a id='L36' name='L36'></a>  36 <em class='sharp'>#include</em> &lt;linux/types.h&gt;
+<a id='L37' name='L37'></a>  37 
+<a id='L38' name='L38'></a>  38 <em class='sharp'>#define</em> <a href='../R/1279.html' title='Multiple referred from 2 places.'>SCFTORT_STRING</a> "scftorture"
+<a id='L39' name='L39'></a>  39 <em class='sharp'>#define</em> <a href='../R/1277.html' title='Multiple referred from 5 places.'>SCFTORT_FLAG</a> <a href='../S/73.html#L38' title='Defined at 38 in scftorture.c.'>SCFTORT_STRING</a> ": "
+<a id='L40' name='L40'></a>  40 
+<a id='L41' name='L41'></a>  41 <em class='sharp'>#define</em> SCFTORTOUT(s, x...) \
+<a id='L42' name='L42'></a>  42         pr_alert(<a href='../S/73.html#L39' title='Defined at 39 in scftorture.c.'>SCFTORT_FLAG</a> s, ## x)
+<a id='L43' name='L43'></a>  43 
+<a id='L44' name='L44'></a>  44 <em class='sharp'>#define</em> <a href='../R/1575.html' title='Multiple referred from 6 places.'>VERBOSE_SCFTORTOUT</a>(s, x...) \
+<a id='L45' name='L45'></a>  45         <strong class='reserved'>do</strong> <em class='brace'>{</em> <strong class='reserved'>if</strong> (<a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>) pr_alert(<a href='../S/73.html#L39' title='Defined at 39 in scftorture.c.'>SCFTORT_FLAG</a> s, ## x); <em class='brace'>}</em> <strong class='reserved'>while</strong> (0)
+<a id='L46' name='L46'></a>  46 
+<a id='L47' name='L47'></a>  47 <em class='sharp'>#define</em> <a href='../R/1576.html' title='Multiple referred from 2 places.'>VERBOSE_SCFTORTOUT_ERRSTRING</a>(s, x...) \
+<a id='L48' name='L48'></a>  48         <strong class='reserved'>do</strong> <em class='brace'>{</em> <strong class='reserved'>if</strong> (<a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>) pr_alert(<a href='../S/73.html#L39' title='Defined at 39 in scftorture.c.'>SCFTORT_FLAG</a> "!!! " s, ## x); <em class='brace'>}</em> <strong class='reserved'>while</strong> (0)
+<a id='L49' name='L49'></a>  49 
+<a id='L50' name='L50'></a>  50 MODULE_LICENSE("GPL");
+<a id='L51' name='L51'></a>  51 MODULE_AUTHOR("Paul E. McKenney &lt;paulmck@kernel.org&gt;");
+<a id='L52' name='L52'></a>  52 
+<a id='L53' name='L53'></a>  53 <em class='comment'>// Wait until there are multiple CPUs before starting test.</em>
+<a id='L54' name='L54'></a>  54 torture_param(<strong class='reserved'>int</strong>, holdoff, IS_BUILTIN(CONFIG_SCF_TORTURE_TEST) ? 10 : 0,
+<a id='L55' name='L55'></a>  55               "Holdoff time before test start (s)");
+<a id='L56' name='L56'></a>  56 torture_param(<strong class='reserved'>int</strong>, longwait, 0, "Include ridiculously long waits? (seconds)");
+<a id='L57' name='L57'></a>  57 torture_param(<strong class='reserved'>int</strong>, nthreads, -1, "# threads, defaults to -1 for all CPUs.");
+<a id='L58' name='L58'></a>  58 torture_param(<strong class='reserved'>int</strong>, onoff_holdoff, 0, "Time after boot before CPU hotplugs (s)");
+<a id='L59' name='L59'></a>  59 torture_param(<strong class='reserved'>int</strong>, onoff_interval, 0, "Time between CPU hotplugs (s), 0=disable");
+<a id='L60' name='L60'></a>  60 torture_param(<strong class='reserved'>int</strong>, shutdown_secs, 0, "Shutdown time (ms), &lt;= zero to disable.");
+<a id='L61' name='L61'></a>  61 torture_param(<strong class='reserved'>int</strong>, stat_interval, 60, "Number of seconds between stats printk()s.");
+<a id='L62' name='L62'></a>  62 torture_param(<strong class='reserved'>int</strong>, stutter_cpus, 5, "Number of jiffies to change CPUs under test, 0=disable");
+<a id='L63' name='L63'></a>  63 torture_param(bool, use_cpus_read_lock, 0, "Use cpus_read_lock() to exclude CPU hotplug.");
+<a id='L64' name='L64'></a>  64 torture_param(<strong class='reserved'>int</strong>, <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>, 0, "Enable verbose debugging printk()s");
+<a id='L65' name='L65'></a>  65 torture_param(<strong class='reserved'>int</strong>, weight_single, -1, "Testing weight for single-CPU no-wait operations.");
+<a id='L66' name='L66'></a>  66 torture_param(<strong class='reserved'>int</strong>, weight_single_wait, -1, "Testing weight for single-CPU operations.");
+<a id='L67' name='L67'></a>  67 torture_param(<strong class='reserved'>int</strong>, weight_many, -1, "Testing weight for multi-CPU no-wait operations.");
+<a id='L68' name='L68'></a>  68 torture_param(<strong class='reserved'>int</strong>, weight_many_wait, -1, "Testing weight for multi-CPU operations.");
+<a id='L69' name='L69'></a>  69 torture_param(<strong class='reserved'>int</strong>, weight_all, -1, "Testing weight for all-CPU no-wait operations.");
+<a id='L70' name='L70'></a>  70 torture_param(<strong class='reserved'>int</strong>, weight_all_wait, -1, "Testing weight for all-CPU operations.");
+<a id='L71' name='L71'></a>  71 
+<a id='L72' name='L72'></a>  72 <strong class='reserved'>char</strong> *torture_type = "";
+<a id='L73' name='L73'></a>  73 
+<a id='L74' name='L74'></a>  74 <em class='sharp'>#ifdef</em> MODULE
+<a id='L75' name='L75'></a>  75 <em class='sharp'># define</em> <a href='../S/73.html#L80' title='Referred from 80 in scftorture.c.'>SCFTORT_SHUTDOWN</a> 0
+<a id='L76' name='L76'></a>  76 <em class='sharp'>#else</em>
+<a id='L77' name='L77'></a>  77 <em class='sharp'># define</em> <a href='../S/73.html#L80' title='Referred from 80 in scftorture.c.'>SCFTORT_SHUTDOWN</a> 1
+<a id='L78' name='L78'></a>  78 <em class='sharp'>#endif</em>
+<a id='L79' name='L79'></a>  79 
+<a id='L80' name='L80'></a>  80 torture_param(bool, shutdown, <a href='../D/1387.html' title='Multiple defined in 2 places.'>SCFTORT_SHUTDOWN</a>, "Shutdown at end of torture test.");
+<a id='L81' name='L81'></a>  81 
+<a id='L82' name='L82'></a>  82 <strong class='reserved'>struct</strong> <a href='../R/11929.html' title='Multiple referred from 4 places.'>scf_statistics</a> <em class='brace'>{</em>
+<a id='L83' name='L83'></a>  83         <strong class='reserved'>struct</strong> task_struct *task;
+<a id='L84' name='L84'></a>  84         <strong class='reserved'>int</strong> cpu;
+<a id='L85' name='L85'></a>  85         <strong class='reserved'>long</strong> <strong class='reserved'>long</strong> n_single;
+<a id='L86' name='L86'></a>  86         <strong class='reserved'>long</strong> <strong class='reserved'>long</strong> n_single_ofl;
+<a id='L87' name='L87'></a>  87         <strong class='reserved'>long</strong> <strong class='reserved'>long</strong> n_single_wait;
+<a id='L88' name='L88'></a>  88         <strong class='reserved'>long</strong> <strong class='reserved'>long</strong> n_single_wait_ofl;
+<a id='L89' name='L89'></a>  89         <strong class='reserved'>long</strong> <strong class='reserved'>long</strong> n_many;
+<a id='L90' name='L90'></a>  90         <strong class='reserved'>long</strong> <strong class='reserved'>long</strong> n_many_wait;
+<a id='L91' name='L91'></a>  91         <strong class='reserved'>long</strong> <strong class='reserved'>long</strong> n_all;
+<a id='L92' name='L92'></a>  92         <strong class='reserved'>long</strong> <strong class='reserved'>long</strong> n_all_wait;
+<a id='L93' name='L93'></a>  93 <em class='brace'>}</em>;
+<a id='L94' name='L94'></a>  94 
+<a id='L95' name='L95'></a>  95 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../S/73.html#L82' title='Defined at 82 in scftorture.c.'>scf_statistics</a> *scf_stats_p;
+<a id='L96' name='L96'></a>  96 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> task_struct *scf_torture_stats_task;
+<a id='L97' name='L97'></a>  97 <strong class='reserved'>static</strong> DEFINE_PER_CPU(<strong class='reserved'>long</strong> <strong class='reserved'>long</strong>, scf_invoked_count);
+<a id='L98' name='L98'></a>  98 
+<a id='L99' name='L99'></a>  99 <em class='comment'>// Data for random primitive selection</em>
+<a id='L100' name='L100'></a> 100 <em class='sharp'>#define</em> <a href='../R/1283.html' title='Multiple referred from 5 places.'>SCF_PRIM_SINGLE</a>         0
+<a id='L101' name='L101'></a> 101 <em class='sharp'>#define</em> <a href='../R/1282.html' title='Multiple referred from 3 places.'>SCF_PRIM_MANY</a>           1
+<a id='L102' name='L102'></a> 102 <em class='sharp'>#define</em> <a href='../R/1281.html' title='Multiple referred from 3 places.'>SCF_PRIM_ALL</a>            2
+<a id='L103' name='L103'></a> 103 <em class='sharp'>#define</em> <a href='../S/73.html#L116' title='Referred from 116 in scftorture.c.'>SCF_NPRIMS</a>              (2 * 3) <em class='comment'>// Need wait and no-wait versions of each.</em>
+<a id='L104' name='L104'></a> 104 
+<a id='L105' name='L105'></a> 105 <strong class='reserved'>static</strong> <strong class='reserved'>char</strong> *scf_prim_name[] = <em class='brace'>{</em>
+<a id='L106' name='L106'></a> 106         "smp_call_function_single",
+<a id='L107' name='L107'></a> 107         "smp_call_function_many",
+<a id='L108' name='L108'></a> 108         "smp_call_function",
+<a id='L109' name='L109'></a> 109 <em class='brace'>}</em>;
+<a id='L110' name='L110'></a> 110 
+<a id='L111' name='L111'></a> 111 <strong class='reserved'>struct</strong> <a href='../R/11928.html' title='Multiple referred from 5 places.'>scf_selector</a> <em class='brace'>{</em>
+<a id='L112' name='L112'></a> 112         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> scfs_weight;
+<a id='L113' name='L113'></a> 113         <strong class='reserved'>int</strong> scfs_prim;
+<a id='L114' name='L114'></a> 114         bool scfs_wait;
+<a id='L115' name='L115'></a> 115 <em class='brace'>}</em>;
+<a id='L116' name='L116'></a> 116 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../S/73.html#L111' title='Defined at 111 in scftorture.c.'>scf_selector</a> scf_sel_array[<a href='../S/73.html#L103' title='Defined at 103 in scftorture.c.'>SCF_NPRIMS</a>];
+<a id='L117' name='L117'></a> 117 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> scf_sel_array_len;
+<a id='L118' name='L118'></a> 118 <strong class='reserved'>static</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> scf_sel_totweight;
+<a id='L119' name='L119'></a> 119 
+<a id='L120' name='L120'></a> 120 <em class='comment'>// Communicate between caller and handler.</em>
+<a id='L121' name='L121'></a> 121 <strong class='reserved'>struct</strong> <a href='../R/11921.html' title='Multiple referred from 3 places.'>scf_check</a> <em class='brace'>{</em>
+<a id='L122' name='L122'></a> 122         bool scfc_in;
+<a id='L123' name='L123'></a> 123         bool scfc_out;
+<a id='L124' name='L124'></a> 124         <strong class='reserved'>int</strong> scfc_cpu; <em class='comment'>// -1 for not _single().</em>
+<a id='L125' name='L125'></a> 125         bool scfc_wait;
+<a id='L126' name='L126'></a> 126 <em class='brace'>}</em>;
+<a id='L127' name='L127'></a> 127 
+<a id='L128' name='L128'></a> 128 <em class='comment'>// Use to wait for all threads to start.</em>
+<a id='L129' name='L129'></a> 129 <strong class='reserved'>static</strong> atomic_t n_started;
+<a id='L130' name='L130'></a> 130 <strong class='reserved'>static</strong> atomic_t n_errs;
+<a id='L131' name='L131'></a> 131 <strong class='reserved'>static</strong> atomic_t n_mb_in_errs;
+<a id='L132' name='L132'></a> 132 <strong class='reserved'>static</strong> atomic_t n_mb_out_errs;
+<a id='L133' name='L133'></a> 133 <strong class='reserved'>static</strong> atomic_t n_alloc_errs;
+<a id='L134' name='L134'></a> 134 <strong class='reserved'>static</strong> bool scfdone;
+<a id='L135' name='L135'></a> 135 <strong class='reserved'>static</strong> <strong class='reserved'>char</strong> *bangstr = "";
+<a id='L136' name='L136'></a> 136 
+<a id='L137' name='L137'></a> 137 <strong class='reserved'>static</strong> DEFINE_TORTURE_RANDOM_PERCPU(scf_torture_rand);
+<a id='L138' name='L138'></a> 138 
+<a id='L139' name='L139'></a> 139 <em class='comment'>// Print torture statistics.  Caller must ensure serialization.</em>
+<a id='L140' name='L140'></a> 140 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/11933.html' title='Multiple referred from 2 places.'>scf_torture_stats_print</a>(<strong class='reserved'>void</strong>)
+<a id='L141' name='L141'></a> 141 <em class='brace'>{</em>
+<a id='L142' name='L142'></a> 142         <strong class='reserved'>int</strong> cpu;
+<a id='L143' name='L143'></a> 143         <strong class='reserved'>int</strong> i;
+<a id='L144' name='L144'></a> 144         <strong class='reserved'>long</strong> <strong class='reserved'>long</strong> invoked_count = 0;
+<a id='L145' name='L145'></a> 145         bool isdone = READ_ONCE(scfdone);
+<a id='L146' name='L146'></a> 146         <strong class='reserved'>struct</strong> <a href='../S/73.html#L82' title='Defined at 82 in scftorture.c.'>scf_statistics</a> scfs = <em class='brace'>{</em><em class='brace'>}</em>;
+<a id='L147' name='L147'></a> 147 
+<a id='L148' name='L148'></a> 148         for_each_possible_cpu(cpu)
+<a id='L149' name='L149'></a> 149                 invoked_count += data_race(per_cpu(scf_invoked_count, cpu));
+<a id='L150' name='L150'></a> 150         <strong class='reserved'>for</strong> (i = 0; i &lt; nthreads; i++) <em class='brace'>{</em>
+<a id='L151' name='L151'></a> 151                 scfs.n_single += scf_stats_p[i].n_single;
+<a id='L152' name='L152'></a> 152                 scfs.n_single_ofl += scf_stats_p[i].n_single_ofl;
+<a id='L153' name='L153'></a> 153                 scfs.n_single_wait += scf_stats_p[i].n_single_wait;
+<a id='L154' name='L154'></a> 154                 scfs.n_single_wait_ofl += scf_stats_p[i].n_single_wait_ofl;
+<a id='L155' name='L155'></a> 155                 scfs.n_many += scf_stats_p[i].n_many;
+<a id='L156' name='L156'></a> 156                 scfs.n_many_wait += scf_stats_p[i].n_many_wait;
+<a id='L157' name='L157'></a> 157                 scfs.n_all += scf_stats_p[i].n_all;
+<a id='L158' name='L158'></a> 158                 scfs.n_all_wait += scf_stats_p[i].n_all_wait;
+<a id='L159' name='L159'></a> 159         <em class='brace'>}</em>
+<a id='L160' name='L160'></a> 160         <strong class='reserved'>if</strong> (atomic_read(&amp;n_errs) || atomic_read(&amp;n_mb_in_errs) ||
+<a id='L161' name='L161'></a> 161             atomic_read(&amp;n_mb_out_errs) || atomic_read(&amp;n_alloc_errs))
+<a id='L162' name='L162'></a> 162                 bangstr = "!!! ";
+<a id='L163' name='L163'></a> 163         pr_alert("%s %sscf_invoked_count %s: %lld single: %lld/%lld single_ofl: %lld/%lld many: %lld/%lld all: %lld/%lld ",
+<a id='L164' name='L164'></a> 164                  <a href='../S/73.html#L39' title='Defined at 39 in scftorture.c.'>SCFTORT_FLAG</a>, bangstr, isdone ? "VER" : "ver", invoked_count,
+<a id='L165' name='L165'></a> 165                  scfs.n_single, scfs.n_single_wait, scfs.n_single_ofl, scfs.n_single_wait_ofl,
+<a id='L166' name='L166'></a> 166                  scfs.n_many, scfs.n_many_wait, scfs.n_all, scfs.n_all_wait);
+<a id='L167' name='L167'></a> 167         <a href='../S/16.html#L295' title='Defined at 295 in torture.c.'>torture_onoff_stats</a>();
+<a id='L168' name='L168'></a> 168         pr_cont("ste: %d stnmie: %d stnmoe: %d staf: %d\n", atomic_read(&amp;n_errs),
+<a id='L169' name='L169'></a> 169                 atomic_read(&amp;n_mb_in_errs), atomic_read(&amp;n_mb_out_errs),
+<a id='L170' name='L170'></a> 170                 atomic_read(&amp;n_alloc_errs));
+<a id='L171' name='L171'></a> 171 <em class='brace'>}</em>
+<a id='L172' name='L172'></a> 172 
+<a id='L173' name='L173'></a> 173 <em class='comment'>// Periodically prints torture statistics, if periodic statistics printing</em>
+<a id='L174' name='L174'></a> 174 <em class='comment'>// was specified via the stat_interval module parameter.</em>
+<a id='L175' name='L175'></a> 175 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong>
+<a id='L176' name='L176'></a> 176 <a href='../R/11932.html' title='Multiple referred from 2 places.'>scf_torture_stats</a>(<strong class='reserved'>void</strong> *arg)
+<a id='L177' name='L177'></a> 177 <em class='brace'>{</em>
+<a id='L178' name='L178'></a> 178         VERBOSE_TOROUT_STRING("scf_torture_stats task started");
+<a id='L179' name='L179'></a> 179         <strong class='reserved'>do</strong> <em class='brace'>{</em>
+<a id='L180' name='L180'></a> 180                 <a href='../S/115.html#L1894' title='Defined at 1894 in time/timer.c.'>schedule_timeout_interruptible</a>(stat_interval * HZ);
+<a id='L181' name='L181'></a> 181                 <a href='../S/73.html#L140' title='Defined at 140 in scftorture.c.'>scf_torture_stats_print</a>();
+<a id='L182' name='L182'></a> 182                 <a href='../S/16.html#L489' title='Defined at 489 in torture.c.'>torture_shutdown_absorb</a>("scf_torture_stats");
+<a id='L183' name='L183'></a> 183         <em class='brace'>}</em> <strong class='reserved'>while</strong> (!<a href='../S/16.html#L760' title='Defined at 760 in torture.c.'>torture_must_stop</a>());
+<a id='L184' name='L184'></a> 184         <a href='../S/16.html#L783' title='Defined at 783 in torture.c.'>torture_kthread_stopping</a>("scf_torture_stats");
+<a id='L185' name='L185'></a> 185         <strong class='reserved'>return</strong> 0;
+<a id='L186' name='L186'></a> 186 <em class='brace'>}</em>
+<a id='L187' name='L187'></a> 187 
+<a id='L188' name='L188'></a> 188 <em class='comment'>// Add a primitive to the scf_sel_array[].</em>
+<a id='L189' name='L189'></a> 189 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/11925.html' title='Multiple referred from 6 places.'>scf_sel_add</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> weight, <strong class='reserved'>int</strong> prim, bool wait)
+<a id='L190' name='L190'></a> 190 <em class='brace'>{</em>
+<a id='L191' name='L191'></a> 191         <strong class='reserved'>struct</strong> <a href='../S/73.html#L111' title='Defined at 111 in scftorture.c.'>scf_selector</a> *scfsp = &amp;scf_sel_array[scf_sel_array_len];
+<a id='L192' name='L192'></a> 192 
+<a id='L193' name='L193'></a> 193         <em class='comment'>// If no weight, if array would overflow, if computing three-place</em>
+<a id='L194' name='L194'></a> 194         <em class='comment'>// percentages would overflow, or if the scf_prim_name[] array would</em>
+<a id='L195' name='L195'></a> 195         <em class='comment'>// overflow, don't bother.  In the last three two cases, complain.</em>
+<a id='L196' name='L196'></a> 196         <strong class='reserved'>if</strong> (!weight ||
+<a id='L197' name='L197'></a> 197             WARN_ON_ONCE(scf_sel_array_len &gt;= ARRAY_SIZE(scf_sel_array)) ||
+<a id='L198' name='L198'></a> 198             WARN_ON_ONCE(0 - 100000 * weight &lt;= 100000 * scf_sel_totweight) ||
+<a id='L199' name='L199'></a> 199             WARN_ON_ONCE(prim &gt;= ARRAY_SIZE(scf_prim_name)))
+<a id='L200' name='L200'></a> 200                 <strong class='reserved'>return</strong>;
+<a id='L201' name='L201'></a> 201         scf_sel_totweight += weight;
+<a id='L202' name='L202'></a> 202         scfsp-&gt;scfs_weight = scf_sel_totweight;
+<a id='L203' name='L203'></a> 203         scfsp-&gt;scfs_prim = prim;
+<a id='L204' name='L204'></a> 204         scfsp-&gt;scfs_wait = wait;
+<a id='L205' name='L205'></a> 205         scf_sel_array_len++;
+<a id='L206' name='L206'></a> 206 <em class='brace'>}</em>
+<a id='L207' name='L207'></a> 207 
+<a id='L208' name='L208'></a> 208 <em class='comment'>// Dump out weighting percentages for scf_prim_name[] array.</em>
+<a id='L209' name='L209'></a> 209 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/73.html#L526' title='Referred from 526 in scftorture.c.'>scf_sel_dump</a>(<strong class='reserved'>void</strong>)
+<a id='L210' name='L210'></a> 210 <em class='brace'>{</em>
+<a id='L211' name='L211'></a> 211         <strong class='reserved'>int</strong> i;
+<a id='L212' name='L212'></a> 212         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> oldw = 0;
+<a id='L213' name='L213'></a> 213         <strong class='reserved'>struct</strong> <a href='../S/73.html#L111' title='Defined at 111 in scftorture.c.'>scf_selector</a> *scfsp;
+<a id='L214' name='L214'></a> 214         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> w;
+<a id='L215' name='L215'></a> 215 
+<a id='L216' name='L216'></a> 216         <strong class='reserved'>for</strong> (i = 0; i &lt; scf_sel_array_len; i++) <em class='brace'>{</em>
+<a id='L217' name='L217'></a> 217                 scfsp = &amp;scf_sel_array[i];
+<a id='L218' name='L218'></a> 218                 w = (scfsp-&gt;scfs_weight - oldw) * 100000 / scf_sel_totweight;
+<a id='L219' name='L219'></a> 219                 pr_info("%s: %3lu.%03lu %s(%s)\n", __func__, w / 1000, w % 1000,
+<a id='L220' name='L220'></a> 220                         scf_prim_name[scfsp-&gt;scfs_prim],
+<a id='L221' name='L221'></a> 221                         scfsp-&gt;scfs_wait ? "wait" : "nowait");
+<a id='L222' name='L222'></a> 222                 oldw = scfsp-&gt;scfs_weight;
+<a id='L223' name='L223'></a> 223         <em class='brace'>}</em>
+<a id='L224' name='L224'></a> 224 <em class='brace'>}</em>
+<a id='L225' name='L225'></a> 225 
+<a id='L226' name='L226'></a> 226 <em class='comment'>// Randomly pick a primitive and wait/nowait, based on weightings.</em>
+<a id='L227' name='L227'></a> 227 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../S/73.html#L111' title='Defined at 111 in scftorture.c.'>scf_selector</a> *<a href='../S/73.html#L300' title='Referred from 300 in scftorture.c.'>scf_sel_rand</a>(<strong class='reserved'>struct</strong> torture_random_state *trsp)
+<a id='L228' name='L228'></a> 228 <em class='brace'>{</em>
+<a id='L229' name='L229'></a> 229         <strong class='reserved'>int</strong> i;
+<a id='L230' name='L230'></a> 230         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> w = <a href='../S/16.html#L331' title='Defined at 331 in torture.c.'>torture_random</a>(trsp) % (scf_sel_totweight + 1);
+<a id='L231' name='L231'></a> 231 
+<a id='L232' name='L232'></a> 232         <strong class='reserved'>for</strong> (i = 0; i &lt; scf_sel_array_len; i++)
+<a id='L233' name='L233'></a> 233                 <strong class='reserved'>if</strong> (scf_sel_array[i].scfs_weight &gt;= w)
+<a id='L234' name='L234'></a> 234                         <strong class='reserved'>return</strong> &amp;scf_sel_array[i];
+<a id='L235' name='L235'></a> 235         WARN_ON_ONCE(1);
+<a id='L236' name='L236'></a> 236         <strong class='reserved'>return</strong> &amp;scf_sel_array[0];
+<a id='L237' name='L237'></a> 237 <em class='brace'>}</em>
+<a id='L238' name='L238'></a> 238 
+<a id='L239' name='L239'></a> 239 <em class='comment'>// Update statistics and occasionally burn up mass quantities of CPU time,</em>
+<a id='L240' name='L240'></a> 240 <em class='comment'>// if told to do so via scftorture.longwait.  Otherwise, occasionally burn</em>
+<a id='L241' name='L241'></a> 241 <em class='comment'>// a little bit.</em>
+<a id='L242' name='L242'></a> 242 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/11923.html' title='Multiple referred from 3 places.'>scf_handler</a>(<strong class='reserved'>void</strong> *scfc_in)
+<a id='L243' name='L243'></a> 243 <em class='brace'>{</em>
+<a id='L244' name='L244'></a> 244         <strong class='reserved'>int</strong> i;
+<a id='L245' name='L245'></a> 245         <strong class='reserved'>int</strong> j;
+<a id='L246' name='L246'></a> 246         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> r = <a href='../S/16.html#L331' title='Defined at 331 in torture.c.'>torture_random</a>(this_cpu_ptr(&amp;scf_torture_rand));
+<a id='L247' name='L247'></a> 247         <strong class='reserved'>struct</strong> <a href='../S/73.html#L121' title='Defined at 121 in scftorture.c.'>scf_check</a> *scfcp = scfc_in;
+<a id='L248' name='L248'></a> 248 
+<a id='L249' name='L249'></a> 249         <strong class='reserved'>if</strong> (likely(scfcp)) <em class='brace'>{</em>
+<a id='L250' name='L250'></a> 250                 WRITE_ONCE(scfcp-&gt;scfc_out, false); <em class='comment'>// For multiple receivers.</em>
+<a id='L251' name='L251'></a> 251                 <strong class='reserved'>if</strong> (WARN_ON_ONCE(unlikely(!READ_ONCE(scfcp-&gt;scfc_in))))
+<a id='L252' name='L252'></a> 252                         atomic_inc(&amp;n_mb_in_errs);
+<a id='L253' name='L253'></a> 253         <em class='brace'>}</em>
+<a id='L254' name='L254'></a> 254         this_cpu_inc(scf_invoked_count);
+<a id='L255' name='L255'></a> 255         <strong class='reserved'>if</strong> (longwait &lt;= 0) <em class='brace'>{</em>
+<a id='L256' name='L256'></a> 256                 <strong class='reserved'>if</strong> (!(r &amp; 0xffc0))
+<a id='L257' name='L257'></a> 257                         udelay(r &amp; 0x3f);
+<a id='L258' name='L258'></a> 258                 <strong class='reserved'>goto</strong> out;
+<a id='L259' name='L259'></a> 259         <em class='brace'>}</em>
+<a id='L260' name='L260'></a> 260         <strong class='reserved'>if</strong> (r &amp; 0xfff)
+<a id='L261' name='L261'></a> 261                 <strong class='reserved'>goto</strong> out;
+<a id='L262' name='L262'></a> 262         r = (r &gt;&gt; 12);
+<a id='L263' name='L263'></a> 263         <strong class='reserved'>if</strong> (longwait &lt;= 0) <em class='brace'>{</em>
+<a id='L264' name='L264'></a> 264                 udelay((r &amp; 0xff) + 1);
+<a id='L265' name='L265'></a> 265                 <strong class='reserved'>goto</strong> out;
+<a id='L266' name='L266'></a> 266         <em class='brace'>}</em>
+<a id='L267' name='L267'></a> 267         r = r % longwait + 1;
+<a id='L268' name='L268'></a> 268         <strong class='reserved'>for</strong> (i = 0; i &lt; r; i++) <em class='brace'>{</em>
+<a id='L269' name='L269'></a> 269                 <strong class='reserved'>for</strong> (j = 0; j &lt; 1000; j++) <em class='brace'>{</em>
+<a id='L270' name='L270'></a> 270                         udelay(1000);
+<a id='L271' name='L271'></a> 271                         cpu_relax();
+<a id='L272' name='L272'></a> 272                 <em class='brace'>}</em>
+<a id='L273' name='L273'></a> 273         <em class='brace'>}</em>
+<a id='L274' name='L274'></a> 274 out:
+<a id='L275' name='L275'></a> 275         <strong class='reserved'>if</strong> (unlikely(!scfcp))
+<a id='L276' name='L276'></a> 276                 <strong class='reserved'>return</strong>;
+<a id='L277' name='L277'></a> 277         <strong class='reserved'>if</strong> (scfcp-&gt;scfc_wait)
+<a id='L278' name='L278'></a> 278                 WRITE_ONCE(scfcp-&gt;scfc_out, true);
+<a id='L279' name='L279'></a> 279         <strong class='reserved'>else</strong>
+<a id='L280' name='L280'></a> 280                 kfree(scfcp);
+<a id='L281' name='L281'></a> 281 <em class='brace'>}</em>
+<a id='L282' name='L282'></a> 282 
+<a id='L283' name='L283'></a> 283 <em class='comment'>// As above, but check for correct CPU.</em>
+<a id='L284' name='L284'></a> 284 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/73.html#L328' title='Referred from 328 in scftorture.c.'>scf_handler_1</a>(<strong class='reserved'>void</strong> *scfc_in)
+<a id='L285' name='L285'></a> 285 <em class='brace'>{</em>
+<a id='L286' name='L286'></a> 286         <strong class='reserved'>struct</strong> <a href='../S/73.html#L121' title='Defined at 121 in scftorture.c.'>scf_check</a> *scfcp = scfc_in;
+<a id='L287' name='L287'></a> 287 
+<a id='L288' name='L288'></a> 288         <strong class='reserved'>if</strong> (likely(scfcp) &amp;&amp; WARN_ONCE(smp_processor_id() != scfcp-&gt;scfc_cpu, "%s: Wanted CPU %d got CPU %d\n", __func__, scfcp-&gt;scfc_cpu, smp_processor_id())) <em class='brace'>{</em>
+<a id='L289' name='L289'></a> 289                 atomic_inc(&amp;n_errs);
+<a id='L290' name='L290'></a> 290         <em class='brace'>}</em>
+<a id='L291' name='L291'></a> 291         <a href='../S/73.html#L242' title='Defined at 242 in scftorture.c.'>scf_handler</a>(scfcp);
+<a id='L292' name='L292'></a> 292 <em class='brace'>}</em>
+<a id='L293' name='L293'></a> 293 
+<a id='L294' name='L294'></a> 294 <em class='comment'>// Randomly do an smp_call_function*() invocation.</em>
+<a id='L295' name='L295'></a> 295 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/73.html#L414' title='Referred from 414 in scftorture.c.'>scftorture_invoke_one</a>(<strong class='reserved'>struct</strong> <a href='../S/73.html#L82' title='Defined at 82 in scftorture.c.'>scf_statistics</a> *scfp, <strong class='reserved'>struct</strong> torture_random_state *trsp)
+<a id='L296' name='L296'></a> 296 <em class='brace'>{</em>
+<a id='L297' name='L297'></a> 297         uintptr_t cpu;
+<a id='L298' name='L298'></a> 298         <strong class='reserved'>int</strong> ret = 0;
+<a id='L299' name='L299'></a> 299         <strong class='reserved'>struct</strong> <a href='../S/73.html#L121' title='Defined at 121 in scftorture.c.'>scf_check</a> *scfcp = NULL;
+<a id='L300' name='L300'></a> 300         <strong class='reserved'>struct</strong> <a href='../S/73.html#L111' title='Defined at 111 in scftorture.c.'>scf_selector</a> *scfsp = <a href='../S/73.html#L227' title='Defined at 227 in scftorture.c.'>scf_sel_rand</a>(trsp);
+<a id='L301' name='L301'></a> 301 
+<a id='L302' name='L302'></a> 302         <strong class='reserved'>if</strong> (use_cpus_read_lock)
+<a id='L303' name='L303'></a> 303                 <a href='../S/327.html#L299' title='Defined at 299 in cpu.c.'>cpus_read_lock</a>();
+<a id='L304' name='L304'></a> 304         <strong class='reserved'>else</strong>
+<a id='L305' name='L305'></a> 305                 preempt_disable();
+<a id='L306' name='L306'></a> 306         <strong class='reserved'>if</strong> (scfsp-&gt;scfs_prim == <a href='../S/73.html#L100' title='Defined at 100 in scftorture.c.'>SCF_PRIM_SINGLE</a> || scfsp-&gt;scfs_wait) <em class='brace'>{</em>
+<a id='L307' name='L307'></a> 307                 scfcp = kmalloc(<strong class='reserved'>sizeof</strong>(*scfcp), GFP_ATOMIC);
+<a id='L308' name='L308'></a> 308                 <strong class='reserved'>if</strong> (WARN_ON_ONCE(!scfcp)) <em class='brace'>{</em>
+<a id='L309' name='L309'></a> 309                         atomic_inc(&amp;n_alloc_errs);
+<a id='L310' name='L310'></a> 310                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L311' name='L311'></a> 311                         scfcp-&gt;scfc_cpu = -1;
+<a id='L312' name='L312'></a> 312                         scfcp-&gt;scfc_wait = scfsp-&gt;scfs_wait;
+<a id='L313' name='L313'></a> 313                         scfcp-&gt;scfc_out = false;
+<a id='L314' name='L314'></a> 314                 <em class='brace'>}</em>
+<a id='L315' name='L315'></a> 315         <em class='brace'>}</em>
+<a id='L316' name='L316'></a> 316         <strong class='reserved'>switch</strong> (scfsp-&gt;scfs_prim) <em class='brace'>{</em>
+<a id='L317' name='L317'></a> 317         <strong class='reserved'>case</strong> <a href='../S/73.html#L100' title='Defined at 100 in scftorture.c.'>SCF_PRIM_SINGLE</a>:
+<a id='L318' name='L318'></a> 318                 cpu = <a href='../S/16.html#L331' title='Defined at 331 in torture.c.'>torture_random</a>(trsp) % nr_cpu_ids;
+<a id='L319' name='L319'></a> 319                 <strong class='reserved'>if</strong> (scfsp-&gt;scfs_wait)
+<a id='L320' name='L320'></a> 320                         scfp-&gt;n_single_wait++;
+<a id='L321' name='L321'></a> 321                 <strong class='reserved'>else</strong>
+<a id='L322' name='L322'></a> 322                         scfp-&gt;n_single++;
+<a id='L323' name='L323'></a> 323                 <strong class='reserved'>if</strong> (scfcp) <em class='brace'>{</em>
+<a id='L324' name='L324'></a> 324                         scfcp-&gt;scfc_cpu = cpu;
+<a id='L325' name='L325'></a> 325                         barrier(); <em class='comment'>// Prevent race-reduction compiler optimizations.</em>
+<a id='L326' name='L326'></a> 326                         scfcp-&gt;scfc_in = true;
+<a id='L327' name='L327'></a> 327                 <em class='brace'>}</em>
+<a id='L328' name='L328'></a> 328                 ret = <a href='../D/13135.html' title='Multiple defined in 2 places.'>smp_call_function_single</a>(cpu, <a href='../S/73.html#L284' title='Defined at 284 in scftorture.c.'>scf_handler_1</a>, (<strong class='reserved'>void</strong> *)scfcp, scfsp-&gt;scfs_wait);
+<a id='L329' name='L329'></a> 329                 <strong class='reserved'>if</strong> (ret) <em class='brace'>{</em>
+<a id='L330' name='L330'></a> 330                         <strong class='reserved'>if</strong> (scfsp-&gt;scfs_wait)
+<a id='L331' name='L331'></a> 331                                 scfp-&gt;n_single_wait_ofl++;
+<a id='L332' name='L332'></a> 332                         <strong class='reserved'>else</strong>
+<a id='L333' name='L333'></a> 333                                 scfp-&gt;n_single_ofl++;
+<a id='L334' name='L334'></a> 334                         kfree(scfcp);
+<a id='L335' name='L335'></a> 335                         scfcp = NULL;
+<a id='L336' name='L336'></a> 336                 <em class='brace'>}</em>
+<a id='L337' name='L337'></a> 337                 <strong class='reserved'>break</strong>;
+<a id='L338' name='L338'></a> 338         <strong class='reserved'>case</strong> <a href='../S/73.html#L101' title='Defined at 101 in scftorture.c.'>SCF_PRIM_MANY</a>:
+<a id='L339' name='L339'></a> 339                 <strong class='reserved'>if</strong> (scfsp-&gt;scfs_wait)
+<a id='L340' name='L340'></a> 340                         scfp-&gt;n_many_wait++;
+<a id='L341' name='L341'></a> 341                 <strong class='reserved'>else</strong>
+<a id='L342' name='L342'></a> 342                         scfp-&gt;n_many++;
+<a id='L343' name='L343'></a> 343                 <strong class='reserved'>if</strong> (scfcp) <em class='brace'>{</em>
+<a id='L344' name='L344'></a> 344                         barrier(); <em class='comment'>// Prevent race-reduction compiler optimizations.</em>
+<a id='L345' name='L345'></a> 345                         scfcp-&gt;scfc_in = true;
+<a id='L346' name='L346'></a> 346                 <em class='brace'>}</em>
+<a id='L347' name='L347'></a> 347                 <a href='../S/229.html#L713' title='Defined at 713 in smp.c.'>smp_call_function_many</a>(cpu_online_mask, <a href='../S/73.html#L242' title='Defined at 242 in scftorture.c.'>scf_handler</a>, scfcp, scfsp-&gt;scfs_wait);
+<a id='L348' name='L348'></a> 348                 <strong class='reserved'>break</strong>;
+<a id='L349' name='L349'></a> 349         <strong class='reserved'>case</strong> <a href='../S/73.html#L102' title='Defined at 102 in scftorture.c.'>SCF_PRIM_ALL</a>:
+<a id='L350' name='L350'></a> 350                 <strong class='reserved'>if</strong> (scfsp-&gt;scfs_wait)
+<a id='L351' name='L351'></a> 351                         scfp-&gt;n_all_wait++;
+<a id='L352' name='L352'></a> 352                 <strong class='reserved'>else</strong>
+<a id='L353' name='L353'></a> 353                         scfp-&gt;n_all++;
+<a id='L354' name='L354'></a> 354                 <strong class='reserved'>if</strong> (scfcp) <em class='brace'>{</em>
+<a id='L355' name='L355'></a> 355                         barrier(); <em class='comment'>// Prevent race-reduction compiler optimizations.</em>
+<a id='L356' name='L356'></a> 356                         scfcp-&gt;scfc_in = true;
+<a id='L357' name='L357'></a> 357                 <em class='brace'>}</em>
+<a id='L358' name='L358'></a> 358                 <a href='../S/229.html#L735' title='Defined at 735 in smp.c.'>smp_call_function</a>(<a href='../S/73.html#L242' title='Defined at 242 in scftorture.c.'>scf_handler</a>, scfcp, scfsp-&gt;scfs_wait);
+<a id='L359' name='L359'></a> 359                 <strong class='reserved'>break</strong>;
+<a id='L360' name='L360'></a> 360         <strong class='reserved'>default</strong>:
+<a id='L361' name='L361'></a> 361                 WARN_ON_ONCE(1);
+<a id='L362' name='L362'></a> 362                 <strong class='reserved'>if</strong> (scfcp)
+<a id='L363' name='L363'></a> 363                         scfcp-&gt;scfc_out = true;
+<a id='L364' name='L364'></a> 364         <em class='brace'>}</em>
+<a id='L365' name='L365'></a> 365         <strong class='reserved'>if</strong> (scfcp &amp;&amp; scfsp-&gt;scfs_wait) <em class='brace'>{</em>
+<a id='L366' name='L366'></a> 366                 <strong class='reserved'>if</strong> (WARN_ON_ONCE((num_online_cpus() &gt; 1 || scfsp-&gt;scfs_prim == <a href='../S/73.html#L100' title='Defined at 100 in scftorture.c.'>SCF_PRIM_SINGLE</a>) &amp;&amp;
+<a id='L367' name='L367'></a> 367                                  !scfcp-&gt;scfc_out))
+<a id='L368' name='L368'></a> 368                         atomic_inc(&amp;n_mb_out_errs); <em class='comment'>// Leak rather than trash!</em>
+<a id='L369' name='L369'></a> 369                 <strong class='reserved'>else</strong>
+<a id='L370' name='L370'></a> 370                         kfree(scfcp);
+<a id='L371' name='L371'></a> 371                 barrier(); <em class='comment'>// Prevent race-reduction compiler optimizations.</em>
+<a id='L372' name='L372'></a> 372         <em class='brace'>}</em>
+<a id='L373' name='L373'></a> 373         <strong class='reserved'>if</strong> (use_cpus_read_lock)
+<a id='L374' name='L374'></a> 374                 <a href='../S/327.html#L311' title='Defined at 311 in cpu.c.'>cpus_read_unlock</a>();
+<a id='L375' name='L375'></a> 375         <strong class='reserved'>else</strong>
+<a id='L376' name='L376'></a> 376                 preempt_enable();
+<a id='L377' name='L377'></a> 377         <strong class='reserved'>if</strong> (!(<a href='../S/16.html#L331' title='Defined at 331 in torture.c.'>torture_random</a>(trsp) &amp; 0xfff))
+<a id='L378' name='L378'></a> 378                 <a href='../S/115.html#L1908' title='Defined at 1908 in time/timer.c.'>schedule_timeout_uninterruptible</a>(1);
+<a id='L379' name='L379'></a> 379 <em class='brace'>}</em>
+<a id='L380' name='L380'></a> 380 
+<a id='L381' name='L381'></a> 381 <em class='comment'>// SCF test kthread.  Repeatedly does calls to members of the</em>
+<a id='L382' name='L382'></a> 382 <em class='comment'>// smp_call_function() family of functions.</em>
+<a id='L383' name='L383'></a> 383 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/73.html#L554' title='Referred from 554 in scftorture.c.'>scftorture_invoker</a>(<strong class='reserved'>void</strong> *arg)
+<a id='L384' name='L384'></a> 384 <em class='brace'>{</em>
+<a id='L385' name='L385'></a> 385         <strong class='reserved'>int</strong> cpu;
+<a id='L386' name='L386'></a> 386         DEFINE_TORTURE_RANDOM(rand);
+<a id='L387' name='L387'></a> 387         <strong class='reserved'>struct</strong> <a href='../S/73.html#L82' title='Defined at 82 in scftorture.c.'>scf_statistics</a> *scfp = (<strong class='reserved'>struct</strong> <a href='../S/73.html#L82' title='Defined at 82 in scftorture.c.'>scf_statistics</a> *)arg;
+<a id='L388' name='L388'></a> 388         bool was_offline = false;
+<a id='L389' name='L389'></a> 389 
+<a id='L390' name='L390'></a> 390         <a href='../S/73.html#L44' title='Defined at 44 in scftorture.c.'>VERBOSE_SCFTORTOUT</a>("scftorture_invoker %d: task started", scfp-&gt;cpu);
+<a id='L391' name='L391'></a> 391         cpu = scfp-&gt;cpu % nr_cpu_ids;
+<a id='L392' name='L392'></a> 392         <a href='../S/441.html#L2063' title='Defined at 2063 in sched/core.c.'>set_cpus_allowed_ptr</a>(current, cpumask_of(cpu));
+<a id='L393' name='L393'></a> 393         <a href='../S/441.html#L5192' title='Defined at 5192 in sched/core.c.'>set_user_nice</a>(current, MAX_NICE);
+<a id='L394' name='L394'></a> 394         <strong class='reserved'>if</strong> (holdoff)
+<a id='L395' name='L395'></a> 395                 <a href='../S/115.html#L1894' title='Defined at 1894 in time/timer.c.'>schedule_timeout_interruptible</a>(holdoff * HZ);
+<a id='L396' name='L396'></a> 396 
+<a id='L397' name='L397'></a> 397         <a href='../S/73.html#L44' title='Defined at 44 in scftorture.c.'>VERBOSE_SCFTORTOUT</a>("scftorture_invoker %d: Waiting for all SCF torturers from cpu %d", scfp-&gt;cpu, smp_processor_id());
+<a id='L398' name='L398'></a> 398 
+<a id='L399' name='L399'></a> 399         <em class='comment'>// Make sure that the CPU is affinitized appropriately during testing.</em>
+<a id='L400' name='L400'></a> 400         WARN_ON_ONCE(smp_processor_id() != scfp-&gt;cpu);
+<a id='L401' name='L401'></a> 401 
+<a id='L402' name='L402'></a> 402         <strong class='reserved'>if</strong> (!atomic_dec_return(&amp;n_started))
+<a id='L403' name='L403'></a> 403                 <strong class='reserved'>while</strong> (atomic_read_acquire(&amp;n_started)) <em class='brace'>{</em>
+<a id='L404' name='L404'></a> 404                         <strong class='reserved'>if</strong> (<a href='../S/16.html#L760' title='Defined at 760 in torture.c.'>torture_must_stop</a>()) <em class='brace'>{</em>
+<a id='L405' name='L405'></a> 405                                 <a href='../S/73.html#L44' title='Defined at 44 in scftorture.c.'>VERBOSE_SCFTORTOUT</a>("scftorture_invoker %d ended before starting", scfp-&gt;cpu);
+<a id='L406' name='L406'></a> 406                                 <strong class='reserved'>goto</strong> end;
+<a id='L407' name='L407'></a> 407                         <em class='brace'>}</em>
+<a id='L408' name='L408'></a> 408                         <a href='../S/115.html#L1908' title='Defined at 1908 in time/timer.c.'>schedule_timeout_uninterruptible</a>(1);
+<a id='L409' name='L409'></a> 409                 <em class='brace'>}</em>
+<a id='L410' name='L410'></a> 410 
+<a id='L411' name='L411'></a> 411         <a href='../S/73.html#L44' title='Defined at 44 in scftorture.c.'>VERBOSE_SCFTORTOUT</a>("scftorture_invoker %d started", scfp-&gt;cpu);
+<a id='L412' name='L412'></a> 412 
+<a id='L413' name='L413'></a> 413         <strong class='reserved'>do</strong> <em class='brace'>{</em>
+<a id='L414' name='L414'></a> 414                 <a href='../S/73.html#L295' title='Defined at 295 in scftorture.c.'>scftorture_invoke_one</a>(scfp, &amp;rand);
+<a id='L415' name='L415'></a> 415                 <strong class='reserved'>while</strong> (cpu_is_offline(cpu) &amp;&amp; !<a href='../S/16.html#L760' title='Defined at 760 in torture.c.'>torture_must_stop</a>()) <em class='brace'>{</em>
+<a id='L416' name='L416'></a> 416                         <a href='../S/115.html#L1894' title='Defined at 1894 in time/timer.c.'>schedule_timeout_interruptible</a>(HZ / 5);
+<a id='L417' name='L417'></a> 417                         was_offline = true;
+<a id='L418' name='L418'></a> 418                 <em class='brace'>}</em>
+<a id='L419' name='L419'></a> 419                 <strong class='reserved'>if</strong> (was_offline) <em class='brace'>{</em>
+<a id='L420' name='L420'></a> 420                         <a href='../S/441.html#L2063' title='Defined at 2063 in sched/core.c.'>set_cpus_allowed_ptr</a>(current, cpumask_of(cpu));
+<a id='L421' name='L421'></a> 421                         was_offline = false;
+<a id='L422' name='L422'></a> 422                 <em class='brace'>}</em>
+<a id='L423' name='L423'></a> 423                 cond_resched();
+<a id='L424' name='L424'></a> 424         <em class='brace'>}</em> <strong class='reserved'>while</strong> (!<a href='../S/16.html#L760' title='Defined at 760 in torture.c.'>torture_must_stop</a>());
+<a id='L425' name='L425'></a> 425 
+<a id='L426' name='L426'></a> 426         <a href='../S/73.html#L44' title='Defined at 44 in scftorture.c.'>VERBOSE_SCFTORTOUT</a>("scftorture_invoker %d ended", scfp-&gt;cpu);
+<a id='L427' name='L427'></a> 427 end:
+<a id='L428' name='L428'></a> 428         <a href='../S/16.html#L783' title='Defined at 783 in torture.c.'>torture_kthread_stopping</a>("scftorture_invoker");
+<a id='L429' name='L429'></a> 429         <strong class='reserved'>return</strong> 0;
+<a id='L430' name='L430'></a> 430 <em class='brace'>}</em>
+<a id='L431' name='L431'></a> 431 
+<a id='L432' name='L432'></a> 432 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong>
+<a id='L433' name='L433'></a> 433 <a href='../R/11936.html' title='Multiple referred from 4 places.'>scftorture_print_module_parms</a>(<strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *tag)
+<a id='L434' name='L434'></a> 434 <em class='brace'>{</em>
+<a id='L435' name='L435'></a> 435         pr_alert(<a href='../S/73.html#L39' title='Defined at 39 in scftorture.c.'>SCFTORT_FLAG</a>
+<a id='L436' name='L436'></a> 436                  "--- %s:  verbose=%d holdoff=%d longwait=%d nthreads=%d onoff_holdoff=%d onoff_interval=%d shutdown_secs=%d stat_interval=%d stutter_cpus=%d use_cpus_read_lock=%d, weight_single=%d, weight_single_wait=%d, weight_many=%d, weight_many_wait=%d, weight_all=%d, weight_all_wait=%d\n", tag,
+<a id='L437' name='L437'></a> 437                  <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>, holdoff, longwait, nthreads, onoff_holdoff, onoff_interval, shutdown, stat_interval, stutter_cpus, use_cpus_read_lock, weight_single, weight_single_wait, weight_many, weight_many_wait, weight_all, weight_all_wait);
+<a id='L438' name='L438'></a> 438 <em class='brace'>}</em>
+<a id='L439' name='L439'></a> 439 
+<a id='L440' name='L440'></a> 440 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/73.html#L457' title='Referred from 457 in scftorture.c.'>scf_cleanup_handler</a>(<strong class='reserved'>void</strong> *unused)
+<a id='L441' name='L441'></a> 441 <em class='brace'>{</em>
+<a id='L442' name='L442'></a> 442 <em class='brace'>}</em>
+<a id='L443' name='L443'></a> 443 
+<a id='L444' name='L444'></a> 444 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/11930.html' title='Multiple referred from 3 places.'>scf_torture_cleanup</a>(<strong class='reserved'>void</strong>)
+<a id='L445' name='L445'></a> 445 <em class='brace'>{</em>
+<a id='L446' name='L446'></a> 446         <strong class='reserved'>int</strong> i;
+<a id='L447' name='L447'></a> 447 
+<a id='L448' name='L448'></a> 448         <strong class='reserved'>if</strong> (<a href='../S/16.html#L730' title='Defined at 730 in torture.c.'>torture_cleanup_begin</a>())
+<a id='L449' name='L449'></a> 449                 <strong class='reserved'>return</strong>;
+<a id='L450' name='L450'></a> 450 
+<a id='L451' name='L451'></a> 451         WRITE_ONCE(scfdone, true);
+<a id='L452' name='L452'></a> 452         <strong class='reserved'>if</strong> (nthreads)
+<a id='L453' name='L453'></a> 453                 <strong class='reserved'>for</strong> (i = 0; i &lt; nthreads; i++)
+<a id='L454' name='L454'></a> 454                         torture_stop_kthread("scftorture_invoker", scf_stats_p[i].task);
+<a id='L455' name='L455'></a> 455         <strong class='reserved'>else</strong>
+<a id='L456' name='L456'></a> 456                 <strong class='reserved'>goto</strong> end;
+<a id='L457' name='L457'></a> 457         <a href='../S/229.html#L735' title='Defined at 735 in smp.c.'>smp_call_function</a>(<a href='../S/73.html#L440' title='Defined at 440 in scftorture.c.'>scf_cleanup_handler</a>, NULL, 0);
+<a id='L458' name='L458'></a> 458         torture_stop_kthread(<a href='../S/73.html#L176' title='Defined at 176 in scftorture.c.'>scf_torture_stats</a>, scf_torture_stats_task);
+<a id='L459' name='L459'></a> 459         <a href='../S/73.html#L140' title='Defined at 140 in scftorture.c.'>scf_torture_stats_print</a>();  <em class='comment'>// -After- the stats thread is stopped!</em>
+<a id='L460' name='L460'></a> 460         kfree(scf_stats_p);  <em class='comment'>// -After- the last stats print has completed!</em>
+<a id='L461' name='L461'></a> 461         scf_stats_p = NULL;
+<a id='L462' name='L462'></a> 462 
+<a id='L463' name='L463'></a> 463         <strong class='reserved'>if</strong> (atomic_read(&amp;n_errs) || atomic_read(&amp;n_mb_in_errs) || atomic_read(&amp;n_mb_out_errs))
+<a id='L464' name='L464'></a> 464                 <a href='../S/73.html#L433' title='Defined at 433 in scftorture.c.'>scftorture_print_module_parms</a>("End of test: FAILURE");
+<a id='L465' name='L465'></a> 465         <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (<a href='../S/16.html#L311' title='Defined at 311 in torture.c.'>torture_onoff_failures</a>())
+<a id='L466' name='L466'></a> 466                 <a href='../S/73.html#L433' title='Defined at 433 in scftorture.c.'>scftorture_print_module_parms</a>("End of test: LOCK_HOTPLUG");
+<a id='L467' name='L467'></a> 467         <strong class='reserved'>else</strong>
+<a id='L468' name='L468'></a> 468                 <a href='../S/73.html#L433' title='Defined at 433 in scftorture.c.'>scftorture_print_module_parms</a>("End of test: SUCCESS");
+<a id='L469' name='L469'></a> 469 
+<a id='L470' name='L470'></a> 470 end:
+<a id='L471' name='L471'></a> 471         <a href='../S/16.html#L749' title='Defined at 749 in torture.c.'>torture_cleanup_end</a>();
+<a id='L472' name='L472'></a> 472 <em class='brace'>}</em>
+<a id='L473' name='L473'></a> 473 
+<a id='L474' name='L474'></a> 474 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __init <a href='../S/73.html#L574' title='Referred from 574 in scftorture.c.'>scf_torture_init</a>(<strong class='reserved'>void</strong>)
+<a id='L475' name='L475'></a> 475 <em class='brace'>{</em>
+<a id='L476' name='L476'></a> 476         <strong class='reserved'>long</strong> i;
+<a id='L477' name='L477'></a> 477         <strong class='reserved'>int</strong> firsterr = 0;
+<a id='L478' name='L478'></a> 478         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> weight_single1 = weight_single;
+<a id='L479' name='L479'></a> 479         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> weight_single_wait1 = weight_single_wait;
+<a id='L480' name='L480'></a> 480         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> weight_many1 = weight_many;
+<a id='L481' name='L481'></a> 481         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> weight_many_wait1 = weight_many_wait;
+<a id='L482' name='L482'></a> 482         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> weight_all1 = weight_all;
+<a id='L483' name='L483'></a> 483         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> weight_all_wait1 = weight_all_wait;
+<a id='L484' name='L484'></a> 484 
+<a id='L485' name='L485'></a> 485         <strong class='reserved'>if</strong> (!<a href='../S/16.html#L688' title='Defined at 688 in torture.c.'>torture_init_begin</a>(<a href='../S/73.html#L38' title='Defined at 38 in scftorture.c.'>SCFTORT_STRING</a>, <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>))
+<a id='L486' name='L486'></a> 486                 <strong class='reserved'>return</strong> -EBUSY;
+<a id='L487' name='L487'></a> 487 
+<a id='L488' name='L488'></a> 488         <a href='../S/73.html#L433' title='Defined at 433 in scftorture.c.'>scftorture_print_module_parms</a>("Start of test");
+<a id='L489' name='L489'></a> 489 
+<a id='L490' name='L490'></a> 490         <strong class='reserved'>if</strong> (weight_single == -1 &amp;&amp; weight_single_wait == -1 &amp;&amp;
+<a id='L491' name='L491'></a> 491             weight_many == -1 &amp;&amp; weight_many_wait == -1 &amp;&amp;
+<a id='L492' name='L492'></a> 492             weight_all == -1 &amp;&amp; weight_all_wait == -1) <em class='brace'>{</em>
+<a id='L493' name='L493'></a> 493                 weight_single1 = 2 * nr_cpu_ids;
+<a id='L494' name='L494'></a> 494                 weight_single_wait1 = 2 * nr_cpu_ids;
+<a id='L495' name='L495'></a> 495                 weight_many1 = 2;
+<a id='L496' name='L496'></a> 496                 weight_many_wait1 = 2;
+<a id='L497' name='L497'></a> 497                 weight_all1 = 1;
+<a id='L498' name='L498'></a> 498                 weight_all_wait1 = 1;
+<a id='L499' name='L499'></a> 499         <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L500' name='L500'></a> 500                 <strong class='reserved'>if</strong> (weight_single == -1)
+<a id='L501' name='L501'></a> 501                         weight_single1 = 0;
+<a id='L502' name='L502'></a> 502                 <strong class='reserved'>if</strong> (weight_single_wait == -1)
+<a id='L503' name='L503'></a> 503                         weight_single_wait1 = 0;
+<a id='L504' name='L504'></a> 504                 <strong class='reserved'>if</strong> (weight_many == -1)
+<a id='L505' name='L505'></a> 505                         weight_many1 = 0;
+<a id='L506' name='L506'></a> 506                 <strong class='reserved'>if</strong> (weight_many_wait == -1)
+<a id='L507' name='L507'></a> 507                         weight_many_wait1 = 0;
+<a id='L508' name='L508'></a> 508                 <strong class='reserved'>if</strong> (weight_all == -1)
+<a id='L509' name='L509'></a> 509                         weight_all1 = 0;
+<a id='L510' name='L510'></a> 510                 <strong class='reserved'>if</strong> (weight_all_wait == -1)
+<a id='L511' name='L511'></a> 511                         weight_all_wait1 = 0;
+<a id='L512' name='L512'></a> 512         <em class='brace'>}</em>
+<a id='L513' name='L513'></a> 513         <strong class='reserved'>if</strong> (weight_single1 == 0 &amp;&amp; weight_single_wait1 == 0 &amp;&amp;
+<a id='L514' name='L514'></a> 514             weight_many1 == 0 &amp;&amp; weight_many_wait1 == 0 &amp;&amp;
+<a id='L515' name='L515'></a> 515             weight_all1 == 0 &amp;&amp; weight_all_wait1 == 0) <em class='brace'>{</em>
+<a id='L516' name='L516'></a> 516                 <a href='../S/73.html#L47' title='Defined at 47 in scftorture.c.'>VERBOSE_SCFTORTOUT_ERRSTRING</a>("all zero weights makes no sense");
+<a id='L517' name='L517'></a> 517                 firsterr = -EINVAL;
+<a id='L518' name='L518'></a> 518                 <strong class='reserved'>goto</strong> unwind;
+<a id='L519' name='L519'></a> 519         <em class='brace'>}</em>
+<a id='L520' name='L520'></a> 520         <a href='../S/73.html#L189' title='Defined at 189 in scftorture.c.'>scf_sel_add</a>(weight_single1, <a href='../S/73.html#L100' title='Defined at 100 in scftorture.c.'>SCF_PRIM_SINGLE</a>, false);
+<a id='L521' name='L521'></a> 521         <a href='../S/73.html#L189' title='Defined at 189 in scftorture.c.'>scf_sel_add</a>(weight_single_wait1, <a href='../S/73.html#L100' title='Defined at 100 in scftorture.c.'>SCF_PRIM_SINGLE</a>, true);
+<a id='L522' name='L522'></a> 522         <a href='../S/73.html#L189' title='Defined at 189 in scftorture.c.'>scf_sel_add</a>(weight_many1, <a href='../S/73.html#L101' title='Defined at 101 in scftorture.c.'>SCF_PRIM_MANY</a>, false);
+<a id='L523' name='L523'></a> 523         <a href='../S/73.html#L189' title='Defined at 189 in scftorture.c.'>scf_sel_add</a>(weight_many_wait1, <a href='../S/73.html#L101' title='Defined at 101 in scftorture.c.'>SCF_PRIM_MANY</a>, true);
+<a id='L524' name='L524'></a> 524         <a href='../S/73.html#L189' title='Defined at 189 in scftorture.c.'>scf_sel_add</a>(weight_all1, <a href='../S/73.html#L102' title='Defined at 102 in scftorture.c.'>SCF_PRIM_ALL</a>, false);
+<a id='L525' name='L525'></a> 525         <a href='../S/73.html#L189' title='Defined at 189 in scftorture.c.'>scf_sel_add</a>(weight_all_wait1, <a href='../S/73.html#L102' title='Defined at 102 in scftorture.c.'>SCF_PRIM_ALL</a>, true);
+<a id='L526' name='L526'></a> 526         <a href='../S/73.html#L209' title='Defined at 209 in scftorture.c.'>scf_sel_dump</a>();
+<a id='L527' name='L527'></a> 527 
+<a id='L528' name='L528'></a> 528         <strong class='reserved'>if</strong> (onoff_interval &gt; 0) <em class='brace'>{</em>
+<a id='L529' name='L529'></a> 529                 firsterr = <a href='../S/16.html#L263' title='Defined at 263 in torture.c.'>torture_onoff_init</a>(onoff_holdoff * HZ, onoff_interval, NULL);
+<a id='L530' name='L530'></a> 530                 <strong class='reserved'>if</strong> (firsterr)
+<a id='L531' name='L531'></a> 531                         <strong class='reserved'>goto</strong> unwind;
+<a id='L532' name='L532'></a> 532         <em class='brace'>}</em>
+<a id='L533' name='L533'></a> 533         <strong class='reserved'>if</strong> (shutdown_secs &gt; 0) <em class='brace'>{</em>
+<a id='L534' name='L534'></a> 534                 firsterr = <a href='../S/16.html#L542' title='Defined at 542 in torture.c.'>torture_shutdown_init</a>(shutdown_secs, <a href='../S/73.html#L444' title='Defined at 444 in scftorture.c.'>scf_torture_cleanup</a>);
+<a id='L535' name='L535'></a> 535                 <strong class='reserved'>if</strong> (firsterr)
+<a id='L536' name='L536'></a> 536                         <strong class='reserved'>goto</strong> unwind;
+<a id='L537' name='L537'></a> 537         <em class='brace'>}</em>
+<a id='L538' name='L538'></a> 538 
+<a id='L539' name='L539'></a> 539         <em class='comment'>// Worker tasks invoking smp_call_function().</em>
+<a id='L540' name='L540'></a> 540         <strong class='reserved'>if</strong> (nthreads &lt; 0)
+<a id='L541' name='L541'></a> 541                 nthreads = num_online_cpus();
+<a id='L542' name='L542'></a> 542         scf_stats_p = kcalloc(nthreads, <strong class='reserved'>sizeof</strong>(scf_stats_p[0]), GFP_KERNEL);
+<a id='L543' name='L543'></a> 543         <strong class='reserved'>if</strong> (!scf_stats_p) <em class='brace'>{</em>
+<a id='L544' name='L544'></a> 544                 <a href='../S/73.html#L47' title='Defined at 47 in scftorture.c.'>VERBOSE_SCFTORTOUT_ERRSTRING</a>("out of memory");
+<a id='L545' name='L545'></a> 545                 firsterr = -ENOMEM;
+<a id='L546' name='L546'></a> 546                 <strong class='reserved'>goto</strong> unwind;
+<a id='L547' name='L547'></a> 547         <em class='brace'>}</em>
+<a id='L548' name='L548'></a> 548 
+<a id='L549' name='L549'></a> 549         <a href='../S/73.html#L44' title='Defined at 44 in scftorture.c.'>VERBOSE_SCFTORTOUT</a>("Starting %d smp_call_function() threads\n", nthreads);
+<a id='L550' name='L550'></a> 550 
+<a id='L551' name='L551'></a> 551         atomic_set(&amp;n_started, nthreads);
+<a id='L552' name='L552'></a> 552         <strong class='reserved'>for</strong> (i = 0; i &lt; nthreads; i++) <em class='brace'>{</em>
+<a id='L553' name='L553'></a> 553                 scf_stats_p[i].cpu = i;
+<a id='L554' name='L554'></a> 554                 firsterr = torture_create_kthread(<a href='../S/73.html#L383' title='Defined at 383 in scftorture.c.'>scftorture_invoker</a>, (<strong class='reserved'>void</strong> *)&amp;scf_stats_p[i],
+<a id='L555' name='L555'></a> 555                                                   scf_stats_p[i].task);
+<a id='L556' name='L556'></a> 556                 <strong class='reserved'>if</strong> (firsterr)
+<a id='L557' name='L557'></a> 557                         <strong class='reserved'>goto</strong> unwind;
+<a id='L558' name='L558'></a> 558         <em class='brace'>}</em>
+<a id='L559' name='L559'></a> 559         <strong class='reserved'>if</strong> (stat_interval &gt; 0) <em class='brace'>{</em>
+<a id='L560' name='L560'></a> 560                 firsterr = torture_create_kthread(<a href='../S/73.html#L176' title='Defined at 176 in scftorture.c.'>scf_torture_stats</a>, NULL, scf_torture_stats_task);
+<a id='L561' name='L561'></a> 561                 <strong class='reserved'>if</strong> (firsterr)
+<a id='L562' name='L562'></a> 562                         <strong class='reserved'>goto</strong> unwind;
+<a id='L563' name='L563'></a> 563         <em class='brace'>}</em>
+<a id='L564' name='L564'></a> 564 
+<a id='L565' name='L565'></a> 565         <a href='../S/16.html#L708' title='Defined at 708 in torture.c.'>torture_init_end</a>();
+<a id='L566' name='L566'></a> 566         <strong class='reserved'>return</strong> 0;
+<a id='L567' name='L567'></a> 567 
+<a id='L568' name='L568'></a> 568 unwind:
+<a id='L569' name='L569'></a> 569         <a href='../S/16.html#L708' title='Defined at 708 in torture.c.'>torture_init_end</a>();
+<a id='L570' name='L570'></a> 570         <a href='../S/73.html#L444' title='Defined at 444 in scftorture.c.'>scf_torture_cleanup</a>();
+<a id='L571' name='L571'></a> 571         <strong class='reserved'>return</strong> firsterr;
+<a id='L572' name='L572'></a> 572 <em class='brace'>}</em>
+<a id='L573' name='L573'></a> 573 
+<a id='L574' name='L574'></a> 574 module_init(<a href='../S/73.html#L474' title='Defined at 474 in scftorture.c.'>scf_torture_init</a>);
+<a id='L575' name='L575'></a> 575 module_exit(<a href='../S/73.html#L444' title='Defined at 444 in scftorture.c.'>scf_torture_cleanup</a>);
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L140'>[^]</a><a href='#L474'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

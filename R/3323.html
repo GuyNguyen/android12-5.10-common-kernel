@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>autogroup</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/448.html#L9'>autogroup</a>           9 sched/autogroup.c static struct autogroup autogroup_default;</span>
+<span class='curline'><a href='../S/448.html#L17'>autogroup</a>          17 sched/autogroup.c 	init_task-&gt;signal-&gt;autogroup = &amp;autogroup_default;</span>
+<span class='curline'><a href='../S/448.html#L22'>autogroup</a>          22 sched/autogroup.c 	kfree(tg-&gt;autogroup);</span>
+<span class='curline'><a href='../S/448.html#L27'>autogroup</a>          27 sched/autogroup.c 	struct autogroup *ag = container_of(kref, struct autogroup, kref);</span>
+<span class='curline'><a href='../S/448.html#L38'>autogroup</a>          38 sched/autogroup.c static inline void autogroup_kref_put(struct autogroup *ag)</span>
+<span class='curline'><a href='../S/448.html#L43'>autogroup</a>          43 sched/autogroup.c static inline struct autogroup *autogroup_kref_get(struct autogroup *ag)</span>
+<span class='curline'><a href='../S/448.html#L49'>autogroup</a>          49 sched/autogroup.c static inline struct autogroup *autogroup_task_get(struct task_struct *p)</span>
+<span class='curline'><a href='../S/448.html#L51'>autogroup</a>          51 sched/autogroup.c 	struct autogroup *ag;</span>
+<span class='curline'><a href='../S/448.html#L57'>autogroup</a>          57 sched/autogroup.c 	ag = autogroup_kref_get(p-&gt;signal-&gt;autogroup);</span>
+<span class='curline'><a href='../S/448.html#L63'>autogroup</a>          63 sched/autogroup.c static inline struct autogroup *autogroup_create(void)</span>
+<span class='curline'><a href='../S/448.html#L65'>autogroup</a>          65 sched/autogroup.c 	struct autogroup *ag = kzalloc(sizeof(*ag), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/448.html#L91'>autogroup</a>          91 sched/autogroup.c 	tg-&gt;autogroup = ag;</span>
+<span class='curline'><a href='../S/448.html#L136'>autogroup</a>         136 sched/autogroup.c autogroup_move_group(struct task_struct *p, struct autogroup *ag)</span>
+<span class='curline'><a href='../S/448.html#L138'>autogroup</a>         138 sched/autogroup.c 	struct autogroup *prev;</span>
+<span class='curline'><a href='../S/448.html#L144'>autogroup</a>         144 sched/autogroup.c 	prev = p-&gt;signal-&gt;autogroup;</span>
+<span class='curline'><a href='../S/448.html#L150'>autogroup</a>         150 sched/autogroup.c 	p-&gt;signal-&gt;autogroup = autogroup_kref_get(ag);</span>
+<span class='curline'><a href='../S/448.html#L172'>autogroup</a>         172 sched/autogroup.c 	struct autogroup *ag = autogroup_create();</span>
+<span class='curline'><a href='../S/448.html#L190'>autogroup</a>         190 sched/autogroup.c 	sig-&gt;autogroup = autogroup_task_get(current);</span>
+<span class='curline'><a href='../S/448.html#L195'>autogroup</a>         195 sched/autogroup.c 	autogroup_kref_put(sig-&gt;autogroup);</span>
+<span class='curline'><a href='../S/448.html#L211'>autogroup</a>         211 sched/autogroup.c 	struct autogroup *ag;</span>
+<span class='curline'><a href='../S/448.html#L248'>autogroup</a>         248 sched/autogroup.c 	struct autogroup *ag = autogroup_task_get(p);</span>
+<span class='curline'><a href='../S/448.html#L267'>autogroup</a>         267 sched/autogroup.c 	return snprintf(buf, buflen, "%s-%ld", "/autogroup", tg-&gt;autogroup-&gt;id);</span>
+<span class='curline'><a href='../S/443.html#L22'>autogroup</a>          22 sched/autogroup.h 	return !!tg-&gt;autogroup;</span>
+<span class='curline'><a href='../S/443.html#L33'>autogroup</a>          33 sched/autogroup.h 		return p-&gt;signal-&gt;autogroup-&gt;tg;</span>
+<span class='curline'><a href='../S/447.html#L422'>autogroup</a>         422 sched/sched.h  	struct autogroup	*autogroup;</span>
+</pre>
+</body>
+</html>

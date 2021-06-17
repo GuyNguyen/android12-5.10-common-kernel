@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>dl_bw</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/441.html#L5623'>dl_bw</a>            5623 sched/core.c   			    rq-&gt;rd-&gt;dl_bw.bw == 0) {</span>
+<span class='curline'><a href='../S/451.html#L69'>dl_bw</a>              69 sched/deadline.c static inline struct dl_bw *dl_bw_of(int i)</span>
+<span class='curline'><a href='../S/451.html#L73'>dl_bw</a>              73 sched/deadline.c 	return &amp;cpu_rq(i)-&gt;rd-&gt;dl_bw;</span>
+<span class='curline'><a href='../S/451.html#L123'>dl_bw</a>             123 sched/deadline.c static inline struct dl_bw *dl_bw_of(int i)</span>
+<span class='curline'><a href='../S/451.html#L125'>dl_bw</a>             125 sched/deadline.c 	return &amp;cpu_rq(i)-&gt;dl.dl_bw;</span>
+<span class='curline'><a href='../S/451.html#L140'>dl_bw</a>             140 sched/deadline.c void __add_running_bw(u64 dl_bw, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L145'>dl_bw</a>             145 sched/deadline.c 	dl_rq-&gt;running_bw += dl_bw;</span>
+<span class='curline'><a href='../S/451.html#L153'>dl_bw</a>             153 sched/deadline.c void __sub_running_bw(u64 dl_bw, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L158'>dl_bw</a>             158 sched/deadline.c 	dl_rq-&gt;running_bw -= dl_bw;</span>
+<span class='curline'><a href='../S/451.html#L167'>dl_bw</a>             167 sched/deadline.c void __add_rq_bw(u64 dl_bw, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L172'>dl_bw</a>             172 sched/deadline.c 	dl_rq-&gt;this_bw += dl_bw;</span>
+<span class='curline'><a href='../S/451.html#L177'>dl_bw</a>             177 sched/deadline.c void __sub_rq_bw(u64 dl_bw, struct dl_rq *dl_rq)</span>
+<span class='curline'><a href='../S/451.html#L182'>dl_bw</a>             182 sched/deadline.c 	dl_rq-&gt;this_bw -= dl_bw;</span>
+<span class='curline'><a href='../S/451.html#L193'>dl_bw</a>             193 sched/deadline.c 		__add_rq_bw(dl_se-&gt;dl_bw, dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L200'>dl_bw</a>             200 sched/deadline.c 		__sub_rq_bw(dl_se-&gt;dl_bw, dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L207'>dl_bw</a>             207 sched/deadline.c 		__add_running_bw(dl_se-&gt;dl_bw, dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L214'>dl_bw</a>             214 sched/deadline.c 		__sub_running_bw(dl_se-&gt;dl_bw, dl_rq);</span>
+<span class='curline'><a href='../S/451.html#L240'>dl_bw</a>             240 sched/deadline.c 	__sub_rq_bw(p-&gt;dl.dl_bw, &amp;rq-&gt;dl);</span>
+<span class='curline'><a href='../S/451.html#L336'>dl_bw</a>             336 sched/deadline.c 			struct dl_bw *dl_b = dl_bw_of(task_cpu(p));</span>
+<span class='curline'><a href='../S/451.html#L341'>dl_bw</a>             341 sched/deadline.c 			__dl_sub(dl_b, p-&gt;dl.dl_bw, dl_bw_cpus(task_cpu(p)));</span>
+<span class='curline'><a href='../S/451.html#L407'>dl_bw</a>             407 sched/deadline.c void init_dl_bw(struct dl_bw *dl_b)</span>
+<span class='curline'><a href='../S/451.html#L431'>dl_bw</a>             431 sched/deadline.c 	init_dl_bw(&amp;dl_rq-&gt;dl_bw);</span>
+<span class='curline'><a href='../S/451.html#L595'>dl_bw</a>             595 sched/deadline.c 	struct dl_bw *dl_b;</span>
+<span class='curline'><a href='../S/451.html#L646'>dl_bw</a>             646 sched/deadline.c 	dl_b = &amp;rq-&gt;rd-&gt;dl_bw;</span>
+<span class='curline'><a href='../S/451.html#L648'>dl_bw</a>             648 sched/deadline.c 	__dl_sub(dl_b, p-&gt;dl.dl_bw, cpumask_weight(rq-&gt;rd-&gt;span));</span>
+<span class='curline'><a href='../S/451.html#L651'>dl_bw</a>             651 sched/deadline.c 	dl_b = &amp;later_rq-&gt;rd-&gt;dl_bw;</span>
+<span class='curline'><a href='../S/451.html#L653'>dl_bw</a>             653 sched/deadline.c 	__dl_add(dl_b, p-&gt;dl.dl_bw, cpumask_weight(later_rq-&gt;rd-&gt;span));</span>
+<span class='curline'><a href='../S/451.html#L1217'>dl_bw</a>            1217 sched/deadline.c 	u64 u_act_min = (dl_se-&gt;dl_bw * rq-&gt;dl.bw_ratio) &gt;&gt; RATIO_SHIFT;</span>
+<span class='curline'><a href='../S/451.html#L1357'>dl_bw</a>            1357 sched/deadline.c 		struct dl_bw *dl_b = dl_bw_of(task_cpu(p));</span>
+<span class='curline'><a href='../S/451.html#L1366'>dl_bw</a>            1366 sched/deadline.c 		__dl_sub(dl_b, p-&gt;dl.dl_bw, dl_bw_cpus(task_cpu(p)));</span>
+<span class='curline'><a href='../S/451.html#L2326'>dl_bw</a>            2326 sched/deadline.c 		struct dl_bw *src_dl_b;</span>
+<span class='curline'><a href='../S/451.html#L2335'>dl_bw</a>            2335 sched/deadline.c 		__dl_sub(src_dl_b, p-&gt;dl.dl_bw, dl_bw_cpus(task_cpu(p)));</span>
+<span class='curline'><a href='../S/451.html#L2376'>dl_bw</a>            2376 sched/deadline.c 	struct dl_bw *dl_b;</span>
+<span class='curline'><a href='../S/451.html#L2386'>dl_bw</a>            2386 sched/deadline.c 	dl_b = &amp;rq-&gt;rd-&gt;dl_bw;</span>
+<span class='curline'><a href='../S/451.html#L2389'>dl_bw</a>            2389 sched/deadline.c 	__dl_add(dl_b, p-&gt;dl.dl_bw, cpumask_weight(rq-&gt;rd-&gt;span));</span>
+<span class='curline'><a href='../S/451.html#L2400'>dl_bw</a>            2400 sched/deadline.c 	raw_spin_lock_irqsave(&amp;rd-&gt;dl_bw.lock, flags);</span>
+<span class='curline'><a href='../S/451.html#L2401'>dl_bw</a>            2401 sched/deadline.c 	rd-&gt;dl_bw.total_bw = 0;</span>
+<span class='curline'><a href='../S/451.html#L2402'>dl_bw</a>            2402 sched/deadline.c 	raw_spin_unlock_irqrestore(&amp;rd-&gt;dl_bw.lock, flags);</span>
+<span class='curline'><a href='../S/451.html#L2552'>dl_bw</a>            2552 sched/deadline.c 	struct dl_bw *dl_b;</span>
+<span class='curline'><a href='../S/451.html#L2600'>dl_bw</a>            2600 sched/deadline.c 	struct dl_bw *dl_b;</span>
+<span class='curline'><a href='../S/451.html#L2641'>dl_bw</a>            2641 sched/deadline.c 	struct dl_bw *dl_b = dl_bw_of(cpu);</span>
+<span class='curline'><a href='../S/451.html#L2648'>dl_bw</a>            2648 sched/deadline.c 	if (new_bw == p-&gt;dl.dl_bw &amp;&amp; task_has_dl_policy(p))</span>
+<span class='curline'><a href='../S/451.html#L2663'>dl_bw</a>            2663 sched/deadline.c 			__dl_sub(dl_b, p-&gt;dl.dl_bw, cpus);</span>
+<span class='curline'><a href='../S/451.html#L2667'>dl_bw</a>            2667 sched/deadline.c 		   !__dl_overflow(dl_b, cap, p-&gt;dl.dl_bw, new_bw)) {</span>
+<span class='curline'><a href='../S/451.html#L2675'>dl_bw</a>            2675 sched/deadline.c 		__dl_sub(dl_b, p-&gt;dl.dl_bw, cpus);</span>
+<span class='curline'><a href='../S/451.html#L2708'>dl_bw</a>            2708 sched/deadline.c 	dl_se-&gt;dl_bw = to_ratio(dl_se-&gt;dl_period, dl_se-&gt;dl_runtime);</span>
+<span class='curline'><a href='../S/451.html#L2797'>dl_bw</a>            2797 sched/deadline.c 	dl_se-&gt;dl_bw			= 0;</span>
+<span class='curline'><a href='../S/451.html#L2828'>dl_bw</a>            2828 sched/deadline.c 	struct dl_bw *dl_b;</span>
+<span class='curline'><a href='../S/451.html#L2838'>dl_bw</a>            2838 sched/deadline.c 	overflow = __dl_overflow(dl_b, cap, 0, p-&gt;dl.dl_bw);</span>
+<span class='curline'><a href='../S/451.html#L2850'>dl_bw</a>            2850 sched/deadline.c 		__dl_add(dl_b, p-&gt;dl.dl_bw, cpus);</span>
+<span class='curline'><a href='../S/451.html#L2863'>dl_bw</a>            2863 sched/deadline.c 	struct dl_bw *cur_dl_b;</span>
+<span class='curline'><a href='../S/451.html#L2883'>dl_bw</a>            2883 sched/deadline.c 	struct dl_bw *dl_b;</span>
+<span class='curline'><a href='../S/460.html#L666'>dl_bw</a>             666 sched/debug.c  	struct dl_bw *dl_bw;</span>
+<span class='curline'><a href='../S/460.html#L677'>dl_bw</a>             677 sched/debug.c  	dl_bw = &amp;cpu_rq(cpu)-&gt;rd-&gt;dl_bw;</span>
+<span class='curline'><a href='../S/460.html#L679'>dl_bw</a>             679 sched/debug.c  	dl_bw = &amp;dl_rq-&gt;dl_bw;</span>
+<span class='curline'><a href='../S/460.html#L681'>dl_bw</a>             681 sched/debug.c  	SEQ_printf(m, "  .%-30s: %lld\n", "dl_bw-&gt;bw", dl_bw-&gt;bw);</span>
+<span class='curline'><a href='../S/460.html#L682'>dl_bw</a>             682 sched/debug.c  	SEQ_printf(m, "  .%-30s: %lld\n", "dl_bw-&gt;total_bw", dl_bw-&gt;total_bw);</span>
+<span class='curline'><a href='../S/447.html#L304'>dl_bw</a>             304 sched/sched.h  static inline void __dl_update(struct dl_bw *dl_b, s64 bw);</span>
+<span class='curline'><a href='../S/447.html#L307'>dl_bw</a>             307 sched/sched.h  void __dl_sub(struct dl_bw *dl_b, u64 tsk_bw, int cpus)</span>
+<span class='curline'><a href='../S/447.html#L314'>dl_bw</a>             314 sched/sched.h  void __dl_add(struct dl_bw *dl_b, u64 tsk_bw, int cpus)</span>
+<span class='curline'><a href='../S/447.html#L320'>dl_bw</a>             320 sched/sched.h  static inline bool __dl_overflow(struct dl_bw *dl_b, unsigned long cap,</span>
+<span class='curline'><a href='../S/447.html#L342'>dl_bw</a>             342 sched/sched.h  extern void init_dl_bw(struct dl_bw *dl_b);</span>
+<span class='curline'><a href='../S/447.html#L699'>dl_bw</a>             699 sched/sched.h  	struct dl_bw		dl_bw;</span>
+<span class='curline'><a href='../S/447.html#L812'>dl_bw</a>             812 sched/sched.h  	struct dl_bw		dl_bw;</span>
+<span class='curline'><a href='../S/447.html#L2346'>dl_bw</a>            2346 sched/sched.h  void __dl_update(struct dl_bw *dl_b, s64 bw)</span>
+<span class='curline'><a href='../S/447.html#L2348'>dl_bw</a>            2348 sched/sched.h  	struct root_domain *rd = container_of(dl_b, struct root_domain, dl_bw);</span>
+<span class='curline'><a href='../S/447.html#L2361'>dl_bw</a>            2361 sched/sched.h  void __dl_update(struct dl_bw *dl_b, s64 bw)</span>
+<span class='curline'><a href='../S/447.html#L2363'>dl_bw</a>            2363 sched/sched.h  	struct dl_rq *dl = container_of(dl_b, struct dl_rq, dl_bw);</span>
+<span class='curline'><a href='../S/452.html#L512'>dl_bw</a>             512 sched/topology.c 	init_dl_bw(&amp;rd-&gt;dl_bw);</span>
+</pre>
+</body>
+</html>

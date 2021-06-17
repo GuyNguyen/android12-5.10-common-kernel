@@ -1,0 +1,304 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>kcsan/debugfs.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/505.html'>kcsan</a>/debugfs.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L58'>[^]</a><a href='#L264'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L58' title='Defined at 58.'>microbenchmark</a></li>
+<li><a href='#L90' title='Defined at 90.'>cmp_filterlist_addrs</a></li>
+<li><a href='#L98' title='Defined at 98.'>kcsan_skip_report_debugfs</a></li>
+<li><a href='#L129' title='Defined at 129.'>set_report_filterlist_whitelist</a></li>
+<li><a href='#L139' title='Defined at 139.'>insert_report_filterlist</a></li>
+<li><a href='#L189' title='Defined at 189.'>show_info</a></li>
+<li><a href='#L213' title='Defined at 213.'>debugfs_open</a></li>
+<li><a href='#L219' title='Defined at 219.'>debugfs_write</a></li>
+<li><a href='#L264' title='Defined at 264.'>kcsan_debugfs_init</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 
+<a id='L3' name='L3'></a>   3 <em class='sharp'>#define</em> <a href='../R/10143.html' title='Multiple referred from 2 places.'>pr_fmt</a>(fmt) "kcsan: " fmt
+<a id='L4' name='L4'></a>   4 
+<a id='L5' name='L5'></a>   5 <em class='sharp'>#include</em> &lt;<a href='484.html'>linux/atomic.h</a>&gt;
+<a id='L6' name='L6'></a>   6 <em class='sharp'>#include</em> &lt;linux/bsearch.h&gt;
+<a id='L7' name='L7'></a>   7 <em class='sharp'>#include</em> &lt;linux/bug.h&gt;
+<a id='L8' name='L8'></a>   8 <em class='sharp'>#include</em> &lt;linux/debugfs.h&gt;
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> &lt;linux/init.h&gt;
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;linux/kallsyms.h&gt;
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;<a href='447.html'>linux/sched.h</a>&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;linux/seq_file.h&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;linux/slab.h&gt;
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> &lt;linux/sort.h&gt;
+<a id='L15' name='L15'></a>  15 <em class='sharp'>#include</em> &lt;linux/string.h&gt;
+<a id='L16' name='L16'></a>  16 <em class='sharp'>#include</em> &lt;linux/uaccess.h&gt;
+<a id='L17' name='L17'></a>  17 
+<a id='L18' name='L18'></a>  18 <em class='sharp'>#include</em> "<a href='488.html'>kcsan.h</a>"
+<a id='L19' name='L19'></a>  19 
+<a id='L20' name='L20'></a>  20 atomic_long_t kcsan_counters[<a href='../S/488.html#L87' title='Defined at 87 in kcsan/kcsan.h.'>KCSAN_COUNTER_COUNT</a>];
+<a id='L21' name='L21'></a>  21 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *<strong class='reserved'>const</strong> counter_names[] = <em class='brace'>{</em>
+<a id='L22' name='L22'></a>  22         [<a href='../S/488.html#L41' title='Defined at 41 in kcsan/kcsan.h.'>KCSAN_COUNTER_USED_WATCHPOINTS</a>]                = "used_watchpoints",
+<a id='L23' name='L23'></a>  23         [<a href='../S/488.html#L46' title='Defined at 46 in kcsan/kcsan.h.'>KCSAN_COUNTER_SETUP_WATCHPOINTS</a>]               = "setup_watchpoints",
+<a id='L24' name='L24'></a>  24         [<a href='../S/488.html#L51' title='Defined at 51 in kcsan/kcsan.h.'>KCSAN_COUNTER_DATA_RACES</a>]                      = "data_races",
+<a id='L25' name='L25'></a>  25         [<a href='../S/488.html#L58' title='Defined at 58 in kcsan/kcsan.h.'>KCSAN_COUNTER_ASSERT_FAILURES</a>]                 = "assert_failures",
+<a id='L26' name='L26'></a>  26         [<a href='../S/488.html#L63' title='Defined at 63 in kcsan/kcsan.h.'>KCSAN_COUNTER_NO_CAPACITY</a>]                     = "no_capacity",
+<a id='L27' name='L27'></a>  27         [<a href='../S/488.html#L69' title='Defined at 69 in kcsan/kcsan.h.'>KCSAN_COUNTER_REPORT_RACES</a>]                    = "report_races",
+<a id='L28' name='L28'></a>  28         [<a href='../S/488.html#L74' title='Defined at 74 in kcsan/kcsan.h.'>KCSAN_COUNTER_RACES_UNKNOWN_ORIGIN</a>]            = "races_unknown_origin",
+<a id='L29' name='L29'></a>  29         [<a href='../S/488.html#L79' title='Defined at 79 in kcsan/kcsan.h.'>KCSAN_COUNTER_UNENCODABLE_ACCESSES</a>]            = "unencodable_accesses",
+<a id='L30' name='L30'></a>  30         [<a href='../S/488.html#L85' title='Defined at 85 in kcsan/kcsan.h.'>KCSAN_COUNTER_ENCODING_FALSE_POSITIVES</a>]        = "encoding_false_positives",
+<a id='L31' name='L31'></a>  31 <em class='brace'>}</em>;
+<a id='L32' name='L32'></a>  32 static_assert(ARRAY_SIZE(counter_names) == <a href='../S/488.html#L87' title='Defined at 87 in kcsan/kcsan.h.'>KCSAN_COUNTER_COUNT</a>);
+<a id='L33' name='L33'></a>  33 
+<a id='L34' name='L34'></a>  34 <em class='comment'>/*</em>
+<a id='L35' name='L35'></a>  35 <em class='comment'> * Addresses for filtering functions from reporting. This list can be used as a</em>
+<a id='L36' name='L36'></a>  36 <em class='comment'> * whitelist or blacklist.</em>
+<a id='L37' name='L37'></a>  37 <em class='comment'> */</em>
+<a id='L38' name='L38'></a>  38 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <em class='brace'>{</em>
+<a id='L39' name='L39'></a>  39         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>   *addrs;         <em class='comment'>/* array of addresses */</em>
+<a id='L40' name='L40'></a>  40         size_t          size;           <em class='comment'>/* current size */</em>
+<a id='L41' name='L41'></a>  41         <strong class='reserved'>int</strong>             used;           <em class='comment'>/* number of elements used */</em>
+<a id='L42' name='L42'></a>  42         bool            sorted;         <em class='comment'>/* if elements are sorted */</em>
+<a id='L43' name='L43'></a>  43         bool            whitelist;      <em class='comment'>/* if list is a blacklist or whitelist */</em>
+<a id='L44' name='L44'></a>  44 <em class='brace'>}</em> report_filterlist = <em class='brace'>{</em>
+<a id='L45' name='L45'></a>  45         .addrs          = NULL,
+<a id='L46' name='L46'></a>  46         .size           = 8,            <em class='comment'>/* small initial size */</em>
+<a id='L47' name='L47'></a>  47         .used           = 0,
+<a id='L48' name='L48'></a>  48         .sorted         = false,
+<a id='L49' name='L49'></a>  49         .whitelist      = false,        <em class='comment'>/* default is blacklist */</em>
+<a id='L50' name='L50'></a>  50 <em class='brace'>}</em>;
+<a id='L51' name='L51'></a>  51 <strong class='reserved'>static</strong> DEFINE_SPINLOCK(report_filterlist_lock);
+<a id='L52' name='L52'></a>  52 
+<a id='L53' name='L53'></a>  53 <em class='comment'>/*</em>
+<a id='L54' name='L54'></a>  54 <em class='comment'> * The microbenchmark allows benchmarking KCSAN core runtime only. To run</em>
+<a id='L55' name='L55'></a>  55 <em class='comment'> * multiple threads, pipe 'microbench=&lt;iters&gt;' from multiple tasks into the</em>
+<a id='L56' name='L56'></a>  56 <em class='comment'> * debugfs file. This will not generate any conflicts, and tests fast-path only.</em>
+<a id='L57' name='L57'></a>  57 <em class='comment'> */</em>
+<a id='L58' name='L58'></a>  58 <strong class='reserved'>static</strong> noinline <strong class='reserved'>void</strong> <a href='../S/490.html#L239' title='Referred from 239 in kcsan/debugfs.c.'>microbenchmark</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> iters)
+<a id='L59' name='L59'></a>  59 <em class='brace'>{</em>
+<a id='L60' name='L60'></a>  60         <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> kcsan_ctx ctx_save = current-&gt;kcsan_ctx;
+<a id='L61' name='L61'></a>  61         <strong class='reserved'>const</strong> bool was_enabled = READ_ONCE(kcsan_enabled);
+<a id='L62' name='L62'></a>  62         cycles_t cycles;
+<a id='L63' name='L63'></a>  63 
+<a id='L64' name='L64'></a>  64         <em class='comment'>/* We may have been called from an atomic region; reset context. */</em>
+<a id='L65' name='L65'></a>  65         memset(&amp;current-&gt;kcsan_ctx, 0, <strong class='reserved'>sizeof</strong>(current-&gt;kcsan_ctx));
+<a id='L66' name='L66'></a>  66         <em class='comment'>/*</em>
+<a id='L67' name='L67'></a>  67 <em class='comment'>         * Disable to benchmark fast-path for all accesses, and (expected</em>
+<a id='L68' name='L68'></a>  68 <em class='comment'>         * negligible) call into slow-path, but never set up watchpoints.</em>
+<a id='L69' name='L69'></a>  69 <em class='comment'>         */</em>
+<a id='L70' name='L70'></a>  70         WRITE_ONCE(kcsan_enabled, false);
+<a id='L71' name='L71'></a>  71 
+<a id='L72' name='L72'></a>  72         pr_info("%s begin | iters: %lu\n", __func__, iters);
+<a id='L73' name='L73'></a>  73 
+<a id='L74' name='L74'></a>  74         cycles = get_cycles();
+<a id='L75' name='L75'></a>  75         <strong class='reserved'>while</strong> (iters--) <em class='brace'>{</em>
+<a id='L76' name='L76'></a>  76                 <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> addr = iters &amp; ((PAGE_SIZE &lt;&lt; 8) - 1);
+<a id='L77' name='L77'></a>  77                 <strong class='reserved'>int</strong> type = !(iters &amp; 0x7f) ? KCSAN_ACCESS_ATOMIC :
+<a id='L78' name='L78'></a>  78                                 (!(iters &amp; 0xf) ? KCSAN_ACCESS_WRITE : 0);
+<a id='L79' name='L79'></a>  79                 <a href='../S/482.html#L788' title='Defined at 788 in kcsan/core.c.'>__kcsan_check_access</a>((<strong class='reserved'>void</strong> *)addr, <strong class='reserved'>sizeof</strong>(<strong class='reserved'>long</strong>), type);
+<a id='L80' name='L80'></a>  80         <em class='brace'>}</em>
+<a id='L81' name='L81'></a>  81         cycles = get_cycles() - cycles;
+<a id='L82' name='L82'></a>  82 
+<a id='L83' name='L83'></a>  83         pr_info("%s end   | cycles: %llu\n", __func__, cycles);
+<a id='L84' name='L84'></a>  84 
+<a id='L85' name='L85'></a>  85         WRITE_ONCE(kcsan_enabled, was_enabled);
+<a id='L86' name='L86'></a>  86         <em class='comment'>/* restore context */</em>
+<a id='L87' name='L87'></a>  87         current-&gt;kcsan_ctx = ctx_save;
+<a id='L88' name='L88'></a>  88 <em class='brace'>}</em>
+<a id='L89' name='L89'></a>  89 
+<a id='L90' name='L90'></a>  90 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../R/4810.html' title='Multiple referred from 2 places.'>cmp_filterlist_addrs</a>(<strong class='reserved'>const</strong> <strong class='reserved'>void</strong> *rhs, <strong class='reserved'>const</strong> <strong class='reserved'>void</strong> *lhs)
+<a id='L91' name='L91'></a>  91 <em class='brace'>{</em>
+<a id='L92' name='L92'></a>  92         <strong class='reserved'>const</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> a = *(<strong class='reserved'>const</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> *)rhs;
+<a id='L93' name='L93'></a>  93         <strong class='reserved'>const</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> b = *(<strong class='reserved'>const</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> *)lhs;
+<a id='L94' name='L94'></a>  94 
+<a id='L95' name='L95'></a>  95         <strong class='reserved'>return</strong> a &lt; b ? -1 : a == b ? 0 : 1;
+<a id='L96' name='L96'></a>  96 <em class='brace'>}</em>
+<a id='L97' name='L97'></a>  97 
+<a id='L98' name='L98'></a>  98 bool <a href='../R/8287.html' title='Multiple referred from 2 places.'>kcsan_skip_report_debugfs</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> func_addr)
+<a id='L99' name='L99'></a>  99 <em class='brace'>{</em>
+<a id='L100' name='L100'></a> 100         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> symbolsize, offset;
+<a id='L101' name='L101'></a> 101         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> flags;
+<a id='L102' name='L102'></a> 102         bool ret = false;
+<a id='L103' name='L103'></a> 103 
+<a id='L104' name='L104'></a> 104         <strong class='reserved'>if</strong> (!<a href='../S/192.html#L284' title='Defined at 284 in kallsyms.c.'>kallsyms_lookup_size_offset</a>(func_addr, &amp;symbolsize, &amp;offset))
+<a id='L105' name='L105'></a> 105                 <strong class='reserved'>return</strong> false;
+<a id='L106' name='L106'></a> 106         func_addr -= offset; <em class='comment'>/* Get function start */</em>
+<a id='L107' name='L107'></a> 107 
+<a id='L108' name='L108'></a> 108         spin_lock_irqsave(&amp;report_filterlist_lock, flags);
+<a id='L109' name='L109'></a> 109         <strong class='reserved'>if</strong> (report_filterlist.used == 0)
+<a id='L110' name='L110'></a> 110                 <strong class='reserved'>goto</strong> out;
+<a id='L111' name='L111'></a> 111 
+<a id='L112' name='L112'></a> 112         <em class='comment'>/* Sort array if it is unsorted, and then do a binary search. */</em>
+<a id='L113' name='L113'></a> 113         <strong class='reserved'>if</strong> (!report_filterlist.sorted) <em class='brace'>{</em>
+<a id='L114' name='L114'></a> 114                 sort(report_filterlist.addrs, report_filterlist.used,
+<a id='L115' name='L115'></a> 115                      <strong class='reserved'>sizeof</strong>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>), <a href='../S/490.html#L90' title='Defined at 90 in kcsan/debugfs.c.'>cmp_filterlist_addrs</a>, NULL);
+<a id='L116' name='L116'></a> 116                 report_filterlist.sorted = true;
+<a id='L117' name='L117'></a> 117         <em class='brace'>}</em>
+<a id='L118' name='L118'></a> 118         ret = !!bsearch(&amp;func_addr, report_filterlist.addrs,
+<a id='L119' name='L119'></a> 119                         report_filterlist.used, <strong class='reserved'>sizeof</strong>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>),
+<a id='L120' name='L120'></a> 120                         <a href='../S/490.html#L90' title='Defined at 90 in kcsan/debugfs.c.'>cmp_filterlist_addrs</a>);
+<a id='L121' name='L121'></a> 121         <strong class='reserved'>if</strong> (report_filterlist.whitelist)
+<a id='L122' name='L122'></a> 122                 ret = !ret;
+<a id='L123' name='L123'></a> 123 
+<a id='L124' name='L124'></a> 124 out:
+<a id='L125' name='L125'></a> 125         spin_unlock_irqrestore(&amp;report_filterlist_lock, flags);
+<a id='L126' name='L126'></a> 126         <strong class='reserved'>return</strong> ret;
+<a id='L127' name='L127'></a> 127 <em class='brace'>}</em>
+<a id='L128' name='L128'></a> 128 
+<a id='L129' name='L129'></a> 129 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/12302.html' title='Multiple referred from 2 places.'>set_report_filterlist_whitelist</a>(bool whitelist)
+<a id='L130' name='L130'></a> 130 <em class='brace'>{</em>
+<a id='L131' name='L131'></a> 131         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> flags;
+<a id='L132' name='L132'></a> 132 
+<a id='L133' name='L133'></a> 133         spin_lock_irqsave(&amp;report_filterlist_lock, flags);
+<a id='L134' name='L134'></a> 134         report_filterlist.whitelist = whitelist;
+<a id='L135' name='L135'></a> 135         spin_unlock_irqrestore(&amp;report_filterlist_lock, flags);
+<a id='L136' name='L136'></a> 136 <em class='brace'>}</em>
+<a id='L137' name='L137'></a> 137 
+<a id='L138' name='L138'></a> 138 <em class='comment'>/* Returns 0 on success, error-code otherwise. */</em>
+<a id='L139' name='L139'></a> 139 <strong class='reserved'>static</strong> ssize_t <a href='../S/490.html#L245' title='Referred from 245 in kcsan/debugfs.c.'>insert_report_filterlist</a>(<strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>)
+<a id='L140' name='L140'></a> 140 <em class='brace'>{</em>
+<a id='L141' name='L141'></a> 141         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> flags;
+<a id='L142' name='L142'></a> 142         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> addr = <a href='../S/192.html#L185' title='Defined at 185 in kallsyms.c.'>kallsyms_lookup_name</a>(<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>);
+<a id='L143' name='L143'></a> 143         ssize_t ret = 0;
+<a id='L144' name='L144'></a> 144 
+<a id='L145' name='L145'></a> 145         <strong class='reserved'>if</strong> (!addr) <em class='brace'>{</em>
+<a id='L146' name='L146'></a> 146                 pr_err("could not find function: '%s'\n", <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>);
+<a id='L147' name='L147'></a> 147                 <strong class='reserved'>return</strong> -ENOENT;
+<a id='L148' name='L148'></a> 148         <em class='brace'>}</em>
+<a id='L149' name='L149'></a> 149 
+<a id='L150' name='L150'></a> 150         spin_lock_irqsave(&amp;report_filterlist_lock, flags);
+<a id='L151' name='L151'></a> 151 
+<a id='L152' name='L152'></a> 152         <strong class='reserved'>if</strong> (report_filterlist.addrs == NULL) <em class='brace'>{</em>
+<a id='L153' name='L153'></a> 153                 <em class='comment'>/* initial allocation */</em>
+<a id='L154' name='L154'></a> 154                 report_filterlist.addrs =
+<a id='L155' name='L155'></a> 155                         kmalloc_array(report_filterlist.size,
+<a id='L156' name='L156'></a> 156                                       <strong class='reserved'>sizeof</strong>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>), GFP_ATOMIC);
+<a id='L157' name='L157'></a> 157                 <strong class='reserved'>if</strong> (report_filterlist.addrs == NULL) <em class='brace'>{</em>
+<a id='L158' name='L158'></a> 158                         ret = -ENOMEM;
+<a id='L159' name='L159'></a> 159                         <strong class='reserved'>goto</strong> out;
+<a id='L160' name='L160'></a> 160                 <em class='brace'>}</em>
+<a id='L161' name='L161'></a> 161         <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (report_filterlist.used == report_filterlist.size) <em class='brace'>{</em>
+<a id='L162' name='L162'></a> 162                 <em class='comment'>/* resize filterlist */</em>
+<a id='L163' name='L163'></a> 163                 size_t new_size = report_filterlist.size * 2;
+<a id='L164' name='L164'></a> 164                 <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> *new_addrs =
+<a id='L165' name='L165'></a> 165                         krealloc(report_filterlist.addrs,
+<a id='L166' name='L166'></a> 166                                  new_size * <strong class='reserved'>sizeof</strong>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>), GFP_ATOMIC);
+<a id='L167' name='L167'></a> 167 
+<a id='L168' name='L168'></a> 168                 <strong class='reserved'>if</strong> (new_addrs == NULL) <em class='brace'>{</em>
+<a id='L169' name='L169'></a> 169                         <em class='comment'>/* leave filterlist itself untouched */</em>
+<a id='L170' name='L170'></a> 170                         ret = -ENOMEM;
+<a id='L171' name='L171'></a> 171                         <strong class='reserved'>goto</strong> out;
+<a id='L172' name='L172'></a> 172                 <em class='brace'>}</em>
+<a id='L173' name='L173'></a> 173 
+<a id='L174' name='L174'></a> 174                 report_filterlist.size = new_size;
+<a id='L175' name='L175'></a> 175                 report_filterlist.addrs = new_addrs;
+<a id='L176' name='L176'></a> 176         <em class='brace'>}</em>
+<a id='L177' name='L177'></a> 177 
+<a id='L178' name='L178'></a> 178         <em class='comment'>/* Note: deduplicating should be done in userspace. */</em>
+<a id='L179' name='L179'></a> 179         report_filterlist.addrs[report_filterlist.used++] =
+<a id='L180' name='L180'></a> 180                 <a href='../S/192.html#L185' title='Defined at 185 in kallsyms.c.'>kallsyms_lookup_name</a>(<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>);
+<a id='L181' name='L181'></a> 181         report_filterlist.sorted = false;
+<a id='L182' name='L182'></a> 182 
+<a id='L183' name='L183'></a> 183 out:
+<a id='L184' name='L184'></a> 184         spin_unlock_irqrestore(&amp;report_filterlist_lock, flags);
+<a id='L185' name='L185'></a> 185 
+<a id='L186' name='L186'></a> 186         <strong class='reserved'>return</strong> ret;
+<a id='L187' name='L187'></a> 187 <em class='brace'>}</em>
+<a id='L188' name='L188'></a> 188 
+<a id='L189' name='L189'></a> 189 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/490.html#L215' title='Referred from 215 in kcsan/debugfs.c.'>show_info</a>(<strong class='reserved'>struct</strong> seq_file *file, <strong class='reserved'>void</strong> *v)
+<a id='L190' name='L190'></a> 190 <em class='brace'>{</em>
+<a id='L191' name='L191'></a> 191         <strong class='reserved'>int</strong> i;
+<a id='L192' name='L192'></a> 192         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> flags;
+<a id='L193' name='L193'></a> 193 
+<a id='L194' name='L194'></a> 194         <em class='comment'>/* show stats */</em>
+<a id='L195' name='L195'></a> 195         seq_printf(file, "enabled: %i\n", READ_ONCE(kcsan_enabled));
+<a id='L196' name='L196'></a> 196         <strong class='reserved'>for</strong> (i = 0; i &lt; <a href='../S/488.html#L87' title='Defined at 87 in kcsan/kcsan.h.'>KCSAN_COUNTER_COUNT</a>; ++i) <em class='brace'>{</em>
+<a id='L197' name='L197'></a> 197                 seq_printf(file, "%s: %ld\n", counter_names[i],
+<a id='L198' name='L198'></a> 198                            atomic_long_read(&amp;kcsan_counters[i]));
+<a id='L199' name='L199'></a> 199         <em class='brace'>}</em>
+<a id='L200' name='L200'></a> 200 
+<a id='L201' name='L201'></a> 201         <em class='comment'>/* show filter functions, and filter type */</em>
+<a id='L202' name='L202'></a> 202         spin_lock_irqsave(&amp;report_filterlist_lock, flags);
+<a id='L203' name='L203'></a> 203         seq_printf(file, "\n%s functions: %s\n",
+<a id='L204' name='L204'></a> 204                    report_filterlist.whitelist ? "whitelisted" : "blacklisted",
+<a id='L205' name='L205'></a> 205                    report_filterlist.used == 0 ? "none" : "");
+<a id='L206' name='L206'></a> 206         <strong class='reserved'>for</strong> (i = 0; i &lt; report_filterlist.used; ++i)
+<a id='L207' name='L207'></a> 207                 seq_printf(file, " %ps\n", (<strong class='reserved'>void</strong> *)report_filterlist.addrs[i]);
+<a id='L208' name='L208'></a> 208         spin_unlock_irqrestore(&amp;report_filterlist_lock, flags);
+<a id='L209' name='L209'></a> 209 
+<a id='L210' name='L210'></a> 210         <strong class='reserved'>return</strong> 0;
+<a id='L211' name='L211'></a> 211 <em class='brace'>}</em>
+<a id='L212' name='L212'></a> 212 
+<a id='L213' name='L213'></a> 213 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/490.html#L259' title='Referred from 259 in kcsan/debugfs.c.'>debugfs_open</a>(<strong class='reserved'>struct</strong> inode *inode, <strong class='reserved'>struct</strong> file *file)
+<a id='L214' name='L214'></a> 214 <em class='brace'>{</em>
+<a id='L215' name='L215'></a> 215         <strong class='reserved'>return</strong> single_open(file, <a href='../S/490.html#L189' title='Defined at 189 in kcsan/debugfs.c.'>show_info</a>, NULL);
+<a id='L216' name='L216'></a> 216 <em class='brace'>}</em>
+<a id='L217' name='L217'></a> 217 
+<a id='L218' name='L218'></a> 218 <strong class='reserved'>static</strong> ssize_t
+<a id='L219' name='L219'></a> 219 <a href='../S/490.html#L260' title='Referred from 260 in kcsan/debugfs.c.'>debugfs_write</a>(<strong class='reserved'>struct</strong> file *file, <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> __user *buf, size_t count, loff_t *off)
+<a id='L220' name='L220'></a> 220 <em class='brace'>{</em>
+<a id='L221' name='L221'></a> 221         <strong class='reserved'>char</strong> kbuf[KSYM_NAME_LEN];
+<a id='L222' name='L222'></a> 222         <strong class='reserved'>char</strong> *arg;
+<a id='L223' name='L223'></a> 223         <strong class='reserved'>int</strong> read_len = count &lt; (<strong class='reserved'>sizeof</strong>(kbuf) - 1) ? count : (<strong class='reserved'>sizeof</strong>(kbuf) - 1);
+<a id='L224' name='L224'></a> 224 
+<a id='L225' name='L225'></a> 225         <strong class='reserved'>if</strong> (copy_from_user(kbuf, buf, read_len))
+<a id='L226' name='L226'></a> 226                 <strong class='reserved'>return</strong> -EFAULT;
+<a id='L227' name='L227'></a> 227         kbuf[read_len] = '\0';
+<a id='L228' name='L228'></a> 228         arg = strstrip(kbuf);
+<a id='L229' name='L229'></a> 229 
+<a id='L230' name='L230'></a> 230         <strong class='reserved'>if</strong> (!strcmp(arg, "on")) <em class='brace'>{</em>
+<a id='L231' name='L231'></a> 231                 WRITE_ONCE(kcsan_enabled, true);
+<a id='L232' name='L232'></a> 232         <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (!strcmp(arg, "off")) <em class='brace'>{</em>
+<a id='L233' name='L233'></a> 233                 WRITE_ONCE(kcsan_enabled, false);
+<a id='L234' name='L234'></a> 234         <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (str_has_prefix(arg, "microbench=")) <em class='brace'>{</em>
+<a id='L235' name='L235'></a> 235                 <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> iters;
+<a id='L236' name='L236'></a> 236 
+<a id='L237' name='L237'></a> 237                 <strong class='reserved'>if</strong> (kstrtoul(&amp;arg[strlen("microbench=")], 0, &amp;iters))
+<a id='L238' name='L238'></a> 238                         <strong class='reserved'>return</strong> -EINVAL;
+<a id='L239' name='L239'></a> 239                 <a href='../S/490.html#L58' title='Defined at 58 in kcsan/debugfs.c.'>microbenchmark</a>(iters);
+<a id='L240' name='L240'></a> 240         <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (!strcmp(arg, "whitelist")) <em class='brace'>{</em>
+<a id='L241' name='L241'></a> 241                 <a href='../S/490.html#L129' title='Defined at 129 in kcsan/debugfs.c.'>set_report_filterlist_whitelist</a>(true);
+<a id='L242' name='L242'></a> 242         <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (!strcmp(arg, "blacklist")) <em class='brace'>{</em>
+<a id='L243' name='L243'></a> 243                 <a href='../S/490.html#L129' title='Defined at 129 in kcsan/debugfs.c.'>set_report_filterlist_whitelist</a>(false);
+<a id='L244' name='L244'></a> 244         <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (arg[0] == '!') <em class='brace'>{</em>
+<a id='L245' name='L245'></a> 245                 ssize_t ret = <a href='../S/490.html#L139' title='Defined at 139 in kcsan/debugfs.c.'>insert_report_filterlist</a>(&amp;arg[1]);
+<a id='L246' name='L246'></a> 246 
+<a id='L247' name='L247'></a> 247                 <strong class='reserved'>if</strong> (ret &lt; 0)
+<a id='L248' name='L248'></a> 248                         <strong class='reserved'>return</strong> ret;
+<a id='L249' name='L249'></a> 249         <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L250' name='L250'></a> 250                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L251' name='L251'></a> 251         <em class='brace'>}</em>
+<a id='L252' name='L252'></a> 252 
+<a id='L253' name='L253'></a> 253         <strong class='reserved'>return</strong> count;
+<a id='L254' name='L254'></a> 254 <em class='brace'>}</em>
+<a id='L255' name='L255'></a> 255 
+<a id='L256' name='L256'></a> 256 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> file_operations debugfs_ops =
+<a id='L257' name='L257'></a> 257 <em class='brace'>{</em>
+<a id='L258' name='L258'></a> 258         .read    = seq_read,
+<a id='L259' name='L259'></a> 259         .open    = <a href='../S/490.html#L213' title='Defined at 213 in kcsan/debugfs.c.'>debugfs_open</a>,
+<a id='L260' name='L260'></a> 260         .write   = <a href='../S/490.html#L219' title='Defined at 219 in kcsan/debugfs.c.'>debugfs_write</a>,
+<a id='L261' name='L261'></a> 261         .release = single_release
+<a id='L262' name='L262'></a> 262 <em class='brace'>}</em>;
+<a id='L263' name='L263'></a> 263 
+<a id='L264' name='L264'></a> 264 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __init <a href='../S/490.html#L270' title='Referred from 270 in kcsan/debugfs.c.'>kcsan_debugfs_init</a>(<strong class='reserved'>void</strong>)
+<a id='L265' name='L265'></a> 265 <em class='brace'>{</em>
+<a id='L266' name='L266'></a> 266         debugfs_create_file("kcsan", 0644, NULL, NULL, &amp;debugfs_ops);
+<a id='L267' name='L267'></a> 267         <strong class='reserved'>return</strong> 0;
+<a id='L268' name='L268'></a> 268 <em class='brace'>}</em>
+<a id='L269' name='L269'></a> 269 
+<a id='L270' name='L270'></a> 270 late_initcall(<a href='../S/490.html#L264' title='Defined at 264 in kcsan/debugfs.c.'>kcsan_debugfs_init</a>);
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L58'>[^]</a><a href='#L264'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

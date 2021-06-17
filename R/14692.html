@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>watchdog</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/227.html#L317'>watchdog</a>          317 hung_task.c    	watchdog_task = kthread_run(watchdog, NULL, "khungtaskd");</span>
+<span class='curline'><a href='../S/450.html#L2488'>watchdog</a>         2488 sched/rt.c     	watchdog(rq, p);</span>
+<span class='curline'><a href='../S/100.html#L101'>watchdog</a>          101 time/clocksource.c static struct clocksource *watchdog;</span>
+<span class='curline'><a href='../S/100.html#L211'>watchdog</a>          211 time/clocksource.c 		wdnow = watchdog-&gt;read(watchdog);</span>
+<span class='curline'><a href='../S/100.html#L223'>watchdog</a>          223 time/clocksource.c 		delta = clocksource_delta(wdnow, cs-&gt;wd_last, watchdog-&gt;mask);</span>
+<span class='curline'><a href='../S/100.html#L224'>watchdog</a>          224 time/clocksource.c 		wd_nsec = clocksource_cyc2ns(delta, watchdog-&gt;mult,</span>
+<span class='curline'><a href='../S/100.html#L225'>watchdog</a>          225 time/clocksource.c 					     watchdog-&gt;shift);</span>
+<span class='curline'><a href='../S/100.html#L242'>watchdog</a>          242 time/clocksource.c 				watchdog-&gt;name, wdnow, wdlast, watchdog-&gt;mask);</span>
+<span class='curline'><a href='../S/100.html#L254'>watchdog</a>          254 time/clocksource.c 		    (watchdog-&gt;flags &amp; CLOCK_SOURCE_IS_CONTINUOUS)) {</span>
+<span class='curline'><a href='../S/100.html#L311'>watchdog</a>          311 time/clocksource.c 	if (watchdog_running || !watchdog || list_empty(&amp;watchdog_list))</span>
+<span class='curline'><a href='../S/100.html#L321'>watchdog</a>          321 time/clocksource.c 	if (!watchdog_running || (watchdog &amp;&amp; !list_empty(&amp;watchdog_list)))</span>
+<span class='curline'><a href='../S/100.html#L362'>watchdog</a>          362 time/clocksource.c 	old_wd = watchdog;</span>
+<span class='curline'><a href='../S/100.html#L364'>watchdog</a>          364 time/clocksource.c 		watchdog = NULL;</span>
+<span class='curline'><a href='../S/100.html#L376'>watchdog</a>          376 time/clocksource.c 		if (!watchdog || cs-&gt;rating &gt; watchdog-&gt;rating)</span>
+<span class='curline'><a href='../S/100.html#L377'>watchdog</a>          377 time/clocksource.c 			watchdog = cs;</span>
+<span class='curline'><a href='../S/100.html#L380'>watchdog</a>          380 time/clocksource.c 	if (!watchdog)</span>
+<span class='curline'><a href='../S/100.html#L381'>watchdog</a>          381 time/clocksource.c 		watchdog = old_wd;</span>
+<span class='curline'><a href='../S/100.html#L384'>watchdog</a>          384 time/clocksource.c 	if (watchdog != old_wd)</span>
+<span class='curline'><a href='../S/100.html#L394'>watchdog</a>          394 time/clocksource.c 	if (cs != watchdog) {</span>
+<span class='curline'><a href='../S/100.html#L440'>watchdog</a>          440 time/clocksource.c 	return cs == watchdog;</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>up</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/48.html#L2801'>up</a>               2801 fork.c         up:</span>
+<span class='curline'><a href='../S/48.html#L2810'>up</a>               2810 fork.c         		goto up;</span>
+<span class='curline'><a href='../S/18.html#L189'>up</a>                189 locking/semaphore.c EXPORT_SYMBOL(up);</span>
+<span class='curline'><a href='../S/18.html#L196'>up</a>                196 locking/semaphore.c 	bool up;</span>
+<span class='curline'><a href='../S/18.html#L211'>up</a>                211 locking/semaphore.c 	waiter.up = false;</span>
+<span class='curline'><a href='../S/18.html#L222'>up</a>                222 locking/semaphore.c 		if (waiter.up)</span>
+<span class='curline'><a href='../S/18.html#L260'>up</a>                260 locking/semaphore.c 	waiter-&gt;up = true;</span>
+<span class='curline'><a href='../S/6.html#L257'>up</a>                257 printk/printk.c 	up(&amp;console_sem);</span>
+<span class='curline'><a href='../S/441.html#L847'>up</a>                847 sched/core.c   			     tg_visitor down, tg_visitor up, void *data)</span>
+<span class='curline'><a href='../S/441.html#L862'>up</a>                862 sched/core.c   up:</span>
+<span class='curline'><a href='../S/441.html#L865'>up</a>                865 sched/core.c   	ret = (*up)(parent, data);</span>
+<span class='curline'><a href='../S/441.html#L872'>up</a>                872 sched/core.c   		goto up;</span>
+<span class='curline'><a href='../S/447.html#L464'>up</a>                464 sched/sched.h  			     tg_visitor down, tg_visitor up, void *data);</span>
+<span class='curline'><a href='../S/447.html#L472'>up</a>                472 sched/sched.h  static inline int walk_tg_tree(tg_visitor down, tg_visitor up, void *data)</span>
+<span class='curline'><a href='../S/447.html#L474'>up</a>                474 sched/sched.h  	return walk_tg_tree_from(&amp;root_task_group, down, up, data);</span>
+<span class='curline'><a href='../S/11.html#L1096'>up</a>               1096 seccomp.c      	up(&amp;match-&gt;notif-&gt;request);</span>
+<span class='curline'><a href='../S/11.html#L1476'>up</a>               1476 seccomp.c      			up(&amp;filter-&gt;notif-&gt;request);</span>
+<span class='curline'><a href='../S/326.html#L993'>up</a>                993 sysctl.c       	unsigned int *up = write ? &amp;tmp : valp;</span>
+<span class='curline'><a href='../S/326.html#L995'>up</a>                995 sysctl.c       	ret = do_proc_douintvec_conv(lvalp, up, write, data);</span>
+<span class='curline'><a href='../S/328.html#L113'>up</a>                113 user.c         static void uid_hash_insert(struct user_struct *up, struct hlist_head *hashent)</span>
+<span class='curline'><a href='../S/328.html#L115'>up</a>                115 user.c         	hlist_add_head(&amp;up-&gt;uidhash_node, hashent);</span>
+<span class='curline'><a href='../S/328.html#L118'>up</a>                118 user.c         static void uid_hash_remove(struct user_struct *up)</span>
+<span class='curline'><a href='../S/328.html#L120'>up</a>                120 user.c         	hlist_del_init(&amp;up-&gt;uidhash_node);</span>
+<span class='curline'><a href='../S/328.html#L141'>up</a>                141 user.c         static void free_user(struct user_struct *up, unsigned long flags)</span>
+<span class='curline'><a href='../S/328.html#L144'>up</a>                144 user.c         	trace_android_vh_free_user(up);</span>
+<span class='curline'><a href='../S/328.html#L145'>up</a>                145 user.c         	uid_hash_remove(up);</span>
+<span class='curline'><a href='../S/328.html#L147'>up</a>                147 user.c         	kmem_cache_free(uid_cachep, up);</span>
+<span class='curline'><a href='../S/328.html#L168'>up</a>                168 user.c         void free_uid(struct user_struct *up)</span>
+<span class='curline'><a href='../S/328.html#L172'>up</a>                172 user.c         	if (!up)</span>
+<span class='curline'><a href='../S/328.html#L175'>up</a>                175 user.c         	if (refcount_dec_and_lock_irqsave(&amp;up-&gt;__count, &amp;uidhash_lock, &amp;flags))</span>
+<span class='curline'><a href='../S/328.html#L176'>up</a>                176 user.c         		free_user(up, flags);</span>
+<span class='curline'><a href='../S/328.html#L183'>up</a>                183 user.c         	struct user_struct *up, *new;</span>
+<span class='curline'><a href='../S/328.html#L186'>up</a>                186 user.c         	up = uid_hash_find(uid, hashent);</span>
+<span class='curline'><a href='../S/328.html#L189'>up</a>                189 user.c         	if (!up) {</span>
+<span class='curline'><a href='../S/328.html#L205'>up</a>                205 user.c         		up = uid_hash_find(uid, hashent);</span>
+<span class='curline'><a href='../S/328.html#L206'>up</a>                206 user.c         		if (up) {</span>
+<span class='curline'><a href='../S/328.html#L210'>up</a>                210 user.c         			up = new;</span>
+<span class='curline'><a href='../S/328.html#L215'>up</a>                215 user.c         	return up;</span>
+</pre>
+</body>
+</html>

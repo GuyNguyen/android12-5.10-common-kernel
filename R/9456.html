@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>overlap</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/156.html#L465'>overlap</a>           465 dma/debug.c    	int overlap = 0, i;</span>
+<span class='curline'><a href='../S/156.html#L469'>overlap</a>           469 dma/debug.c    			overlap |= 1 &lt;&lt; i;</span>
+<span class='curline'><a href='../S/156.html#L470'>overlap</a>           470 dma/debug.c    	return overlap;</span>
+<span class='curline'><a href='../S/156.html#L473'>overlap</a>           473 dma/debug.c    static int active_cacheline_set_overlap(phys_addr_t cln, int overlap)</span>
+<span class='curline'><a href='../S/156.html#L477'>overlap</a>           477 dma/debug.c    	if (overlap &gt; ACTIVE_CACHELINE_MAX_OVERLAP || overlap &lt; 0)</span>
+<span class='curline'><a href='../S/156.html#L478'>overlap</a>           478 dma/debug.c    		return overlap;</span>
+<span class='curline'><a href='../S/156.html#L481'>overlap</a>           481 dma/debug.c    		if (overlap &amp; 1 &lt;&lt; i)</span>
+<span class='curline'><a href='../S/156.html#L486'>overlap</a>           486 dma/debug.c    	return overlap;</span>
+<span class='curline'><a href='../S/156.html#L491'>overlap</a>           491 dma/debug.c    	int overlap = active_cacheline_read_overlap(cln);</span>
+<span class='curline'><a href='../S/156.html#L493'>overlap</a>           493 dma/debug.c    	overlap = active_cacheline_set_overlap(cln, ++overlap);</span>
+<span class='curline'><a href='../S/156.html#L498'>overlap</a>           498 dma/debug.c    	WARN_ONCE(overlap &gt; ACTIVE_CACHELINE_MAX_OVERLAP,</span>
+<span class='curline'><a href='../S/156.html#L505'>overlap</a>           505 dma/debug.c    	int overlap = active_cacheline_read_overlap(cln);</span>
+<span class='curline'><a href='../S/156.html#L507'>overlap</a>           507 dma/debug.c    	return active_cacheline_set_overlap(cln, --overlap);</span>
+<span class='curline'><a href='../S/156.html#L1081'>overlap</a>          1081 dma/debug.c    	if (overlap(addr, len, _stext, _etext) ||</span>
+<span class='curline'><a href='../S/156.html#L1082'>overlap</a>          1082 dma/debug.c    	    overlap(addr, len, __start_rodata, __end_rodata))</span>
+</pre>
+</body>
+</html>

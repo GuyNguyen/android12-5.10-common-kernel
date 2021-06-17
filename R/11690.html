@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rq_clock</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/441.html#L2664'>rq_clock</a>         2664 sched/core.c   		u64 delta = rq_clock(rq) - rq-&gt;idle_stamp;</span>
+<span class='curline'><a href='../S/451.html#L326'>rq_clock</a>          326 sched/deadline.c 	zerolag_time -= rq_clock(rq);</span>
+<span class='curline'><a href='../S/451.html#L724'>rq_clock</a>          724 sched/deadline.c 	WARN_ON(dl_time_before(rq_clock(rq), dl_se-&gt;deadline));</span>
+<span class='curline'><a href='../S/451.html#L739'>rq_clock</a>          739 sched/deadline.c 	dl_se-&gt;deadline = rq_clock(rq) + dl_se-&gt;dl_deadline;</span>
+<span class='curline'><a href='../S/451.html#L773'>rq_clock</a>          773 sched/deadline.c 		dl_se-&gt;deadline = rq_clock(rq) + pi_of(dl_se)-&gt;dl_deadline;</span>
+<span class='curline'><a href='../S/451.html#L800'>rq_clock</a>          800 sched/deadline.c 	if (dl_time_before(dl_se-&gt;deadline, rq_clock(rq))) {</span>
+<span class='curline'><a href='../S/451.html#L802'>rq_clock</a>          802 sched/deadline.c 		dl_se-&gt;deadline = rq_clock(rq) + pi_of(dl_se)-&gt;dl_deadline;</span>
+<span class='curline'><a href='../S/451.html#L886'>rq_clock</a>          886 sched/deadline.c 	u64 laxity = dl_se-&gt;deadline - rq_clock(rq);</span>
+<span class='curline'><a href='../S/451.html#L894'>rq_clock</a>          894 sched/deadline.c 	WARN_ON(dl_time_before(dl_se-&gt;deadline, rq_clock(rq)));</span>
+<span class='curline'><a href='../S/451.html#L950'>rq_clock</a>          950 sched/deadline.c 	if (dl_time_before(dl_se-&gt;deadline, rq_clock(rq)) ||</span>
+<span class='curline'><a href='../S/451.html#L951'>rq_clock</a>          951 sched/deadline.c 	    dl_entity_overflow(dl_se, rq_clock(rq))) {</span>
+<span class='curline'><a href='../S/451.html#L954'>rq_clock</a>          954 sched/deadline.c 			     !dl_time_before(dl_se-&gt;deadline, rq_clock(rq)) &amp;&amp;</span>
+<span class='curline'><a href='../S/451.html#L960'>rq_clock</a>          960 sched/deadline.c 		dl_se-&gt;deadline = rq_clock(rq) + pi_of(dl_se)-&gt;dl_deadline;</span>
+<span class='curline'><a href='../S/451.html#L997'>rq_clock</a>          997 sched/deadline.c 	delta = ktime_to_ns(now) - rq_clock(rq);</span>
+<span class='curline'><a href='../S/451.html#L1176'>rq_clock</a>         1176 sched/deadline.c 	if (dl_time_before(dl_se-&gt;deadline, rq_clock(rq)) &amp;&amp;</span>
+<span class='curline'><a href='../S/451.html#L1177'>rq_clock</a>         1177 sched/deadline.c 	    dl_time_before(rq_clock(rq), dl_next_period(dl_se))) {</span>
+<span class='curline'><a href='../S/451.html#L1519'>rq_clock</a>         1519 sched/deadline.c 				 rq_clock(rq_of_dl_rq(dl_rq_of_se(dl_se))))) {</span>
+<span class='curline'><a href='../S/464.html#L908'>rq_clock</a>          908 sched/fair.c   	wait_start = rq_clock(rq_of(cfs_rq));</span>
+<span class='curline'><a href='../S/464.html#L927'>rq_clock</a>          927 sched/fair.c   	delta = rq_clock(rq_of(cfs_rq)) - schedstat_val(se-&gt;statistics.wait_start);</span>
+<span class='curline'><a href='../S/464.html#L966'>rq_clock</a>          966 sched/fair.c   		u64 delta = rq_clock(rq_of(cfs_rq)) - sleep_start;</span>
+<span class='curline'><a href='../S/464.html#L983'>rq_clock</a>          983 sched/fair.c   		u64 delta = rq_clock(rq_of(cfs_rq)) - block_start;</span>
+<span class='curline'><a href='../S/464.html#L1058'>rq_clock</a>         1058 sched/fair.c   				      rq_clock(rq_of(cfs_rq)));</span>
+<span class='curline'><a href='../S/464.html#L1061'>rq_clock</a>         1061 sched/fair.c   				      rq_clock(rq_of(cfs_rq)));</span>
+<span class='curline'><a href='../S/464.html#L4869'>rq_clock</a>         4869 sched/fair.c   	cfs_rq-&gt;throttled_clock = rq_clock(rq);</span>
+<span class='curline'><a href='../S/464.html#L4887'>rq_clock</a>         4887 sched/fair.c   	cfs_b-&gt;throttled_time += rq_clock(rq) - cfs_rq-&gt;throttled_clock;</span>
+<span class='curline'><a href='../S/464.html#L10750'>rq_clock</a>         10750 sched/fair.c   	this_rq-&gt;idle_stamp = rq_clock(this_rq);</span>
+<span class='curline'><a href='../S/450.html#L979'>rq_clock</a>          979 sched/rt.c     				rq_clock(rq_of_rt_rq(rt_rq)),</span>
+<span class='curline'><a href='../S/447.html#L2432'>rq_clock</a>         2432 sched/sched.h  		data-&gt;func(data, rq_clock(rq), flags);</span>
+<span class='curline'><a href='../S/461.html#L179'>rq_clock</a>          179 sched/stats.h  	unsigned long long now = rq_clock(rq), delta = 0;</span>
+<span class='curline'><a href='../S/461.html#L198'>rq_clock</a>          198 sched/stats.h  	unsigned long long now = rq_clock(rq), delta = 0;</span>
+<span class='curline'><a href='../S/461.html#L219'>rq_clock</a>          219 sched/stats.h  			t-&gt;sched_info.last_queued = rq_clock(rq);</span>
+<span class='curline'><a href='../S/461.html#L233'>rq_clock</a>          233 sched/stats.h  	unsigned long long delta = rq_clock(rq) - t-&gt;sched_info.last_arrival;</span>
+</pre>
+</body>
+</html>

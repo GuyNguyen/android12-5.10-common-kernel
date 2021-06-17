@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>sched/stats.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/511.html'>sched</a>/stats.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L15'>[^]</a><a href='#L123'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L15' title='Defined at 15.'>show_schedstat</a></li>
+<li><a href='#L83' title='Defined at 83.'>schedstat_start</a></li>
+<li><a href='#L105' title='Defined at 105.'>schedstat_next</a></li>
+<li><a href='#L112' title='Defined at 112.'>schedstat_stop</a></li>
+<li><a href='#L123' title='Defined at 123.'>proc_schedstat_init</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * /proc/schedstat implementation</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> */</em>
+<a id='L5' name='L5'></a>   5 <em class='sharp'>#include</em> "<a href='447.html'>sched.h</a>"
+<a id='L6' name='L6'></a>   6 
+<a id='L7' name='L7'></a>   7 <em class='comment'>/*</em>
+<a id='L8' name='L8'></a>   8 <em class='comment'> * Current schedstat API version.</em>
+<a id='L9' name='L9'></a>   9 <em class='comment'> *</em>
+<a id='L10' name='L10'></a>  10 <em class='comment'> * Bump this up when changing the output format or the meaning of an existing</em>
+<a id='L11' name='L11'></a>  11 <em class='comment'> * format, so that tools can adapt (or abort)</em>
+<a id='L12' name='L12'></a>  12 <em class='comment'> */</em>
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#define</em> <a href='../S/472.html#L20' title='Referred from 20 in sched/stats.c.'>SCHEDSTAT_VERSION</a> 15
+<a id='L14' name='L14'></a>  14 
+<a id='L15' name='L15'></a>  15 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/472.html#L120' title='Referred from 120 in sched/stats.c.'>show_schedstat</a>(<strong class='reserved'>struct</strong> seq_file *seq, <strong class='reserved'>void</strong> *v)
+<a id='L16' name='L16'></a>  16 <em class='brace'>{</em>
+<a id='L17' name='L17'></a>  17         <strong class='reserved'>int</strong> cpu;
+<a id='L18' name='L18'></a>  18 
+<a id='L19' name='L19'></a>  19         <strong class='reserved'>if</strong> (v == (<strong class='reserved'>void</strong> *)1) <em class='brace'>{</em>
+<a id='L20' name='L20'></a>  20                 seq_printf(seq, "version %d\n", <a href='../S/472.html#L13' title='Defined at 13 in sched/stats.c.'>SCHEDSTAT_VERSION</a>);
+<a id='L21' name='L21'></a>  21                 seq_printf(seq, "timestamp %lu\n", jiffies);
+<a id='L22' name='L22'></a>  22         <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L23' name='L23'></a>  23                 <strong class='reserved'>struct</strong> <a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a> *<a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a>;
+<a id='L24' name='L24'></a>  24 <em class='sharp'>#ifdef</em> CONFIG_SMP
+<a id='L25' name='L25'></a>  25                 <strong class='reserved'>struct</strong> sched_domain *sd;
+<a id='L26' name='L26'></a>  26                 <strong class='reserved'>int</strong> dcount = 0;
+<a id='L27' name='L27'></a>  27 <em class='sharp'>#endif</em>
+<a id='L28' name='L28'></a>  28                 cpu = (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)(v - 2);
+<a id='L29' name='L29'></a>  29                 <a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a> = <a href='../S/447.html#L1127' title='Defined at 1127 in sched/sched.h.'>cpu_rq</a>(cpu);
+<a id='L30' name='L30'></a>  30 
+<a id='L31' name='L31'></a>  31                 <em class='comment'>/* runqueue-specific stats */</em>
+<a id='L32' name='L32'></a>  32                 seq_printf(seq,
+<a id='L33' name='L33'></a>  33                     "cpu%d %u 0 %u %u %u %u %llu %llu %lu",
+<a id='L34' name='L34'></a>  34                     cpu, <a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a>-&gt;yld_count,
+<a id='L35' name='L35'></a>  35                     <a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a>-&gt;sched_count, <a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a>-&gt;sched_goidle,
+<a id='L36' name='L36'></a>  36                     <a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a>-&gt;ttwu_count, <a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a>-&gt;ttwu_local,
+<a id='L37' name='L37'></a>  37                     <a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a>-&gt;rq_cpu_time,
+<a id='L38' name='L38'></a>  38                     <a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a>-&gt;rq_sched_info.run_delay, <a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a>-&gt;rq_sched_info.pcount);
+<a id='L39' name='L39'></a>  39 
+<a id='L40' name='L40'></a>  40                 seq_printf(seq, "\n");
+<a id='L41' name='L41'></a>  41 
+<a id='L42' name='L42'></a>  42 <em class='sharp'>#ifdef</em> CONFIG_SMP
+<a id='L43' name='L43'></a>  43                 <em class='comment'>/* domain-specific stats */</em>
+<a id='L44' name='L44'></a>  44                 rcu_read_lock();
+<a id='L45' name='L45'></a>  45                 <a href='../S/447.html#L1444' title='Defined at 1444 in sched/sched.h.'>for_each_domain</a>(cpu, sd) <em class='brace'>{</em>
+<a id='L46' name='L46'></a>  46                         <strong class='reserved'>enum</strong> cpu_idle_type itype;
+<a id='L47' name='L47'></a>  47 
+<a id='L48' name='L48'></a>  48                         seq_printf(seq, "domain%d %*pb", dcount++,
+<a id='L49' name='L49'></a>  49                                    cpumask_pr_args(sched_domain_span(sd)));
+<a id='L50' name='L50'></a>  50                         <strong class='reserved'>for</strong> (itype = CPU_IDLE; itype &lt; CPU_MAX_IDLE_TYPES;
+<a id='L51' name='L51'></a>  51                                         itype++) <em class='brace'>{</em>
+<a id='L52' name='L52'></a>  52                                 seq_printf(seq, " %u %u %u %u %u %u %u %u",
+<a id='L53' name='L53'></a>  53                                     sd-&gt;lb_count[itype],
+<a id='L54' name='L54'></a>  54                                     sd-&gt;lb_balanced[itype],
+<a id='L55' name='L55'></a>  55                                     sd-&gt;lb_failed[itype],
+<a id='L56' name='L56'></a>  56                                     sd-&gt;lb_imbalance[itype],
+<a id='L57' name='L57'></a>  57                                     sd-&gt;lb_gained[itype],
+<a id='L58' name='L58'></a>  58                                     sd-&gt;lb_hot_gained[itype],
+<a id='L59' name='L59'></a>  59                                     sd-&gt;lb_nobusyq[itype],
+<a id='L60' name='L60'></a>  60                                     sd-&gt;lb_nobusyg[itype]);
+<a id='L61' name='L61'></a>  61                         <em class='brace'>}</em>
+<a id='L62' name='L62'></a>  62                         seq_printf(seq,
+<a id='L63' name='L63'></a>  63                                    " %u %u %u %u %u %u %u %u %u %u %u %u\n",
+<a id='L64' name='L64'></a>  64                             sd-&gt;alb_count, sd-&gt;alb_failed, sd-&gt;alb_pushed,
+<a id='L65' name='L65'></a>  65                             sd-&gt;sbe_count, sd-&gt;sbe_balanced, sd-&gt;sbe_pushed,
+<a id='L66' name='L66'></a>  66                             sd-&gt;sbf_count, sd-&gt;sbf_balanced, sd-&gt;sbf_pushed,
+<a id='L67' name='L67'></a>  67                             sd-&gt;ttwu_wake_remote, sd-&gt;ttwu_move_affine,
+<a id='L68' name='L68'></a>  68                             sd-&gt;ttwu_move_balance);
+<a id='L69' name='L69'></a>  69                 <em class='brace'>}</em>
+<a id='L70' name='L70'></a>  70                 rcu_read_unlock();
+<a id='L71' name='L71'></a>  71 <em class='sharp'>#endif</em>
+<a id='L72' name='L72'></a>  72         <em class='brace'>}</em>
+<a id='L73' name='L73'></a>  73         <strong class='reserved'>return</strong> 0;
+<a id='L74' name='L74'></a>  74 <em class='brace'>}</em>
+<a id='L75' name='L75'></a>  75 
+<a id='L76' name='L76'></a>  76 <em class='comment'>/*</em>
+<a id='L77' name='L77'></a>  77 <em class='comment'> * This itererator needs some explanation.</em>
+<a id='L78' name='L78'></a>  78 <em class='comment'> * It returns 1 for the header position.</em>
+<a id='L79' name='L79'></a>  79 <em class='comment'> * This means 2 is cpu 0.</em>
+<a id='L80' name='L80'></a>  80 <em class='comment'> * In a hotplugged system some CPUs, including cpu 0, may be missing so we have</em>
+<a id='L81' name='L81'></a>  81 <em class='comment'> * to use cpumask_* to iterate over the CPUs.</em>
+<a id='L82' name='L82'></a>  82 <em class='comment'> */</em>
+<a id='L83' name='L83'></a>  83 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> *<a href='../R/12101.html' title='Multiple referred from 2 places.'>schedstat_start</a>(<strong class='reserved'>struct</strong> seq_file *file, loff_t *offset)
+<a id='L84' name='L84'></a>  84 <em class='brace'>{</em>
+<a id='L85' name='L85'></a>  85         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> n = *offset;
+<a id='L86' name='L86'></a>  86 
+<a id='L87' name='L87'></a>  87         <strong class='reserved'>if</strong> (n == 0)
+<a id='L88' name='L88'></a>  88                 <strong class='reserved'>return</strong> (<strong class='reserved'>void</strong> *) 1;
+<a id='L89' name='L89'></a>  89 
+<a id='L90' name='L90'></a>  90         n--;
+<a id='L91' name='L91'></a>  91 
+<a id='L92' name='L92'></a>  92         <strong class='reserved'>if</strong> (n &gt; 0)
+<a id='L93' name='L93'></a>  93                 n = cpumask_next(n - 1, cpu_online_mask);
+<a id='L94' name='L94'></a>  94         <strong class='reserved'>else</strong>
+<a id='L95' name='L95'></a>  95                 n = cpumask_first(cpu_online_mask);
+<a id='L96' name='L96'></a>  96 
+<a id='L97' name='L97'></a>  97         *offset = n + 1;
+<a id='L98' name='L98'></a>  98 
+<a id='L99' name='L99'></a>  99         <strong class='reserved'>if</strong> (n &lt; nr_cpu_ids)
+<a id='L100' name='L100'></a> 100                 <strong class='reserved'>return</strong> (<strong class='reserved'>void</strong> *)(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)(n + 2);
+<a id='L101' name='L101'></a> 101 
+<a id='L102' name='L102'></a> 102         <strong class='reserved'>return</strong> NULL;
+<a id='L103' name='L103'></a> 103 <em class='brace'>}</em>
+<a id='L104' name='L104'></a> 104 
+<a id='L105' name='L105'></a> 105 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> *<a href='../S/472.html#L118' title='Referred from 118 in sched/stats.c.'>schedstat_next</a>(<strong class='reserved'>struct</strong> seq_file *file, <strong class='reserved'>void</strong> *data, loff_t *offset)
+<a id='L106' name='L106'></a> 106 <em class='brace'>{</em>
+<a id='L107' name='L107'></a> 107         (*offset)++;
+<a id='L108' name='L108'></a> 108 
+<a id='L109' name='L109'></a> 109         <strong class='reserved'>return</strong> <a href='../S/472.html#L83' title='Defined at 83 in sched/stats.c.'>schedstat_start</a>(file, offset);
+<a id='L110' name='L110'></a> 110 <em class='brace'>}</em>
+<a id='L111' name='L111'></a> 111 
+<a id='L112' name='L112'></a> 112 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/472.html#L119' title='Referred from 119 in sched/stats.c.'>schedstat_stop</a>(<strong class='reserved'>struct</strong> seq_file *file, <strong class='reserved'>void</strong> *data)
+<a id='L113' name='L113'></a> 113 <em class='brace'>{</em>
+<a id='L114' name='L114'></a> 114 <em class='brace'>}</em>
+<a id='L115' name='L115'></a> 115 
+<a id='L116' name='L116'></a> 116 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> seq_operations schedstat_sops = <em class='brace'>{</em>
+<a id='L117' name='L117'></a> 117         .start = <a href='../S/472.html#L83' title='Defined at 83 in sched/stats.c.'>schedstat_start</a>,
+<a id='L118' name='L118'></a> 118         .next  = <a href='../S/472.html#L105' title='Defined at 105 in sched/stats.c.'>schedstat_next</a>,
+<a id='L119' name='L119'></a> 119         .stop  = <a href='../S/472.html#L112' title='Defined at 112 in sched/stats.c.'>schedstat_stop</a>,
+<a id='L120' name='L120'></a> 120         .show  = <a href='../S/472.html#L15' title='Defined at 15 in sched/stats.c.'>show_schedstat</a>,
+<a id='L121' name='L121'></a> 121 <em class='brace'>}</em>;
+<a id='L122' name='L122'></a> 122 
+<a id='L123' name='L123'></a> 123 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __init <a href='../S/472.html#L128' title='Referred from 128 in sched/stats.c.'>proc_schedstat_init</a>(<strong class='reserved'>void</strong>)
+<a id='L124' name='L124'></a> 124 <em class='brace'>{</em>
+<a id='L125' name='L125'></a> 125         proc_create_seq("schedstat", 0, NULL, &amp;schedstat_sops);
+<a id='L126' name='L126'></a> 126         <strong class='reserved'>return</strong> 0;
+<a id='L127' name='L127'></a> 127 <em class='brace'>}</em>
+<a id='L128' name='L128'></a> 128 subsys_initcall(<a href='../S/472.html#L123' title='Defined at 123 in sched/stats.c.'>proc_schedstat_init</a>);
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L15'>[^]</a><a href='#L123'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>from_kuid_munged</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/15.html#L497'>from_kuid_munged</a>  497 acct.c         	ac.ac_uid = from_kuid_munged(file-&gt;f_cred-&gt;user_ns, orig_cred-&gt;uid);</span>
+<span class='curline'><a href='../S/418.html#L3415'>from_kuid_munged</a> 3415 bpf/syscall.c  	info.created_by_uid = from_kuid_munged(current_user_ns(),</span>
+<span class='curline'><a href='../S/199.html#L822'>from_kuid_munged</a>  822 cred.c         		from_kuid_munged(&amp;init_user_ns, cred-&gt;uid),</span>
+<span class='curline'><a href='../S/199.html#L823'>from_kuid_munged</a>  823 cred.c         		from_kuid_munged(&amp;init_user_ns, cred-&gt;euid),</span>
+<span class='curline'><a href='../S/199.html#L824'>from_kuid_munged</a>  824 cred.c         		from_kuid_munged(&amp;init_user_ns, cred-&gt;suid),</span>
+<span class='curline'><a href='../S/199.html#L825'>from_kuid_munged</a>  825 cred.c         		from_kuid_munged(&amp;init_user_ns, cred-&gt;fsuid));</span>
+<span class='curline'><a href='../S/63.html#L989'>from_kuid_munged</a>  989 exit.c         	uid_t uid = from_kuid_munged(current_user_ns(), task_uid(p));</span>
+<span class='curline'><a href='../S/63.html#L1175'>from_kuid_munged</a> 1175 exit.c         	uid = from_kuid_munged(current_user_ns(), task_uid(p));</span>
+<span class='curline'><a href='../S/63.html#L1236'>from_kuid_munged</a> 1236 exit.c         	uid = from_kuid_munged(current_user_ns(), task_uid(p));</span>
+<span class='curline'><a href='../S/246.html#L1132'>from_kuid_munged</a> 1132 signal.c       				from_kuid_munged(task_cred_xxx(t, user_ns),</span>
+<span class='curline'><a href='../S/246.html#L1232'>from_kuid_munged</a> 1232 signal.c       			info-&gt;si_uid = from_kuid_munged(t_user_ns, uid);</span>
+<span class='curline'><a href='../S/246.html#L1963'>from_kuid_munged</a> 1963 signal.c       	info.si_uid = from_kuid_munged(task_cred_xxx(tsk-&gt;parent, user_ns),</span>
+<span class='curline'><a href='../S/246.html#L2054'>from_kuid_munged</a> 2054 signal.c       	info.si_uid = from_kuid_munged(task_cred_xxx(parent, user_ns), task_uid(tsk));</span>
+<span class='curline'><a href='../S/246.html#L2278'>from_kuid_munged</a> 2278 signal.c       	info.si_uid = from_kuid_munged(current_user_ns(), current_uid());</span>
+<span class='curline'><a href='../S/246.html#L2525'>from_kuid_munged</a> 2525 signal.c       		info-&gt;si_uid = from_kuid_munged(current_user_ns(),</span>
+<span class='curline'><a href='../S/246.html#L3686'>from_kuid_munged</a> 3686 signal.c       	info-&gt;si_uid = from_kuid_munged(current_user_ns(), current_uid());</span>
+<span class='curline'><a href='../S/246.html#L3859'>from_kuid_munged</a> 3859 signal.c       	info.si_uid = from_kuid_munged(current_user_ns(), current_uid());</span>
+<span class='curline'><a href='../S/492.html#L710'>from_kuid_munged</a>  710 sys.c          	ruid = from_kuid_munged(cred-&gt;user_ns, cred-&gt;uid);</span>
+<span class='curline'><a href='../S/492.html#L711'>from_kuid_munged</a>  711 sys.c          	euid = from_kuid_munged(cred-&gt;user_ns, cred-&gt;euid);</span>
+<span class='curline'><a href='../S/492.html#L712'>from_kuid_munged</a>  712 sys.c          	suid = from_kuid_munged(cred-&gt;user_ns, cred-&gt;suid);</span>
+<span class='curline'><a href='../S/492.html#L822'>from_kuid_munged</a>  822 sys.c          	old_fsuid = from_kuid_munged(old-&gt;user_ns, old-&gt;fsuid);</span>
+<span class='curline'><a href='../S/492.html#L940'>from_kuid_munged</a>  940 sys.c          	return from_kuid_munged(current_user_ns(), current_uid());</span>
+<span class='curline'><a href='../S/492.html#L946'>from_kuid_munged</a>  946 sys.c          	return from_kuid_munged(current_user_ns(), current_euid());</span>
+<span class='curline'><a href='../S/271.html#L3903'>from_kuid_munged</a> 3903 trace/trace.c  		   from_kuid_munged(seq_user_ns(m), data-&gt;uid), data-&gt;nice,</span>
+<span class='curline'><a href='../S/422.html#L57'>from_kuid_munged</a>   57 tsacct.c       	stats-&gt;ac_uid	 = from_kuid_munged(user_ns, tcred-&gt;uid);</span>
+<span class='curline'><a href='../S/78.html#L70'>from_kuid_munged</a>   70 uid16.c        	ruid = high2lowuid(from_kuid_munged(cred-&gt;user_ns, cred-&gt;uid));</span>
+<span class='curline'><a href='../S/78.html#L71'>from_kuid_munged</a>   71 uid16.c        	euid = high2lowuid(from_kuid_munged(cred-&gt;user_ns, cred-&gt;euid));</span>
+<span class='curline'><a href='../S/78.html#L72'>from_kuid_munged</a>   72 uid16.c        	suid = high2lowuid(from_kuid_munged(cred-&gt;user_ns, cred-&gt;suid));</span>
+<span class='curline'><a href='../S/78.html#L205'>from_kuid_munged</a>  205 uid16.c        	return high2lowuid(from_kuid_munged(current_user_ns(), current_uid()));</span>
+<span class='curline'><a href='../S/78.html#L210'>from_kuid_munged</a>  210 uid16.c        	return high2lowuid(from_kuid_munged(current_user_ns(), current_euid()));</span>
+<span class='curline'><a href='../S/117.html#L440'>from_kuid_munged</a>  440 user_namespace.c EXPORT_SYMBOL(from_kuid_munged);</span>
+</pre>
+</body>
+</html>

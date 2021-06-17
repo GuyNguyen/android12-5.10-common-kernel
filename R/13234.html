@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>this_rq</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/441.html#L417'>this_rq</a>           417 sched/core.c   	if (rq == this_rq())</span>
+<span class='curline'><a href='../S/441.html#L1885'>this_rq</a>          1885 sched/core.c   	struct rq *rq = this_rq();</span>
+<span class='curline'><a href='../S/441.html#L2611'>this_rq</a>          2611 sched/core.c   	rq = this_rq();</span>
+<span class='curline'><a href='../S/441.html#L2752'>this_rq</a>          2752 sched/core.c   	struct rq *rq = this_rq();</span>
+<span class='curline'><a href='../S/441.html#L3802'>this_rq</a>          3802 sched/core.c   	struct rq *rq = this_rq();</span>
+<span class='curline'><a href='../S/441.html#L4534'>this_rq</a>          4534 sched/core.c   	schedstat_inc(this_rq()-&gt;sched_count);</span>
+<span class='curline'><a href='../S/441.html#L6444'>this_rq</a>          6444 sched/core.c   	rq = this_rq();</span>
+<span class='curline'><a href='../S/441.html#L6919'>this_rq</a>          6919 sched/core.c   	BUG_ON(current != this_rq()-&gt;idle);</span>
+<span class='curline'><a href='../S/441.html#L7082'>this_rq</a>          7082 sched/core.c   	struct rq *rq = this_rq();</span>
+<span class='curline'><a href='../S/473.html#L232'>this_rq</a>           232 sched/cputime.c 	struct rq *rq = this_rq();</span>
+<span class='curline'><a href='../S/473.html#L252'>this_rq</a>           252 sched/cputime.c 		steal -= this_rq()-&gt;prev_steal_time;</span>
+<span class='curline'><a href='../S/473.html#L255'>this_rq</a>           255 sched/cputime.c 		this_rq()-&gt;prev_steal_time += steal;</span>
+<span class='curline'><a href='../S/473.html#L395'>this_rq</a>           395 sched/cputime.c 	} else if (p == this_rq()-&gt;idle) {</span>
+<span class='curline'><a href='../S/473.html#L402'>this_rq</a>           402 sched/cputime.c 	trace_android_vh_irqtime_account_process_tick(p, this_rq(), user_tick, ticks);</span>
+<span class='curline'><a href='../S/473.html#L490'>this_rq</a>           490 sched/cputime.c 	trace_android_vh_account_task_time(p, this_rq(), user_tick);</span>
+<span class='curline'><a href='../S/473.html#L507'>this_rq</a>           507 sched/cputime.c 	else if ((p != this_rq()-&gt;idle) || (irq_count() != HARDIRQ_OFFSET))</span>
+<span class='curline'><a href='../S/451.html#L2212'>this_rq</a>          2212 sched/deadline.c static void pull_dl_task(struct rq *this_rq)</span>
+<span class='curline'><a href='../S/451.html#L2214'>this_rq</a>          2214 sched/deadline.c 	int this_cpu = this_rq-&gt;cpu, cpu;</span>
+<span class='curline'><a href='../S/451.html#L2220'>this_rq</a>          2220 sched/deadline.c 	if (likely(!dl_overloaded(this_rq)))</span>
+<span class='curline'><a href='../S/451.html#L2229'>this_rq</a>          2229 sched/deadline.c 	for_each_cpu(cpu, this_rq-&gt;rd-&gt;dlo_mask) {</span>
+<span class='curline'><a href='../S/451.html#L2239'>this_rq</a>          2239 sched/deadline.c 		if (this_rq-&gt;dl.dl_nr_running &amp;&amp;</span>
+<span class='curline'><a href='../S/451.html#L2240'>this_rq</a>          2240 sched/deadline.c 		    dl_time_before(this_rq-&gt;dl.earliest_dl.curr,</span>
+<span class='curline'><a href='../S/451.html#L2245'>this_rq</a>          2245 sched/deadline.c 		double_lock_balance(this_rq, src_rq);</span>
+<span class='curline'><a href='../S/451.html#L2262'>this_rq</a>          2262 sched/deadline.c 		    (!this_rq-&gt;dl.dl_nr_running ||</span>
+<span class='curline'><a href='../S/451.html#L2264'>this_rq</a>          2264 sched/deadline.c 				    this_rq-&gt;dl.earliest_dl.curr))) {</span>
+<span class='curline'><a href='../S/451.html#L2280'>this_rq</a>          2280 sched/deadline.c 			activate_task(this_rq, p, 0);</span>
+<span class='curline'><a href='../S/451.html#L2286'>this_rq</a>          2286 sched/deadline.c 		double_unlock_balance(this_rq, src_rq);</span>
+<span class='curline'><a href='../S/451.html#L2290'>this_rq</a>          2290 sched/deadline.c 		resched_curr(this_rq);</span>
+<span class='curline'><a href='../S/464.html#L3908'>this_rq</a>          3908 sched/fair.c   static int newidle_balance(struct rq *this_rq, struct rq_flags *rf);</span>
+<span class='curline'><a href='../S/464.html#L6213'>this_rq</a>          6213 sched/fair.c   	avg_idle = this_rq()-&gt;avg_idle / 512;</span>
+<span class='curline'><a href='../S/464.html#L6326'>this_rq</a>          6326 sched/fair.c   	    this_rq()-&gt;nr_running &lt;= 1) {</span>
+<span class='curline'><a href='../S/464.html#L9722'>this_rq</a>          9722 sched/fair.c   static int load_balance(int this_cpu, struct rq *this_rq,</span>
+<span class='curline'><a href='../S/464.html#L9736'>this_rq</a>          9736 sched/fair.c   		.dst_rq		= this_rq,</span>
+<span class='curline'><a href='../S/464.html#L10452'>this_rq</a>          10452 sched/fair.c   	SCHED_WARN_ON(rq != this_rq());</span>
+<span class='curline'><a href='../S/464.html#L10558'>this_rq</a>          10558 sched/fair.c   static bool _nohz_idle_balance(struct rq *this_rq, unsigned int flags,</span>
+<span class='curline'><a href='../S/464.html#L10566'>this_rq</a>          10566 sched/fair.c   	int this_cpu = this_rq-&gt;cpu;</span>
+<span class='curline'><a href='../S/464.html#L10639'>this_rq</a>          10639 sched/fair.c   		has_blocked_load |= this_rq-&gt;has_blocked_load;</span>
+<span class='curline'><a href='../S/464.html#L10643'>this_rq</a>          10643 sched/fair.c   		rebalance_domains(this_rq, CPU_IDLE);</span>
+<span class='curline'><a href='../S/464.html#L10663'>this_rq</a>          10663 sched/fair.c   static bool nohz_idle_balance(struct rq *this_rq, enum cpu_idle_type idle)</span>
+<span class='curline'><a href='../S/464.html#L10665'>this_rq</a>          10665 sched/fair.c   	unsigned int flags = this_rq-&gt;nohz_idle_balance;</span>
+<span class='curline'><a href='../S/464.html#L10670'>this_rq</a>          10670 sched/fair.c   	this_rq-&gt;nohz_idle_balance = 0;</span>
+<span class='curline'><a href='../S/464.html#L10675'>this_rq</a>          10675 sched/fair.c   	_nohz_idle_balance(this_rq, flags, idle);</span>
+<span class='curline'><a href='../S/464.html#L10680'>this_rq</a>          10680 sched/fair.c   static void nohz_newidle_balance(struct rq *this_rq)</span>
+<span class='curline'><a href='../S/464.html#L10682'>this_rq</a>          10682 sched/fair.c   	int this_cpu = this_rq-&gt;cpu;</span>
+<span class='curline'><a href='../S/464.html#L10692'>this_rq</a>          10692 sched/fair.c   	if (this_rq-&gt;avg_idle &lt; sysctl_sched_migration_cost)</span>
+<span class='curline'><a href='../S/464.html#L10700'>this_rq</a>          10700 sched/fair.c   	raw_spin_unlock(&amp;this_rq-&gt;lock);</span>
+<span class='curline'><a href='../S/464.html#L10707'>this_rq</a>          10707 sched/fair.c   	if (!_nohz_idle_balance(this_rq, NOHZ_STATS_KICK, CPU_NEWLY_IDLE))</span>
+<span class='curline'><a href='../S/464.html#L10709'>this_rq</a>          10709 sched/fair.c   	raw_spin_lock(&amp;this_rq-&gt;lock);</span>
+<span class='curline'><a href='../S/464.html#L10715'>this_rq</a>          10715 sched/fair.c   static inline bool nohz_idle_balance(struct rq *this_rq, enum cpu_idle_type idle)</span>
+<span class='curline'><a href='../S/464.html#L10720'>this_rq</a>          10720 sched/fair.c   static inline void nohz_newidle_balance(struct rq *this_rq) { }</span>
+<span class='curline'><a href='../S/464.html#L10732'>this_rq</a>          10732 sched/fair.c   static int newidle_balance(struct rq *this_rq, struct rq_flags *rf)</span>
+<span class='curline'><a href='../S/464.html#L10735'>this_rq</a>          10735 sched/fair.c   	int this_cpu = this_rq-&gt;cpu;</span>
+<span class='curline'><a href='../S/464.html#L10741'>this_rq</a>          10741 sched/fair.c   	trace_android_rvh_sched_newidle_balance(this_rq, rf, &amp;pulled_task, &amp;done);</span>
+<span class='curline'><a href='../S/464.html#L10745'>this_rq</a>          10745 sched/fair.c   	update_misfit_status(NULL, this_rq);</span>
+<span class='curline'><a href='../S/464.html#L10750'>this_rq</a>          10750 sched/fair.c   	this_rq-&gt;idle_stamp = rq_clock(this_rq);</span>
+<span class='curline'><a href='../S/464.html#L10764'>this_rq</a>          10764 sched/fair.c   	rq_unpin_lock(this_rq, rf);</span>
+<span class='curline'><a href='../S/464.html#L10766'>this_rq</a>          10766 sched/fair.c   	if (this_rq-&gt;avg_idle &lt; sysctl_sched_migration_cost ||</span>
+<span class='curline'><a href='../S/464.html#L10767'>this_rq</a>          10767 sched/fair.c   	    !READ_ONCE(this_rq-&gt;rd-&gt;overload)) {</span>
+<span class='curline'><a href='../S/464.html#L10770'>this_rq</a>          10770 sched/fair.c   		sd = rcu_dereference_check_sched_domain(this_rq-&gt;sd);</span>
+<span class='curline'><a href='../S/464.html#L10775'>this_rq</a>          10775 sched/fair.c   		nohz_newidle_balance(this_rq);</span>
+<span class='curline'><a href='../S/464.html#L10780'>this_rq</a>          10780 sched/fair.c   	raw_spin_unlock(&amp;this_rq-&gt;lock);</span>
+<span class='curline'><a href='../S/464.html#L10788'>this_rq</a>          10788 sched/fair.c   		if (this_rq-&gt;avg_idle &lt; curr_cost + sd-&gt;max_newidle_lb_cost) {</span>
+<span class='curline'><a href='../S/464.html#L10796'>this_rq</a>          10796 sched/fair.c   			pulled_task = load_balance(this_cpu, this_rq,</span>
+<span class='curline'><a href='../S/464.html#L10813'>this_rq</a>          10813 sched/fair.c   		if (pulled_task || this_rq-&gt;nr_running &gt; 0)</span>
+<span class='curline'><a href='../S/464.html#L10818'>this_rq</a>          10818 sched/fair.c   	raw_spin_lock(&amp;this_rq-&gt;lock);</span>
+<span class='curline'><a href='../S/464.html#L10820'>this_rq</a>          10820 sched/fair.c   	if (curr_cost &gt; this_rq-&gt;max_idle_balance_cost)</span>
+<span class='curline'><a href='../S/464.html#L10821'>this_rq</a>          10821 sched/fair.c   		this_rq-&gt;max_idle_balance_cost = curr_cost;</span>
+<span class='curline'><a href='../S/464.html#L10829'>this_rq</a>          10829 sched/fair.c   	if (this_rq-&gt;cfs.h_nr_running &amp;&amp; !pulled_task)</span>
+<span class='curline'><a href='../S/464.html#L10833'>this_rq</a>          10833 sched/fair.c   	if (time_after(this_rq-&gt;next_balance, next_balance))</span>
+<span class='curline'><a href='../S/464.html#L10834'>this_rq</a>          10834 sched/fair.c   		this_rq-&gt;next_balance = next_balance;</span>
+<span class='curline'><a href='../S/464.html#L10837'>this_rq</a>          10837 sched/fair.c   	if (this_rq-&gt;nr_running != this_rq-&gt;cfs.h_nr_running)</span>
+<span class='curline'><a href='../S/464.html#L10841'>this_rq</a>          10841 sched/fair.c   		this_rq-&gt;idle_stamp = 0;</span>
+<span class='curline'><a href='../S/464.html#L10843'>this_rq</a>          10843 sched/fair.c   	rq_repin_lock(this_rq, rf);</span>
+<span class='curline'><a href='../S/464.html#L10854'>this_rq</a>          10854 sched/fair.c   	struct rq *this_rq = this_rq();</span>
+<span class='curline'><a href='../S/464.html#L10855'>this_rq</a>          10855 sched/fair.c   	enum cpu_idle_type idle = this_rq-&gt;idle_balance ?</span>
+<span class='curline'><a href='../S/464.html#L10866'>this_rq</a>          10866 sched/fair.c   	if (nohz_idle_balance(this_rq, idle))</span>
+<span class='curline'><a href='../S/464.html#L10870'>this_rq</a>          10870 sched/fair.c   	update_blocked_averages(this_rq-&gt;cpu);</span>
+<span class='curline'><a href='../S/464.html#L10871'>this_rq</a>          10871 sched/fair.c   	rebalance_domains(this_rq, idle);</span>
+<span class='curline'><a href='../S/464.html#L10940'>this_rq</a>          10940 sched/fair.c   	struct rq *rq = this_rq();</span>
+<span class='curline'><a href='../S/455.html#L24'>this_rq</a>            24 sched/idle.c   	idle_set_state(this_rq(), idle_state);</span>
+<span class='curline'><a href='../S/454.html#L80'>this_rq</a>            80 sched/loadavg.c long calc_load_fold_active(struct rq *this_rq, long adjust)</span>
+<span class='curline'><a href='../S/454.html#L84'>this_rq</a>            84 sched/loadavg.c 	nr_active = this_rq-&gt;nr_running - adjust;</span>
+<span class='curline'><a href='../S/454.html#L85'>this_rq</a>            85 sched/loadavg.c 	nr_active += (long)this_rq-&gt;nr_uninterruptible;</span>
+<span class='curline'><a href='../S/454.html#L87'>this_rq</a>            87 sched/loadavg.c 	if (nr_active != this_rq-&gt;calc_load_active) {</span>
+<span class='curline'><a href='../S/454.html#L88'>this_rq</a>            88 sched/loadavg.c 		delta = nr_active - this_rq-&gt;calc_load_active;</span>
+<span class='curline'><a href='../S/454.html#L89'>this_rq</a>            89 sched/loadavg.c 		this_rq-&gt;calc_load_active = nr_active;</span>
+<span class='curline'><a href='../S/454.html#L253'>this_rq</a>           253 sched/loadavg.c 	calc_load_nohz_fold(this_rq());</span>
+<span class='curline'><a href='../S/454.html#L267'>this_rq</a>           267 sched/loadavg.c 	struct rq *this_rq = this_rq();</span>
+<span class='curline'><a href='../S/454.html#L272'>this_rq</a>           272 sched/loadavg.c 	this_rq-&gt;calc_load_update = READ_ONCE(calc_load_update);</span>
+<span class='curline'><a href='../S/454.html#L273'>this_rq</a>           273 sched/loadavg.c 	if (time_before(jiffies, this_rq-&gt;calc_load_update))</span>
+<span class='curline'><a href='../S/454.html#L281'>this_rq</a>           281 sched/loadavg.c 	if (time_before(jiffies, this_rq-&gt;calc_load_update + 10))</span>
+<span class='curline'><a href='../S/454.html#L282'>this_rq</a>           282 sched/loadavg.c 		this_rq-&gt;calc_load_update += LOAD_FREQ;</span>
+<span class='curline'><a href='../S/454.html#L387'>this_rq</a>           387 sched/loadavg.c void calc_global_load_tick(struct rq *this_rq)</span>
+<span class='curline'><a href='../S/454.html#L391'>this_rq</a>           391 sched/loadavg.c 	if (time_before(jiffies, this_rq-&gt;calc_load_update))</span>
+<span class='curline'><a href='../S/454.html#L394'>this_rq</a>           394 sched/loadavg.c 	delta  = calc_load_fold_active(this_rq, 0);</span>
+<span class='curline'><a href='../S/454.html#L398'>this_rq</a>           398 sched/loadavg.c 	this_rq-&gt;calc_load_update += LOAD_FREQ;</span>
+<span class='curline'><a href='../S/450.html#L265'>this_rq</a>           265 sched/rt.c     static void pull_rt_task(struct rq *this_rq);</span>
+<span class='curline'><a href='../S/450.html#L427'>this_rq</a>           427 sched/rt.c     static inline void pull_rt_task(struct rq *this_rq)</span>
+<span class='curline'><a href='../S/450.html#L586'>this_rq</a>           586 sched/rt.c     	return this_rq()-&gt;rd-&gt;span;</span>
+<span class='curline'><a href='../S/450.html#L2184'>this_rq</a>          2184 sched/rt.c     	rq = this_rq();</span>
+<span class='curline'><a href='../S/450.html#L2213'>this_rq</a>          2213 sched/rt.c     static void pull_rt_task(struct rq *this_rq)</span>
+<span class='curline'><a href='../S/450.html#L2215'>this_rq</a>          2215 sched/rt.c     	int this_cpu = this_rq-&gt;cpu, cpu;</span>
+<span class='curline'><a href='../S/450.html#L2219'>this_rq</a>          2219 sched/rt.c     	int rt_overload_count = rt_overloaded(this_rq);</span>
+<span class='curline'><a href='../S/450.html#L2232'>this_rq</a>          2232 sched/rt.c     	    cpumask_test_cpu(this_rq-&gt;cpu, this_rq-&gt;rd-&gt;rto_mask))</span>
+<span class='curline'><a href='../S/450.html#L2237'>this_rq</a>          2237 sched/rt.c     		tell_cpu_to_push(this_rq);</span>
+<span class='curline'><a href='../S/450.html#L2242'>this_rq</a>          2242 sched/rt.c     	for_each_cpu(cpu, this_rq-&gt;rd-&gt;rto_mask) {</span>
+<span class='curline'><a href='../S/450.html#L2256'>this_rq</a>          2256 sched/rt.c     		    this_rq-&gt;rt.highest_prio.curr)</span>
+<span class='curline'><a href='../S/450.html#L2264'>this_rq</a>          2264 sched/rt.c     		double_lock_balance(this_rq, src_rq);</span>
+<span class='curline'><a href='../S/450.html#L2276'>this_rq</a>          2276 sched/rt.c     		if (p &amp;&amp; (p-&gt;prio &lt; this_rq-&gt;rt.highest_prio.curr)) {</span>
+<span class='curline'><a href='../S/450.html#L2295'>this_rq</a>          2295 sched/rt.c     			activate_task(this_rq, p, 0);</span>
+<span class='curline'><a href='../S/450.html#L2304'>this_rq</a>          2304 sched/rt.c     		double_unlock_balance(this_rq, src_rq);</span>
+<span class='curline'><a href='../S/450.html#L2308'>this_rq</a>          2308 sched/rt.c     		resched_curr(this_rq);</span>
+<span class='curline'><a href='../S/447.html#L101'>this_rq</a>           101 sched/sched.h  extern void calc_global_load_tick(struct rq *this_rq);</span>
+<span class='curline'><a href='../S/447.html#L102'>this_rq</a>           102 sched/sched.h  extern long calc_load_fold_active(struct rq *this_rq, long adjust);</span>
+<span class='curline'><a href='../S/447.html#L1368'>this_rq</a>          1368 sched/sched.h  	rq = this_rq();</span>
+<span class='curline'><a href='../S/447.html#L1840'>this_rq</a>          1840 sched/sched.h  	void (*task_woken)(struct rq *this_rq, struct task_struct *task);</span>
+<span class='curline'><a href='../S/447.html#L1858'>this_rq</a>          1858 sched/sched.h  	void (*switched_from)(struct rq *this_rq, struct task_struct *task);</span>
+<span class='curline'><a href='../S/447.html#L1859'>this_rq</a>          1859 sched/sched.h  	void (*switched_to)  (struct rq *this_rq, struct task_struct *task);</span>
+<span class='curline'><a href='../S/447.html#L1860'>this_rq</a>          1860 sched/sched.h  	void (*prio_changed) (struct rq *this_rq, struct task_struct *task,</span>
+<span class='curline'><a href='../S/447.html#L2128'>this_rq</a>          2128 sched/sched.h  static inline int _double_lock_balance(struct rq *this_rq, struct rq *busiest)</span>
+<span class='curline'><a href='../S/447.html#L2129'>this_rq</a>          2129 sched/sched.h  	__releases(this_rq-&gt;lock)</span>
+<span class='curline'><a href='../S/447.html#L2131'>this_rq</a>          2131 sched/sched.h  	__acquires(this_rq-&gt;lock)</span>
+<span class='curline'><a href='../S/447.html#L2133'>this_rq</a>          2133 sched/sched.h  	raw_spin_unlock(&amp;this_rq-&gt;lock);</span>
+<span class='curline'><a href='../S/447.html#L2134'>this_rq</a>          2134 sched/sched.h  	double_rq_lock(this_rq, busiest);</span>
+<span class='curline'><a href='../S/447.html#L2147'>this_rq</a>          2147 sched/sched.h  static inline int _double_lock_balance(struct rq *this_rq, struct rq *busiest)</span>
+<span class='curline'><a href='../S/447.html#L2148'>this_rq</a>          2148 sched/sched.h  	__releases(this_rq-&gt;lock)</span>
+<span class='curline'><a href='../S/447.html#L2150'>this_rq</a>          2150 sched/sched.h  	__acquires(this_rq-&gt;lock)</span>
+<span class='curline'><a href='../S/447.html#L2155'>this_rq</a>          2155 sched/sched.h  		if (busiest &lt; this_rq) {</span>
+<span class='curline'><a href='../S/447.html#L2156'>this_rq</a>          2156 sched/sched.h  			raw_spin_unlock(&amp;this_rq-&gt;lock);</span>
+<span class='curline'><a href='../S/447.html#L2158'>this_rq</a>          2158 sched/sched.h  			raw_spin_lock_nested(&amp;this_rq-&gt;lock,</span>
+<span class='curline'><a href='../S/447.html#L2173'>this_rq</a>          2173 sched/sched.h  static inline int double_lock_balance(struct rq *this_rq, struct rq *busiest)</span>
+<span class='curline'><a href='../S/447.html#L2177'>this_rq</a>          2177 sched/sched.h  		raw_spin_unlock(&amp;this_rq-&gt;lock);</span>
+<span class='curline'><a href='../S/447.html#L2181'>this_rq</a>          2181 sched/sched.h  	return _double_lock_balance(this_rq, busiest);</span>
+<span class='curline'><a href='../S/447.html#L2184'>this_rq</a>          2184 sched/sched.h  static inline void double_unlock_balance(struct rq *this_rq, struct rq *busiest)</span>
+<span class='curline'><a href='../S/447.html#L2188'>this_rq</a>          2188 sched/sched.h  	lock_set_subclass(&amp;this_rq-&gt;lock.dep_map, 0, _RET_IP_);</span>
+</pre>
+</body>
+</html>

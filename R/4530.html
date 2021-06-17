@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>check_access</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/482.html#L790'>check_access</a>      790 kcsan/core.c   	check_access(ptr, size, type);</span>
+<span class='curline'><a href='../S/482.html#L811'>check_access</a>      811 kcsan/core.c   		check_access(ptr, size, 0);                                    \</span>
+<span class='curline'><a href='../S/482.html#L820'>check_access</a>      820 kcsan/core.c   		check_access(ptr, size, KCSAN_ACCESS_WRITE);                   \</span>
+<span class='curline'><a href='../S/482.html#L829'>check_access</a>      829 kcsan/core.c   		check_access(ptr, size,                                        \</span>
+<span class='curline'><a href='../S/482.html#L846'>check_access</a>      846 kcsan/core.c   	check_access(ptr, size, 0);</span>
+<span class='curline'><a href='../S/482.html#L853'>check_access</a>      853 kcsan/core.c   	check_access(ptr, size, KCSAN_ACCESS_WRITE);</span>
+<span class='curline'><a href='../S/482.html#L874'>check_access</a>      874 kcsan/core.c   		check_access(ptr, size, is_atomic ? KCSAN_ACCESS_ATOMIC : 0);  \</span>
+<span class='curline'><a href='../S/482.html#L887'>check_access</a>      887 kcsan/core.c   		check_access(ptr, size,                                        \</span>
+<span class='curline'><a href='../S/482.html#L943'>check_access</a>      943 kcsan/core.c   			check_access(ptr, bits / BITS_PER_BYTE, KCSAN_ACCESS_ATOMIC);              \</span>
+<span class='curline'><a href='../S/482.html#L952'>check_access</a>      952 kcsan/core.c   			check_access(ptr, bits / BITS_PER_BYTE,                                    \</span>
+<span class='curline'><a href='../S/482.html#L964'>check_access</a>      964 kcsan/core.c   			check_access(ptr, bits / BITS_PER_BYTE,                                    \</span>
+<span class='curline'><a href='../S/482.html#L996'>check_access</a>      996 kcsan/core.c   			check_access(ptr, bits / BITS_PER_BYTE,                                    \</span>
+<span class='curline'><a href='../S/482.html#L1011'>check_access</a>     1011 kcsan/core.c   			check_access(ptr, bits / BITS_PER_BYTE,                                    \</span>
+</pre>
+</body>
+</html>

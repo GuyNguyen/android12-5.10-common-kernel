@@ -1,0 +1,18 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>task_pid_ptr</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/79.html#L333'>task_pid_ptr</a>      333 pid.c          	struct pid *pid = *task_pid_ptr(task, type);</span>
+<span class='curline'><a href='../S/79.html#L340'>task_pid_ptr</a>      340 pid.c          	struct pid **pid_ptr = task_pid_ptr(task, type);</span>
+<span class='curline'><a href='../S/79.html#L443'>task_pid_ptr</a>      443 pid.c          	pid = get_pid(rcu_dereference(*task_pid_ptr(task, type)));</span>
+<span class='curline'><a href='../S/79.html#L501'>task_pid_ptr</a>      501 pid.c          	nr = pid_nr_ns(rcu_dereference(*task_pid_ptr(task, type)), ns);</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>IRQ_TIMINGS_SIZE</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/356.html#L288'>IRQ_TIMINGS_SIZE</a>  288 irq/internals.h #define IRQ_TIMINGS_MASK	(IRQ_TIMINGS_SIZE - 1)</span>
+<span class='curline'><a href='../S/356.html#L296'>IRQ_TIMINGS_SIZE</a>  296 irq/internals.h 	u64	values[IRQ_TIMINGS_SIZE];</span>
+<span class='curline'><a href='../S/360.html#L282'>IRQ_TIMINGS_SIZE</a>  282 irq/timings.c  	for (i = irqts-&gt;count &lt; IRQ_TIMINGS_SIZE ?			\</span>
+<span class='curline'><a href='../S/360.html#L284'>IRQ_TIMINGS_SIZE</a>  284 irq/timings.c  		     irqts-&gt;count = min(IRQ_TIMINGS_SIZE,		\</span>
+<span class='curline'><a href='../S/360.html#L292'>IRQ_TIMINGS_SIZE</a>  292 irq/timings.c  	int	timings[IRQ_TIMINGS_SIZE];</span>
+<span class='curline'><a href='../S/360.html#L293'>IRQ_TIMINGS_SIZE</a>  293 irq/timings.c  	int	circ_timings[IRQ_TIMINGS_SIZE];</span>
+<span class='curline'><a href='../S/360.html#L409'>IRQ_TIMINGS_SIZE</a>  409 irq/timings.c  	count = irqs-&gt;count &lt; IRQ_TIMINGS_SIZE ?</span>
+<span class='curline'><a href='../S/360.html#L410'>IRQ_TIMINGS_SIZE</a>  410 irq/timings.c  		irqs-&gt;count : IRQ_TIMINGS_SIZE;</span>
+<span class='curline'><a href='../S/360.html#L412'>IRQ_TIMINGS_SIZE</a>  412 irq/timings.c  	start = irqs-&gt;count &lt; IRQ_TIMINGS_SIZE ?</span>
+<span class='curline'><a href='../S/360.html#L709'>IRQ_TIMINGS_SIZE</a>  709 irq/timings.c  	int _buffer[IRQ_TIMINGS_SIZE];</span>
+<span class='curline'><a href='../S/360.html#L710'>IRQ_TIMINGS_SIZE</a>  710 irq/timings.c  	int buffer[IRQ_TIMINGS_SIZE];</span>
+<span class='curline'><a href='../S/360.html#L730'>IRQ_TIMINGS_SIZE</a>  730 irq/timings.c  	start = count &lt; IRQ_TIMINGS_SIZE ? 0 :</span>
+<span class='curline'><a href='../S/360.html#L733'>IRQ_TIMINGS_SIZE</a>  733 irq/timings.c  	count = min_t(int, count, IRQ_TIMINGS_SIZE);</span>
+<span class='curline'><a href='../S/360.html#L832'>IRQ_TIMINGS_SIZE</a>  832 irq/timings.c  	int start = count &gt;= IRQ_TIMINGS_SIZE ? count - IRQ_TIMINGS_SIZE : 0;</span>
+<span class='curline'><a href='../S/360.html#L900'>IRQ_TIMINGS_SIZE</a>  900 irq/timings.c  			IRQ_TIMINGS_SIZE &gt;&gt; 1,</span>
+<span class='curline'><a href='../S/360.html#L901'>IRQ_TIMINGS_SIZE</a>  901 irq/timings.c  			IRQ_TIMINGS_SIZE,</span>
+<span class='curline'><a href='../S/360.html#L902'>IRQ_TIMINGS_SIZE</a>  902 irq/timings.c  			IRQ_TIMINGS_SIZE + (IRQ_TIMINGS_SIZE &gt;&gt; 1),</span>
+<span class='curline'><a href='../S/360.html#L903'>IRQ_TIMINGS_SIZE</a>  903 irq/timings.c  			2 * IRQ_TIMINGS_SIZE,</span>
+<span class='curline'><a href='../S/360.html#L904'>IRQ_TIMINGS_SIZE</a>  904 irq/timings.c  			(2 * IRQ_TIMINGS_SIZE) + 3,</span>
+<span class='curline'><a href='../S/360.html#L910'>IRQ_TIMINGS_SIZE</a>  910 irq/timings.c  			count[i], IRQ_TIMINGS_SIZE);</span>
+</pre>
+</body>
+</html>

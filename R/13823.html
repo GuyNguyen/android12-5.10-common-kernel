@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>trace_probe</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/317.html#L61'>trace_probe</a>        61 trace/trace_kprobe.c 	struct trace_probe	tp;</span>
+<span class='curline'><a href='../S/317.html#L211'>trace_probe</a>       211 trace/trace_kprobe.c 	struct trace_probe *tp;</span>
+<span class='curline'><a href='../S/317.html#L332'>trace_probe</a>       332 trace/trace_kprobe.c static void __disable_trace_kprobe(struct trace_probe *tp)</span>
+<span class='curline'><a href='../S/317.html#L334'>trace_probe</a>       334 trace/trace_kprobe.c 	struct trace_probe *pos;</span>
+<span class='curline'><a href='../S/317.html#L355'>trace_probe</a>       355 trace/trace_kprobe.c 	struct trace_probe *pos, *tp;</span>
+<span class='curline'><a href='../S/317.html#L406'>trace_probe</a>       406 trace/trace_kprobe.c 	struct trace_probe *tp;</span>
+<span class='curline'><a href='../S/317.html#L562'>trace_probe</a>       562 trace/trace_kprobe.c 	struct trace_probe *pos;</span>
+<span class='curline'><a href='../S/317.html#L1477'>trace_probe</a>      1477 trace/trace_kprobe.c 	struct trace_probe *tp;</span>
+<span class='curline'><a href='../S/317.html#L1507'>trace_probe</a>      1507 trace/trace_kprobe.c 	struct trace_probe *tp;</span>
+<span class='curline'><a href='../S/317.html#L1542'>trace_probe</a>      1542 trace/trace_kprobe.c 	struct trace_probe *tp;</span>
+<span class='curline'><a href='../S/317.html#L1557'>trace_probe</a>      1557 trace/trace_kprobe.c 	struct trace_probe *tp;</span>
+<span class='curline'><a href='../S/272.html#L748'>trace_probe</a>       748 trace/trace_probe.c int traceprobe_parse_probe_arg(struct trace_probe *tp, int i, char *arg,</span>
+<span class='curline'><a href='../S/272.html#L841'>trace_probe</a>       841 trace/trace_probe.c static int __set_print_fmt(struct trace_probe *tp, char *buf, int len,</span>
+<span class='curline'><a href='../S/272.html#L903'>trace_probe</a>       903 trace/trace_probe.c int traceprobe_set_print_fmt(struct trace_probe *tp, bool is_return)</span>
+<span class='curline'><a href='../S/272.html#L923'>trace_probe</a>       923 trace/trace_probe.c 				 size_t offset, struct trace_probe *tp)</span>
+<span class='curline'><a href='../S/272.html#L955'>trace_probe</a>       955 trace/trace_probe.c int trace_probe_append(struct trace_probe *tp, struct trace_probe *to)</span>
+<span class='curline'><a href='../S/272.html#L969'>trace_probe</a>       969 trace/trace_probe.c void trace_probe_unlink(struct trace_probe *tp)</span>
+<span class='curline'><a href='../S/272.html#L977'>trace_probe</a>       977 trace/trace_probe.c void trace_probe_cleanup(struct trace_probe *tp)</span>
+<span class='curline'><a href='../S/272.html#L988'>trace_probe</a>       988 trace/trace_probe.c int trace_probe_init(struct trace_probe *tp, const char *event,</span>
+<span class='curline'><a href='../S/272.html#L1032'>trace_probe</a>      1032 trace/trace_probe.c int trace_probe_register_event_call(struct trace_probe *tp)</span>
+<span class='curline'><a href='../S/272.html#L1048'>trace_probe</a>      1048 trace/trace_probe.c int trace_probe_add_file(struct trace_probe *tp, struct trace_event_file *file)</span>
+<span class='curline'><a href='../S/272.html#L1063'>trace_probe</a>      1063 trace/trace_probe.c struct event_file_link *trace_probe_get_file_link(struct trace_probe *tp,</span>
+<span class='curline'><a href='../S/272.html#L1076'>trace_probe</a>      1076 trace/trace_probe.c int trace_probe_remove_file(struct trace_probe *tp,</span>
+<span class='curline'><a href='../S/272.html#L1099'>trace_probe</a>      1099 trace/trace_probe.c int trace_probe_compare_arg_type(struct trace_probe *a, struct trace_probe *b)</span>
+<span class='curline'><a href='../S/272.html#L1120'>trace_probe</a>      1120 trace/trace_probe.c bool trace_probe_match_command_args(struct trace_probe *tp,</span>
+<span class='curline'><a href='../S/265.html#L254'>trace_probe</a>       254 trace/trace_probe.h static inline bool trace_probe_test_flag(struct trace_probe *tp,</span>
+<span class='curline'><a href='../S/265.html#L260'>trace_probe</a>       260 trace/trace_probe.h static inline void trace_probe_set_flag(struct trace_probe *tp,</span>
+<span class='curline'><a href='../S/265.html#L266'>trace_probe</a>       266 trace/trace_probe.h static inline void trace_probe_clear_flag(struct trace_probe *tp,</span>
+<span class='curline'><a href='../S/265.html#L272'>trace_probe</a>       272 trace/trace_probe.h static inline bool trace_probe_is_enabled(struct trace_probe *tp)</span>
+<span class='curline'><a href='../S/265.html#L277'>trace_probe</a>       277 trace/trace_probe.h static inline const char *trace_probe_name(struct trace_probe *tp)</span>
+<span class='curline'><a href='../S/265.html#L282'>trace_probe</a>       282 trace/trace_probe.h static inline const char *trace_probe_group_name(struct trace_probe *tp)</span>
+<span class='curline'><a href='../S/265.html#L288'>trace_probe</a>       288 trace/trace_probe.h 	trace_probe_event_call(struct trace_probe *tp)</span>
+<span class='curline'><a href='../S/265.html#L299'>trace_probe</a>       299 trace/trace_probe.h static inline struct trace_probe *</span>
+<span class='curline'><a href='../S/265.html#L304'>trace_probe</a>       304 trace/trace_probe.h 	return list_first_entry(&amp;tpe-&gt;probes, struct trace_probe, list);</span>
+<span class='curline'><a href='../S/265.html#L307'>trace_probe</a>       307 trace/trace_probe.h static inline struct list_head *trace_probe_probe_list(struct trace_probe *tp)</span>
+<span class='curline'><a href='../S/265.html#L312'>trace_probe</a>       312 trace/trace_probe.h static inline bool trace_probe_has_sibling(struct trace_probe *tp)</span>
+<span class='curline'><a href='../S/265.html#L319'>trace_probe</a>       319 trace/trace_probe.h static inline int trace_probe_unregister_event_call(struct trace_probe *tp)</span>
+<span class='curline'><a href='../S/265.html#L325'>trace_probe</a>       325 trace/trace_probe.h static inline bool trace_probe_has_single_file(struct trace_probe *tp)</span>
+<span class='curline'><a href='../S/265.html#L330'>trace_probe</a>       330 trace/trace_probe.h int trace_probe_init(struct trace_probe *tp, const char *event,</span>
+<span class='curline'><a href='../S/265.html#L332'>trace_probe</a>       332 trace/trace_probe.h void trace_probe_cleanup(struct trace_probe *tp);</span>
+<span class='curline'><a href='../S/265.html#L333'>trace_probe</a>       333 trace/trace_probe.h int trace_probe_append(struct trace_probe *tp, struct trace_probe *to);</span>
+<span class='curline'><a href='../S/265.html#L334'>trace_probe</a>       334 trace/trace_probe.h void trace_probe_unlink(struct trace_probe *tp);</span>
+<span class='curline'><a href='../S/265.html#L335'>trace_probe</a>       335 trace/trace_probe.h int trace_probe_register_event_call(struct trace_probe *tp);</span>
+<span class='curline'><a href='../S/265.html#L336'>trace_probe</a>       336 trace/trace_probe.h int trace_probe_add_file(struct trace_probe *tp, struct trace_event_file *file);</span>
+<span class='curline'><a href='../S/265.html#L337'>trace_probe</a>       337 trace/trace_probe.h int trace_probe_remove_file(struct trace_probe *tp,</span>
+<span class='curline'><a href='../S/265.html#L339'>trace_probe</a>       339 trace/trace_probe.h struct event_file_link *trace_probe_get_file_link(struct trace_probe *tp,</span>
+<span class='curline'><a href='../S/265.html#L341'>trace_probe</a>       341 trace/trace_probe.h int trace_probe_compare_arg_type(struct trace_probe *a, struct trace_probe *b);</span>
+<span class='curline'><a href='../S/265.html#L342'>trace_probe</a>       342 trace/trace_probe.h bool trace_probe_match_command_args(struct trace_probe *tp,</span>
+<span class='curline'><a href='../S/265.html#L355'>trace_probe</a>       355 trace/trace_probe.h extern int traceprobe_parse_probe_arg(struct trace_probe *tp, int i,</span>
+<span class='curline'><a href='../S/265.html#L365'>trace_probe</a>       365 trace/trace_probe.h extern int traceprobe_set_print_fmt(struct trace_probe *tp, bool is_return);</span>
+<span class='curline'><a href='../S/265.html#L379'>trace_probe</a>       379 trace/trace_probe.h 					size_t offset, struct trace_probe *tp);</span>
+<span class='curline'><a href='../S/316.html#L172'>trace_probe</a>       172 trace/trace_probe_tmpl.h __get_data_size(struct trace_probe *tp, struct pt_regs *regs)</span>
+<span class='curline'><a href='../S/316.html#L191'>trace_probe</a>       191 trace/trace_probe_tmpl.h store_trace_args(void *data, struct trace_probe *tp, struct pt_regs *regs,</span>
+<span class='curline'><a href='../S/301.html#L64'>trace_probe</a>        64 trace/trace_uprobe.c 	struct trace_probe		tp;</span>
+<span class='curline'><a href='../S/301.html#L325'>trace_probe</a>       325 trace/trace_uprobe.c 	struct trace_probe *tp;</span>
+<span class='curline'><a href='../S/301.html#L411'>trace_probe</a>       411 trace/trace_uprobe.c 	struct trace_probe *pos;</span>
+<span class='curline'><a href='../S/301.html#L1071'>trace_probe</a>      1071 trace/trace_uprobe.c static void __probe_event_disable(struct trace_probe *tp)</span>
+<span class='curline'><a href='../S/301.html#L1073'>trace_probe</a>      1073 trace/trace_uprobe.c 	struct trace_probe *pos;</span>
+<span class='curline'><a href='../S/301.html#L1092'>trace_probe</a>      1092 trace/trace_uprobe.c 	struct trace_probe *pos, *tp;</span>
+<span class='curline'><a href='../S/301.html#L1153'>trace_probe</a>      1153 trace/trace_uprobe.c 	struct trace_probe *tp;</span>
+<span class='curline'><a href='../S/301.html#L1273'>trace_probe</a>      1273 trace/trace_uprobe.c 	struct trace_probe *pos, *tp;</span>
+<span class='curline'><a href='../S/301.html#L1298'>trace_probe</a>      1298 trace/trace_uprobe.c 	struct trace_probe *pos, *tp;</span>
+</pre>
+</body>
+</html>

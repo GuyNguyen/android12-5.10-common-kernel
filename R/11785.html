@@ -1,0 +1,326 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rt_rq</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/448.html#L32'>rt_rq</a>              32 sched/autogroup.c 	ag-&gt;tg-&gt;rt_rq = NULL;</span>
+<span class='curline'><a href='../S/448.html#L89'>rt_rq</a>              89 sched/autogroup.c 	tg-&gt;rt_rq = root_task_group.rt_rq;</span>
+<span class='curline'><a href='../S/441.html#L7458'>rt_rq</a>            7458 sched/core.c   		root_task_group.rt_rq = (struct rt_rq **)ptr;</span>
+<span class='curline'><a href='../S/451.html#L1192'>rt_rq</a>            1192 sched/deadline.c extern bool sched_rt_bandwidth_account(struct rt_rq *rt_rq);</span>
+<span class='curline'><a href='../S/451.html#L1328'>rt_rq</a>            1328 sched/deadline.c 		struct rt_rq *rt_rq = &amp;rq-&gt;rt;</span>
+<span class='curline'><a href='../S/451.html#L1330'>rt_rq</a>            1330 sched/deadline.c 		raw_spin_lock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/451.html#L1336'>rt_rq</a>            1336 sched/deadline.c 		if (sched_rt_bandwidth_account(rt_rq))</span>
+<span class='curline'><a href='../S/451.html#L1337'>rt_rq</a>            1337 sched/deadline.c 			rt_rq-&gt;rt_time += delta_exec;</span>
+<span class='curline'><a href='../S/451.html#L1338'>rt_rq</a>            1338 sched/deadline.c 		raw_spin_unlock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/460.html#L634'>rt_rq</a>             634 sched/debug.c  void print_rt_rq(struct seq_file *m, int cpu, struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/460.html#L638'>rt_rq</a>             638 sched/debug.c  	SEQ_printf_task_group_path(m, rt_rq-&gt;tg, "rt_rq[%d]:%s\n", cpu);</span>
+<span class='curline'><a href='../S/460.html#L645'>rt_rq</a>             645 sched/debug.c  	SEQ_printf(m, "  .%-30s: %Ld\n", #x, (long long)(rt_rq-&gt;x))</span>
+<span class='curline'><a href='../S/460.html#L647'>rt_rq</a>             647 sched/debug.c  	SEQ_printf(m, "  .%-30s: %lu\n", #x, (unsigned long)(rt_rq-&gt;x))</span>
+<span class='curline'><a href='../S/460.html#L649'>rt_rq</a>             649 sched/debug.c  	SEQ_printf(m, "  .%-30s: %Ld.%06ld\n", #x, SPLIT_NS(rt_rq-&gt;x))</span>
+<span class='curline'><a href='../S/450.html#L80'>rt_rq</a>              80 sched/rt.c     void init_rt_rq(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L85'>rt_rq</a>              85 sched/rt.c     	array = &amp;rt_rq-&gt;active;</span>
+<span class='curline'><a href='../S/450.html#L94'>rt_rq</a>              94 sched/rt.c     	rt_rq-&gt;highest_prio.curr = MAX_RT_PRIO;</span>
+<span class='curline'><a href='../S/450.html#L95'>rt_rq</a>              95 sched/rt.c     	rt_rq-&gt;highest_prio.next = MAX_RT_PRIO;</span>
+<span class='curline'><a href='../S/450.html#L96'>rt_rq</a>              96 sched/rt.c     	rt_rq-&gt;rt_nr_migratory = 0;</span>
+<span class='curline'><a href='../S/450.html#L97'>rt_rq</a>              97 sched/rt.c     	rt_rq-&gt;overloaded = 0;</span>
+<span class='curline'><a href='../S/450.html#L98'>rt_rq</a>              98 sched/rt.c     	plist_head_init(&amp;rt_rq-&gt;pushable_tasks);</span>
+<span class='curline'><a href='../S/450.html#L101'>rt_rq</a>             101 sched/rt.c     	rt_rq-&gt;rt_queued = 0;</span>
+<span class='curline'><a href='../S/450.html#L103'>rt_rq</a>             103 sched/rt.c     	rt_rq-&gt;rt_time = 0;</span>
+<span class='curline'><a href='../S/450.html#L104'>rt_rq</a>             104 sched/rt.c     	rt_rq-&gt;rt_throttled = 0;</span>
+<span class='curline'><a href='../S/450.html#L105'>rt_rq</a>             105 sched/rt.c     	rt_rq-&gt;rt_runtime = 0;</span>
+<span class='curline'><a href='../S/450.html#L106'>rt_rq</a>             106 sched/rt.c     	raw_spin_lock_init(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L125'>rt_rq</a>             125 sched/rt.c     static inline struct rq *rq_of_rt_rq(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L127'>rt_rq</a>             127 sched/rt.c     	return rt_rq-&gt;rq;</span>
+<span class='curline'><a href='../S/450.html#L130'>rt_rq</a>             130 sched/rt.c     static inline struct rt_rq *rt_rq_of_se(struct sched_rt_entity *rt_se)</span>
+<span class='curline'><a href='../S/450.html#L132'>rt_rq</a>             132 sched/rt.c     	return rt_se-&gt;rt_rq;</span>
+<span class='curline'><a href='../S/450.html#L137'>rt_rq</a>             137 sched/rt.c     	struct rt_rq *rt_rq = rt_se-&gt;rt_rq;</span>
+<span class='curline'><a href='../S/450.html#L139'>rt_rq</a>             139 sched/rt.c     	return rt_rq-&gt;rq;</span>
+<span class='curline'><a href='../S/450.html#L150'>rt_rq</a>             150 sched/rt.c     		if (tg-&gt;rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L151'>rt_rq</a>             151 sched/rt.c     			kfree(tg-&gt;rt_rq[i]);</span>
+<span class='curline'><a href='../S/450.html#L156'>rt_rq</a>             156 sched/rt.c     	kfree(tg-&gt;rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L160'>rt_rq</a>             160 sched/rt.c     void init_tg_rt_entry(struct task_group *tg, struct rt_rq *rt_rq,</span>
+<span class='curline'><a href='../S/450.html#L166'>rt_rq</a>             166 sched/rt.c     	rt_rq-&gt;highest_prio.curr = MAX_RT_PRIO;</span>
+<span class='curline'><a href='../S/450.html#L167'>rt_rq</a>             167 sched/rt.c     	rt_rq-&gt;rt_nr_boosted = 0;</span>
+<span class='curline'><a href='../S/450.html#L168'>rt_rq</a>             168 sched/rt.c     	rt_rq-&gt;rq = rq;</span>
+<span class='curline'><a href='../S/450.html#L169'>rt_rq</a>             169 sched/rt.c     	rt_rq-&gt;tg = tg;</span>
+<span class='curline'><a href='../S/450.html#L171'>rt_rq</a>             171 sched/rt.c     	tg-&gt;rt_rq[cpu] = rt_rq;</span>
+<span class='curline'><a href='../S/450.html#L178'>rt_rq</a>             178 sched/rt.c     		rt_se-&gt;rt_rq = &amp;rq-&gt;rt;</span>
+<span class='curline'><a href='../S/450.html#L180'>rt_rq</a>             180 sched/rt.c     		rt_se-&gt;rt_rq = parent-&gt;my_q;</span>
+<span class='curline'><a href='../S/450.html#L182'>rt_rq</a>             182 sched/rt.c     	rt_se-&gt;my_q = rt_rq;</span>
+<span class='curline'><a href='../S/450.html#L189'>rt_rq</a>             189 sched/rt.c     	struct rt_rq *rt_rq;</span>
+<span class='curline'><a href='../S/450.html#L193'>rt_rq</a>             193 sched/rt.c     	tg-&gt;rt_rq = kcalloc(nr_cpu_ids, sizeof(rt_rq), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/450.html#L194'>rt_rq</a>             194 sched/rt.c     	if (!tg-&gt;rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L204'>rt_rq</a>             204 sched/rt.c     		rt_rq = kzalloc_node(sizeof(struct rt_rq),</span>
+<span class='curline'><a href='../S/450.html#L206'>rt_rq</a>             206 sched/rt.c     		if (!rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L214'>rt_rq</a>             214 sched/rt.c     		init_rt_rq(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L215'>rt_rq</a>             215 sched/rt.c     		rt_rq-&gt;rt_runtime = tg-&gt;rt_bandwidth.rt_runtime;</span>
+<span class='curline'><a href='../S/450.html#L216'>rt_rq</a>             216 sched/rt.c     		init_tg_rt_entry(tg, rt_rq, rt_se, i, parent-&gt;rt_se[i]);</span>
+<span class='curline'><a href='../S/450.html#L222'>rt_rq</a>             222 sched/rt.c     	kfree(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L236'>rt_rq</a>             236 sched/rt.c     static inline struct rq *rq_of_rt_rq(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L238'>rt_rq</a>             238 sched/rt.c     	return container_of(rt_rq, struct rq, rt);</span>
+<span class='curline'><a href='../S/450.html#L248'>rt_rq</a>             248 sched/rt.c     static inline struct rt_rq *rt_rq_of_se(struct sched_rt_entity *rt_se)</span>
+<span class='curline'><a href='../S/450.html#L307'>rt_rq</a>             307 sched/rt.c     static void update_rt_migration(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L309'>rt_rq</a>             309 sched/rt.c     	if (rt_rq-&gt;rt_nr_migratory &amp;&amp; rt_rq-&gt;rt_nr_total &gt; 1) {</span>
+<span class='curline'><a href='../S/450.html#L310'>rt_rq</a>             310 sched/rt.c     		if (!rt_rq-&gt;overloaded) {</span>
+<span class='curline'><a href='../S/450.html#L311'>rt_rq</a>             311 sched/rt.c     			rt_set_overload(rq_of_rt_rq(rt_rq));</span>
+<span class='curline'><a href='../S/450.html#L312'>rt_rq</a>             312 sched/rt.c     			rt_rq-&gt;overloaded = 1;</span>
+<span class='curline'><a href='../S/450.html#L314'>rt_rq</a>             314 sched/rt.c     	} else if (rt_rq-&gt;overloaded) {</span>
+<span class='curline'><a href='../S/450.html#L315'>rt_rq</a>             315 sched/rt.c     		rt_clear_overload(rq_of_rt_rq(rt_rq));</span>
+<span class='curline'><a href='../S/450.html#L316'>rt_rq</a>             316 sched/rt.c     		rt_rq-&gt;overloaded = 0;</span>
+<span class='curline'><a href='../S/450.html#L320'>rt_rq</a>             320 sched/rt.c     static void inc_rt_migration(struct sched_rt_entity *rt_se, struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L328'>rt_rq</a>             328 sched/rt.c     	rt_rq = &amp;rq_of_rt_rq(rt_rq)-&gt;rt;</span>
+<span class='curline'><a href='../S/450.html#L330'>rt_rq</a>             330 sched/rt.c     	rt_rq-&gt;rt_nr_total++;</span>
+<span class='curline'><a href='../S/450.html#L332'>rt_rq</a>             332 sched/rt.c     		rt_rq-&gt;rt_nr_migratory++;</span>
+<span class='curline'><a href='../S/450.html#L334'>rt_rq</a>             334 sched/rt.c     	update_rt_migration(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L337'>rt_rq</a>             337 sched/rt.c     static void dec_rt_migration(struct sched_rt_entity *rt_se, struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L345'>rt_rq</a>             345 sched/rt.c     	rt_rq = &amp;rq_of_rt_rq(rt_rq)-&gt;rt;</span>
+<span class='curline'><a href='../S/450.html#L347'>rt_rq</a>             347 sched/rt.c     	rt_rq-&gt;rt_nr_total--;</span>
+<span class='curline'><a href='../S/450.html#L349'>rt_rq</a>             349 sched/rt.c     		rt_rq-&gt;rt_nr_migratory--;</span>
+<span class='curline'><a href='../S/450.html#L351'>rt_rq</a>             351 sched/rt.c     	update_rt_migration(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L413'>rt_rq</a>             413 sched/rt.c     void inc_rt_migration(struct sched_rt_entity *rt_se, struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L418'>rt_rq</a>             418 sched/rt.c     void dec_rt_migration(struct sched_rt_entity *rt_se, struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L436'>rt_rq</a>             436 sched/rt.c     static void enqueue_top_rt_rq(struct rt_rq *rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L437'>rt_rq</a>             437 sched/rt.c     static void dequeue_top_rt_rq(struct rt_rq *rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L485'>rt_rq</a>             485 sched/rt.c     static inline u64 sched_rt_runtime(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L487'>rt_rq</a>             487 sched/rt.c     	if (!rt_rq-&gt;tg)</span>
+<span class='curline'><a href='../S/450.html#L490'>rt_rq</a>             490 sched/rt.c     	return rt_rq-&gt;rt_runtime;</span>
+<span class='curline'><a href='../S/450.html#L493'>rt_rq</a>             493 sched/rt.c     static inline u64 sched_rt_period(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L495'>rt_rq</a>             495 sched/rt.c     	return ktime_to_ns(rt_rq-&gt;tg-&gt;rt_bandwidth.rt_period);</span>
+<span class='curline'><a href='../S/450.html#L513'>rt_rq</a>             513 sched/rt.c     #define for_each_rt_rq(rt_rq, iter, rq)					\</span>
+<span class='curline'><a href='../S/450.html#L516'>rt_rq</a>             516 sched/rt.c     		(rt_rq = iter-&gt;rt_rq[cpu_of(rq)]);)</span>
+<span class='curline'><a href='../S/450.html#L521'>rt_rq</a>             521 sched/rt.c     static inline struct rt_rq *group_rt_rq(struct sched_rt_entity *rt_se)</span>
+<span class='curline'><a href='../S/450.html#L529'>rt_rq</a>             529 sched/rt.c     static void sched_rt_rq_enqueue(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L531'>rt_rq</a>             531 sched/rt.c     	struct task_struct *curr = rq_of_rt_rq(rt_rq)-&gt;curr;</span>
+<span class='curline'><a href='../S/450.html#L532'>rt_rq</a>             532 sched/rt.c     	struct rq *rq = rq_of_rt_rq(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L537'>rt_rq</a>             537 sched/rt.c     	rt_se = rt_rq-&gt;tg-&gt;rt_se[cpu];</span>
+<span class='curline'><a href='../S/450.html#L539'>rt_rq</a>             539 sched/rt.c     	if (rt_rq-&gt;rt_nr_running) {</span>
+<span class='curline'><a href='../S/450.html#L541'>rt_rq</a>             541 sched/rt.c     			enqueue_top_rt_rq(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L545'>rt_rq</a>             545 sched/rt.c     		if (rt_rq-&gt;highest_prio.curr &lt; curr-&gt;prio)</span>
+<span class='curline'><a href='../S/450.html#L550'>rt_rq</a>             550 sched/rt.c     static void sched_rt_rq_dequeue(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L553'>rt_rq</a>             553 sched/rt.c     	int cpu = cpu_of(rq_of_rt_rq(rt_rq));</span>
+<span class='curline'><a href='../S/450.html#L555'>rt_rq</a>             555 sched/rt.c     	rt_se = rt_rq-&gt;tg-&gt;rt_se[cpu];</span>
+<span class='curline'><a href='../S/450.html#L558'>rt_rq</a>             558 sched/rt.c     		dequeue_top_rt_rq(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L560'>rt_rq</a>             560 sched/rt.c     		cpufreq_update_util(rq_of_rt_rq(rt_rq), 0);</span>
+<span class='curline'><a href='../S/450.html#L566'>rt_rq</a>             566 sched/rt.c     static inline int rt_rq_throttled(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L568'>rt_rq</a>             568 sched/rt.c     	return rt_rq-&gt;rt_throttled &amp;&amp; !rt_rq-&gt;rt_nr_boosted;</span>
+<span class='curline'><a href='../S/450.html#L573'>rt_rq</a>             573 sched/rt.c     	struct rt_rq *rt_rq = group_rt_rq(rt_se);</span>
+<span class='curline'><a href='../S/450.html#L576'>rt_rq</a>             576 sched/rt.c     	if (rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L577'>rt_rq</a>             577 sched/rt.c     		return !!rt_rq-&gt;rt_nr_boosted;</span>
+<span class='curline'><a href='../S/450.html#L596'>rt_rq</a>             596 sched/rt.c     struct rt_rq *sched_rt_period_rt_rq(struct rt_bandwidth *rt_b, int cpu)</span>
+<span class='curline'><a href='../S/450.html#L598'>rt_rq</a>             598 sched/rt.c     	return container_of(rt_b, struct task_group, rt_bandwidth)-&gt;rt_rq[cpu];</span>
+<span class='curline'><a href='../S/450.html#L601'>rt_rq</a>             601 sched/rt.c     static inline struct rt_bandwidth *sched_rt_bandwidth(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L603'>rt_rq</a>             603 sched/rt.c     	return &amp;rt_rq-&gt;tg-&gt;rt_bandwidth;</span>
+<span class='curline'><a href='../S/450.html#L608'>rt_rq</a>             608 sched/rt.c     static inline u64 sched_rt_runtime(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L610'>rt_rq</a>             610 sched/rt.c     	return rt_rq-&gt;rt_runtime;</span>
+<span class='curline'><a href='../S/450.html#L613'>rt_rq</a>             613 sched/rt.c     static inline u64 sched_rt_period(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L618'>rt_rq</a>             618 sched/rt.c     typedef struct rt_rq *rt_rq_iter_t;</span>
+<span class='curline'><a href='../S/450.html#L620'>rt_rq</a>             620 sched/rt.c     #define for_each_rt_rq(rt_rq, iter, rq) \</span>
+<span class='curline'><a href='../S/450.html#L621'>rt_rq</a>             621 sched/rt.c     	for ((void) iter, rt_rq = &amp;rq-&gt;rt; rt_rq; rt_rq = NULL)</span>
+<span class='curline'><a href='../S/450.html#L626'>rt_rq</a>             626 sched/rt.c     static inline struct rt_rq *group_rt_rq(struct sched_rt_entity *rt_se)</span>
+<span class='curline'><a href='../S/450.html#L631'>rt_rq</a>             631 sched/rt.c     static inline void sched_rt_rq_enqueue(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L633'>rt_rq</a>             633 sched/rt.c     	struct rq *rq = rq_of_rt_rq(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L635'>rt_rq</a>             635 sched/rt.c     	if (!rt_rq-&gt;rt_nr_running)</span>
+<span class='curline'><a href='../S/450.html#L638'>rt_rq</a>             638 sched/rt.c     	enqueue_top_rt_rq(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L642'>rt_rq</a>             642 sched/rt.c     static inline void sched_rt_rq_dequeue(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L644'>rt_rq</a>             644 sched/rt.c     	dequeue_top_rt_rq(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L647'>rt_rq</a>             647 sched/rt.c     static inline int rt_rq_throttled(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L649'>rt_rq</a>             649 sched/rt.c     	return rt_rq-&gt;rt_throttled;</span>
+<span class='curline'><a href='../S/450.html#L658'>rt_rq</a>             658 sched/rt.c     struct rt_rq *sched_rt_period_rt_rq(struct rt_bandwidth *rt_b, int cpu)</span>
+<span class='curline'><a href='../S/450.html#L663'>rt_rq</a>             663 sched/rt.c     static inline struct rt_bandwidth *sched_rt_bandwidth(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L670'>rt_rq</a>             670 sched/rt.c     bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L672'>rt_rq</a>             672 sched/rt.c     	struct rt_bandwidth *rt_b = sched_rt_bandwidth(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L675'>rt_rq</a>             675 sched/rt.c     		rt_rq-&gt;rt_time &lt; rt_b-&gt;rt_runtime);</span>
+<span class='curline'><a href='../S/450.html#L682'>rt_rq</a>             682 sched/rt.c     static void do_balance_runtime(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L684'>rt_rq</a>             684 sched/rt.c     	struct rt_bandwidth *rt_b = sched_rt_bandwidth(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L685'>rt_rq</a>             685 sched/rt.c     	struct root_domain *rd = rq_of_rt_rq(rt_rq)-&gt;rd;</span>
+<span class='curline'><a href='../S/450.html#L694'>rt_rq</a>             694 sched/rt.c     		struct rt_rq *iter = sched_rt_period_rt_rq(rt_b, i);</span>
+<span class='curline'><a href='../S/450.html#L697'>rt_rq</a>             697 sched/rt.c     		if (iter == rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L716'>rt_rq</a>             716 sched/rt.c     			if (rt_rq-&gt;rt_runtime + diff &gt; rt_period)</span>
+<span class='curline'><a href='../S/450.html#L717'>rt_rq</a>             717 sched/rt.c     				diff = rt_period - rt_rq-&gt;rt_runtime;</span>
+<span class='curline'><a href='../S/450.html#L719'>rt_rq</a>             719 sched/rt.c     			rt_rq-&gt;rt_runtime += diff;</span>
+<span class='curline'><a href='../S/450.html#L720'>rt_rq</a>             720 sched/rt.c     			if (rt_rq-&gt;rt_runtime == rt_period) {</span>
+<span class='curline'><a href='../S/450.html#L738'>rt_rq</a>             738 sched/rt.c     	struct rt_rq *rt_rq;</span>
+<span class='curline'><a href='../S/450.html#L743'>rt_rq</a>             743 sched/rt.c     	for_each_rt_rq(rt_rq, iter, rq) {</span>
+<span class='curline'><a href='../S/450.html#L744'>rt_rq</a>             744 sched/rt.c     		struct rt_bandwidth *rt_b = sched_rt_bandwidth(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L749'>rt_rq</a>             749 sched/rt.c     		raw_spin_lock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L755'>rt_rq</a>             755 sched/rt.c     		if (rt_rq-&gt;rt_runtime == RUNTIME_INF ||</span>
+<span class='curline'><a href='../S/450.html#L756'>rt_rq</a>             756 sched/rt.c     				rt_rq-&gt;rt_runtime == rt_b-&gt;rt_runtime)</span>
+<span class='curline'><a href='../S/450.html#L758'>rt_rq</a>             758 sched/rt.c     		raw_spin_unlock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L765'>rt_rq</a>             765 sched/rt.c     		want = rt_b-&gt;rt_runtime - rt_rq-&gt;rt_runtime;</span>
+<span class='curline'><a href='../S/450.html#L771'>rt_rq</a>             771 sched/rt.c     			struct rt_rq *iter = sched_rt_period_rt_rq(rt_b, i);</span>
+<span class='curline'><a href='../S/450.html#L777'>rt_rq</a>             777 sched/rt.c     			if (iter == rt_rq || iter-&gt;rt_runtime == RUNTIME_INF)</span>
+<span class='curline'><a href='../S/450.html#L795'>rt_rq</a>             795 sched/rt.c     		raw_spin_lock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L806'>rt_rq</a>             806 sched/rt.c     		rt_rq-&gt;rt_runtime = RUNTIME_INF;</span>
+<span class='curline'><a href='../S/450.html#L807'>rt_rq</a>             807 sched/rt.c     		rt_rq-&gt;rt_throttled = 0;</span>
+<span class='curline'><a href='../S/450.html#L808'>rt_rq</a>             808 sched/rt.c     		raw_spin_unlock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L812'>rt_rq</a>             812 sched/rt.c     		sched_rt_rq_enqueue(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L819'>rt_rq</a>             819 sched/rt.c     	struct rt_rq *rt_rq;</span>
+<span class='curline'><a href='../S/450.html#L827'>rt_rq</a>             827 sched/rt.c     	for_each_rt_rq(rt_rq, iter, rq) {</span>
+<span class='curline'><a href='../S/450.html#L828'>rt_rq</a>             828 sched/rt.c     		struct rt_bandwidth *rt_b = sched_rt_bandwidth(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L831'>rt_rq</a>             831 sched/rt.c     		raw_spin_lock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L832'>rt_rq</a>             832 sched/rt.c     		rt_rq-&gt;rt_runtime = rt_b-&gt;rt_runtime;</span>
+<span class='curline'><a href='../S/450.html#L833'>rt_rq</a>             833 sched/rt.c     		rt_rq-&gt;rt_time = 0;</span>
+<span class='curline'><a href='../S/450.html#L834'>rt_rq</a>             834 sched/rt.c     		rt_rq-&gt;rt_throttled = 0;</span>
+<span class='curline'><a href='../S/450.html#L835'>rt_rq</a>             835 sched/rt.c     		raw_spin_unlock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L840'>rt_rq</a>             840 sched/rt.c     static void balance_runtime(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L845'>rt_rq</a>             845 sched/rt.c     	if (rt_rq-&gt;rt_time &gt; rt_rq-&gt;rt_runtime) {</span>
+<span class='curline'><a href='../S/450.html#L846'>rt_rq</a>             846 sched/rt.c     		raw_spin_unlock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L847'>rt_rq</a>             847 sched/rt.c     		do_balance_runtime(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L848'>rt_rq</a>             848 sched/rt.c     		raw_spin_lock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L852'>rt_rq</a>             852 sched/rt.c     static inline void balance_runtime(struct rt_rq *rt_rq) {}</span>
+<span class='curline'><a href='../S/450.html#L876'>rt_rq</a>             876 sched/rt.c     		struct rt_rq *rt_rq = sched_rt_period_rt_rq(rt_b, i);</span>
+<span class='curline'><a href='../S/450.html#L877'>rt_rq</a>             877 sched/rt.c     		struct rq *rq = rq_of_rt_rq(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L884'>rt_rq</a>             884 sched/rt.c     		raw_spin_lock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L885'>rt_rq</a>             885 sched/rt.c     		if (!sched_feat(RT_RUNTIME_SHARE) &amp;&amp; rt_rq-&gt;rt_runtime != RUNTIME_INF)</span>
+<span class='curline'><a href='../S/450.html#L886'>rt_rq</a>             886 sched/rt.c     			rt_rq-&gt;rt_runtime = rt_b-&gt;rt_runtime;</span>
+<span class='curline'><a href='../S/450.html#L887'>rt_rq</a>             887 sched/rt.c     		skip = !rt_rq-&gt;rt_time &amp;&amp; !rt_rq-&gt;rt_nr_running;</span>
+<span class='curline'><a href='../S/450.html#L888'>rt_rq</a>             888 sched/rt.c     		raw_spin_unlock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L895'>rt_rq</a>             895 sched/rt.c     		if (rt_rq-&gt;rt_time) {</span>
+<span class='curline'><a href='../S/450.html#L898'>rt_rq</a>             898 sched/rt.c     			raw_spin_lock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L899'>rt_rq</a>             899 sched/rt.c     			if (rt_rq-&gt;rt_throttled)</span>
+<span class='curline'><a href='../S/450.html#L900'>rt_rq</a>             900 sched/rt.c     				balance_runtime(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L901'>rt_rq</a>             901 sched/rt.c     			runtime = rt_rq-&gt;rt_runtime;</span>
+<span class='curline'><a href='../S/450.html#L902'>rt_rq</a>             902 sched/rt.c     			rt_rq-&gt;rt_time -= min(rt_rq-&gt;rt_time, overrun*runtime);</span>
+<span class='curline'><a href='../S/450.html#L903'>rt_rq</a>             903 sched/rt.c     			if (rt_rq-&gt;rt_throttled &amp;&amp; rt_rq-&gt;rt_time &lt; runtime) {</span>
+<span class='curline'><a href='../S/450.html#L904'>rt_rq</a>             904 sched/rt.c     				rt_rq-&gt;rt_throttled = 0;</span>
+<span class='curline'><a href='../S/450.html#L914'>rt_rq</a>             914 sched/rt.c     				if (rt_rq-&gt;rt_nr_running &amp;&amp; rq-&gt;curr == rq-&gt;idle)</span>
+<span class='curline'><a href='../S/450.html#L917'>rt_rq</a>             917 sched/rt.c     			if (rt_rq-&gt;rt_time || rt_rq-&gt;rt_nr_running)</span>
+<span class='curline'><a href='../S/450.html#L919'>rt_rq</a>             919 sched/rt.c     			raw_spin_unlock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L920'>rt_rq</a>             920 sched/rt.c     		} else if (rt_rq-&gt;rt_nr_running) {</span>
+<span class='curline'><a href='../S/450.html#L922'>rt_rq</a>             922 sched/rt.c     			if (!rt_rq_throttled(rt_rq))</span>
+<span class='curline'><a href='../S/450.html#L925'>rt_rq</a>             925 sched/rt.c     		if (rt_rq-&gt;rt_throttled)</span>
+<span class='curline'><a href='../S/450.html#L929'>rt_rq</a>             929 sched/rt.c     			sched_rt_rq_enqueue(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L942'>rt_rq</a>             942 sched/rt.c     	struct rt_rq *rt_rq = group_rt_rq(rt_se);</span>
+<span class='curline'><a href='../S/450.html#L944'>rt_rq</a>             944 sched/rt.c     	if (rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L945'>rt_rq</a>             945 sched/rt.c     		return rt_rq-&gt;highest_prio.curr;</span>
+<span class='curline'><a href='../S/450.html#L951'>rt_rq</a>             951 sched/rt.c     static int sched_rt_runtime_exceeded(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L953'>rt_rq</a>             953 sched/rt.c     	u64 runtime = sched_rt_runtime(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L955'>rt_rq</a>             955 sched/rt.c     	if (rt_rq-&gt;rt_throttled)</span>
+<span class='curline'><a href='../S/450.html#L956'>rt_rq</a>             956 sched/rt.c     		return rt_rq_throttled(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L958'>rt_rq</a>             958 sched/rt.c     	if (runtime &gt;= sched_rt_period(rt_rq))</span>
+<span class='curline'><a href='../S/450.html#L961'>rt_rq</a>             961 sched/rt.c     	balance_runtime(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L962'>rt_rq</a>             962 sched/rt.c     	runtime = sched_rt_runtime(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L966'>rt_rq</a>             966 sched/rt.c     	if (rt_rq-&gt;rt_time &gt; runtime) {</span>
+<span class='curline'><a href='../S/450.html#L967'>rt_rq</a>             967 sched/rt.c     		struct rt_bandwidth *rt_b = sched_rt_bandwidth(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L974'>rt_rq</a>             974 sched/rt.c     			rt_rq-&gt;rt_throttled = 1;</span>
+<span class='curline'><a href='../S/450.html#L979'>rt_rq</a>             979 sched/rt.c     				rq_clock(rq_of_rt_rq(rt_rq)),</span>
+<span class='curline'><a href='../S/450.html#L980'>rt_rq</a>             980 sched/rt.c     				sched_rt_period(rt_rq),</span>
+<span class='curline'><a href='../S/450.html#L989'>rt_rq</a>             989 sched/rt.c     			rt_rq-&gt;rt_time = 0;</span>
+<span class='curline'><a href='../S/450.html#L992'>rt_rq</a>             992 sched/rt.c     		if (rt_rq_throttled(rt_rq)) {</span>
+<span class='curline'><a href='../S/450.html#L993'>rt_rq</a>             993 sched/rt.c     			sched_rt_rq_dequeue(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L1033'>rt_rq</a>            1033 sched/rt.c     		struct rt_rq *rt_rq = rt_rq_of_se(rt_se);</span>
+<span class='curline'><a href='../S/450.html#L1035'>rt_rq</a>            1035 sched/rt.c     		if (sched_rt_runtime(rt_rq) != RUNTIME_INF) {</span>
+<span class='curline'><a href='../S/450.html#L1036'>rt_rq</a>            1036 sched/rt.c     			raw_spin_lock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L1037'>rt_rq</a>            1037 sched/rt.c     			rt_rq-&gt;rt_time += delta_exec;</span>
+<span class='curline'><a href='../S/450.html#L1038'>rt_rq</a>            1038 sched/rt.c     			if (sched_rt_runtime_exceeded(rt_rq))</span>
+<span class='curline'><a href='../S/450.html#L1040'>rt_rq</a>            1040 sched/rt.c     			raw_spin_unlock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L1046'>rt_rq</a>            1046 sched/rt.c     dequeue_top_rt_rq(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L1048'>rt_rq</a>            1048 sched/rt.c     	struct rq *rq = rq_of_rt_rq(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L1050'>rt_rq</a>            1050 sched/rt.c     	BUG_ON(&amp;rq-&gt;rt != rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L1052'>rt_rq</a>            1052 sched/rt.c     	if (!rt_rq-&gt;rt_queued)</span>
+<span class='curline'><a href='../S/450.html#L1057'>rt_rq</a>            1057 sched/rt.c     	sub_nr_running(rq, rt_rq-&gt;rt_nr_running);</span>
+<span class='curline'><a href='../S/450.html#L1058'>rt_rq</a>            1058 sched/rt.c     	rt_rq-&gt;rt_queued = 0;</span>
+<span class='curline'><a href='../S/450.html#L1063'>rt_rq</a>            1063 sched/rt.c     enqueue_top_rt_rq(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L1065'>rt_rq</a>            1065 sched/rt.c     	struct rq *rq = rq_of_rt_rq(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L1067'>rt_rq</a>            1067 sched/rt.c     	BUG_ON(&amp;rq-&gt;rt != rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L1069'>rt_rq</a>            1069 sched/rt.c     	if (rt_rq-&gt;rt_queued)</span>
+<span class='curline'><a href='../S/450.html#L1072'>rt_rq</a>            1072 sched/rt.c     	if (rt_rq_throttled(rt_rq))</span>
+<span class='curline'><a href='../S/450.html#L1075'>rt_rq</a>            1075 sched/rt.c     	if (rt_rq-&gt;rt_nr_running) {</span>
+<span class='curline'><a href='../S/450.html#L1076'>rt_rq</a>            1076 sched/rt.c     		add_nr_running(rq, rt_rq-&gt;rt_nr_running);</span>
+<span class='curline'><a href='../S/450.html#L1077'>rt_rq</a>            1077 sched/rt.c     		rt_rq-&gt;rt_queued = 1;</span>
+<span class='curline'><a href='../S/450.html#L1087'>rt_rq</a>            1087 sched/rt.c     inc_rt_prio_smp(struct rt_rq *rt_rq, int prio, int prev_prio)</span>
+<span class='curline'><a href='../S/450.html#L1089'>rt_rq</a>            1089 sched/rt.c     	struct rq *rq = rq_of_rt_rq(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L1095'>rt_rq</a>            1095 sched/rt.c     	if (&amp;rq-&gt;rt != rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L1103'>rt_rq</a>            1103 sched/rt.c     dec_rt_prio_smp(struct rt_rq *rt_rq, int prio, int prev_prio)</span>
+<span class='curline'><a href='../S/450.html#L1105'>rt_rq</a>            1105 sched/rt.c     	struct rq *rq = rq_of_rt_rq(rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L1111'>rt_rq</a>            1111 sched/rt.c     	if (&amp;rq-&gt;rt != rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L1114'>rt_rq</a>            1114 sched/rt.c     	if (rq-&gt;online &amp;&amp; rt_rq-&gt;highest_prio.curr != prev_prio)</span>
+<span class='curline'><a href='../S/450.html#L1115'>rt_rq</a>            1115 sched/rt.c     		cpupri_set(&amp;rq-&gt;rd-&gt;cpupri, rq-&gt;cpu, rt_rq-&gt;highest_prio.curr);</span>
+<span class='curline'><a href='../S/450.html#L1121'>rt_rq</a>            1121 sched/rt.c     void inc_rt_prio_smp(struct rt_rq *rt_rq, int prio, int prev_prio) {}</span>
+<span class='curline'><a href='../S/450.html#L1123'>rt_rq</a>            1123 sched/rt.c     void dec_rt_prio_smp(struct rt_rq *rt_rq, int prio, int prev_prio) {}</span>
+<span class='curline'><a href='../S/450.html#L1129'>rt_rq</a>            1129 sched/rt.c     inc_rt_prio(struct rt_rq *rt_rq, int prio)</span>
+<span class='curline'><a href='../S/450.html#L1131'>rt_rq</a>            1131 sched/rt.c     	int prev_prio = rt_rq-&gt;highest_prio.curr;</span>
+<span class='curline'><a href='../S/450.html#L1134'>rt_rq</a>            1134 sched/rt.c     		rt_rq-&gt;highest_prio.curr = prio;</span>
+<span class='curline'><a href='../S/450.html#L1136'>rt_rq</a>            1136 sched/rt.c     	inc_rt_prio_smp(rt_rq, prio, prev_prio);</span>
+<span class='curline'><a href='../S/450.html#L1140'>rt_rq</a>            1140 sched/rt.c     dec_rt_prio(struct rt_rq *rt_rq, int prio)</span>
+<span class='curline'><a href='../S/450.html#L1142'>rt_rq</a>            1142 sched/rt.c     	int prev_prio = rt_rq-&gt;highest_prio.curr;</span>
+<span class='curline'><a href='../S/450.html#L1144'>rt_rq</a>            1144 sched/rt.c     	if (rt_rq-&gt;rt_nr_running) {</span>
+<span class='curline'><a href='../S/450.html#L1153'>rt_rq</a>            1153 sched/rt.c     			struct rt_prio_array *array = &amp;rt_rq-&gt;active;</span>
+<span class='curline'><a href='../S/450.html#L1155'>rt_rq</a>            1155 sched/rt.c     			rt_rq-&gt;highest_prio.curr =</span>
+<span class='curline'><a href='../S/450.html#L1160'>rt_rq</a>            1160 sched/rt.c     		rt_rq-&gt;highest_prio.curr = MAX_RT_PRIO;</span>
+<span class='curline'><a href='../S/450.html#L1162'>rt_rq</a>            1162 sched/rt.c     	dec_rt_prio_smp(rt_rq, prio, prev_prio);</span>
+<span class='curline'><a href='../S/450.html#L1167'>rt_rq</a>            1167 sched/rt.c     static inline void inc_rt_prio(struct rt_rq *rt_rq, int prio) {}</span>
+<span class='curline'><a href='../S/450.html#L1168'>rt_rq</a>            1168 sched/rt.c     static inline void dec_rt_prio(struct rt_rq *rt_rq, int prio) {}</span>
+<span class='curline'><a href='../S/450.html#L1175'>rt_rq</a>            1175 sched/rt.c     inc_rt_group(struct sched_rt_entity *rt_se, struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L1178'>rt_rq</a>            1178 sched/rt.c     		rt_rq-&gt;rt_nr_boosted++;</span>
+<span class='curline'><a href='../S/450.html#L1180'>rt_rq</a>            1180 sched/rt.c     	if (rt_rq-&gt;tg)</span>
+<span class='curline'><a href='../S/450.html#L1181'>rt_rq</a>            1181 sched/rt.c     		start_rt_bandwidth(&amp;rt_rq-&gt;tg-&gt;rt_bandwidth);</span>
+<span class='curline'><a href='../S/450.html#L1185'>rt_rq</a>            1185 sched/rt.c     dec_rt_group(struct sched_rt_entity *rt_se, struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L1188'>rt_rq</a>            1188 sched/rt.c     		rt_rq-&gt;rt_nr_boosted--;</span>
+<span class='curline'><a href='../S/450.html#L1190'>rt_rq</a>            1190 sched/rt.c     	WARN_ON(!rt_rq-&gt;rt_nr_running &amp;&amp; rt_rq-&gt;rt_nr_boosted);</span>
+<span class='curline'><a href='../S/450.html#L1196'>rt_rq</a>            1196 sched/rt.c     inc_rt_group(struct sched_rt_entity *rt_se, struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L1202'>rt_rq</a>            1202 sched/rt.c     void dec_rt_group(struct sched_rt_entity *rt_se, struct rt_rq *rt_rq) {}</span>
+<span class='curline'><a href='../S/450.html#L1209'>rt_rq</a>            1209 sched/rt.c     	struct rt_rq *group_rq = group_rt_rq(rt_se);</span>
+<span class='curline'><a href='../S/450.html#L1220'>rt_rq</a>            1220 sched/rt.c     	struct rt_rq *group_rq = group_rt_rq(rt_se);</span>
+<span class='curline'><a href='../S/450.html#L1232'>rt_rq</a>            1232 sched/rt.c     void inc_rt_tasks(struct sched_rt_entity *rt_se, struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L1237'>rt_rq</a>            1237 sched/rt.c     	rt_rq-&gt;rt_nr_running += rt_se_nr_running(rt_se);</span>
+<span class='curline'><a href='../S/450.html#L1238'>rt_rq</a>            1238 sched/rt.c     	rt_rq-&gt;rr_nr_running += rt_se_rr_nr_running(rt_se);</span>
+<span class='curline'><a href='../S/450.html#L1240'>rt_rq</a>            1240 sched/rt.c     	inc_rt_prio(rt_rq, prio);</span>
+<span class='curline'><a href='../S/450.html#L1241'>rt_rq</a>            1241 sched/rt.c     	inc_rt_migration(rt_se, rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L1242'>rt_rq</a>            1242 sched/rt.c     	inc_rt_group(rt_se, rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L1246'>rt_rq</a>            1246 sched/rt.c     void dec_rt_tasks(struct sched_rt_entity *rt_se, struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L1249'>rt_rq</a>            1249 sched/rt.c     	WARN_ON(!rt_rq-&gt;rt_nr_running);</span>
+<span class='curline'><a href='../S/450.html#L1250'>rt_rq</a>            1250 sched/rt.c     	rt_rq-&gt;rt_nr_running -= rt_se_nr_running(rt_se);</span>
+<span class='curline'><a href='../S/450.html#L1251'>rt_rq</a>            1251 sched/rt.c     	rt_rq-&gt;rr_nr_running -= rt_se_rr_nr_running(rt_se);</span>
+<span class='curline'><a href='../S/450.html#L1253'>rt_rq</a>            1253 sched/rt.c     	dec_rt_prio(rt_rq, rt_se_prio(rt_se));</span>
+<span class='curline'><a href='../S/450.html#L1254'>rt_rq</a>            1254 sched/rt.c     	dec_rt_migration(rt_se, rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L1255'>rt_rq</a>            1255 sched/rt.c     	dec_rt_group(rt_se, rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L1283'>rt_rq</a>            1283 sched/rt.c     	struct rt_rq *rt_rq = rt_rq_of_se(rt_se);</span>
+<span class='curline'><a href='../S/450.html#L1284'>rt_rq</a>            1284 sched/rt.c     	struct rt_prio_array *array = &amp;rt_rq-&gt;active;</span>
+<span class='curline'><a href='../S/450.html#L1285'>rt_rq</a>            1285 sched/rt.c     	struct rt_rq *group_rq = group_rt_rq(rt_se);</span>
+<span class='curline'><a href='../S/450.html#L1312'>rt_rq</a>            1312 sched/rt.c     	inc_rt_tasks(rt_se, rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L1317'>rt_rq</a>            1317 sched/rt.c     	struct rt_rq *rt_rq = rt_rq_of_se(rt_se);</span>
+<span class='curline'><a href='../S/450.html#L1318'>rt_rq</a>            1318 sched/rt.c     	struct rt_prio_array *array = &amp;rt_rq-&gt;active;</span>
+<span class='curline'><a href='../S/450.html#L1326'>rt_rq</a>            1326 sched/rt.c     	dec_rt_tasks(rt_se, rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L1367'>rt_rq</a>            1367 sched/rt.c     		struct rt_rq *rt_rq = group_rt_rq(rt_se);</span>
+<span class='curline'><a href='../S/450.html#L1369'>rt_rq</a>            1369 sched/rt.c     		if (rt_rq &amp;&amp; rt_rq-&gt;rt_nr_running)</span>
+<span class='curline'><a href='../S/450.html#L1430'>rt_rq</a>            1430 sched/rt.c     requeue_rt_entity(struct rt_rq *rt_rq, struct sched_rt_entity *rt_se, int head)</span>
+<span class='curline'><a href='../S/450.html#L1433'>rt_rq</a>            1433 sched/rt.c     		struct rt_prio_array *array = &amp;rt_rq-&gt;active;</span>
+<span class='curline'><a href='../S/450.html#L1446'>rt_rq</a>            1446 sched/rt.c     	struct rt_rq *rt_rq;</span>
+<span class='curline'><a href='../S/450.html#L1449'>rt_rq</a>            1449 sched/rt.c     		rt_rq = rt_rq_of_se(rt_se);</span>
+<span class='curline'><a href='../S/450.html#L1450'>rt_rq</a>            1450 sched/rt.c     		requeue_rt_entity(rt_rq, rt_se, head);</span>
+<span class='curline'><a href='../S/450.html#L1684'>rt_rq</a>            1684 sched/rt.c     						   struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/450.html#L1686'>rt_rq</a>            1686 sched/rt.c     	struct rt_prio_array *array = &amp;rt_rq-&gt;active;</span>
+<span class='curline'><a href='../S/450.html#L1703'>rt_rq</a>            1703 sched/rt.c     	struct rt_rq *rt_rq  = &amp;rq-&gt;rt;</span>
+<span class='curline'><a href='../S/450.html#L1706'>rt_rq</a>            1706 sched/rt.c     		rt_se = pick_next_rt_entity(rq, rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L1708'>rt_rq</a>            1708 sched/rt.c     		rt_rq = group_rt_rq(rt_se);</span>
+<span class='curline'><a href='../S/450.html#L1709'>rt_rq</a>            1709 sched/rt.c     	} while (rt_rq);</span>
+<span class='curline'><a href='../S/450.html#L2700'>rt_rq</a>            2700 sched/rt.c     		struct rt_rq *rt_rq = tg-&gt;rt_rq[i];</span>
+<span class='curline'><a href='../S/450.html#L2702'>rt_rq</a>            2702 sched/rt.c     		raw_spin_lock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L2703'>rt_rq</a>            2703 sched/rt.c     		rt_rq-&gt;rt_runtime = rt_runtime;</span>
+<span class='curline'><a href='../S/450.html#L2704'>rt_rq</a>            2704 sched/rt.c     		raw_spin_unlock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L2789'>rt_rq</a>            2789 sched/rt.c     		struct rt_rq *rt_rq = &amp;cpu_rq(i)-&gt;rt;</span>
+<span class='curline'><a href='../S/450.html#L2791'>rt_rq</a>            2791 sched/rt.c     		raw_spin_lock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L2792'>rt_rq</a>            2792 sched/rt.c     		rt_rq-&gt;rt_runtime = global_rt_runtime();</span>
+<span class='curline'><a href='../S/450.html#L2793'>rt_rq</a>            2793 sched/rt.c     		raw_spin_unlock(&amp;rt_rq-&gt;rt_runtime_lock);</span>
+<span class='curline'><a href='../S/450.html#L2886'>rt_rq</a>            2886 sched/rt.c     	struct rt_rq *rt_rq;</span>
+<span class='curline'><a href='../S/450.html#L2889'>rt_rq</a>            2889 sched/rt.c     	for_each_rt_rq(rt_rq, iter, cpu_rq(cpu))</span>
+<span class='curline'><a href='../S/450.html#L2890'>rt_rq</a>            2890 sched/rt.c     		print_rt_rq(m, cpu, rt_rq);</span>
+<span class='curline'><a href='../S/447.html#L360'>rt_rq</a>             360 sched/sched.h  struct rt_rq;</span>
+<span class='curline'><a href='../S/447.html#L409'>rt_rq</a>             409 sched/sched.h  	struct rt_rq		**rt_rq;</span>
+<span class='curline'><a href='../S/447.html#L494'>rt_rq</a>             494 sched/sched.h  extern void init_tg_rt_entry(struct task_group *tg, struct rt_rq *rt_rq,</span>
+<span class='curline'><a href='../S/447.html#L665'>rt_rq</a>             665 sched/sched.h  static inline bool rt_rq_is_runnable(struct rt_rq *rt_rq)</span>
+<span class='curline'><a href='../S/447.html#L667'>rt_rq</a>             667 sched/sched.h  	return rt_rq-&gt;rt_queued &amp;&amp; rt_rq-&gt;rt_nr_running;</span>
+<span class='curline'><a href='../S/447.html#L951'>rt_rq</a>             951 sched/sched.h  	struct rt_rq		rt;</span>
+<span class='curline'><a href='../S/447.html#L1611'>rt_rq</a>            1611 sched/sched.h  	p-&gt;rt.rt_rq  = tg-&gt;rt_rq[cpu];</span>
+<span class='curline'><a href='../S/447.html#L2309'>rt_rq</a>            2309 sched/sched.h  extern void print_rt_rq(struct seq_file *m, int cpu, struct rt_rq *rt_rq);</span>
+<span class='curline'><a href='../S/447.html#L2321'>rt_rq</a>            2321 sched/sched.h  extern void init_rt_rq(struct rt_rq *rt_rq);</span>
+</pre>
+</body>
+</html>

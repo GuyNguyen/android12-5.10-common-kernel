@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>stress</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/28.html#L373'>stress</a>            373 locking/test-ww_mutex.c static void dummy_load(struct stress *stress)</span>
+<span class='curline'><a href='../S/28.html#L380'>stress</a>            380 locking/test-ww_mutex.c 	struct stress *stress = container_of(work, typeof(*stress), work);</span>
+<span class='curline'><a href='../S/28.html#L381'>stress</a>            381 locking/test-ww_mutex.c 	const int nlocks = stress-&gt;nlocks;</span>
+<span class='curline'><a href='../S/28.html#L382'>stress</a>            382 locking/test-ww_mutex.c 	struct ww_mutex *locks = stress-&gt;locks;</span>
+<span class='curline'><a href='../S/28.html#L406'>stress</a>            406 locking/test-ww_mutex.c 			dummy_load(stress);</span>
+<span class='curline'><a href='../S/28.html#L426'>stress</a>            426 locking/test-ww_mutex.c 	} while (!time_after(jiffies, stress-&gt;timeout));</span>
+<span class='curline'><a href='../S/28.html#L429'>stress</a>            429 locking/test-ww_mutex.c 	kfree(stress);</span>
+<span class='curline'><a href='../S/28.html#L439'>stress</a>            439 locking/test-ww_mutex.c 	struct stress *stress = container_of(work, typeof(*stress), work);</span>
+<span class='curline'><a href='../S/28.html#L446'>stress</a>            446 locking/test-ww_mutex.c 	order = get_random_order(stress-&gt;nlocks);</span>
+<span class='curline'><a href='../S/28.html#L450'>stress</a>            450 locking/test-ww_mutex.c 	for (n = 0; n &lt; stress-&gt;nlocks; n++) {</span>
+<span class='curline'><a href='../S/28.html#L455'>stress</a>            455 locking/test-ww_mutex.c 		ll-&gt;lock = &amp;stress-&gt;locks[order[n]];</span>
+<span class='curline'><a href='../S/28.html#L483'>stress</a>            483 locking/test-ww_mutex.c 		dummy_load(stress);</span>
+<span class='curline'><a href='../S/28.html#L488'>stress</a>            488 locking/test-ww_mutex.c 	} while (!time_after(jiffies, stress-&gt;timeout));</span>
+<span class='curline'><a href='../S/28.html#L494'>stress</a>            494 locking/test-ww_mutex.c 	kfree(stress);</span>
+<span class='curline'><a href='../S/28.html#L499'>stress</a>            499 locking/test-ww_mutex.c 	struct stress *stress = container_of(work, typeof(*stress), work);</span>
+<span class='curline'><a href='../S/28.html#L500'>stress</a>            500 locking/test-ww_mutex.c 	const int nlocks = stress-&gt;nlocks;</span>
+<span class='curline'><a href='../S/28.html#L501'>stress</a>            501 locking/test-ww_mutex.c 	struct ww_mutex *lock = stress-&gt;locks + (get_random_int() % nlocks);</span>
+<span class='curline'><a href='../S/28.html#L507'>stress</a>            507 locking/test-ww_mutex.c 			dummy_load(stress);</span>
+<span class='curline'><a href='../S/28.html#L514'>stress</a>            514 locking/test-ww_mutex.c 	} while (!time_after(jiffies, stress-&gt;timeout));</span>
+<span class='curline'><a href='../S/28.html#L516'>stress</a>            516 locking/test-ww_mutex.c 	kfree(stress);</span>
+<span class='curline'><a href='../S/28.html#L537'>stress</a>            537 locking/test-ww_mutex.c 		struct stress *stress;</span>
+<span class='curline'><a href='../S/28.html#L559'>stress</a>            559 locking/test-ww_mutex.c 		stress = kmalloc(sizeof(*stress), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/28.html#L560'>stress</a>            560 locking/test-ww_mutex.c 		if (!stress)</span>
+<span class='curline'><a href='../S/28.html#L563'>stress</a>            563 locking/test-ww_mutex.c 		INIT_WORK(&amp;stress-&gt;work, fn);</span>
+<span class='curline'><a href='../S/28.html#L564'>stress</a>            564 locking/test-ww_mutex.c 		stress-&gt;locks = locks;</span>
+<span class='curline'><a href='../S/28.html#L565'>stress</a>            565 locking/test-ww_mutex.c 		stress-&gt;nlocks = nlocks;</span>
+<span class='curline'><a href='../S/28.html#L566'>stress</a>            566 locking/test-ww_mutex.c 		stress-&gt;timeout = jiffies + 2*HZ;</span>
+<span class='curline'><a href='../S/28.html#L568'>stress</a>            568 locking/test-ww_mutex.c 		queue_work(wq, &amp;stress-&gt;work);</span>
+<span class='curline'><a href='../S/28.html#L610'>stress</a>            610 locking/test-ww_mutex.c 	ret = stress(16, 2*ncpus, STRESS_INORDER);</span>
+<span class='curline'><a href='../S/28.html#L614'>stress</a>            614 locking/test-ww_mutex.c 	ret = stress(16, 2*ncpus, STRESS_REORDER);</span>
+<span class='curline'><a href='../S/28.html#L618'>stress</a>            618 locking/test-ww_mutex.c 	ret = stress(4095, hweight32(STRESS_ALL)*ncpus, STRESS_ALL);</span>
+</pre>
+</body>
+</html>

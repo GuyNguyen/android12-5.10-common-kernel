@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>futex_q</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/76.html#L226'>futex_q</a>           226 futex.c        static const struct futex_q futex_q_init = {</span>
+<span class='curline'><a href='../S/76.html#L697'>futex_q</a>           697 futex.c        static struct futex_q *futex_top_waiter(struct futex_hash_bucket *hb,</span>
+<span class='curline'><a href='../S/76.html#L700'>futex_q</a>           700 futex.c        	struct futex_q *this;</span>
+<span class='curline'><a href='../S/76.html#L1310'>futex_q</a>          1310 futex.c        	struct futex_q *top_waiter = futex_top_waiter(hb, key);</span>
+<span class='curline'><a href='../S/76.html#L1374'>futex_q</a>          1374 futex.c        	struct futex_q *top_waiter;</span>
+<span class='curline'><a href='../S/76.html#L1450'>futex_q</a>          1450 futex.c        static void __unqueue_futex(struct futex_q *q)</span>
+<span class='curline'><a href='../S/76.html#L1469'>futex_q</a>          1469 futex.c        static void mark_wake_futex(struct wake_q_head *wake_q, struct futex_q *q)</span>
+<span class='curline'><a href='../S/76.html#L1595'>futex_q</a>          1595 futex.c        	struct futex_q *this, *next;</span>
+<span class='curline'><a href='../S/76.html#L1693'>futex_q</a>          1693 futex.c        	struct futex_q *this, *next;</span>
+<span class='curline'><a href='../S/76.html#L1781'>futex_q</a>          1781 futex.c        void requeue_futex(struct futex_q *q, struct futex_hash_bucket *hb1,</span>
+<span class='curline'><a href='../S/76.html#L1814'>futex_q</a>          1814 futex.c        void requeue_pi_wake_futex(struct futex_q *q, union futex_key *key,</span>
+<span class='curline'><a href='../S/76.html#L1861'>futex_q</a>          1861 futex.c        	struct futex_q *top_waiter = NULL;</span>
+<span class='curline'><a href='../S/76.html#L1930'>futex_q</a>          1930 futex.c        	struct futex_q *this, *next;</span>
+<span class='curline'><a href='../S/76.html#L2196'>futex_q</a>          2196 futex.c        static inline struct futex_hash_bucket *queue_lock(struct futex_q *q)</span>
+<span class='curline'><a href='../S/76.html#L2227'>futex_q</a>          2227 futex.c        static inline void __queue_me(struct futex_q *q, struct futex_hash_bucket *hb)</span>
+<span class='curline'><a href='../S/76.html#L2261'>futex_q</a>          2261 futex.c        static inline void queue_me(struct futex_q *q, struct futex_hash_bucket *hb)</span>
+<span class='curline'><a href='../S/76.html#L2279'>futex_q</a>          2279 futex.c        static int unqueue_me(struct futex_q *q)</span>
+<span class='curline'><a href='../S/76.html#L2327'>futex_q</a>          2327 futex.c        static void unqueue_me_pi(struct futex_q *q)</span>
+<span class='curline'><a href='../S/76.html#L2339'>futex_q</a>          2339 futex.c        static int __fixup_pi_state_owner(u32 __user *uaddr, struct futex_q *q,</span>
+<span class='curline'><a href='../S/76.html#L2511'>futex_q</a>          2511 futex.c        static int fixup_pi_state_owner(u32 __user *uaddr, struct futex_q *q,</span>
+<span class='curline'><a href='../S/76.html#L2542'>futex_q</a>          2542 futex.c        static int fixup_owner(u32 __user *uaddr, struct futex_q *q, int locked)</span>
+<span class='curline'><a href='../S/76.html#L2585'>futex_q</a>          2585 futex.c        static void futex_wait_queue_me(struct futex_hash_bucket *hb, struct futex_q *q,</span>
+<span class='curline'><a href='../S/76.html#L2635'>futex_q</a>          2635 futex.c        			   struct futex_q *q, struct futex_hash_bucket **hb)</span>
+<span class='curline'><a href='../S/76.html#L2695'>futex_q</a>          2695 futex.c        	struct futex_q q = futex_q_init;</span>
+<span class='curline'><a href='../S/76.html#L2786'>futex_q</a>          2786 futex.c        	struct futex_q q = futex_q_init;</span>
+<span class='curline'><a href='../S/76.html#L2955'>futex_q</a>          2955 futex.c        	struct futex_q *top_waiter;</span>
+<span class='curline'><a href='../S/76.html#L3103'>futex_q</a>          3103 futex.c        				   struct futex_q *q, union futex_key *key2,</span>
+<span class='curline'><a href='../S/76.html#L3182'>futex_q</a>          3182 futex.c        	struct futex_q q = futex_q_init;</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>sched_group_span</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/464.html#L5968'>sched_group_span</a> 5968 sched/fair.c   		return cpumask_first(sched_group_span(group));</span>
+<span class='curline'><a href='../S/464.html#L5971'>sched_group_span</a> 5971 sched/fair.c   	for_each_cpu_and(i, sched_group_span(group), p-&gt;cpus_ptr) {</span>
+<span class='curline'><a href='../S/464.html#L8345'>sched_group_span</a> 8345 sched/fair.c   		for_each_cpu(cpu, sched_group_span(sdg)) {</span>
+<span class='curline'><a href='../S/464.html#L8567'>sched_group_span</a> 8567 sched/fair.c   	local_group = cpumask_test_cpu(env-&gt;dst_cpu, sched_group_span(group));</span>
+<span class='curline'><a href='../S/464.html#L8569'>sched_group_span</a> 8569 sched/fair.c   	for_each_cpu_and(i, sched_group_span(group), env-&gt;cpus) {</span>
+<span class='curline'><a href='../S/464.html#L8847'>sched_group_span</a> 8847 sched/fair.c   	for_each_cpu(i, sched_group_span(group)) {</span>
+<span class='curline'><a href='../S/464.html#L8966'>sched_group_span</a> 8966 sched/fair.c   		if (!cpumask_intersects(sched_group_span(group),</span>
+<span class='curline'><a href='../S/464.html#L8971'>sched_group_span</a> 8971 sched/fair.c   					       sched_group_span(group));</span>
+<span class='curline'><a href='../S/464.html#L9061'>sched_group_span</a> 9061 sched/fair.c   			idlest_cpu = cpumask_first(sched_group_span(idlest));</span>
+<span class='curline'><a href='../S/464.html#L9112'>sched_group_span</a> 9112 sched/fair.c   		local_group = cpumask_test_cpu(env-&gt;dst_cpu, sched_group_span(sg));</span>
+<span class='curline'><a href='../S/464.html#L9511'>sched_group_span</a> 9511 sched/fair.c   	for_each_cpu_and(i, sched_group_span(group), env-&gt;cpus) {</span>
+<span class='curline'><a href='../S/464.html#L9737'>sched_group_span</a> 9737 sched/fair.c   		.dst_grpmask    = sched_group_span(sd-&gt;groups),</span>
+<span class='curline'><a href='../S/447.html#L1547'>sched_group_span</a> 1547 sched/sched.h  	return cpumask_first(sched_group_span(group));</span>
+<span class='curline'><a href='../S/452.html#L55'>sched_group_span</a>   55 sched/topology.c 	if (group &amp;&amp; !cpumask_test_cpu(cpu, sched_group_span(group))) {</span>
+<span class='curline'><a href='../S/452.html#L82'>sched_group_span</a>   82 sched/topology.c 		if (!cpumask_weight(sched_group_span(group))) {</span>
+<span class='curline'><a href='../S/452.html#L89'>sched_group_span</a>   89 sched/topology.c 		    cpumask_intersects(groupmask, sched_group_span(group))) {</span>
+<span class='curline'><a href='../S/452.html#L95'>sched_group_span</a>   95 sched/topology.c 		cpumask_or(groupmask, groupmask, sched_group_span(group));</span>
+<span class='curline'><a href='../S/452.html#L99'>sched_group_span</a>   99 sched/topology.c 				cpumask_pr_args(sched_group_span(group)));</span>
+<span class='curline'><a href='../S/452.html#L102'>sched_group_span</a>  102 sched/topology.c 		    !cpumask_equal(group_balance_mask(group), sched_group_span(group))) {</span>
+<span class='curline'><a href='../S/452.html#L112'>sched_group_span</a>  112 sched/topology.c 				   sched_group_span(group))) {</span>
+<span class='curline'><a href='../S/452.html#L847'>sched_group_span</a>  847 sched/topology.c 	const struct cpumask *sg_span = sched_group_span(sg);</span>
+<span class='curline'><a href='../S/452.html#L893'>sched_group_span</a>  893 sched/topology.c 	sg_span = sched_group_span(sg);</span>
+<span class='curline'><a href='../S/452.html#L912'>sched_group_span</a>  912 sched/topology.c 	cpu = cpumask_first_and(sched_group_span(sg), mask);</span>
+<span class='curline'><a href='../S/452.html#L925'>sched_group_span</a>  925 sched/topology.c 	sg_span = sched_group_span(sg);</span>
+<span class='curline'><a href='../S/452.html#L968'>sched_group_span</a>  968 sched/topology.c 		sg_span = sched_group_span(sg);</span>
+<span class='curline'><a href='../S/452.html#L1085'>sched_group_span</a> 1085 sched/topology.c 		cpumask_copy(sched_group_span(sg), sched_domain_span(child));</span>
+<span class='curline'><a href='../S/452.html#L1086'>sched_group_span</a> 1086 sched/topology.c 		cpumask_copy(group_balance_mask(sg), sched_group_span(sg));</span>
+<span class='curline'><a href='../S/452.html#L1088'>sched_group_span</a> 1088 sched/topology.c 		cpumask_set_cpu(cpu, sched_group_span(sg));</span>
+<span class='curline'><a href='../S/452.html#L1092'>sched_group_span</a> 1092 sched/topology.c 	sg-&gt;sgc-&gt;capacity = SCHED_CAPACITY_SCALE * cpumask_weight(sched_group_span(sg));</span>
+<span class='curline'><a href='../S/452.html#L1128'>sched_group_span</a> 1128 sched/topology.c 		cpumask_or(covered, covered, sched_group_span(sg));</span>
+<span class='curline'><a href='../S/452.html#L1161'>sched_group_span</a> 1161 sched/topology.c 		sg-&gt;group_weight = cpumask_weight(sched_group_span(sg));</span>
+<span class='curline'><a href='../S/452.html#L1166'>sched_group_span</a> 1166 sched/topology.c 		for_each_cpu(cpu, sched_group_span(sg)) {</span>
+</pre>
+</body>
+</html>

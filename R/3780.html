@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>bpf_preload_ops</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/398.html#L666'>bpf_preload_ops</a>   666 bpf/inode.c    struct bpf_preload_ops *bpf_preload_ops;</span>
+<span class='curline'><a href='../S/398.html#L667'>bpf_preload_ops</a>   667 bpf/inode.c    EXPORT_SYMBOL_GPL(bpf_preload_ops);</span>
+<span class='curline'><a href='../S/398.html#L675'>bpf_preload_ops</a>   675 bpf/inode.c    	if (!bpf_preload_ops) {</span>
+<span class='curline'><a href='../S/398.html#L677'>bpf_preload_ops</a>   677 bpf/inode.c    		if (!bpf_preload_ops)</span>
+<span class='curline'><a href='../S/398.html#L683'>bpf_preload_ops</a>   683 bpf/inode.c    	if (!try_module_get(bpf_preload_ops-&gt;owner)) {</span>
+<span class='curline'><a href='../S/398.html#L692'>bpf_preload_ops</a>   692 bpf/inode.c    	if (bpf_preload_ops)</span>
+<span class='curline'><a href='../S/398.html#L694'>bpf_preload_ops</a>   694 bpf/inode.c    		module_put(bpf_preload_ops-&gt;owner);</span>
+<span class='curline'><a href='../S/398.html#L714'>bpf_preload_ops</a>   714 bpf/inode.c    	if (!bpf_preload_ops-&gt;info.tgid) {</span>
+<span class='curline'><a href='../S/398.html#L716'>bpf_preload_ops</a>   716 bpf/inode.c    		err = bpf_preload_ops-&gt;preload(objs);</span>
+<span class='curline'><a href='../S/398.html#L737'>bpf_preload_ops</a>   737 bpf/inode.c    		err = bpf_preload_ops-&gt;finish();</span>
+<span class='curline'><a href='../S/395.html#L14'>bpf_preload_ops</a>    14 bpf/preload/bpf_preload.h extern struct bpf_preload_ops *bpf_preload_ops;</span>
+<span class='curline'><a href='../S/392.html#L16'>bpf_preload_ops</a>    16 bpf/preload/bpf_preload_kern.c static struct bpf_preload_ops umd_ops = {</span>
+<span class='curline'><a href='../S/392.html#L80'>bpf_preload_ops</a>    80 bpf/preload/bpf_preload_kern.c 	bpf_preload_ops = &amp;umd_ops;</span>
+<span class='curline'><a href='../S/392.html#L88'>bpf_preload_ops</a>    88 bpf/preload/bpf_preload_kern.c 	bpf_preload_ops = NULL;</span>
+</pre>
+</body>
+</html>

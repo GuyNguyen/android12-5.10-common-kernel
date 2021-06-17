@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>audit_gid_comparator</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/120.html#L219'>audit_gid_comparator</a>  219 audit.h        extern int audit_gid_comparator(kgid_t left, u32 op, kgid_t right);</span>
+<span class='curline'><a href='../S/219.html#L1343'>audit_gid_comparator</a> 1343 auditfilter.c  				result = audit_gid_comparator(current_gid(), f-&gt;op, f-&gt;gid);</span>
+<span class='curline'><a href='../S/200.html#L368'>audit_gid_comparator</a>  368 auditsc.c      		rc = audit_gid_comparator(gid, f-&gt;op, name-&gt;gid);</span>
+<span class='curline'><a href='../S/200.html#L375'>audit_gid_comparator</a>  375 auditsc.c      			rc = audit_gid_comparator(gid, f-&gt;op, n-&gt;gid);</span>
+<span class='curline'><a href='../S/200.html#L439'>audit_gid_comparator</a>  439 auditsc.c      		return audit_gid_comparator(cred-&gt;gid, f-&gt;op, cred-&gt;egid);</span>
+<span class='curline'><a href='../S/200.html#L441'>audit_gid_comparator</a>  441 auditsc.c      		return audit_gid_comparator(cred-&gt;gid, f-&gt;op, cred-&gt;sgid);</span>
+<span class='curline'><a href='../S/200.html#L443'>audit_gid_comparator</a>  443 auditsc.c      		return audit_gid_comparator(cred-&gt;gid, f-&gt;op, cred-&gt;fsgid);</span>
+<span class='curline'><a href='../S/200.html#L446'>audit_gid_comparator</a>  446 auditsc.c      		return audit_gid_comparator(cred-&gt;egid, f-&gt;op, cred-&gt;sgid);</span>
+<span class='curline'><a href='../S/200.html#L448'>audit_gid_comparator</a>  448 auditsc.c      		return audit_gid_comparator(cred-&gt;egid, f-&gt;op, cred-&gt;fsgid);</span>
+<span class='curline'><a href='../S/200.html#L451'>audit_gid_comparator</a>  451 auditsc.c      		return audit_gid_comparator(cred-&gt;sgid, f-&gt;op, cred-&gt;fsgid);</span>
+<span class='curline'><a href='../S/200.html#L517'>audit_gid_comparator</a>  517 auditsc.c      			result = audit_gid_comparator(cred-&gt;gid, f-&gt;op, f-&gt;gid);</span>
+<span class='curline'><a href='../S/200.html#L527'>audit_gid_comparator</a>  527 auditsc.c      			result = audit_gid_comparator(cred-&gt;egid, f-&gt;op, f-&gt;gid);</span>
+<span class='curline'><a href='../S/200.html#L537'>audit_gid_comparator</a>  537 auditsc.c      			result = audit_gid_comparator(cred-&gt;sgid, f-&gt;op, f-&gt;gid);</span>
+<span class='curline'><a href='../S/200.html#L540'>audit_gid_comparator</a>  540 auditsc.c      			result = audit_gid_comparator(cred-&gt;fsgid, f-&gt;op, f-&gt;gid);</span>
+<span class='curline'><a href='../S/200.html#L622'>audit_gid_comparator</a>  622 auditsc.c      				result = audit_gid_comparator(name-&gt;gid, f-&gt;op, f-&gt;gid);</span>
+<span class='curline'><a href='../S/200.html#L625'>audit_gid_comparator</a>  625 auditsc.c      					if (audit_gid_comparator(n-&gt;gid, f-&gt;op, f-&gt;gid)) {</span>
+</pre>
+</body>
+</html>

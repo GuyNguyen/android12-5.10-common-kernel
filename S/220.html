@@ -1,0 +1,932 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>jump_label.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/jump_label.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L25'>[^]</a><a href='#L830'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L25' title='Defined at 25.'>jump_label_lock</a></li>
+<li><a href='#L30' title='Defined at 30.'>jump_label_unlock</a></li>
+<li><a href='#L35' title='Defined at 35.'>jump_label_cmp</a></li>
+<li><a href='#L63' title='Defined at 63.'>jump_label_swap</a></li>
+<li><a href='#L80' title='Defined at 80.'>jump_label_sort_entries</a></li>
+<li><a href='#L104' title='Defined at 104.'>static_key_count</a></li>
+<li><a href='#L116' title='Defined at 116.'>static_key_slow_inc_cpuslocked</a></li>
+<li><a href='#L156' title='Defined at 156.'>static_key_slow_inc</a></li>
+<li><a href='#L164' title='Defined at 164.'>static_key_enable_cpuslocked</a></li>
+<li><a href='#L187' title='Defined at 187.'>static_key_enable</a></li>
+<li><a href='#L195' title='Defined at 195.'>static_key_disable_cpuslocked</a></li>
+<li><a href='#L212' title='Defined at 212.'>static_key_disable</a></li>
+<li><a href='#L220' title='Defined at 220.'>static_key_slow_try_dec</a></li>
+<li><a href='#L239' title='Defined at 239.'>__static_key_slow_dec_cpuslocked</a></li>
+<li><a href='#L252' title='Defined at 252.'>__static_key_slow_dec</a></li>
+<li><a href='#L259' title='Defined at 259.'>jump_label_update_timeout</a></li>
+<li><a href='#L267' title='Defined at 267.'>static_key_slow_dec</a></li>
+<li><a href='#L274' title='Defined at 274.'>static_key_slow_dec_cpuslocked</a></li>
+<li><a href='#L280' title='Defined at 280.'>__static_key_slow_dec_deferred</a></li>
+<li><a href='#L293' title='Defined at 293.'>__static_key_deferred_flush</a></li>
+<li><a href='#L300' title='Defined at 300.'>jump_label_rate_limit</a></li>
+<li><a href='#L309' title='Defined at 309.'>addr_conflict</a></li>
+<li><a href='#L318' title='Defined at 318.'>__jump_label_text_reserved</a></li>
+<li><a href='#L339' title='Defined at 339.'>arch_jump_label_transform_static</a></li>
+<li><a href='#L345' title='Defined at 345.'>static_key_entries</a></li>
+<li><a href='#L351' title='Defined at 351.'>static_key_type</a></li>
+<li><a href='#L356' title='Defined at 356.'>static_key_linked</a></li>
+<li><a href='#L361' title='Defined at 361.'>static_key_clear_linked</a></li>
+<li><a href='#L366' title='Defined at 366.'>static_key_set_linked</a></li>
+<li><a href='#L380' title='Defined at 380.'>static_key_set_entries</a></li>
+<li><a href='#L401' title='Defined at 401.'>jump_label_can_update</a></li>
+<li><a href='#L428' title='Defined at 428.'>__jump_label_update</a></li>
+<li><a href='#L439' title='Defined at 439.'>__jump_label_update</a></li>
+<li><a href='#L461' title='Defined at 461.'>jump_label_init</a></li>
+<li><a href='#L508' title='Defined at 508.'>jump_label_init_type</a></li>
+<li><a href='#L536' title='Defined at 536.'>static_key_set_mod</a></li>
+<li><a href='#L547' title='Defined at 547.'>__jump_label_mod_text_reserved</a></li>
+<li><a href='#L571' title='Defined at 571.'>__jump_label_mod_update</a></li>
+<li><a href='#L604' title='Defined at 604.'>jump_label_apply_nops</a></li>
+<li><a href='#L621' title='Defined at 621.'>jump_label_add_module</a></li>
+<li><a href='#L682' title='Defined at 682.'>jump_label_del_module</a></li>
+<li><a href='#L733' title='Defined at 733.'>jump_label_module_notify</a></li>
+<li><a href='#L766' title='Defined at 766.'>jump_label_init_module</a></li>
+<li><a href='#L787' title='Defined at 787.'>jump_label_text_reserved</a></li>
+<li><a href='#L801' title='Defined at 801.'>jump_label_update</a></li>
+<li><a href='#L830' title='Defined at 830.'>jump_label_test</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0-only</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * jump label support</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> *</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * Copyright (C) 2009 Jason Baron &lt;jbaron@redhat.com&gt;</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> * Copyright (C) 2011 Peter Zijlstra</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> *</em>
+<a id='L8' name='L8'></a>   8 <em class='comment'> */</em>
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> &lt;linux/memory.h&gt;
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;linux/uaccess.h&gt;
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;linux/module.h&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;linux/list.h&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;linux/slab.h&gt;
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> &lt;linux/sort.h&gt;
+<a id='L15' name='L15'></a>  15 <em class='sharp'>#include</em> &lt;linux/err.h&gt;
+<a id='L16' name='L16'></a>  16 <em class='sharp'>#include</em> &lt;linux/static_key.h&gt;
+<a id='L17' name='L17'></a>  17 <em class='sharp'>#include</em> &lt;linux/jump_label_ratelimit.h&gt;
+<a id='L18' name='L18'></a>  18 <em class='sharp'>#include</em> &lt;linux/bug.h&gt;
+<a id='L19' name='L19'></a>  19 <em class='sharp'>#include</em> &lt;linux/cpu.h&gt;
+<a id='L20' name='L20'></a>  20 <em class='sharp'>#include</em> &lt;asm/sections.h&gt;
+<a id='L21' name='L21'></a>  21 
+<a id='L22' name='L22'></a>  22 <em class='comment'>/* mutex to protect coming/going of the jump_label table */</em>
+<a id='L23' name='L23'></a>  23 <strong class='reserved'>static</strong> DEFINE_MUTEX(jump_label_mutex);
+<a id='L24' name='L24'></a>  24 
+<a id='L25' name='L25'></a>  25 <strong class='reserved'>void</strong> <a href='../R/8184.html' title='Multiple referred from 9 places.'>jump_label_lock</a>(<strong class='reserved'>void</strong>)
+<a id='L26' name='L26'></a>  26 <em class='brace'>{</em>
+<a id='L27' name='L27'></a>  27         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;jump_label_mutex);
+<a id='L28' name='L28'></a>  28 <em class='brace'>}</em>
+<a id='L29' name='L29'></a>  29 
+<a id='L30' name='L30'></a>  30 <strong class='reserved'>void</strong> <a href='../R/8192.html' title='Multiple referred from 9 places.'>jump_label_unlock</a>(<strong class='reserved'>void</strong>)
+<a id='L31' name='L31'></a>  31 <em class='brace'>{</em>
+<a id='L32' name='L32'></a>  32         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;jump_label_mutex);
+<a id='L33' name='L33'></a>  33 <em class='brace'>}</em>
+<a id='L34' name='L34'></a>  34 
+<a id='L35' name='L35'></a>  35 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/220.html#L90' title='Referred from 90 in jump_label.c.'>jump_label_cmp</a>(<strong class='reserved'>const</strong> <strong class='reserved'>void</strong> *a, <strong class='reserved'>const</strong> <strong class='reserved'>void</strong> *b)
+<a id='L36' name='L36'></a>  36 <em class='brace'>{</em>
+<a id='L37' name='L37'></a>  37         <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> jump_entry *jea = a;
+<a id='L38' name='L38'></a>  38         <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> jump_entry *jeb = b;
+<a id='L39' name='L39'></a>  39 
+<a id='L40' name='L40'></a>  40         <em class='comment'>/*</em>
+<a id='L41' name='L41'></a>  41 <em class='comment'>         * Entrires are sorted by key.</em>
+<a id='L42' name='L42'></a>  42 <em class='comment'>         */</em>
+<a id='L43' name='L43'></a>  43         <strong class='reserved'>if</strong> (jump_entry_key(jea) &lt; jump_entry_key(jeb))
+<a id='L44' name='L44'></a>  44                 <strong class='reserved'>return</strong> -1;
+<a id='L45' name='L45'></a>  45 
+<a id='L46' name='L46'></a>  46         <strong class='reserved'>if</strong> (jump_entry_key(jea) &gt; jump_entry_key(jeb))
+<a id='L47' name='L47'></a>  47                 <strong class='reserved'>return</strong> 1;
+<a id='L48' name='L48'></a>  48 
+<a id='L49' name='L49'></a>  49         <em class='comment'>/*</em>
+<a id='L50' name='L50'></a>  50 <em class='comment'>         * In the batching mode, entries should also be sorted by the code</em>
+<a id='L51' name='L51'></a>  51 <em class='comment'>         * inside the already sorted list of entries, enabling a bsearch in</em>
+<a id='L52' name='L52'></a>  52 <em class='comment'>         * the vector.</em>
+<a id='L53' name='L53'></a>  53 <em class='comment'>         */</em>
+<a id='L54' name='L54'></a>  54         <strong class='reserved'>if</strong> (jump_entry_code(jea) &lt; jump_entry_code(jeb))
+<a id='L55' name='L55'></a>  55                 <strong class='reserved'>return</strong> -1;
+<a id='L56' name='L56'></a>  56 
+<a id='L57' name='L57'></a>  57         <strong class='reserved'>if</strong> (jump_entry_code(jea) &gt; jump_entry_code(jeb))
+<a id='L58' name='L58'></a>  58                 <strong class='reserved'>return</strong> 1;
+<a id='L59' name='L59'></a>  59 
+<a id='L60' name='L60'></a>  60         <strong class='reserved'>return</strong> 0;
+<a id='L61' name='L61'></a>  61 <em class='brace'>}</em>
+<a id='L62' name='L62'></a>  62 
+<a id='L63' name='L63'></a>  63 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/220.html#L86' title='Referred from 86 in jump_label.c.'>jump_label_swap</a>(<strong class='reserved'>void</strong> *a, <strong class='reserved'>void</strong> *b, <strong class='reserved'>int</strong> size)
+<a id='L64' name='L64'></a>  64 <em class='brace'>{</em>
+<a id='L65' name='L65'></a>  65         <strong class='reserved'>long</strong> delta = (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)a - (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)b;
+<a id='L66' name='L66'></a>  66         <strong class='reserved'>struct</strong> jump_entry *jea = a;
+<a id='L67' name='L67'></a>  67         <strong class='reserved'>struct</strong> jump_entry *jeb = b;
+<a id='L68' name='L68'></a>  68         <strong class='reserved'>struct</strong> jump_entry tmp = *jea;
+<a id='L69' name='L69'></a>  69 
+<a id='L70' name='L70'></a>  70         jea-&gt;code       = jeb-&gt;code - delta;
+<a id='L71' name='L71'></a>  71         jea-&gt;target     = jeb-&gt;target - delta;
+<a id='L72' name='L72'></a>  72         jea-&gt;key        = jeb-&gt;key - delta;
+<a id='L73' name='L73'></a>  73 
+<a id='L74' name='L74'></a>  74         jeb-&gt;code       = tmp.code + delta;
+<a id='L75' name='L75'></a>  75         jeb-&gt;target     = tmp.target + delta;
+<a id='L76' name='L76'></a>  76         jeb-&gt;key        = tmp.key + delta;
+<a id='L77' name='L77'></a>  77 <em class='brace'>}</em>
+<a id='L78' name='L78'></a>  78 
+<a id='L79' name='L79'></a>  79 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong>
+<a id='L80' name='L80'></a>  80 <a href='../R/8187.html' title='Multiple referred from 2 places.'>jump_label_sort_entries</a>(<strong class='reserved'>struct</strong> jump_entry *start, <strong class='reserved'>struct</strong> jump_entry *stop)
+<a id='L81' name='L81'></a>  81 <em class='brace'>{</em>
+<a id='L82' name='L82'></a>  82         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> size;
+<a id='L83' name='L83'></a>  83         <strong class='reserved'>void</strong> *swapfn = NULL;
+<a id='L84' name='L84'></a>  84 
+<a id='L85' name='L85'></a>  85         <strong class='reserved'>if</strong> (IS_ENABLED(CONFIG_HAVE_ARCH_JUMP_LABEL_RELATIVE))
+<a id='L86' name='L86'></a>  86                 swapfn = <a href='../S/220.html#L63' title='Defined at 63 in jump_label.c.'>jump_label_swap</a>;
+<a id='L87' name='L87'></a>  87 
+<a id='L88' name='L88'></a>  88         size = (((<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)stop - (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)start)
+<a id='L89' name='L89'></a>  89                                         / <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> jump_entry));
+<a id='L90' name='L90'></a>  90         sort(start, size, <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> jump_entry), <a href='../S/220.html#L35' title='Defined at 35 in jump_label.c.'>jump_label_cmp</a>, swapfn);
+<a id='L91' name='L91'></a>  91 <em class='brace'>}</em>
+<a id='L92' name='L92'></a>  92 
+<a id='L93' name='L93'></a>  93 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/220.html#L801' title='Defined at 801 in jump_label.c.'>jump_label_update</a>(<strong class='reserved'>struct</strong> static_key *key);
+<a id='L94' name='L94'></a>  94 
+<a id='L95' name='L95'></a>  95 <em class='comment'>/*</em>
+<a id='L96' name='L96'></a>  96 <em class='comment'> * There are similar definitions for the !CONFIG_JUMP_LABEL case in jump_label.h.</em>
+<a id='L97' name='L97'></a>  97 <em class='comment'> * The use of 'atomic_read()' requires atomic.h and its problematic for some</em>
+<a id='L98' name='L98'></a>  98 <em class='comment'> * kernel headers such as kernel.h and others. Since static_key_count() is not</em>
+<a id='L99' name='L99'></a>  99 <em class='comment'> * used in the branch statements as it is for the !CONFIG_JUMP_LABEL case its ok</em>
+<a id='L100' name='L100'></a> 100 <em class='comment'> * to have it be a function here. Similarly, for 'static_key_enable()' and</em>
+<a id='L101' name='L101'></a> 101 <em class='comment'> * 'static_key_disable()', which require bug.h. This should allow jump_label.h</em>
+<a id='L102' name='L102'></a> 102 <em class='comment'> * to be included from most/all places for CONFIG_JUMP_LABEL.</em>
+<a id='L103' name='L103'></a> 103 <em class='comment'> */</em>
+<a id='L104' name='L104'></a> 104 <strong class='reserved'>int</strong> <a href='../R/12665.html' title='Multiple referred from 4 places.'>static_key_count</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L105' name='L105'></a> 105 <em class='brace'>{</em>
+<a id='L106' name='L106'></a> 106         <em class='comment'>/*</em>
+<a id='L107' name='L107'></a> 107 <em class='comment'>         * -1 means the first static_key_slow_inc() is in progress.</em>
+<a id='L108' name='L108'></a> 108 <em class='comment'>         *  static_key_enabled() must return true, so return 1 here.</em>
+<a id='L109' name='L109'></a> 109 <em class='comment'>         */</em>
+<a id='L110' name='L110'></a> 110         <strong class='reserved'>int</strong> n = atomic_read(&amp;key-&gt;enabled);
+<a id='L111' name='L111'></a> 111 
+<a id='L112' name='L112'></a> 112         <strong class='reserved'>return</strong> n &gt;= 0 ? n : 1;
+<a id='L113' name='L113'></a> 113 <em class='brace'>}</em>
+<a id='L114' name='L114'></a> 114 EXPORT_SYMBOL_GPL(<a href='../S/220.html#L104' title='Defined at 104 in jump_label.c.'>static_key_count</a>);
+<a id='L115' name='L115'></a> 115 
+<a id='L116' name='L116'></a> 116 <strong class='reserved'>void</strong> <a href='../R/12679.html' title='Multiple referred from 2 places.'>static_key_slow_inc_cpuslocked</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L117' name='L117'></a> 117 <em class='brace'>{</em>
+<a id='L118' name='L118'></a> 118         <strong class='reserved'>int</strong> v, v1;
+<a id='L119' name='L119'></a> 119 
+<a id='L120' name='L120'></a> 120         STATIC_KEY_CHECK_USE(key);
+<a id='L121' name='L121'></a> 121         <a href='../S/327.html#L327' title='Defined at 327 in cpu.c.'>lockdep_assert_cpus_held</a>();
+<a id='L122' name='L122'></a> 122 
+<a id='L123' name='L123'></a> 123         <em class='comment'>/*</em>
+<a id='L124' name='L124'></a> 124 <em class='comment'>         * Careful if we get concurrent static_key_slow_inc() calls;</em>
+<a id='L125' name='L125'></a> 125 <em class='comment'>         * later calls must wait for the first one to _finish_ the</em>
+<a id='L126' name='L126'></a> 126 <em class='comment'>         * jump_label_update() process.  At the same time, however,</em>
+<a id='L127' name='L127'></a> 127 <em class='comment'>         * the jump_label_update() call below wants to see</em>
+<a id='L128' name='L128'></a> 128 <em class='comment'>         * static_key_enabled(&amp;key) for jumps to be updated properly.</em>
+<a id='L129' name='L129'></a> 129 <em class='comment'>         *</em>
+<a id='L130' name='L130'></a> 130 <em class='comment'>         * So give a special meaning to negative key-&gt;enabled: it sends</em>
+<a id='L131' name='L131'></a> 131 <em class='comment'>         * static_key_slow_inc() down the slow path, and it is non-zero</em>
+<a id='L132' name='L132'></a> 132 <em class='comment'>         * so it counts as "enabled" in jump_label_update().  Note that</em>
+<a id='L133' name='L133'></a> 133 <em class='comment'>         * atomic_inc_unless_negative() checks &gt;= 0, so roll our own.</em>
+<a id='L134' name='L134'></a> 134 <em class='comment'>         */</em>
+<a id='L135' name='L135'></a> 135         <strong class='reserved'>for</strong> (v = atomic_read(&amp;key-&gt;enabled); v &gt; 0; v = v1) <em class='brace'>{</em>
+<a id='L136' name='L136'></a> 136                 v1 = atomic_cmpxchg(&amp;key-&gt;enabled, v, v + 1);
+<a id='L137' name='L137'></a> 137                 <strong class='reserved'>if</strong> (likely(v1 == v))
+<a id='L138' name='L138'></a> 138                         <strong class='reserved'>return</strong>;
+<a id='L139' name='L139'></a> 139         <em class='brace'>}</em>
+<a id='L140' name='L140'></a> 140 
+<a id='L141' name='L141'></a> 141         <a href='../S/220.html#L25' title='Defined at 25 in jump_label.c.'>jump_label_lock</a>();
+<a id='L142' name='L142'></a> 142         <strong class='reserved'>if</strong> (atomic_read(&amp;key-&gt;enabled) == 0) <em class='brace'>{</em>
+<a id='L143' name='L143'></a> 143                 atomic_set(&amp;key-&gt;enabled, -1);
+<a id='L144' name='L144'></a> 144                 <a href='../S/220.html#L801' title='Defined at 801 in jump_label.c.'>jump_label_update</a>(key);
+<a id='L145' name='L145'></a> 145                 <em class='comment'>/*</em>
+<a id='L146' name='L146'></a> 146 <em class='comment'>                 * Ensure that if the above cmpxchg loop observes our positive</em>
+<a id='L147' name='L147'></a> 147 <em class='comment'>                 * value, it must also observe all the text changes.</em>
+<a id='L148' name='L148'></a> 148 <em class='comment'>                 */</em>
+<a id='L149' name='L149'></a> 149                 atomic_set_release(&amp;key-&gt;enabled, 1);
+<a id='L150' name='L150'></a> 150         <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L151' name='L151'></a> 151                 atomic_inc(&amp;key-&gt;enabled);
+<a id='L152' name='L152'></a> 152         <em class='brace'>}</em>
+<a id='L153' name='L153'></a> 153         <a href='../S/220.html#L30' title='Defined at 30 in jump_label.c.'>jump_label_unlock</a>();
+<a id='L154' name='L154'></a> 154 <em class='brace'>}</em>
+<a id='L155' name='L155'></a> 155 
+<a id='L156' name='L156'></a> 156 <strong class='reserved'>void</strong> <a href='../R/12678.html' title='Multiple referred from 4 places.'>static_key_slow_inc</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L157' name='L157'></a> 157 <em class='brace'>{</em>
+<a id='L158' name='L158'></a> 158         <a href='../S/327.html#L299' title='Defined at 299 in cpu.c.'>cpus_read_lock</a>();
+<a id='L159' name='L159'></a> 159         <a href='../S/220.html#L116' title='Defined at 116 in jump_label.c.'>static_key_slow_inc_cpuslocked</a>(key);
+<a id='L160' name='L160'></a> 160         <a href='../S/327.html#L311' title='Defined at 311 in cpu.c.'>cpus_read_unlock</a>();
+<a id='L161' name='L161'></a> 161 <em class='brace'>}</em>
+<a id='L162' name='L162'></a> 162 EXPORT_SYMBOL_GPL(<a href='../S/220.html#L156' title='Defined at 156 in jump_label.c.'>static_key_slow_inc</a>);
+<a id='L163' name='L163'></a> 163 
+<a id='L164' name='L164'></a> 164 <strong class='reserved'>void</strong> <a href='../R/12669.html' title='Multiple referred from 3 places.'>static_key_enable_cpuslocked</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L165' name='L165'></a> 165 <em class='brace'>{</em>
+<a id='L166' name='L166'></a> 166         STATIC_KEY_CHECK_USE(key);
+<a id='L167' name='L167'></a> 167         <a href='../S/327.html#L327' title='Defined at 327 in cpu.c.'>lockdep_assert_cpus_held</a>();
+<a id='L168' name='L168'></a> 168 
+<a id='L169' name='L169'></a> 169         <strong class='reserved'>if</strong> (atomic_read(&amp;key-&gt;enabled) &gt; 0) <em class='brace'>{</em>
+<a id='L170' name='L170'></a> 170                 WARN_ON_ONCE(atomic_read(&amp;key-&gt;enabled) != 1);
+<a id='L171' name='L171'></a> 171                 <strong class='reserved'>return</strong>;
+<a id='L172' name='L172'></a> 172         <em class='brace'>}</em>
+<a id='L173' name='L173'></a> 173 
+<a id='L174' name='L174'></a> 174         <a href='../S/220.html#L25' title='Defined at 25 in jump_label.c.'>jump_label_lock</a>();
+<a id='L175' name='L175'></a> 175         <strong class='reserved'>if</strong> (atomic_read(&amp;key-&gt;enabled) == 0) <em class='brace'>{</em>
+<a id='L176' name='L176'></a> 176                 atomic_set(&amp;key-&gt;enabled, -1);
+<a id='L177' name='L177'></a> 177                 <a href='../S/220.html#L801' title='Defined at 801 in jump_label.c.'>jump_label_update</a>(key);
+<a id='L178' name='L178'></a> 178                 <em class='comment'>/*</em>
+<a id='L179' name='L179'></a> 179 <em class='comment'>                 * See static_key_slow_inc().</em>
+<a id='L180' name='L180'></a> 180 <em class='comment'>                 */</em>
+<a id='L181' name='L181'></a> 181                 atomic_set_release(&amp;key-&gt;enabled, 1);
+<a id='L182' name='L182'></a> 182         <em class='brace'>}</em>
+<a id='L183' name='L183'></a> 183         <a href='../S/220.html#L30' title='Defined at 30 in jump_label.c.'>jump_label_unlock</a>();
+<a id='L184' name='L184'></a> 184 <em class='brace'>}</em>
+<a id='L185' name='L185'></a> 185 EXPORT_SYMBOL_GPL(<a href='../S/220.html#L164' title='Defined at 164 in jump_label.c.'>static_key_enable_cpuslocked</a>);
+<a id='L186' name='L186'></a> 186 
+<a id='L187' name='L187'></a> 187 <strong class='reserved'>void</strong> <a href='../R/12668.html' title='Multiple referred from 6 places.'>static_key_enable</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L188' name='L188'></a> 188 <em class='brace'>{</em>
+<a id='L189' name='L189'></a> 189         <a href='../S/327.html#L299' title='Defined at 299 in cpu.c.'>cpus_read_lock</a>();
+<a id='L190' name='L190'></a> 190         <a href='../S/220.html#L164' title='Defined at 164 in jump_label.c.'>static_key_enable_cpuslocked</a>(key);
+<a id='L191' name='L191'></a> 191         <a href='../S/327.html#L311' title='Defined at 311 in cpu.c.'>cpus_read_unlock</a>();
+<a id='L192' name='L192'></a> 192 <em class='brace'>}</em>
+<a id='L193' name='L193'></a> 193 EXPORT_SYMBOL_GPL(<a href='../S/220.html#L187' title='Defined at 187 in jump_label.c.'>static_key_enable</a>);
+<a id='L194' name='L194'></a> 194 
+<a id='L195' name='L195'></a> 195 <strong class='reserved'>void</strong> <a href='../R/12667.html' title='Multiple referred from 3 places.'>static_key_disable_cpuslocked</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L196' name='L196'></a> 196 <em class='brace'>{</em>
+<a id='L197' name='L197'></a> 197         STATIC_KEY_CHECK_USE(key);
+<a id='L198' name='L198'></a> 198         <a href='../S/327.html#L327' title='Defined at 327 in cpu.c.'>lockdep_assert_cpus_held</a>();
+<a id='L199' name='L199'></a> 199 
+<a id='L200' name='L200'></a> 200         <strong class='reserved'>if</strong> (atomic_read(&amp;key-&gt;enabled) != 1) <em class='brace'>{</em>
+<a id='L201' name='L201'></a> 201                 WARN_ON_ONCE(atomic_read(&amp;key-&gt;enabled) != 0);
+<a id='L202' name='L202'></a> 202                 <strong class='reserved'>return</strong>;
+<a id='L203' name='L203'></a> 203         <em class='brace'>}</em>
+<a id='L204' name='L204'></a> 204 
+<a id='L205' name='L205'></a> 205         <a href='../S/220.html#L25' title='Defined at 25 in jump_label.c.'>jump_label_lock</a>();
+<a id='L206' name='L206'></a> 206         <strong class='reserved'>if</strong> (atomic_cmpxchg(&amp;key-&gt;enabled, 1, 0))
+<a id='L207' name='L207'></a> 207                 <a href='../S/220.html#L801' title='Defined at 801 in jump_label.c.'>jump_label_update</a>(key);
+<a id='L208' name='L208'></a> 208         <a href='../S/220.html#L30' title='Defined at 30 in jump_label.c.'>jump_label_unlock</a>();
+<a id='L209' name='L209'></a> 209 <em class='brace'>}</em>
+<a id='L210' name='L210'></a> 210 EXPORT_SYMBOL_GPL(<a href='../S/220.html#L195' title='Defined at 195 in jump_label.c.'>static_key_disable_cpuslocked</a>);
+<a id='L211' name='L211'></a> 211 
+<a id='L212' name='L212'></a> 212 <strong class='reserved'>void</strong> <a href='../R/12666.html' title='Multiple referred from 4 places.'>static_key_disable</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L213' name='L213'></a> 213 <em class='brace'>{</em>
+<a id='L214' name='L214'></a> 214         <a href='../S/327.html#L299' title='Defined at 299 in cpu.c.'>cpus_read_lock</a>();
+<a id='L215' name='L215'></a> 215         <a href='../S/220.html#L195' title='Defined at 195 in jump_label.c.'>static_key_disable_cpuslocked</a>(key);
+<a id='L216' name='L216'></a> 216         <a href='../S/327.html#L311' title='Defined at 311 in cpu.c.'>cpus_read_unlock</a>();
+<a id='L217' name='L217'></a> 217 <em class='brace'>}</em>
+<a id='L218' name='L218'></a> 218 EXPORT_SYMBOL_GPL(<a href='../S/220.html#L212' title='Defined at 212 in jump_label.c.'>static_key_disable</a>);
+<a id='L219' name='L219'></a> 219 
+<a id='L220' name='L220'></a> 220 <strong class='reserved'>static</strong> bool <a href='../R/12680.html' title='Multiple referred from 2 places.'>static_key_slow_try_dec</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L221' name='L221'></a> 221 <em class='brace'>{</em>
+<a id='L222' name='L222'></a> 222         <strong class='reserved'>int</strong> val;
+<a id='L223' name='L223'></a> 223 
+<a id='L224' name='L224'></a> 224         val = atomic_fetch_add_unless(&amp;key-&gt;enabled, -1, 1);
+<a id='L225' name='L225'></a> 225         <strong class='reserved'>if</strong> (val == 1)
+<a id='L226' name='L226'></a> 226                 <strong class='reserved'>return</strong> false;
+<a id='L227' name='L227'></a> 227 
+<a id='L228' name='L228'></a> 228         <em class='comment'>/*</em>
+<a id='L229' name='L229'></a> 229 <em class='comment'>         * The negative count check is valid even when a negative</em>
+<a id='L230' name='L230'></a> 230 <em class='comment'>         * key-&gt;enabled is in use by static_key_slow_inc(); a</em>
+<a id='L231' name='L231'></a> 231 <em class='comment'>         * __static_key_slow_dec() before the first static_key_slow_inc()</em>
+<a id='L232' name='L232'></a> 232 <em class='comment'>         * returns is unbalanced, because all other static_key_slow_inc()</em>
+<a id='L233' name='L233'></a> 233 <em class='comment'>         * instances block while the update is in progress.</em>
+<a id='L234' name='L234'></a> 234 <em class='comment'>         */</em>
+<a id='L235' name='L235'></a> 235         WARN(val &lt; 0, "jump label: negative count!\n");
+<a id='L236' name='L236'></a> 236         <strong class='reserved'>return</strong> true;
+<a id='L237' name='L237'></a> 237 <em class='brace'>}</em>
+<a id='L238' name='L238'></a> 238 
+<a id='L239' name='L239'></a> 239 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/2473.html' title='Multiple referred from 2 places.'>__static_key_slow_dec_cpuslocked</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L240' name='L240'></a> 240 <em class='brace'>{</em>
+<a id='L241' name='L241'></a> 241         <a href='../S/327.html#L327' title='Defined at 327 in cpu.c.'>lockdep_assert_cpus_held</a>();
+<a id='L242' name='L242'></a> 242 
+<a id='L243' name='L243'></a> 243         <strong class='reserved'>if</strong> (<a href='../S/220.html#L220' title='Defined at 220 in jump_label.c.'>static_key_slow_try_dec</a>(key))
+<a id='L244' name='L244'></a> 244                 <strong class='reserved'>return</strong>;
+<a id='L245' name='L245'></a> 245 
+<a id='L246' name='L246'></a> 246         <a href='../S/220.html#L25' title='Defined at 25 in jump_label.c.'>jump_label_lock</a>();
+<a id='L247' name='L247'></a> 247         <strong class='reserved'>if</strong> (atomic_dec_and_test(&amp;key-&gt;enabled))
+<a id='L248' name='L248'></a> 248                 <a href='../S/220.html#L801' title='Defined at 801 in jump_label.c.'>jump_label_update</a>(key);
+<a id='L249' name='L249'></a> 249         <a href='../S/220.html#L30' title='Defined at 30 in jump_label.c.'>jump_label_unlock</a>();
+<a id='L250' name='L250'></a> 250 <em class='brace'>}</em>
+<a id='L251' name='L251'></a> 251 
+<a id='L252' name='L252'></a> 252 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/2472.html' title='Multiple referred from 2 places.'>__static_key_slow_dec</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L253' name='L253'></a> 253 <em class='brace'>{</em>
+<a id='L254' name='L254'></a> 254         <a href='../S/327.html#L299' title='Defined at 299 in cpu.c.'>cpus_read_lock</a>();
+<a id='L255' name='L255'></a> 255         <a href='../S/220.html#L239' title='Defined at 239 in jump_label.c.'>__static_key_slow_dec_cpuslocked</a>(key);
+<a id='L256' name='L256'></a> 256         <a href='../S/327.html#L311' title='Defined at 311 in cpu.c.'>cpus_read_unlock</a>();
+<a id='L257' name='L257'></a> 257 <em class='brace'>}</em>
+<a id='L258' name='L258'></a> 258 
+<a id='L259' name='L259'></a> 259 <strong class='reserved'>void</strong> <a href='../R/8194.html' title='Multiple referred from 2 places.'>jump_label_update_timeout</a>(<strong class='reserved'>struct</strong> work_struct *work)
+<a id='L260' name='L260'></a> 260 <em class='brace'>{</em>
+<a id='L261' name='L261'></a> 261         <strong class='reserved'>struct</strong> static_key_deferred *key =
+<a id='L262' name='L262'></a> 262                 container_of(work, <strong class='reserved'>struct</strong> static_key_deferred, work.work);
+<a id='L263' name='L263'></a> 263         <a href='../S/220.html#L252' title='Defined at 252 in jump_label.c.'>__static_key_slow_dec</a>(&amp;key-&gt;key);
+<a id='L264' name='L264'></a> 264 <em class='brace'>}</em>
+<a id='L265' name='L265'></a> 265 EXPORT_SYMBOL_GPL(<a href='../S/220.html#L259' title='Defined at 259 in jump_label.c.'>jump_label_update_timeout</a>);
+<a id='L266' name='L266'></a> 266 
+<a id='L267' name='L267'></a> 267 <strong class='reserved'>void</strong> <a href='../R/12676.html' title='Multiple referred from 4 places.'>static_key_slow_dec</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L268' name='L268'></a> 268 <em class='brace'>{</em>
+<a id='L269' name='L269'></a> 269         STATIC_KEY_CHECK_USE(key);
+<a id='L270' name='L270'></a> 270         <a href='../S/220.html#L252' title='Defined at 252 in jump_label.c.'>__static_key_slow_dec</a>(key);
+<a id='L271' name='L271'></a> 271 <em class='brace'>}</em>
+<a id='L272' name='L272'></a> 272 EXPORT_SYMBOL_GPL(<a href='../S/220.html#L267' title='Defined at 267 in jump_label.c.'>static_key_slow_dec</a>);
+<a id='L273' name='L273'></a> 273 
+<a id='L274' name='L274'></a> 274 <strong class='reserved'>void</strong> <a href='../S/464.html#L4631' title='Referred from 4631 in sched/fair.c.'>static_key_slow_dec_cpuslocked</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L275' name='L275'></a> 275 <em class='brace'>{</em>
+<a id='L276' name='L276'></a> 276         STATIC_KEY_CHECK_USE(key);
+<a id='L277' name='L277'></a> 277         <a href='../S/220.html#L239' title='Defined at 239 in jump_label.c.'>__static_key_slow_dec_cpuslocked</a>(key);
+<a id='L278' name='L278'></a> 278 <em class='brace'>}</em>
+<a id='L279' name='L279'></a> 279 
+<a id='L280' name='L280'></a> 280 <strong class='reserved'>void</strong> <a href='../S/220.html#L291' title='Referred from 291 in jump_label.c.'>__static_key_slow_dec_deferred</a>(<strong class='reserved'>struct</strong> static_key *key,
+<a id='L281' name='L281'></a> 281                                     <strong class='reserved'>struct</strong> delayed_work *work,
+<a id='L282' name='L282'></a> 282                                     <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> timeout)
+<a id='L283' name='L283'></a> 283 <em class='brace'>{</em>
+<a id='L284' name='L284'></a> 284         STATIC_KEY_CHECK_USE(key);
+<a id='L285' name='L285'></a> 285 
+<a id='L286' name='L286'></a> 286         <strong class='reserved'>if</strong> (<a href='../S/220.html#L220' title='Defined at 220 in jump_label.c.'>static_key_slow_try_dec</a>(key))
+<a id='L287' name='L287'></a> 287                 <strong class='reserved'>return</strong>;
+<a id='L288' name='L288'></a> 288 
+<a id='L289' name='L289'></a> 289         schedule_delayed_work(work, timeout);
+<a id='L290' name='L290'></a> 290 <em class='brace'>}</em>
+<a id='L291' name='L291'></a> 291 EXPORT_SYMBOL_GPL(<a href='../S/220.html#L280' title='Defined at 280 in jump_label.c.'>__static_key_slow_dec_deferred</a>);
+<a id='L292' name='L292'></a> 292 
+<a id='L293' name='L293'></a> 293 <strong class='reserved'>void</strong> <a href='../S/220.html#L298' title='Referred from 298 in jump_label.c.'>__static_key_deferred_flush</a>(<strong class='reserved'>void</strong> *key, <strong class='reserved'>struct</strong> delayed_work *work)
+<a id='L294' name='L294'></a> 294 <em class='brace'>{</em>
+<a id='L295' name='L295'></a> 295         STATIC_KEY_CHECK_USE(key);
+<a id='L296' name='L296'></a> 296         <a href='../S/365.html#L3204' title='Defined at 3204 in workqueue.c.'>flush_delayed_work</a>(work);
+<a id='L297' name='L297'></a> 297 <em class='brace'>}</em>
+<a id='L298' name='L298'></a> 298 EXPORT_SYMBOL_GPL(<a href='../S/220.html#L293' title='Defined at 293 in jump_label.c.'>__static_key_deferred_flush</a>);
+<a id='L299' name='L299'></a> 299 
+<a id='L300' name='L300'></a> 300 <strong class='reserved'>void</strong> <a href='../S/220.html#L307' title='Referred from 307 in jump_label.c.'>jump_label_rate_limit</a>(<strong class='reserved'>struct</strong> static_key_deferred *key,
+<a id='L301' name='L301'></a> 301                 <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> rl)
+<a id='L302' name='L302'></a> 302 <em class='brace'>{</em>
+<a id='L303' name='L303'></a> 303         STATIC_KEY_CHECK_USE(key);
+<a id='L304' name='L304'></a> 304         key-&gt;timeout = rl;
+<a id='L305' name='L305'></a> 305         INIT_DELAYED_WORK(&amp;key-&gt;work, <a href='../S/220.html#L259' title='Defined at 259 in jump_label.c.'>jump_label_update_timeout</a>);
+<a id='L306' name='L306'></a> 306 <em class='brace'>}</em>
+<a id='L307' name='L307'></a> 307 EXPORT_SYMBOL_GPL(<a href='../S/220.html#L300' title='Defined at 300 in jump_label.c.'>jump_label_rate_limit</a>);
+<a id='L308' name='L308'></a> 308 
+<a id='L309' name='L309'></a> 309 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../R/2805.html' title='Multiple referred from 2 places.'>addr_conflict</a>(<strong class='reserved'>struct</strong> jump_entry *entry, <strong class='reserved'>void</strong> *start, <strong class='reserved'>void</strong> *end)
+<a id='L310' name='L310'></a> 310 <em class='brace'>{</em>
+<a id='L311' name='L311'></a> 311         <strong class='reserved'>if</strong> (jump_entry_code(entry) &lt;= (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)end &amp;&amp;
+<a id='L312' name='L312'></a> 312             jump_entry_code(entry) + JUMP_LABEL_NOP_SIZE &gt; (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)start)
+<a id='L313' name='L313'></a> 313                 <strong class='reserved'>return</strong> 1;
+<a id='L314' name='L314'></a> 314 
+<a id='L315' name='L315'></a> 315         <strong class='reserved'>return</strong> 0;
+<a id='L316' name='L316'></a> 316 <em class='brace'>}</em>
+<a id='L317' name='L317'></a> 317 
+<a id='L318' name='L318'></a> 318 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../R/2122.html' title='Multiple referred from 2 places.'>__jump_label_text_reserved</a>(<strong class='reserved'>struct</strong> jump_entry *iter_start,
+<a id='L319' name='L319'></a> 319                 <strong class='reserved'>struct</strong> jump_entry *iter_stop, <strong class='reserved'>void</strong> *start, <strong class='reserved'>void</strong> *end)
+<a id='L320' name='L320'></a> 320 <em class='brace'>{</em>
+<a id='L321' name='L321'></a> 321         <strong class='reserved'>struct</strong> jump_entry *iter;
+<a id='L322' name='L322'></a> 322 
+<a id='L323' name='L323'></a> 323         iter = iter_start;
+<a id='L324' name='L324'></a> 324         <strong class='reserved'>while</strong> (iter &lt; iter_stop) <em class='brace'>{</em>
+<a id='L325' name='L325'></a> 325                 <strong class='reserved'>if</strong> (<a href='../D/3021.html' title='Multiple defined in 2 places.'>addr_conflict</a>(iter, start, end))
+<a id='L326' name='L326'></a> 326                         <strong class='reserved'>return</strong> 1;
+<a id='L327' name='L327'></a> 327                 iter++;
+<a id='L328' name='L328'></a> 328         <em class='brace'>}</em>
+<a id='L329' name='L329'></a> 329 
+<a id='L330' name='L330'></a> 330         <strong class='reserved'>return</strong> 0;
+<a id='L331' name='L331'></a> 331 <em class='brace'>}</em>
+<a id='L332' name='L332'></a> 332 
+<a id='L333' name='L333'></a> 333 <em class='comment'>/*</em>
+<a id='L334' name='L334'></a> 334 <em class='comment'> * Update code which is definitely not currently executing.</em>
+<a id='L335' name='L335'></a> 335 <em class='comment'> * Architectures which need heavyweight synchronization to modify</em>
+<a id='L336' name='L336'></a> 336 <em class='comment'> * running code can override this to make the non-live update case</em>
+<a id='L337' name='L337'></a> 337 <em class='comment'> * cheaper.</em>
+<a id='L338' name='L338'></a> 338 <em class='comment'> */</em>
+<a id='L339' name='L339'></a> 339 <strong class='reserved'>void</strong> __weak __init_or_module <a href='../R/2981.html' title='Multiple referred from 2 places.'>arch_jump_label_transform_static</a>(<strong class='reserved'>struct</strong> jump_entry *entry,
+<a id='L340' name='L340'></a> 340                                             <strong class='reserved'>enum</strong> <a href='../S/220.html#L391' title='Defined at 391 in jump_label.c.'>jump_label_type</a> type)
+<a id='L341' name='L341'></a> 341 <em class='brace'>{</em>
+<a id='L342' name='L342'></a> 342         arch_jump_label_transform(entry, type);
+<a id='L343' name='L343'></a> 343 <em class='brace'>}</em>
+<a id='L344' name='L344'></a> 344 
+<a id='L345' name='L345'></a> 345 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>struct</strong> jump_entry *<a href='../R/12670.html' title='Multiple referred from 2 places.'>static_key_entries</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L346' name='L346'></a> 346 <em class='brace'>{</em>
+<a id='L347' name='L347'></a> 347         WARN_ON_ONCE(key-&gt;type &amp; JUMP_TYPE_LINKED);
+<a id='L348' name='L348'></a> 348         <strong class='reserved'>return</strong> (<strong class='reserved'>struct</strong> jump_entry *)(key-&gt;type &amp; ~JUMP_TYPE_MASK);
+<a id='L349' name='L349'></a> 349 <em class='brace'>}</em>
+<a id='L350' name='L350'></a> 350 
+<a id='L351' name='L351'></a> 351 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> bool <a href='../S/220.html#L511' title='Referred from 511 in jump_label.c.'>static_key_type</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L352' name='L352'></a> 352 <em class='brace'>{</em>
+<a id='L353' name='L353'></a> 353         <strong class='reserved'>return</strong> key-&gt;type &amp; JUMP_TYPE_TRUE;
+<a id='L354' name='L354'></a> 354 <em class='brace'>}</em>
+<a id='L355' name='L355'></a> 355 
+<a id='L356' name='L356'></a> 356 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> bool <a href='../R/12671.html' title='Multiple referred from 4 places.'>static_key_linked</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L357' name='L357'></a> 357 <em class='brace'>{</em>
+<a id='L358' name='L358'></a> 358         <strong class='reserved'>return</strong> key-&gt;type &amp; JUMP_TYPE_LINKED;
+<a id='L359' name='L359'></a> 359 <em class='brace'>}</em>
+<a id='L360' name='L360'></a> 360 
+<a id='L361' name='L361'></a> 361 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/220.html#L726' title='Referred from 726 in jump_label.c.'>static_key_clear_linked</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L362' name='L362'></a> 362 <em class='brace'>{</em>
+<a id='L363' name='L363'></a> 363         key-&gt;type &amp;= ~JUMP_TYPE_LINKED;
+<a id='L364' name='L364'></a> 364 <em class='brace'>}</em>
+<a id='L365' name='L365'></a> 365 
+<a id='L366' name='L366'></a> 366 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/12674.html' title='Multiple referred from 2 places.'>static_key_set_linked</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L367' name='L367'></a> 367 <em class='brace'>{</em>
+<a id='L368' name='L368'></a> 368         key-&gt;type |= JUMP_TYPE_LINKED;
+<a id='L369' name='L369'></a> 369 <em class='brace'>}</em>
+<a id='L370' name='L370'></a> 370 
+<a id='L371' name='L371'></a> 371 <em class='comment'>/***</em>
+<a id='L372' name='L372'></a> 372 <em class='comment'> * A 'struct static_key' uses a union such that it either points directly</em>
+<a id='L373' name='L373'></a> 373 <em class='comment'> * to a table of 'struct jump_entry' or to a linked list of modules which in</em>
+<a id='L374' name='L374'></a> 374 <em class='comment'> * turn point to 'struct jump_entry' tables.</em>
+<a id='L375' name='L375'></a> 375 <em class='comment'> *</em>
+<a id='L376' name='L376'></a> 376 <em class='comment'> * The two lower bits of the pointer are used to keep track of which pointer</em>
+<a id='L377' name='L377'></a> 377 <em class='comment'> * type is in use and to store the initial branch direction, we use an access</em>
+<a id='L378' name='L378'></a> 378 <em class='comment'> * function which preserves these bits.</em>
+<a id='L379' name='L379'></a> 379 <em class='comment'> */</em>
+<a id='L380' name='L380'></a> 380 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/12673.html' title='Multiple referred from 3 places.'>static_key_set_entries</a>(<strong class='reserved'>struct</strong> static_key *key,
+<a id='L381' name='L381'></a> 381                                    <strong class='reserved'>struct</strong> jump_entry *entries)
+<a id='L382' name='L382'></a> 382 <em class='brace'>{</em>
+<a id='L383' name='L383'></a> 383         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> type;
+<a id='L384' name='L384'></a> 384 
+<a id='L385' name='L385'></a> 385         WARN_ON_ONCE((<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)entries &amp; JUMP_TYPE_MASK);
+<a id='L386' name='L386'></a> 386         type = key-&gt;type &amp; JUMP_TYPE_MASK;
+<a id='L387' name='L387'></a> 387         key-&gt;entries = entries;
+<a id='L388' name='L388'></a> 388         key-&gt;type |= type;
+<a id='L389' name='L389'></a> 389 <em class='brace'>}</em>
+<a id='L390' name='L390'></a> 390 
+<a id='L391' name='L391'></a> 391 <strong class='reserved'>static</strong> <strong class='reserved'>enum</strong> <a href='../R/8191.html' title='Multiple referred from 8 places.'>jump_label_type</a> <a href='../S/220.html#L391' title='Defined at 391 in jump_label.c.'>jump_label_type</a>(<strong class='reserved'>struct</strong> jump_entry *entry)
+<a id='L392' name='L392'></a> 392 <em class='brace'>{</em>
+<a id='L393' name='L393'></a> 393         <strong class='reserved'>struct</strong> static_key *key = jump_entry_key(entry);
+<a id='L394' name='L394'></a> 394         bool enabled = static_key_enabled(key);
+<a id='L395' name='L395'></a> 395         bool branch = jump_entry_is_branch(entry);
+<a id='L396' name='L396'></a> 396 
+<a id='L397' name='L397'></a> 397         <em class='comment'>/* See the comment in linux/jump_label.h */</em>
+<a id='L398' name='L398'></a> 398         <strong class='reserved'>return</strong> enabled ^ branch;
+<a id='L399' name='L399'></a> 399 <em class='brace'>}</em>
+<a id='L400' name='L400'></a> 400 
+<a id='L401' name='L401'></a> 401 <strong class='reserved'>static</strong> bool <a href='../R/8179.html' title='Multiple referred from 2 places.'>jump_label_can_update</a>(<strong class='reserved'>struct</strong> jump_entry *entry, bool init)
+<a id='L402' name='L402'></a> 402 <em class='brace'>{</em>
+<a id='L403' name='L403'></a> 403         <em class='comment'>/*</em>
+<a id='L404' name='L404'></a> 404 <em class='comment'>         * Cannot update code that was in an init text area.</em>
+<a id='L405' name='L405'></a> 405 <em class='comment'>         */</em>
+<a id='L406' name='L406'></a> 406         <strong class='reserved'>if</strong> (!init &amp;&amp; jump_entry_is_init(entry))
+<a id='L407' name='L407'></a> 407                 <strong class='reserved'>return</strong> false;
+<a id='L408' name='L408'></a> 408 
+<a id='L409' name='L409'></a> 409         <strong class='reserved'>if</strong> (!<a href='../S/243.html#L120' title='Defined at 120 in extable.c.'>kernel_text_address</a>(jump_entry_code(entry))) <em class='brace'>{</em>
+<a id='L410' name='L410'></a> 410                 <em class='comment'>/*</em>
+<a id='L411' name='L411'></a> 411 <em class='comment'>                 * This skips patching built-in __exit, which</em>
+<a id='L412' name='L412'></a> 412 <em class='comment'>                 * is part of init_section_contains() but is</em>
+<a id='L413' name='L413'></a> 413 <em class='comment'>                 * not part of kernel_text_address().</em>
+<a id='L414' name='L414'></a> 414 <em class='comment'>                 *</em>
+<a id='L415' name='L415'></a> 415 <em class='comment'>                 * Skipping built-in __exit is fine since it</em>
+<a id='L416' name='L416'></a> 416 <em class='comment'>                 * will never be executed.</em>
+<a id='L417' name='L417'></a> 417 <em class='comment'>                 */</em>
+<a id='L418' name='L418'></a> 418                 WARN_ONCE(!jump_entry_is_init(entry),
+<a id='L419' name='L419'></a> 419                           "can't patch jump_label at %pS",
+<a id='L420' name='L420'></a> 420                           (<strong class='reserved'>void</strong> *)jump_entry_code(entry));
+<a id='L421' name='L421'></a> 421                 <strong class='reserved'>return</strong> false;
+<a id='L422' name='L422'></a> 422         <em class='brace'>}</em>
+<a id='L423' name='L423'></a> 423 
+<a id='L424' name='L424'></a> 424         <strong class='reserved'>return</strong> true;
+<a id='L425' name='L425'></a> 425 <em class='brace'>}</em>
+<a id='L426' name='L426'></a> 426 
+<a id='L427' name='L427'></a> 427 <em class='sharp'>#ifndef</em> HAVE_JUMP_LABEL_BATCH
+<a id='L428' name='L428'></a> 428 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/2123.html' title='Multiple referred from 3 places.'>__jump_label_update</a>(<strong class='reserved'>struct</strong> static_key *key,
+<a id='L429' name='L429'></a> 429                                 <strong class='reserved'>struct</strong> jump_entry *entry,
+<a id='L430' name='L430'></a> 430                                 <strong class='reserved'>struct</strong> jump_entry *stop,
+<a id='L431' name='L431'></a> 431                                 bool init)
+<a id='L432' name='L432'></a> 432 <em class='brace'>{</em>
+<a id='L433' name='L433'></a> 433         <strong class='reserved'>for</strong> (; (entry &lt; stop) &amp;&amp; (jump_entry_key(entry) == key); entry++) <em class='brace'>{</em>
+<a id='L434' name='L434'></a> 434                 <strong class='reserved'>if</strong> (<a href='../S/220.html#L401' title='Defined at 401 in jump_label.c.'>jump_label_can_update</a>(entry, init))
+<a id='L435' name='L435'></a> 435                         arch_jump_label_transform(entry, <a href='../S/220.html#L391' title='Defined at 391 in jump_label.c.'>jump_label_type</a>(entry));
+<a id='L436' name='L436'></a> 436         <em class='brace'>}</em>
+<a id='L437' name='L437'></a> 437 <em class='brace'>}</em>
+<a id='L438' name='L438'></a> 438 <em class='sharp'>#else</em>
+<a id='L439' name='L439'></a> 439 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/2123.html' title='Multiple referred from 3 places.'>__jump_label_update</a>(<strong class='reserved'>struct</strong> static_key *key,
+<a id='L440' name='L440'></a> 440                                 <strong class='reserved'>struct</strong> jump_entry *entry,
+<a id='L441' name='L441'></a> 441                                 <strong class='reserved'>struct</strong> jump_entry *stop,
+<a id='L442' name='L442'></a> 442                                 bool init)
+<a id='L443' name='L443'></a> 443 <em class='brace'>{</em>
+<a id='L444' name='L444'></a> 444         <strong class='reserved'>for</strong> (; (entry &lt; stop) &amp;&amp; (jump_entry_key(entry) == key); entry++) <em class='brace'>{</em>
+<a id='L445' name='L445'></a> 445 
+<a id='L446' name='L446'></a> 446                 <strong class='reserved'>if</strong> (!<a href='../S/220.html#L401' title='Defined at 401 in jump_label.c.'>jump_label_can_update</a>(entry, init))
+<a id='L447' name='L447'></a> 447                         <strong class='reserved'>continue</strong>;
+<a id='L448' name='L448'></a> 448 
+<a id='L449' name='L449'></a> 449                 <strong class='reserved'>if</strong> (!arch_jump_label_transform_queue(entry, <a href='../S/220.html#L391' title='Defined at 391 in jump_label.c.'>jump_label_type</a>(entry))) <em class='brace'>{</em>
+<a id='L450' name='L450'></a> 450                         <em class='comment'>/*</em>
+<a id='L451' name='L451'></a> 451 <em class='comment'>                         * Queue is full: Apply the current queue and try again.</em>
+<a id='L452' name='L452'></a> 452 <em class='comment'>                         */</em>
+<a id='L453' name='L453'></a> 453                         arch_jump_label_transform_apply();
+<a id='L454' name='L454'></a> 454                         BUG_ON(!arch_jump_label_transform_queue(entry, <a href='../S/220.html#L391' title='Defined at 391 in jump_label.c.'>jump_label_type</a>(entry)));
+<a id='L455' name='L455'></a> 455                 <em class='brace'>}</em>
+<a id='L456' name='L456'></a> 456         <em class='brace'>}</em>
+<a id='L457' name='L457'></a> 457         arch_jump_label_transform_apply();
+<a id='L458' name='L458'></a> 458 <em class='brace'>}</em>
+<a id='L459' name='L459'></a> 459 <em class='sharp'>#endif</em>
+<a id='L460' name='L460'></a> 460 
+<a id='L461' name='L461'></a> 461 <strong class='reserved'>void</strong> __init jump_label_init(<strong class='reserved'>void</strong>)
+<a id='L462' name='L462'></a> 462 <em class='brace'>{</em>
+<a id='L463' name='L463'></a> 463         <strong class='reserved'>struct</strong> jump_entry *iter_start = __start___jump_table;
+<a id='L464' name='L464'></a> 464         <strong class='reserved'>struct</strong> jump_entry *iter_stop = __stop___jump_table;
+<a id='L465' name='L465'></a> 465         <strong class='reserved'>struct</strong> static_key *key = NULL;
+<a id='L466' name='L466'></a> 466         <strong class='reserved'>struct</strong> jump_entry *iter;
+<a id='L467' name='L467'></a> 467 
+<a id='L468' name='L468'></a> 468         <em class='comment'>/*</em>
+<a id='L469' name='L469'></a> 469 <em class='comment'>         * Since we are initializing the static_key.enabled field with</em>
+<a id='L470' name='L470'></a> 470 <em class='comment'>         * with the 'raw' int values (to avoid pulling in atomic.h) in</em>
+<a id='L471' name='L471'></a> 471 <em class='comment'>         * jump_label.h, let's make sure that is safe. There are only two</em>
+<a id='L472' name='L472'></a> 472 <em class='comment'>         * cases to check since we initialize to 0 or 1.</em>
+<a id='L473' name='L473'></a> 473 <em class='comment'>         */</em>
+<a id='L474' name='L474'></a> 474         BUILD_BUG_ON((<strong class='reserved'>int</strong>)ATOMIC_INIT(0) != 0);
+<a id='L475' name='L475'></a> 475         BUILD_BUG_ON((<strong class='reserved'>int</strong>)ATOMIC_INIT(1) != 1);
+<a id='L476' name='L476'></a> 476 
+<a id='L477' name='L477'></a> 477         <strong class='reserved'>if</strong> (static_key_initialized)
+<a id='L478' name='L478'></a> 478                 <strong class='reserved'>return</strong>;
+<a id='L479' name='L479'></a> 479 
+<a id='L480' name='L480'></a> 480         <a href='../S/327.html#L299' title='Defined at 299 in cpu.c.'>cpus_read_lock</a>();
+<a id='L481' name='L481'></a> 481         <a href='../S/220.html#L25' title='Defined at 25 in jump_label.c.'>jump_label_lock</a>();
+<a id='L482' name='L482'></a> 482         <a href='../S/220.html#L80' title='Defined at 80 in jump_label.c.'>jump_label_sort_entries</a>(iter_start, iter_stop);
+<a id='L483' name='L483'></a> 483 
+<a id='L484' name='L484'></a> 484         <strong class='reserved'>for</strong> (iter = iter_start; iter &lt; iter_stop; iter++) <em class='brace'>{</em>
+<a id='L485' name='L485'></a> 485                 <strong class='reserved'>struct</strong> static_key *iterk;
+<a id='L486' name='L486'></a> 486 
+<a id='L487' name='L487'></a> 487                 <em class='comment'>/* rewrite NOPs */</em>
+<a id='L488' name='L488'></a> 488                 <strong class='reserved'>if</strong> (<a href='../S/220.html#L391' title='Defined at 391 in jump_label.c.'>jump_label_type</a>(iter) == JUMP_LABEL_NOP)
+<a id='L489' name='L489'></a> 489                         <a href='../S/220.html#L339' title='Defined at 339 in jump_label.c.'>arch_jump_label_transform_static</a>(iter, JUMP_LABEL_NOP);
+<a id='L490' name='L490'></a> 490 
+<a id='L491' name='L491'></a> 491                 <strong class='reserved'>if</strong> (init_section_contains((<strong class='reserved'>void</strong> *)jump_entry_code(iter), 1))
+<a id='L492' name='L492'></a> 492                         jump_entry_set_init(iter);
+<a id='L493' name='L493'></a> 493 
+<a id='L494' name='L494'></a> 494                 iterk = jump_entry_key(iter);
+<a id='L495' name='L495'></a> 495                 <strong class='reserved'>if</strong> (iterk == key)
+<a id='L496' name='L496'></a> 496                         <strong class='reserved'>continue</strong>;
+<a id='L497' name='L497'></a> 497 
+<a id='L498' name='L498'></a> 498                 key = iterk;
+<a id='L499' name='L499'></a> 499                 <a href='../S/220.html#L380' title='Defined at 380 in jump_label.c.'>static_key_set_entries</a>(key, iter);
+<a id='L500' name='L500'></a> 500         <em class='brace'>}</em>
+<a id='L501' name='L501'></a> 501         static_key_initialized = true;
+<a id='L502' name='L502'></a> 502         <a href='../S/220.html#L30' title='Defined at 30 in jump_label.c.'>jump_label_unlock</a>();
+<a id='L503' name='L503'></a> 503         <a href='../S/327.html#L311' title='Defined at 311 in cpu.c.'>cpus_read_unlock</a>();
+<a id='L504' name='L504'></a> 504 <em class='brace'>}</em>
+<a id='L505' name='L505'></a> 505 
+<a id='L506' name='L506'></a> 506 <em class='sharp'>#ifdef</em> CONFIG_MODULES
+<a id='L507' name='L507'></a> 507 
+<a id='L508' name='L508'></a> 508 <strong class='reserved'>static</strong> <strong class='reserved'>enum</strong> <a href='../S/220.html#L391' title='Defined at 391 in jump_label.c.'>jump_label_type</a> <a href='../R/8183.html' title='Multiple referred from 2 places.'>jump_label_init_type</a>(<strong class='reserved'>struct</strong> jump_entry *entry)
+<a id='L509' name='L509'></a> 509 <em class='brace'>{</em>
+<a id='L510' name='L510'></a> 510         <strong class='reserved'>struct</strong> static_key *key = jump_entry_key(entry);
+<a id='L511' name='L511'></a> 511         bool type = <a href='../S/220.html#L351' title='Defined at 351 in jump_label.c.'>static_key_type</a>(key);
+<a id='L512' name='L512'></a> 512         bool branch = jump_entry_is_branch(entry);
+<a id='L513' name='L513'></a> 513 
+<a id='L514' name='L514'></a> 514         <em class='comment'>/* See the comment in linux/jump_label.h */</em>
+<a id='L515' name='L515'></a> 515         <strong class='reserved'>return</strong> type ^ branch;
+<a id='L516' name='L516'></a> 516 <em class='brace'>}</em>
+<a id='L517' name='L517'></a> 517 
+<a id='L518' name='L518'></a> 518 <strong class='reserved'>struct</strong> <a href='../R/12672.html' title='Multiple referred from 13 places.'>static_key_mod</a> <em class='brace'>{</em>
+<a id='L519' name='L519'></a> 519         <strong class='reserved'>struct</strong> <a href='../D/13367.html' title='Multiple defined in 2 places.'>static_key_mod</a> *next;
+<a id='L520' name='L520'></a> 520         <strong class='reserved'>struct</strong> jump_entry *entries;
+<a id='L521' name='L521'></a> 521         <strong class='reserved'>struct</strong> module *mod;
+<a id='L522' name='L522'></a> 522 <em class='brace'>}</em>;
+<a id='L523' name='L523'></a> 523 
+<a id='L524' name='L524'></a> 524 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>struct</strong> <a href='../R/12672.html' title='Multiple referred from 13 places.'>static_key_mod</a> *<a href='../D/13367.html' title='Multiple defined in 2 places.'>static_key_mod</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L525' name='L525'></a> 525 <em class='brace'>{</em>
+<a id='L526' name='L526'></a> 526         WARN_ON_ONCE(!<a href='../S/220.html#L356' title='Defined at 356 in jump_label.c.'>static_key_linked</a>(key));
+<a id='L527' name='L527'></a> 527         <strong class='reserved'>return</strong> (<strong class='reserved'>struct</strong> <a href='../D/13367.html' title='Multiple defined in 2 places.'>static_key_mod</a> *)(key-&gt;type &amp; ~JUMP_TYPE_MASK);
+<a id='L528' name='L528'></a> 528 <em class='brace'>}</em>
+<a id='L529' name='L529'></a> 529 
+<a id='L530' name='L530'></a> 530 <em class='comment'>/***</em>
+<a id='L531' name='L531'></a> 531 <em class='comment'> * key-&gt;type and key-&gt;next are the same via union.</em>
+<a id='L532' name='L532'></a> 532 <em class='comment'> * This sets key-&gt;next and preserves the type bits.</em>
+<a id='L533' name='L533'></a> 533 <em class='comment'> *</em>
+<a id='L534' name='L534'></a> 534 <em class='comment'> * See additional comments above static_key_set_entries().</em>
+<a id='L535' name='L535'></a> 535 <em class='comment'> */</em>
+<a id='L536' name='L536'></a> 536 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/12675.html' title='Multiple referred from 3 places.'>static_key_set_mod</a>(<strong class='reserved'>struct</strong> static_key *key,
+<a id='L537' name='L537'></a> 537                                <strong class='reserved'>struct</strong> <a href='../D/13367.html' title='Multiple defined in 2 places.'>static_key_mod</a> *mod)
+<a id='L538' name='L538'></a> 538 <em class='brace'>{</em>
+<a id='L539' name='L539'></a> 539         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> type;
+<a id='L540' name='L540'></a> 540 
+<a id='L541' name='L541'></a> 541         WARN_ON_ONCE((<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)mod &amp; JUMP_TYPE_MASK);
+<a id='L542' name='L542'></a> 542         type = key-&gt;type &amp; JUMP_TYPE_MASK;
+<a id='L543' name='L543'></a> 543         key-&gt;next = mod;
+<a id='L544' name='L544'></a> 544         key-&gt;type |= type;
+<a id='L545' name='L545'></a> 545 <em class='brace'>}</em>
+<a id='L546' name='L546'></a> 546 
+<a id='L547' name='L547'></a> 547 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/220.html#L796' title='Referred from 796 in jump_label.c.'>__jump_label_mod_text_reserved</a>(<strong class='reserved'>void</strong> *start, <strong class='reserved'>void</strong> *end)
+<a id='L548' name='L548'></a> 548 <em class='brace'>{</em>
+<a id='L549' name='L549'></a> 549         <strong class='reserved'>struct</strong> module *mod;
+<a id='L550' name='L550'></a> 550         <strong class='reserved'>int</strong> ret;
+<a id='L551' name='L551'></a> 551 
+<a id='L552' name='L552'></a> 552         preempt_disable();
+<a id='L553' name='L553'></a> 553         mod = <a href='../S/476.html#L4759' title='Defined at 4759 in module.c.'>__module_text_address</a>((<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)start);
+<a id='L554' name='L554'></a> 554         WARN_ON_ONCE(<a href='../S/476.html#L4759' title='Defined at 4759 in module.c.'>__module_text_address</a>((<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)end) != mod);
+<a id='L555' name='L555'></a> 555         <strong class='reserved'>if</strong> (!<a href='../S/476.html#L1135' title='Defined at 1135 in module.c.'>try_module_get</a>(mod))
+<a id='L556' name='L556'></a> 556                 mod = NULL;
+<a id='L557' name='L557'></a> 557         preempt_enable();
+<a id='L558' name='L558'></a> 558 
+<a id='L559' name='L559'></a> 559         <strong class='reserved'>if</strong> (!mod)
+<a id='L560' name='L560'></a> 560                 <strong class='reserved'>return</strong> 0;
+<a id='L561' name='L561'></a> 561 
+<a id='L562' name='L562'></a> 562         ret = <a href='../S/220.html#L318' title='Defined at 318 in jump_label.c.'>__jump_label_text_reserved</a>(mod-&gt;jump_entries,
+<a id='L563' name='L563'></a> 563                                 mod-&gt;jump_entries + mod-&gt;num_jump_entries,
+<a id='L564' name='L564'></a> 564                                 start, end);
+<a id='L565' name='L565'></a> 565 
+<a id='L566' name='L566'></a> 566         <a href='../S/476.html#L1154' title='Defined at 1154 in module.c.'>module_put</a>(mod);
+<a id='L567' name='L567'></a> 567 
+<a id='L568' name='L568'></a> 568         <strong class='reserved'>return</strong> ret;
+<a id='L569' name='L569'></a> 569 <em class='brace'>}</em>
+<a id='L570' name='L570'></a> 570 
+<a id='L571' name='L571'></a> 571 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/220.html#L809' title='Referred from 809 in jump_label.c.'>__jump_label_mod_update</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L572' name='L572'></a> 572 <em class='brace'>{</em>
+<a id='L573' name='L573'></a> 573         <strong class='reserved'>struct</strong> <a href='../D/13367.html' title='Multiple defined in 2 places.'>static_key_mod</a> *mod;
+<a id='L574' name='L574'></a> 574 
+<a id='L575' name='L575'></a> 575         <strong class='reserved'>for</strong> (mod = <a href='../D/13367.html' title='Multiple defined in 2 places.'>static_key_mod</a>(key); mod; mod = mod-&gt;next) <em class='brace'>{</em>
+<a id='L576' name='L576'></a> 576                 <strong class='reserved'>struct</strong> jump_entry *stop;
+<a id='L577' name='L577'></a> 577                 <strong class='reserved'>struct</strong> module *m;
+<a id='L578' name='L578'></a> 578 
+<a id='L579' name='L579'></a> 579                 <em class='comment'>/*</em>
+<a id='L580' name='L580'></a> 580 <em class='comment'>                 * NULL if the static_key is defined in a module</em>
+<a id='L581' name='L581'></a> 581 <em class='comment'>                 * that does not use it</em>
+<a id='L582' name='L582'></a> 582 <em class='comment'>                 */</em>
+<a id='L583' name='L583'></a> 583                 <strong class='reserved'>if</strong> (!mod-&gt;entries)
+<a id='L584' name='L584'></a> 584                         <strong class='reserved'>continue</strong>;
+<a id='L585' name='L585'></a> 585 
+<a id='L586' name='L586'></a> 586                 m = mod-&gt;mod;
+<a id='L587' name='L587'></a> 587                 <strong class='reserved'>if</strong> (!m)
+<a id='L588' name='L588'></a> 588                         stop = __stop___jump_table;
+<a id='L589' name='L589'></a> 589                 <strong class='reserved'>else</strong>
+<a id='L590' name='L590'></a> 590                         stop = m-&gt;jump_entries + m-&gt;num_jump_entries;
+<a id='L591' name='L591'></a> 591                 <a href='../D/2319.html' title='Multiple defined in 2 places.'>__jump_label_update</a>(key, mod-&gt;entries, stop,
+<a id='L592' name='L592'></a> 592                                     m &amp;&amp; m-&gt;state == MODULE_STATE_COMING);
+<a id='L593' name='L593'></a> 593         <em class='brace'>}</em>
+<a id='L594' name='L594'></a> 594 <em class='brace'>}</em>
+<a id='L595' name='L595'></a> 595 
+<a id='L596' name='L596'></a> 596 <em class='comment'>/***</em>
+<a id='L597' name='L597'></a> 597 <em class='comment'> * apply_jump_label_nops - patch module jump labels with arch_get_jump_label_nop()</em>
+<a id='L598' name='L598'></a> 598 <em class='comment'> * @mod: module to patch</em>
+<a id='L599' name='L599'></a> 599 <em class='comment'> *</em>
+<a id='L600' name='L600'></a> 600 <em class='comment'> * Allow for run-time selection of the optimal nops. Before the module</em>
+<a id='L601' name='L601'></a> 601 <em class='comment'> * loads patch these with arch_get_jump_label_nop(), which is specified by</em>
+<a id='L602' name='L602'></a> 602 <em class='comment'> * the arch specific jump label code.</em>
+<a id='L603' name='L603'></a> 603 <em class='comment'> */</em>
+<a id='L604' name='L604'></a> 604 <strong class='reserved'>void</strong> jump_label_apply_nops(<strong class='reserved'>struct</strong> module *mod)
+<a id='L605' name='L605'></a> 605 <em class='brace'>{</em>
+<a id='L606' name='L606'></a> 606         <strong class='reserved'>struct</strong> jump_entry *iter_start = mod-&gt;jump_entries;
+<a id='L607' name='L607'></a> 607         <strong class='reserved'>struct</strong> jump_entry *iter_stop = iter_start + mod-&gt;num_jump_entries;
+<a id='L608' name='L608'></a> 608         <strong class='reserved'>struct</strong> jump_entry *iter;
+<a id='L609' name='L609'></a> 609 
+<a id='L610' name='L610'></a> 610         <em class='comment'>/* if the module doesn't have jump label entries, just return */</em>
+<a id='L611' name='L611'></a> 611         <strong class='reserved'>if</strong> (iter_start == iter_stop)
+<a id='L612' name='L612'></a> 612                 <strong class='reserved'>return</strong>;
+<a id='L613' name='L613'></a> 613 
+<a id='L614' name='L614'></a> 614         <strong class='reserved'>for</strong> (iter = iter_start; iter &lt; iter_stop; iter++) <em class='brace'>{</em>
+<a id='L615' name='L615'></a> 615                 <em class='comment'>/* Only write NOPs for arch_branch_static(). */</em>
+<a id='L616' name='L616'></a> 616                 <strong class='reserved'>if</strong> (<a href='../S/220.html#L508' title='Defined at 508 in jump_label.c.'>jump_label_init_type</a>(iter) == JUMP_LABEL_NOP)
+<a id='L617' name='L617'></a> 617                         <a href='../S/220.html#L339' title='Defined at 339 in jump_label.c.'>arch_jump_label_transform_static</a>(iter, JUMP_LABEL_NOP);
+<a id='L618' name='L618'></a> 618         <em class='brace'>}</em>
+<a id='L619' name='L619'></a> 619 <em class='brace'>}</em>
+<a id='L620' name='L620'></a> 620 
+<a id='L621' name='L621'></a> 621 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/220.html#L744' title='Referred from 744 in jump_label.c.'>jump_label_add_module</a>(<strong class='reserved'>struct</strong> module *mod)
+<a id='L622' name='L622'></a> 622 <em class='brace'>{</em>
+<a id='L623' name='L623'></a> 623         <strong class='reserved'>struct</strong> jump_entry *iter_start = mod-&gt;jump_entries;
+<a id='L624' name='L624'></a> 624         <strong class='reserved'>struct</strong> jump_entry *iter_stop = iter_start + mod-&gt;num_jump_entries;
+<a id='L625' name='L625'></a> 625         <strong class='reserved'>struct</strong> jump_entry *iter;
+<a id='L626' name='L626'></a> 626         <strong class='reserved'>struct</strong> static_key *key = NULL;
+<a id='L627' name='L627'></a> 627         <strong class='reserved'>struct</strong> <a href='../D/13367.html' title='Multiple defined in 2 places.'>static_key_mod</a> *jlm, *jlm2;
+<a id='L628' name='L628'></a> 628 
+<a id='L629' name='L629'></a> 629         <em class='comment'>/* if the module doesn't have jump label entries, just return */</em>
+<a id='L630' name='L630'></a> 630         <strong class='reserved'>if</strong> (iter_start == iter_stop)
+<a id='L631' name='L631'></a> 631                 <strong class='reserved'>return</strong> 0;
+<a id='L632' name='L632'></a> 632 
+<a id='L633' name='L633'></a> 633         <a href='../S/220.html#L80' title='Defined at 80 in jump_label.c.'>jump_label_sort_entries</a>(iter_start, iter_stop);
+<a id='L634' name='L634'></a> 634 
+<a id='L635' name='L635'></a> 635         <strong class='reserved'>for</strong> (iter = iter_start; iter &lt; iter_stop; iter++) <em class='brace'>{</em>
+<a id='L636' name='L636'></a> 636                 <strong class='reserved'>struct</strong> static_key *iterk;
+<a id='L637' name='L637'></a> 637 
+<a id='L638' name='L638'></a> 638                 <strong class='reserved'>if</strong> (within_module_init(jump_entry_code(iter), mod))
+<a id='L639' name='L639'></a> 639                         jump_entry_set_init(iter);
+<a id='L640' name='L640'></a> 640 
+<a id='L641' name='L641'></a> 641                 iterk = jump_entry_key(iter);
+<a id='L642' name='L642'></a> 642                 <strong class='reserved'>if</strong> (iterk == key)
+<a id='L643' name='L643'></a> 643                         <strong class='reserved'>continue</strong>;
+<a id='L644' name='L644'></a> 644 
+<a id='L645' name='L645'></a> 645                 key = iterk;
+<a id='L646' name='L646'></a> 646                 <strong class='reserved'>if</strong> (within_module((<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)key, mod)) <em class='brace'>{</em>
+<a id='L647' name='L647'></a> 647                         <a href='../S/220.html#L380' title='Defined at 380 in jump_label.c.'>static_key_set_entries</a>(key, iter);
+<a id='L648' name='L648'></a> 648                         <strong class='reserved'>continue</strong>;
+<a id='L649' name='L649'></a> 649                 <em class='brace'>}</em>
+<a id='L650' name='L650'></a> 650                 jlm = kzalloc(<strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> <a href='../D/13367.html' title='Multiple defined in 2 places.'>static_key_mod</a>), GFP_KERNEL);
+<a id='L651' name='L651'></a> 651                 <strong class='reserved'>if</strong> (!jlm)
+<a id='L652' name='L652'></a> 652                         <strong class='reserved'>return</strong> -ENOMEM;
+<a id='L653' name='L653'></a> 653                 <strong class='reserved'>if</strong> (!<a href='../S/220.html#L356' title='Defined at 356 in jump_label.c.'>static_key_linked</a>(key)) <em class='brace'>{</em>
+<a id='L654' name='L654'></a> 654                         jlm2 = kzalloc(<strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> <a href='../D/13367.html' title='Multiple defined in 2 places.'>static_key_mod</a>),
+<a id='L655' name='L655'></a> 655                                        GFP_KERNEL);
+<a id='L656' name='L656'></a> 656                         <strong class='reserved'>if</strong> (!jlm2) <em class='brace'>{</em>
+<a id='L657' name='L657'></a> 657                                 kfree(jlm);
+<a id='L658' name='L658'></a> 658                                 <strong class='reserved'>return</strong> -ENOMEM;
+<a id='L659' name='L659'></a> 659                         <em class='brace'>}</em>
+<a id='L660' name='L660'></a> 660                         preempt_disable();
+<a id='L661' name='L661'></a> 661                         jlm2-&gt;mod = <a href='../S/476.html#L4715' title='Defined at 4715 in module.c.'>__module_address</a>((<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)key);
+<a id='L662' name='L662'></a> 662                         preempt_enable();
+<a id='L663' name='L663'></a> 663                         jlm2-&gt;entries = <a href='../S/220.html#L345' title='Defined at 345 in jump_label.c.'>static_key_entries</a>(key);
+<a id='L664' name='L664'></a> 664                         jlm2-&gt;next = NULL;
+<a id='L665' name='L665'></a> 665                         <a href='../S/220.html#L536' title='Defined at 536 in jump_label.c.'>static_key_set_mod</a>(key, jlm2);
+<a id='L666' name='L666'></a> 666                         <a href='../S/220.html#L366' title='Defined at 366 in jump_label.c.'>static_key_set_linked</a>(key);
+<a id='L667' name='L667'></a> 667                 <em class='brace'>}</em>
+<a id='L668' name='L668'></a> 668                 jlm-&gt;mod = mod;
+<a id='L669' name='L669'></a> 669                 jlm-&gt;entries = iter;
+<a id='L670' name='L670'></a> 670                 jlm-&gt;next = <a href='../D/13367.html' title='Multiple defined in 2 places.'>static_key_mod</a>(key);
+<a id='L671' name='L671'></a> 671                 <a href='../S/220.html#L536' title='Defined at 536 in jump_label.c.'>static_key_set_mod</a>(key, jlm);
+<a id='L672' name='L672'></a> 672                 <a href='../S/220.html#L366' title='Defined at 366 in jump_label.c.'>static_key_set_linked</a>(key);
+<a id='L673' name='L673'></a> 673 
+<a id='L674' name='L674'></a> 674                 <em class='comment'>/* Only update if we've changed from our initial state */</em>
+<a id='L675' name='L675'></a> 675                 <strong class='reserved'>if</strong> (<a href='../S/220.html#L391' title='Defined at 391 in jump_label.c.'>jump_label_type</a>(iter) != <a href='../S/220.html#L508' title='Defined at 508 in jump_label.c.'>jump_label_init_type</a>(iter))
+<a id='L676' name='L676'></a> 676                         <a href='../D/2319.html' title='Multiple defined in 2 places.'>__jump_label_update</a>(key, iter, iter_stop, true);
+<a id='L677' name='L677'></a> 677         <em class='brace'>}</em>
+<a id='L678' name='L678'></a> 678 
+<a id='L679' name='L679'></a> 679         <strong class='reserved'>return</strong> 0;
+<a id='L680' name='L680'></a> 680 <em class='brace'>}</em>
+<a id='L681' name='L681'></a> 681 
+<a id='L682' name='L682'></a> 682 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/8181.html' title='Multiple referred from 2 places.'>jump_label_del_module</a>(<strong class='reserved'>struct</strong> module *mod)
+<a id='L683' name='L683'></a> 683 <em class='brace'>{</em>
+<a id='L684' name='L684'></a> 684         <strong class='reserved'>struct</strong> jump_entry *iter_start = mod-&gt;jump_entries;
+<a id='L685' name='L685'></a> 685         <strong class='reserved'>struct</strong> jump_entry *iter_stop = iter_start + mod-&gt;num_jump_entries;
+<a id='L686' name='L686'></a> 686         <strong class='reserved'>struct</strong> jump_entry *iter;
+<a id='L687' name='L687'></a> 687         <strong class='reserved'>struct</strong> static_key *key = NULL;
+<a id='L688' name='L688'></a> 688         <strong class='reserved'>struct</strong> <a href='../D/13367.html' title='Multiple defined in 2 places.'>static_key_mod</a> *jlm, **prev;
+<a id='L689' name='L689'></a> 689 
+<a id='L690' name='L690'></a> 690         <strong class='reserved'>for</strong> (iter = iter_start; iter &lt; iter_stop; iter++) <em class='brace'>{</em>
+<a id='L691' name='L691'></a> 691                 <strong class='reserved'>if</strong> (jump_entry_key(iter) == key)
+<a id='L692' name='L692'></a> 692                         <strong class='reserved'>continue</strong>;
+<a id='L693' name='L693'></a> 693 
+<a id='L694' name='L694'></a> 694                 key = jump_entry_key(iter);
+<a id='L695' name='L695'></a> 695 
+<a id='L696' name='L696'></a> 696                 <strong class='reserved'>if</strong> (within_module((<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)key, mod))
+<a id='L697' name='L697'></a> 697                         <strong class='reserved'>continue</strong>;
+<a id='L698' name='L698'></a> 698 
+<a id='L699' name='L699'></a> 699                 <em class='comment'>/* No memory during module load */</em>
+<a id='L700' name='L700'></a> 700                 <strong class='reserved'>if</strong> (WARN_ON(!<a href='../S/220.html#L356' title='Defined at 356 in jump_label.c.'>static_key_linked</a>(key)))
+<a id='L701' name='L701'></a> 701                         <strong class='reserved'>continue</strong>;
+<a id='L702' name='L702'></a> 702 
+<a id='L703' name='L703'></a> 703                 prev = &amp;key-&gt;next;
+<a id='L704' name='L704'></a> 704                 jlm = <a href='../D/13367.html' title='Multiple defined in 2 places.'>static_key_mod</a>(key);
+<a id='L705' name='L705'></a> 705 
+<a id='L706' name='L706'></a> 706                 <strong class='reserved'>while</strong> (jlm &amp;&amp; jlm-&gt;mod != mod) <em class='brace'>{</em>
+<a id='L707' name='L707'></a> 707                         prev = &amp;jlm-&gt;next;
+<a id='L708' name='L708'></a> 708                         jlm = jlm-&gt;next;
+<a id='L709' name='L709'></a> 709                 <em class='brace'>}</em>
+<a id='L710' name='L710'></a> 710 
+<a id='L711' name='L711'></a> 711                 <em class='comment'>/* No memory during module load */</em>
+<a id='L712' name='L712'></a> 712                 <strong class='reserved'>if</strong> (WARN_ON(!jlm))
+<a id='L713' name='L713'></a> 713                         <strong class='reserved'>continue</strong>;
+<a id='L714' name='L714'></a> 714 
+<a id='L715' name='L715'></a> 715                 <strong class='reserved'>if</strong> (prev == &amp;key-&gt;next)
+<a id='L716' name='L716'></a> 716                         <a href='../S/220.html#L536' title='Defined at 536 in jump_label.c.'>static_key_set_mod</a>(key, jlm-&gt;next);
+<a id='L717' name='L717'></a> 717                 <strong class='reserved'>else</strong>
+<a id='L718' name='L718'></a> 718                         *prev = jlm-&gt;next;
+<a id='L719' name='L719'></a> 719 
+<a id='L720' name='L720'></a> 720                 kfree(jlm);
+<a id='L721' name='L721'></a> 721 
+<a id='L722' name='L722'></a> 722                 jlm = <a href='../D/13367.html' title='Multiple defined in 2 places.'>static_key_mod</a>(key);
+<a id='L723' name='L723'></a> 723                 <em class='comment'>/* if only one etry is left, fold it back into the static_key */</em>
+<a id='L724' name='L724'></a> 724                 <strong class='reserved'>if</strong> (jlm-&gt;next == NULL) <em class='brace'>{</em>
+<a id='L725' name='L725'></a> 725                         <a href='../S/220.html#L380' title='Defined at 380 in jump_label.c.'>static_key_set_entries</a>(key, jlm-&gt;entries);
+<a id='L726' name='L726'></a> 726                         <a href='../S/220.html#L361' title='Defined at 361 in jump_label.c.'>static_key_clear_linked</a>(key);
+<a id='L727' name='L727'></a> 727                         kfree(jlm);
+<a id='L728' name='L728'></a> 728                 <em class='brace'>}</em>
+<a id='L729' name='L729'></a> 729         <em class='brace'>}</em>
+<a id='L730' name='L730'></a> 730 <em class='brace'>}</em>
+<a id='L731' name='L731'></a> 731 
+<a id='L732' name='L732'></a> 732 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong>
+<a id='L733' name='L733'></a> 733 <a href='../S/220.html#L762' title='Referred from 762 in jump_label.c.'>jump_label_module_notify</a>(<strong class='reserved'>struct</strong> notifier_block *self, <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> val,
+<a id='L734' name='L734'></a> 734                          <strong class='reserved'>void</strong> *data)
+<a id='L735' name='L735'></a> 735 <em class='brace'>{</em>
+<a id='L736' name='L736'></a> 736         <strong class='reserved'>struct</strong> module *mod = data;
+<a id='L737' name='L737'></a> 737         <strong class='reserved'>int</strong> ret = 0;
+<a id='L738' name='L738'></a> 738 
+<a id='L739' name='L739'></a> 739         <a href='../S/327.html#L299' title='Defined at 299 in cpu.c.'>cpus_read_lock</a>();
+<a id='L740' name='L740'></a> 740         <a href='../S/220.html#L25' title='Defined at 25 in jump_label.c.'>jump_label_lock</a>();
+<a id='L741' name='L741'></a> 741 
+<a id='L742' name='L742'></a> 742         <strong class='reserved'>switch</strong> (val) <em class='brace'>{</em>
+<a id='L743' name='L743'></a> 743         <strong class='reserved'>case</strong> MODULE_STATE_COMING:
+<a id='L744' name='L744'></a> 744                 ret = <a href='../S/220.html#L621' title='Defined at 621 in jump_label.c.'>jump_label_add_module</a>(mod);
+<a id='L745' name='L745'></a> 745                 <strong class='reserved'>if</strong> (ret) <em class='brace'>{</em>
+<a id='L746' name='L746'></a> 746                         WARN(1, "Failed to allocate memory: jump_label may not work properly.\n");
+<a id='L747' name='L747'></a> 747                         <a href='../S/220.html#L682' title='Defined at 682 in jump_label.c.'>jump_label_del_module</a>(mod);
+<a id='L748' name='L748'></a> 748                 <em class='brace'>}</em>
+<a id='L749' name='L749'></a> 749                 <strong class='reserved'>break</strong>;
+<a id='L750' name='L750'></a> 750         <strong class='reserved'>case</strong> MODULE_STATE_GOING:
+<a id='L751' name='L751'></a> 751                 <a href='../S/220.html#L682' title='Defined at 682 in jump_label.c.'>jump_label_del_module</a>(mod);
+<a id='L752' name='L752'></a> 752                 <strong class='reserved'>break</strong>;
+<a id='L753' name='L753'></a> 753         <em class='brace'>}</em>
+<a id='L754' name='L754'></a> 754 
+<a id='L755' name='L755'></a> 755         <a href='../S/220.html#L30' title='Defined at 30 in jump_label.c.'>jump_label_unlock</a>();
+<a id='L756' name='L756'></a> 756         <a href='../S/327.html#L311' title='Defined at 311 in cpu.c.'>cpus_read_unlock</a>();
+<a id='L757' name='L757'></a> 757 
+<a id='L758' name='L758'></a> 758         <strong class='reserved'>return</strong> notifier_from_errno(ret);
+<a id='L759' name='L759'></a> 759 <em class='brace'>}</em>
+<a id='L760' name='L760'></a> 760 
+<a id='L761' name='L761'></a> 761 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> notifier_block jump_label_module_nb = <em class='brace'>{</em>
+<a id='L762' name='L762'></a> 762         .notifier_call = <a href='../S/220.html#L733' title='Defined at 733 in jump_label.c.'>jump_label_module_notify</a>,
+<a id='L763' name='L763'></a> 763         .priority = 1, <em class='comment'>/* higher than tracepoints */</em>
+<a id='L764' name='L764'></a> 764 <em class='brace'>}</em>;
+<a id='L765' name='L765'></a> 765 
+<a id='L766' name='L766'></a> 766 <strong class='reserved'>static</strong> __init <strong class='reserved'>int</strong> <a href='../S/220.html#L770' title='Referred from 770 in jump_label.c.'>jump_label_init_module</a>(<strong class='reserved'>void</strong>)
+<a id='L767' name='L767'></a> 767 <em class='brace'>{</em>
+<a id='L768' name='L768'></a> 768         <strong class='reserved'>return</strong> <a href='../S/476.html#L305' title='Defined at 305 in module.c.'>register_module_notifier</a>(&amp;jump_label_module_nb);
+<a id='L769' name='L769'></a> 769 <em class='brace'>}</em>
+<a id='L770' name='L770'></a> 770 early_initcall(<a href='../S/220.html#L766' title='Defined at 766 in jump_label.c.'>jump_label_init_module</a>);
+<a id='L771' name='L771'></a> 771 
+<a id='L772' name='L772'></a> 772 <em class='sharp'>#endif</em> <em class='comment'>/* CONFIG_MODULES */</em>
+<a id='L773' name='L773'></a> 773 
+<a id='L774' name='L774'></a> 774 <em class='comment'>/***</em>
+<a id='L775' name='L775'></a> 775 <em class='comment'> * jump_label_text_reserved - check if addr range is reserved</em>
+<a id='L776' name='L776'></a> 776 <em class='comment'> * @start: start text addr</em>
+<a id='L777' name='L777'></a> 777 <em class='comment'> * @end: end text addr</em>
+<a id='L778' name='L778'></a> 778 <em class='comment'> *</em>
+<a id='L779' name='L779'></a> 779 <em class='comment'> * checks if the text addr located between @start and @end</em>
+<a id='L780' name='L780'></a> 780 <em class='comment'> * overlaps with any of the jump label patch addresses. Code</em>
+<a id='L781' name='L781'></a> 781 <em class='comment'> * that wants to modify kernel text should first verify that</em>
+<a id='L782' name='L782'></a> 782 <em class='comment'> * it does not overlap with any of the jump label addresses.</em>
+<a id='L783' name='L783'></a> 783 <em class='comment'> * Caller must hold jump_label_mutex.</em>
+<a id='L784' name='L784'></a> 784 <em class='comment'> *</em>
+<a id='L785' name='L785'></a> 785 <em class='comment'> * returns 1 if there is an overlap, 0 otherwise</em>
+<a id='L786' name='L786'></a> 786 <em class='comment'> */</em>
+<a id='L787' name='L787'></a> 787 <strong class='reserved'>int</strong> <a href='../S/182.html#L1645' title='Referred from 1645 in kprobes.c.'>jump_label_text_reserved</a>(<strong class='reserved'>void</strong> *start, <strong class='reserved'>void</strong> *end)
+<a id='L788' name='L788'></a> 788 <em class='brace'>{</em>
+<a id='L789' name='L789'></a> 789         <strong class='reserved'>int</strong> ret = <a href='../S/220.html#L318' title='Defined at 318 in jump_label.c.'>__jump_label_text_reserved</a>(__start___jump_table,
+<a id='L790' name='L790'></a> 790                         __stop___jump_table, start, end);
+<a id='L791' name='L791'></a> 791 
+<a id='L792' name='L792'></a> 792         <strong class='reserved'>if</strong> (ret)
+<a id='L793' name='L793'></a> 793                 <strong class='reserved'>return</strong> ret;
+<a id='L794' name='L794'></a> 794 
+<a id='L795' name='L795'></a> 795 <em class='sharp'>#ifdef</em> CONFIG_MODULES
+<a id='L796' name='L796'></a> 796         ret = <a href='../S/220.html#L547' title='Defined at 547 in jump_label.c.'>__jump_label_mod_text_reserved</a>(start, end);
+<a id='L797' name='L797'></a> 797 <em class='sharp'>#endif</em>
+<a id='L798' name='L798'></a> 798         <strong class='reserved'>return</strong> ret;
+<a id='L799' name='L799'></a> 799 <em class='brace'>}</em>
+<a id='L800' name='L800'></a> 800 
+<a id='L801' name='L801'></a> 801 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/8193.html' title='Multiple referred from 5 places.'>jump_label_update</a>(<strong class='reserved'>struct</strong> static_key *key)
+<a id='L802' name='L802'></a> 802 <em class='brace'>{</em>
+<a id='L803' name='L803'></a> 803         <strong class='reserved'>struct</strong> jump_entry *stop = __stop___jump_table;
+<a id='L804' name='L804'></a> 804         <strong class='reserved'>struct</strong> jump_entry *entry;
+<a id='L805' name='L805'></a> 805 <em class='sharp'>#ifdef</em> CONFIG_MODULES
+<a id='L806' name='L806'></a> 806         <strong class='reserved'>struct</strong> module *mod;
+<a id='L807' name='L807'></a> 807 
+<a id='L808' name='L808'></a> 808         <strong class='reserved'>if</strong> (<a href='../S/220.html#L356' title='Defined at 356 in jump_label.c.'>static_key_linked</a>(key)) <em class='brace'>{</em>
+<a id='L809' name='L809'></a> 809                 <a href='../S/220.html#L571' title='Defined at 571 in jump_label.c.'>__jump_label_mod_update</a>(key);
+<a id='L810' name='L810'></a> 810                 <strong class='reserved'>return</strong>;
+<a id='L811' name='L811'></a> 811         <em class='brace'>}</em>
+<a id='L812' name='L812'></a> 812 
+<a id='L813' name='L813'></a> 813         preempt_disable();
+<a id='L814' name='L814'></a> 814         mod = <a href='../S/476.html#L4715' title='Defined at 4715 in module.c.'>__module_address</a>((<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)key);
+<a id='L815' name='L815'></a> 815         <strong class='reserved'>if</strong> (mod)
+<a id='L816' name='L816'></a> 816                 stop = mod-&gt;jump_entries + mod-&gt;num_jump_entries;
+<a id='L817' name='L817'></a> 817         preempt_enable();
+<a id='L818' name='L818'></a> 818 <em class='sharp'>#endif</em>
+<a id='L819' name='L819'></a> 819         entry = <a href='../S/220.html#L345' title='Defined at 345 in jump_label.c.'>static_key_entries</a>(key);
+<a id='L820' name='L820'></a> 820         <em class='comment'>/* if there are no users, entry can be NULL */</em>
+<a id='L821' name='L821'></a> 821         <strong class='reserved'>if</strong> (entry)
+<a id='L822' name='L822'></a> 822                 <a href='../D/2319.html' title='Multiple defined in 2 places.'>__jump_label_update</a>(key, entry, stop,
+<a id='L823' name='L823'></a> 823                                     system_state &lt; SYSTEM_RUNNING);
+<a id='L824' name='L824'></a> 824 <em class='brace'>}</em>
+<a id='L825' name='L825'></a> 825 
+<a id='L826' name='L826'></a> 826 <em class='sharp'>#ifdef</em> CONFIG_STATIC_KEYS_SELFTEST
+<a id='L827' name='L827'></a> 827 <strong class='reserved'>static</strong> DEFINE_STATIC_KEY_TRUE(sk_true);
+<a id='L828' name='L828'></a> 828 <strong class='reserved'>static</strong> DEFINE_STATIC_KEY_FALSE(sk_false);
+<a id='L829' name='L829'></a> 829 
+<a id='L830' name='L830'></a> 830 <strong class='reserved'>static</strong> __init <strong class='reserved'>int</strong> <a href='../S/220.html#L860' title='Referred from 860 in jump_label.c.'>jump_label_test</a>(<strong class='reserved'>void</strong>)
+<a id='L831' name='L831'></a> 831 <em class='brace'>{</em>
+<a id='L832' name='L832'></a> 832         <strong class='reserved'>int</strong> i;
+<a id='L833' name='L833'></a> 833 
+<a id='L834' name='L834'></a> 834         <strong class='reserved'>for</strong> (i = 0; i &lt; 2; i++) <em class='brace'>{</em>
+<a id='L835' name='L835'></a> 835                 WARN_ON(static_key_enabled(&amp;sk_true.key) != true);
+<a id='L836' name='L836'></a> 836                 WARN_ON(static_key_enabled(&amp;sk_false.key) != false);
+<a id='L837' name='L837'></a> 837 
+<a id='L838' name='L838'></a> 838                 WARN_ON(!static_branch_likely(&amp;sk_true));
+<a id='L839' name='L839'></a> 839                 WARN_ON(!static_branch_unlikely(&amp;sk_true));
+<a id='L840' name='L840'></a> 840                 WARN_ON(static_branch_likely(&amp;sk_false));
+<a id='L841' name='L841'></a> 841                 WARN_ON(static_branch_unlikely(&amp;sk_false));
+<a id='L842' name='L842'></a> 842 
+<a id='L843' name='L843'></a> 843                 static_branch_disable(&amp;sk_true);
+<a id='L844' name='L844'></a> 844                 static_branch_enable(&amp;sk_false);
+<a id='L845' name='L845'></a> 845 
+<a id='L846' name='L846'></a> 846                 WARN_ON(static_key_enabled(&amp;sk_true.key) == true);
+<a id='L847' name='L847'></a> 847                 WARN_ON(static_key_enabled(&amp;sk_false.key) == false);
+<a id='L848' name='L848'></a> 848 
+<a id='L849' name='L849'></a> 849                 WARN_ON(static_branch_likely(&amp;sk_true));
+<a id='L850' name='L850'></a> 850                 WARN_ON(static_branch_unlikely(&amp;sk_true));
+<a id='L851' name='L851'></a> 851                 WARN_ON(!static_branch_likely(&amp;sk_false));
+<a id='L852' name='L852'></a> 852                 WARN_ON(!static_branch_unlikely(&amp;sk_false));
+<a id='L853' name='L853'></a> 853 
+<a id='L854' name='L854'></a> 854                 static_branch_enable(&amp;sk_true);
+<a id='L855' name='L855'></a> 855                 static_branch_disable(&amp;sk_false);
+<a id='L856' name='L856'></a> 856         <em class='brace'>}</em>
+<a id='L857' name='L857'></a> 857 
+<a id='L858' name='L858'></a> 858         <strong class='reserved'>return</strong> 0;
+<a id='L859' name='L859'></a> 859 <em class='brace'>}</em>
+<a id='L860' name='L860'></a> 860 early_initcall(<a href='../S/220.html#L830' title='Defined at 830 in jump_label.c.'>jump_label_test</a>);
+<a id='L861' name='L861'></a> 861 <em class='sharp'>#endif</em> <em class='comment'>/* STATIC_KEYS_SELFTEST */</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L25'>[^]</a><a href='#L830'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

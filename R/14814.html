@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>xol_area</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/334.html#L1442'>xol_area</a>         1442 events/uprobes.c static int xol_add_vma(struct mm_struct *mm, struct xol_area *area)</span>
+<span class='curline'><a href='../S/334.html#L1450'>xol_area</a>         1450 events/uprobes.c 	if (mm-&gt;uprobes_state.xol_area) {</span>
+<span class='curline'><a href='../S/334.html#L1475'>xol_area</a>         1475 events/uprobes.c 	smp_store_release(&amp;mm-&gt;uprobes_state.xol_area, area); /* ^^^ */</span>
+<span class='curline'><a href='../S/334.html#L1482'>xol_area</a>         1482 events/uprobes.c static struct xol_area *__create_xol_area(unsigned long vaddr)</span>
+<span class='curline'><a href='../S/334.html#L1486'>xol_area</a>         1486 events/uprobes.c 	struct xol_area *area;</span>
+<span class='curline'><a href='../S/334.html#L1530'>xol_area</a>         1530 events/uprobes.c static struct xol_area *get_xol_area(void)</span>
+<span class='curline'><a href='../S/334.html#L1533'>xol_area</a>         1533 events/uprobes.c 	struct xol_area *area;</span>
+<span class='curline'><a href='../S/334.html#L1535'>xol_area</a>         1535 events/uprobes.c 	if (!mm-&gt;uprobes_state.xol_area)</span>
+<span class='curline'><a href='../S/334.html#L1539'>xol_area</a>         1539 events/uprobes.c 	area = READ_ONCE(mm-&gt;uprobes_state.xol_area); /* ^^^ */</span>
+<span class='curline'><a href='../S/334.html#L1548'>xol_area</a>         1548 events/uprobes.c 	struct xol_area *area = mm-&gt;uprobes_state.xol_area;</span>
+<span class='curline'><a href='../S/334.html#L1584'>xol_area</a>         1584 events/uprobes.c static unsigned long xol_take_insn_slot(struct xol_area *area)</span>
+<span class='curline'><a href='../S/334.html#L1613'>xol_area</a>         1613 events/uprobes.c 	struct xol_area *area;</span>
+<span class='curline'><a href='../S/334.html#L1637'>xol_area</a>         1637 events/uprobes.c 	struct xol_area *area;</span>
+<span class='curline'><a href='../S/334.html#L1641'>xol_area</a>         1641 events/uprobes.c 	if (!tsk-&gt;mm || !tsk-&gt;mm-&gt;uprobes_state.xol_area || !tsk-&gt;utask)</span>
+<span class='curline'><a href='../S/334.html#L1648'>xol_area</a>         1648 events/uprobes.c 	area = tsk-&gt;mm-&gt;uprobes_state.xol_area;</span>
+<span class='curline'><a href='../S/334.html#L1803'>xol_area</a>         1803 events/uprobes.c 	struct xol_area *area;</span>
+<span class='curline'><a href='../S/334.html#L1817'>xol_area</a>         1817 events/uprobes.c 	area = mm-&gt;uprobes_state.xol_area;</span>
+<span class='curline'><a href='../S/334.html#L1837'>xol_area</a>         1837 events/uprobes.c 	struct xol_area *area;</span>
+<span class='curline'><a href='../S/334.html#L1841'>xol_area</a>         1841 events/uprobes.c 	area = READ_ONCE(current-&gt;mm-&gt;uprobes_state.xol_area); /* ^^^ */</span>
+<span class='curline'><a href='../S/48.html#L1038'>xol_area</a>         1038 fork.c         	mm-&gt;uprobes_state.xol_area = NULL;</span>
+</pre>
+</body>
+</html>

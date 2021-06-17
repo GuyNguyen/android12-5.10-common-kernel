@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>bpf/preload/iterators/iterators.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/494.html'>bpf</a>/<a href='../files/495.html'>preload</a>/<a href='../files/496.html'>iterators</a>/iterators.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L19'>[^]</a><a href='#L38'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L19' title='Defined at 19.'>send_link_to_kernel</a></li>
+<li><a href='#L38' title='Defined at 38.'>main</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/* Copyright (c) 2020 Facebook */</em>
+<a id='L3' name='L3'></a>   3 <em class='sharp'>#include</em> &lt;argp.h&gt;
+<a id='L4' name='L4'></a>   4 <em class='sharp'>#include</em> &lt;stdio.h&gt;
+<a id='L5' name='L5'></a>   5 <em class='sharp'>#include</em> &lt;stdlib.h&gt;
+<a id='L6' name='L6'></a>   6 <em class='sharp'>#include</em> &lt;string.h&gt;
+<a id='L7' name='L7'></a>   7 <em class='sharp'>#include</em> &lt;unistd.h&gt;
+<a id='L8' name='L8'></a>   8 <em class='sharp'>#include</em> &lt;fcntl.h&gt;
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> &lt;sys/resource.h&gt;
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;bpf/libbpf.h&gt;
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;bpf/bpf.h&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;sys/mount.h&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> "<a href='389.html'>iterators.skel.h</a>"
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> "<a href='390.html'>bpf_preload_common.h</a>"
+<a id='L15' name='L15'></a>  15 
+<a id='L16' name='L16'></a>  16 <strong class='reserved'>int</strong> to_kernel = -1;
+<a id='L17' name='L17'></a>  17 <strong class='reserved'>int</strong> from_kernel = 0;
+<a id='L18' name='L18'></a>  18 
+<a id='L19' name='L19'></a>  19 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../R/12216.html' title='Multiple referred from 2 places.'>send_link_to_kernel</a>(<strong class='reserved'>struct</strong> bpf_link *link, <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *link_name)
+<a id='L20' name='L20'></a>  20 <em class='brace'>{</em>
+<a id='L21' name='L21'></a>  21         <strong class='reserved'>struct</strong> <a href='../S/390.html#L8' title='Defined at 8 in bpf/preload/iterators/bpf_preload_common.h.'>bpf_preload_info</a> obj = <em class='brace'>{</em><em class='brace'>}</em>;
+<a id='L22' name='L22'></a>  22         <strong class='reserved'>struct</strong> bpf_link_info info = <em class='brace'>{</em><em class='brace'>}</em>;
+<a id='L23' name='L23'></a>  23         __u32 info_len = <strong class='reserved'>sizeof</strong>(info);
+<a id='L24' name='L24'></a>  24         <strong class='reserved'>int</strong> err;
+<a id='L25' name='L25'></a>  25 
+<a id='L26' name='L26'></a>  26         err = <a href='../S/418.html#L3770' title='Defined at 3770 in bpf/syscall.c.'>bpf_obj_get_info_by_fd</a>(bpf_link__fd(link), &amp;info, &amp;info_len);
+<a id='L27' name='L27'></a>  27         <strong class='reserved'>if</strong> (err)
+<a id='L28' name='L28'></a>  28                 <strong class='reserved'>return</strong> err;
+<a id='L29' name='L29'></a>  29         obj.link_id = info.id;
+<a id='L30' name='L30'></a>  30         <strong class='reserved'>if</strong> (strlen(link_name) &gt;= <strong class='reserved'>sizeof</strong>(obj.link_name))
+<a id='L31' name='L31'></a>  31                 <strong class='reserved'>return</strong> -E2BIG;
+<a id='L32' name='L32'></a>  32         strcpy(obj.link_name, link_name);
+<a id='L33' name='L33'></a>  33         <strong class='reserved'>if</strong> (write(to_kernel, &amp;obj, <strong class='reserved'>sizeof</strong>(obj)) != <strong class='reserved'>sizeof</strong>(obj))
+<a id='L34' name='L34'></a>  34                 <strong class='reserved'>return</strong> -EPIPE;
+<a id='L35' name='L35'></a>  35         <strong class='reserved'>return</strong> 0;
+<a id='L36' name='L36'></a>  36 <em class='brace'>}</em>
+<a id='L37' name='L37'></a>  37 
+<a id='L38' name='L38'></a>  38 <strong class='reserved'>int</strong> main(<strong class='reserved'>int</strong> argc, <strong class='reserved'>char</strong> **argv)
+<a id='L39' name='L39'></a>  39 <em class='brace'>{</em>
+<a id='L40' name='L40'></a>  40         <strong class='reserved'>struct</strong> rlimit rlim = <em class='brace'>{</em> RLIM_INFINITY, RLIM_INFINITY <em class='brace'>}</em>;
+<a id='L41' name='L41'></a>  41         <strong class='reserved'>struct</strong> <a href='../S/389.html#L10' title='Defined at 10 in bpf/preload/iterators/iterators.skel.h.'>iterators_bpf</a> *skel;
+<a id='L42' name='L42'></a>  42         <strong class='reserved'>int</strong> err, magic;
+<a id='L43' name='L43'></a>  43         <strong class='reserved'>int</strong> debug_fd;
+<a id='L44' name='L44'></a>  44 
+<a id='L45' name='L45'></a>  45         debug_fd = open("/dev/console", O_WRONLY | O_NOCTTY | O_CLOEXEC);
+<a id='L46' name='L46'></a>  46         <strong class='reserved'>if</strong> (debug_fd &lt; 0)
+<a id='L47' name='L47'></a>  47                 <strong class='reserved'>return</strong> 1;
+<a id='L48' name='L48'></a>  48         to_kernel = dup(1);
+<a id='L49' name='L49'></a>  49         close(1);
+<a id='L50' name='L50'></a>  50         dup(debug_fd);
+<a id='L51' name='L51'></a>  51         <em class='comment'>/* now stdin and stderr point to /dev/console */</em>
+<a id='L52' name='L52'></a>  52 
+<a id='L53' name='L53'></a>  53         read(from_kernel, &amp;magic, <strong class='reserved'>sizeof</strong>(magic));
+<a id='L54' name='L54'></a>  54         <strong class='reserved'>if</strong> (magic != <a href='../S/390.html#L5' title='Defined at 5 in bpf/preload/iterators/bpf_preload_common.h.'>BPF_PRELOAD_START</a>) <em class='brace'>{</em>
+<a id='L55' name='L55'></a>  55                 printf("bad start magic %d\n", magic);
+<a id='L56' name='L56'></a>  56                 <strong class='reserved'>return</strong> 1;
+<a id='L57' name='L57'></a>  57         <em class='brace'>}</em>
+<a id='L58' name='L58'></a>  58         setrlimit(RLIMIT_MEMLOCK, &amp;rlim);
+<a id='L59' name='L59'></a>  59         <em class='comment'>/* libbpf opens BPF object and loads it into the kernel */</em>
+<a id='L60' name='L60'></a>  60         skel = <a href='../S/389.html#L77' title='Defined at 77 in bpf/preload/iterators/iterators.skel.h.'>iterators_bpf__open_and_load</a>();
+<a id='L61' name='L61'></a>  61         <strong class='reserved'>if</strong> (!skel) <em class='brace'>{</em>
+<a id='L62' name='L62'></a>  62                 <em class='comment'>/* iterators.skel.h is little endian.</em>
+<a id='L63' name='L63'></a>  63 <em class='comment'>                 * libbpf doesn't support automatic little-&gt;big conversion</em>
+<a id='L64' name='L64'></a>  64 <em class='comment'>                 * of BPF bytecode yet.</em>
+<a id='L65' name='L65'></a>  65 <em class='comment'>                 * The program load will fail in such case.</em>
+<a id='L66' name='L66'></a>  66 <em class='comment'>                 */</em>
+<a id='L67' name='L67'></a>  67                 printf("Failed load could be due to wrong endianness\n");
+<a id='L68' name='L68'></a>  68                 <strong class='reserved'>return</strong> 1;
+<a id='L69' name='L69'></a>  69         <em class='brace'>}</em>
+<a id='L70' name='L70'></a>  70         err = <a href='../S/389.html#L92' title='Defined at 92 in bpf/preload/iterators/iterators.skel.h.'>iterators_bpf__attach</a>(skel);
+<a id='L71' name='L71'></a>  71         <strong class='reserved'>if</strong> (err)
+<a id='L72' name='L72'></a>  72                 <strong class='reserved'>goto</strong> cleanup;
+<a id='L73' name='L73'></a>  73 
+<a id='L74' name='L74'></a>  74         <em class='comment'>/* send two bpf_link IDs with names to the kernel */</em>
+<a id='L75' name='L75'></a>  75         err = <a href='../S/391.html#L19' title='Defined at 19 in bpf/preload/iterators/iterators.c.'>send_link_to_kernel</a>(skel-&gt;links.dump_bpf_map, "maps.debug");
+<a id='L76' name='L76'></a>  76         <strong class='reserved'>if</strong> (err)
+<a id='L77' name='L77'></a>  77                 <strong class='reserved'>goto</strong> cleanup;
+<a id='L78' name='L78'></a>  78         err = <a href='../S/391.html#L19' title='Defined at 19 in bpf/preload/iterators/iterators.c.'>send_link_to_kernel</a>(skel-&gt;links.dump_bpf_prog, "progs.debug");
+<a id='L79' name='L79'></a>  79         <strong class='reserved'>if</strong> (err)
+<a id='L80' name='L80'></a>  80                 <strong class='reserved'>goto</strong> cleanup;
+<a id='L81' name='L81'></a>  81 
+<a id='L82' name='L82'></a>  82         <em class='comment'>/* The kernel will proceed with pinnging the links in bpffs.</em>
+<a id='L83' name='L83'></a>  83 <em class='comment'>         * UMD will wait on read from pipe.</em>
+<a id='L84' name='L84'></a>  84 <em class='comment'>         */</em>
+<a id='L85' name='L85'></a>  85         read(from_kernel, &amp;magic, <strong class='reserved'>sizeof</strong>(magic));
+<a id='L86' name='L86'></a>  86         <strong class='reserved'>if</strong> (magic != <a href='../S/390.html#L6' title='Defined at 6 in bpf/preload/iterators/bpf_preload_common.h.'>BPF_PRELOAD_END</a>) <em class='brace'>{</em>
+<a id='L87' name='L87'></a>  87                 printf("bad final magic %d\n", magic);
+<a id='L88' name='L88'></a>  88                 err = -EINVAL;
+<a id='L89' name='L89'></a>  89         <em class='brace'>}</em>
+<a id='L90' name='L90'></a>  90 cleanup:
+<a id='L91' name='L91'></a>  91         <a href='../S/389.html#L33' title='Defined at 33 in bpf/preload/iterators/iterators.skel.h.'>iterators_bpf__destroy</a>(skel);
+<a id='L92' name='L92'></a>  92 
+<a id='L93' name='L93'></a>  93         <strong class='reserved'>return</strong> err != 0;
+<a id='L94' name='L94'></a>  94 <em class='brace'>}</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L19'>[^]</a><a href='#L38'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

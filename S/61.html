@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>debug/debug_core.h</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/498.html'>debug</a>/debug_core.h</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L81'>[^]</a>[v][top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'><a href='../J/81.html' title='Multiple included from 4 places.'>INCLUDED FROM</a></h2>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L81' title='Defined at 81.'>kdb_stub</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>/*</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'> * Created by: Jason Wessel &lt;jason.wessel@windriver.com&gt;</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> *</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> * Copyright (c) 2009 Wind River Systems, Inc.  All Rights Reserved.</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> *</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> * This file is licensed under the terms of the GNU General Public</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> * License version 2. This program is licensed "as is" without any</em>
+<a id='L8' name='L8'></a>   8 <em class='comment'> * warranty of any kind, whether express or implied.</em>
+<a id='L9' name='L9'></a>   9 <em class='comment'> */</em>
+<a id='L10' name='L10'></a>  10 
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#ifndef</em> <a href='../S/61.html#L12' title='Defined at 12 in debug/debug_core.h.'>_DEBUG_CORE_H_</a>
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#define</em> <a href='../S/61.html#L11' title='Referred from 11 in debug/debug_core.h.'>_DEBUG_CORE_H_</a>
+<a id='L13' name='L13'></a>  13 <em class='comment'>/*</em>
+<a id='L14' name='L14'></a>  14 <em class='comment'> * These are the private implementation headers between the kernel</em>
+<a id='L15' name='L15'></a>  15 <em class='comment'> * debugger core and the debugger front end code.</em>
+<a id='L16' name='L16'></a>  16 <em class='comment'> */</em>
+<a id='L17' name='L17'></a>  17 
+<a id='L18' name='L18'></a>  18 <em class='comment'>/* kernel debug core data structures */</em>
+<a id='L19' name='L19'></a>  19 <strong class='reserved'>struct</strong> <a href='../R/8492.html' title='Multiple referred from 37 places.'>kgdb_state</a> <em class='brace'>{</em>
+<a id='L20' name='L20'></a>  20         <strong class='reserved'>int</strong>                     ex_vector;
+<a id='L21' name='L21'></a>  21         <strong class='reserved'>int</strong>                     signo;
+<a id='L22' name='L22'></a>  22         <strong class='reserved'>int</strong>                     err_code;
+<a id='L23' name='L23'></a>  23         <strong class='reserved'>int</strong>                     cpu;
+<a id='L24' name='L24'></a>  24         <strong class='reserved'>int</strong>                     pass_exception;
+<a id='L25' name='L25'></a>  25         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>           thr_query;
+<a id='L26' name='L26'></a>  26         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>           threadid;
+<a id='L27' name='L27'></a>  27         <strong class='reserved'>long</strong>                    kgdb_usethreadid;
+<a id='L28' name='L28'></a>  28         <strong class='reserved'>struct</strong> pt_regs          *linux_regs;
+<a id='L29' name='L29'></a>  29         atomic_t                *send_ready;
+<a id='L30' name='L30'></a>  30 <em class='brace'>}</em>;
+<a id='L31' name='L31'></a>  31 
+<a id='L32' name='L32'></a>  32 <em class='comment'>/* Exception state values */</em>
+<a id='L33' name='L33'></a>  33 <em class='sharp'>#define</em> <a href='../R/223.html' title='Multiple referred from 6 places.'>DCPU_WANT_MASTER</a> 0x1 <em class='comment'>/* Waiting to become a master kgdb cpu */</em>
+<a id='L34' name='L34'></a>  34 <em class='sharp'>#define</em> <a href='../R/221.html' title='Multiple referred from 3 places.'>DCPU_NEXT_MASTER</a> 0x2 <em class='comment'>/* Transition from one master cpu to another */</em>
+<a id='L35' name='L35'></a>  35 <em class='sharp'>#define</em> <a href='../R/220.html' title='Multiple referred from 5 places.'>DCPU_IS_SLAVE</a>    0x4 <em class='comment'>/* Slave cpu enter exception */</em>
+<a id='L36' name='L36'></a>  36 <em class='sharp'>#define</em> <a href='../R/222.html' title='Multiple referred from 4 places.'>DCPU_WANT_BT</a>     0x8 <em class='comment'>/* Slave cpu should backtrace then clear flag */</em>
+<a id='L37' name='L37'></a>  37 
+<a id='L38' name='L38'></a>  38 <strong class='reserved'>struct</strong> <a href='../R/5445.html' title='Multiple referred from 2 places.'>debuggerinfo_struct</a> <em class='brace'>{</em>
+<a id='L39' name='L39'></a>  39         <strong class='reserved'>void</strong>                    *debuggerinfo;
+<a id='L40' name='L40'></a>  40         <strong class='reserved'>struct</strong> task_struct      *task;
+<a id='L41' name='L41'></a>  41         <strong class='reserved'>int</strong>                     exception_state;
+<a id='L42' name='L42'></a>  42         <strong class='reserved'>int</strong>                     ret_state;
+<a id='L43' name='L43'></a>  43         <strong class='reserved'>int</strong>                     irq_depth;
+<a id='L44' name='L44'></a>  44         <strong class='reserved'>int</strong>                     enter_kgdb;
+<a id='L45' name='L45'></a>  45         bool                    rounding_up;
+<a id='L46' name='L46'></a>  46 <em class='brace'>}</em>;
+<a id='L47' name='L47'></a>  47 
+<a id='L48' name='L48'></a>  48 <strong class='reserved'>extern</strong> <strong class='reserved'>struct</strong> <a href='../S/61.html#L38' title='Defined at 38 in debug/debug_core.h.'>debuggerinfo_struct</a> kgdb_info[];
+<a id='L49' name='L49'></a>  49 
+<a id='L50' name='L50'></a>  50 <em class='comment'>/* kernel debug core break point routines */</em>
+<a id='L51' name='L51'></a>  51 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/62.html#L435' title='Defined at 435 in debug/debug_core.c.'>dbg_remove_all_break</a>(<strong class='reserved'>void</strong>);
+<a id='L52' name='L52'></a>  52 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/62.html#L333' title='Defined at 333 in debug/debug_core.c.'>dbg_set_sw_break</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> addr);
+<a id='L53' name='L53'></a>  53 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/62.html#L397' title='Defined at 397 in debug/debug_core.c.'>dbg_remove_sw_break</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> addr);
+<a id='L54' name='L54'></a>  54 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/62.html#L308' title='Defined at 308 in debug/debug_core.c.'>dbg_activate_sw_breakpoints</a>(<strong class='reserved'>void</strong>);
+<a id='L55' name='L55'></a>  55 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/62.html#L374' title='Defined at 374 in debug/debug_core.c.'>dbg_deactivate_sw_breakpoints</a>(<strong class='reserved'>void</strong>);
+<a id='L56' name='L56'></a>  56 
+<a id='L57' name='L57'></a>  57 <em class='comment'>/* polled character access to i/o module */</em>
+<a id='L58' name='L58'></a>  58 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/62.html#L1210' title='Defined at 1210 in debug/debug_core.c.'>dbg_io_get_char</a>(<strong class='reserved'>void</strong>);
+<a id='L59' name='L59'></a>  59 
+<a id='L60' name='L60'></a>  60 <em class='comment'>/* stub return value for switching between the gdbstub and kdb */</em>
+<a id='L61' name='L61'></a>  61 <em class='sharp'>#define</em> <a href='../R/218.html' title='Multiple referred from 4 places.'>DBG_PASS_EVENT</a> -12345
+<a id='L62' name='L62'></a>  62 <em class='comment'>/* Switch from one cpu to another */</em>
+<a id='L63' name='L63'></a>  63 <em class='sharp'>#define</em> <a href='../R/219.html' title='Multiple referred from 2 places.'>DBG_SWITCH_CPU_EVENT</a> -123456
+<a id='L64' name='L64'></a>  64 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> dbg_switch_cpu;
+<a id='L65' name='L65'></a>  65 
+<a id='L66' name='L66'></a>  66 <em class='comment'>/* gdbstub interface functions */</em>
+<a id='L67' name='L67'></a>  67 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/49.html#L957' title='Defined at 957 in debug/gdbstub.c.'>gdb_serial_stub</a>(<strong class='reserved'>struct</strong> <a href='../S/61.html#L19' title='Defined at 19 in debug/debug_core.h.'>kgdb_state</a> *ks);
+<a id='L68' name='L68'></a>  68 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/49.html#L198' title='Defined at 198 in debug/gdbstub.c.'>gdbstub_msg_write</a>(<strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *s, <strong class='reserved'>int</strong> len);
+<a id='L69' name='L69'></a>  69 
+<a id='L70' name='L70'></a>  70 <em class='comment'>/* gdbstub functions used for kdb &lt;-&gt; gdbstub transition */</em>
+<a id='L71' name='L71'></a>  71 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/49.html#L1095' title='Defined at 1095 in debug/gdbstub.c.'>gdbstub_state</a>(<strong class='reserved'>struct</strong> <a href='../S/61.html#L19' title='Defined at 19 in debug/debug_core.h.'>kgdb_state</a> *ks, <strong class='reserved'>char</strong> *cmd);
+<a id='L72' name='L72'></a>  72 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> dbg_kdb_mode;
+<a id='L73' name='L73'></a>  73 
+<a id='L74' name='L74'></a>  74 <em class='sharp'>#ifdef</em> CONFIG_KGDB_KDB
+<a id='L75' name='L75'></a>  75 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../D/8881.html' title='Multiple defined in 2 places.'>kdb_stub</a>(<strong class='reserved'>struct</strong> <a href='../S/61.html#L19' title='Defined at 19 in debug/debug_core.h.'>kgdb_state</a> *ks);
+<a id='L76' name='L76'></a>  76 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/60.html#L916' title='Defined at 916 in debug/kdb/kdb_main.c.'>kdb_parse</a>(<strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *cmdstr);
+<a id='L77' name='L77'></a>  77 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/54.html#L37' title='Defined at 37 in debug/kdb/kdb_debugger.c.'>kdb_common_init_state</a>(<strong class='reserved'>struct</strong> <a href='../S/61.html#L19' title='Defined at 19 in debug/debug_core.h.'>kgdb_state</a> *ks);
+<a id='L78' name='L78'></a>  78 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/54.html#L45' title='Defined at 45 in debug/kdb/kdb_debugger.c.'>kdb_common_deinit_state</a>(<strong class='reserved'>void</strong>);
+<a id='L79' name='L79'></a>  79 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/62.html#L471' title='Defined at 471 in debug/debug_core.c.'>kdb_dump_stack_on_cpu</a>(<strong class='reserved'>int</strong> cpu);
+<a id='L80' name='L80'></a>  80 <em class='sharp'>#else</em> <em class='comment'>/* ! CONFIG_KGDB_KDB */</em>
+<a id='L81' name='L81'></a>  81 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>int</strong> <a href='../R/8385.html' title='Multiple referred from 2 places.'>kdb_stub</a>(<strong class='reserved'>struct</strong> <a href='../S/61.html#L19' title='Defined at 19 in debug/debug_core.h.'>kgdb_state</a> *ks)
+<a id='L82' name='L82'></a>  82 <em class='brace'>{</em>
+<a id='L83' name='L83'></a>  83         <strong class='reserved'>return</strong> <a href='../S/61.html#L61' title='Defined at 61 in debug/debug_core.h.'>DBG_PASS_EVENT</a>;
+<a id='L84' name='L84'></a>  84 <em class='brace'>}</em>
+<a id='L85' name='L85'></a>  85 <em class='sharp'>#endif</em> <em class='comment'>/* CONFIG_KGDB_KDB */</em>
+<a id='L86' name='L86'></a>  86 
+<a id='L87' name='L87'></a>  87 <em class='sharp'>#endif</em> <em class='comment'>/* _DEBUG_CORE_H_ */</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;][^]<a href='#L81'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>trace/trace_probe_tmpl.h</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/513.html'>trace</a>/trace_probe_tmpl.h</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L7'>[^]</a><a href='#L217'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'><a href='../J/415.html' title='Multiple included from 2 places.'>INCLUDED FROM</a></h2>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L7' title='Defined at 7.'>fetch_store_raw</a></li>
+<li><a href='#L29' title='Defined at 29.'>fetch_apply_bitfield</a></li>
+<li><a href='#L72' title='Defined at 72.'>process_fetch_insn_bottom</a></li>
+<li><a href='#L172' title='Defined at 172.'>__get_data_size</a></li>
+<li><a href='#L191' title='Defined at 191.'>store_trace_args</a></li>
+<li><a href='#L217' title='Defined at 217.'>print_probe_args</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>/* SPDX-License-Identifier: GPL-2.0 */</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * Traceprobe fetch helper inlines</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> */</em>
+<a id='L5' name='L5'></a>   5 
+<a id='L6' name='L6'></a>   6 <strong class='reserved'>static</strong> nokprobe_inline <strong class='reserved'>void</strong>
+<a id='L7' name='L7'></a>   7 <a href='../S/316.html#L116' title='Referred from 116 in trace/trace_probe_tmpl.h.'>fetch_store_raw</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> val, <strong class='reserved'>struct</strong> <a href='../S/265.html#L109' title='Defined at 109 in trace/trace_probe.h.'>fetch_insn</a> *code, <strong class='reserved'>void</strong> *buf)
+<a id='L8' name='L8'></a>   8 <em class='brace'>{</em>
+<a id='L9' name='L9'></a>   9         <strong class='reserved'>switch</strong> (code-&gt;size) <em class='brace'>{</em>
+<a id='L10' name='L10'></a>  10         <strong class='reserved'>case</strong> 1:
+<a id='L11' name='L11'></a>  11                 *(u8 *)buf = (u8)val;
+<a id='L12' name='L12'></a>  12                 <strong class='reserved'>break</strong>;
+<a id='L13' name='L13'></a>  13         <strong class='reserved'>case</strong> 2:
+<a id='L14' name='L14'></a>  14                 *(u16 *)buf = (u16)val;
+<a id='L15' name='L15'></a>  15                 <strong class='reserved'>break</strong>;
+<a id='L16' name='L16'></a>  16         <strong class='reserved'>case</strong> 4:
+<a id='L17' name='L17'></a>  17                 *(u32 *)buf = (u32)val;
+<a id='L18' name='L18'></a>  18                 <strong class='reserved'>break</strong>;
+<a id='L19' name='L19'></a>  19         <strong class='reserved'>case</strong> 8:
+<a id='L20' name='L20'></a>  20                 <em class='comment'>//TBD: 32bit signed</em>
+<a id='L21' name='L21'></a>  21                 *(u64 *)buf = (u64)val;
+<a id='L22' name='L22'></a>  22                 <strong class='reserved'>break</strong>;
+<a id='L23' name='L23'></a>  23         <strong class='reserved'>default</strong>:
+<a id='L24' name='L24'></a>  24                 *(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> *)buf = val;
+<a id='L25' name='L25'></a>  25         <em class='brace'>}</em>
+<a id='L26' name='L26'></a>  26 <em class='brace'>}</em>
+<a id='L27' name='L27'></a>  27 
+<a id='L28' name='L28'></a>  28 <strong class='reserved'>static</strong> nokprobe_inline <strong class='reserved'>void</strong>
+<a id='L29' name='L29'></a>  29 <a href='../S/316.html#L139' title='Referred from 139 in trace/trace_probe_tmpl.h.'>fetch_apply_bitfield</a>(<strong class='reserved'>struct</strong> <a href='../S/265.html#L109' title='Defined at 109 in trace/trace_probe.h.'>fetch_insn</a> *code, <strong class='reserved'>void</strong> *buf)
+<a id='L30' name='L30'></a>  30 <em class='brace'>{</em>
+<a id='L31' name='L31'></a>  31         <strong class='reserved'>switch</strong> (code-&gt;basesize) <em class='brace'>{</em>
+<a id='L32' name='L32'></a>  32         <strong class='reserved'>case</strong> 1:
+<a id='L33' name='L33'></a>  33                 *(u8 *)buf &lt;&lt;= code-&gt;lshift;
+<a id='L34' name='L34'></a>  34                 *(u8 *)buf &gt;&gt;= code-&gt;rshift;
+<a id='L35' name='L35'></a>  35                 <strong class='reserved'>break</strong>;
+<a id='L36' name='L36'></a>  36         <strong class='reserved'>case</strong> 2:
+<a id='L37' name='L37'></a>  37                 *(u16 *)buf &lt;&lt;= code-&gt;lshift;
+<a id='L38' name='L38'></a>  38                 *(u16 *)buf &gt;&gt;= code-&gt;rshift;
+<a id='L39' name='L39'></a>  39                 <strong class='reserved'>break</strong>;
+<a id='L40' name='L40'></a>  40         <strong class='reserved'>case</strong> 4:
+<a id='L41' name='L41'></a>  41                 *(u32 *)buf &lt;&lt;= code-&gt;lshift;
+<a id='L42' name='L42'></a>  42                 *(u32 *)buf &gt;&gt;= code-&gt;rshift;
+<a id='L43' name='L43'></a>  43                 <strong class='reserved'>break</strong>;
+<a id='L44' name='L44'></a>  44         <strong class='reserved'>case</strong> 8:
+<a id='L45' name='L45'></a>  45                 *(u64 *)buf &lt;&lt;= code-&gt;lshift;
+<a id='L46' name='L46'></a>  46                 *(u64 *)buf &gt;&gt;= code-&gt;rshift;
+<a id='L47' name='L47'></a>  47                 <strong class='reserved'>break</strong>;
+<a id='L48' name='L48'></a>  48         <em class='brace'>}</em>
+<a id='L49' name='L49'></a>  49 <em class='brace'>}</em>
+<a id='L50' name='L50'></a>  50 
+<a id='L51' name='L51'></a>  51 <em class='comment'>/*</em>
+<a id='L52' name='L52'></a>  52 <em class='comment'> * These functions must be defined for each callsite.</em>
+<a id='L53' name='L53'></a>  53 <em class='comment'> * Return consumed dynamic data size (&gt;= 0), or error (&lt; 0).</em>
+<a id='L54' name='L54'></a>  54 <em class='comment'> * If dest is NULL, don't store result and return required dynamic data size.</em>
+<a id='L55' name='L55'></a>  55 <em class='comment'> */</em>
+<a id='L56' name='L56'></a>  56 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong>
+<a id='L57' name='L57'></a>  57 <a href='../D/11086.html' title='Multiple defined in 2 places.'>process_fetch_insn</a>(<strong class='reserved'>struct</strong> <a href='../S/265.html#L109' title='Defined at 109 in trace/trace_probe.h.'>fetch_insn</a> *code, <strong class='reserved'>struct</strong> pt_regs *regs,
+<a id='L58' name='L58'></a>  58                    <strong class='reserved'>void</strong> *dest, <strong class='reserved'>void</strong> *base);
+<a id='L59' name='L59'></a>  59 <strong class='reserved'>static</strong> nokprobe_inline <strong class='reserved'>int</strong> <a href='../D/6621.html' title='Multiple defined in 2 places.'>fetch_store_strlen</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> addr);
+<a id='L60' name='L60'></a>  60 <strong class='reserved'>static</strong> nokprobe_inline <strong class='reserved'>int</strong>
+<a id='L61' name='L61'></a>  61 <a href='../D/6619.html' title='Multiple defined in 2 places.'>fetch_store_string</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> addr, <strong class='reserved'>void</strong> *dest, <strong class='reserved'>void</strong> *base);
+<a id='L62' name='L62'></a>  62 <strong class='reserved'>static</strong> nokprobe_inline <strong class='reserved'>int</strong> <a href='../D/6622.html' title='Multiple defined in 2 places.'>fetch_store_strlen_user</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> addr);
+<a id='L63' name='L63'></a>  63 <strong class='reserved'>static</strong> nokprobe_inline <strong class='reserved'>int</strong>
+<a id='L64' name='L64'></a>  64 <a href='../D/6620.html' title='Multiple defined in 2 places.'>fetch_store_string_user</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> addr, <strong class='reserved'>void</strong> *dest, <strong class='reserved'>void</strong> *base);
+<a id='L65' name='L65'></a>  65 <strong class='reserved'>static</strong> nokprobe_inline <strong class='reserved'>int</strong>
+<a id='L66' name='L66'></a>  66 <a href='../D/11009.html' title='Multiple defined in 2 places.'>probe_mem_read</a>(<strong class='reserved'>void</strong> *dest, <strong class='reserved'>void</strong> *src, size_t size);
+<a id='L67' name='L67'></a>  67 <strong class='reserved'>static</strong> nokprobe_inline <strong class='reserved'>int</strong>
+<a id='L68' name='L68'></a>  68 <a href='../D/11010.html' title='Multiple defined in 2 places.'>probe_mem_read_user</a>(<strong class='reserved'>void</strong> *dest, <strong class='reserved'>void</strong> *src, size_t size);
+<a id='L69' name='L69'></a>  69 
+<a id='L70' name='L70'></a>  70 <em class='comment'>/* From the 2nd stage, routine is same */</em>
+<a id='L71' name='L71'></a>  71 <strong class='reserved'>static</strong> nokprobe_inline <strong class='reserved'>int</strong>
+<a id='L72' name='L72'></a>  72 <a href='../R/10468.html' title='Multiple referred from 2 places.'>process_fetch_insn_bottom</a>(<strong class='reserved'>struct</strong> <a href='../S/265.html#L109' title='Defined at 109 in trace/trace_probe.h.'>fetch_insn</a> *code, <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> val,
+<a id='L73' name='L73'></a>  73                            <strong class='reserved'>void</strong> *dest, <strong class='reserved'>void</strong> *base)
+<a id='L74' name='L74'></a>  74 <em class='brace'>{</em>
+<a id='L75' name='L75'></a>  75         <strong class='reserved'>struct</strong> <a href='../S/265.html#L109' title='Defined at 109 in trace/trace_probe.h.'>fetch_insn</a> *s3 = NULL;
+<a id='L76' name='L76'></a>  76         <strong class='reserved'>int</strong> total = 0, ret = 0, i = 0;
+<a id='L77' name='L77'></a>  77         u32 loc = 0;
+<a id='L78' name='L78'></a>  78         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> lval = val;
+<a id='L79' name='L79'></a>  79 
+<a id='L80' name='L80'></a>  80 stage2:
+<a id='L81' name='L81'></a>  81         <em class='comment'>/* 2nd stage: dereference memory if needed */</em>
+<a id='L82' name='L82'></a>  82         <strong class='reserved'>do</strong> <em class='brace'>{</em>
+<a id='L83' name='L83'></a>  83                 <strong class='reserved'>if</strong> (code-&gt;op == <a href='../S/265.html#L93' title='Defined at 93 in trace/trace_probe.h.'>FETCH_OP_DEREF</a>) <em class='brace'>{</em>
+<a id='L84' name='L84'></a>  84                         lval = val;
+<a id='L85' name='L85'></a>  85                         ret = <a href='../D/11009.html' title='Multiple defined in 2 places.'>probe_mem_read</a>(&amp;val, (<strong class='reserved'>void</strong> *)val + code-&gt;offset,
+<a id='L86' name='L86'></a>  86                                              <strong class='reserved'>sizeof</strong>(val));
+<a id='L87' name='L87'></a>  87                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (code-&gt;op == <a href='../S/265.html#L94' title='Defined at 94 in trace/trace_probe.h.'>FETCH_OP_UDEREF</a>) <em class='brace'>{</em>
+<a id='L88' name='L88'></a>  88                         lval = val;
+<a id='L89' name='L89'></a>  89                         ret = <a href='../D/11010.html' title='Multiple defined in 2 places.'>probe_mem_read_user</a>(&amp;val,
+<a id='L90' name='L90'></a>  90                                  (<strong class='reserved'>void</strong> *)val + code-&gt;offset, <strong class='reserved'>sizeof</strong>(val));
+<a id='L91' name='L91'></a>  91                 <em class='brace'>}</em> <strong class='reserved'>else</strong>
+<a id='L92' name='L92'></a>  92                         <strong class='reserved'>break</strong>;
+<a id='L93' name='L93'></a>  93                 <strong class='reserved'>if</strong> (ret)
+<a id='L94' name='L94'></a>  94                         <strong class='reserved'>return</strong> ret;
+<a id='L95' name='L95'></a>  95                 code++;
+<a id='L96' name='L96'></a>  96         <em class='brace'>}</em> <strong class='reserved'>while</strong> (1);
+<a id='L97' name='L97'></a>  97 
+<a id='L98' name='L98'></a>  98         s3 = code;
+<a id='L99' name='L99'></a>  99 stage3:
+<a id='L100' name='L100'></a> 100         <em class='comment'>/* 3rd stage: store value to buffer */</em>
+<a id='L101' name='L101'></a> 101         <strong class='reserved'>if</strong> (unlikely(!dest)) <em class='brace'>{</em>
+<a id='L102' name='L102'></a> 102                 <strong class='reserved'>if</strong> (code-&gt;op == <a href='../S/265.html#L99' title='Defined at 99 in trace/trace_probe.h.'>FETCH_OP_ST_STRING</a>) <em class='brace'>{</em>
+<a id='L103' name='L103'></a> 103                         ret = <a href='../D/6621.html' title='Multiple defined in 2 places.'>fetch_store_strlen</a>(val + code-&gt;offset);
+<a id='L104' name='L104'></a> 104                         code++;
+<a id='L105' name='L105'></a> 105                         <strong class='reserved'>goto</strong> array;
+<a id='L106' name='L106'></a> 106                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (code-&gt;op == <a href='../S/265.html#L100' title='Defined at 100 in trace/trace_probe.h.'>FETCH_OP_ST_USTRING</a>) <em class='brace'>{</em>
+<a id='L107' name='L107'></a> 107                         ret += <a href='../D/6622.html' title='Multiple defined in 2 places.'>fetch_store_strlen_user</a>(val + code-&gt;offset);
+<a id='L108' name='L108'></a> 108                         code++;
+<a id='L109' name='L109'></a> 109                         <strong class='reserved'>goto</strong> array;
+<a id='L110' name='L110'></a> 110                 <em class='brace'>}</em> <strong class='reserved'>else</strong>
+<a id='L111' name='L111'></a> 111                         <strong class='reserved'>return</strong> -EILSEQ;
+<a id='L112' name='L112'></a> 112         <em class='brace'>}</em>
+<a id='L113' name='L113'></a> 113 
+<a id='L114' name='L114'></a> 114         <strong class='reserved'>switch</strong> (code-&gt;op) <em class='brace'>{</em>
+<a id='L115' name='L115'></a> 115         <strong class='reserved'>case</strong> <a href='../S/265.html#L96' title='Defined at 96 in trace/trace_probe.h.'>FETCH_OP_ST_RAW</a>:
+<a id='L116' name='L116'></a> 116                 <a href='../S/316.html#L7' title='Defined at 7 in trace/trace_probe_tmpl.h.'>fetch_store_raw</a>(val, code, dest);
+<a id='L117' name='L117'></a> 117                 <strong class='reserved'>break</strong>;
+<a id='L118' name='L118'></a> 118         <strong class='reserved'>case</strong> <a href='../S/265.html#L97' title='Defined at 97 in trace/trace_probe.h.'>FETCH_OP_ST_MEM</a>:
+<a id='L119' name='L119'></a> 119                 <a href='../D/11009.html' title='Multiple defined in 2 places.'>probe_mem_read</a>(dest, (<strong class='reserved'>void</strong> *)val + code-&gt;offset, code-&gt;size);
+<a id='L120' name='L120'></a> 120                 <strong class='reserved'>break</strong>;
+<a id='L121' name='L121'></a> 121         <strong class='reserved'>case</strong> <a href='../S/265.html#L98' title='Defined at 98 in trace/trace_probe.h.'>FETCH_OP_ST_UMEM</a>:
+<a id='L122' name='L122'></a> 122                 <a href='../D/11010.html' title='Multiple defined in 2 places.'>probe_mem_read_user</a>(dest, (<strong class='reserved'>void</strong> *)val + code-&gt;offset, code-&gt;size);
+<a id='L123' name='L123'></a> 123                 <strong class='reserved'>break</strong>;
+<a id='L124' name='L124'></a> 124         <strong class='reserved'>case</strong> <a href='../S/265.html#L99' title='Defined at 99 in trace/trace_probe.h.'>FETCH_OP_ST_STRING</a>:
+<a id='L125' name='L125'></a> 125                 loc = *(u32 *)dest;
+<a id='L126' name='L126'></a> 126                 ret = <a href='../D/6619.html' title='Multiple defined in 2 places.'>fetch_store_string</a>(val + code-&gt;offset, dest, base);
+<a id='L127' name='L127'></a> 127                 <strong class='reserved'>break</strong>;
+<a id='L128' name='L128'></a> 128         <strong class='reserved'>case</strong> <a href='../S/265.html#L100' title='Defined at 100 in trace/trace_probe.h.'>FETCH_OP_ST_USTRING</a>:
+<a id='L129' name='L129'></a> 129                 loc = *(u32 *)dest;
+<a id='L130' name='L130'></a> 130                 ret = <a href='../D/6620.html' title='Multiple defined in 2 places.'>fetch_store_string_user</a>(val + code-&gt;offset, dest, base);
+<a id='L131' name='L131'></a> 131                 <strong class='reserved'>break</strong>;
+<a id='L132' name='L132'></a> 132         <strong class='reserved'>default</strong>:
+<a id='L133' name='L133'></a> 133                 <strong class='reserved'>return</strong> -EILSEQ;
+<a id='L134' name='L134'></a> 134         <em class='brace'>}</em>
+<a id='L135' name='L135'></a> 135         code++;
+<a id='L136' name='L136'></a> 136 
+<a id='L137' name='L137'></a> 137         <em class='comment'>/* 4th stage: modify stored value if needed */</em>
+<a id='L138' name='L138'></a> 138         <strong class='reserved'>if</strong> (code-&gt;op == <a href='../S/265.html#L102' title='Defined at 102 in trace/trace_probe.h.'>FETCH_OP_MOD_BF</a>) <em class='brace'>{</em>
+<a id='L139' name='L139'></a> 139                 <a href='../S/316.html#L29' title='Defined at 29 in trace/trace_probe_tmpl.h.'>fetch_apply_bitfield</a>(code, dest);
+<a id='L140' name='L140'></a> 140                 code++;
+<a id='L141' name='L141'></a> 141         <em class='brace'>}</em>
+<a id='L142' name='L142'></a> 142 
+<a id='L143' name='L143'></a> 143 array:
+<a id='L144' name='L144'></a> 144         <em class='comment'>/* the last stage: Loop on array */</em>
+<a id='L145' name='L145'></a> 145         <strong class='reserved'>if</strong> (code-&gt;op == <a href='../S/265.html#L104' title='Defined at 104 in trace/trace_probe.h.'>FETCH_OP_LP_ARRAY</a>) <em class='brace'>{</em>
+<a id='L146' name='L146'></a> 146                 total += ret;
+<a id='L147' name='L147'></a> 147                 <strong class='reserved'>if</strong> (++i &lt; code-&gt;param) <em class='brace'>{</em>
+<a id='L148' name='L148'></a> 148                         code = s3;
+<a id='L149' name='L149'></a> 149                         <strong class='reserved'>if</strong> (s3-&gt;op != <a href='../S/265.html#L99' title='Defined at 99 in trace/trace_probe.h.'>FETCH_OP_ST_STRING</a> &amp;&amp;
+<a id='L150' name='L150'></a> 150                             s3-&gt;op != <a href='../S/265.html#L100' title='Defined at 100 in trace/trace_probe.h.'>FETCH_OP_ST_USTRING</a>) <em class='brace'>{</em>
+<a id='L151' name='L151'></a> 151                                 dest += s3-&gt;size;
+<a id='L152' name='L152'></a> 152                                 val += s3-&gt;size;
+<a id='L153' name='L153'></a> 153                                 <strong class='reserved'>goto</strong> stage3;
+<a id='L154' name='L154'></a> 154                         <em class='brace'>}</em>
+<a id='L155' name='L155'></a> 155                         code--;
+<a id='L156' name='L156'></a> 156                         val = lval + <strong class='reserved'>sizeof</strong>(<strong class='reserved'>char</strong> *);
+<a id='L157' name='L157'></a> 157                         <strong class='reserved'>if</strong> (dest) <em class='brace'>{</em>
+<a id='L158' name='L158'></a> 158                                 dest += <strong class='reserved'>sizeof</strong>(u32);
+<a id='L159' name='L159'></a> 159                                 *(u32 *)dest = <a href='../S/265.html#L69' title='Defined at 69 in trace/trace_probe.h.'>update_data_loc</a>(loc, ret);
+<a id='L160' name='L160'></a> 160                         <em class='brace'>}</em>
+<a id='L161' name='L161'></a> 161                         <strong class='reserved'>goto</strong> stage2;
+<a id='L162' name='L162'></a> 162                 <em class='brace'>}</em>
+<a id='L163' name='L163'></a> 163                 code++;
+<a id='L164' name='L164'></a> 164                 ret = total;
+<a id='L165' name='L165'></a> 165         <em class='brace'>}</em>
+<a id='L166' name='L166'></a> 166 
+<a id='L167' name='L167'></a> 167         <strong class='reserved'>return</strong> code-&gt;op == <a href='../S/265.html#L105' title='Defined at 105 in trace/trace_probe.h.'>FETCH_OP_END</a> ? ret : -EILSEQ;
+<a id='L168' name='L168'></a> 168 <em class='brace'>}</em>
+<a id='L169' name='L169'></a> 169 
+<a id='L170' name='L170'></a> 170 <em class='comment'>/* Sum up total data length for dynamic arraies (strings) */</em>
+<a id='L171' name='L171'></a> 171 <strong class='reserved'>static</strong> nokprobe_inline <strong class='reserved'>int</strong>
+<a id='L172' name='L172'></a> 172 <a href='../R/2043.html' title='Multiple referred from 6 places.'>__get_data_size</a>(<strong class='reserved'>struct</strong> <a href='../S/265.html#L241' title='Defined at 241 in trace/trace_probe.h.'>trace_probe</a> *tp, <strong class='reserved'>struct</strong> pt_regs *regs)
+<a id='L173' name='L173'></a> 173 <em class='brace'>{</em>
+<a id='L174' name='L174'></a> 174         <strong class='reserved'>struct</strong> <a href='../S/265.html#L214' title='Defined at 214 in trace/trace_probe.h.'>probe_arg</a> *arg;
+<a id='L175' name='L175'></a> 175         <strong class='reserved'>int</strong> i, len, ret = 0;
+<a id='L176' name='L176'></a> 176 
+<a id='L177' name='L177'></a> 177         <strong class='reserved'>for</strong> (i = 0; i &lt; tp-&gt;nr_args; i++) <em class='brace'>{</em>
+<a id='L178' name='L178'></a> 178                 arg = tp-&gt;args + i;
+<a id='L179' name='L179'></a> 179                 <strong class='reserved'>if</strong> (unlikely(arg-&gt;dynamic)) <em class='brace'>{</em>
+<a id='L180' name='L180'></a> 180                         len = <a href='../D/11086.html' title='Multiple defined in 2 places.'>process_fetch_insn</a>(arg-&gt;code, regs, NULL, NULL);
+<a id='L181' name='L181'></a> 181                         <strong class='reserved'>if</strong> (len &gt; 0)
+<a id='L182' name='L182'></a> 182                                 ret += len;
+<a id='L183' name='L183'></a> 183                 <em class='brace'>}</em>
+<a id='L184' name='L184'></a> 184         <em class='brace'>}</em>
+<a id='L185' name='L185'></a> 185 
+<a id='L186' name='L186'></a> 186         <strong class='reserved'>return</strong> ret;
+<a id='L187' name='L187'></a> 187 <em class='brace'>}</em>
+<a id='L188' name='L188'></a> 188 
+<a id='L189' name='L189'></a> 189 <em class='comment'>/* Store the value of each argument */</em>
+<a id='L190' name='L190'></a> 190 <strong class='reserved'>static</strong> nokprobe_inline <strong class='reserved'>void</strong>
+<a id='L191' name='L191'></a> 191 <a href='../R/12710.html' title='Multiple referred from 6 places.'>store_trace_args</a>(<strong class='reserved'>void</strong> *data, <strong class='reserved'>struct</strong> <a href='../S/265.html#L241' title='Defined at 241 in trace/trace_probe.h.'>trace_probe</a> *tp, <strong class='reserved'>struct</strong> pt_regs *regs,
+<a id='L192' name='L192'></a> 192                  <strong class='reserved'>int</strong> header_size, <strong class='reserved'>int</strong> maxlen)
+<a id='L193' name='L193'></a> 193 <em class='brace'>{</em>
+<a id='L194' name='L194'></a> 194         <strong class='reserved'>struct</strong> <a href='../S/265.html#L214' title='Defined at 214 in trace/trace_probe.h.'>probe_arg</a> *arg;
+<a id='L195' name='L195'></a> 195         <strong class='reserved'>void</strong> *base = data - header_size;
+<a id='L196' name='L196'></a> 196         <strong class='reserved'>void</strong> *dyndata = data + tp-&gt;size;
+<a id='L197' name='L197'></a> 197         u32 *dl;        <em class='comment'>/* Data location */</em>
+<a id='L198' name='L198'></a> 198         <strong class='reserved'>int</strong> ret, i;
+<a id='L199' name='L199'></a> 199 
+<a id='L200' name='L200'></a> 200         <strong class='reserved'>for</strong> (i = 0; i &lt; tp-&gt;nr_args; i++) <em class='brace'>{</em>
+<a id='L201' name='L201'></a> 201                 arg = tp-&gt;args + i;
+<a id='L202' name='L202'></a> 202                 dl = data + arg-&gt;offset;
+<a id='L203' name='L203'></a> 203                 <em class='comment'>/* Point the dynamic data area if needed */</em>
+<a id='L204' name='L204'></a> 204                 <strong class='reserved'>if</strong> (unlikely(arg-&gt;dynamic))
+<a id='L205' name='L205'></a> 205                         *dl = <a href='../S/265.html#L59' title='Defined at 59 in trace/trace_probe.h.'>make_data_loc</a>(maxlen, dyndata - base);
+<a id='L206' name='L206'></a> 206                 ret = <a href='../D/11086.html' title='Multiple defined in 2 places.'>process_fetch_insn</a>(arg-&gt;code, regs, dl, base);
+<a id='L207' name='L207'></a> 207                 <strong class='reserved'>if</strong> (unlikely(ret &lt; 0 &amp;&amp; arg-&gt;dynamic)) <em class='brace'>{</em>
+<a id='L208' name='L208'></a> 208                         *dl = <a href='../S/265.html#L59' title='Defined at 59 in trace/trace_probe.h.'>make_data_loc</a>(0, dyndata - base);
+<a id='L209' name='L209'></a> 209                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L210' name='L210'></a> 210                         dyndata += ret;
+<a id='L211' name='L211'></a> 211                         maxlen -= ret;
+<a id='L212' name='L212'></a> 212                 <em class='brace'>}</em>
+<a id='L213' name='L213'></a> 213         <em class='brace'>}</em>
+<a id='L214' name='L214'></a> 214 <em class='brace'>}</em>
+<a id='L215' name='L215'></a> 215 
+<a id='L216' name='L216'></a> 216 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>int</strong>
+<a id='L217' name='L217'></a> 217 <a href='../R/10331.html' title='Multiple referred from 3 places.'>print_probe_args</a>(<strong class='reserved'>struct</strong> trace_seq *s, <strong class='reserved'>struct</strong> <a href='../S/265.html#L214' title='Defined at 214 in trace/trace_probe.h.'>probe_arg</a> *args, <strong class='reserved'>int</strong> nr_args,
+<a id='L218' name='L218'></a> 218                  u8 *data, <strong class='reserved'>void</strong> *field)
+<a id='L219' name='L219'></a> 219 <em class='brace'>{</em>
+<a id='L220' name='L220'></a> 220         <strong class='reserved'>void</strong> *p;
+<a id='L221' name='L221'></a> 221         <strong class='reserved'>int</strong> i, j;
+<a id='L222' name='L222'></a> 222 
+<a id='L223' name='L223'></a> 223         <strong class='reserved'>for</strong> (i = 0; i &lt; nr_args; i++) <em class='brace'>{</em>
+<a id='L224' name='L224'></a> 224                 <strong class='reserved'>struct</strong> <a href='../S/265.html#L214' title='Defined at 214 in trace/trace_probe.h.'>probe_arg</a> *a = args + i;
+<a id='L225' name='L225'></a> 225 
+<a id='L226' name='L226'></a> 226                 <a href='../S/299.html#L81' title='Defined at 81 in trace/trace_seq.c.'>trace_seq_printf</a>(s, " %s=", a-&gt;name);
+<a id='L227' name='L227'></a> 227                 <strong class='reserved'>if</strong> (likely(!a-&gt;count)) <em class='brace'>{</em>
+<a id='L228' name='L228'></a> 228                         <strong class='reserved'>if</strong> (!a-&gt;type-&gt;print(s, data + a-&gt;offset, field))
+<a id='L229' name='L229'></a> 229                                 <strong class='reserved'>return</strong> -ENOMEM;
+<a id='L230' name='L230'></a> 230                         <strong class='reserved'>continue</strong>;
+<a id='L231' name='L231'></a> 231                 <em class='brace'>}</em>
+<a id='L232' name='L232'></a> 232                 <a href='../S/299.html#L233' title='Defined at 233 in trace/trace_seq.c.'>trace_seq_putc</a>(s, '{');
+<a id='L233' name='L233'></a> 233                 p = data + a-&gt;offset;
+<a id='L234' name='L234'></a> 234                 <strong class='reserved'>for</strong> (j = 0; j &lt; a-&gt;count; j++) <em class='brace'>{</em>
+<a id='L235' name='L235'></a> 235                         <strong class='reserved'>if</strong> (!a-&gt;type-&gt;print(s, p, field))
+<a id='L236' name='L236'></a> 236                                 <strong class='reserved'>return</strong> -ENOMEM;
+<a id='L237' name='L237'></a> 237                         <a href='../S/299.html#L233' title='Defined at 233 in trace/trace_seq.c.'>trace_seq_putc</a>(s, j == a-&gt;count - 1 ? '}' : ',');
+<a id='L238' name='L238'></a> 238                         p += a-&gt;type-&gt;size;
+<a id='L239' name='L239'></a> 239                 <em class='brace'>}</em>
+<a id='L240' name='L240'></a> 240         <em class='brace'>}</em>
+<a id='L241' name='L241'></a> 241         <strong class='reserved'>return</strong> 0;
+<a id='L242' name='L242'></a> 242 <em class='brace'>}</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L7'>[^]</a><a href='#L217'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

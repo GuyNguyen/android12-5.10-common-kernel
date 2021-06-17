@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>k_clock</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/84.html#L857'>k_clock</a>           857 time/alarmtimer.c const struct k_clock alarm_clock = {</span>
+<span class='curline'><a href='../S/90.html#L312'>k_clock</a>           312 time/posix-clock.c const struct k_clock clock_posix_dynamic = {</span>
+<span class='curline'><a href='../S/99.html#L1538'>k_clock</a>          1538 time/posix-cpu-timers.c const struct k_clock clock_posix_cpu = {</span>
+<span class='curline'><a href='../S/99.html#L1550'>k_clock</a>          1550 time/posix-cpu-timers.c const struct k_clock clock_process = {</span>
+<span class='curline'><a href='../S/99.html#L1557'>k_clock</a>          1557 time/posix-cpu-timers.c const struct k_clock clock_thread = {</span>
+<span class='curline'><a href='../S/103.html#L55'>k_clock</a>            55 time/posix-timers.c static const struct k_clock * const posix_clocks[];</span>
+<span class='curline'><a href='../S/103.html#L56'>k_clock</a>            56 time/posix-timers.c static const struct k_clock *clockid_to_kclock(const clockid_t id);</span>
+<span class='curline'><a href='../S/103.html#L57'>k_clock</a>            57 time/posix-timers.c static const struct k_clock clock_realtime, clock_monotonic;</span>
+<span class='curline'><a href='../S/103.html#L501'>k_clock</a>           501 time/posix-timers.c 	const struct k_clock *kc = clockid_to_kclock(which_clock);</span>
+<span class='curline'><a href='../S/103.html#L672'>k_clock</a>           672 time/posix-timers.c 	const struct k_clock *kc = timr-&gt;kclock;</span>
+<span class='curline'><a href='../S/103.html#L718'>k_clock</a>           718 time/posix-timers.c 	const struct k_clock *kc;</span>
+<span class='curline'><a href='../S/103.html#L842'>k_clock</a>           842 time/posix-timers.c 	const struct k_clock *kc = READ_ONCE(timer-&gt;kclock);</span>
+<span class='curline'><a href='../S/103.html#L862'>k_clock</a>           862 time/posix-timers.c 	const struct k_clock *kc = timr-&gt;kclock;</span>
+<span class='curline'><a href='../S/103.html#L902'>k_clock</a>           902 time/posix-timers.c 	const struct k_clock *kc;</span>
+<span class='curline'><a href='../S/103.html#L985'>k_clock</a>           985 time/posix-timers.c 	const struct k_clock *kc = timer-&gt;kclock;</span>
+<span class='curline'><a href='../S/103.html#L996'>k_clock</a>           996 time/posix-timers.c 	const struct k_clock *kc = timer-&gt;kclock;</span>
+<span class='curline'><a href='../S/103.html#L1070'>k_clock</a>          1070 time/posix-timers.c 	const struct k_clock *kc = clockid_to_kclock(which_clock);</span>
+<span class='curline'><a href='../S/103.html#L1085'>k_clock</a>          1085 time/posix-timers.c 	const struct k_clock *kc = clockid_to_kclock(which_clock);</span>
+<span class='curline'><a href='../S/103.html#L1102'>k_clock</a>          1102 time/posix-timers.c 	const struct k_clock *kc = clockid_to_kclock(which_clock);</span>
+<span class='curline'><a href='../S/103.html#L1132'>k_clock</a>          1132 time/posix-timers.c 	const struct k_clock *kc = clockid_to_kclock(which_clock);</span>
+<span class='curline'><a href='../S/103.html#L1152'>k_clock</a>          1152 time/posix-timers.c 	const struct k_clock *kc = clockid_to_kclock(which_clock);</span>
+<span class='curline'><a href='../S/103.html#L1167'>k_clock</a>          1167 time/posix-timers.c 	const struct k_clock *kc = clockid_to_kclock(which_clock);</span>
+<span class='curline'><a href='../S/103.html#L1203'>k_clock</a>          1203 time/posix-timers.c 	const struct k_clock *kc = clockid_to_kclock(which_clock);</span>
+<span class='curline'><a href='../S/103.html#L1249'>k_clock</a>          1249 time/posix-timers.c 	const struct k_clock *kc = clockid_to_kclock(which_clock);</span>
+<span class='curline'><a href='../S/103.html#L1276'>k_clock</a>          1276 time/posix-timers.c 	const struct k_clock *kc = clockid_to_kclock(which_clock);</span>
+<span class='curline'><a href='../S/103.html#L1299'>k_clock</a>          1299 time/posix-timers.c static const struct k_clock clock_realtime = {</span>
+<span class='curline'><a href='../S/103.html#L1318'>k_clock</a>          1318 time/posix-timers.c static const struct k_clock clock_monotonic = {</span>
+<span class='curline'><a href='../S/103.html#L1335'>k_clock</a>          1335 time/posix-timers.c static const struct k_clock clock_monotonic_raw = {</span>
+<span class='curline'><a href='../S/103.html#L1340'>k_clock</a>          1340 time/posix-timers.c static const struct k_clock clock_realtime_coarse = {</span>
+<span class='curline'><a href='../S/103.html#L1345'>k_clock</a>          1345 time/posix-timers.c static const struct k_clock clock_monotonic_coarse = {</span>
+<span class='curline'><a href='../S/103.html#L1350'>k_clock</a>          1350 time/posix-timers.c static const struct k_clock clock_tai = {</span>
+<span class='curline'><a href='../S/103.html#L1367'>k_clock</a>          1367 time/posix-timers.c static const struct k_clock clock_boottime = {</span>
+<span class='curline'><a href='../S/103.html#L1384'>k_clock</a>          1384 time/posix-timers.c static const struct k_clock * const posix_clocks[] = {</span>
+<span class='curline'><a href='../S/103.html#L1398'>k_clock</a>          1398 time/posix-timers.c static const struct k_clock *clockid_to_kclock(const clockid_t id)</span>
+<span class='curline'><a href='../S/93.html#L33'>k_clock</a>            33 time/posix-timers.h extern const struct k_clock clock_posix_cpu;</span>
+<span class='curline'><a href='../S/93.html#L34'>k_clock</a>            34 time/posix-timers.h extern const struct k_clock clock_posix_dynamic;</span>
+<span class='curline'><a href='../S/93.html#L35'>k_clock</a>            35 time/posix-timers.h extern const struct k_clock clock_process;</span>
+<span class='curline'><a href='../S/93.html#L36'>k_clock</a>            36 time/posix-timers.h extern const struct k_clock clock_thread;</span>
+<span class='curline'><a href='../S/93.html#L37'>k_clock</a>            37 time/posix-timers.h extern const struct k_clock alarm_clock;</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>trace_run_command</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/271.html#L9502'>trace_run_command</a> 9502 trace/trace.c  			ret = trace_run_command(buf, createfn);</span>
+<span class='curline'><a href='../S/256.html#L2010'>trace_run_command</a> 2010 trace/trace.h  extern int trace_run_command(const char *buf, int (*createfn)(int, char**));</span>
+<span class='curline'><a href='../S/255.html#L1406'>trace_run_command</a> 1406 trace/trace_events_synth.c 	ret = trace_run_command(cmd-&gt;seq.buffer, create_or_delete_synth_event);</span>
+<span class='curline'><a href='../S/317.html#L926'>trace_run_command</a>  926 trace/trace_kprobe.c 	return trace_run_command(cmd-&gt;seq.buffer, create_or_delete_trace_kprobe);</span>
+<span class='curline'><a href='../S/317.html#L1087'>trace_run_command</a> 1087 trace/trace_kprobe.c 	return trace_run_command(buf, create_or_delete_trace_kprobe);</span>
+<span class='curline'><a href='../S/317.html#L1890'>trace_run_command</a> 1890 trace/trace_kprobe.c 		ret = trace_run_command(cmd, create_or_delete_trace_kprobe);</span>
+<span class='curline'><a href='../S/317.html#L1984'>trace_run_command</a> 1984 trace/trace_kprobe.c 	ret = trace_run_command("p:testprobe kprobe_trace_selftest_target $stack $stack0 +0($stack)",</span>
+<span class='curline'><a href='../S/317.html#L2006'>trace_run_command</a> 2006 trace/trace_kprobe.c 	ret = trace_run_command("r:testprobe2 kprobe_trace_selftest_target $retval",</span>
+<span class='curline'><a href='../S/317.html#L2080'>trace_run_command</a> 2080 trace/trace_kprobe.c 	ret = trace_run_command("-:testprobe", create_or_delete_trace_kprobe);</span>
+<span class='curline'><a href='../S/317.html#L2086'>trace_run_command</a> 2086 trace/trace_kprobe.c 	ret = trace_run_command("-:testprobe2", create_or_delete_trace_kprobe);</span>
+</pre>
+</body>
+</html>

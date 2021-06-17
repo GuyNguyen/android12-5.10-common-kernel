@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>SPIN_BUG_ON</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/22.html#L83'>SPIN_BUG_ON</a>        83 locking/spinlock_debug.c 	SPIN_BUG_ON(READ_ONCE(lock-&gt;magic) != SPINLOCK_MAGIC, lock, "bad magic");</span>
+<span class='curline'><a href='../S/22.html#L84'>SPIN_BUG_ON</a>        84 locking/spinlock_debug.c 	SPIN_BUG_ON(READ_ONCE(lock-&gt;owner) == current, lock, "recursion");</span>
+<span class='curline'><a href='../S/22.html#L85'>SPIN_BUG_ON</a>        85 locking/spinlock_debug.c 	SPIN_BUG_ON(READ_ONCE(lock-&gt;owner_cpu) == raw_smp_processor_id(),</span>
+<span class='curline'><a href='../S/22.html#L97'>SPIN_BUG_ON</a>        97 locking/spinlock_debug.c 	SPIN_BUG_ON(lock-&gt;magic != SPINLOCK_MAGIC, lock, "bad magic");</span>
+<span class='curline'><a href='../S/22.html#L98'>SPIN_BUG_ON</a>        98 locking/spinlock_debug.c 	SPIN_BUG_ON(!raw_spin_is_locked(lock), lock, "already unlocked");</span>
+<span class='curline'><a href='../S/22.html#L99'>SPIN_BUG_ON</a>        99 locking/spinlock_debug.c 	SPIN_BUG_ON(lock-&gt;owner != current, lock, "wrong owner");</span>
+<span class='curline'><a href='../S/22.html#L100'>SPIN_BUG_ON</a>       100 locking/spinlock_debug.c 	SPIN_BUG_ON(lock-&gt;owner_cpu != raw_smp_processor_id(),</span>
+<span class='curline'><a href='../S/22.html#L130'>SPIN_BUG_ON</a>       130 locking/spinlock_debug.c 	SPIN_BUG_ON(!ret, lock, "trylock failure on UP");</span>
+</pre>
+</body>
+</html>

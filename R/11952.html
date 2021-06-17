@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>sched_clock</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/373.html#L510'>sched_clock</a>       510 bpf/trampoline.c 		start = sched_clock();</span>
+<span class='curline'><a href='../S/373.html#L529'>sched_clock</a>       529 bpf/trampoline.c 		stats-&gt;nsecs += sched_clock() - start;</span>
+<span class='curline'><a href='../S/327.html#L1145'>sched_clock</a>      1145 cpu.c          	start_time = sched_clock();</span>
+<span class='curline'><a href='../S/327.html#L1256'>sched_clock</a>      1256 cpu.c          	start_time = sched_clock();</span>
+<span class='curline'><a href='../S/36.html#L110'>sched_clock</a>       110 locking/qspinlock_stat.h 	u64 start = sched_clock();</span>
+<span class='curline'><a href='../S/36.html#L114'>sched_clock</a>       114 locking/qspinlock_stat.h 	this_cpu_add(EVENT_COUNT(pv_latency_kick), sched_clock() - start);</span>
+<span class='curline'><a href='../S/36.html#L128'>sched_clock</a>       128 locking/qspinlock_stat.h 			     sched_clock() - *pkick_time);</span>
+<span class='curline'><a href='../S/27.html#L773'>sched_clock</a>       773 locking/rwsem.c 	return sched_clock() + delta;</span>
+<span class='curline'><a href='../S/27.html#L838'>sched_clock</a>       838 locking/rwsem.c 			else if (!(++loop &amp; 0xf) &amp;&amp; (sched_clock() &gt; rspin_threshold)) {</span>
+<span class='curline'><a href='../S/474.html#L69'>sched_clock</a>        69 sched/clock.c  EXPORT_SYMBOL_GPL(sched_clock);</span>
+<span class='curline'><a href='../S/474.html#L116'>sched_clock</a>       116 sched/clock.c  	scd-&gt;tick_raw = sched_clock();</span>
+<span class='curline'><a href='../S/474.html#L271'>sched_clock</a>       271 sched/clock.c  	now = sched_clock();</span>
+<span class='curline'><a href='../S/474.html#L371'>sched_clock</a>       371 sched/clock.c  		return sched_clock() + __sched_clock_offset;</span>
+<span class='curline'><a href='../S/474.html#L374'>sched_clock</a>       374 sched/clock.c  		return sched_clock();</span>
+<span class='curline'><a href='../S/474.html#L466'>sched_clock</a>       466 sched/clock.c  	return sched_clock();</span>
+<span class='curline'><a href='../S/441.html#L6765'>sched_clock</a>      6765 sched/core.c   	idle-&gt;se.exec_start = sched_clock();</span>
+<span class='curline'><a href='../S/473.html#L655'>sched_clock</a>       655 sched/cputime.c 	clock = sched_clock();</span>
+<span class='curline'><a href='../S/473.html#L804'>sched_clock</a>       804 sched/cputime.c 	vtime-&gt;starttime = sched_clock();</span>
+<span class='curline'><a href='../S/473.html#L817'>sched_clock</a>       817 sched/cputime.c 	vtime-&gt;starttime = sched_clock();</span>
+<span class='curline'><a href='../S/460.html#L761'>sched_clock</a>       761 sched/debug.c  	sched_clk = sched_clock();</span>
+<span class='curline'><a href='../S/462.html#L190'>sched_clock</a>       190 sched/psi.c    	group-&gt;avg_last_update = sched_clock();</span>
+<span class='curline'><a href='../S/462.html#L424'>sched_clock</a>       424 sched/psi.c    	now = sched_clock();</span>
+<span class='curline'><a href='../S/462.html#L589'>sched_clock</a>       589 sched/psi.c    	now = sched_clock();</span>
+<span class='curline'><a href='../S/462.html#L1022'>sched_clock</a>      1022 sched/psi.c    	now = sched_clock();</span>
+<span class='curline'><a href='../S/229.html#L162'>sched_clock</a>       162 smp.c          	ts2 = sched_clock();</span>
+<span class='curline'><a href='../S/229.html#L213'>sched_clock</a>       213 smp.c          	ts1 = ts0 = sched_clock();</span>
+<span class='curline'><a href='../S/283.html#L42'>sched_clock</a>        42 trace/trace_clock.c 	clock = sched_clock();</span>
+</pre>
+</body>
+</html>

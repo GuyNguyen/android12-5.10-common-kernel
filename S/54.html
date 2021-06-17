@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>debug/kdb/kdb_debugger.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/498.html'>debug</a>/<a href='../files/499.html'>kdb</a>/kdb_debugger.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L37'>[^]</a><a href='#L174'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L37' title='Defined at 37.'>kdb_common_init_state</a></li>
+<li><a href='#L45' title='Defined at 45.'>kdb_common_deinit_state</a></li>
+<li><a href='#L53' title='Defined at 53.'>kdb_stub</a></li>
+<li><a href='#L174' title='Defined at 174.'>kdb_gdb_state_pass</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>/*</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'> * Created by: Jason Wessel &lt;jason.wessel@windriver.com&gt;</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> *</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> * Copyright (c) 2009 Wind River Systems, Inc.  All Rights Reserved.</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> *</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> * This file is licensed under the terms of the GNU General Public</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> * License version 2. This program is licensed "as is" without any</em>
+<a id='L8' name='L8'></a>   8 <em class='comment'> * warranty of any kind, whether express or implied.</em>
+<a id='L9' name='L9'></a>   9 <em class='comment'> */</em>
+<a id='L10' name='L10'></a>  10 
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;linux/kgdb.h&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;linux/kdb.h&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;linux/kdebug.h&gt;
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> &lt;linux/export.h&gt;
+<a id='L15' name='L15'></a>  15 <em class='sharp'>#include</em> &lt;linux/hardirq.h&gt;
+<a id='L16' name='L16'></a>  16 <em class='sharp'>#include</em> "<a href='59.html'>kdb_private.h</a>"
+<a id='L17' name='L17'></a>  17 <em class='sharp'>#include</em> "<a href='61.html'>../debug_core.h</a>"
+<a id='L18' name='L18'></a>  18 
+<a id='L19' name='L19'></a>  19 <em class='comment'>/*</em>
+<a id='L20' name='L20'></a>  20 <em class='comment'> * KDB interface to KGDB internals</em>
+<a id='L21' name='L21'></a>  21 <em class='comment'> */</em>
+<a id='L22' name='L22'></a>  22 get_char_func kdb_poll_funcs[] = <em class='brace'>{</em>
+<a id='L23' name='L23'></a>  23         <a href='../S/62.html#L1210' title='Defined at 1210 in debug/debug_core.c.'>dbg_io_get_char</a>,
+<a id='L24' name='L24'></a>  24         NULL,
+<a id='L25' name='L25'></a>  25         NULL,
+<a id='L26' name='L26'></a>  26         NULL,
+<a id='L27' name='L27'></a>  27         NULL,
+<a id='L28' name='L28'></a>  28         NULL,
+<a id='L29' name='L29'></a>  29 <em class='brace'>}</em>;
+<a id='L30' name='L30'></a>  30 EXPORT_SYMBOL_GPL(kdb_poll_funcs);
+<a id='L31' name='L31'></a>  31 
+<a id='L32' name='L32'></a>  32 <strong class='reserved'>int</strong> kdb_poll_idx = 1;
+<a id='L33' name='L33'></a>  33 EXPORT_SYMBOL_GPL(kdb_poll_idx);
+<a id='L34' name='L34'></a>  34 
+<a id='L35' name='L35'></a>  35 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../S/61.html#L19' title='Defined at 19 in debug/debug_core.h.'>kgdb_state</a> *kdb_ks;
+<a id='L36' name='L36'></a>  36 
+<a id='L37' name='L37'></a>  37 <strong class='reserved'>int</strong> <a href='../R/8308.html' title='Multiple referred from 3 places.'>kdb_common_init_state</a>(<strong class='reserved'>struct</strong> <a href='../S/61.html#L19' title='Defined at 19 in debug/debug_core.h.'>kgdb_state</a> *ks)
+<a id='L38' name='L38'></a>  38 <em class='brace'>{</em>
+<a id='L39' name='L39'></a>  39         kdb_initial_cpu = atomic_read(&amp;kgdb_active);
+<a id='L40' name='L40'></a>  40         kdb_current_task = kgdb_info[ks-&gt;cpu].task;
+<a id='L41' name='L41'></a>  41         kdb_current_regs = kgdb_info[ks-&gt;cpu].debuggerinfo;
+<a id='L42' name='L42'></a>  42         <strong class='reserved'>return</strong> 0;
+<a id='L43' name='L43'></a>  43 <em class='brace'>}</em>
+<a id='L44' name='L44'></a>  44 
+<a id='L45' name='L45'></a>  45 <strong class='reserved'>int</strong> <a href='../R/8307.html' title='Multiple referred from 3 places.'>kdb_common_deinit_state</a>(<strong class='reserved'>void</strong>)
+<a id='L46' name='L46'></a>  46 <em class='brace'>{</em>
+<a id='L47' name='L47'></a>  47         kdb_initial_cpu = -1;
+<a id='L48' name='L48'></a>  48         kdb_current_task = NULL;
+<a id='L49' name='L49'></a>  49         kdb_current_regs = NULL;
+<a id='L50' name='L50'></a>  50         <strong class='reserved'>return</strong> 0;
+<a id='L51' name='L51'></a>  51 <em class='brace'>}</em>
+<a id='L52' name='L52'></a>  52 
+<a id='L53' name='L53'></a>  53 <strong class='reserved'>int</strong> <a href='../R/8385.html' title='Multiple referred from 2 places.'>kdb_stub</a>(<strong class='reserved'>struct</strong> <a href='../S/61.html#L19' title='Defined at 19 in debug/debug_core.h.'>kgdb_state</a> *ks)
+<a id='L54' name='L54'></a>  54 <em class='brace'>{</em>
+<a id='L55' name='L55'></a>  55         <strong class='reserved'>int</strong> error = 0;
+<a id='L56' name='L56'></a>  56         <a href='../S/59.html#L163' title='Defined at 163 in debug/kdb/kdb_private.h.'>kdb_bp_t</a> *bp;
+<a id='L57' name='L57'></a>  57         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> addr = <a href='../S/62.html#L205' title='Defined at 205 in debug/debug_core.c.'>kgdb_arch_pc</a>(ks-&gt;ex_vector, ks-&gt;linux_regs);
+<a id='L58' name='L58'></a>  58         kdb_reason_t reason = KDB_REASON_OOPS;
+<a id='L59' name='L59'></a>  59         <a href='../S/59.html#L191' title='Defined at 191 in debug/kdb/kdb_private.h.'>kdb_dbtrap_t</a> db_result = <a href='../S/59.html#L190' title='Defined at 190 in debug/kdb/kdb_private.h.'>KDB_DB_NOBPT</a>;
+<a id='L60' name='L60'></a>  60         <strong class='reserved'>int</strong> i;
+<a id='L61' name='L61'></a>  61 
+<a id='L62' name='L62'></a>  62         kdb_ks = ks;
+<a id='L63' name='L63'></a>  63         <strong class='reserved'>if</strong> (<a href='../S/59.html#L148' title='Defined at 148 in debug/kdb/kdb_private.h.'>KDB_STATE</a>(REENTRY)) <em class='brace'>{</em>
+<a id='L64' name='L64'></a>  64                 reason = KDB_REASON_SWITCH;
+<a id='L65' name='L65'></a>  65                 <a href='../S/59.html#L150' title='Defined at 150 in debug/kdb/kdb_private.h.'>KDB_STATE_CLEAR</a>(REENTRY);
+<a id='L66' name='L66'></a>  66                 addr = instruction_pointer(ks-&gt;linux_regs);
+<a id='L67' name='L67'></a>  67         <em class='brace'>}</em>
+<a id='L68' name='L68'></a>  68         ks-&gt;pass_exception = 0;
+<a id='L69' name='L69'></a>  69         <strong class='reserved'>if</strong> (atomic_read(&amp;kgdb_setting_breakpoint))
+<a id='L70' name='L70'></a>  70                 reason = KDB_REASON_KEYBOARD;
+<a id='L71' name='L71'></a>  71 
+<a id='L72' name='L72'></a>  72         <strong class='reserved'>if</strong> (ks-&gt;err_code == KDB_REASON_SYSTEM_NMI &amp;&amp; ks-&gt;signo == SIGTRAP)
+<a id='L73' name='L73'></a>  73                 reason = KDB_REASON_SYSTEM_NMI;
+<a id='L74' name='L74'></a>  74 
+<a id='L75' name='L75'></a>  75         <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (in_nmi())
+<a id='L76' name='L76'></a>  76                 reason = KDB_REASON_NMI;
+<a id='L77' name='L77'></a>  77 
+<a id='L78' name='L78'></a>  78         <strong class='reserved'>for</strong> (i = 0, bp = kdb_breakpoints; i &lt; <a href='../S/59.html#L69' title='Defined at 69 in debug/kdb/kdb_private.h.'>KDB_MAXBPT</a>; i++, bp++) <em class='brace'>{</em>
+<a id='L79' name='L79'></a>  79                 <strong class='reserved'>if</strong> ((bp-&gt;bp_enabled) &amp;&amp; (bp-&gt;bp_addr == addr)) <em class='brace'>{</em>
+<a id='L80' name='L80'></a>  80                         reason = KDB_REASON_BREAK;
+<a id='L81' name='L81'></a>  81                         db_result = <a href='../S/59.html#L187' title='Defined at 187 in debug/kdb/kdb_private.h.'>KDB_DB_BPT</a>;
+<a id='L82' name='L82'></a>  82                         <strong class='reserved'>if</strong> (addr != instruction_pointer(ks-&gt;linux_regs))
+<a id='L83' name='L83'></a>  83                                 kgdb_arch_set_pc(ks-&gt;linux_regs, addr);
+<a id='L84' name='L84'></a>  84                         <strong class='reserved'>break</strong>;
+<a id='L85' name='L85'></a>  85                 <em class='brace'>}</em>
+<a id='L86' name='L86'></a>  86         <em class='brace'>}</em>
+<a id='L87' name='L87'></a>  87         <strong class='reserved'>if</strong> (reason == KDB_REASON_BREAK || reason == KDB_REASON_SWITCH) <em class='brace'>{</em>
+<a id='L88' name='L88'></a>  88                 <strong class='reserved'>for</strong> (i = 0, bp = kdb_breakpoints; i &lt; <a href='../S/59.html#L69' title='Defined at 69 in debug/kdb/kdb_private.h.'>KDB_MAXBPT</a>; i++, bp++) <em class='brace'>{</em>
+<a id='L89' name='L89'></a>  89                         <strong class='reserved'>if</strong> (bp-&gt;bp_free)
+<a id='L90' name='L90'></a>  90                                 <strong class='reserved'>continue</strong>;
+<a id='L91' name='L91'></a>  91                         <strong class='reserved'>if</strong> (bp-&gt;bp_addr == addr) <em class='brace'>{</em>
+<a id='L92' name='L92'></a>  92                                 bp-&gt;bp_delay = 1;
+<a id='L93' name='L93'></a>  93                                 bp-&gt;bp_delayed = 1;
+<a id='L94' name='L94'></a>  94         <em class='comment'>/*</em>
+<a id='L95' name='L95'></a>  95 <em class='comment'>         * SSBPT is set when the kernel debugger must single step a</em>
+<a id='L96' name='L96'></a>  96 <em class='comment'>         * task in order to re-establish an instruction breakpoint</em>
+<a id='L97' name='L97'></a>  97 <em class='comment'>         * which uses the instruction replacement mechanism.  It is</em>
+<a id='L98' name='L98'></a>  98 <em class='comment'>         * cleared by any action that removes the need to single-step</em>
+<a id='L99' name='L99'></a>  99 <em class='comment'>         * the breakpoint.</em>
+<a id='L100' name='L100'></a> 100 <em class='comment'>         */</em>
+<a id='L101' name='L101'></a> 101                                 reason = KDB_REASON_BREAK;
+<a id='L102' name='L102'></a> 102                                 db_result = <a href='../S/59.html#L187' title='Defined at 187 in debug/kdb/kdb_private.h.'>KDB_DB_BPT</a>;
+<a id='L103' name='L103'></a> 103                                 <a href='../S/59.html#L149' title='Defined at 149 in debug/kdb/kdb_private.h.'>KDB_STATE_SET</a>(SSBPT);
+<a id='L104' name='L104'></a> 104                                 <strong class='reserved'>break</strong>;
+<a id='L105' name='L105'></a> 105                         <em class='brace'>}</em>
+<a id='L106' name='L106'></a> 106                 <em class='brace'>}</em>
+<a id='L107' name='L107'></a> 107         <em class='brace'>}</em>
+<a id='L108' name='L108'></a> 108 
+<a id='L109' name='L109'></a> 109         <strong class='reserved'>if</strong> (reason != KDB_REASON_BREAK &amp;&amp; ks-&gt;ex_vector == 0 &amp;&amp;
+<a id='L110' name='L110'></a> 110                 ks-&gt;signo == SIGTRAP) <em class='brace'>{</em>
+<a id='L111' name='L111'></a> 111                 reason = KDB_REASON_SSTEP;
+<a id='L112' name='L112'></a> 112                 db_result = <a href='../S/59.html#L187' title='Defined at 187 in debug/kdb/kdb_private.h.'>KDB_DB_BPT</a>;
+<a id='L113' name='L113'></a> 113         <em class='brace'>}</em>
+<a id='L114' name='L114'></a> 114         <em class='comment'>/* Set initial kdb state variables */</em>
+<a id='L115' name='L115'></a> 115         <a href='../S/59.html#L150' title='Defined at 150 in debug/kdb/kdb_private.h.'>KDB_STATE_CLEAR</a>(KGDB_TRANS);
+<a id='L116' name='L116'></a> 116         <a href='../S/54.html#L37' title='Defined at 37 in debug/kdb/kdb_debugger.c.'>kdb_common_init_state</a>(ks);
+<a id='L117' name='L117'></a> 117         <em class='comment'>/* Remove any breakpoints as needed by kdb and clear single step */</em>
+<a id='L118' name='L118'></a> 118         <a href='../S/56.html#L205' title='Defined at 205 in debug/kdb/kdb_bp.c.'>kdb_bp_remove</a>();
+<a id='L119' name='L119'></a> 119         <a href='../S/59.html#L150' title='Defined at 150 in debug/kdb/kdb_private.h.'>KDB_STATE_CLEAR</a>(DOING_SS);
+<a id='L120' name='L120'></a> 120         <a href='../S/59.html#L149' title='Defined at 149 in debug/kdb/kdb_private.h.'>KDB_STATE_SET</a>(PAGER);
+<a id='L121' name='L121'></a> 121         <strong class='reserved'>if</strong> (ks-&gt;err_code == DIE_OOPS || reason == KDB_REASON_OOPS) <em class='brace'>{</em>
+<a id='L122' name='L122'></a> 122                 ks-&gt;pass_exception = 1;
+<a id='L123' name='L123'></a> 123                 KDB_FLAG_SET(CATASTROPHIC);
+<a id='L124' name='L124'></a> 124         <em class='brace'>}</em>
+<a id='L125' name='L125'></a> 125         <em class='comment'>/* set CATASTROPHIC if the system contains unresponsive processors */</em>
+<a id='L126' name='L126'></a> 126         for_each_online_cpu(i)
+<a id='L127' name='L127'></a> 127                 <strong class='reserved'>if</strong> (!kgdb_info[i].enter_kgdb)
+<a id='L128' name='L128'></a> 128                         KDB_FLAG_SET(CATASTROPHIC);
+<a id='L129' name='L129'></a> 129         <strong class='reserved'>if</strong> (<a href='../S/59.html#L148' title='Defined at 148 in debug/kdb/kdb_private.h.'>KDB_STATE</a>(SSBPT) &amp;&amp; reason == KDB_REASON_SSTEP) <em class='brace'>{</em>
+<a id='L130' name='L130'></a> 130                 <a href='../S/59.html#L150' title='Defined at 150 in debug/kdb/kdb_private.h.'>KDB_STATE_CLEAR</a>(SSBPT);
+<a id='L131' name='L131'></a> 131                 <a href='../S/59.html#L150' title='Defined at 150 in debug/kdb/kdb_private.h.'>KDB_STATE_CLEAR</a>(DOING_SS);
+<a id='L132' name='L132'></a> 132         <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L133' name='L133'></a> 133                 <em class='comment'>/* Start kdb main loop */</em>
+<a id='L134' name='L134'></a> 134                 error = <a href='../S/60.html#L1400' title='Defined at 1400 in debug/kdb/kdb_main.c.'>kdb_main_loop</a>(KDB_REASON_ENTER, reason,
+<a id='L135' name='L135'></a> 135                                       ks-&gt;err_code, db_result, ks-&gt;linux_regs);
+<a id='L136' name='L136'></a> 136         <em class='brace'>}</em>
+<a id='L137' name='L137'></a> 137         <em class='comment'>/*</em>
+<a id='L138' name='L138'></a> 138 <em class='comment'>         * Upon exit from the kdb main loop setup break points and restart</em>
+<a id='L139' name='L139'></a> 139 <em class='comment'>         * the system based on the requested continue state</em>
+<a id='L140' name='L140'></a> 140 <em class='comment'>         */</em>
+<a id='L141' name='L141'></a> 141         <a href='../S/54.html#L45' title='Defined at 45 in debug/kdb/kdb_debugger.c.'>kdb_common_deinit_state</a>();
+<a id='L142' name='L142'></a> 142         <a href='../S/59.html#L150' title='Defined at 150 in debug/kdb/kdb_private.h.'>KDB_STATE_CLEAR</a>(PAGER);
+<a id='L143' name='L143'></a> 143         <a href='../S/58.html#L161' title='Defined at 161 in debug/kdb/kdb_support.c.'>kdbnearsym_cleanup</a>();
+<a id='L144' name='L144'></a> 144         <strong class='reserved'>if</strong> (error == <a href='../S/59.html#L22' title='Defined at 22 in debug/kdb/kdb_private.h.'>KDB_CMD_KGDB</a>) <em class='brace'>{</em>
+<a id='L145' name='L145'></a> 145                 <strong class='reserved'>if</strong> (<a href='../S/59.html#L148' title='Defined at 148 in debug/kdb/kdb_private.h.'>KDB_STATE</a>(DOING_KGDB))
+<a id='L146' name='L146'></a> 146                         <a href='../S/59.html#L150' title='Defined at 150 in debug/kdb/kdb_private.h.'>KDB_STATE_CLEAR</a>(DOING_KGDB);
+<a id='L147' name='L147'></a> 147                 <strong class='reserved'>return</strong> <a href='../S/61.html#L61' title='Defined at 61 in debug/debug_core.h.'>DBG_PASS_EVENT</a>;
+<a id='L148' name='L148'></a> 148         <em class='brace'>}</em>
+<a id='L149' name='L149'></a> 149         <a href='../S/56.html#L174' title='Defined at 174 in debug/kdb/kdb_bp.c.'>kdb_bp_install</a>(ks-&gt;linux_regs);
+<a id='L150' name='L150'></a> 150         <em class='comment'>/* Set the exit state to a single step or a continue */</em>
+<a id='L151' name='L151'></a> 151         <strong class='reserved'>if</strong> (<a href='../S/59.html#L148' title='Defined at 148 in debug/kdb/kdb_private.h.'>KDB_STATE</a>(DOING_SS))
+<a id='L152' name='L152'></a> 152                 <a href='../S/49.html#L1095' title='Defined at 1095 in debug/gdbstub.c.'>gdbstub_state</a>(ks, "s");
+<a id='L153' name='L153'></a> 153         <strong class='reserved'>else</strong>
+<a id='L154' name='L154'></a> 154                 <a href='../S/49.html#L1095' title='Defined at 1095 in debug/gdbstub.c.'>gdbstub_state</a>(ks, "c");
+<a id='L155' name='L155'></a> 155 
+<a id='L156' name='L156'></a> 156         KDB_FLAG_CLEAR(CATASTROPHIC);
+<a id='L157' name='L157'></a> 157 
+<a id='L158' name='L158'></a> 158         <em class='comment'>/* Invoke arch specific exception handling prior to system resume */</em>
+<a id='L159' name='L159'></a> 159         kgdb_info[ks-&gt;cpu].ret_state = <a href='../S/49.html#L1095' title='Defined at 1095 in debug/gdbstub.c.'>gdbstub_state</a>(ks, "e");
+<a id='L160' name='L160'></a> 160         <strong class='reserved'>if</strong> (ks-&gt;pass_exception)
+<a id='L161' name='L161'></a> 161                 kgdb_info[ks-&gt;cpu].ret_state = 1;
+<a id='L162' name='L162'></a> 162         <strong class='reserved'>if</strong> (error == <a href='../S/59.html#L20' title='Defined at 20 in debug/kdb/kdb_private.h.'>KDB_CMD_CPU</a>) <em class='brace'>{</em>
+<a id='L163' name='L163'></a> 163                 <a href='../S/59.html#L149' title='Defined at 149 in debug/kdb/kdb_private.h.'>KDB_STATE_SET</a>(REENTRY);
+<a id='L164' name='L164'></a> 164                 <em class='comment'>/*</em>
+<a id='L165' name='L165'></a> 165 <em class='comment'>                 * Force clear the single step bit because kdb emulates this</em>
+<a id='L166' name='L166'></a> 166 <em class='comment'>                 * differently vs the gdbstub</em>
+<a id='L167' name='L167'></a> 167 <em class='comment'>                 */</em>
+<a id='L168' name='L168'></a> 168                 kgdb_single_step = 0;
+<a id='L169' name='L169'></a> 169                 <strong class='reserved'>return</strong> <a href='../S/61.html#L63' title='Defined at 63 in debug/debug_core.h.'>DBG_SWITCH_CPU_EVENT</a>;
+<a id='L170' name='L170'></a> 170         <em class='brace'>}</em>
+<a id='L171' name='L171'></a> 171         <strong class='reserved'>return</strong> kgdb_info[ks-&gt;cpu].ret_state;
+<a id='L172' name='L172'></a> 172 <em class='brace'>}</em>
+<a id='L173' name='L173'></a> 173 
+<a id='L174' name='L174'></a> 174 <strong class='reserved'>void</strong> <a href='../R/8324.html' title='Multiple referred from 4 places.'>kdb_gdb_state_pass</a>(<strong class='reserved'>char</strong> *buf)
+<a id='L175' name='L175'></a> 175 <em class='brace'>{</em>
+<a id='L176' name='L176'></a> 176         <a href='../S/49.html#L1095' title='Defined at 1095 in debug/gdbstub.c.'>gdbstub_state</a>(kdb_ks, buf);
+<a id='L177' name='L177'></a> 177 <em class='brace'>}</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L37'>[^]</a><a href='#L174'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

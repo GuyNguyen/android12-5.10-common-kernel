@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>RT_MUTEX_HAS_WAITERS</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/40.html#L59'>RT_MUTEX_HAS_WAITERS</a>   59 locking/rtmutex.c 		val |= RT_MUTEX_HAS_WAITERS;</span>
+<span class='curline'><a href='../S/40.html#L67'>RT_MUTEX_HAS_WAITERS</a>   67 locking/rtmutex.c 			((unsigned long)lock-&gt;owner &amp; ~RT_MUTEX_HAS_WAITERS);</span>
+<span class='curline'><a href='../S/40.html#L136'>RT_MUTEX_HAS_WAITERS</a>  136 locking/rtmutex.c 	if (owner &amp; RT_MUTEX_HAS_WAITERS)</span>
+<span class='curline'><a href='../S/40.html#L137'>RT_MUTEX_HAS_WAITERS</a>  137 locking/rtmutex.c 		WRITE_ONCE(*p, owner &amp; ~RT_MUTEX_HAS_WAITERS);</span>
+<span class='curline'><a href='../S/40.html#L160'>RT_MUTEX_HAS_WAITERS</a>  160 locking/rtmutex.c 				 owner | RT_MUTEX_HAS_WAITERS) != owner);</span>
+<span class='curline'><a href='../S/40.html#L211'>RT_MUTEX_HAS_WAITERS</a>  211 locking/rtmutex.c 			((unsigned long)lock-&gt;owner | RT_MUTEX_HAS_WAITERS);</span>
+<span class='curline'><a href='../S/40.html#L1043'>RT_MUTEX_HAS_WAITERS</a> 1043 locking/rtmutex.c 	lock-&gt;owner = (void *) RT_MUTEX_HAS_WAITERS;</span>
+<span class='curline'><a href='../S/47.html#L112'>RT_MUTEX_HAS_WAITERS</a>  112 locking/rtmutex_common.h 	return (struct task_struct *) (owner &amp; ~RT_MUTEX_HAS_WAITERS);</span>
+</pre>
+</body>
+</html>

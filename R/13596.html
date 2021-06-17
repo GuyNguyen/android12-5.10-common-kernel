@@ -1,0 +1,632 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>trace_array</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/290.html#L33'>trace_array</a>        33 trace/blktrace.c static struct trace_array *blk_tr;</span>
+<span class='curline'><a href='../S/290.html#L1496'>trace_array</a>      1496 trace/blktrace.c static void blk_tracer_start(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/290.html#L1501'>trace_array</a>      1501 trace/blktrace.c static int blk_tracer_init(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/290.html#L1508'>trace_array</a>      1508 trace/blktrace.c static void blk_tracer_stop(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/290.html#L1513'>trace_array</a>      1513 trace/blktrace.c static void blk_tracer_reset(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/290.html#L1543'>trace_array</a>      1543 trace/blktrace.c 	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/290.html#L1612'>trace_array</a>      1612 trace/blktrace.c blk_tracer_set_flag(struct trace_array *tr, u32 old_flags, u32 bit, int set)</span>
+<span class='curline'><a href='../S/270.html#L98'>trace_array</a>        98 trace/ftrace.c 	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/270.html#L145'>trace_array</a>       145 trace/ftrace.c 	struct trace_array *tr = op-&gt;private;</span>
+<span class='curline'><a href='../S/270.html#L1020'>trace_array</a>      1020 trace/ftrace.c 	struct trace_array	*tr;</span>
+<span class='curline'><a href='../S/270.html#L1287'>trace_array</a>      1287 trace/ftrace.c static int ftrace_add_mod(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/270.html#L3258'>trace_array</a>      3258 trace/ftrace.c 	struct trace_array		*tr;</span>
+<span class='curline'><a href='../S/270.html#L3269'>trace_array</a>      3269 trace/ftrace.c 	struct trace_array *tr = iter-&gt;ops-&gt;private;</span>
+<span class='curline'><a href='../S/270.html#L3400'>trace_array</a>      3400 trace/ftrace.c 	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/270.html#L3453'>trace_array</a>      3453 trace/ftrace.c 	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/270.html#L3762'>trace_array</a>      3762 trace/ftrace.c 	struct trace_array *tr = ops-&gt;private;</span>
+<span class='curline'><a href='../S/270.html#L4131'>trace_array</a>      4131 trace/ftrace.c static int cache_mod(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/270.html#L4252'>trace_array</a>      4252 trace/ftrace.c 	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/270.html#L4278'>trace_array</a>      4278 trace/ftrace.c ftrace_mod_callback(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/270.html#L4515'>trace_array</a>      4515 trace/ftrace.c register_ftrace_function_probe(char *glob, struct trace_array *tr,</span>
+<span class='curline'><a href='../S/270.html#L4658'>trace_array</a>      4658 trace/ftrace.c unregister_ftrace_function_probe_func(char *glob, struct trace_array *tr,</span>
+<span class='curline'><a href='../S/270.html#L4786'>trace_array</a>      4786 trace/ftrace.c void clear_ftrace_function_probes(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/270.html#L4847'>trace_array</a>      4847 trace/ftrace.c 	struct trace_array *tr = iter-&gt;ops-&gt;private;</span>
+<span class='curline'><a href='../S/270.html#L6369'>trace_array</a>      6369 trace/ftrace.c 	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/270.html#L6741'>trace_array</a>      6741 trace/ftrace.c 	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/270.html#L6916'>trace_array</a>      6916 trace/ftrace.c void ftrace_init_trace_array(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/270.html#L6951'>trace_array</a>      6951 trace/ftrace.c __init void ftrace_init_global_array_ops(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/270.html#L6958'>trace_array</a>      6958 trace/ftrace.c void ftrace_init_array_ops(struct trace_array *tr, ftrace_func_t func)</span>
+<span class='curline'><a href='../S/270.html#L6970'>trace_array</a>      6970 trace/ftrace.c void ftrace_reset_array_ops(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/270.html#L7099'>trace_array</a>      7099 trace/ftrace.c 	struct trace_array *tr = data;</span>
+<span class='curline'><a href='../S/270.html#L7120'>trace_array</a>      7120 trace/ftrace.c 	struct trace_array *tr = data;</span>
+<span class='curline'><a href='../S/270.html#L7133'>trace_array</a>      7133 trace/ftrace.c 	struct trace_array *tr = data;</span>
+<span class='curline'><a href='../S/270.html#L7142'>trace_array</a>      7142 trace/ftrace.c void ftrace_pid_follow_fork(struct trace_array *tr, bool enable)</span>
+<span class='curline'><a href='../S/270.html#L7157'>trace_array</a>      7157 trace/ftrace.c static void clear_ftrace_pids(struct trace_array *tr, int type)</span>
+<span class='curline'><a href='../S/270.html#L7195'>trace_array</a>      7195 trace/ftrace.c void ftrace_clear_pids(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/270.html#L7204'>trace_array</a>      7204 trace/ftrace.c static void ftrace_pid_reset(struct trace_array *tr, int type)</span>
+<span class='curline'><a href='../S/270.html#L7222'>trace_array</a>      7222 trace/ftrace.c 	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/270.html#L7237'>trace_array</a>      7237 trace/ftrace.c 	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/270.html#L7275'>trace_array</a>      7275 trace/ftrace.c 	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/270.html#L7290'>trace_array</a>      7290 trace/ftrace.c 	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/270.html#L7310'>trace_array</a>      7310 trace/ftrace.c 	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/270.html#L7361'>trace_array</a>      7361 trace/ftrace.c 	struct trace_array *tr = data;</span>
+<span class='curline'><a href='../S/270.html#L7387'>trace_array</a>      7387 trace/ftrace.c 	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/270.html#L7474'>trace_array</a>      7474 trace/ftrace.c 	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/270.html#L7497'>trace_array</a>      7497 trace/ftrace.c void ftrace_init_tracefs(struct trace_array *tr, struct dentry *d_tracer)</span>
+<span class='curline'><a href='../S/270.html#L7505'>trace_array</a>      7505 trace/ftrace.c void __init ftrace_init_tracefs_toplevel(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L98'>trace_array</a>        98 trace/trace.c  dummy_set_flag(struct trace_array *tr, u32 old_flags, u32 bit, int set)</span>
+<span class='curline'><a href='../S/271.html#L177'>trace_array</a>       177 trace/trace.c  int tracing_set_tracer(struct trace_array *tr, const char *buf);</span>
+<span class='curline'><a href='../S/271.html#L178'>trace_array</a>       178 trace/trace.c  static void ftrace_trace_userstack(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L426'>trace_array</a>       426 trace/trace.c  static struct trace_array global_trace = {</span>
+<span class='curline'><a href='../S/271.html#L432'>trace_array</a>       432 trace/trace.c  int trace_array_get(struct trace_array *this_tr)</span>
+<span class='curline'><a href='../S/271.html#L434'>trace_array</a>       434 trace/trace.c  	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/271.html#L450'>trace_array</a>       450 trace/trace.c  static void __trace_array_put(struct trace_array *this_tr)</span>
+<span class='curline'><a href='../S/271.html#L464'>trace_array</a>       464 trace/trace.c  void trace_array_put(struct trace_array *this_tr)</span>
+<span class='curline'><a href='../S/271.html#L475'>trace_array</a>       475 trace/trace.c  int tracing_check_open_get_tr(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L911'>trace_array</a>       911 trace/trace.c  static inline void ftrace_trace_stack(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L922'>trace_array</a>       922 trace/trace.c  static inline void ftrace_trace_stack(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L955'>trace_array</a>       955 trace/trace.c  void tracer_tracing_on(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L1102'>trace_array</a>      1102 trace/trace.c  static void tracing_snapshot_instance_cond(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L1133'>trace_array</a>      1133 trace/trace.c  void tracing_snapshot_instance(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L1154'>trace_array</a>      1154 trace/trace.c  	struct trace_array *tr = &amp;global_trace;</span>
+<span class='curline'><a href='../S/271.html#L1173'>trace_array</a>      1173 trace/trace.c  void tracing_snapshot_cond(struct trace_array *tr, void *cond_data)</span>
+<span class='curline'><a href='../S/271.html#L1193'>trace_array</a>      1193 trace/trace.c  void *tracing_cond_snapshot_data(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L1212'>trace_array</a>      1212 trace/trace.c  int tracing_alloc_snapshot_instance(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L1230'>trace_array</a>      1230 trace/trace.c  static void free_snapshot(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L1255'>trace_array</a>      1255 trace/trace.c  	struct trace_array *tr = &amp;global_trace;</span>
+<span class='curline'><a href='../S/271.html#L1301'>trace_array</a>      1301 trace/trace.c  int tracing_snapshot_cond_enable(struct trace_array *tr, void *cond_data,</span>
+<span class='curline'><a href='../S/271.html#L1363'>trace_array</a>      1363 trace/trace.c  int tracing_snapshot_cond_disable(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L1387'>trace_array</a>      1387 trace/trace.c  void tracing_snapshot_cond(struct trace_array *tr, void *cond_data)</span>
+<span class='curline'><a href='../S/271.html#L1404'>trace_array</a>      1404 trace/trace.c  void *tracing_cond_snapshot_data(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L1409'>trace_array</a>      1409 trace/trace.c  int tracing_snapshot_cond_enable(struct trace_array *tr, void *cond_data, cond_update_fn_t update)</span>
+<span class='curline'><a href='../S/271.html#L1414'>trace_array</a>      1414 trace/trace.c  int tracing_snapshot_cond_disable(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L1421'>trace_array</a>      1421 trace/trace.c  void tracer_tracing_off(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L1467'>trace_array</a>      1467 trace/trace.c  bool tracer_tracing_is_on(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L1549'>trace_array</a>      1549 trace/trace.c  bool trace_clock_in_ns(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L1696'>trace_array</a>      1696 trace/trace.c  	struct trace_array *tr = container_of(work, struct trace_array,</span>
+<span class='curline'><a href='../S/271.html#L1703'>trace_array</a>      1703 trace/trace.c  	struct trace_array *tr = container_of(iwork, struct trace_array,</span>
+<span class='curline'><a href='../S/271.html#L1708'>trace_array</a>      1708 trace/trace.c  static void trace_create_maxlat_file(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L1731'>trace_array</a>      1731 trace/trace.c  void latency_fsnotify(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L1762'>trace_array</a>      1762 trace/trace.c  __update_max_tr(struct trace_array *tr, struct task_struct *tsk, int cpu)</span>
+<span class='curline'><a href='../S/271.html#L1807'>trace_array</a>      1807 trace/trace.c  update_max_tr(struct trace_array *tr, struct task_struct *tsk, int cpu,</span>
+<span class='curline'><a href='../S/271.html#L1850'>trace_array</a>      1850 trace/trace.c  update_max_tr_single(struct trace_array *tr, struct task_struct *tsk, int cpu)</span>
+<span class='curline'><a href='../S/271.html#L1921'>trace_array</a>      1921 trace/trace.c  	struct trace_array *tr = &amp;global_trace;</span>
+<span class='curline'><a href='../S/271.html#L2039'>trace_array</a>      2039 trace/trace.c  static void add_tracer_options(struct trace_array *tr, struct tracer *t);</span>
+<span class='curline'><a href='../S/271.html#L2172'>trace_array</a>      2172 trace/trace.c  	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/271.html#L2303'>trace_array</a>      2303 trace/trace.c  static void tracing_start_tr(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L2368'>trace_array</a>      2368 trace/trace.c  static void tracing_stop_tr(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L2856'>trace_array</a>      2856 trace/trace.c  void trace_buffer_unlock_commit_regs(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L2885'>trace_array</a>      2885 trace/trace.c  trace_function(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L2997'>trace_array</a>      2997 trace/trace.c  static inline void ftrace_trace_stack(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L3008'>trace_array</a>      3008 trace/trace.c  void __trace_stack(struct trace_array *tr, unsigned long flags, int skip,</span>
+<span class='curline'><a href='../S/271.html#L3058'>trace_array</a>      3058 trace/trace.c  ftrace_trace_userstack(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L3104'>trace_array</a>      3104 trace/trace.c  static void ftrace_trace_userstack(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L3234'>trace_array</a>      3234 trace/trace.c  	struct trace_array *tr = &amp;global_trace;</span>
+<span class='curline'><a href='../S/271.html#L3349'>trace_array</a>      3349 trace/trace.c  int trace_array_vprintk(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L3376'>trace_array</a>      3376 trace/trace.c  int trace_array_printk(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L3407'>trace_array</a>      3407 trace/trace.c  int trace_array_init_printk(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L3667'>trace_array</a>      3667 trace/trace.c  	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/271.html#L3780'>trace_array</a>      3780 trace/trace.c  unsigned long trace_total_entries_cpu(struct trace_array *tr, int cpu)</span>
+<span class='curline'><a href='../S/271.html#L3792'>trace_array</a>      3792 trace/trace.c  unsigned long trace_total_entries(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L3923'>trace_array</a>      3923 trace/trace.c  	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/271.html#L3949'>trace_array</a>      3949 trace/trace.c  	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/271.html#L3981'>trace_array</a>      3981 trace/trace.c  	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/271.html#L4006'>trace_array</a>      4006 trace/trace.c  	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/271.html#L4036'>trace_array</a>      4036 trace/trace.c  	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/271.html#L4092'>trace_array</a>      4092 trace/trace.c  	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/271.html#L4143'>trace_array</a>      4143 trace/trace.c  	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/271.html#L4159'>trace_array</a>      4159 trace/trace.c  	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/271.html#L4301'>trace_array</a>      4301 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L4434'>trace_array</a>      4434 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L4448'>trace_array</a>      4448 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L4490'>trace_array</a>      4490 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L4498'>trace_array</a>      4498 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L4507'>trace_array</a>      4507 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L4551'>trace_array</a>      4551 trace/trace.c  trace_ok_for_array(struct tracer *t, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L4558'>trace_array</a>      4558 trace/trace.c  get_tracer_for_array(struct trace_array *tr, struct tracer *t)</span>
+<span class='curline'><a href='../S/271.html#L4569'>trace_array</a>      4569 trace/trace.c  	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/271.html#L4582'>trace_array</a>      4582 trace/trace.c  	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/271.html#L4625'>trace_array</a>      4625 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L4647'>trace_array</a>      4647 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L4691'>trace_array</a>      4691 trace/trace.c  	struct trace_array *tr = file_inode(filp)-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L4715'>trace_array</a>      4715 trace/trace.c  int tracing_set_cpumask(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L4753'>trace_array</a>      4753 trace/trace.c  	struct trace_array *tr = file_inode(filp)-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L4789'>trace_array</a>      4789 trace/trace.c  	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/271.html#L4815'>trace_array</a>      4815 trace/trace.c  static int __set_tracer_option(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L4834'>trace_array</a>      4834 trace/trace.c  static int set_tracer_option(struct trace_array *tr, char *cmp, int neg)</span>
+<span class='curline'><a href='../S/271.html#L4860'>trace_array</a>      4860 trace/trace.c  int set_tracer_flag(struct trace_array *tr, unsigned int mask, int enabled)</span>
+<span class='curline'><a href='../S/271.html#L4917'>trace_array</a>      4917 trace/trace.c  int trace_set_options(struct trace_array *tr, char *option)</span>
+<span class='curline'><a href='../S/271.html#L4981'>trace_array</a>      4981 trace/trace.c  	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/271.html#L5004'>trace_array</a>      5004 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L5703'>trace_array</a>      5703 trace/trace.c  	struct trace_array *tr = filp-&gt;private_data;</span>
+<span class='curline'><a href='../S/271.html#L5714'>trace_array</a>      5714 trace/trace.c  int tracer_init(struct tracer *t, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L5756'>trace_array</a>      5756 trace/trace.c  static int __tracing_resize_ring_buffer(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L5822'>trace_array</a>      5822 trace/trace.c  ssize_t tracing_resize_ring_buffer(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L5874'>trace_array</a>      5874 trace/trace.c  create_trace_option_files(struct trace_array *tr, struct tracer *tracer);</span>
+<span class='curline'><a href='../S/271.html#L5880'>trace_array</a>      5880 trace/trace.c  static void tracing_set_nop(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L5893'>trace_array</a>      5893 trace/trace.c  static void add_tracer_options(struct trace_array *tr, struct tracer *t)</span>
+<span class='curline'><a href='../S/271.html#L5902'>trace_array</a>      5902 trace/trace.c  int tracing_set_tracer(struct trace_array *tr, const char *buf)</span>
+<span class='curline'><a href='../S/271.html#L6013'>trace_array</a>      6013 trace/trace.c  	struct trace_array *tr = filp-&gt;private_data;</span>
+<span class='curline'><a href='../S/271.html#L6083'>trace_array</a>      6083 trace/trace.c  	struct trace_array *tr = filp-&gt;private_data;</span>
+<span class='curline'><a href='../S/271.html#L6124'>trace_array</a>      6124 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L6186'>trace_array</a>      6186 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L6209'>trace_array</a>      6209 trace/trace.c  	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/271.html#L6513'>trace_array</a>      6513 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L6561'>trace_array</a>      6561 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L6588'>trace_array</a>      6588 trace/trace.c  	struct trace_array *tr = filp-&gt;private_data;</span>
+<span class='curline'><a href='../S/271.html#L6625'>trace_array</a>      6625 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L6642'>trace_array</a>      6642 trace/trace.c  	struct trace_array *tr = filp-&gt;private_data;</span>
+<span class='curline'><a href='../S/271.html#L6724'>trace_array</a>      6724 trace/trace.c  	struct trace_array *tr = filp-&gt;private_data;</span>
+<span class='curline'><a href='../S/271.html#L6782'>trace_array</a>      6782 trace/trace.c  	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/271.html#L6795'>trace_array</a>      6795 trace/trace.c  int tracing_set_clock(struct trace_array *tr, const char *clockstr)</span>
+<span class='curline'><a href='../S/271.html#L6833'>trace_array</a>      6833 trace/trace.c  	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/271.html#L6859'>trace_array</a>      6859 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L6875'>trace_array</a>      6875 trace/trace.c  	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/271.html#L6891'>trace_array</a>      6891 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L6905'>trace_array</a>      6905 trace/trace.c  int tracing_set_time_stamp_abs(struct trace_array *tr, bool abs)</span>
+<span class='curline'><a href='../S/271.html#L6946'>trace_array</a>      6946 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L6991'>trace_array</a>      6991 trace/trace.c  	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/271.html#L7241'>trace_array</a>      7241 trace/trace.c  static struct tracing_log_err *get_tracing_log_err(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L7313'>trace_array</a>      7313 trace/trace.c  void tracing_log_err(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L7341'>trace_array</a>      7341 trace/trace.c  static void clear_tracing_err_log(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L7357'>trace_array</a>      7357 trace/trace.c  	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/271.html#L7366'>trace_array</a>      7366 trace/trace.c  	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/271.html#L7415'>trace_array</a>      7415 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L7447'>trace_array</a>      7447 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L7467'>trace_array</a>      7467 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L7786'>trace_array</a>      7786 trace/trace.c  	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/271.html#L7887'>trace_array</a>      7887 trace/trace.c  		struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/271.html#L7895'>trace_array</a>      7895 trace/trace.c  		      struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/271.html#L7938'>trace_array</a>      7938 trace/trace.c  ftrace_snapshot_init(struct ftrace_probe_ops *ops, struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L7954'>trace_array</a>      7954 trace/trace.c  ftrace_snapshot_free(struct ftrace_probe_ops *ops, struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L7982'>trace_array</a>      7982 trace/trace.c  ftrace_trace_snapshot_callback(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/271.html#L8042'>trace_array</a>      8042 trace/trace.c  static struct dentry *tracing_get_dentry(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L8055'>trace_array</a>      8055 trace/trace.c  static struct dentry *tracing_dentry_percpu(struct trace_array *tr, int cpu)</span>
+<span class='curline'><a href='../S/271.html#L8086'>trace_array</a>      8086 trace/trace.c  tracing_init_tracefs_percpu(struct trace_array *tr, long cpu)</span>
+<span class='curline'><a href='../S/271.html#L8209'>trace_array</a>      8209 trace/trace.c  static void get_tr_index(void *data, struct trace_array **ptr,</span>
+<span class='curline'><a href='../S/271.html#L8214'>trace_array</a>      8214 trace/trace.c  	*ptr = container_of(data - *pindex, struct trace_array,</span>
+<span class='curline'><a href='../S/271.html#L8223'>trace_array</a>      8223 trace/trace.c  	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/271.html#L8242'>trace_array</a>      8242 trace/trace.c  	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/271.html#L8293'>trace_array</a>      8293 trace/trace.c  static struct dentry *trace_options_init_dentry(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L8314'>trace_array</a>      8314 trace/trace.c  create_trace_option_file(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L8335'>trace_array</a>      8335 trace/trace.c  create_trace_option_files(struct trace_array *tr, struct tracer *tracer)</span>
+<span class='curline'><a href='../S/271.html#L8396'>trace_array</a>      8396 trace/trace.c  create_trace_option_core_file(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L8410'>trace_array</a>      8410 trace/trace.c  static void create_trace_options_dir(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L8431'>trace_array</a>      8431 trace/trace.c  	struct trace_array *tr = filp-&gt;private_data;</span>
+<span class='curline'><a href='../S/271.html#L8445'>trace_array</a>      8445 trace/trace.c  	struct trace_array *tr = filp-&gt;private_data;</span>
+<span class='curline'><a href='../S/271.html#L8487'>trace_array</a>      8487 trace/trace.c  	struct trace_array *tr = filp-&gt;private_data;</span>
+<span class='curline'><a href='../S/271.html#L8501'>trace_array</a>      8501 trace/trace.c  	struct trace_array *tr = filp-&gt;private_data;</span>
+<span class='curline'><a href='../S/271.html#L8533'>trace_array</a>      8533 trace/trace.c  init_tracer_tracefs(struct trace_array *tr, struct dentry *d_tracer);</span>
+<span class='curline'><a href='../S/271.html#L8536'>trace_array</a>      8536 trace/trace.c  allocate_trace_buffer(struct trace_array *tr, struct array_buffer *buf, int size)</span>
+<span class='curline'><a href='../S/271.html#L8562'>trace_array</a>      8562 trace/trace.c  static int allocate_trace_buffers(struct trace_array *tr, int size)</span>
+<span class='curline'><a href='../S/271.html#L8602'>trace_array</a>      8602 trace/trace.c  static void free_trace_buffers(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L8614'>trace_array</a>      8614 trace/trace.c  static void init_trace_flags_index(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L8623'>trace_array</a>      8623 trace/trace.c  static void __update_tracer_options(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L8631'>trace_array</a>      8631 trace/trace.c  static void update_tracer_options(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L8639'>trace_array</a>      8639 trace/trace.c  struct trace_array *trace_array_find(const char *instance)</span>
+<span class='curline'><a href='../S/271.html#L8641'>trace_array</a>      8641 trace/trace.c  	struct trace_array *tr, *found = NULL;</span>
+<span class='curline'><a href='../S/271.html#L8653'>trace_array</a>      8653 trace/trace.c  struct trace_array *trace_array_find_get(const char *instance)</span>
+<span class='curline'><a href='../S/271.html#L8655'>trace_array</a>      8655 trace/trace.c  	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/271.html#L8666'>trace_array</a>      8666 trace/trace.c  static int trace_array_create_dir(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L8684'>trace_array</a>      8684 trace/trace.c  static struct trace_array *trace_array_create(const char *name)</span>
+<span class='curline'><a href='../S/271.html#L8686'>trace_array</a>      8686 trace/trace.c  	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/271.html#L8751'>trace_array</a>      8751 trace/trace.c  	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/271.html#L8787'>trace_array</a>      8787 trace/trace.c  struct trace_array *trace_array_get_by_name(const char *name)</span>
+<span class='curline'><a href='../S/271.html#L8789'>trace_array</a>      8789 trace/trace.c  	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/271.html#L8813'>trace_array</a>      8813 trace/trace.c  static int __remove_instance(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L8849'>trace_array</a>      8849 trace/trace.c  int trace_array_destroy(struct trace_array *this_tr)</span>
+<span class='curline'><a href='../S/271.html#L8851'>trace_array</a>      8851 trace/trace.c  	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/271.html#L8879'>trace_array</a>      8879 trace/trace.c  	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/271.html#L8898'>trace_array</a>      8898 trace/trace.c  	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/271.html#L8922'>trace_array</a>      8922 trace/trace.c  init_tracer_tracefs(struct trace_array *tr, struct dentry *d_tracer)</span>
+<span class='curline'><a href='../S/271.html#L9036'>trace_array</a>      9036 trace/trace.c  	struct trace_array *tr = &amp;global_trace;</span>
+<span class='curline'><a href='../S/271.html#L9314'>trace_array</a>      9314 trace/trace.c  	struct trace_array *tr = &amp;global_trace;</span>
+<span class='curline'><a href='../S/256.html#L160'>trace_array</a>       160 trace/trace.h  struct trace_array;</span>
+<span class='curline'><a href='../S/256.html#L195'>trace_array</a>       195 trace/trace.h  	struct trace_array		*tr;</span>
+<span class='curline'><a href='../S/256.html#L238'>trace_array</a>       238 trace/trace.h  typedef bool (*cond_update_fn_t)(struct trace_array *tr, void *cond_data);</span>
+<span class='curline'><a href='../S/256.html#L389'>trace_array</a>       389 trace/trace.h  extern int trace_array_get(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L390'>trace_array</a>       390 trace/trace.h  extern int tracing_check_open_get_tr(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L391'>trace_array</a>       391 trace/trace.h  extern struct trace_array *trace_array_find(const char *instance);</span>
+<span class='curline'><a href='../S/256.html#L392'>trace_array</a>       392 trace/trace.h  extern struct trace_array *trace_array_find_get(const char *instance);</span>
+<span class='curline'><a href='../S/256.html#L394'>trace_array</a>       394 trace/trace.h  extern int tracing_set_time_stamp_abs(struct trace_array *tr, bool abs);</span>
+<span class='curline'><a href='../S/256.html#L395'>trace_array</a>       395 trace/trace.h  extern int tracing_set_clock(struct trace_array *tr, const char *clockstr);</span>
+<span class='curline'><a href='../S/256.html#L397'>trace_array</a>       397 trace/trace.h  extern bool trace_clock_in_ns(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L403'>trace_array</a>       403 trace/trace.h  static inline struct trace_array *top_trace_array(void)</span>
+<span class='curline'><a href='../S/256.html#L405'>trace_array</a>       405 trace/trace.h  	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/256.html#L493'>trace_array</a>       493 trace/trace.h  	struct trace_array		*tr;</span>
+<span class='curline'><a href='../S/256.html#L519'>trace_array</a>       519 trace/trace.h  	int			(*init)(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L520'>trace_array</a>       520 trace/trace.h  	void			(*reset)(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L521'>trace_array</a>       521 trace/trace.h  	void			(*start)(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L522'>trace_array</a>       522 trace/trace.h  	void			(*stop)(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L523'>trace_array</a>       523 trace/trace.h  	int			(*update_thresh)(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L539'>trace_array</a>       539 trace/trace.h  					    struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L544'>trace_array</a>       544 trace/trace.h  	int			(*set_flag)(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L547'>trace_array</a>       547 trace/trace.h  	int			(*flag_changed)(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L744'>trace_array</a>       744 trace/trace.h  int tracer_init(struct tracer *t, struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L752'>trace_array</a>       752 trace/trace.h  bool tracer_tracing_is_on(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L753'>trace_array</a>       753 trace/trace.h  void tracer_tracing_on(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L754'>trace_array</a>       754 trace/trace.h  void tracer_tracing_off(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L772'>trace_array</a>       772 trace/trace.h  struct trace_entry *tracing_get_trace_entry(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L789'>trace_array</a>       789 trace/trace.h  unsigned long trace_total_entries_cpu(struct trace_array *tr, int cpu);</span>
+<span class='curline'><a href='../S/256.html#L790'>trace_array</a>       790 trace/trace.h  unsigned long trace_total_entries(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L792'>trace_array</a>       792 trace/trace.h  void trace_function(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L796'>trace_array</a>       796 trace/trace.h  void trace_graph_function(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L807'>trace_array</a>       807 trace/trace.h  void set_graph_array(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L849'>trace_array</a>       849 trace/trace.h  void update_max_tr(struct trace_array *tr, struct task_struct *tsk, int cpu,</span>
+<span class='curline'><a href='../S/256.html#L851'>trace_array</a>       851 trace/trace.h  void update_max_tr_single(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L858'>trace_array</a>       858 trace/trace.h  void latency_fsnotify(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L862'>trace_array</a>       862 trace/trace.h  static inline void latency_fsnotify(struct trace_array *tr) { }</span>
+<span class='curline'><a href='../S/256.html#L867'>trace_array</a>       867 trace/trace.h  void __trace_stack(struct trace_array *tr, unsigned long flags, int skip,</span>
+<span class='curline'><a href='../S/256.html#L870'>trace_array</a>       870 trace/trace.h  static inline void __trace_stack(struct trace_array *tr, unsigned long flags,</span>
+<span class='curline'><a href='../S/256.html#L880'>trace_array</a>       880 trace/trace.h  extern void trace_event_follow_fork(struct trace_array *tr, bool enable);</span>
+<span class='curline'><a href='../S/256.html#L886'>trace_array</a>       886 trace/trace.h  void ftrace_init_trace_array(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L888'>trace_array</a>       888 trace/trace.h  static inline void ftrace_init_trace_array(struct trace_array *tr) { }</span>
+<span class='curline'><a href='../S/256.html#L902'>trace_array</a>       902 trace/trace.h  					   struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L904'>trace_array</a>       904 trace/trace.h  						 struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L906'>trace_array</a>       906 trace/trace.h  					  struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L908'>trace_array</a>       908 trace/trace.h  					     struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L910'>trace_array</a>       910 trace/trace.h  						 struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L912'>trace_array</a>       912 trace/trace.h  					 struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L914'>trace_array</a>       914 trace/trace.h  					 struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L916'>trace_array</a>       916 trace/trace.h  					 struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L938'>trace_array</a>       938 trace/trace.h  trace_array_vprintk(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L1009'>trace_array</a>      1009 trace/trace.h  extern int __trace_graph_entry(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L1012'>trace_array</a>      1012 trace/trace.h  extern void __trace_graph_return(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L1139'>trace_array</a>      1139 trace/trace.h  	int			(*func)(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L1145'>trace_array</a>      1145 trace/trace.h  static inline int ftrace_trace_task(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/256.html#L1151'>trace_array</a>      1151 trace/trace.h  int ftrace_create_function_files(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L1153'>trace_array</a>      1153 trace/trace.h  void ftrace_destroy_function_files(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L1154'>trace_array</a>      1154 trace/trace.h  int ftrace_allocate_ftrace_ops(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L1155'>trace_array</a>      1155 trace/trace.h  void ftrace_free_ftrace_ops(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L1156'>trace_array</a>      1156 trace/trace.h  void ftrace_init_global_array_ops(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L1157'>trace_array</a>      1157 trace/trace.h  void ftrace_init_array_ops(struct trace_array *tr, ftrace_func_t func);</span>
+<span class='curline'><a href='../S/256.html#L1158'>trace_array</a>      1158 trace/trace.h  void ftrace_reset_array_ops(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L1159'>trace_array</a>      1159 trace/trace.h  void ftrace_init_tracefs(struct trace_array *tr, struct dentry *d_tracer);</span>
+<span class='curline'><a href='../S/256.html#L1160'>trace_array</a>      1160 trace/trace.h  void ftrace_init_tracefs_toplevel(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L1162'>trace_array</a>      1162 trace/trace.h  void ftrace_clear_pids(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L1164'>trace_array</a>      1164 trace/trace.h  void ftrace_pid_follow_fork(struct trace_array *tr, bool enable);</span>
+<span class='curline'><a href='../S/256.html#L1166'>trace_array</a>      1166 trace/trace.h  static inline int ftrace_trace_task(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/256.html#L1172'>trace_array</a>      1172 trace/trace.h  ftrace_create_function_files(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L1177'>trace_array</a>      1177 trace/trace.h  static inline int ftrace_allocate_ftrace_ops(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/256.html#L1181'>trace_array</a>      1181 trace/trace.h  static inline void ftrace_free_ftrace_ops(struct trace_array *tr) { }</span>
+<span class='curline'><a href='../S/256.html#L1182'>trace_array</a>      1182 trace/trace.h  static inline void ftrace_destroy_function_files(struct trace_array *tr) { }</span>
+<span class='curline'><a href='../S/256.html#L1184'>trace_array</a>      1184 trace/trace.h  ftrace_init_global_array_ops(struct trace_array *tr) { }</span>
+<span class='curline'><a href='../S/256.html#L1185'>trace_array</a>      1185 trace/trace.h  static inline void ftrace_reset_array_ops(struct trace_array *tr) { }</span>
+<span class='curline'><a href='../S/256.html#L1186'>trace_array</a>      1186 trace/trace.h  static inline void ftrace_init_tracefs(struct trace_array *tr, struct dentry *d) { }</span>
+<span class='curline'><a href='../S/256.html#L1187'>trace_array</a>      1187 trace/trace.h  static inline void ftrace_init_tracefs_toplevel(struct trace_array *tr, struct dentry *d) { }</span>
+<span class='curline'><a href='../S/256.html#L1188'>trace_array</a>      1188 trace/trace.h  static inline void ftrace_clear_pids(struct trace_array *tr) { }</span>
+<span class='curline'><a href='../S/256.html#L1190'>trace_array</a>      1190 trace/trace.h  static inline void ftrace_pid_follow_fork(struct trace_array *tr, bool enable) { }</span>
+<span class='curline'><a href='../S/256.html#L1200'>trace_array</a>      1200 trace/trace.h  					struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L1204'>trace_array</a>      1204 trace/trace.h  					struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L1208'>trace_array</a>      1208 trace/trace.h  					struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L1230'>trace_array</a>      1230 trace/trace.h  register_ftrace_function_probe(char *glob, struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L1233'>trace_array</a>      1233 trace/trace.h  unregister_ftrace_function_probe_func(char *glob, struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L1235'>trace_array</a>      1235 trace/trace.h  extern void clear_ftrace_function_probes(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L1259'>trace_array</a>      1259 trace/trace.h  static inline void clear_ftrace_function_probes(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/256.html#L1411'>trace_array</a>      1411 trace/trace.h  extern int enable_branch_tracing(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L1413'>trace_array</a>      1413 trace/trace.h  static inline int trace_branch_enable(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/256.html#L1425'>trace_array</a>      1425 trace/trace.h  static inline int trace_branch_enable(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/256.html#L1464'>trace_array</a>      1464 trace/trace.h  	struct trace_array		*tr;</span>
+<span class='curline'><a href='../S/256.html#L1474'>trace_array</a>      1474 trace/trace.h  void trace_buffer_unlock_commit_regs(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L1480'>trace_array</a>      1480 trace/trace.h  static inline void trace_buffer_unlock_commit(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L1672'>trace_array</a>      1672 trace/trace.h  extern int create_event_filter(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L1685'>trace_array</a>      1685 trace/trace.h  extern int event_trace_add_tracer(struct dentry *parent, struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L1686'>trace_array</a>      1686 trace/trace.h  extern int event_trace_del_tracer(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L1687'>trace_array</a>      1687 trace/trace.h  extern void __trace_early_add_events(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L1689'>trace_array</a>      1689 trace/trace.h  extern struct trace_event_file *__find_event_file(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L1692'>trace_array</a>      1692 trace/trace.h  extern struct trace_event_file *find_event_file(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L1718'>trace_array</a>      1718 trace/trace.h  extern void clear_event_triggers(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L1982'>trace_array</a>      1982 trace/trace.h  extern void tracing_snapshot_cond(struct trace_array *tr, void *cond_data);</span>
+<span class='curline'><a href='../S/256.html#L1983'>trace_array</a>      1983 trace/trace.h  extern int tracing_snapshot_cond_enable(struct trace_array *tr, void *cond_data, cond_update_fn_t update);</span>
+<span class='curline'><a href='../S/256.html#L1985'>trace_array</a>      1985 trace/trace.h  extern int tracing_snapshot_cond_disable(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L1986'>trace_array</a>      1986 trace/trace.h  extern void *tracing_cond_snapshot_data(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L1997'>trace_array</a>      1997 trace/trace.h  int set_tracer_flag(struct trace_array *tr, unsigned int mask, int enabled);</span>
+<span class='curline'><a href='../S/256.html#L2000'>trace_array</a>      2000 trace/trace.h  extern int trace_set_options(struct trace_array *tr, char *option);</span>
+<span class='curline'><a href='../S/256.html#L2001'>trace_array</a>      2001 trace/trace.h  extern int tracing_set_tracer(struct trace_array *tr, const char *buf);</span>
+<span class='curline'><a href='../S/256.html#L2002'>trace_array</a>      2002 trace/trace.h  extern ssize_t tracing_resize_ring_buffer(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L2004'>trace_array</a>      2004 trace/trace.h  extern int tracing_set_cpumask(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L2016'>trace_array</a>      2016 trace/trace.h  extern void tracing_log_err(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/256.html#L2066'>trace_array</a>      2066 trace/trace.h  extern int ftrace_set_clr_event(struct trace_array *tr, char *buf, int set);</span>
+<span class='curline'><a href='../S/256.html#L2074'>trace_array</a>      2074 trace/trace.h  void tracing_snapshot_instance(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L2075'>trace_array</a>      2075 trace/trace.h  int tracing_alloc_snapshot_instance(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L2077'>trace_array</a>      2077 trace/trace.h  static inline void tracing_snapshot_instance(struct trace_array *tr) { }</span>
+<span class='curline'><a href='../S/256.html#L2078'>trace_array</a>      2078 trace/trace.h  static inline int tracing_alloc_snapshot_instance(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/310.html#L25'>trace_array</a>        25 trace/trace_boot.c trace_boot_set_instance_options(struct trace_array *tr, struct xbc_node *node)</span>
+<span class='curline'><a href='../S/310.html#L83'>trace_array</a>        83 trace/trace_boot.c trace_boot_enable_events(struct trace_array *tr, struct xbc_node *node)</span>
+<span class='curline'><a href='../S/310.html#L175'>trace_array</a>       175 trace/trace_boot.c trace_boot_init_one_event(struct trace_array *tr, struct xbc_node *gnode,</span>
+<span class='curline'><a href='../S/310.html#L225'>trace_array</a>       225 trace/trace_boot.c trace_boot_init_events(struct trace_array *tr, struct xbc_node *node)</span>
+<span class='curline'><a href='../S/310.html#L244'>trace_array</a>       244 trace/trace_boot.c trace_boot_set_ftrace_filter(struct trace_array *tr, struct xbc_node *node)</span>
+<span class='curline'><a href='../S/310.html#L276'>trace_array</a>       276 trace/trace_boot.c trace_boot_enable_tracer(struct trace_array *tr, struct xbc_node *node)</span>
+<span class='curline'><a href='../S/310.html#L296'>trace_array</a>       296 trace/trace_boot.c trace_boot_init_one_instance(struct trace_array *tr, struct xbc_node *node)</span>
+<span class='curline'><a href='../S/310.html#L308'>trace_array</a>       308 trace/trace_boot.c 	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/310.html#L333'>trace_array</a>       333 trace/trace_boot.c 	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/309.html#L28'>trace_array</a>        28 trace/trace_branch.c static struct trace_array *branch_tracer;</span>
+<span class='curline'><a href='../S/309.html#L34'>trace_array</a>        34 trace/trace_branch.c 	struct trace_array *tr = branch_tracer;</span>
+<span class='curline'><a href='../S/309.html#L102'>trace_array</a>       102 trace/trace_branch.c int enable_branch_tracing(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/309.html#L130'>trace_array</a>       130 trace/trace_branch.c static int branch_trace_init(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/309.html#L135'>trace_array</a>       135 trace/trace_branch.c static void branch_trace_reset(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/267.html#L234'>trace_array</a>       234 trace/trace_events.c 	struct trace_array *tr = trace_file-&gt;tr;</span>
+<span class='curline'><a href='../S/267.html#L327'>trace_array</a>       327 trace/trace_events.c 	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/267.html#L349'>trace_array</a>       349 trace/trace_events.c 	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/267.html#L372'>trace_array</a>       372 trace/trace_events.c 	struct trace_array *tr = file-&gt;tr;</span>
+<span class='curline'><a href='../S/267.html#L498'>trace_array</a>       498 trace/trace_events.c static void ftrace_clear_events(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/267.html#L513'>trace_array</a>       513 trace/trace_events.c 	struct trace_array *tr = data;</span>
+<span class='curline'><a href='../S/267.html#L528'>trace_array</a>       528 trace/trace_events.c 	struct trace_array *tr = data;</span>
+<span class='curline'><a href='../S/267.html#L537'>trace_array</a>       537 trace/trace_events.c void trace_event_follow_fork(struct trace_array *tr, bool enable)</span>
+<span class='curline'><a href='../S/267.html#L556'>trace_array</a>       556 trace/trace_events.c 	struct trace_array *tr = data;</span>
+<span class='curline'><a href='../S/267.html#L580'>trace_array</a>       580 trace/trace_events.c 	struct trace_array *tr = data;</span>
+<span class='curline'><a href='../S/267.html#L594'>trace_array</a>       594 trace/trace_events.c 	struct trace_array *tr = data;</span>
+<span class='curline'><a href='../S/267.html#L612'>trace_array</a>       612 trace/trace_events.c 	struct trace_array *tr = data;</span>
+<span class='curline'><a href='../S/267.html#L628'>trace_array</a>       628 trace/trace_events.c static void unregister_pid_events(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/267.html#L643'>trace_array</a>       643 trace/trace_events.c static void __ftrace_clear_event_pids(struct trace_array *tr, int type)</span>
+<span class='curline'><a href='../S/267.html#L686'>trace_array</a>       686 trace/trace_events.c static void ftrace_clear_event_pids(struct trace_array *tr, int type)</span>
+<span class='curline'><a href='../S/267.html#L780'>trace_array</a>       780 trace/trace_events.c __ftrace_set_clr_event_nolock(struct trace_array *tr, const char *match,</span>
+<span class='curline'><a href='../S/267.html#L827'>trace_array</a>       827 trace/trace_events.c static int __ftrace_set_clr_event(struct trace_array *tr, const char *match,</span>
+<span class='curline'><a href='../S/267.html#L839'>trace_array</a>       839 trace/trace_events.c int ftrace_set_clr_event(struct trace_array *tr, char *buf, int set)</span>
+<span class='curline'><a href='../S/267.html#L893'>trace_array</a>       893 trace/trace_events.c 	struct trace_array *tr = top_trace_array();</span>
+<span class='curline'><a href='../S/267.html#L915'>trace_array</a>       915 trace/trace_events.c int trace_array_set_clr_event(struct trace_array *tr, const char *system,</span>
+<span class='curline'><a href='../S/267.html#L937'>trace_array</a>       937 trace/trace_events.c 	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/267.html#L976'>trace_array</a>       976 trace/trace_events.c 	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/267.html#L997'>trace_array</a>       997 trace/trace_events.c 	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/267.html#L1015'>trace_array</a>      1015 trace/trace_events.c 	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/267.html#L1030'>trace_array</a>      1030 trace/trace_events.c 	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/267.html#L1064'>trace_array</a>      1064 trace/trace_events.c 	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/267.html#L1091'>trace_array</a>      1091 trace/trace_events.c 	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/267.html#L1207'>trace_array</a>      1207 trace/trace_events.c 	struct trace_array *tr = dir-&gt;tr;</span>
+<span class='curline'><a href='../S/267.html#L1502'>trace_array</a>      1502 trace/trace_events.c 	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/267.html#L1551'>trace_array</a>      1551 trace/trace_events.c 	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/267.html#L1668'>trace_array</a>      1668 trace/trace_events.c 	struct trace_array *tr = data;</span>
+<span class='curline'><a href='../S/267.html#L1685'>trace_array</a>      1685 trace/trace_events.c static void register_pid_events(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/267.html#L1719'>trace_array</a>      1719 trace/trace_events.c 	struct trace_array *tr = m-&gt;private;</span>
+<span class='curline'><a href='../S/267.html#L1941'>trace_array</a>      1941 trace/trace_events.c 	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/267.html#L1961'>trace_array</a>      1961 trace/trace_events.c 	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/267.html#L1982'>trace_array</a>      1982 trace/trace_events.c 	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/267.html#L2003'>trace_array</a>      2003 trace/trace_events.c 	struct trace_array *tr = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/267.html#L2054'>trace_array</a>      2054 trace/trace_events.c event_subsystem_dir(struct trace_array *tr, const char *name,</span>
+<span class='curline'><a href='../S/267.html#L2169'>trace_array</a>      2169 trace/trace_events.c 	struct trace_array *tr = file-&gt;tr;</span>
+<span class='curline'><a href='../S/267.html#L2244'>trace_array</a>      2244 trace/trace_events.c 	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/267.html#L2263'>trace_array</a>      2263 trace/trace_events.c 	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/267.html#L2463'>trace_array</a>      2463 trace/trace_events.c 		       struct trace_array *tr)</span>
+<span class='curline'><a href='../S/267.html#L2483'>trace_array</a>      2483 trace/trace_events.c __trace_add_new_event(struct trace_event_call *call, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/267.html#L2504'>trace_array</a>      2504 trace/trace_events.c 			    struct trace_array *tr)</span>
+<span class='curline'><a href='../S/267.html#L2548'>trace_array</a>      2548 trace/trace_events.c 	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/267.html#L2676'>trace_array</a>      2676 trace/trace_events.c __trace_add_event_dirs(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/267.html#L2691'>trace_array</a>      2691 trace/trace_events.c __find_event_file(struct trace_array *tr, const char *system, const char *event)</span>
+<span class='curline'><a href='../S/267.html#L2714'>trace_array</a>      2714 trace/trace_events.c find_event_file(struct trace_array *tr, const char *system, const char *event)</span>
+<span class='curline'><a href='../S/267.html#L2750'>trace_array</a>      2750 trace/trace_events.c 	struct trace_array *tr = top_trace_array();</span>
+<span class='curline'><a href='../S/267.html#L2834'>trace_array</a>      2834 trace/trace_events.c 		   struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/267.html#L2851'>trace_array</a>      2851 trace/trace_events.c 			 struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/267.html#L2908'>trace_array</a>      2908 trace/trace_events.c event_enable_init(struct ftrace_probe_ops *ops, struct trace_array *tr,</span>
+<span class='curline'><a href='../S/267.html#L2946'>trace_array</a>      2946 trace/trace_events.c event_enable_free(struct ftrace_probe_ops *ops, struct trace_array *tr,</span>
+<span class='curline'><a href='../S/267.html#L2999'>trace_array</a>      2999 trace/trace_events.c event_enable_func(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/267.html#L3141'>trace_array</a>      3141 trace/trace_events.c static void __trace_early_add_event_dirs(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/267.html#L3161'>trace_array</a>      3161 trace/trace_events.c void __trace_early_add_events(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/267.html#L3180'>trace_array</a>      3180 trace/trace_events.c __trace_remove_event_dirs(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/267.html#L3190'>trace_array</a>      3190 trace/trace_events.c 	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/267.html#L3213'>trace_array</a>      3213 trace/trace_events.c create_event_toplevel_files(struct dentry *parent, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/267.html#L3281'>trace_array</a>      3281 trace/trace_events.c int event_trace_add_tracer(struct dentry *parent, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/267.html#L3308'>trace_array</a>      3308 trace/trace_events.c early_event_add_tracer(struct dentry *parent, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/267.html#L3329'>trace_array</a>      3329 trace/trace_events.c int event_trace_del_tracer(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/267.html#L3363'>trace_array</a>      3363 trace/trace_events.c early_enable_events(struct trace_array *tr, bool disable_first)</span>
+<span class='curline'><a href='../S/267.html#L3393'>trace_array</a>      3393 trace/trace_events.c 	struct trace_array *tr = top_trace_array();</span>
+<span class='curline'><a href='../S/267.html#L3439'>trace_array</a>      3439 trace/trace_events.c 	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/267.html#L3466'>trace_array</a>      3466 trace/trace_events.c 	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/267.html#L3565'>trace_array</a>      3565 trace/trace_events.c 	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/304.html#L929'>trace_array</a>       929 trace/trace_events_filter.c static void append_filter_err(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/304.html#L1052'>trace_array</a>      1052 trace/trace_events_filter.c 					struct trace_array *tr)</span>
+<span class='curline'><a href='../S/304.html#L1070'>trace_array</a>      1070 trace/trace_events_filter.c 					  struct trace_array *tr)</span>
+<span class='curline'><a href='../S/304.html#L1591'>trace_array</a>      1591 trace/trace_events_filter.c 				struct trace_array *tr,</span>
+<span class='curline'><a href='../S/304.html#L1732'>trace_array</a>      1732 trace/trace_events_filter.c static int create_filter(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/304.html#L1756'>trace_array</a>      1756 trace/trace_events_filter.c int create_event_filter(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/304.html#L1774'>trace_array</a>      1774 trace/trace_events_filter.c 				struct trace_array *tr,</span>
+<span class='curline'><a href='../S/304.html#L1852'>trace_array</a>      1852 trace/trace_events_filter.c 	struct trace_array *tr = dir-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L571'>trace_array</a>       571 trace/trace_events_hist.c static void hist_err(struct trace_array *tr, u8 err_type, u8 err_pos)</span>
+<span class='curline'><a href='../S/291.html#L631'>trace_array</a>       631 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L721'>trace_array</a>       721 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L770'>trace_array</a>       770 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L825'>trace_array</a>       825 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L849'>trace_array</a>       849 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L910'>trace_array</a>       910 trace/trace_events_hist.c static struct trace_event_file *find_var_file(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/291.html#L965'>trace_array</a>       965 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L1000'>trace_array</a>      1000 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L1216'>trace_array</a>      1216 trace/trace_events_hist.c static int parse_assignment(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/291.html#L1287'>trace_array</a>      1287 trace/trace_events_hist.c parse_hist_trigger_attrs(struct trace_array *tr, char *trigger_str)</span>
+<span class='curline'><a href='../S/291.html#L1910'>trace_array</a>      1910 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L1934'>trace_array</a>      1934 trace/trace_events_hist.c 	struct trace_array *tr = file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L2143'>trace_array</a>      2143 trace/trace_events_hist.c static int check_expr_operands(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/291.html#L2358'>trace_array</a>      2358 trace/trace_events_hist.c static struct trace_event_file *event_file(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/291.html#L2420'>trace_array</a>      2420 trace/trace_events_hist.c 	struct trace_array *tr = target_hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L2659'>trace_array</a>      2659 trace/trace_events_hist.c 	struct trace_array *tr = file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L2805'>trace_array</a>      2805 trace/trace_events_hist.c static bool cond_snapshot_update(struct trace_array *tr, void *cond_data)</span>
+<span class='curline'><a href='../S/291.html#L2903'>trace_array</a>      2903 trace/trace_events_hist.c static bool cond_snapshot_update(struct trace_array *tr, void *cond_data)</span>
+<span class='curline'><a href='../S/291.html#L3011'>trace_array</a>      3011 trace/trace_events_hist.c 	struct trace_array *tr = file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L3056'>trace_array</a>      3056 trace/trace_events_hist.c static int parse_action_params(struct trace_array *tr, char *params,</span>
+<span class='curline'><a href='../S/291.html#L3102'>trace_array</a>      3102 trace/trace_events_hist.c static int action_parse(struct trace_array *tr, char *str, struct action_data *data,</span>
+<span class='curline'><a href='../S/291.html#L3315'>trace_array</a>      3315 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L3389'>trace_array</a>      3389 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L3499'>trace_array</a>      3499 trace/trace_events_hist.c 	struct trace_array *tr = file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L3563'>trace_array</a>      3563 trace/trace_events_hist.c static struct action_data *onmatch_parse(struct trace_array *tr, char *str)</span>
+<span class='curline'><a href='../S/291.html#L3671'>trace_array</a>      3671 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L3737'>trace_array</a>      3737 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L3858'>trace_array</a>      3858 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L3935'>trace_array</a>      3935 trace/trace_events_hist.c static int is_descending(struct trace_array *tr, const char *str)</span>
+<span class='curline'><a href='../S/291.html#L3953'>trace_array</a>      3953 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L4057'>trace_array</a>      4057 trace/trace_events_hist.c 	struct trace_array *tr = hist_data-&gt;event_file-&gt;tr;</span>
+<span class='curline'><a href='../S/291.html#L5391'>trace_array</a>      5391 trace/trace_events_hist.c 	struct trace_array *tr = file-&gt;tr;</span>
+<span class='curline'><a href='../S/255.html#L315'>trace_array</a>       315 trace/trace_events_synth.c 	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/260.html#L481'>trace_array</a>       481 trace/trace_events_trigger.c clear_event_triggers(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/260.html#L1367'>trace_array</a>      1367 trace/trace_events_trigger.c 	struct trace_array *tr = file-&gt;tr;</span>
+<span class='curline'><a href='../S/307.html#L22'>trace_array</a>        22 trace/trace_functions.c static void tracing_start_function_trace(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/307.html#L23'>trace_array</a>        23 trace/trace_functions.c static void tracing_stop_function_trace(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/307.html#L37'>trace_array</a>        37 trace/trace_functions.c int ftrace_allocate_ftrace_ops(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/307.html#L59'>trace_array</a>        59 trace/trace_functions.c void ftrace_free_ftrace_ops(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/307.html#L65'>trace_array</a>        65 trace/trace_functions.c int ftrace_create_function_files(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/307.html#L83'>trace_array</a>        83 trace/trace_functions.c void ftrace_destroy_function_files(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/307.html#L89'>trace_array</a>        89 trace/trace_functions.c static int function_trace_init(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/307.html#L118'>trace_array</a>       118 trace/trace_functions.c static void function_trace_reset(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/307.html#L125'>trace_array</a>       125 trace/trace_functions.c static void function_trace_start(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/307.html#L134'>trace_array</a>       134 trace/trace_functions.c 	struct trace_array *tr = op-&gt;private;</span>
+<span class='curline'><a href='../S/307.html#L185'>trace_array</a>       185 trace/trace_functions.c 	struct trace_array *tr = op-&gt;private;</span>
+<span class='curline'><a href='../S/307.html#L226'>trace_array</a>       226 trace/trace_functions.c static void tracing_start_function_trace(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/307.html#L233'>trace_array</a>       233 trace/trace_functions.c static void tracing_stop_function_trace(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/307.html#L242'>trace_array</a>       242 trace/trace_functions.c func_set_flag(struct trace_array *tr, u32 old_flags, u32 bit, int set)</span>
+<span class='curline'><a href='../S/307.html#L289'>trace_array</a>       289 trace/trace_functions.c 				 struct trace_array *tr, bool on,</span>
+<span class='curline'><a href='../S/307.html#L350'>trace_array</a>       350 trace/trace_functions.c 		     struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L358'>trace_array</a>       358 trace/trace_functions.c 		      struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L366'>trace_array</a>       366 trace/trace_functions.c 	       struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L377'>trace_array</a>       377 trace/trace_functions.c 		struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L408'>trace_array</a>       408 trace/trace_functions.c static __always_inline void trace_stack(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/307.html#L421'>trace_array</a>       421 trace/trace_functions.c 		  struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L429'>trace_array</a>       429 trace/trace_functions.c 			struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L489'>trace_array</a>       489 trace/trace_functions.c 		  struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L499'>trace_array</a>       499 trace/trace_functions.c 		     struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L565'>trace_array</a>       565 trace/trace_functions.c ftrace_count_init(struct ftrace_probe_ops *ops, struct trace_array *tr,</span>
+<span class='curline'><a href='../S/307.html#L581'>trace_array</a>       581 trace/trace_functions.c ftrace_count_free(struct ftrace_probe_ops *ops, struct trace_array *tr,</span>
+<span class='curline'><a href='../S/307.html#L643'>trace_array</a>       643 trace/trace_functions.c ftrace_trace_probe_callback(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/307.html#L682'>trace_array</a>       682 trace/trace_functions.c ftrace_trace_onoff_callback(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/307.html#L701'>trace_array</a>       701 trace/trace_functions.c ftrace_stacktrace_callback(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/307.html#L716'>trace_array</a>       716 trace/trace_functions.c ftrace_dump_callback(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/307.html#L732'>trace_array</a>       732 trace/trace_functions.c ftrace_cpudump_callback(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/287.html#L80'>trace_array</a>        80 trace/trace_functions_graph.c static struct trace_array *graph_array;</span>
+<span class='curline'><a href='../S/287.html#L94'>trace_array</a>        94 trace/trace_functions_graph.c print_graph_duration(struct trace_array *tr, unsigned long long duration,</span>
+<span class='curline'><a href='../S/287.html#L97'>trace_array</a>        97 trace/trace_functions_graph.c int __trace_graph_entry(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/287.html#L129'>trace_array</a>       129 trace/trace_functions_graph.c 	struct trace_array *tr = graph_array;</span>
+<span class='curline'><a href='../S/287.html#L190'>trace_array</a>       190 trace/trace_functions_graph.c __trace_graph_function(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/287.html#L210'>trace_array</a>       210 trace/trace_functions_graph.c trace_graph_function(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/287.html#L217'>trace_array</a>       217 trace/trace_functions_graph.c void __trace_graph_return(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/287.html#L239'>trace_array</a>       239 trace/trace_functions_graph.c 	struct trace_array *tr = graph_array;</span>
+<span class='curline'><a href='../S/287.html#L265'>trace_array</a>       265 trace/trace_functions_graph.c void set_graph_array(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/287.html#L300'>trace_array</a>       300 trace/trace_functions_graph.c static int graph_trace_init(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/287.html#L316'>trace_array</a>       316 trace/trace_functions_graph.c static void graph_trace_reset(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/287.html#L325'>trace_array</a>       325 trace/trace_functions_graph.c static int graph_trace_update_thresh(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/287.html#L516'>trace_array</a>       516 trace/trace_functions_graph.c 	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/287.html#L594'>trace_array</a>       594 trace/trace_functions_graph.c print_graph_duration(struct trace_array *tr, unsigned long long duration,</span>
+<span class='curline'><a href='../S/287.html#L632'>trace_array</a>       632 trace/trace_functions_graph.c 	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/287.html#L683'>trace_array</a>       683 trace/trace_functions_graph.c 	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/287.html#L724'>trace_array</a>       724 trace/trace_functions_graph.c 	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/287.html#L907'>trace_array</a>       907 trace/trace_functions_graph.c 	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/287.html#L973'>trace_array</a>       973 trace/trace_functions_graph.c 	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/287.html#L1135'>trace_array</a>      1135 trace/trace_functions_graph.c static void __print_graph_headers_flags(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/287.html#L1184'>trace_array</a>      1184 trace/trace_functions_graph.c 	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/287.html#L1253'>trace_array</a>      1253 trace/trace_functions_graph.c func_graph_set_flag(struct trace_array *tr, u32 old_flags, u32 bit, int set)</span>
+<span class='curline'><a href='../S/297.html#L48'>trace_array</a>        48 trace/trace_hwlat.c static struct trace_array	*hwlat_trace;</span>
+<span class='curline'><a href='../S/297.html#L106'>trace_array</a>       106 trace/trace_hwlat.c 	struct trace_array *tr = hwlat_trace;</span>
+<span class='curline'><a href='../S/297.html#L171'>trace_array</a>       171 trace/trace_hwlat.c 	struct trace_array *tr = hwlat_trace;</span>
+<span class='curline'><a href='../S/297.html#L286'>trace_array</a>       286 trace/trace_hwlat.c 	struct trace_array *tr = hwlat_trace;</span>
+<span class='curline'><a href='../S/297.html#L365'>trace_array</a>       365 trace/trace_hwlat.c static int start_kthread(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/297.html#L573'>trace_array</a>       573 trace/trace_hwlat.c static void hwlat_tracer_start(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/297.html#L582'>trace_array</a>       582 trace/trace_hwlat.c static void hwlat_tracer_stop(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/297.html#L589'>trace_array</a>       589 trace/trace_hwlat.c static int hwlat_tracer_init(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/297.html#L614'>trace_array</a>       614 trace/trace_hwlat.c static void hwlat_tracer_reset(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/314.html#L24'>trace_array</a>        24 trace/trace_irqsoff.c static struct trace_array		*irqsoff_trace __read_mostly;</span>
+<span class='curline'><a href='../S/314.html#L40'>trace_array</a>        40 trace/trace_irqsoff.c static void stop_irqsoff_tracer(struct trace_array *tr, int graph);</span>
+<span class='curline'><a href='../S/314.html#L41'>trace_array</a>        41 trace/trace_irqsoff.c static int start_irqsoff_tracer(struct trace_array *tr, int graph);</span>
+<span class='curline'><a href='../S/314.html#L65'>trace_array</a>        65 trace/trace_irqsoff.c static int irqsoff_display_graph(struct trace_array *tr, int set);</span>
+<span class='curline'><a href='../S/314.html#L68'>trace_array</a>        68 trace/trace_irqsoff.c static inline int irqsoff_display_graph(struct trace_array *tr, int set)</span>
+<span class='curline'><a href='../S/314.html#L99'>trace_array</a>        99 trace/trace_irqsoff.c static int func_prolog_dec(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/314.html#L143'>trace_array</a>       143 trace/trace_irqsoff.c 	struct trace_array *tr = irqsoff_trace;</span>
+<span class='curline'><a href='../S/314.html#L157'>trace_array</a>       157 trace/trace_irqsoff.c static int irqsoff_display_graph(struct trace_array *tr, int set)</span>
+<span class='curline'><a href='../S/314.html#L177'>trace_array</a>       177 trace/trace_irqsoff.c 	struct trace_array *tr = irqsoff_trace;</span>
+<span class='curline'><a href='../S/314.html#L207'>trace_array</a>       207 trace/trace_irqsoff.c 	struct trace_array *tr = irqsoff_trace;</span>
+<span class='curline'><a href='../S/314.html#L259'>trace_array</a>       259 trace/trace_irqsoff.c 	struct trace_array *tr = irqsoff_trace;</span>
+<span class='curline'><a href='../S/314.html#L268'>trace_array</a>       268 trace/trace_irqsoff.c __trace_function(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/314.html#L305'>trace_array</a>       305 trace/trace_irqsoff.c static bool report_latency(struct trace_array *tr, u64 delta)</span>
+<span class='curline'><a href='../S/314.html#L318'>trace_array</a>       318 trace/trace_irqsoff.c check_critical_timing(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/314.html#L373'>trace_array</a>       373 trace/trace_irqsoff.c 	struct trace_array *tr = irqsoff_trace;</span>
+<span class='curline'><a href='../S/314.html#L409'>trace_array</a>       409 trace/trace_irqsoff.c 	struct trace_array *tr = irqsoff_trace;</span>
+<span class='curline'><a href='../S/314.html#L462'>trace_array</a>       462 trace/trace_irqsoff.c static int register_irqsoff_function(struct trace_array *tr, int graph, int set)</span>
+<span class='curline'><a href='../S/314.html#L481'>trace_array</a>       481 trace/trace_irqsoff.c static void unregister_irqsoff_function(struct trace_array *tr, int graph)</span>
+<span class='curline'><a href='../S/314.html#L494'>trace_array</a>       494 trace/trace_irqsoff.c static int irqsoff_function_set(struct trace_array *tr, u32 mask, int set)</span>
+<span class='curline'><a href='../S/314.html#L506'>trace_array</a>       506 trace/trace_irqsoff.c static int register_irqsoff_function(struct trace_array *tr, int graph, int set)</span>
+<span class='curline'><a href='../S/314.html#L510'>trace_array</a>       510 trace/trace_irqsoff.c static void unregister_irqsoff_function(struct trace_array *tr, int graph) { }</span>
+<span class='curline'><a href='../S/314.html#L511'>trace_array</a>       511 trace/trace_irqsoff.c static inline int irqsoff_function_set(struct trace_array *tr, u32 mask, int set)</span>
+<span class='curline'><a href='../S/314.html#L517'>trace_array</a>       517 trace/trace_irqsoff.c static int irqsoff_flag_changed(struct trace_array *tr, u32 mask, int set)</span>
+<span class='curline'><a href='../S/314.html#L532'>trace_array</a>       532 trace/trace_irqsoff.c static int start_irqsoff_tracer(struct trace_array *tr, int graph)</span>
+<span class='curline'><a href='../S/314.html#L546'>trace_array</a>       546 trace/trace_irqsoff.c static void stop_irqsoff_tracer(struct trace_array *tr, int graph)</span>
+<span class='curline'><a href='../S/314.html#L555'>trace_array</a>       555 trace/trace_irqsoff.c static int __irqsoff_tracer_init(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/314.html#L584'>trace_array</a>       584 trace/trace_irqsoff.c static void __irqsoff_tracer_reset(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/314.html#L600'>trace_array</a>       600 trace/trace_irqsoff.c static void irqsoff_tracer_start(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/314.html#L605'>trace_array</a>       605 trace/trace_irqsoff.c static void irqsoff_tracer_stop(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/314.html#L632'>trace_array</a>       632 trace/trace_irqsoff.c static int irqsoff_tracer_init(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/314.html#L639'>trace_array</a>       639 trace/trace_irqsoff.c static void irqsoff_tracer_reset(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/314.html#L682'>trace_array</a>       682 trace/trace_irqsoff.c static int preemptoff_tracer_init(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/314.html#L689'>trace_array</a>       689 trace/trace_irqsoff.c static void preemptoff_tracer_reset(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/314.html#L717'>trace_array</a>       717 trace/trace_irqsoff.c static int preemptirqsoff_tracer_init(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/314.html#L724'>trace_array</a>       724 trace/trace_irqsoff.c static void preemptirqsoff_tracer_reset(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/280.html#L25'>trace_array</a>        25 trace/trace_kdb.c 	struct trace_array *tr;</span>
+<span class='curline'><a href='../S/317.html#L1864'>trace_array</a>      1864 trace/trace_kprobe.c 	struct trace_array *tr = top_trace_array();</span>
+<span class='curline'><a href='../S/317.html#L1952'>trace_array</a>      1952 trace/trace_kprobe.c find_trace_probe_file(struct trace_kprobe *tk, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/286.html#L25'>trace_array</a>        25 trace/trace_mmiotrace.c static struct trace_array *mmio_trace_array;</span>
+<span class='curline'><a href='../S/286.html#L30'>trace_array</a>        30 trace/trace_mmiotrace.c static void mmio_reset_data(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/286.html#L38'>trace_array</a>        38 trace/trace_mmiotrace.c static int mmio_trace_init(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/286.html#L48'>trace_array</a>        48 trace/trace_mmiotrace.c static void mmio_trace_reset(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/286.html#L57'>trace_array</a>        57 trace/trace_mmiotrace.c static void mmio_trace_start(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/286.html#L295'>trace_array</a>       295 trace/trace_mmiotrace.c static void __trace_mmiotrace_rw(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/286.html#L320'>trace_array</a>       320 trace/trace_mmiotrace.c 	struct trace_array *tr = mmio_trace_array;</span>
+<span class='curline'><a href='../S/286.html#L325'>trace_array</a>       325 trace/trace_mmiotrace.c static void __trace_mmiotrace_map(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/286.html#L350'>trace_array</a>       350 trace/trace_mmiotrace.c 	struct trace_array *tr = mmio_trace_array;</span>
+<span class='curline'><a href='../S/266.html#L35'>trace_array</a>        35 trace/trace_nop.c static struct trace_array	*ctx_trace;</span>
+<span class='curline'><a href='../S/266.html#L37'>trace_array</a>        37 trace/trace_nop.c static void start_nop_trace(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/266.html#L42'>trace_array</a>        42 trace/trace_nop.c static void stop_nop_trace(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/266.html#L47'>trace_array</a>        47 trace/trace_nop.c static int nop_trace_init(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/266.html#L54'>trace_array</a>        54 trace/trace_nop.c static void nop_trace_reset(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/266.html#L64'>trace_array</a>        64 trace/trace_nop.c static int nop_set_flag(struct trace_array *tr, u32 old_flags, u32 bit, int set)</span>
+<span class='curline'><a href='../S/279.html#L538'>trace_array</a>       538 trace/trace_output.c 	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/279.html#L582'>trace_array</a>       582 trace/trace_output.c 	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/279.html#L621'>trace_array</a>       621 trace/trace_output.c 	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/279.html#L1098'>trace_array</a>      1098 trace/trace_output.c 	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/295.html#L22'>trace_array</a>        22 trace/trace_sched_wakeup.c static struct trace_array	*wakeup_trace;</span>
+<span class='curline'><a href='../S/295.html#L36'>trace_array</a>        36 trace/trace_sched_wakeup.c static void wakeup_reset(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/295.html#L37'>trace_array</a>        37 trace/trace_sched_wakeup.c static void __wakeup_reset(struct trace_array *tr);</span>
+<span class='curline'><a href='../S/295.html#L38'>trace_array</a>        38 trace/trace_sched_wakeup.c static int start_func_tracer(struct trace_array *tr, int graph);</span>
+<span class='curline'><a href='../S/295.html#L39'>trace_array</a>        39 trace/trace_sched_wakeup.c static void stop_func_tracer(struct trace_array *tr, int graph);</span>
+<span class='curline'><a href='../S/295.html#L68'>trace_array</a>        68 trace/trace_sched_wakeup.c func_prolog_preempt_disable(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/295.html#L102'>trace_array</a>       102 trace/trace_sched_wakeup.c static int wakeup_display_graph(struct trace_array *tr, int set)</span>
+<span class='curline'><a href='../S/295.html#L117'>trace_array</a>       117 trace/trace_sched_wakeup.c 	struct trace_array *tr = wakeup_trace;</span>
+<span class='curline'><a href='../S/295.html#L147'>trace_array</a>       147 trace/trace_sched_wakeup.c 	struct trace_array *tr = wakeup_trace;</span>
+<span class='curline'><a href='../S/295.html#L217'>trace_array</a>       217 trace/trace_sched_wakeup.c 	struct trace_array *tr = wakeup_trace;</span>
+<span class='curline'><a href='../S/295.html#L233'>trace_array</a>       233 trace/trace_sched_wakeup.c static int register_wakeup_function(struct trace_array *tr, int graph, int set)</span>
+<span class='curline'><a href='../S/295.html#L252'>trace_array</a>       252 trace/trace_sched_wakeup.c static void unregister_wakeup_function(struct trace_array *tr, int graph)</span>
+<span class='curline'><a href='../S/295.html#L265'>trace_array</a>       265 trace/trace_sched_wakeup.c static int wakeup_function_set(struct trace_array *tr, u32 mask, int set)</span>
+<span class='curline'><a href='../S/295.html#L277'>trace_array</a>       277 trace/trace_sched_wakeup.c static int register_wakeup_function(struct trace_array *tr, int graph, int set)</span>
+<span class='curline'><a href='../S/295.html#L281'>trace_array</a>       281 trace/trace_sched_wakeup.c static void unregister_wakeup_function(struct trace_array *tr, int graph) { }</span>
+<span class='curline'><a href='../S/295.html#L282'>trace_array</a>       282 trace/trace_sched_wakeup.c static int wakeup_function_set(struct trace_array *tr, u32 mask, int set)</span>
+<span class='curline'><a href='../S/295.html#L304'>trace_array</a>       304 trace/trace_sched_wakeup.c __trace_function(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/295.html#L314'>trace_array</a>       314 trace/trace_sched_wakeup.c static int wakeup_flag_changed(struct trace_array *tr, u32 mask, int set)</span>
+<span class='curline'><a href='../S/295.html#L329'>trace_array</a>       329 trace/trace_sched_wakeup.c static int start_func_tracer(struct trace_array *tr, int graph)</span>
+<span class='curline'><a href='../S/295.html#L343'>trace_array</a>       343 trace/trace_sched_wakeup.c static void stop_func_tracer(struct trace_array *tr, int graph)</span>
+<span class='curline'><a href='../S/295.html#L353'>trace_array</a>       353 trace/trace_sched_wakeup.c static bool report_latency(struct trace_array *tr, u64 delta)</span>
+<span class='curline'><a href='../S/295.html#L375'>trace_array</a>       375 trace/trace_sched_wakeup.c tracing_sched_switch_trace(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/295.html#L403'>trace_array</a>       403 trace/trace_sched_wakeup.c tracing_sched_wakeup_trace(struct trace_array *tr,</span>
+<span class='curline'><a href='../S/295.html#L500'>trace_array</a>       500 trace/trace_sched_wakeup.c static void __wakeup_reset(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/295.html#L512'>trace_array</a>       512 trace/trace_sched_wakeup.c static void wakeup_reset(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/295.html#L604'>trace_array</a>       604 trace/trace_sched_wakeup.c static void start_wakeup_tracer(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/295.html#L659'>trace_array</a>       659 trace/trace_sched_wakeup.c static void stop_wakeup_tracer(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/295.html#L671'>trace_array</a>       671 trace/trace_sched_wakeup.c static int __wakeup_tracer_init(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/295.html#L688'>trace_array</a>       688 trace/trace_sched_wakeup.c static int wakeup_tracer_init(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/295.html#L698'>trace_array</a>       698 trace/trace_sched_wakeup.c static int wakeup_rt_tracer_init(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/295.html#L708'>trace_array</a>       708 trace/trace_sched_wakeup.c static int wakeup_dl_tracer_init(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/295.html#L718'>trace_array</a>       718 trace/trace_sched_wakeup.c static void wakeup_tracer_reset(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/295.html#L733'>trace_array</a>       733 trace/trace_sched_wakeup.c static void wakeup_tracer_start(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/295.html#L739'>trace_array</a>       739 trace/trace_sched_wakeup.c static void wakeup_tracer_stop(struct trace_array *tr)</span>
+<span class='curline'><a href='../S/319.html#L185'>trace_array</a>       185 trace/trace_selftest.c static int trace_selftest_ops(struct trace_array *tr, int cnt)</span>
+<span class='curline'><a href='../S/319.html#L326'>trace_array</a>       326 trace/trace_selftest.c 						  struct trace_array *tr,</span>
+<span class='curline'><a href='../S/319.html#L658'>trace_array</a>       658 trace/trace_selftest.c trace_selftest_startup_function(struct tracer *trace, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/319.html#L760'>trace_array</a>       760 trace/trace_selftest.c 					struct trace_array *tr)</span>
+<span class='curline'><a href='../S/319.html#L826'>trace_array</a>       826 trace/trace_selftest.c trace_selftest_startup_irqsoff(struct tracer *trace, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/319.html#L875'>trace_array</a>       875 trace/trace_selftest.c trace_selftest_startup_preemptoff(struct tracer *trace, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/319.html#L937'>trace_array</a>       937 trace/trace_selftest.c trace_selftest_startup_preemptirqsoff(struct tracer *trace, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/319.html#L1038'>trace_array</a>      1038 trace/trace_selftest.c trace_selftest_startup_nop(struct tracer *trace, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/319.html#L1090'>trace_array</a>      1090 trace/trace_selftest.c trace_selftest_startup_wakeup(struct tracer *trace, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/319.html#L1168'>trace_array</a>      1168 trace/trace_selftest.c trace_selftest_startup_branch(struct tracer *trace, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/264.html#L130'>trace_array</a>       130 trace/trace_syscalls.c 	struct trace_array *tr = iter-&gt;tr;</span>
+<span class='curline'><a href='../S/264.html#L295'>trace_array</a>       295 trace/trace_syscalls.c 	struct trace_array *tr = data;</span>
+<span class='curline'><a href='../S/264.html#L345'>trace_array</a>       345 trace/trace_syscalls.c 	struct trace_array *tr = data;</span>
+<span class='curline'><a href='../S/264.html#L392'>trace_array</a>       392 trace/trace_syscalls.c 	struct trace_array *tr = file-&gt;tr;</span>
+<span class='curline'><a href='../S/264.html#L413'>trace_array</a>       413 trace/trace_syscalls.c 	struct trace_array *tr = file-&gt;tr;</span>
+<span class='curline'><a href='../S/264.html#L430'>trace_array</a>       430 trace/trace_syscalls.c 	struct trace_array *tr = file-&gt;tr;</span>
+<span class='curline'><a href='../S/264.html#L451'>trace_array</a>       451 trace/trace_syscalls.c 	struct trace_array *tr = file-&gt;tr;</span>
+</pre>
+</body>
+</html>

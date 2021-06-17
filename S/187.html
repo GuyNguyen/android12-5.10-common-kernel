@@ -1,0 +1,469 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>kexec_elf.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/kexec_elf.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L24'>[^]</a><a href='#L388'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L24' title='Defined at 24.'>elf_is_elf_file</a></li>
+<li><a href='#L29' title='Defined at 29.'>elf64_to_cpu</a></li>
+<li><a href='#L39' title='Defined at 39.'>elf32_to_cpu</a></li>
+<li><a href='#L49' title='Defined at 49.'>elf16_to_cpu</a></li>
+<li><a href='#L63' title='Defined at 63.'>elf_is_ehdr_sane</a></li>
+<li><a href='#L119' title='Defined at 119.'>elf_read_ehdr</a></li>
+<li><a href='#L185' title='Defined at 185.'>elf_is_phdr_sane</a></li>
+<li><a href='#L202' title='Defined at 202.'>elf_read_phdr</a></li>
+<li><a href='#L251' title='Defined at 251.'>elf_read_phdrs</a></li>
+<li><a href='#L296' title='Defined at 296.'>elf_read_from_buffer</a></li>
+<li><a href='#L319' title='Defined at 319.'>kexec_free_elf_info</a></li>
+<li><a href='#L327' title='Defined at 327.'>kexec_build_elf_info</a></li>
+<li><a href='#L365' title='Defined at 365.'>kexec_elf_probe</a></li>
+<li><a href='#L388' title='Defined at 388.'>kexec_elf_load</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0-only</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * Load ELF vmlinux file for the kexec_file_load syscall.</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> *</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * Copyright (C) 2004  Adam Litke (agl@us.ibm.com)</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> * Copyright (C) 2004  IBM Corp.</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> * Copyright (C) 2005  R Sharada (sharada@in.ibm.com)</em>
+<a id='L8' name='L8'></a>   8 <em class='comment'> * Copyright (C) 2006  Mohan Kumar M (mohan@in.ibm.com)</em>
+<a id='L9' name='L9'></a>   9 <em class='comment'> * Copyright (C) 2016  IBM Corporation</em>
+<a id='L10' name='L10'></a>  10 <em class='comment'> *</em>
+<a id='L11' name='L11'></a>  11 <em class='comment'> * Based on kexec-tools' kexec-elf-exec.c and kexec-elf-ppc64.c.</em>
+<a id='L12' name='L12'></a>  12 <em class='comment'> * Heavily modified for the kernel by</em>
+<a id='L13' name='L13'></a>  13 <em class='comment'> * Thiago Jung Bauermann &lt;bauerman@linux.vnet.ibm.com&gt;.</em>
+<a id='L14' name='L14'></a>  14 <em class='comment'> */</em>
+<a id='L15' name='L15'></a>  15 
+<a id='L16' name='L16'></a>  16 <em class='sharp'>#define</em> <a href='../R/10143.html' title='Multiple referred from 2 places.'>pr_fmt</a>(fmt)     "kexec_elf: " fmt
+<a id='L17' name='L17'></a>  17 
+<a id='L18' name='L18'></a>  18 <em class='sharp'>#include</em> &lt;linux/elf.h&gt;
+<a id='L19' name='L19'></a>  19 <em class='sharp'>#include</em> &lt;linux/kexec.h&gt;
+<a id='L20' name='L20'></a>  20 <em class='sharp'>#include</em> &lt;linux/module.h&gt;
+<a id='L21' name='L21'></a>  21 <em class='sharp'>#include</em> &lt;linux/slab.h&gt;
+<a id='L22' name='L22'></a>  22 <em class='sharp'>#include</em> &lt;linux/types.h&gt;
+<a id='L23' name='L23'></a>  23 
+<a id='L24' name='L24'></a>  24 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> bool <a href='../S/187.html#L130' title='Referred from 130 in kexec_elf.c.'>elf_is_elf_file</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> elfhdr *ehdr)
+<a id='L25' name='L25'></a>  25 <em class='brace'>{</em>
+<a id='L26' name='L26'></a>  26         <strong class='reserved'>return</strong> memcmp(ehdr-&gt;e_ident, ELFMAG, SELFMAG) == 0;
+<a id='L27' name='L27'></a>  27 <em class='brace'>}</em>
+<a id='L28' name='L28'></a>  28 
+<a id='L29' name='L29'></a>  29 <strong class='reserved'>static</strong> uint64_t <a href='../R/5985.html' title='Multiple referred from 9 places.'>elf64_to_cpu</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> elfhdr *ehdr, uint64_t value)
+<a id='L30' name='L30'></a>  30 <em class='brace'>{</em>
+<a id='L31' name='L31'></a>  31         <strong class='reserved'>if</strong> (ehdr-&gt;e_ident[EI_DATA] == ELFDATA2LSB)
+<a id='L32' name='L32'></a>  32                 value = le64_to_cpu(value);
+<a id='L33' name='L33'></a>  33         <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (ehdr-&gt;e_ident[EI_DATA] == ELFDATA2MSB)
+<a id='L34' name='L34'></a>  34                 value = be64_to_cpu(value);
+<a id='L35' name='L35'></a>  35 
+<a id='L36' name='L36'></a>  36         <strong class='reserved'>return</strong> value;
+<a id='L37' name='L37'></a>  37 <em class='brace'>}</em>
+<a id='L38' name='L38'></a>  38 
+<a id='L39' name='L39'></a>  39 <strong class='reserved'>static</strong> uint32_t <a href='../R/5984.html' title='Multiple referred from 13 places.'>elf32_to_cpu</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> elfhdr *ehdr, uint32_t value)
+<a id='L40' name='L40'></a>  40 <em class='brace'>{</em>
+<a id='L41' name='L41'></a>  41         <strong class='reserved'>if</strong> (ehdr-&gt;e_ident[EI_DATA] == ELFDATA2LSB)
+<a id='L42' name='L42'></a>  42                 value = le32_to_cpu(value);
+<a id='L43' name='L43'></a>  43         <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (ehdr-&gt;e_ident[EI_DATA] == ELFDATA2MSB)
+<a id='L44' name='L44'></a>  44                 value = be32_to_cpu(value);
+<a id='L45' name='L45'></a>  45 
+<a id='L46' name='L46'></a>  46         <strong class='reserved'>return</strong> value;
+<a id='L47' name='L47'></a>  47 <em class='brace'>}</em>
+<a id='L48' name='L48'></a>  48 
+<a id='L49' name='L49'></a>  49 <strong class='reserved'>static</strong> uint16_t <a href='../R/5983.html' title='Multiple referred from 8 places.'>elf16_to_cpu</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> elfhdr *ehdr, uint16_t value)
+<a id='L50' name='L50'></a>  50 <em class='brace'>{</em>
+<a id='L51' name='L51'></a>  51         <strong class='reserved'>if</strong> (ehdr-&gt;e_ident[EI_DATA] == ELFDATA2LSB)
+<a id='L52' name='L52'></a>  52                 value = le16_to_cpu(value);
+<a id='L53' name='L53'></a>  53         <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (ehdr-&gt;e_ident[EI_DATA] == ELFDATA2MSB)
+<a id='L54' name='L54'></a>  54                 value = be16_to_cpu(value);
+<a id='L55' name='L55'></a>  55 
+<a id='L56' name='L56'></a>  56         <strong class='reserved'>return</strong> value;
+<a id='L57' name='L57'></a>  57 <em class='brace'>}</em>
+<a id='L58' name='L58'></a>  58 
+<a id='L59' name='L59'></a>  59 <em class='comment'>/**</em>
+<a id='L60' name='L60'></a>  60 <em class='comment'> * elf_is_ehdr_sane - check that it is safe to use the ELF header</em>
+<a id='L61' name='L61'></a>  61 <em class='comment'> * @buf_len:    size of the buffer in which the ELF file is loaded.</em>
+<a id='L62' name='L62'></a>  62 <em class='comment'> */</em>
+<a id='L63' name='L63'></a>  63 <strong class='reserved'>static</strong> bool <a href='../S/187.html#L178' title='Referred from 178 in kexec_elf.c.'>elf_is_ehdr_sane</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> elfhdr *ehdr, size_t buf_len)
+<a id='L64' name='L64'></a>  64 <em class='brace'>{</em>
+<a id='L65' name='L65'></a>  65         <strong class='reserved'>if</strong> (ehdr-&gt;e_phnum &gt; 0 &amp;&amp; ehdr-&gt;e_phentsize != <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> elf_phdr)) <em class='brace'>{</em>
+<a id='L66' name='L66'></a>  66                 pr_debug("Bad program header size.\n");
+<a id='L67' name='L67'></a>  67                 <strong class='reserved'>return</strong> false;
+<a id='L68' name='L68'></a>  68         <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (ehdr-&gt;e_shnum &gt; 0 &amp;&amp;
+<a id='L69' name='L69'></a>  69                    ehdr-&gt;e_shentsize != <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> elf_shdr)) <em class='brace'>{</em>
+<a id='L70' name='L70'></a>  70                 pr_debug("Bad section header size.\n");
+<a id='L71' name='L71'></a>  71                 <strong class='reserved'>return</strong> false;
+<a id='L72' name='L72'></a>  72         <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (ehdr-&gt;e_ident[EI_VERSION] != EV_CURRENT ||
+<a id='L73' name='L73'></a>  73                    ehdr-&gt;e_version != EV_CURRENT) <em class='brace'>{</em>
+<a id='L74' name='L74'></a>  74                 pr_debug("Unknown ELF version.\n");
+<a id='L75' name='L75'></a>  75                 <strong class='reserved'>return</strong> false;
+<a id='L76' name='L76'></a>  76         <em class='brace'>}</em>
+<a id='L77' name='L77'></a>  77 
+<a id='L78' name='L78'></a>  78         <strong class='reserved'>if</strong> (ehdr-&gt;e_phoff &gt; 0 &amp;&amp; ehdr-&gt;e_phnum &gt; 0) <em class='brace'>{</em>
+<a id='L79' name='L79'></a>  79                 size_t phdr_size;
+<a id='L80' name='L80'></a>  80 
+<a id='L81' name='L81'></a>  81                 <em class='comment'>/*</em>
+<a id='L82' name='L82'></a>  82 <em class='comment'>                 * e_phnum is at most 65535 so calculating the size of the</em>
+<a id='L83' name='L83'></a>  83 <em class='comment'>                 * program header cannot overflow.</em>
+<a id='L84' name='L84'></a>  84 <em class='comment'>                 */</em>
+<a id='L85' name='L85'></a>  85                 phdr_size = <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> elf_phdr) * ehdr-&gt;e_phnum;
+<a id='L86' name='L86'></a>  86 
+<a id='L87' name='L87'></a>  87                 <em class='comment'>/* Sanity check the program header table location. */</em>
+<a id='L88' name='L88'></a>  88                 <strong class='reserved'>if</strong> (ehdr-&gt;e_phoff + phdr_size &lt; ehdr-&gt;e_phoff) <em class='brace'>{</em>
+<a id='L89' name='L89'></a>  89                         pr_debug("Program headers at invalid location.\n");
+<a id='L90' name='L90'></a>  90                         <strong class='reserved'>return</strong> false;
+<a id='L91' name='L91'></a>  91                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (ehdr-&gt;e_phoff + phdr_size &gt; buf_len) <em class='brace'>{</em>
+<a id='L92' name='L92'></a>  92                         pr_debug("Program headers truncated.\n");
+<a id='L93' name='L93'></a>  93                         <strong class='reserved'>return</strong> false;
+<a id='L94' name='L94'></a>  94                 <em class='brace'>}</em>
+<a id='L95' name='L95'></a>  95         <em class='brace'>}</em>
+<a id='L96' name='L96'></a>  96 
+<a id='L97' name='L97'></a>  97         <strong class='reserved'>if</strong> (ehdr-&gt;e_shoff &gt; 0 &amp;&amp; ehdr-&gt;e_shnum &gt; 0) <em class='brace'>{</em>
+<a id='L98' name='L98'></a>  98                 size_t shdr_size;
+<a id='L99' name='L99'></a>  99 
+<a id='L100' name='L100'></a> 100                 <em class='comment'>/*</em>
+<a id='L101' name='L101'></a> 101 <em class='comment'>                 * e_shnum is at most 65536 so calculating</em>
+<a id='L102' name='L102'></a> 102 <em class='comment'>                 * the size of the section header cannot overflow.</em>
+<a id='L103' name='L103'></a> 103 <em class='comment'>                 */</em>
+<a id='L104' name='L104'></a> 104                 shdr_size = <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> elf_shdr) * ehdr-&gt;e_shnum;
+<a id='L105' name='L105'></a> 105 
+<a id='L106' name='L106'></a> 106                 <em class='comment'>/* Sanity check the section header table location. */</em>
+<a id='L107' name='L107'></a> 107                 <strong class='reserved'>if</strong> (ehdr-&gt;e_shoff + shdr_size &lt; ehdr-&gt;e_shoff) <em class='brace'>{</em>
+<a id='L108' name='L108'></a> 108                         pr_debug("Section headers at invalid location.\n");
+<a id='L109' name='L109'></a> 109                         <strong class='reserved'>return</strong> false;
+<a id='L110' name='L110'></a> 110                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (ehdr-&gt;e_shoff + shdr_size &gt; buf_len) <em class='brace'>{</em>
+<a id='L111' name='L111'></a> 111                         pr_debug("Section headers truncated.\n");
+<a id='L112' name='L112'></a> 112                         <strong class='reserved'>return</strong> false;
+<a id='L113' name='L113'></a> 113                 <em class='brace'>}</em>
+<a id='L114' name='L114'></a> 114         <em class='brace'>}</em>
+<a id='L115' name='L115'></a> 115 
+<a id='L116' name='L116'></a> 116         <strong class='reserved'>return</strong> true;
+<a id='L117' name='L117'></a> 117 <em class='brace'>}</em>
+<a id='L118' name='L118'></a> 118 
+<a id='L119' name='L119'></a> 119 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/187.html#L302' title='Referred from 302 in kexec_elf.c.'>elf_read_ehdr</a>(<strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *buf, size_t len, <strong class='reserved'>struct</strong> elfhdr *ehdr)
+<a id='L120' name='L120'></a> 120 <em class='brace'>{</em>
+<a id='L121' name='L121'></a> 121         <strong class='reserved'>struct</strong> elfhdr *buf_ehdr;
+<a id='L122' name='L122'></a> 122 
+<a id='L123' name='L123'></a> 123         <strong class='reserved'>if</strong> (len &lt; <strong class='reserved'>sizeof</strong>(*buf_ehdr)) <em class='brace'>{</em>
+<a id='L124' name='L124'></a> 124                 pr_debug("Buffer is too small to hold ELF header.\n");
+<a id='L125' name='L125'></a> 125                 <strong class='reserved'>return</strong> -ENOEXEC;
+<a id='L126' name='L126'></a> 126         <em class='brace'>}</em>
+<a id='L127' name='L127'></a> 127 
+<a id='L128' name='L128'></a> 128         memset(ehdr, 0, <strong class='reserved'>sizeof</strong>(*ehdr));
+<a id='L129' name='L129'></a> 129         memcpy(ehdr-&gt;e_ident, buf, <strong class='reserved'>sizeof</strong>(ehdr-&gt;e_ident));
+<a id='L130' name='L130'></a> 130         <strong class='reserved'>if</strong> (!<a href='../S/187.html#L24' title='Defined at 24 in kexec_elf.c.'>elf_is_elf_file</a>(ehdr)) <em class='brace'>{</em>
+<a id='L131' name='L131'></a> 131                 pr_debug("No ELF header magic.\n");
+<a id='L132' name='L132'></a> 132                 <strong class='reserved'>return</strong> -ENOEXEC;
+<a id='L133' name='L133'></a> 133         <em class='brace'>}</em>
+<a id='L134' name='L134'></a> 134 
+<a id='L135' name='L135'></a> 135         <strong class='reserved'>if</strong> (ehdr-&gt;e_ident[EI_CLASS] != ELF_CLASS) <em class='brace'>{</em>
+<a id='L136' name='L136'></a> 136                 pr_debug("Not a supported ELF class.\n");
+<a id='L137' name='L137'></a> 137                 <strong class='reserved'>return</strong> -ENOEXEC;
+<a id='L138' name='L138'></a> 138         <em class='brace'>}</em> <strong class='reserved'>else</strong>  <strong class='reserved'>if</strong> (ehdr-&gt;e_ident[EI_DATA] != ELFDATA2LSB &amp;&amp;
+<a id='L139' name='L139'></a> 139                 ehdr-&gt;e_ident[EI_DATA] != ELFDATA2MSB) <em class='brace'>{</em>
+<a id='L140' name='L140'></a> 140                 pr_debug("Not a supported ELF data format.\n");
+<a id='L141' name='L141'></a> 141                 <strong class='reserved'>return</strong> -ENOEXEC;
+<a id='L142' name='L142'></a> 142         <em class='brace'>}</em>
+<a id='L143' name='L143'></a> 143 
+<a id='L144' name='L144'></a> 144         buf_ehdr = (<strong class='reserved'>struct</strong> elfhdr *) buf;
+<a id='L145' name='L145'></a> 145         <strong class='reserved'>if</strong> (<a href='../S/187.html#L49' title='Defined at 49 in kexec_elf.c.'>elf16_to_cpu</a>(ehdr, buf_ehdr-&gt;e_ehsize) != <strong class='reserved'>sizeof</strong>(*buf_ehdr)) <em class='brace'>{</em>
+<a id='L146' name='L146'></a> 146                 pr_debug("Bad ELF header size.\n");
+<a id='L147' name='L147'></a> 147                 <strong class='reserved'>return</strong> -ENOEXEC;
+<a id='L148' name='L148'></a> 148         <em class='brace'>}</em>
+<a id='L149' name='L149'></a> 149 
+<a id='L150' name='L150'></a> 150         ehdr-&gt;e_type      = <a href='../S/187.html#L49' title='Defined at 49 in kexec_elf.c.'>elf16_to_cpu</a>(ehdr, buf_ehdr-&gt;e_type);
+<a id='L151' name='L151'></a> 151         ehdr-&gt;e_machine   = <a href='../S/187.html#L49' title='Defined at 49 in kexec_elf.c.'>elf16_to_cpu</a>(ehdr, buf_ehdr-&gt;e_machine);
+<a id='L152' name='L152'></a> 152         ehdr-&gt;e_version   = <a href='../S/187.html#L39' title='Defined at 39 in kexec_elf.c.'>elf32_to_cpu</a>(ehdr, buf_ehdr-&gt;e_version);
+<a id='L153' name='L153'></a> 153         ehdr-&gt;e_flags     = <a href='../S/187.html#L39' title='Defined at 39 in kexec_elf.c.'>elf32_to_cpu</a>(ehdr, buf_ehdr-&gt;e_flags);
+<a id='L154' name='L154'></a> 154         ehdr-&gt;e_phentsize = <a href='../S/187.html#L49' title='Defined at 49 in kexec_elf.c.'>elf16_to_cpu</a>(ehdr, buf_ehdr-&gt;e_phentsize);
+<a id='L155' name='L155'></a> 155         ehdr-&gt;e_phnum     = <a href='../S/187.html#L49' title='Defined at 49 in kexec_elf.c.'>elf16_to_cpu</a>(ehdr, buf_ehdr-&gt;e_phnum);
+<a id='L156' name='L156'></a> 156         ehdr-&gt;e_shentsize = <a href='../S/187.html#L49' title='Defined at 49 in kexec_elf.c.'>elf16_to_cpu</a>(ehdr, buf_ehdr-&gt;e_shentsize);
+<a id='L157' name='L157'></a> 157         ehdr-&gt;e_shnum     = <a href='../S/187.html#L49' title='Defined at 49 in kexec_elf.c.'>elf16_to_cpu</a>(ehdr, buf_ehdr-&gt;e_shnum);
+<a id='L158' name='L158'></a> 158         ehdr-&gt;e_shstrndx  = <a href='../S/187.html#L49' title='Defined at 49 in kexec_elf.c.'>elf16_to_cpu</a>(ehdr, buf_ehdr-&gt;e_shstrndx);
+<a id='L159' name='L159'></a> 159 
+<a id='L160' name='L160'></a> 160         <strong class='reserved'>switch</strong> (ehdr-&gt;e_ident[EI_CLASS]) <em class='brace'>{</em>
+<a id='L161' name='L161'></a> 161         <strong class='reserved'>case</strong> ELFCLASS64:
+<a id='L162' name='L162'></a> 162                 ehdr-&gt;e_entry = <a href='../S/187.html#L29' title='Defined at 29 in kexec_elf.c.'>elf64_to_cpu</a>(ehdr, buf_ehdr-&gt;e_entry);
+<a id='L163' name='L163'></a> 163                 ehdr-&gt;e_phoff = <a href='../S/187.html#L29' title='Defined at 29 in kexec_elf.c.'>elf64_to_cpu</a>(ehdr, buf_ehdr-&gt;e_phoff);
+<a id='L164' name='L164'></a> 164                 ehdr-&gt;e_shoff = <a href='../S/187.html#L29' title='Defined at 29 in kexec_elf.c.'>elf64_to_cpu</a>(ehdr, buf_ehdr-&gt;e_shoff);
+<a id='L165' name='L165'></a> 165                 <strong class='reserved'>break</strong>;
+<a id='L166' name='L166'></a> 166 
+<a id='L167' name='L167'></a> 167         <strong class='reserved'>case</strong> ELFCLASS32:
+<a id='L168' name='L168'></a> 168                 ehdr-&gt;e_entry = <a href='../S/187.html#L39' title='Defined at 39 in kexec_elf.c.'>elf32_to_cpu</a>(ehdr, buf_ehdr-&gt;e_entry);
+<a id='L169' name='L169'></a> 169                 ehdr-&gt;e_phoff = <a href='../S/187.html#L39' title='Defined at 39 in kexec_elf.c.'>elf32_to_cpu</a>(ehdr, buf_ehdr-&gt;e_phoff);
+<a id='L170' name='L170'></a> 170                 ehdr-&gt;e_shoff = <a href='../S/187.html#L39' title='Defined at 39 in kexec_elf.c.'>elf32_to_cpu</a>(ehdr, buf_ehdr-&gt;e_shoff);
+<a id='L171' name='L171'></a> 171                 <strong class='reserved'>break</strong>;
+<a id='L172' name='L172'></a> 172 
+<a id='L173' name='L173'></a> 173         <strong class='reserved'>default</strong>:
+<a id='L174' name='L174'></a> 174                 pr_debug("Unknown ELF class.\n");
+<a id='L175' name='L175'></a> 175                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L176' name='L176'></a> 176         <em class='brace'>}</em>
+<a id='L177' name='L177'></a> 177 
+<a id='L178' name='L178'></a> 178         <strong class='reserved'>return</strong> <a href='../S/187.html#L63' title='Defined at 63 in kexec_elf.c.'>elf_is_ehdr_sane</a>(ehdr, len) ? 0 : -ENOEXEC;
+<a id='L179' name='L179'></a> 179 <em class='brace'>}</em>
+<a id='L180' name='L180'></a> 180 
+<a id='L181' name='L181'></a> 181 <em class='comment'>/**</em>
+<a id='L182' name='L182'></a> 182 <em class='comment'> * elf_is_phdr_sane - check that it is safe to use the program header</em>
+<a id='L183' name='L183'></a> 183 <em class='comment'> * @buf_len:    size of the buffer in which the ELF file is loaded.</em>
+<a id='L184' name='L184'></a> 184 <em class='comment'> */</em>
+<a id='L185' name='L185'></a> 185 <strong class='reserved'>static</strong> bool <a href='../S/187.html#L242' title='Referred from 242 in kexec_elf.c.'>elf_is_phdr_sane</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> elf_phdr *phdr, size_t buf_len)
+<a id='L186' name='L186'></a> 186 <em class='brace'>{</em>
+<a id='L187' name='L187'></a> 187 
+<a id='L188' name='L188'></a> 188         <strong class='reserved'>if</strong> (phdr-&gt;p_offset + phdr-&gt;p_filesz &lt; phdr-&gt;p_offset) <em class='brace'>{</em>
+<a id='L189' name='L189'></a> 189                 pr_debug("ELF segment location wraps around.\n");
+<a id='L190' name='L190'></a> 190                 <strong class='reserved'>return</strong> false;
+<a id='L191' name='L191'></a> 191         <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (phdr-&gt;p_offset + phdr-&gt;p_filesz &gt; buf_len) <em class='brace'>{</em>
+<a id='L192' name='L192'></a> 192                 pr_debug("ELF segment not in file.\n");
+<a id='L193' name='L193'></a> 193                 <strong class='reserved'>return</strong> false;
+<a id='L194' name='L194'></a> 194         <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (phdr-&gt;p_paddr + phdr-&gt;p_memsz &lt; phdr-&gt;p_paddr) <em class='brace'>{</em>
+<a id='L195' name='L195'></a> 195                 pr_debug("ELF segment address wraps around.\n");
+<a id='L196' name='L196'></a> 196                 <strong class='reserved'>return</strong> false;
+<a id='L197' name='L197'></a> 197         <em class='brace'>}</em>
+<a id='L198' name='L198'></a> 198 
+<a id='L199' name='L199'></a> 199         <strong class='reserved'>return</strong> true;
+<a id='L200' name='L200'></a> 200 <em class='brace'>}</em>
+<a id='L201' name='L201'></a> 201 
+<a id='L202' name='L202'></a> 202 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/187.html#L270' title='Referred from 270 in kexec_elf.c.'>elf_read_phdr</a>(<strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *buf, size_t len,
+<a id='L203' name='L203'></a> 203                          <strong class='reserved'>struct</strong> kexec_elf_info *elf_info,
+<a id='L204' name='L204'></a> 204                          <strong class='reserved'>int</strong> idx)
+<a id='L205' name='L205'></a> 205 <em class='brace'>{</em>
+<a id='L206' name='L206'></a> 206         <em class='comment'>/* Override the const in proghdrs, we are the ones doing the loading. */</em>
+<a id='L207' name='L207'></a> 207         <strong class='reserved'>struct</strong> elf_phdr *phdr = (<strong class='reserved'>struct</strong> elf_phdr *) &amp;elf_info-&gt;proghdrs[idx];
+<a id='L208' name='L208'></a> 208         <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> elfhdr *ehdr = elf_info-&gt;ehdr;
+<a id='L209' name='L209'></a> 209         <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *pbuf;
+<a id='L210' name='L210'></a> 210         <strong class='reserved'>struct</strong> elf_phdr *buf_phdr;
+<a id='L211' name='L211'></a> 211 
+<a id='L212' name='L212'></a> 212         pbuf = buf + elf_info-&gt;ehdr-&gt;e_phoff + (idx * <strong class='reserved'>sizeof</strong>(*buf_phdr));
+<a id='L213' name='L213'></a> 213         buf_phdr = (<strong class='reserved'>struct</strong> elf_phdr *) pbuf;
+<a id='L214' name='L214'></a> 214 
+<a id='L215' name='L215'></a> 215         phdr-&gt;p_type   = <a href='../S/187.html#L39' title='Defined at 39 in kexec_elf.c.'>elf32_to_cpu</a>(elf_info-&gt;ehdr, buf_phdr-&gt;p_type);
+<a id='L216' name='L216'></a> 216         phdr-&gt;p_flags  = <a href='../S/187.html#L39' title='Defined at 39 in kexec_elf.c.'>elf32_to_cpu</a>(elf_info-&gt;ehdr, buf_phdr-&gt;p_flags);
+<a id='L217' name='L217'></a> 217 
+<a id='L218' name='L218'></a> 218         <strong class='reserved'>switch</strong> (ehdr-&gt;e_ident[EI_CLASS]) <em class='brace'>{</em>
+<a id='L219' name='L219'></a> 219         <strong class='reserved'>case</strong> ELFCLASS64:
+<a id='L220' name='L220'></a> 220                 phdr-&gt;p_offset = <a href='../S/187.html#L29' title='Defined at 29 in kexec_elf.c.'>elf64_to_cpu</a>(ehdr, buf_phdr-&gt;p_offset);
+<a id='L221' name='L221'></a> 221                 phdr-&gt;p_paddr  = <a href='../S/187.html#L29' title='Defined at 29 in kexec_elf.c.'>elf64_to_cpu</a>(ehdr, buf_phdr-&gt;p_paddr);
+<a id='L222' name='L222'></a> 222                 phdr-&gt;p_vaddr  = <a href='../S/187.html#L29' title='Defined at 29 in kexec_elf.c.'>elf64_to_cpu</a>(ehdr, buf_phdr-&gt;p_vaddr);
+<a id='L223' name='L223'></a> 223                 phdr-&gt;p_filesz = <a href='../S/187.html#L29' title='Defined at 29 in kexec_elf.c.'>elf64_to_cpu</a>(ehdr, buf_phdr-&gt;p_filesz);
+<a id='L224' name='L224'></a> 224                 phdr-&gt;p_memsz  = <a href='../S/187.html#L29' title='Defined at 29 in kexec_elf.c.'>elf64_to_cpu</a>(ehdr, buf_phdr-&gt;p_memsz);
+<a id='L225' name='L225'></a> 225                 phdr-&gt;p_align  = <a href='../S/187.html#L29' title='Defined at 29 in kexec_elf.c.'>elf64_to_cpu</a>(ehdr, buf_phdr-&gt;p_align);
+<a id='L226' name='L226'></a> 226                 <strong class='reserved'>break</strong>;
+<a id='L227' name='L227'></a> 227 
+<a id='L228' name='L228'></a> 228         <strong class='reserved'>case</strong> ELFCLASS32:
+<a id='L229' name='L229'></a> 229                 phdr-&gt;p_offset = <a href='../S/187.html#L39' title='Defined at 39 in kexec_elf.c.'>elf32_to_cpu</a>(ehdr, buf_phdr-&gt;p_offset);
+<a id='L230' name='L230'></a> 230                 phdr-&gt;p_paddr  = <a href='../S/187.html#L39' title='Defined at 39 in kexec_elf.c.'>elf32_to_cpu</a>(ehdr, buf_phdr-&gt;p_paddr);
+<a id='L231' name='L231'></a> 231                 phdr-&gt;p_vaddr  = <a href='../S/187.html#L39' title='Defined at 39 in kexec_elf.c.'>elf32_to_cpu</a>(ehdr, buf_phdr-&gt;p_vaddr);
+<a id='L232' name='L232'></a> 232                 phdr-&gt;p_filesz = <a href='../S/187.html#L39' title='Defined at 39 in kexec_elf.c.'>elf32_to_cpu</a>(ehdr, buf_phdr-&gt;p_filesz);
+<a id='L233' name='L233'></a> 233                 phdr-&gt;p_memsz  = <a href='../S/187.html#L39' title='Defined at 39 in kexec_elf.c.'>elf32_to_cpu</a>(ehdr, buf_phdr-&gt;p_memsz);
+<a id='L234' name='L234'></a> 234                 phdr-&gt;p_align  = <a href='../S/187.html#L39' title='Defined at 39 in kexec_elf.c.'>elf32_to_cpu</a>(ehdr, buf_phdr-&gt;p_align);
+<a id='L235' name='L235'></a> 235                 <strong class='reserved'>break</strong>;
+<a id='L236' name='L236'></a> 236 
+<a id='L237' name='L237'></a> 237         <strong class='reserved'>default</strong>:
+<a id='L238' name='L238'></a> 238                 pr_debug("Unknown ELF class.\n");
+<a id='L239' name='L239'></a> 239                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L240' name='L240'></a> 240         <em class='brace'>}</em>
+<a id='L241' name='L241'></a> 241 
+<a id='L242' name='L242'></a> 242         <strong class='reserved'>return</strong> <a href='../S/187.html#L185' title='Defined at 185 in kexec_elf.c.'>elf_is_phdr_sane</a>(phdr, len) ? 0 : -ENOEXEC;
+<a id='L243' name='L243'></a> 243 <em class='brace'>}</em>
+<a id='L244' name='L244'></a> 244 
+<a id='L245' name='L245'></a> 245 <em class='comment'>/**</em>
+<a id='L246' name='L246'></a> 246 <em class='comment'> * elf_read_phdrs - read the program headers from the buffer</em>
+<a id='L247' name='L247'></a> 247 <em class='comment'> *</em>
+<a id='L248' name='L248'></a> 248 <em class='comment'> * This function assumes that the program header table was checked for sanity.</em>
+<a id='L249' name='L249'></a> 249 <em class='comment'> * Use elf_is_ehdr_sane() if it wasn't.</em>
+<a id='L250' name='L250'></a> 250 <em class='comment'> */</em>
+<a id='L251' name='L251'></a> 251 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/187.html#L309' title='Referred from 309 in kexec_elf.c.'>elf_read_phdrs</a>(<strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *buf, size_t len,
+<a id='L252' name='L252'></a> 252                           <strong class='reserved'>struct</strong> kexec_elf_info *elf_info)
+<a id='L253' name='L253'></a> 253 <em class='brace'>{</em>
+<a id='L254' name='L254'></a> 254         size_t phdr_size, i;
+<a id='L255' name='L255'></a> 255         <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> elfhdr *ehdr = elf_info-&gt;ehdr;
+<a id='L256' name='L256'></a> 256 
+<a id='L257' name='L257'></a> 257         <em class='comment'>/*</em>
+<a id='L258' name='L258'></a> 258 <em class='comment'>         * e_phnum is at most 65535 so calculating the size of the</em>
+<a id='L259' name='L259'></a> 259 <em class='comment'>         * program header cannot overflow.</em>
+<a id='L260' name='L260'></a> 260 <em class='comment'>         */</em>
+<a id='L261' name='L261'></a> 261         phdr_size = <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> elf_phdr) * ehdr-&gt;e_phnum;
+<a id='L262' name='L262'></a> 262 
+<a id='L263' name='L263'></a> 263         elf_info-&gt;proghdrs = kzalloc(phdr_size, GFP_KERNEL);
+<a id='L264' name='L264'></a> 264         <strong class='reserved'>if</strong> (!elf_info-&gt;proghdrs)
+<a id='L265' name='L265'></a> 265                 <strong class='reserved'>return</strong> -ENOMEM;
+<a id='L266' name='L266'></a> 266 
+<a id='L267' name='L267'></a> 267         <strong class='reserved'>for</strong> (i = 0; i &lt; ehdr-&gt;e_phnum; i++) <em class='brace'>{</em>
+<a id='L268' name='L268'></a> 268                 <strong class='reserved'>int</strong> ret;
+<a id='L269' name='L269'></a> 269 
+<a id='L270' name='L270'></a> 270                 ret = <a href='../S/187.html#L202' title='Defined at 202 in kexec_elf.c.'>elf_read_phdr</a>(buf, len, elf_info, i);
+<a id='L271' name='L271'></a> 271                 <strong class='reserved'>if</strong> (ret) <em class='brace'>{</em>
+<a id='L272' name='L272'></a> 272                         kfree(elf_info-&gt;proghdrs);
+<a id='L273' name='L273'></a> 273                         elf_info-&gt;proghdrs = NULL;
+<a id='L274' name='L274'></a> 274                         <strong class='reserved'>return</strong> ret;
+<a id='L275' name='L275'></a> 275                 <em class='brace'>}</em>
+<a id='L276' name='L276'></a> 276         <em class='brace'>}</em>
+<a id='L277' name='L277'></a> 277 
+<a id='L278' name='L278'></a> 278         <strong class='reserved'>return</strong> 0;
+<a id='L279' name='L279'></a> 279 <em class='brace'>}</em>
+<a id='L280' name='L280'></a> 280 
+<a id='L281' name='L281'></a> 281 <em class='comment'>/**</em>
+<a id='L282' name='L282'></a> 282 <em class='comment'> * elf_read_from_buffer - read ELF file and sets up ELF header and ELF info</em>
+<a id='L283' name='L283'></a> 283 <em class='comment'> * @buf:        Buffer to read ELF file from.</em>
+<a id='L284' name='L284'></a> 284 <em class='comment'> * @len:        Size of @buf.</em>
+<a id='L285' name='L285'></a> 285 <em class='comment'> * @ehdr:       Pointer to existing struct which will be populated.</em>
+<a id='L286' name='L286'></a> 286 <em class='comment'> * @elf_info:   Pointer to existing struct which will be populated.</em>
+<a id='L287' name='L287'></a> 287 <em class='comment'> *</em>
+<a id='L288' name='L288'></a> 288 <em class='comment'> * This function allows reading ELF files with different byte order than</em>
+<a id='L289' name='L289'></a> 289 <em class='comment'> * the kernel, byte-swapping the fields as needed.</em>
+<a id='L290' name='L290'></a> 290 <em class='comment'> *</em>
+<a id='L291' name='L291'></a> 291 <em class='comment'> * Return:</em>
+<a id='L292' name='L292'></a> 292 <em class='comment'> * On success returns 0, and the caller should call</em>
+<a id='L293' name='L293'></a> 293 <em class='comment'> * kexec_free_elf_info(elf_info) to free the memory allocated for the section</em>
+<a id='L294' name='L294'></a> 294 <em class='comment'> * and program headers.</em>
+<a id='L295' name='L295'></a> 295 <em class='comment'> */</em>
+<a id='L296' name='L296'></a> 296 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/187.html#L333' title='Referred from 333 in kexec_elf.c.'>elf_read_from_buffer</a>(<strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *buf, size_t len,
+<a id='L297' name='L297'></a> 297                                 <strong class='reserved'>struct</strong> elfhdr *ehdr,
+<a id='L298' name='L298'></a> 298                                 <strong class='reserved'>struct</strong> kexec_elf_info *elf_info)
+<a id='L299' name='L299'></a> 299 <em class='brace'>{</em>
+<a id='L300' name='L300'></a> 300         <strong class='reserved'>int</strong> ret;
+<a id='L301' name='L301'></a> 301 
+<a id='L302' name='L302'></a> 302         ret = <a href='../S/187.html#L119' title='Defined at 119 in kexec_elf.c.'>elf_read_ehdr</a>(buf, len, ehdr);
+<a id='L303' name='L303'></a> 303         <strong class='reserved'>if</strong> (ret)
+<a id='L304' name='L304'></a> 304                 <strong class='reserved'>return</strong> ret;
+<a id='L305' name='L305'></a> 305 
+<a id='L306' name='L306'></a> 306         elf_info-&gt;buffer = buf;
+<a id='L307' name='L307'></a> 307         elf_info-&gt;ehdr = ehdr;
+<a id='L308' name='L308'></a> 308         <strong class='reserved'>if</strong> (ehdr-&gt;e_phoff &gt; 0 &amp;&amp; ehdr-&gt;e_phnum &gt; 0) <em class='brace'>{</em>
+<a id='L309' name='L309'></a> 309                 ret = <a href='../S/187.html#L251' title='Defined at 251 in kexec_elf.c.'>elf_read_phdrs</a>(buf, len, elf_info);
+<a id='L310' name='L310'></a> 310                 <strong class='reserved'>if</strong> (ret)
+<a id='L311' name='L311'></a> 311                         <strong class='reserved'>return</strong> ret;
+<a id='L312' name='L312'></a> 312         <em class='brace'>}</em>
+<a id='L313' name='L313'></a> 313         <strong class='reserved'>return</strong> 0;
+<a id='L314' name='L314'></a> 314 <em class='brace'>}</em>
+<a id='L315' name='L315'></a> 315 
+<a id='L316' name='L316'></a> 316 <em class='comment'>/**</em>
+<a id='L317' name='L317'></a> 317 <em class='comment'> * kexec_free_elf_info - free memory allocated by elf_read_from_buffer</em>
+<a id='L318' name='L318'></a> 318 <em class='comment'> */</em>
+<a id='L319' name='L319'></a> 319 <strong class='reserved'>void</strong> <a href='../R/8437.html' title='Multiple referred from 2 places.'>kexec_free_elf_info</a>(<strong class='reserved'>struct</strong> kexec_elf_info *elf_info)
+<a id='L320' name='L320'></a> 320 <em class='brace'>{</em>
+<a id='L321' name='L321'></a> 321         kfree(elf_info-&gt;proghdrs);
+<a id='L322' name='L322'></a> 322         memset(elf_info, 0, <strong class='reserved'>sizeof</strong>(*elf_info));
+<a id='L323' name='L323'></a> 323 <em class='brace'>}</em>
+<a id='L324' name='L324'></a> 324 <em class='comment'>/**</em>
+<a id='L325' name='L325'></a> 325 <em class='comment'> * kexec_build_elf_info - read ELF executable and check that we can use it</em>
+<a id='L326' name='L326'></a> 326 <em class='comment'> */</em>
+<a id='L327' name='L327'></a> 327 <strong class='reserved'>int</strong> <a href='../S/187.html#L371' title='Referred from 371 in kexec_elf.c.'>kexec_build_elf_info</a>(<strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *buf, size_t len, <strong class='reserved'>struct</strong> elfhdr *ehdr,
+<a id='L328' name='L328'></a> 328                                <strong class='reserved'>struct</strong> kexec_elf_info *elf_info)
+<a id='L329' name='L329'></a> 329 <em class='brace'>{</em>
+<a id='L330' name='L330'></a> 330         <strong class='reserved'>int</strong> i;
+<a id='L331' name='L331'></a> 331         <strong class='reserved'>int</strong> ret;
+<a id='L332' name='L332'></a> 332 
+<a id='L333' name='L333'></a> 333         ret = <a href='../S/187.html#L296' title='Defined at 296 in kexec_elf.c.'>elf_read_from_buffer</a>(buf, len, ehdr, elf_info);
+<a id='L334' name='L334'></a> 334         <strong class='reserved'>if</strong> (ret)
+<a id='L335' name='L335'></a> 335                 <strong class='reserved'>return</strong> ret;
+<a id='L336' name='L336'></a> 336 
+<a id='L337' name='L337'></a> 337         <em class='comment'>/* Big endian vmlinux has type ET_DYN. */</em>
+<a id='L338' name='L338'></a> 338         <strong class='reserved'>if</strong> (ehdr-&gt;e_type != ET_EXEC &amp;&amp; ehdr-&gt;e_type != ET_DYN) <em class='brace'>{</em>
+<a id='L339' name='L339'></a> 339                 pr_err("Not an ELF executable.\n");
+<a id='L340' name='L340'></a> 340                 <strong class='reserved'>goto</strong> error;
+<a id='L341' name='L341'></a> 341         <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (!elf_info-&gt;proghdrs) <em class='brace'>{</em>
+<a id='L342' name='L342'></a> 342                 pr_err("No ELF program header.\n");
+<a id='L343' name='L343'></a> 343                 <strong class='reserved'>goto</strong> error;
+<a id='L344' name='L344'></a> 344         <em class='brace'>}</em>
+<a id='L345' name='L345'></a> 345 
+<a id='L346' name='L346'></a> 346         <strong class='reserved'>for</strong> (i = 0; i &lt; ehdr-&gt;e_phnum; i++) <em class='brace'>{</em>
+<a id='L347' name='L347'></a> 347                 <em class='comment'>/*</em>
+<a id='L348' name='L348'></a> 348 <em class='comment'>                 * Kexec does not support loading interpreters.</em>
+<a id='L349' name='L349'></a> 349 <em class='comment'>                 * In addition this check keeps us from attempting</em>
+<a id='L350' name='L350'></a> 350 <em class='comment'>                 * to kexec ordinay executables.</em>
+<a id='L351' name='L351'></a> 351 <em class='comment'>                 */</em>
+<a id='L352' name='L352'></a> 352                 <strong class='reserved'>if</strong> (elf_info-&gt;proghdrs[i].p_type == PT_INTERP) <em class='brace'>{</em>
+<a id='L353' name='L353'></a> 353                         pr_err("Requires an ELF interpreter.\n");
+<a id='L354' name='L354'></a> 354                         <strong class='reserved'>goto</strong> error;
+<a id='L355' name='L355'></a> 355                 <em class='brace'>}</em>
+<a id='L356' name='L356'></a> 356         <em class='brace'>}</em>
+<a id='L357' name='L357'></a> 357 
+<a id='L358' name='L358'></a> 358         <strong class='reserved'>return</strong> 0;
+<a id='L359' name='L359'></a> 359 error:
+<a id='L360' name='L360'></a> 360         <a href='../S/187.html#L319' title='Defined at 319 in kexec_elf.c.'>kexec_free_elf_info</a>(elf_info);
+<a id='L361' name='L361'></a> 361         <strong class='reserved'>return</strong> -ENOEXEC;
+<a id='L362' name='L362'></a> 362 <em class='brace'>}</em>
+<a id='L363' name='L363'></a> 363 
+<a id='L364' name='L364'></a> 364 
+<a id='L365' name='L365'></a> 365 <strong class='reserved'>int</strong> kexec_elf_probe(<strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *buf, <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> len)
+<a id='L366' name='L366'></a> 366 <em class='brace'>{</em>
+<a id='L367' name='L367'></a> 367         <strong class='reserved'>struct</strong> elfhdr ehdr;
+<a id='L368' name='L368'></a> 368         <strong class='reserved'>struct</strong> kexec_elf_info elf_info;
+<a id='L369' name='L369'></a> 369         <strong class='reserved'>int</strong> ret;
+<a id='L370' name='L370'></a> 370 
+<a id='L371' name='L371'></a> 371         ret = <a href='../S/187.html#L327' title='Defined at 327 in kexec_elf.c.'>kexec_build_elf_info</a>(buf, len, &amp;ehdr, &amp;elf_info);
+<a id='L372' name='L372'></a> 372         <strong class='reserved'>if</strong> (ret)
+<a id='L373' name='L373'></a> 373                 <strong class='reserved'>return</strong> ret;
+<a id='L374' name='L374'></a> 374 
+<a id='L375' name='L375'></a> 375         <a href='../S/187.html#L319' title='Defined at 319 in kexec_elf.c.'>kexec_free_elf_info</a>(&amp;elf_info);
+<a id='L376' name='L376'></a> 376 
+<a id='L377' name='L377'></a> 377         <strong class='reserved'>return</strong> elf_check_arch(&amp;ehdr) ? 0 : -ENOEXEC;
+<a id='L378' name='L378'></a> 378 <em class='brace'>}</em>
+<a id='L379' name='L379'></a> 379 
+<a id='L380' name='L380'></a> 380 <em class='comment'>/**</em>
+<a id='L381' name='L381'></a> 381 <em class='comment'> * kexec_elf_load - load ELF executable image</em>
+<a id='L382' name='L382'></a> 382 <em class='comment'> * @lowest_load_addr:   On return, will be the address where the first PT_LOAD</em>
+<a id='L383' name='L383'></a> 383 <em class='comment'> *                      section will be loaded in memory.</em>
+<a id='L384' name='L384'></a> 384 <em class='comment'> *</em>
+<a id='L385' name='L385'></a> 385 <em class='comment'> * Return:</em>
+<a id='L386' name='L386'></a> 386 <em class='comment'> * 0 on success, negative value on failure.</em>
+<a id='L387' name='L387'></a> 387 <em class='comment'> */</em>
+<a id='L388' name='L388'></a> 388 <strong class='reserved'>int</strong> kexec_elf_load(<strong class='reserved'>struct</strong> kimage *image, <strong class='reserved'>struct</strong> elfhdr *ehdr,
+<a id='L389' name='L389'></a> 389                          <strong class='reserved'>struct</strong> kexec_elf_info *elf_info,
+<a id='L390' name='L390'></a> 390                          <strong class='reserved'>struct</strong> kexec_buf *kbuf,
+<a id='L391' name='L391'></a> 391                          <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> *lowest_load_addr)
+<a id='L392' name='L392'></a> 392 <em class='brace'>{</em>
+<a id='L393' name='L393'></a> 393         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> lowest_addr = UINT_MAX;
+<a id='L394' name='L394'></a> 394         <strong class='reserved'>int</strong> ret;
+<a id='L395' name='L395'></a> 395         size_t i;
+<a id='L396' name='L396'></a> 396 
+<a id='L397' name='L397'></a> 397         <em class='comment'>/* Read in the PT_LOAD segments. */</em>
+<a id='L398' name='L398'></a> 398         <strong class='reserved'>for</strong> (i = 0; i &lt; ehdr-&gt;e_phnum; i++) <em class='brace'>{</em>
+<a id='L399' name='L399'></a> 399                 <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> load_addr;
+<a id='L400' name='L400'></a> 400                 size_t size;
+<a id='L401' name='L401'></a> 401                 <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> elf_phdr *phdr;
+<a id='L402' name='L402'></a> 402 
+<a id='L403' name='L403'></a> 403                 phdr = &amp;elf_info-&gt;proghdrs[i];
+<a id='L404' name='L404'></a> 404                 <strong class='reserved'>if</strong> (phdr-&gt;p_type != PT_LOAD)
+<a id='L405' name='L405'></a> 405                         <strong class='reserved'>continue</strong>;
+<a id='L406' name='L406'></a> 406 
+<a id='L407' name='L407'></a> 407                 size = phdr-&gt;p_filesz;
+<a id='L408' name='L408'></a> 408                 <strong class='reserved'>if</strong> (size &gt; phdr-&gt;p_memsz)
+<a id='L409' name='L409'></a> 409                         size = phdr-&gt;p_memsz;
+<a id='L410' name='L410'></a> 410 
+<a id='L411' name='L411'></a> 411                 kbuf-&gt;buffer = (<strong class='reserved'>void</strong> *) elf_info-&gt;buffer + phdr-&gt;p_offset;
+<a id='L412' name='L412'></a> 412                 kbuf-&gt;bufsz = size;
+<a id='L413' name='L413'></a> 413                 kbuf-&gt;memsz = phdr-&gt;p_memsz;
+<a id='L414' name='L414'></a> 414                 kbuf-&gt;buf_align = phdr-&gt;p_align;
+<a id='L415' name='L415'></a> 415                 kbuf-&gt;buf_min = phdr-&gt;p_paddr;
+<a id='L416' name='L416'></a> 416                 kbuf-&gt;mem = KEXEC_BUF_MEM_UNKNOWN;
+<a id='L417' name='L417'></a> 417                 ret = <a href='../S/119.html#L667' title='Defined at 667 in kexec_file.c.'>kexec_add_buffer</a>(kbuf);
+<a id='L418' name='L418'></a> 418                 <strong class='reserved'>if</strong> (ret)
+<a id='L419' name='L419'></a> 419                         <strong class='reserved'>goto</strong> out;
+<a id='L420' name='L420'></a> 420                 load_addr = kbuf-&gt;mem;
+<a id='L421' name='L421'></a> 421 
+<a id='L422' name='L422'></a> 422                 <strong class='reserved'>if</strong> (load_addr &lt; lowest_addr)
+<a id='L423' name='L423'></a> 423                         lowest_addr = load_addr;
+<a id='L424' name='L424'></a> 424         <em class='brace'>}</em>
+<a id='L425' name='L425'></a> 425 
+<a id='L426' name='L426'></a> 426         *lowest_load_addr = lowest_addr;
+<a id='L427' name='L427'></a> 427         ret = 0;
+<a id='L428' name='L428'></a> 428  out:
+<a id='L429' name='L429'></a> 429         <strong class='reserved'>return</strong> ret;
+<a id='L430' name='L430'></a> 430 <em class='brace'>}</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L24'>[^]</a><a href='#L388'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

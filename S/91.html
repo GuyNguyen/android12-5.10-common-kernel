@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>time/test_udelay.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/512.html'>time</a>/test_udelay.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L28'>[^]</a><a href='#L150'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L28' title='Defined at 28.'>udelay_test_single</a></li>
+<li><a href='#L68' title='Defined at 68.'>udelay_test_show</a></li>
+<li><a href='#L95' title='Defined at 95.'>udelay_test_open</a></li>
+<li><a href='#L100' title='Defined at 100.'>udelay_test_write</a></li>
+<li><a href='#L138' title='Defined at 138.'>udelay_test_init</a></li>
+<li><a href='#L150' title='Defined at 150.'>udelay_test_exit</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * udelay() test kernel module</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> *</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * Test is executed by writing and reading to /sys/kernel/debug/udelay_test</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> * Tests are configured by writing: USECS ITERATIONS</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> * Tests are executed by reading from the same file.</em>
+<a id='L8' name='L8'></a>   8 <em class='comment'> * Specifying usecs of 0 or negative values will run multiples tests.</em>
+<a id='L9' name='L9'></a>   9 <em class='comment'> *</em>
+<a id='L10' name='L10'></a>  10 <em class='comment'> * Copyright (C) 2014 Google, Inc.</em>
+<a id='L11' name='L11'></a>  11 <em class='comment'> */</em>
+<a id='L12' name='L12'></a>  12 
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;linux/debugfs.h&gt;
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> &lt;linux/delay.h&gt;
+<a id='L15' name='L15'></a>  15 <em class='sharp'>#include</em> &lt;linux/ktime.h&gt;
+<a id='L16' name='L16'></a>  16 <em class='sharp'>#include</em> &lt;linux/module.h&gt;
+<a id='L17' name='L17'></a>  17 <em class='sharp'>#include</em> &lt;linux/uaccess.h&gt;
+<a id='L18' name='L18'></a>  18 
+<a id='L19' name='L19'></a>  19 <em class='sharp'>#define</em> <a href='../R/233.html' title='Multiple referred from 2 places.'>DEFAULT_ITERATIONS</a> 100
+<a id='L20' name='L20'></a>  20 
+<a id='L21' name='L21'></a>  21 <em class='sharp'>#define</em> <a href='../R/225.html' title='Multiple referred from 3 places.'>DEBUGFS_FILENAME</a> "udelay_test"
+<a id='L22' name='L22'></a>  22 
+<a id='L23' name='L23'></a>  23 <strong class='reserved'>static</strong> DEFINE_MUTEX(udelay_test_lock);
+<a id='L24' name='L24'></a>  24 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> dentry *udelay_test_debugfs_file;
+<a id='L25' name='L25'></a>  25 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> udelay_test_usecs;
+<a id='L26' name='L26'></a>  26 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> udelay_test_iterations = <a href='../S/91.html#L19' title='Defined at 19 in time/test_udelay.c.'>DEFAULT_ITERATIONS</a>;
+<a id='L27' name='L27'></a>  27 
+<a id='L28' name='L28'></a>  28 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/91.html#L80' title='Referred from 80 in time/test_udelay.c.'>udelay_test_single</a>(<strong class='reserved'>struct</strong> seq_file *s, <strong class='reserved'>int</strong> usecs, uint32_t iters)
+<a id='L29' name='L29'></a>  29 <em class='brace'>{</em>
+<a id='L30' name='L30'></a>  30         <strong class='reserved'>int</strong> min = 0, max = 0, fail_count = 0;
+<a id='L31' name='L31'></a>  31         uint64_t sum = 0;
+<a id='L32' name='L32'></a>  32         uint64_t avg;
+<a id='L33' name='L33'></a>  33         <strong class='reserved'>int</strong> i;
+<a id='L34' name='L34'></a>  34         <em class='comment'>/* Allow udelay to be up to 0.5% fast */</em>
+<a id='L35' name='L35'></a>  35         <strong class='reserved'>int</strong> allowed_error_ns = usecs * 5;
+<a id='L36' name='L36'></a>  36 
+<a id='L37' name='L37'></a>  37         <strong class='reserved'>for</strong> (i = 0; i &lt; iters; ++i) <em class='brace'>{</em>
+<a id='L38' name='L38'></a>  38                 s64 kt1, kt2;
+<a id='L39' name='L39'></a>  39                 <strong class='reserved'>int</strong> time_passed;
+<a id='L40' name='L40'></a>  40 
+<a id='L41' name='L41'></a>  41                 kt1 = ktime_get_ns();
+<a id='L42' name='L42'></a>  42                 udelay(usecs);
+<a id='L43' name='L43'></a>  43                 kt2 = ktime_get_ns();
+<a id='L44' name='L44'></a>  44                 time_passed = kt2 - kt1;
+<a id='L45' name='L45'></a>  45 
+<a id='L46' name='L46'></a>  46                 <strong class='reserved'>if</strong> (i == 0 || time_passed &lt; min)
+<a id='L47' name='L47'></a>  47                         min = time_passed;
+<a id='L48' name='L48'></a>  48                 <strong class='reserved'>if</strong> (i == 0 || time_passed &gt; max)
+<a id='L49' name='L49'></a>  49                         max = time_passed;
+<a id='L50' name='L50'></a>  50                 <strong class='reserved'>if</strong> ((time_passed + allowed_error_ns) / 1000 &lt; usecs)
+<a id='L51' name='L51'></a>  51                         ++fail_count;
+<a id='L52' name='L52'></a>  52                 WARN_ON(time_passed &lt; 0);
+<a id='L53' name='L53'></a>  53                 sum += time_passed;
+<a id='L54' name='L54'></a>  54         <em class='brace'>}</em>
+<a id='L55' name='L55'></a>  55 
+<a id='L56' name='L56'></a>  56         avg = sum;
+<a id='L57' name='L57'></a>  57         do_div(avg, iters);
+<a id='L58' name='L58'></a>  58         seq_printf(s, "%d usecs x %d: exp=%d allowed=%d min=%d avg=%lld max=%d",
+<a id='L59' name='L59'></a>  59                         usecs, iters, usecs * 1000,
+<a id='L60' name='L60'></a>  60                         (usecs * 1000) - allowed_error_ns, min, avg, max);
+<a id='L61' name='L61'></a>  61         <strong class='reserved'>if</strong> (fail_count)
+<a id='L62' name='L62'></a>  62                 seq_printf(s, " FAIL=%d", fail_count);
+<a id='L63' name='L63'></a>  63         seq_puts(s, "\n");
+<a id='L64' name='L64'></a>  64 
+<a id='L65' name='L65'></a>  65         <strong class='reserved'>return</strong> 0;
+<a id='L66' name='L66'></a>  66 <em class='brace'>}</em>
+<a id='L67' name='L67'></a>  67 
+<a id='L68' name='L68'></a>  68 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/91.html#L97' title='Referred from 97 in time/test_udelay.c.'>udelay_test_show</a>(<strong class='reserved'>struct</strong> seq_file *s, <strong class='reserved'>void</strong> *v)
+<a id='L69' name='L69'></a>  69 <em class='brace'>{</em>
+<a id='L70' name='L70'></a>  70         <strong class='reserved'>int</strong> usecs;
+<a id='L71' name='L71'></a>  71         <strong class='reserved'>int</strong> iters;
+<a id='L72' name='L72'></a>  72         <strong class='reserved'>int</strong> ret = 0;
+<a id='L73' name='L73'></a>  73 
+<a id='L74' name='L74'></a>  74         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;udelay_test_lock);
+<a id='L75' name='L75'></a>  75         usecs = udelay_test_usecs;
+<a id='L76' name='L76'></a>  76         iters = udelay_test_iterations;
+<a id='L77' name='L77'></a>  77         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;udelay_test_lock);
+<a id='L78' name='L78'></a>  78 
+<a id='L79' name='L79'></a>  79         <strong class='reserved'>if</strong> (usecs &gt; 0 &amp;&amp; iters &gt; 0) <em class='brace'>{</em>
+<a id='L80' name='L80'></a>  80                 <strong class='reserved'>return</strong> <a href='../S/91.html#L28' title='Defined at 28 in time/test_udelay.c.'>udelay_test_single</a>(s, usecs, iters);
+<a id='L81' name='L81'></a>  81         <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (usecs == 0) <em class='brace'>{</em>
+<a id='L82' name='L82'></a>  82                 <strong class='reserved'>struct</strong> timespec64 ts;
+<a id='L83' name='L83'></a>  83 
+<a id='L84' name='L84'></a>  84                 <a href='../S/82.html#L954' title='Defined at 954 in time/timekeeping.c.'>ktime_get_ts64</a>(&amp;ts);
+<a id='L85' name='L85'></a>  85                 seq_printf(s, "udelay() test (lpj=%ld kt=%lld.%09ld)\n",
+<a id='L86' name='L86'></a>  86                                 loops_per_jiffy, (s64)ts.tv_sec, ts.tv_nsec);
+<a id='L87' name='L87'></a>  87                 seq_puts(s, "usage:\n");
+<a id='L88' name='L88'></a>  88                 seq_puts(s, "echo USECS [ITERS] &gt; " <a href='../S/91.html#L21' title='Defined at 21 in time/test_udelay.c.'>DEBUGFS_FILENAME</a> "\n");
+<a id='L89' name='L89'></a>  89                 seq_puts(s, "cat " <a href='../S/91.html#L21' title='Defined at 21 in time/test_udelay.c.'>DEBUGFS_FILENAME</a> "\n");
+<a id='L90' name='L90'></a>  90         <em class='brace'>}</em>
+<a id='L91' name='L91'></a>  91 
+<a id='L92' name='L92'></a>  92         <strong class='reserved'>return</strong> ret;
+<a id='L93' name='L93'></a>  93 <em class='brace'>}</em>
+<a id='L94' name='L94'></a>  94 
+<a id='L95' name='L95'></a>  95 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/91.html#L131' title='Referred from 131 in time/test_udelay.c.'>udelay_test_open</a>(<strong class='reserved'>struct</strong> inode *inode, <strong class='reserved'>struct</strong> file *file)
+<a id='L96' name='L96'></a>  96 <em class='brace'>{</em>
+<a id='L97' name='L97'></a>  97         <strong class='reserved'>return</strong> single_open(file, <a href='../S/91.html#L68' title='Defined at 68 in time/test_udelay.c.'>udelay_test_show</a>, inode-&gt;i_private);
+<a id='L98' name='L98'></a>  98 <em class='brace'>}</em>
+<a id='L99' name='L99'></a>  99 
+<a id='L100' name='L100'></a> 100 <strong class='reserved'>static</strong> ssize_t <a href='../S/91.html#L133' title='Referred from 133 in time/test_udelay.c.'>udelay_test_write</a>(<strong class='reserved'>struct</strong> file *file, <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> __user *buf,
+<a id='L101' name='L101'></a> 101                 size_t count, loff_t *pos)
+<a id='L102' name='L102'></a> 102 <em class='brace'>{</em>
+<a id='L103' name='L103'></a> 103         <strong class='reserved'>char</strong> lbuf[32];
+<a id='L104' name='L104'></a> 104         <strong class='reserved'>int</strong> ret;
+<a id='L105' name='L105'></a> 105         <strong class='reserved'>int</strong> usecs;
+<a id='L106' name='L106'></a> 106         <strong class='reserved'>int</strong> iters;
+<a id='L107' name='L107'></a> 107 
+<a id='L108' name='L108'></a> 108         <strong class='reserved'>if</strong> (count &gt;= <strong class='reserved'>sizeof</strong>(lbuf))
+<a id='L109' name='L109'></a> 109                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L110' name='L110'></a> 110 
+<a id='L111' name='L111'></a> 111         <strong class='reserved'>if</strong> (copy_from_user(lbuf, buf, count))
+<a id='L112' name='L112'></a> 112                 <strong class='reserved'>return</strong> -EFAULT;
+<a id='L113' name='L113'></a> 113         lbuf[count] = '\0';
+<a id='L114' name='L114'></a> 114 
+<a id='L115' name='L115'></a> 115         ret = sscanf(lbuf, "%d %d", &amp;usecs, &amp;iters);
+<a id='L116' name='L116'></a> 116         <strong class='reserved'>if</strong> (ret &lt; 1)
+<a id='L117' name='L117'></a> 117                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L118' name='L118'></a> 118         <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (ret &lt; 2)
+<a id='L119' name='L119'></a> 119                 iters = <a href='../S/91.html#L19' title='Defined at 19 in time/test_udelay.c.'>DEFAULT_ITERATIONS</a>;
+<a id='L120' name='L120'></a> 120 
+<a id='L121' name='L121'></a> 121         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;udelay_test_lock);
+<a id='L122' name='L122'></a> 122         udelay_test_usecs = usecs;
+<a id='L123' name='L123'></a> 123         udelay_test_iterations = iters;
+<a id='L124' name='L124'></a> 124         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;udelay_test_lock);
+<a id='L125' name='L125'></a> 125 
+<a id='L126' name='L126'></a> 126         <strong class='reserved'>return</strong> count;
+<a id='L127' name='L127'></a> 127 <em class='brace'>}</em>
+<a id='L128' name='L128'></a> 128 
+<a id='L129' name='L129'></a> 129 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> file_operations udelay_test_debugfs_ops = <em class='brace'>{</em>
+<a id='L130' name='L130'></a> 130         .owner = THIS_MODULE,
+<a id='L131' name='L131'></a> 131         .open = <a href='../S/91.html#L95' title='Defined at 95 in time/test_udelay.c.'>udelay_test_open</a>,
+<a id='L132' name='L132'></a> 132         .read = seq_read,
+<a id='L133' name='L133'></a> 133         .write = <a href='../S/91.html#L100' title='Defined at 100 in time/test_udelay.c.'>udelay_test_write</a>,
+<a id='L134' name='L134'></a> 134         .llseek = seq_lseek,
+<a id='L135' name='L135'></a> 135         .release = single_release,
+<a id='L136' name='L136'></a> 136 <em class='brace'>}</em>;
+<a id='L137' name='L137'></a> 137 
+<a id='L138' name='L138'></a> 138 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __init <a href='../S/91.html#L148' title='Referred from 148 in time/test_udelay.c.'>udelay_test_init</a>(<strong class='reserved'>void</strong>)
+<a id='L139' name='L139'></a> 139 <em class='brace'>{</em>
+<a id='L140' name='L140'></a> 140         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;udelay_test_lock);
+<a id='L141' name='L141'></a> 141         udelay_test_debugfs_file = debugfs_create_file(<a href='../S/91.html#L21' title='Defined at 21 in time/test_udelay.c.'>DEBUGFS_FILENAME</a>,
+<a id='L142' name='L142'></a> 142                         S_IRUSR, NULL, NULL, &amp;udelay_test_debugfs_ops);
+<a id='L143' name='L143'></a> 143         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;udelay_test_lock);
+<a id='L144' name='L144'></a> 144 
+<a id='L145' name='L145'></a> 145         <strong class='reserved'>return</strong> 0;
+<a id='L146' name='L146'></a> 146 <em class='brace'>}</em>
+<a id='L147' name='L147'></a> 147 
+<a id='L148' name='L148'></a> 148 module_init(<a href='../S/91.html#L138' title='Defined at 138 in time/test_udelay.c.'>udelay_test_init</a>);
+<a id='L149' name='L149'></a> 149 
+<a id='L150' name='L150'></a> 150 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> __exit <a href='../S/91.html#L157' title='Referred from 157 in time/test_udelay.c.'>udelay_test_exit</a>(<strong class='reserved'>void</strong>)
+<a id='L151' name='L151'></a> 151 <em class='brace'>{</em>
+<a id='L152' name='L152'></a> 152         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;udelay_test_lock);
+<a id='L153' name='L153'></a> 153         debugfs_remove(udelay_test_debugfs_file);
+<a id='L154' name='L154'></a> 154         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;udelay_test_lock);
+<a id='L155' name='L155'></a> 155 <em class='brace'>}</em>
+<a id='L156' name='L156'></a> 156 
+<a id='L157' name='L157'></a> 157 module_exit(<a href='../S/91.html#L150' title='Defined at 150 in time/test_udelay.c.'>udelay_test_exit</a>);
+<a id='L158' name='L158'></a> 158 
+<a id='L159' name='L159'></a> 159 MODULE_AUTHOR("David Riley &lt;davidriley@chromium.org&gt;");
+<a id='L160' name='L160'></a> 160 MODULE_LICENSE("GPL");
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L28'>[^]</a><a href='#L150'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

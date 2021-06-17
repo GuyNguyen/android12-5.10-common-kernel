@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>CGROUP_FROZEN</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/237.html#L78'>CGROUP_FROZEN</a>      78 cgroup/legacy_freezer.c 	if (state &amp; CGROUP_FROZEN)</span>
+<span class='curline'><a href='../S/237.html#L115'>CGROUP_FROZEN</a>     115 cgroup/legacy_freezer.c 		freezer-&gt;state |= CGROUP_FREEZING_PARENT | CGROUP_FROZEN;</span>
+<span class='curline'><a href='../S/237.html#L183'>CGROUP_FROZEN</a>     183 cgroup/legacy_freezer.c 			while (freezer &amp;&amp; (freezer-&gt;state &amp; CGROUP_FROZEN)) {</span>
+<span class='curline'><a href='../S/237.html#L184'>CGROUP_FROZEN</a>     184 cgroup/legacy_freezer.c 				freezer-&gt;state &amp;= ~CGROUP_FROZEN;</span>
+<span class='curline'><a href='../S/237.html#L254'>CGROUP_FROZEN</a>     254 cgroup/legacy_freezer.c 	    (freezer-&gt;state &amp; CGROUP_FROZEN))</span>
+<span class='curline'><a href='../S/237.html#L263'>CGROUP_FROZEN</a>     263 cgroup/legacy_freezer.c 		    !(child-&gt;state &amp; CGROUP_FROZEN)) {</span>
+<span class='curline'><a href='../S/237.html#L286'>CGROUP_FROZEN</a>     286 cgroup/legacy_freezer.c 	freezer-&gt;state |= CGROUP_FROZEN;</span>
+<span class='curline'><a href='../S/237.html#L371'>CGROUP_FROZEN</a>     371 cgroup/legacy_freezer.c 			freezer-&gt;state &amp;= ~CGROUP_FROZEN;</span>
+<span class='curline'><a href='../S/237.html#L428'>CGROUP_FROZEN</a>     428 cgroup/legacy_freezer.c 	else if (strcmp(buf, freezer_state_strs(CGROUP_FROZEN)) == 0)</span>
+</pre>
+</body>
+</html>

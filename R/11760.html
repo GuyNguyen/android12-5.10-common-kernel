@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rt_mutex_owner</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/76.html#L2391'>rt_mutex_owner</a>   2391 futex.c        		newowner = rt_mutex_owner(&amp;pi_state-&gt;pi_mutex);</span>
+<span class='curline'><a href='../S/76.html#L2506'>rt_mutex_owner</a>   2506 futex.c        	pi_state_update_owner(pi_state, rt_mutex_owner(&amp;pi_state-&gt;pi_mutex));</span>
+<span class='curline'><a href='../S/76.html#L2573'>rt_mutex_owner</a>   2573 futex.c        	if (WARN_ON_ONCE(rt_mutex_owner(&amp;q-&gt;pi_state-&gt;pi_mutex) == current))</span>
+<span class='curline'><a href='../S/41.html#L52'>rt_mutex_owner</a>     52 locking/rtmutex-debug.c 	if (print_owner &amp;&amp; rt_mutex_owner(lock)) {</span>
+<span class='curline'><a href='../S/41.html#L55'>rt_mutex_owner</a>     55 locking/rtmutex-debug.c 		printk_task(rt_mutex_owner(lock));</span>
+<span class='curline'><a href='../S/41.html#L80'>rt_mutex_owner</a>     80 locking/rtmutex-debug.c 	task = rt_mutex_owner(act_waiter-&gt;lock);</span>
+<span class='curline'><a href='../S/41.html#L145'>rt_mutex_owner</a>    145 locking/rtmutex-debug.c 	DEBUG_LOCKS_WARN_ON(rt_mutex_owner(lock) != current);</span>
+<span class='curline'><a href='../S/41.html#L155'>rt_mutex_owner</a>    155 locking/rtmutex-debug.c 	DEBUG_LOCKS_WARN_ON(!rt_mutex_owner(lock));</span>
+<span class='curline'><a href='../S/40.html#L173'>rt_mutex_owner</a>    173 locking/rtmutex.c 	struct task_struct *owner = rt_mutex_owner(lock);</span>
+<span class='curline'><a href='../S/40.html#L525'>rt_mutex_owner</a>    525 locking/rtmutex.c 	if (orig_waiter &amp;&amp; !rt_mutex_owner(orig_lock))</span>
+<span class='curline'><a href='../S/40.html#L600'>rt_mutex_owner</a>    600 locking/rtmutex.c 	if (lock == orig_lock || rt_mutex_owner(lock) == top_task) {</span>
+<span class='curline'><a href='../S/40.html#L624'>rt_mutex_owner</a>    624 locking/rtmutex.c 		if (!rt_mutex_owner(lock)) {</span>
+<span class='curline'><a href='../S/40.html#L630'>rt_mutex_owner</a>    630 locking/rtmutex.c 		task = get_task_struct(rt_mutex_owner(lock));</span>
+<span class='curline'><a href='../S/40.html#L697'>rt_mutex_owner</a>    697 locking/rtmutex.c 	if (!rt_mutex_owner(lock)) {</span>
+<span class='curline'><a href='../S/40.html#L710'>rt_mutex_owner</a>    710 locking/rtmutex.c 	task = get_task_struct(rt_mutex_owner(lock));</span>
+<span class='curline'><a href='../S/40.html#L833'>rt_mutex_owner</a>    833 locking/rtmutex.c 	if (rt_mutex_owner(lock))</span>
+<span class='curline'><a href='../S/40.html#L932'>rt_mutex_owner</a>    932 locking/rtmutex.c 	struct task_struct *owner = rt_mutex_owner(lock);</span>
+<span class='curline'><a href='../S/40.html#L1070'>rt_mutex_owner</a>   1070 locking/rtmutex.c 	struct task_struct *owner = rt_mutex_owner(lock);</span>
+<span class='curline'><a href='../S/40.html#L1318'>rt_mutex_owner</a>   1318 locking/rtmutex.c 	if (rt_mutex_owner(lock))</span>
+<span class='curline'><a href='../S/40.html#L1762'>rt_mutex_owner</a>   1762 locking/rtmutex.c 	if (ret &amp;&amp; !rt_mutex_owner(lock)) {</span>
+<span class='curline'><a href='../S/40.html#L1910'>rt_mutex_owner</a>   1910 locking/rtmutex.c 	if (rt_mutex_owner(lock) != current) {</span>
+<span class='curline'><a href='../S/126.html#L509'>rt_mutex_owner</a>    509 rcu/tree_plugin.h 			drop_boost_mutex = rt_mutex_owner(&amp;rnp-&gt;boost_mtx) == t;</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>dah_overhead</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/58.html#L757'>dah_overhead</a>      757 debug/kdb/kdb_support.c 		h-&gt;size = sizeof(debug_alloc_pool_aligned) - dah_overhead;</span>
+<span class='curline'><a href='../S/58.html#L778'>dah_overhead</a>      778 debug/kdb/kdb_support.c 	if (best-&gt;next == 0 &amp;&amp; bestprev == NULL &amp;&amp; rem &lt; dah_overhead)</span>
+<span class='curline'><a href='../S/58.html#L780'>dah_overhead</a>      780 debug/kdb/kdb_support.c 	if (rem &gt;= dah_overhead) {</span>
+<span class='curline'><a href='../S/58.html#L783'>dah_overhead</a>      783 debug/kdb/kdb_support.c 			   dah_overhead + best-&gt;size;</span>
+<span class='curline'><a href='../S/58.html#L785'>dah_overhead</a>      785 debug/kdb/kdb_support.c 		h-&gt;size = rem - dah_overhead;</span>
+<span class='curline'><a href='../S/58.html#L796'>dah_overhead</a>      796 debug/kdb/kdb_support.c 	p = (char *)best + dah_overhead;</span>
+<span class='curline'><a href='../S/58.html#L819'>dah_overhead</a>      819 debug/kdb/kdb_support.c 	h = (struct debug_alloc_header *)((char *)p - dah_overhead);</span>
+<span class='curline'><a href='../S/58.html#L840'>dah_overhead</a>      840 debug/kdb/kdb_support.c 		if (prev_offset + dah_overhead + prev-&gt;size == h_offset) {</span>
+<span class='curline'><a href='../S/58.html#L841'>dah_overhead</a>      841 debug/kdb/kdb_support.c 			prev-&gt;size += dah_overhead + h-&gt;size;</span>
+<span class='curline'><a href='../S/58.html#L842'>dah_overhead</a>      842 debug/kdb/kdb_support.c 			memset(h, POISON_FREE, dah_overhead - 1);</span>
+<span class='curline'><a href='../S/58.html#L843'>dah_overhead</a>      843 debug/kdb/kdb_support.c 			*((char *)h + dah_overhead - 1) = POISON_END;</span>
+<span class='curline'><a href='../S/58.html#L851'>dah_overhead</a>      851 debug/kdb/kdb_support.c 	if (h_offset + dah_overhead + h-&gt;size == h-&gt;next) {</span>
+<span class='curline'><a href='../S/58.html#L855'>dah_overhead</a>      855 debug/kdb/kdb_support.c 		h-&gt;size += dah_overhead + next-&gt;size;</span>
+<span class='curline'><a href='../S/58.html#L857'>dah_overhead</a>      857 debug/kdb/kdb_support.c 		memset(next, POISON_FREE, dah_overhead - 1);</span>
+<span class='curline'><a href='../S/58.html#L858'>dah_overhead</a>      858 debug/kdb/kdb_support.c 		*((char *)next + dah_overhead - 1) = POISON_END;</span>
+<span class='curline'><a href='../S/58.html#L881'>dah_overhead</a>      881 debug/kdb/kdb_support.c 	    (h_free-&gt;size == sizeof(debug_alloc_pool_aligned) - dah_overhead ||</span>
+<span class='curline'><a href='../S/58.html#L896'>dah_overhead</a>      896 debug/kdb/kdb_support.c 			  ((char *)h_free + dah_overhead + h_free-&gt;size);</span>
+<span class='curline'><a href='../S/58.html#L903'>dah_overhead</a>      903 debug/kdb/kdb_support.c 		  ((char *)h_free + dah_overhead + h_free-&gt;size);</span>
+</pre>
+</body>
+</html>

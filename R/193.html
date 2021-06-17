@@ -1,0 +1,18 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>CQ_MASK</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/35.html#L1432'>CQ_MASK</a>          1432 locking/lockdep.c 	return ((cq-&gt;rear + 1) &amp; CQ_MASK) == cq-&gt;front;</span>
+<span class='curline'><a href='../S/35.html#L1441'>CQ_MASK</a>          1441 locking/lockdep.c 	cq-&gt;rear = (cq-&gt;rear + 1) &amp; CQ_MASK;</span>
+<span class='curline'><a href='../S/35.html#L1457'>CQ_MASK</a>          1457 locking/lockdep.c 	cq-&gt;front = (cq-&gt;front + 1) &amp; CQ_MASK;</span>
+<span class='curline'><a href='../S/35.html#L1464'>CQ_MASK</a>          1464 locking/lockdep.c 	return (cq-&gt;rear - cq-&gt;front) &amp; CQ_MASK;</span>
+</pre>
+</body>
+</html>

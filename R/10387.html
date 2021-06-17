@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>printk_safe_seq_buf</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/2.html#L45'>printk_safe_seq_buf</a>   45 printk/printk_safe.c static DEFINE_PER_CPU(struct printk_safe_seq_buf, safe_print_seq);</span>
+<span class='curline'><a href='../S/2.html#L51'>printk_safe_seq_buf</a>   51 printk/printk_safe.c static DEFINE_PER_CPU(struct printk_safe_seq_buf, nmi_print_seq);</span>
+<span class='curline'><a href='../S/2.html#L55'>printk_safe_seq_buf</a>   55 printk/printk_safe.c static void queue_flush_work(struct printk_safe_seq_buf *s)</span>
+<span class='curline'><a href='../S/2.html#L71'>printk_safe_seq_buf</a>   71 printk/printk_safe.c static __printf(2, 0) int printk_safe_log_store(struct printk_safe_seq_buf *s,</span>
+<span class='curline'><a href='../S/2.html#L171'>printk_safe_seq_buf</a>  171 printk/printk_safe.c static void report_message_lost(struct printk_safe_seq_buf *s)</span>
+<span class='curline'><a href='../S/2.html#L185'>printk_safe_seq_buf</a>  185 printk/printk_safe.c 	struct printk_safe_seq_buf *s =</span>
+<span class='curline'><a href='../S/2.html#L186'>printk_safe_seq_buf</a>  186 printk/printk_safe.c 		container_of(work, struct printk_safe_seq_buf, work);</span>
+<span class='curline'><a href='../S/2.html#L301'>printk_safe_seq_buf</a>  301 printk/printk_safe.c 	struct printk_safe_seq_buf *s = this_cpu_ptr(&amp;nmi_print_seq);</span>
+<span class='curline'><a href='../S/2.html#L353'>printk_safe_seq_buf</a>  353 printk/printk_safe.c 	struct printk_safe_seq_buf *s = this_cpu_ptr(&amp;safe_print_seq);</span>
+<span class='curline'><a href='../S/2.html#L409'>printk_safe_seq_buf</a>  409 printk/printk_safe.c 		struct printk_safe_seq_buf *s;</span>
+</pre>
+</body>
+</html>

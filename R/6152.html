@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>event_trigger_ops</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/256.html#L1723'>event_trigger_ops</a> 1723 trace/trace.h  	struct event_trigger_ops	*ops;</span>
+<span class='curline'><a href='../S/256.html#L1749'>event_trigger_ops</a> 1749 trace/trace.h  				      struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/256.html#L1751'>event_trigger_ops</a> 1751 trace/trace.h  extern void event_enable_trigger_free(struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/256.html#L1757'>event_trigger_ops</a> 1757 trace/trace.h  					 struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/256.html#L1761'>event_trigger_ops</a> 1761 trace/trace.h  					    struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/256.html#L1765'>event_trigger_ops</a> 1765 trace/trace.h  extern int event_trigger_init(struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/256.html#L1829'>event_trigger_ops</a> 1829 trace/trace.h  	int			(*init)(struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/256.html#L1831'>event_trigger_ops</a> 1831 trace/trace.h  	void			(*free)(struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/256.html#L1834'>event_trigger_ops</a> 1834 trace/trace.h  					 struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/256.html#L1922'>event_trigger_ops</a> 1922 trace/trace.h  				       struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/256.html#L1926'>event_trigger_ops</a> 1926 trace/trace.h  					 struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/256.html#L1933'>event_trigger_ops</a> 1933 trace/trace.h  	struct event_trigger_ops *(*get_trigger_ops)(char *cmd, char *param);</span>
+<span class='curline'><a href='../S/291.html#L5074'>event_trigger_ops</a> 5074 trace/trace_events_hist.c 				    struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/291.html#L5182'>event_trigger_ops</a> 5182 trace/trace_events_hist.c static int event_hist_trigger_init(struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/291.html#L5210'>event_trigger_ops</a> 5210 trace/trace_events_hist.c static void event_hist_trigger_free(struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/291.html#L5233'>event_trigger_ops</a> 5233 trace/trace_events_hist.c static struct event_trigger_ops event_hist_trigger_ops = {</span>
+<span class='curline'><a href='../S/291.html#L5240'>event_trigger_ops</a> 5240 trace/trace_events_hist.c static int event_hist_trigger_named_init(struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/291.html#L5252'>event_trigger_ops</a> 5252 trace/trace_events_hist.c static void event_hist_trigger_named_free(struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/291.html#L5267'>event_trigger_ops</a> 5267 trace/trace_events_hist.c static struct event_trigger_ops event_hist_trigger_named_ops = {</span>
+<span class='curline'><a href='../S/291.html#L5274'>event_trigger_ops</a> 5274 trace/trace_events_hist.c static struct event_trigger_ops *event_hist_get_trigger_ops(char *cmd,</span>
+<span class='curline'><a href='../S/291.html#L5385'>event_trigger_ops</a> 5385 trace/trace_events_hist.c static int hist_register_trigger(char *glob, struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/291.html#L5537'>event_trigger_ops</a> 5537 trace/trace_events_hist.c static void hist_unregister_trigger(char *glob, struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/291.html#L5628'>event_trigger_ops</a> 5628 trace/trace_events_hist.c 	struct event_trigger_ops *trigger_ops;</span>
+<span class='curline'><a href='../S/291.html#L5845'>event_trigger_ops</a> 5845 trace/trace_events_hist.c static struct event_trigger_ops hist_enable_trigger_ops = {</span>
+<span class='curline'><a href='../S/291.html#L5852'>event_trigger_ops</a> 5852 trace/trace_events_hist.c static struct event_trigger_ops hist_enable_count_trigger_ops = {</span>
+<span class='curline'><a href='../S/291.html#L5859'>event_trigger_ops</a> 5859 trace/trace_events_hist.c static struct event_trigger_ops hist_disable_trigger_ops = {</span>
+<span class='curline'><a href='../S/291.html#L5866'>event_trigger_ops</a> 5866 trace/trace_events_hist.c static struct event_trigger_ops hist_disable_count_trigger_ops = {</span>
+<span class='curline'><a href='../S/291.html#L5873'>event_trigger_ops</a> 5873 trace/trace_events_hist.c static struct event_trigger_ops *</span>
+<span class='curline'><a href='../S/291.html#L5876'>event_trigger_ops</a> 5876 trace/trace_events_hist.c 	struct event_trigger_ops *ops;</span>
+<span class='curline'><a href='../S/260.html#L418'>event_trigger_ops</a>  418 trace/trace_events_trigger.c int event_trigger_init(struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/260.html#L436'>event_trigger_ops</a>  436 trace/trace_events_trigger.c event_trigger_free(struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/260.html#L541'>event_trigger_ops</a>  541 trace/trace_events_trigger.c static int register_trigger(char *glob, struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/260.html#L588'>event_trigger_ops</a>  588 trace/trace_events_trigger.c static void unregister_trigger(char *glob, struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/260.html#L633'>event_trigger_ops</a>  633 trace/trace_events_trigger.c 	struct event_trigger_ops *trigger_ops;</span>
+<span class='curline'><a href='../S/260.html#L992'>event_trigger_ops</a>  992 trace/trace_events_trigger.c traceon_trigger_print(struct seq_file *m, struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/260.html#L1000'>event_trigger_ops</a> 1000 trace/trace_events_trigger.c traceoff_trigger_print(struct seq_file *m, struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/260.html#L1007'>event_trigger_ops</a> 1007 trace/trace_events_trigger.c static struct event_trigger_ops traceon_trigger_ops = {</span>
+<span class='curline'><a href='../S/260.html#L1014'>event_trigger_ops</a> 1014 trace/trace_events_trigger.c static struct event_trigger_ops traceon_count_trigger_ops = {</span>
+<span class='curline'><a href='../S/260.html#L1021'>event_trigger_ops</a> 1021 trace/trace_events_trigger.c static struct event_trigger_ops traceoff_trigger_ops = {</span>
+<span class='curline'><a href='../S/260.html#L1028'>event_trigger_ops</a> 1028 trace/trace_events_trigger.c static struct event_trigger_ops traceoff_count_trigger_ops = {</span>
+<span class='curline'><a href='../S/260.html#L1035'>event_trigger_ops</a> 1035 trace/trace_events_trigger.c static struct event_trigger_ops *</span>
+<span class='curline'><a href='../S/260.html#L1038'>event_trigger_ops</a> 1038 trace/trace_events_trigger.c 	struct event_trigger_ops *ops;</span>
+<span class='curline'><a href='../S/260.html#L1099'>event_trigger_ops</a> 1099 trace/trace_events_trigger.c register_snapshot_trigger(char *glob, struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/260.html#L1110'>event_trigger_ops</a> 1110 trace/trace_events_trigger.c snapshot_trigger_print(struct seq_file *m, struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/260.html#L1117'>event_trigger_ops</a> 1117 trace/trace_events_trigger.c static struct event_trigger_ops snapshot_trigger_ops = {</span>
+<span class='curline'><a href='../S/260.html#L1124'>event_trigger_ops</a> 1124 trace/trace_events_trigger.c static struct event_trigger_ops snapshot_count_trigger_ops = {</span>
+<span class='curline'><a href='../S/260.html#L1131'>event_trigger_ops</a> 1131 trace/trace_events_trigger.c static struct event_trigger_ops *</span>
+<span class='curline'><a href='../S/260.html#L1199'>event_trigger_ops</a> 1199 trace/trace_events_trigger.c stacktrace_trigger_print(struct seq_file *m, struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/260.html#L1206'>event_trigger_ops</a> 1206 trace/trace_events_trigger.c static struct event_trigger_ops stacktrace_trigger_ops = {</span>
+<span class='curline'><a href='../S/260.html#L1213'>event_trigger_ops</a> 1213 trace/trace_events_trigger.c static struct event_trigger_ops stacktrace_count_trigger_ops = {</span>
+<span class='curline'><a href='../S/260.html#L1220'>event_trigger_ops</a> 1220 trace/trace_events_trigger.c static struct event_trigger_ops *</span>
+<span class='curline'><a href='../S/260.html#L1288'>event_trigger_ops</a> 1288 trace/trace_events_trigger.c 			       struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/260.html#L1313'>event_trigger_ops</a> 1313 trace/trace_events_trigger.c void event_enable_trigger_free(struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/260.html#L1331'>event_trigger_ops</a> 1331 trace/trace_events_trigger.c static struct event_trigger_ops event_enable_trigger_ops = {</span>
+<span class='curline'><a href='../S/260.html#L1338'>event_trigger_ops</a> 1338 trace/trace_events_trigger.c static struct event_trigger_ops event_enable_count_trigger_ops = {</span>
+<span class='curline'><a href='../S/260.html#L1345'>event_trigger_ops</a> 1345 trace/trace_events_trigger.c static struct event_trigger_ops event_disable_trigger_ops = {</span>
+<span class='curline'><a href='../S/260.html#L1352'>event_trigger_ops</a> 1352 trace/trace_events_trigger.c static struct event_trigger_ops event_disable_count_trigger_ops = {</span>
+<span class='curline'><a href='../S/260.html#L1366'>event_trigger_ops</a> 1366 trace/trace_events_trigger.c 	struct event_trigger_ops *trigger_ops;</span>
+<span class='curline'><a href='../S/260.html#L1511'>event_trigger_ops</a> 1511 trace/trace_events_trigger.c 				  struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/260.html#L1553'>event_trigger_ops</a> 1553 trace/trace_events_trigger.c 				     struct event_trigger_ops *ops,</span>
+<span class='curline'><a href='../S/260.html#L1582'>event_trigger_ops</a> 1582 trace/trace_events_trigger.c static struct event_trigger_ops *</span>
+<span class='curline'><a href='../S/260.html#L1585'>event_trigger_ops</a> 1585 trace/trace_events_trigger.c 	struct event_trigger_ops *ops;</span>
+</pre>
+</body>
+</html>

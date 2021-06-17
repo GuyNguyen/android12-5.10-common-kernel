@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>max_vruntime</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/460.html#L559'>max_vruntime</a>      559 sched/debug.c  	s64 MIN_vruntime = -1, min_vruntime, max_vruntime = -1,</span>
+<span class='curline'><a href='../S/460.html#L580'>max_vruntime</a>      580 sched/debug.c  		max_vruntime = last-&gt;vruntime;</span>
+<span class='curline'><a href='../S/460.html#L589'>max_vruntime</a>      589 sched/debug.c  			SPLIT_NS(max_vruntime));</span>
+<span class='curline'><a href='../S/460.html#L590'>max_vruntime</a>      590 sched/debug.c  	spread = max_vruntime - MIN_vruntime;</span>
+<span class='curline'><a href='../S/464.html#L520'>max_vruntime</a>      520 sched/fair.c   static inline u64 max_vruntime(u64 max_vruntime, u64 vruntime)</span>
+<span class='curline'><a href='../S/464.html#L522'>max_vruntime</a>      522 sched/fair.c   	s64 delta = (s64)(vruntime - max_vruntime);</span>
+<span class='curline'><a href='../S/464.html#L524'>max_vruntime</a>      524 sched/fair.c   		max_vruntime = vruntime;</span>
+<span class='curline'><a href='../S/464.html#L526'>max_vruntime</a>      526 sched/fair.c   	return max_vruntime;</span>
+<span class='curline'><a href='../S/464.html#L569'>max_vruntime</a>      569 sched/fair.c   	cfs_rq-&gt;min_vruntime = max_vruntime(cfs_rq-&gt;min_vruntime, vruntime);</span>
+<span class='curline'><a href='../S/464.html#L4186'>max_vruntime</a>     4186 sched/fair.c   	se-&gt;vruntime = max_vruntime(se-&gt;vruntime, vruntime);</span>
+</pre>
+</body>
+</html>

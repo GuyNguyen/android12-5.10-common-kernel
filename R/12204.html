@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>select_task_rq</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/441.html#L2543'>select_task_rq</a>   2543 sched/core.c   		cpu = p-&gt;sched_class-&gt;select_task_rq(p, cpu, sd_flags, wake_flags);</span>
+<span class='curline'><a href='../S/441.html#L3175'>select_task_rq</a>   3175 sched/core.c   	cpu = select_task_rq(p, p-&gt;wake_cpu, SD_BALANCE_WAKE, wake_flags);</span>
+<span class='curline'><a href='../S/441.html#L3572'>select_task_rq</a>   3572 sched/core.c   	__set_task_cpu(p, select_task_rq(p, task_cpu(p), SD_BALANCE_FORK, 0));</span>
+<span class='curline'><a href='../S/441.html#L4123'>select_task_rq</a>   4123 sched/core.c   	dest_cpu = p-&gt;sched_class-&gt;select_task_rq(p, task_cpu(p), SD_BALANCE_EXEC, 0);</span>
+<span class='curline'><a href='../S/451.html#L2529'>select_task_rq</a>   2529 sched/deadline.c 	.select_task_rq		= select_task_rq_dl,</span>
+<span class='curline'><a href='../S/464.html#L11424'>select_task_rq</a>   11424 sched/fair.c   	.select_task_rq		= select_task_rq_fair,</span>
+<span class='curline'><a href='../S/455.html#L506'>select_task_rq</a>    506 sched/idle.c   	.select_task_rq		= select_task_rq_idle,</span>
+<span class='curline'><a href='../S/450.html#L2540'>select_task_rq</a>   2540 sched/rt.c     	.select_task_rq		= select_task_rq_rt,</span>
+<span class='curline'><a href='../S/447.html#L1837'>select_task_rq</a>   1837 sched/sched.h  	int  (*select_task_rq)(struct task_struct *p, int task_cpu, int sd_flag, int flags);</span>
+<span class='curline'><a href='../S/439.html#L127'>select_task_rq</a>    127 sched/stop_task.c 	.select_task_rq		= select_task_rq_stop,</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>curr_task</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/421.html#L144'>curr_task</a>         144 bpf/task_iter.c 	struct task_struct *curr_task;</span>
+<span class='curline'><a href='../S/421.html#L153'>curr_task</a>         153 bpf/task_iter.c 		curr_task = info-&gt;task;</span>
+<span class='curline'><a href='../S/421.html#L157'>curr_task</a>         157 bpf/task_iter.c 		curr_task = task_seq_get_next(ns, &amp;curr_tid, true);</span>
+<span class='curline'><a href='../S/421.html#L158'>curr_task</a>         158 bpf/task_iter.c 		if (!curr_task) {</span>
+<span class='curline'><a href='../S/421.html#L165'>curr_task</a>         165 bpf/task_iter.c 		curr_files = get_files_struct(curr_task);</span>
+<span class='curline'><a href='../S/421.html#L167'>curr_task</a>         167 bpf/task_iter.c 			put_task_struct(curr_task);</span>
+<span class='curline'><a href='../S/421.html#L174'>curr_task</a>         174 bpf/task_iter.c 		info-&gt;task = curr_task;</span>
+<span class='curline'><a href='../S/421.html#L203'>curr_task</a>         203 bpf/task_iter.c 	put_task_struct(curr_task);</span>
+<span class='curline'><a href='../S/60.html#L191'>curr_task</a>         191 debug/kdb/kdb_main.c 	struct task_struct *p = curr_task(cpu);</span>
+</pre>
+</body>
+</html>

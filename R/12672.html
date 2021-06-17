@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>static_key_mod</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/220.html#L519'>static_key_mod</a>    519 jump_label.c   	struct static_key_mod *next;</span>
+<span class='curline'><a href='../S/220.html#L524'>static_key_mod</a>    524 jump_label.c   static inline struct static_key_mod *static_key_mod(struct static_key *key)</span>
+<span class='curline'><a href='../S/220.html#L527'>static_key_mod</a>    527 jump_label.c   	return (struct static_key_mod *)(key-&gt;type &amp; ~JUMP_TYPE_MASK);</span>
+<span class='curline'><a href='../S/220.html#L537'>static_key_mod</a>    537 jump_label.c   			       struct static_key_mod *mod)</span>
+<span class='curline'><a href='../S/220.html#L573'>static_key_mod</a>    573 jump_label.c   	struct static_key_mod *mod;</span>
+<span class='curline'><a href='../S/220.html#L575'>static_key_mod</a>    575 jump_label.c   	for (mod = static_key_mod(key); mod; mod = mod-&gt;next) {</span>
+<span class='curline'><a href='../S/220.html#L627'>static_key_mod</a>    627 jump_label.c   	struct static_key_mod *jlm, *jlm2;</span>
+<span class='curline'><a href='../S/220.html#L650'>static_key_mod</a>    650 jump_label.c   		jlm = kzalloc(sizeof(struct static_key_mod), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/220.html#L654'>static_key_mod</a>    654 jump_label.c   			jlm2 = kzalloc(sizeof(struct static_key_mod),</span>
+<span class='curline'><a href='../S/220.html#L670'>static_key_mod</a>    670 jump_label.c   		jlm-&gt;next = static_key_mod(key);</span>
+<span class='curline'><a href='../S/220.html#L688'>static_key_mod</a>    688 jump_label.c   	struct static_key_mod *jlm, **prev;</span>
+<span class='curline'><a href='../S/220.html#L704'>static_key_mod</a>    704 jump_label.c   		jlm = static_key_mod(key);</span>
+<span class='curline'><a href='../S/220.html#L722'>static_key_mod</a>    722 jump_label.c   		jlm = static_key_mod(key);</span>
+</pre>
+</body>
+</html>

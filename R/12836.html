@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>swsusp_header</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/165.html#L115'>swsusp_header</a>     115 power/swap.c   static struct swsusp_header *swsusp_header;</span>
+<span class='curline'><a href='../S/165.html#L321'>swsusp_header</a>     321 power/swap.c   		      swsusp_header, NULL);</span>
+<span class='curline'><a href='../S/165.html#L322'>swsusp_header</a>     322 power/swap.c   	if (!memcmp("SWAP-SPACE",swsusp_header-&gt;sig, 10) ||</span>
+<span class='curline'><a href='../S/165.html#L323'>swsusp_header</a>     323 power/swap.c   	    !memcmp("SWAPSPACE2",swsusp_header-&gt;sig, 10)) {</span>
+<span class='curline'><a href='../S/165.html#L324'>swsusp_header</a>     324 power/swap.c   		memcpy(swsusp_header-&gt;orig_sig,swsusp_header-&gt;sig, 10);</span>
+<span class='curline'><a href='../S/165.html#L325'>swsusp_header</a>     325 power/swap.c   		memcpy(swsusp_header-&gt;sig, HIBERNATE_SIG, 10);</span>
+<span class='curline'><a href='../S/165.html#L326'>swsusp_header</a>     326 power/swap.c   		swsusp_header-&gt;image = handle-&gt;first_sector;</span>
+<span class='curline'><a href='../S/165.html#L327'>swsusp_header</a>     327 power/swap.c   		swsusp_header-&gt;flags = flags;</span>
+<span class='curline'><a href='../S/165.html#L329'>swsusp_header</a>     329 power/swap.c   			swsusp_header-&gt;crc32 = handle-&gt;crc32;</span>
+<span class='curline'><a href='../S/165.html#L331'>swsusp_header</a>     331 power/swap.c   				      swsusp_resume_block, swsusp_header, NULL);</span>
+<span class='curline'><a href='../S/165.html#L978'>swsusp_header</a>     978 power/swap.c   	*flags_p = swsusp_header-&gt;flags;</span>
+<span class='curline'><a href='../S/165.html#L980'>swsusp_header</a>     980 power/swap.c   	if (!swsusp_header-&gt;image) /* how can this happen? */</span>
+<span class='curline'><a href='../S/165.html#L985'>swsusp_header</a>     985 power/swap.c   	offset = swsusp_header-&gt;image;</span>
+<span class='curline'><a href='../S/165.html#L1451'>swsusp_header</a>    1451 power/swap.c   			if (swsusp_header-&gt;flags &amp; SF_CRC32_MODE) {</span>
+<span class='curline'><a href='../S/165.html#L1452'>swsusp_header</a>    1452 power/swap.c   				if(handle-&gt;crc32 != swsusp_header-&gt;crc32) {</span>
+<span class='curline'><a href='../S/165.html#L1529'>swsusp_header</a>    1529 power/swap.c   		clear_page(swsusp_header);</span>
+<span class='curline'><a href='../S/165.html#L1532'>swsusp_header</a>    1532 power/swap.c   					swsusp_header, NULL);</span>
+<span class='curline'><a href='../S/165.html#L1536'>swsusp_header</a>    1536 power/swap.c   		if (!memcmp(HIBERNATE_SIG, swsusp_header-&gt;sig, 10)) {</span>
+<span class='curline'><a href='../S/165.html#L1537'>swsusp_header</a>    1537 power/swap.c   			memcpy(swsusp_header-&gt;sig, swsusp_header-&gt;orig_sig, 10);</span>
+<span class='curline'><a href='../S/165.html#L1541'>swsusp_header</a>    1541 power/swap.c   						swsusp_header, NULL);</span>
+<span class='curline'><a href='../S/165.html#L1585'>swsusp_header</a>    1585 power/swap.c   		      swsusp_header, NULL);</span>
+<span class='curline'><a href='../S/165.html#L1586'>swsusp_header</a>    1586 power/swap.c   	if (!memcmp(HIBERNATE_SIG,swsusp_header-&gt;sig, 10)) {</span>
+<span class='curline'><a href='../S/165.html#L1587'>swsusp_header</a>    1587 power/swap.c   		memcpy(swsusp_header-&gt;sig,swsusp_header-&gt;orig_sig, 10);</span>
+<span class='curline'><a href='../S/165.html#L1590'>swsusp_header</a>    1590 power/swap.c   					swsusp_header, NULL);</span>
+<span class='curline'><a href='../S/165.html#L1607'>swsusp_header</a>    1607 power/swap.c   	swsusp_header = (struct swsusp_header*) __get_free_page(GFP_KERNEL);</span>
+<span class='curline'><a href='../S/165.html#L1608'>swsusp_header</a>    1608 power/swap.c   	if (!swsusp_header)</span>
+</pre>
+</body>
+</html>

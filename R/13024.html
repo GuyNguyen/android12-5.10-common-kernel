@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>task_faults_idx</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/464.html#L1269'>task_faults_idx</a>  1269 sched/fair.c   	return p-&gt;numa_faults[task_faults_idx(NUMA_MEM, nid, 0)] +</span>
+<span class='curline'><a href='../S/464.html#L1270'>task_faults_idx</a>  1270 sched/fair.c   		p-&gt;numa_faults[task_faults_idx(NUMA_MEM, nid, 1)];</span>
+<span class='curline'><a href='../S/464.html#L1280'>task_faults_idx</a>  1280 sched/fair.c   	return ng-&gt;faults[task_faults_idx(NUMA_MEM, nid, 0)] +</span>
+<span class='curline'><a href='../S/464.html#L1281'>task_faults_idx</a>  1281 sched/fair.c   		ng-&gt;faults[task_faults_idx(NUMA_MEM, nid, 1)];</span>
+<span class='curline'><a href='../S/464.html#L1286'>task_faults_idx</a>  1286 sched/fair.c   	return group-&gt;faults_cpu[task_faults_idx(NUMA_MEM, nid, 0)] +</span>
+<span class='curline'><a href='../S/464.html#L1287'>task_faults_idx</a>  1287 sched/fair.c   		group-&gt;faults_cpu[task_faults_idx(NUMA_MEM, nid, 1)];</span>
+<span class='curline'><a href='../S/464.html#L1296'>task_faults_idx</a>  1296 sched/fair.c   		faults += ng-&gt;faults[task_faults_idx(NUMA_MEM, node, 1)];</span>
+<span class='curline'><a href='../S/464.html#L1308'>task_faults_idx</a>  1308 sched/fair.c   		faults += ng-&gt;faults[task_faults_idx(NUMA_MEM, node, 0)];</span>
+<span class='curline'><a href='../S/464.html#L2416'>task_faults_idx</a>  2416 sched/fair.c   			mem_idx = task_faults_idx(NUMA_MEM, nid, priv);</span>
+<span class='curline'><a href='../S/464.html#L2417'>task_faults_idx</a>  2417 sched/fair.c   			membuf_idx = task_faults_idx(NUMA_MEMBUF, nid, priv);</span>
+<span class='curline'><a href='../S/464.html#L2418'>task_faults_idx</a>  2418 sched/fair.c   			cpu_idx = task_faults_idx(NUMA_CPU, nid, priv);</span>
+<span class='curline'><a href='../S/464.html#L2419'>task_faults_idx</a>  2419 sched/fair.c   			cpubuf_idx = task_faults_idx(NUMA_CPUBUF, nid, priv);</span>
+<span class='curline'><a href='../S/464.html#L2712'>task_faults_idx</a>  2712 sched/fair.c   	p-&gt;numa_faults[task_faults_idx(NUMA_MEMBUF, mem_node, priv)] += pages;</span>
+<span class='curline'><a href='../S/464.html#L2713'>task_faults_idx</a>  2713 sched/fair.c   	p-&gt;numa_faults[task_faults_idx(NUMA_CPUBUF, cpu_node, priv)] += pages;</span>
+<span class='curline'><a href='../S/464.html#L11476'>task_faults_idx</a>  11476 sched/fair.c   			tsf = p-&gt;numa_faults[task_faults_idx(NUMA_MEM, node, 0)];</span>
+<span class='curline'><a href='../S/464.html#L11477'>task_faults_idx</a>  11477 sched/fair.c   			tpf = p-&gt;numa_faults[task_faults_idx(NUMA_MEM, node, 1)];</span>
+<span class='curline'><a href='../S/464.html#L11480'>task_faults_idx</a>  11480 sched/fair.c   			gsf = ng-&gt;faults[task_faults_idx(NUMA_MEM, node, 0)],</span>
+<span class='curline'><a href='../S/464.html#L11481'>task_faults_idx</a>  11481 sched/fair.c   			gpf = ng-&gt;faults[task_faults_idx(NUMA_MEM, node, 1)];</span>
+</pre>
+</body>
+</html>

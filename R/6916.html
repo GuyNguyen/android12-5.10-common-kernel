@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>futex_hashsize</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/76.html#L368'>futex_hashsize</a>    368 futex.c        	return &amp;futex_queues[hash &amp; (futex_hashsize - 1)];</span>
+<span class='curline'><a href='../S/76.html#L4023'>futex_hashsize</a>   4023 futex.c        	futex_hashsize = 16;</span>
+<span class='curline'><a href='../S/76.html#L4025'>futex_hashsize</a>   4025 futex.c        	futex_hashsize = roundup_pow_of_two(256 * num_possible_cpus());</span>
+<span class='curline'><a href='../S/76.html#L4029'>futex_hashsize</a>   4029 futex.c        					       futex_hashsize, 0,</span>
+<span class='curline'><a href='../S/76.html#L4030'>futex_hashsize</a>   4030 futex.c        					       futex_hashsize &lt; 256 ? HASH_SMALL : 0,</span>
+<span class='curline'><a href='../S/76.html#L4032'>futex_hashsize</a>   4032 futex.c        					       futex_hashsize, futex_hashsize);</span>
+<span class='curline'><a href='../S/76.html#L4033'>futex_hashsize</a>   4033 futex.c        	futex_hashsize = 1UL &lt;&lt; futex_shift;</span>
+<span class='curline'><a href='../S/76.html#L4037'>futex_hashsize</a>   4037 futex.c        	for (i = 0; i &lt; futex_hashsize; i++) {</span>
+</pre>
+</body>
+</html>

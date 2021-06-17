@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>audit_mark</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/120.html#L268'>audit_mark</a>        268 audit.h        extern void audit_remove_mark(struct audit_fsnotify_mark *audit_mark);</span>
+<span class='curline'><a href='../S/367.html#L41'>audit_mark</a>         41 audit_fsnotify.c static void audit_fsnotify_mark_free(struct audit_fsnotify_mark *audit_mark)</span>
+<span class='curline'><a href='../S/367.html#L43'>audit_mark</a>         43 audit_fsnotify.c 	kfree(audit_mark-&gt;path);</span>
+<span class='curline'><a href='../S/367.html#L44'>audit_mark</a>         44 audit_fsnotify.c 	kfree(audit_mark);</span>
+<span class='curline'><a href='../S/367.html#L49'>audit_mark</a>         49 audit_fsnotify.c 	struct audit_fsnotify_mark *audit_mark;</span>
+<span class='curline'><a href='../S/367.html#L51'>audit_mark</a>         51 audit_fsnotify.c 	audit_mark = container_of(mark, struct audit_fsnotify_mark, mark);</span>
+<span class='curline'><a href='../S/367.html#L52'>audit_mark</a>         52 audit_fsnotify.c 	audit_fsnotify_mark_free(audit_mark);</span>
+<span class='curline'><a href='../S/367.html#L67'>audit_mark</a>         67 audit_fsnotify.c static void audit_update_mark(struct audit_fsnotify_mark *audit_mark,</span>
+<span class='curline'><a href='../S/367.html#L70'>audit_mark</a>         70 audit_fsnotify.c 	audit_mark-&gt;dev = inode ? inode-&gt;i_sb-&gt;s_dev : AUDIT_DEV_UNSET;</span>
+<span class='curline'><a href='../S/367.html#L71'>audit_mark</a>         71 audit_fsnotify.c 	audit_mark-&gt;ino = inode ? inode-&gt;i_ino : AUDIT_INO_UNSET;</span>
+<span class='curline'><a href='../S/367.html#L76'>audit_mark</a>         76 audit_fsnotify.c 	struct audit_fsnotify_mark *audit_mark;</span>
+<span class='curline'><a href='../S/367.html#L91'>audit_mark</a>         91 audit_fsnotify.c 	audit_mark = kzalloc(sizeof(*audit_mark), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/367.html#L92'>audit_mark</a>         92 audit_fsnotify.c 	if (unlikely(!audit_mark)) {</span>
+<span class='curline'><a href='../S/367.html#L93'>audit_mark</a>         93 audit_fsnotify.c 		audit_mark = ERR_PTR(-ENOMEM);</span>
+<span class='curline'><a href='../S/367.html#L97'>audit_mark</a>         97 audit_fsnotify.c 	fsnotify_init_mark(&amp;audit_mark-&gt;mark, audit_fsnotify_group);</span>
+<span class='curline'><a href='../S/367.html#L98'>audit_mark</a>         98 audit_fsnotify.c 	audit_mark-&gt;mark.mask = AUDIT_FS_EVENTS;</span>
+<span class='curline'><a href='../S/367.html#L99'>audit_mark</a>         99 audit_fsnotify.c 	audit_mark-&gt;path = pathname;</span>
+<span class='curline'><a href='../S/367.html#L100'>audit_mark</a>        100 audit_fsnotify.c 	audit_update_mark(audit_mark, dentry-&gt;d_inode);</span>
+<span class='curline'><a href='../S/367.html#L101'>audit_mark</a>        101 audit_fsnotify.c 	audit_mark-&gt;rule = krule;</span>
+<span class='curline'><a href='../S/367.html#L103'>audit_mark</a>        103 audit_fsnotify.c 	ret = fsnotify_add_inode_mark(&amp;audit_mark-&gt;mark, inode, true);</span>
+<span class='curline'><a href='../S/367.html#L105'>audit_mark</a>        105 audit_fsnotify.c 		fsnotify_put_mark(&amp;audit_mark-&gt;mark);</span>
+<span class='curline'><a href='../S/367.html#L106'>audit_mark</a>        106 audit_fsnotify.c 		audit_mark = ERR_PTR(ret);</span>
+<span class='curline'><a href='../S/367.html#L111'>audit_mark</a>        111 audit_fsnotify.c 	return audit_mark;</span>
+<span class='curline'><a href='../S/367.html#L114'>audit_mark</a>        114 audit_fsnotify.c static void audit_mark_log_rule_change(struct audit_fsnotify_mark *audit_mark, char *op)</span>
+<span class='curline'><a href='../S/367.html#L117'>audit_mark</a>        117 audit_fsnotify.c 	struct audit_krule *rule = audit_mark-&gt;rule;</span>
+<span class='curline'><a href='../S/367.html#L126'>audit_mark</a>        126 audit_fsnotify.c 	audit_log_untrustedstring(ab, audit_mark-&gt;path);</span>
+<span class='curline'><a href='../S/367.html#L132'>audit_mark</a>        132 audit_fsnotify.c void audit_remove_mark(struct audit_fsnotify_mark *audit_mark)</span>
+<span class='curline'><a href='../S/367.html#L134'>audit_mark</a>        134 audit_fsnotify.c 	fsnotify_destroy_mark(&amp;audit_mark-&gt;mark, audit_fsnotify_group);</span>
+<span class='curline'><a href='../S/367.html#L135'>audit_mark</a>        135 audit_fsnotify.c 	fsnotify_put_mark(&amp;audit_mark-&gt;mark);</span>
+<span class='curline'><a href='../S/367.html#L145'>audit_mark</a>        145 audit_fsnotify.c static void audit_autoremove_mark_rule(struct audit_fsnotify_mark *audit_mark)</span>
+<span class='curline'><a href='../S/367.html#L147'>audit_mark</a>        147 audit_fsnotify.c 	struct audit_krule *rule = audit_mark-&gt;rule;</span>
+<span class='curline'><a href='../S/367.html#L150'>audit_mark</a>        150 audit_fsnotify.c 	audit_mark_log_rule_change(audit_mark, "autoremove_rule");</span>
+<span class='curline'><a href='../S/367.html#L159'>audit_mark</a>        159 audit_fsnotify.c 	struct audit_fsnotify_mark *audit_mark;</span>
+<span class='curline'><a href='../S/367.html#L161'>audit_mark</a>        161 audit_fsnotify.c 	audit_mark = container_of(inode_mark, struct audit_fsnotify_mark, mark);</span>
+<span class='curline'><a href='../S/367.html#L168'>audit_mark</a>        168 audit_fsnotify.c 		if (audit_compare_dname_path(dname, audit_mark-&gt;path, AUDIT_NAME_FULL))</span>
+<span class='curline'><a href='../S/367.html#L170'>audit_mark</a>        170 audit_fsnotify.c 		audit_update_mark(audit_mark, inode);</span>
+<span class='curline'><a href='../S/367.html#L172'>audit_mark</a>        172 audit_fsnotify.c 		audit_autoremove_mark_rule(audit_mark);</span>
+<span class='curline'><a href='../S/72.html#L168'>audit_mark</a>        168 audit_tree.c   	return audit_mark(mark)-&gt;chunk;</span>
+<span class='curline'><a href='../S/72.html#L173'>audit_mark</a>        173 audit_tree.c   	kmem_cache_free(audit_tree_mark_cachep, audit_mark(mark));</span>
+<span class='curline'><a href='../S/72.html#L286'>audit_mark</a>        286 audit_tree.c   	audit_mark(mark)-&gt;chunk = chunk;</span>
+<span class='curline'><a href='../S/181.html#L507'>audit_mark</a>        507 audit_watch.c  	struct audit_fsnotify_mark *audit_mark;</span>
+<span class='curline'><a href='../S/181.html#L514'>audit_mark</a>        514 audit_watch.c  	audit_mark = audit_alloc_mark(new, pathname, strlen(pathname));</span>
+<span class='curline'><a href='../S/181.html#L515'>audit_mark</a>        515 audit_watch.c  	if (IS_ERR(audit_mark)) {</span>
+<span class='curline'><a href='../S/181.html#L517'>audit_mark</a>        517 audit_watch.c  		return PTR_ERR(audit_mark);</span>
+<span class='curline'><a href='../S/181.html#L519'>audit_mark</a>        519 audit_watch.c  	new-&gt;exe = audit_mark;</span>
+<span class='curline'><a href='../S/219.html#L450'>audit_mark</a>        450 auditfilter.c  	struct audit_fsnotify_mark *audit_mark;</span>
+<span class='curline'><a href='../S/219.html#L584'>audit_mark</a>        584 auditfilter.c  			audit_mark = audit_alloc_mark(&amp;entry-&gt;rule, str, f_val);</span>
+<span class='curline'><a href='../S/219.html#L585'>audit_mark</a>        585 auditfilter.c  			if (IS_ERR(audit_mark)) {</span>
+<span class='curline'><a href='../S/219.html#L587'>audit_mark</a>        587 auditfilter.c  				err = PTR_ERR(audit_mark);</span>
+<span class='curline'><a href='../S/219.html#L591'>audit_mark</a>        591 auditfilter.c  			entry-&gt;rule.exe = audit_mark;</span>
+</pre>
+</body>
+</html>

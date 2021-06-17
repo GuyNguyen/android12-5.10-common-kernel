@@ -1,0 +1,1107 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>irq/irqdesc.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/504.html'>irq</a>/irqdesc.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L28'>[^]</a><a href='#L1014'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L28' title='Defined at 28.'>irq_affinity_setup</a></li>
+<li><a href='#L41' title='Defined at 41.'>init_irq_default_affinity</a></li>
+<li><a href='#L49' title='Defined at 49.'>init_irq_default_affinity</a></li>
+<li><a href='#L55' title='Defined at 55.'>alloc_masks</a></li>
+<li><a href='#L81' title='Defined at 81.'>desc_smp_init</a></li>
+<li><a href='#L98' title='Defined at 98.'>alloc_masks</a></li>
+<li><a href='#L100' title='Defined at 100.'>desc_smp_init</a></li>
+<li><a href='#L103' title='Defined at 103.'>desc_set_defaults</a></li>
+<li><a href='#L146' title='Defined at 146.'>per_cpu_count_show</a></li>
+<li><a href='#L166' title='Defined at 166.'>chip_name_show</a></li>
+<li><a href='#L183' title='Defined at 183.'>hwirq_show</a></li>
+<li><a href='#L198' title='Defined at 198.'>type_show</a></li>
+<li><a href='#L214' title='Defined at 214.'>wakeup_show</a></li>
+<li><a href='#L230' title='Defined at 230.'>name_show</a></li>
+<li><a href='#L245' title='Defined at 245.'>actions_show</a></li>
+<li><a href='#L286' title='Defined at 286.'>irq_sysfs_add</a></li>
+<li><a href='#L298' title='Defined at 298.'>irq_sysfs_del</a></li>
+<li><a href='#L310' title='Defined at 310.'>irq_sysfs_init</a></li>
+<li><a href='#L339' title='Defined at 339.'>irq_sysfs_add</a></li>
+<li><a href='#L340' title='Defined at 340.'>irq_sysfs_del</a></li>
+<li><a href='#L346' title='Defined at 346.'>irq_insert_desc</a></li>
+<li><a href='#L351' title='Defined at 351.'>irq_to_desc</a></li>
+<li><a href='#L357' title='Defined at 357.'>delete_irq_desc</a></li>
+<li><a href='#L363' title='Defined at 363.'>free_masks</a></li>
+<li><a href='#L374' title='Defined at 374.'>free_masks</a></li>
+<li><a href='#L377' title='Defined at 377.'>irq_lock_sparse</a></li>
+<li><a href='#L382' title='Defined at 382.'>irq_unlock_sparse</a></li>
+<li><a href='#L387' title='Defined at 387.'>alloc_desc</a></li>
+<li><a href='#L422' title='Defined at 422.'>irq_kobj_release</a></li>
+<li><a href='#L431' title='Defined at 431.'>delayed_free_desc</a></li>
+<li><a href='#L438' title='Defined at 438.'>free_desc</a></li>
+<li><a href='#L466' title='Defined at 466.'>alloc_descs</a></li>
+<li><a href='#L511' title='Defined at 511.'>irq_expand_nr_irqs</a></li>
+<li><a href='#L519' title='Defined at 519.'>early_irq_init</a></li>
+<li><a href='#L558' title='Defined at 558.'>early_irq_init</a></li>
+<li><a href='#L581' title='Defined at 581.'>irq_to_desc</a></li>
+<li><a href='#L587' title='Defined at 587.'>free_desc</a></li>
+<li><a href='#L597' title='Defined at 597.'>alloc_descs</a></li>
+<li><a href='#L612' title='Defined at 612.'>irq_expand_nr_irqs</a></li>
+<li><a href='#L617' title='Defined at 617.'>irq_mark_irq</a></li>
+<li><a href='#L625' title='Defined at 625.'>irq_init_desc</a></li>
+<li><a href='#L638' title='Defined at 638.'>generic_handle_irq</a></li>
+<li><a href='#L665' title='Defined at 665.'>__handle_domain_irq</a></li>
+<li><a href='#L706' title='Defined at 706.'>handle_domain_nmi</a></li>
+<li><a href='#L742' title='Defined at 742.'>irq_free_descs</a></li>
+<li><a href='#L772' title='Defined at 772.'>__irq_alloc_descs</a></li>
+<li><a href='#L821' title='Defined at 821.'>irq_alloc_hwirqs</a></li>
+<li><a href='#L851' title='Defined at 851.'>irq_free_hwirqs</a></li>
+<li><a href='#L870' title='Defined at 870.'>irq_get_next_irq</a></li>
+<li><a href='#L876' title='Defined at 876.'>__irq_get_desc_lock</a></li>
+<li><a href='#L899' title='Defined at 899.'>__irq_put_desc_unlock</a></li>
+<li><a href='#L907' title='Defined at 907.'>irq_set_percpu_devid_partition</a></li>
+<li><a href='#L932' title='Defined at 932.'>irq_set_percpu_devid</a></li>
+<li><a href='#L937' title='Defined at 937.'>irq_get_percpu_devid_partition</a></li>
+<li><a href='#L951' title='Defined at 951.'>kstat_incr_irq_this_cpu</a></li>
+<li><a href='#L965' title='Defined at 965.'>kstat_irqs_cpu</a></li>
+<li><a href='#L974' title='Defined at 974.'>irq_is_nmi</a></li>
+<li><a href='#L987' title='Defined at 987.'>kstat_irqs</a></li>
+<li><a href='#L1014' title='Defined at 1014.'>kstat_irqs_usr</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * Copyright (C) 1992, 1998-2006 Linus Torvalds, Ingo Molnar</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> * Copyright (C) 2005-2006, Thomas Gleixner, Russell King</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> *</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> * This file contains the interrupt descriptor management code. Detailed</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> * information is available in Documentation/core-api/genericirq.rst</em>
+<a id='L8' name='L8'></a>   8 <em class='comment'> *</em>
+<a id='L9' name='L9'></a>   9 <em class='comment'> */</em>
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;linux/irq.h&gt;
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;linux/slab.h&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;linux/export.h&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;linux/interrupt.h&gt;
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> &lt;linux/kernel_stat.h&gt;
+<a id='L15' name='L15'></a>  15 <em class='sharp'>#include</em> &lt;linux/radix-tree.h&gt;
+<a id='L16' name='L16'></a>  16 <em class='sharp'>#include</em> &lt;linux/bitmap.h&gt;
+<a id='L17' name='L17'></a>  17 <em class='sharp'>#include</em> &lt;linux/irqdomain.h&gt;
+<a id='L18' name='L18'></a>  18 <em class='sharp'>#include</em> &lt;linux/sysfs.h&gt;
+<a id='L19' name='L19'></a>  19 
+<a id='L20' name='L20'></a>  20 <em class='sharp'>#include</em> "<a href='356.html'>internals.h</a>"
+<a id='L21' name='L21'></a>  21 
+<a id='L22' name='L22'></a>  22 <em class='comment'>/*</em>
+<a id='L23' name='L23'></a>  23 <em class='comment'> * lockdep: we want to handle all irq_desc locks as a single lock-class:</em>
+<a id='L24' name='L24'></a>  24 <em class='comment'> */</em>
+<a id='L25' name='L25'></a>  25 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> lock_class_key irq_desc_lock_class;
+<a id='L26' name='L26'></a>  26 
+<a id='L27' name='L27'></a>  27 <em class='sharp'>#if</em> <strong class='reserved'>defined</strong>(CONFIG_SMP)
+<a id='L28' name='L28'></a>  28 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __init <a href='../S/343.html#L39' title='Referred from 39 in irq/irqdesc.c.'>irq_affinity_setup</a>(<strong class='reserved'>char</strong> *str)
+<a id='L29' name='L29'></a>  29 <em class='brace'>{</em>
+<a id='L30' name='L30'></a>  30         alloc_bootmem_cpumask_var(&amp;irq_default_affinity);
+<a id='L31' name='L31'></a>  31         cpulist_parse(str, irq_default_affinity);
+<a id='L32' name='L32'></a>  32         <em class='comment'>/*</em>
+<a id='L33' name='L33'></a>  33 <em class='comment'>         * Set at least the boot cpu. We don't want to end up with</em>
+<a id='L34' name='L34'></a>  34 <em class='comment'>         * bugreports caused by random comandline masks</em>
+<a id='L35' name='L35'></a>  35 <em class='comment'>         */</em>
+<a id='L36' name='L36'></a>  36         cpumask_set_cpu(smp_processor_id(), irq_default_affinity);
+<a id='L37' name='L37'></a>  37         <strong class='reserved'>return</strong> 1;
+<a id='L38' name='L38'></a>  38 <em class='brace'>}</em>
+<a id='L39' name='L39'></a>  39 __setup("irqaffinity=", <a href='../S/343.html#L28' title='Defined at 28 in irq/irqdesc.c.'>irq_affinity_setup</a>);
+<a id='L40' name='L40'></a>  40 
+<a id='L41' name='L41'></a>  41 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> __init <a href='../R/7604.html' title='Multiple referred from 2 places.'>init_irq_default_affinity</a>(<strong class='reserved'>void</strong>)
+<a id='L42' name='L42'></a>  42 <em class='brace'>{</em>
+<a id='L43' name='L43'></a>  43         <strong class='reserved'>if</strong> (!cpumask_available(irq_default_affinity))
+<a id='L44' name='L44'></a>  44                 zalloc_cpumask_var(&amp;irq_default_affinity, GFP_NOWAIT);
+<a id='L45' name='L45'></a>  45         <strong class='reserved'>if</strong> (cpumask_empty(irq_default_affinity))
+<a id='L46' name='L46'></a>  46                 cpumask_setall(irq_default_affinity);
+<a id='L47' name='L47'></a>  47 <em class='brace'>}</em>
+<a id='L48' name='L48'></a>  48 <em class='sharp'>#else</em>
+<a id='L49' name='L49'></a>  49 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> __init <a href='../R/7604.html' title='Multiple referred from 2 places.'>init_irq_default_affinity</a>(<strong class='reserved'>void</strong>)
+<a id='L50' name='L50'></a>  50 <em class='brace'>{</em>
+<a id='L51' name='L51'></a>  51 <em class='brace'>}</em>
+<a id='L52' name='L52'></a>  52 <em class='sharp'>#endif</em>
+<a id='L53' name='L53'></a>  53 
+<a id='L54' name='L54'></a>  54 <em class='sharp'>#ifdef</em> CONFIG_SMP
+<a id='L55' name='L55'></a>  55 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../R/2890.html' title='Multiple referred from 2 places.'>alloc_masks</a>(<strong class='reserved'>struct</strong> irq_desc *desc, <strong class='reserved'>int</strong> <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>)
+<a id='L56' name='L56'></a>  56 <em class='brace'>{</em>
+<a id='L57' name='L57'></a>  57         <strong class='reserved'>if</strong> (!zalloc_cpumask_var_node(&amp;desc-&gt;irq_common_data.affinity,
+<a id='L58' name='L58'></a>  58                                      GFP_KERNEL, <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>))
+<a id='L59' name='L59'></a>  59                 <strong class='reserved'>return</strong> -ENOMEM;
+<a id='L60' name='L60'></a>  60 
+<a id='L61' name='L61'></a>  61 <em class='sharp'>#ifdef</em> CONFIG_GENERIC_IRQ_EFFECTIVE_AFF_MASK
+<a id='L62' name='L62'></a>  62         <strong class='reserved'>if</strong> (!zalloc_cpumask_var_node(&amp;desc-&gt;irq_common_data.effective_affinity,
+<a id='L63' name='L63'></a>  63                                      GFP_KERNEL, <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>)) <em class='brace'>{</em>
+<a id='L64' name='L64'></a>  64                 free_cpumask_var(desc-&gt;irq_common_data.affinity);
+<a id='L65' name='L65'></a>  65                 <strong class='reserved'>return</strong> -ENOMEM;
+<a id='L66' name='L66'></a>  66         <em class='brace'>}</em>
+<a id='L67' name='L67'></a>  67 <em class='sharp'>#endif</em>
+<a id='L68' name='L68'></a>  68 
+<a id='L69' name='L69'></a>  69 <em class='sharp'>#ifdef</em> CONFIG_GENERIC_PENDING_IRQ
+<a id='L70' name='L70'></a>  70         <strong class='reserved'>if</strong> (!zalloc_cpumask_var_node(&amp;desc-&gt;pending_mask, GFP_KERNEL, <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>)) <em class='brace'>{</em>
+<a id='L71' name='L71'></a>  71 <em class='sharp'>#ifdef</em> CONFIG_GENERIC_IRQ_EFFECTIVE_AFF_MASK
+<a id='L72' name='L72'></a>  72                 free_cpumask_var(desc-&gt;irq_common_data.effective_affinity);
+<a id='L73' name='L73'></a>  73 <em class='sharp'>#endif</em>
+<a id='L74' name='L74'></a>  74                 free_cpumask_var(desc-&gt;irq_common_data.affinity);
+<a id='L75' name='L75'></a>  75                 <strong class='reserved'>return</strong> -ENOMEM;
+<a id='L76' name='L76'></a>  76         <em class='brace'>}</em>
+<a id='L77' name='L77'></a>  77 <em class='sharp'>#endif</em>
+<a id='L78' name='L78'></a>  78         <strong class='reserved'>return</strong> 0;
+<a id='L79' name='L79'></a>  79 <em class='brace'>}</em>
+<a id='L80' name='L80'></a>  80 
+<a id='L81' name='L81'></a>  81 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/343.html#L127' title='Referred from 127 in irq/irqdesc.c.'>desc_smp_init</a>(<strong class='reserved'>struct</strong> irq_desc *desc, <strong class='reserved'>int</strong> <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>,
+<a id='L82' name='L82'></a>  82                           <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> cpumask *affinity)
+<a id='L83' name='L83'></a>  83 <em class='brace'>{</em>
+<a id='L84' name='L84'></a>  84         <strong class='reserved'>if</strong> (!affinity)
+<a id='L85' name='L85'></a>  85                 affinity = irq_default_affinity;
+<a id='L86' name='L86'></a>  86         cpumask_copy(desc-&gt;irq_common_data.affinity, affinity);
+<a id='L87' name='L87'></a>  87 
+<a id='L88' name='L88'></a>  88 <em class='sharp'>#ifdef</em> CONFIG_GENERIC_PENDING_IRQ
+<a id='L89' name='L89'></a>  89         cpumask_clear(desc-&gt;pending_mask);
+<a id='L90' name='L90'></a>  90 <em class='sharp'>#endif</em>
+<a id='L91' name='L91'></a>  91 <em class='sharp'>#ifdef</em> CONFIG_NUMA
+<a id='L92' name='L92'></a>  92         desc-&gt;irq_common_data.<a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a> = <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>;
+<a id='L93' name='L93'></a>  93 <em class='sharp'>#endif</em>
+<a id='L94' name='L94'></a>  94 <em class='brace'>}</em>
+<a id='L95' name='L95'></a>  95 
+<a id='L96' name='L96'></a>  96 <em class='sharp'>#else</em>
+<a id='L97' name='L97'></a>  97 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>int</strong>
+<a id='L98' name='L98'></a>  98 <a href='../R/2890.html' title='Multiple referred from 2 places.'>alloc_masks</a>(<strong class='reserved'>struct</strong> irq_desc *desc, <strong class='reserved'>int</strong> <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>) <em class='brace'>{</em> <strong class='reserved'>return</strong> 0; <em class='brace'>}</em>
+<a id='L99' name='L99'></a>  99 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong>
+<a id='L100' name='L100'></a> 100 <a href='../S/343.html#L127' title='Referred from 127 in irq/irqdesc.c.'>desc_smp_init</a>(<strong class='reserved'>struct</strong> irq_desc *desc, <strong class='reserved'>int</strong> <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>, <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> cpumask *affinity) <em class='brace'>{</em> <em class='brace'>}</em>
+<a id='L101' name='L101'></a> 101 <em class='sharp'>#endif</em>
+<a id='L102' name='L102'></a> 102 
+<a id='L103' name='L103'></a> 103 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/5537.html' title='Multiple referred from 3 places.'>desc_set_defaults</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq, <strong class='reserved'>struct</strong> irq_desc *desc, <strong class='reserved'>int</strong> <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>,
+<a id='L104' name='L104'></a> 104                               <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> cpumask *affinity, <strong class='reserved'>struct</strong> module *owner)
+<a id='L105' name='L105'></a> 105 <em class='brace'>{</em>
+<a id='L106' name='L106'></a> 106         <strong class='reserved'>int</strong> cpu;
+<a id='L107' name='L107'></a> 107 
+<a id='L108' name='L108'></a> 108         desc-&gt;irq_common_data.handler_data = NULL;
+<a id='L109' name='L109'></a> 109         desc-&gt;irq_common_data.msi_desc = NULL;
+<a id='L110' name='L110'></a> 110 
+<a id='L111' name='L111'></a> 111         desc-&gt;irq_data.common = &amp;desc-&gt;irq_common_data;
+<a id='L112' name='L112'></a> 112         desc-&gt;irq_data.irq = irq;
+<a id='L113' name='L113'></a> 113         desc-&gt;irq_data.chip = &amp;no_irq_chip;
+<a id='L114' name='L114'></a> 114         desc-&gt;irq_data.chip_data = NULL;
+<a id='L115' name='L115'></a> 115         <a href='../S/340.html#L40' title='Defined at 40 in irq/settings.h.'>irq_settings_clr_and_set</a>(desc, ~0, <a href='../S/340.html#L7' title='Defined at 7 in irq/settings.h.'>_IRQ_DEFAULT_INIT_FLAGS</a>);
+<a id='L116' name='L116'></a> 116         <a href='../S/356.html#L228' title='Defined at 228 in irq/internals.h.'>irqd_set</a>(&amp;desc-&gt;irq_data, IRQD_IRQ_DISABLED);
+<a id='L117' name='L117'></a> 117         <a href='../S/356.html#L228' title='Defined at 228 in irq/internals.h.'>irqd_set</a>(&amp;desc-&gt;irq_data, IRQD_IRQ_MASKED);
+<a id='L118' name='L118'></a> 118         desc-&gt;handle_irq = <a href='../S/347.html#L31' title='Defined at 31 in irq/handle.c.'>handle_bad_irq</a>;
+<a id='L119' name='L119'></a> 119         desc-&gt;depth = 1;
+<a id='L120' name='L120'></a> 120         desc-&gt;irq_count = 0;
+<a id='L121' name='L121'></a> 121         desc-&gt;irqs_unhandled = 0;
+<a id='L122' name='L122'></a> 122         desc-&gt;tot_count = 0;
+<a id='L123' name='L123'></a> 123         desc-&gt;name = NULL;
+<a id='L124' name='L124'></a> 124         desc-&gt;owner = owner;
+<a id='L125' name='L125'></a> 125         for_each_possible_cpu(cpu)
+<a id='L126' name='L126'></a> 126                 *per_cpu_ptr(desc-&gt;<a href='../S/343.html#L987' title='Defined at 987 in irq/irqdesc.c.'>kstat_irqs</a>, cpu) = 0;
+<a id='L127' name='L127'></a> 127         <a href='../D/5863.html' title='Multiple defined in 2 places.'>desc_smp_init</a>(desc, <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>, affinity);
+<a id='L128' name='L128'></a> 128 <em class='brace'>}</em>
+<a id='L129' name='L129'></a> 129 
+<a id='L130' name='L130'></a> 130 <strong class='reserved'>int</strong> nr_irqs = NR_IRQS;
+<a id='L131' name='L131'></a> 131 EXPORT_SYMBOL_GPL(nr_irqs);
+<a id='L132' name='L132'></a> 132 
+<a id='L133' name='L133'></a> 133 <strong class='reserved'>static</strong> DEFINE_MUTEX(sparse_irq_lock);
+<a id='L134' name='L134'></a> 134 <strong class='reserved'>static</strong> DECLARE_BITMAP(allocated_irqs, <a href='../D/663.html' title='Multiple defined in 2 places.'>IRQ_BITMAP_BITS</a>);
+<a id='L135' name='L135'></a> 135 
+<a id='L136' name='L136'></a> 136 <em class='sharp'>#ifdef</em> CONFIG_SPARSE_IRQ
+<a id='L137' name='L137'></a> 137 
+<a id='L138' name='L138'></a> 138 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/343.html#L422' title='Defined at 422 in irq/irqdesc.c.'>irq_kobj_release</a>(<strong class='reserved'>struct</strong> kobject *kobj);
+<a id='L139' name='L139'></a> 139 
+<a id='L140' name='L140'></a> 140 <em class='sharp'>#ifdef</em> CONFIG_SYSFS
+<a id='L141' name='L141'></a> 141 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> kobject *irq_kobj_base;
+<a id='L142' name='L142'></a> 142 
+<a id='L143' name='L143'></a> 143 <em class='sharp'>#define</em> <a href='../R/592.html' title='Multiple referred from 7 places.'>IRQ_ATTR_RO</a>(<a href='../D/2859.html' title='Multiple defined in 3 places.'>_name</a>) \
+<a id='L144' name='L144'></a> 144 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> kobj_attribute <a href='../D/2859.html' title='Multiple defined in 3 places.'>_name</a>##_attr = __ATTR_RO(<a href='../D/2859.html' title='Multiple defined in 3 places.'>_name</a>)
+<a id='L145' name='L145'></a> 145 
+<a id='L146' name='L146'></a> 146 <strong class='reserved'>static</strong> ssize_t per_cpu_count_show(<strong class='reserved'>struct</strong> kobject *kobj,
+<a id='L147' name='L147'></a> 147                                   <strong class='reserved'>struct</strong> kobj_attribute *attr, <strong class='reserved'>char</strong> *buf)
+<a id='L148' name='L148'></a> 148 <em class='brace'>{</em>
+<a id='L149' name='L149'></a> 149         <strong class='reserved'>struct</strong> irq_desc *desc = container_of(kobj, <strong class='reserved'>struct</strong> irq_desc, kobj);
+<a id='L150' name='L150'></a> 150         <strong class='reserved'>int</strong> cpu, irq = desc-&gt;irq_data.irq;
+<a id='L151' name='L151'></a> 151         ssize_t ret = 0;
+<a id='L152' name='L152'></a> 152         <strong class='reserved'>char</strong> *p = "";
+<a id='L153' name='L153'></a> 153 
+<a id='L154' name='L154'></a> 154         for_each_possible_cpu(cpu) <em class='brace'>{</em>
+<a id='L155' name='L155'></a> 155                 <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> c = <a href='../S/343.html#L965' title='Defined at 965 in irq/irqdesc.c.'>kstat_irqs_cpu</a>(irq, cpu);
+<a id='L156' name='L156'></a> 156 
+<a id='L157' name='L157'></a> 157                 ret += scnprintf(buf + ret, PAGE_SIZE - ret, "%s%u", p, c);
+<a id='L158' name='L158'></a> 158                 p = ",";
+<a id='L159' name='L159'></a> 159         <em class='brace'>}</em>
+<a id='L160' name='L160'></a> 160 
+<a id='L161' name='L161'></a> 161         ret += scnprintf(buf + ret, PAGE_SIZE - ret, "\n");
+<a id='L162' name='L162'></a> 162         <strong class='reserved'>return</strong> ret;
+<a id='L163' name='L163'></a> 163 <em class='brace'>}</em>
+<a id='L164' name='L164'></a> 164 <a href='../S/343.html#L143' title='Defined at 143 in irq/irqdesc.c.'>IRQ_ATTR_RO</a>(per_cpu_count);
+<a id='L165' name='L165'></a> 165 
+<a id='L166' name='L166'></a> 166 <strong class='reserved'>static</strong> ssize_t chip_name_show(<strong class='reserved'>struct</strong> kobject *kobj,
+<a id='L167' name='L167'></a> 167                               <strong class='reserved'>struct</strong> kobj_attribute *attr, <strong class='reserved'>char</strong> *buf)
+<a id='L168' name='L168'></a> 168 <em class='brace'>{</em>
+<a id='L169' name='L169'></a> 169         <strong class='reserved'>struct</strong> irq_desc *desc = container_of(kobj, <strong class='reserved'>struct</strong> irq_desc, kobj);
+<a id='L170' name='L170'></a> 170         ssize_t ret = 0;
+<a id='L171' name='L171'></a> 171 
+<a id='L172' name='L172'></a> 172         raw_spin_lock_irq(&amp;desc-&gt;lock);
+<a id='L173' name='L173'></a> 173         <strong class='reserved'>if</strong> (desc-&gt;irq_data.chip &amp;&amp; desc-&gt;irq_data.chip-&gt;name) <em class='brace'>{</em>
+<a id='L174' name='L174'></a> 174                 ret = scnprintf(buf, PAGE_SIZE, "%s\n",
+<a id='L175' name='L175'></a> 175                                 desc-&gt;irq_data.chip-&gt;name);
+<a id='L176' name='L176'></a> 176         <em class='brace'>}</em>
+<a id='L177' name='L177'></a> 177         raw_spin_unlock_irq(&amp;desc-&gt;lock);
+<a id='L178' name='L178'></a> 178 
+<a id='L179' name='L179'></a> 179         <strong class='reserved'>return</strong> ret;
+<a id='L180' name='L180'></a> 180 <em class='brace'>}</em>
+<a id='L181' name='L181'></a> 181 <a href='../S/343.html#L143' title='Defined at 143 in irq/irqdesc.c.'>IRQ_ATTR_RO</a>(chip_name);
+<a id='L182' name='L182'></a> 182 
+<a id='L183' name='L183'></a> 183 <strong class='reserved'>static</strong> ssize_t hwirq_show(<strong class='reserved'>struct</strong> kobject *kobj,
+<a id='L184' name='L184'></a> 184                           <strong class='reserved'>struct</strong> kobj_attribute *attr, <strong class='reserved'>char</strong> *buf)
+<a id='L185' name='L185'></a> 185 <em class='brace'>{</em>
+<a id='L186' name='L186'></a> 186         <strong class='reserved'>struct</strong> irq_desc *desc = container_of(kobj, <strong class='reserved'>struct</strong> irq_desc, kobj);
+<a id='L187' name='L187'></a> 187         ssize_t ret = 0;
+<a id='L188' name='L188'></a> 188 
+<a id='L189' name='L189'></a> 189         raw_spin_lock_irq(&amp;desc-&gt;lock);
+<a id='L190' name='L190'></a> 190         <strong class='reserved'>if</strong> (desc-&gt;irq_data.domain)
+<a id='L191' name='L191'></a> 191                 ret = sprintf(buf, "%d\n", (<strong class='reserved'>int</strong>)desc-&gt;irq_data.hwirq);
+<a id='L192' name='L192'></a> 192         raw_spin_unlock_irq(&amp;desc-&gt;lock);
+<a id='L193' name='L193'></a> 193 
+<a id='L194' name='L194'></a> 194         <strong class='reserved'>return</strong> ret;
+<a id='L195' name='L195'></a> 195 <em class='brace'>}</em>
+<a id='L196' name='L196'></a> 196 <a href='../S/343.html#L143' title='Defined at 143 in irq/irqdesc.c.'>IRQ_ATTR_RO</a>(hwirq);
+<a id='L197' name='L197'></a> 197 
+<a id='L198' name='L198'></a> 198 <strong class='reserved'>static</strong> ssize_t type_show(<strong class='reserved'>struct</strong> kobject *kobj,
+<a id='L199' name='L199'></a> 199                          <strong class='reserved'>struct</strong> kobj_attribute *attr, <strong class='reserved'>char</strong> *buf)
+<a id='L200' name='L200'></a> 200 <em class='brace'>{</em>
+<a id='L201' name='L201'></a> 201         <strong class='reserved'>struct</strong> irq_desc *desc = container_of(kobj, <strong class='reserved'>struct</strong> irq_desc, kobj);
+<a id='L202' name='L202'></a> 202         ssize_t ret = 0;
+<a id='L203' name='L203'></a> 203 
+<a id='L204' name='L204'></a> 204         raw_spin_lock_irq(&amp;desc-&gt;lock);
+<a id='L205' name='L205'></a> 205         ret = sprintf(buf, "%s\n",
+<a id='L206' name='L206'></a> 206                       irqd_is_level_type(&amp;desc-&gt;irq_data) ? "level" : "edge");
+<a id='L207' name='L207'></a> 207         raw_spin_unlock_irq(&amp;desc-&gt;lock);
+<a id='L208' name='L208'></a> 208 
+<a id='L209' name='L209'></a> 209         <strong class='reserved'>return</strong> ret;
+<a id='L210' name='L210'></a> 210 
+<a id='L211' name='L211'></a> 211 <em class='brace'>}</em>
+<a id='L212' name='L212'></a> 212 <a href='../S/343.html#L143' title='Defined at 143 in irq/irqdesc.c.'>IRQ_ATTR_RO</a>(type);
+<a id='L213' name='L213'></a> 213 
+<a id='L214' name='L214'></a> 214 <strong class='reserved'>static</strong> ssize_t wakeup_show(<strong class='reserved'>struct</strong> kobject *kobj,
+<a id='L215' name='L215'></a> 215                            <strong class='reserved'>struct</strong> kobj_attribute *attr, <strong class='reserved'>char</strong> *buf)
+<a id='L216' name='L216'></a> 216 <em class='brace'>{</em>
+<a id='L217' name='L217'></a> 217         <strong class='reserved'>struct</strong> irq_desc *desc = container_of(kobj, <strong class='reserved'>struct</strong> irq_desc, kobj);
+<a id='L218' name='L218'></a> 218         ssize_t ret = 0;
+<a id='L219' name='L219'></a> 219 
+<a id='L220' name='L220'></a> 220         raw_spin_lock_irq(&amp;desc-&gt;lock);
+<a id='L221' name='L221'></a> 221         ret = sprintf(buf, "%s\n",
+<a id='L222' name='L222'></a> 222                       irqd_is_wakeup_set(&amp;desc-&gt;irq_data) ? "enabled" : "disabled");
+<a id='L223' name='L223'></a> 223         raw_spin_unlock_irq(&amp;desc-&gt;lock);
+<a id='L224' name='L224'></a> 224 
+<a id='L225' name='L225'></a> 225         <strong class='reserved'>return</strong> ret;
+<a id='L226' name='L226'></a> 226 
+<a id='L227' name='L227'></a> 227 <em class='brace'>}</em>
+<a id='L228' name='L228'></a> 228 <a href='../S/343.html#L143' title='Defined at 143 in irq/irqdesc.c.'>IRQ_ATTR_RO</a>(wakeup);
+<a id='L229' name='L229'></a> 229 
+<a id='L230' name='L230'></a> 230 <strong class='reserved'>static</strong> ssize_t name_show(<strong class='reserved'>struct</strong> kobject *kobj,
+<a id='L231' name='L231'></a> 231                          <strong class='reserved'>struct</strong> kobj_attribute *attr, <strong class='reserved'>char</strong> *buf)
+<a id='L232' name='L232'></a> 232 <em class='brace'>{</em>
+<a id='L233' name='L233'></a> 233         <strong class='reserved'>struct</strong> irq_desc *desc = container_of(kobj, <strong class='reserved'>struct</strong> irq_desc, kobj);
+<a id='L234' name='L234'></a> 234         ssize_t ret = 0;
+<a id='L235' name='L235'></a> 235 
+<a id='L236' name='L236'></a> 236         raw_spin_lock_irq(&amp;desc-&gt;lock);
+<a id='L237' name='L237'></a> 237         <strong class='reserved'>if</strong> (desc-&gt;name)
+<a id='L238' name='L238'></a> 238                 ret = scnprintf(buf, PAGE_SIZE, "%s\n", desc-&gt;name);
+<a id='L239' name='L239'></a> 239         raw_spin_unlock_irq(&amp;desc-&gt;lock);
+<a id='L240' name='L240'></a> 240 
+<a id='L241' name='L241'></a> 241         <strong class='reserved'>return</strong> ret;
+<a id='L242' name='L242'></a> 242 <em class='brace'>}</em>
+<a id='L243' name='L243'></a> 243 <a href='../S/343.html#L143' title='Defined at 143 in irq/irqdesc.c.'>IRQ_ATTR_RO</a>(name);
+<a id='L244' name='L244'></a> 244 
+<a id='L245' name='L245'></a> 245 <strong class='reserved'>static</strong> ssize_t actions_show(<strong class='reserved'>struct</strong> kobject *kobj,
+<a id='L246' name='L246'></a> 246                             <strong class='reserved'>struct</strong> kobj_attribute *attr, <strong class='reserved'>char</strong> *buf)
+<a id='L247' name='L247'></a> 247 <em class='brace'>{</em>
+<a id='L248' name='L248'></a> 248         <strong class='reserved'>struct</strong> irq_desc *desc = container_of(kobj, <strong class='reserved'>struct</strong> irq_desc, kobj);
+<a id='L249' name='L249'></a> 249         <strong class='reserved'>struct</strong> irqaction *action;
+<a id='L250' name='L250'></a> 250         ssize_t ret = 0;
+<a id='L251' name='L251'></a> 251         <strong class='reserved'>char</strong> *p = "";
+<a id='L252' name='L252'></a> 252 
+<a id='L253' name='L253'></a> 253         raw_spin_lock_irq(&amp;desc-&gt;lock);
+<a id='L254' name='L254'></a> 254         <strong class='reserved'>for</strong> (action = desc-&gt;action; action != NULL; action = action-&gt;next) <em class='brace'>{</em>
+<a id='L255' name='L255'></a> 255                 ret += scnprintf(buf + ret, PAGE_SIZE - ret, "%s%s",
+<a id='L256' name='L256'></a> 256                                  p, action-&gt;name);
+<a id='L257' name='L257'></a> 257                 p = ",";
+<a id='L258' name='L258'></a> 258         <em class='brace'>}</em>
+<a id='L259' name='L259'></a> 259         raw_spin_unlock_irq(&amp;desc-&gt;lock);
+<a id='L260' name='L260'></a> 260 
+<a id='L261' name='L261'></a> 261         <strong class='reserved'>if</strong> (ret)
+<a id='L262' name='L262'></a> 262                 ret += scnprintf(buf + ret, PAGE_SIZE - ret, "\n");
+<a id='L263' name='L263'></a> 263 
+<a id='L264' name='L264'></a> 264         <strong class='reserved'>return</strong> ret;
+<a id='L265' name='L265'></a> 265 <em class='brace'>}</em>
+<a id='L266' name='L266'></a> 266 <a href='../S/343.html#L143' title='Defined at 143 in irq/irqdesc.c.'>IRQ_ATTR_RO</a>(<a href='../S/145.html#L59' title='Defined at 59 in taskstats.c.'>actions</a>);
+<a id='L267' name='L267'></a> 267 
+<a id='L268' name='L268'></a> 268 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> attribute *irq_attrs[] = <em class='brace'>{</em>
+<a id='L269' name='L269'></a> 269         &amp;per_cpu_count_attr.attr,
+<a id='L270' name='L270'></a> 270         &amp;chip_name_attr.attr,
+<a id='L271' name='L271'></a> 271         &amp;hwirq_attr.attr,
+<a id='L272' name='L272'></a> 272         &amp;type_attr.attr,
+<a id='L273' name='L273'></a> 273         &amp;wakeup_attr.attr,
+<a id='L274' name='L274'></a> 274         &amp;name_attr.attr,
+<a id='L275' name='L275'></a> 275         &amp;actions_attr.attr,
+<a id='L276' name='L276'></a> 276         NULL
+<a id='L277' name='L277'></a> 277 <em class='brace'>}</em>;
+<a id='L278' name='L278'></a> 278 ATTRIBUTE_GROUPS(irq);
+<a id='L279' name='L279'></a> 279 
+<a id='L280' name='L280'></a> 280 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> kobj_type irq_kobj_type = <em class='brace'>{</em>
+<a id='L281' name='L281'></a> 281         .release        = <a href='../S/343.html#L422' title='Defined at 422 in irq/irqdesc.c.'>irq_kobj_release</a>,
+<a id='L282' name='L282'></a> 282         .sysfs_ops      = &amp;kobj_sysfs_ops,
+<a id='L283' name='L283'></a> 283         .default_groups = irq_groups,
+<a id='L284' name='L284'></a> 284 <em class='brace'>}</em>;
+<a id='L285' name='L285'></a> 285 
+<a id='L286' name='L286'></a> 286 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/7978.html' title='Multiple referred from 2 places.'>irq_sysfs_add</a>(<strong class='reserved'>int</strong> irq, <strong class='reserved'>struct</strong> irq_desc *desc)
+<a id='L287' name='L287'></a> 287 <em class='brace'>{</em>
+<a id='L288' name='L288'></a> 288         <strong class='reserved'>if</strong> (irq_kobj_base) <em class='brace'>{</em>
+<a id='L289' name='L289'></a> 289                 <em class='comment'>/*</em>
+<a id='L290' name='L290'></a> 290 <em class='comment'>                 * Continue even in case of failure as this is nothing</em>
+<a id='L291' name='L291'></a> 291 <em class='comment'>                 * crucial.</em>
+<a id='L292' name='L292'></a> 292 <em class='comment'>                 */</em>
+<a id='L293' name='L293'></a> 293                 <strong class='reserved'>if</strong> (kobject_add(&amp;desc-&gt;kobj, irq_kobj_base, "%d", irq))
+<a id='L294' name='L294'></a> 294                         pr_warn("Failed to add kobject for irq %d\n", irq);
+<a id='L295' name='L295'></a> 295         <em class='brace'>}</em>
+<a id='L296' name='L296'></a> 296 <em class='brace'>}</em>
+<a id='L297' name='L297'></a> 297 
+<a id='L298' name='L298'></a> 298 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/343.html#L454' title='Referred from 454 in irq/irqdesc.c.'>irq_sysfs_del</a>(<strong class='reserved'>struct</strong> irq_desc *desc)
+<a id='L299' name='L299'></a> 299 <em class='brace'>{</em>
+<a id='L300' name='L300'></a> 300         <em class='comment'>/*</em>
+<a id='L301' name='L301'></a> 301 <em class='comment'>         * If irq_sysfs_init() has not yet been invoked (early boot), then</em>
+<a id='L302' name='L302'></a> 302 <em class='comment'>         * irq_kobj_base is NULL and the descriptor was never added.</em>
+<a id='L303' name='L303'></a> 303 <em class='comment'>         * kobject_del() complains about a object with no parent, so make</em>
+<a id='L304' name='L304'></a> 304 <em class='comment'>         * it conditional.</em>
+<a id='L305' name='L305'></a> 305 <em class='comment'>         */</em>
+<a id='L306' name='L306'></a> 306         <strong class='reserved'>if</strong> (irq_kobj_base)
+<a id='L307' name='L307'></a> 307                 kobject_del(&amp;desc-&gt;kobj);
+<a id='L308' name='L308'></a> 308 <em class='brace'>}</em>
+<a id='L309' name='L309'></a> 309 
+<a id='L310' name='L310'></a> 310 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __init <a href='../S/343.html#L331' title='Referred from 331 in irq/irqdesc.c.'>irq_sysfs_init</a>(<strong class='reserved'>void</strong>)
+<a id='L311' name='L311'></a> 311 <em class='brace'>{</em>
+<a id='L312' name='L312'></a> 312         <strong class='reserved'>struct</strong> irq_desc *desc;
+<a id='L313' name='L313'></a> 313         <strong class='reserved'>int</strong> irq;
+<a id='L314' name='L314'></a> 314 
+<a id='L315' name='L315'></a> 315         <em class='comment'>/* Prevent concurrent irq alloc/free */</em>
+<a id='L316' name='L316'></a> 316         <a href='../S/343.html#L377' title='Defined at 377 in irq/irqdesc.c.'>irq_lock_sparse</a>();
+<a id='L317' name='L317'></a> 317 
+<a id='L318' name='L318'></a> 318         irq_kobj_base = kobject_create_and_add("irq", kernel_kobj);
+<a id='L319' name='L319'></a> 319         <strong class='reserved'>if</strong> (!irq_kobj_base) <em class='brace'>{</em>
+<a id='L320' name='L320'></a> 320                 <a href='../S/343.html#L382' title='Defined at 382 in irq/irqdesc.c.'>irq_unlock_sparse</a>();
+<a id='L321' name='L321'></a> 321                 <strong class='reserved'>return</strong> -ENOMEM;
+<a id='L322' name='L322'></a> 322         <em class='brace'>}</em>
+<a id='L323' name='L323'></a> 323 
+<a id='L324' name='L324'></a> 324         <em class='comment'>/* Add the already allocated interrupts */</em>
+<a id='L325' name='L325'></a> 325         for_each_irq_desc(irq, desc)
+<a id='L326' name='L326'></a> 326                 <a href='../D/8455.html' title='Multiple defined in 2 places.'>irq_sysfs_add</a>(irq, desc);
+<a id='L327' name='L327'></a> 327         <a href='../S/343.html#L382' title='Defined at 382 in irq/irqdesc.c.'>irq_unlock_sparse</a>();
+<a id='L328' name='L328'></a> 328 
+<a id='L329' name='L329'></a> 329         <strong class='reserved'>return</strong> 0;
+<a id='L330' name='L330'></a> 330 <em class='brace'>}</em>
+<a id='L331' name='L331'></a> 331 postcore_initcall(<a href='../S/343.html#L310' title='Defined at 310 in irq/irqdesc.c.'>irq_sysfs_init</a>);
+<a id='L332' name='L332'></a> 332 
+<a id='L333' name='L333'></a> 333 <em class='sharp'>#else</em> <em class='comment'>/* !CONFIG_SYSFS */</em>
+<a id='L334' name='L334'></a> 334 
+<a id='L335' name='L335'></a> 335 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> kobj_type irq_kobj_type = <em class='brace'>{</em>
+<a id='L336' name='L336'></a> 336         .release        = <a href='../S/343.html#L422' title='Defined at 422 in irq/irqdesc.c.'>irq_kobj_release</a>,
+<a id='L337' name='L337'></a> 337 <em class='brace'>}</em>;
+<a id='L338' name='L338'></a> 338 
+<a id='L339' name='L339'></a> 339 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/7978.html' title='Multiple referred from 2 places.'>irq_sysfs_add</a>(<strong class='reserved'>int</strong> irq, <strong class='reserved'>struct</strong> irq_desc *desc) <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L340' name='L340'></a> 340 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/343.html#L454' title='Referred from 454 in irq/irqdesc.c.'>irq_sysfs_del</a>(<strong class='reserved'>struct</strong> irq_desc *desc) <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L341' name='L341'></a> 341 
+<a id='L342' name='L342'></a> 342 <em class='sharp'>#endif</em> <em class='comment'>/* CONFIG_SYSFS */</em>
+<a id='L343' name='L343'></a> 343 
+<a id='L344' name='L344'></a> 344 <strong class='reserved'>static</strong> RADIX_TREE(irq_desc_tree, GFP_KERNEL);
+<a id='L345' name='L345'></a> 345 
+<a id='L346' name='L346'></a> 346 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/7871.html' title='Multiple referred from 2 places.'>irq_insert_desc</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq, <strong class='reserved'>struct</strong> irq_desc *desc)
+<a id='L347' name='L347'></a> 347 <em class='brace'>{</em>
+<a id='L348' name='L348'></a> 348         radix_tree_insert(&amp;irq_desc_tree, irq, desc);
+<a id='L349' name='L349'></a> 349 <em class='brace'>}</em>
+<a id='L350' name='L350'></a> 350 
+<a id='L351' name='L351'></a> 351 <strong class='reserved'>struct</strong> irq_desc *<a href='../R/8005.html' title='Multiple referred from 57 places.'>irq_to_desc</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq)
+<a id='L352' name='L352'></a> 352 <em class='brace'>{</em>
+<a id='L353' name='L353'></a> 353         <strong class='reserved'>return</strong> radix_tree_lookup(&amp;irq_desc_tree, irq);
+<a id='L354' name='L354'></a> 354 <em class='brace'>}</em>
+<a id='L355' name='L355'></a> 355 EXPORT_SYMBOL(<a href='../D/8483.html' title='Multiple defined in 2 places.'>irq_to_desc</a>);
+<a id='L356' name='L356'></a> 356 
+<a id='L357' name='L357'></a> 357 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/343.html#L455' title='Referred from 455 in irq/irqdesc.c.'>delete_irq_desc</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq)
+<a id='L358' name='L358'></a> 358 <em class='brace'>{</em>
+<a id='L359' name='L359'></a> 359         radix_tree_delete(&amp;irq_desc_tree, irq);
+<a id='L360' name='L360'></a> 360 <em class='brace'>}</em>
+<a id='L361' name='L361'></a> 361 
+<a id='L362' name='L362'></a> 362 <em class='sharp'>#ifdef</em> CONFIG_SMP
+<a id='L363' name='L363'></a> 363 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/343.html#L426' title='Referred from 426 in irq/irqdesc.c.'>free_masks</a>(<strong class='reserved'>struct</strong> irq_desc *desc)
+<a id='L364' name='L364'></a> 364 <em class='brace'>{</em>
+<a id='L365' name='L365'></a> 365 <em class='sharp'>#ifdef</em> CONFIG_GENERIC_PENDING_IRQ
+<a id='L366' name='L366'></a> 366         free_cpumask_var(desc-&gt;pending_mask);
+<a id='L367' name='L367'></a> 367 <em class='sharp'>#endif</em>
+<a id='L368' name='L368'></a> 368         free_cpumask_var(desc-&gt;irq_common_data.affinity);
+<a id='L369' name='L369'></a> 369 <em class='sharp'>#ifdef</em> CONFIG_GENERIC_IRQ_EFFECTIVE_AFF_MASK
+<a id='L370' name='L370'></a> 370         free_cpumask_var(desc-&gt;irq_common_data.effective_affinity);
+<a id='L371' name='L371'></a> 371 <em class='sharp'>#endif</em>
+<a id='L372' name='L372'></a> 372 <em class='brace'>}</em>
+<a id='L373' name='L373'></a> 373 <em class='sharp'>#else</em>
+<a id='L374' name='L374'></a> 374 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/343.html#L426' title='Referred from 426 in irq/irqdesc.c.'>free_masks</a>(<strong class='reserved'>struct</strong> irq_desc *desc) <em class='brace'>{</em> <em class='brace'>}</em>
+<a id='L375' name='L375'></a> 375 <em class='sharp'>#endif</em>
+<a id='L376' name='L376'></a> 376 
+<a id='L377' name='L377'></a> 377 <strong class='reserved'>void</strong> <a href='../R/7874.html' title='Multiple referred from 5 places.'>irq_lock_sparse</a>(<strong class='reserved'>void</strong>)
+<a id='L378' name='L378'></a> 378 <em class='brace'>{</em>
+<a id='L379' name='L379'></a> 379         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;sparse_irq_lock);
+<a id='L380' name='L380'></a> 380 <em class='brace'>}</em>
+<a id='L381' name='L381'></a> 381 
+<a id='L382' name='L382'></a> 382 <strong class='reserved'>void</strong> <a href='../R/8008.html' title='Multiple referred from 7 places.'>irq_unlock_sparse</a>(<strong class='reserved'>void</strong>)
+<a id='L383' name='L383'></a> 383 <em class='brace'>{</em>
+<a id='L384' name='L384'></a> 384         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;sparse_irq_lock);
+<a id='L385' name='L385'></a> 385 <em class='brace'>}</em>
+<a id='L386' name='L386'></a> 386 
+<a id='L387' name='L387'></a> 387 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> irq_desc *<a href='../R/2877.html' title='Multiple referred from 2 places.'>alloc_desc</a>(<strong class='reserved'>int</strong> irq, <strong class='reserved'>int</strong> <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> flags,
+<a id='L388' name='L388'></a> 388                                    <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> cpumask *affinity,
+<a id='L389' name='L389'></a> 389                                    <strong class='reserved'>struct</strong> module *owner)
+<a id='L390' name='L390'></a> 390 <em class='brace'>{</em>
+<a id='L391' name='L391'></a> 391         <strong class='reserved'>struct</strong> irq_desc *desc;
+<a id='L392' name='L392'></a> 392 
+<a id='L393' name='L393'></a> 393         desc = kzalloc_node(<strong class='reserved'>sizeof</strong>(*desc), GFP_KERNEL, <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>);
+<a id='L394' name='L394'></a> 394         <strong class='reserved'>if</strong> (!desc)
+<a id='L395' name='L395'></a> 395                 <strong class='reserved'>return</strong> NULL;
+<a id='L396' name='L396'></a> 396         <em class='comment'>/* allocate based on nr_cpu_ids */</em>
+<a id='L397' name='L397'></a> 397         desc-&gt;<a href='../S/343.html#L987' title='Defined at 987 in irq/irqdesc.c.'>kstat_irqs</a> = alloc_percpu(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>);
+<a id='L398' name='L398'></a> 398         <strong class='reserved'>if</strong> (!desc-&gt;<a href='../S/343.html#L987' title='Defined at 987 in irq/irqdesc.c.'>kstat_irqs</a>)
+<a id='L399' name='L399'></a> 399                 <strong class='reserved'>goto</strong> err_desc;
+<a id='L400' name='L400'></a> 400 
+<a id='L401' name='L401'></a> 401         <strong class='reserved'>if</strong> (<a href='../D/3106.html' title='Multiple defined in 2 places.'>alloc_masks</a>(desc, <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>))
+<a id='L402' name='L402'></a> 402                 <strong class='reserved'>goto</strong> err_kstat;
+<a id='L403' name='L403'></a> 403 
+<a id='L404' name='L404'></a> 404         raw_spin_lock_init(&amp;desc-&gt;lock);
+<a id='L405' name='L405'></a> 405         lockdep_set_class(&amp;desc-&gt;lock, &amp;irq_desc_lock_class);
+<a id='L406' name='L406'></a> 406         mutex_init(&amp;desc-&gt;request_mutex);
+<a id='L407' name='L407'></a> 407         <a href='../S/140.html#L409' title='Defined at 409 in rcu/update.c.'>init_rcu_head</a>(&amp;desc-&gt;rcu);
+<a id='L408' name='L408'></a> 408 
+<a id='L409' name='L409'></a> 409         <a href='../S/343.html#L103' title='Defined at 103 in irq/irqdesc.c.'>desc_set_defaults</a>(irq, desc, <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>, affinity, owner);
+<a id='L410' name='L410'></a> 410         <a href='../S/356.html#L228' title='Defined at 228 in irq/internals.h.'>irqd_set</a>(&amp;desc-&gt;irq_data, flags);
+<a id='L411' name='L411'></a> 411         kobject_init(&amp;desc-&gt;kobj, &amp;irq_kobj_type);
+<a id='L412' name='L412'></a> 412 
+<a id='L413' name='L413'></a> 413         <strong class='reserved'>return</strong> desc;
+<a id='L414' name='L414'></a> 414 
+<a id='L415' name='L415'></a> 415 err_kstat:
+<a id='L416' name='L416'></a> 416         free_percpu(desc-&gt;<a href='../S/343.html#L987' title='Defined at 987 in irq/irqdesc.c.'>kstat_irqs</a>);
+<a id='L417' name='L417'></a> 417 err_desc:
+<a id='L418' name='L418'></a> 418         kfree(desc);
+<a id='L419' name='L419'></a> 419         <strong class='reserved'>return</strong> NULL;
+<a id='L420' name='L420'></a> 420 <em class='brace'>}</em>
+<a id='L421' name='L421'></a> 421 
+<a id='L422' name='L422'></a> 422 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/7873.html' title='Multiple referred from 3 places.'>irq_kobj_release</a>(<strong class='reserved'>struct</strong> kobject *kobj)
+<a id='L423' name='L423'></a> 423 <em class='brace'>{</em>
+<a id='L424' name='L424'></a> 424         <strong class='reserved'>struct</strong> irq_desc *desc = container_of(kobj, <strong class='reserved'>struct</strong> irq_desc, kobj);
+<a id='L425' name='L425'></a> 425 
+<a id='L426' name='L426'></a> 426         <a href='../D/6908.html' title='Multiple defined in 2 places.'>free_masks</a>(desc);
+<a id='L427' name='L427'></a> 427         free_percpu(desc-&gt;<a href='../S/343.html#L987' title='Defined at 987 in irq/irqdesc.c.'>kstat_irqs</a>);
+<a id='L428' name='L428'></a> 428         kfree(desc);
+<a id='L429' name='L429'></a> 429 <em class='brace'>}</em>
+<a id='L430' name='L430'></a> 430 
+<a id='L431' name='L431'></a> 431 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/343.html#L463' title='Referred from 463 in irq/irqdesc.c.'>delayed_free_desc</a>(<strong class='reserved'>struct</strong> rcu_head *rhp)
+<a id='L432' name='L432'></a> 432 <em class='brace'>{</em>
+<a id='L433' name='L433'></a> 433         <strong class='reserved'>struct</strong> irq_desc *desc = container_of(rhp, <strong class='reserved'>struct</strong> irq_desc, rcu);
+<a id='L434' name='L434'></a> 434 
+<a id='L435' name='L435'></a> 435         kobject_put(&amp;desc-&gt;kobj);
+<a id='L436' name='L436'></a> 436 <em class='brace'>}</em>
+<a id='L437' name='L437'></a> 437 
+<a id='L438' name='L438'></a> 438 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/6506.html' title='Multiple referred from 3 places.'>free_desc</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq)
+<a id='L439' name='L439'></a> 439 <em class='brace'>{</em>
+<a id='L440' name='L440'></a> 440         <strong class='reserved'>struct</strong> irq_desc *desc = <a href='../D/8483.html' title='Multiple defined in 2 places.'>irq_to_desc</a>(irq);
+<a id='L441' name='L441'></a> 441 
+<a id='L442' name='L442'></a> 442         <a href='../D/8371.html' title='Multiple defined in 2 places.'>irq_remove_debugfs_entry</a>(desc);
+<a id='L443' name='L443'></a> 443         <a href='../D/15064.html' title='Multiple defined in 2 places.'>unregister_irq_proc</a>(irq, desc);
+<a id='L444' name='L444'></a> 444 
+<a id='L445' name='L445'></a> 445         <em class='comment'>/*</em>
+<a id='L446' name='L446'></a> 446 <em class='comment'>         * sparse_irq_lock protects also show_interrupts() and</em>
+<a id='L447' name='L447'></a> 447 <em class='comment'>         * kstat_irq_usr(). Once we deleted the descriptor from the</em>
+<a id='L448' name='L448'></a> 448 <em class='comment'>         * sparse tree we can free it. Access in proc will fail to</em>
+<a id='L449' name='L449'></a> 449 <em class='comment'>         * lookup the descriptor.</em>
+<a id='L450' name='L450'></a> 450 <em class='comment'>         *</em>
+<a id='L451' name='L451'></a> 451 <em class='comment'>         * The sysfs entry must be serialized against a concurrent</em>
+<a id='L452' name='L452'></a> 452 <em class='comment'>         * irq_sysfs_init() as well.</em>
+<a id='L453' name='L453'></a> 453 <em class='comment'>         */</em>
+<a id='L454' name='L454'></a> 454         <a href='../D/8456.html' title='Multiple defined in 2 places.'>irq_sysfs_del</a>(desc);
+<a id='L455' name='L455'></a> 455         <a href='../S/343.html#L357' title='Defined at 357 in irq/irqdesc.c.'>delete_irq_desc</a>(irq);
+<a id='L456' name='L456'></a> 456 
+<a id='L457' name='L457'></a> 457         <em class='comment'>/*</em>
+<a id='L458' name='L458'></a> 458 <em class='comment'>         * We free the descriptor, masks and stat fields via RCU. That</em>
+<a id='L459' name='L459'></a> 459 <em class='comment'>         * allows demultiplex interrupts to do rcu based management of</em>
+<a id='L460' name='L460'></a> 460 <em class='comment'>         * the child interrupts.</em>
+<a id='L461' name='L461'></a> 461 <em class='comment'>         * This also allows us to use rcu in kstat_irqs_usr().</em>
+<a id='L462' name='L462'></a> 462 <em class='comment'>         */</em>
+<a id='L463' name='L463'></a> 463         <a href='../D/4450.html' title='Multiple defined in 2 places.'>call_rcu</a>(&amp;desc-&gt;rcu, <a href='../S/343.html#L431' title='Defined at 431 in irq/irqdesc.c.'>delayed_free_desc</a>);
+<a id='L464' name='L464'></a> 464 <em class='brace'>}</em>
+<a id='L465' name='L465'></a> 465 
+<a id='L466' name='L466'></a> 466 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/343.html#L806' title='Referred from 806 in irq/irqdesc.c.'>alloc_descs</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> start, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> cnt, <strong class='reserved'>int</strong> <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>,
+<a id='L467' name='L467'></a> 467                        <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> irq_affinity_desc *affinity,
+<a id='L468' name='L468'></a> 468                        <strong class='reserved'>struct</strong> module *owner)
+<a id='L469' name='L469'></a> 469 <em class='brace'>{</em>
+<a id='L470' name='L470'></a> 470         <strong class='reserved'>struct</strong> irq_desc *desc;
+<a id='L471' name='L471'></a> 471         <strong class='reserved'>int</strong> i;
+<a id='L472' name='L472'></a> 472 
+<a id='L473' name='L473'></a> 473         <em class='comment'>/* Validate affinity mask(s) */</em>
+<a id='L474' name='L474'></a> 474         <strong class='reserved'>if</strong> (affinity) <em class='brace'>{</em>
+<a id='L475' name='L475'></a> 475                 <strong class='reserved'>for</strong> (i = 0; i &lt; cnt; i++) <em class='brace'>{</em>
+<a id='L476' name='L476'></a> 476                         <strong class='reserved'>if</strong> (cpumask_empty(&amp;affinity[i].mask))
+<a id='L477' name='L477'></a> 477                                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L478' name='L478'></a> 478                 <em class='brace'>}</em>
+<a id='L479' name='L479'></a> 479         <em class='brace'>}</em>
+<a id='L480' name='L480'></a> 480 
+<a id='L481' name='L481'></a> 481         <strong class='reserved'>for</strong> (i = 0; i &lt; cnt; i++) <em class='brace'>{</em>
+<a id='L482' name='L482'></a> 482                 <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> cpumask *mask = NULL;
+<a id='L483' name='L483'></a> 483                 <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> flags = 0;
+<a id='L484' name='L484'></a> 484 
+<a id='L485' name='L485'></a> 485                 <strong class='reserved'>if</strong> (affinity) <em class='brace'>{</em>
+<a id='L486' name='L486'></a> 486                         <strong class='reserved'>if</strong> (affinity-&gt;is_managed) <em class='brace'>{</em>
+<a id='L487' name='L487'></a> 487                                 flags = IRQD_AFFINITY_MANAGED |
+<a id='L488' name='L488'></a> 488                                         IRQD_MANAGED_SHUTDOWN;
+<a id='L489' name='L489'></a> 489                         <em class='brace'>}</em>
+<a id='L490' name='L490'></a> 490                         mask = &amp;affinity-&gt;mask;
+<a id='L491' name='L491'></a> 491                         <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a> = cpu_to_node(cpumask_first(mask));
+<a id='L492' name='L492'></a> 492                         affinity++;
+<a id='L493' name='L493'></a> 493                 <em class='brace'>}</em>
+<a id='L494' name='L494'></a> 494 
+<a id='L495' name='L495'></a> 495                 desc = <a href='../S/343.html#L387' title='Defined at 387 in irq/irqdesc.c.'>alloc_desc</a>(start + i, <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>, flags, mask, owner);
+<a id='L496' name='L496'></a> 496                 <strong class='reserved'>if</strong> (!desc)
+<a id='L497' name='L497'></a> 497                         <strong class='reserved'>goto</strong> err;
+<a id='L498' name='L498'></a> 498                 <a href='../S/343.html#L346' title='Defined at 346 in irq/irqdesc.c.'>irq_insert_desc</a>(start + i, desc);
+<a id='L499' name='L499'></a> 499                 <a href='../D/8455.html' title='Multiple defined in 2 places.'>irq_sysfs_add</a>(start + i, desc);
+<a id='L500' name='L500'></a> 500                 <a href='../D/8163.html' title='Multiple defined in 2 places.'>irq_add_debugfs_entry</a>(start + i, desc);
+<a id='L501' name='L501'></a> 501         <em class='brace'>}</em>
+<a id='L502' name='L502'></a> 502         bitmap_set(allocated_irqs, start, cnt);
+<a id='L503' name='L503'></a> 503         <strong class='reserved'>return</strong> start;
+<a id='L504' name='L504'></a> 504 
+<a id='L505' name='L505'></a> 505 err:
+<a id='L506' name='L506'></a> 506         <strong class='reserved'>for</strong> (i--; i &gt;= 0; i--)
+<a id='L507' name='L507'></a> 507                 <a href='../D/6887.html' title='Multiple defined in 2 places.'>free_desc</a>(start + i);
+<a id='L508' name='L508'></a> 508         <strong class='reserved'>return</strong> -ENOMEM;
+<a id='L509' name='L509'></a> 509 <em class='brace'>}</em>
+<a id='L510' name='L510'></a> 510 
+<a id='L511' name='L511'></a> 511 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/343.html#L802' title='Referred from 802 in irq/irqdesc.c.'>irq_expand_nr_irqs</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> nr)
+<a id='L512' name='L512'></a> 512 <em class='brace'>{</em>
+<a id='L513' name='L513'></a> 513         <strong class='reserved'>if</strong> (nr &gt; <a href='../D/663.html' title='Multiple defined in 2 places.'>IRQ_BITMAP_BITS</a>)
+<a id='L514' name='L514'></a> 514                 <strong class='reserved'>return</strong> -ENOMEM;
+<a id='L515' name='L515'></a> 515         nr_irqs = nr;
+<a id='L516' name='L516'></a> 516         <strong class='reserved'>return</strong> 0;
+<a id='L517' name='L517'></a> 517 <em class='brace'>}</em>
+<a id='L518' name='L518'></a> 518 
+<a id='L519' name='L519'></a> 519 <strong class='reserved'>int</strong> __init early_irq_init(<strong class='reserved'>void</strong>)
+<a id='L520' name='L520'></a> 520 <em class='brace'>{</em>
+<a id='L521' name='L521'></a> 521         <strong class='reserved'>int</strong> i, initcnt, <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a> = first_online_node;
+<a id='L522' name='L522'></a> 522         <strong class='reserved'>struct</strong> irq_desc *desc;
+<a id='L523' name='L523'></a> 523 
+<a id='L524' name='L524'></a> 524         <a href='../D/8037.html' title='Multiple defined in 2 places.'>init_irq_default_affinity</a>();
+<a id='L525' name='L525'></a> 525 
+<a id='L526' name='L526'></a> 526         <em class='comment'>/* Let arch update nr_irqs and return the nr of preallocated irqs */</em>
+<a id='L527' name='L527'></a> 527         initcnt = <a href='../S/198.html#L764' title='Defined at 764 in softirq.c.'>arch_probe_nr_irqs</a>();
+<a id='L528' name='L528'></a> 528         <a href='../S/6.html#L2101' title='Defined at 2101 in printk/printk.c.'>printk</a>(KERN_INFO "NR_IRQS: %d, nr_irqs: %d, preallocated irqs: %d\n",
+<a id='L529' name='L529'></a> 529                NR_IRQS, nr_irqs, initcnt);
+<a id='L530' name='L530'></a> 530 
+<a id='L531' name='L531'></a> 531         <strong class='reserved'>if</strong> (WARN_ON(nr_irqs &gt; <a href='../D/663.html' title='Multiple defined in 2 places.'>IRQ_BITMAP_BITS</a>))
+<a id='L532' name='L532'></a> 532                 nr_irqs = <a href='../D/663.html' title='Multiple defined in 2 places.'>IRQ_BITMAP_BITS</a>;
+<a id='L533' name='L533'></a> 533 
+<a id='L534' name='L534'></a> 534         <strong class='reserved'>if</strong> (WARN_ON(initcnt &gt; <a href='../D/663.html' title='Multiple defined in 2 places.'>IRQ_BITMAP_BITS</a>))
+<a id='L535' name='L535'></a> 535                 initcnt = <a href='../D/663.html' title='Multiple defined in 2 places.'>IRQ_BITMAP_BITS</a>;
+<a id='L536' name='L536'></a> 536 
+<a id='L537' name='L537'></a> 537         <strong class='reserved'>if</strong> (initcnt &gt; nr_irqs)
+<a id='L538' name='L538'></a> 538                 nr_irqs = initcnt;
+<a id='L539' name='L539'></a> 539 
+<a id='L540' name='L540'></a> 540         <strong class='reserved'>for</strong> (i = 0; i &lt; initcnt; i++) <em class='brace'>{</em>
+<a id='L541' name='L541'></a> 541                 desc = <a href='../S/343.html#L387' title='Defined at 387 in irq/irqdesc.c.'>alloc_desc</a>(i, <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>, 0, NULL, NULL);
+<a id='L542' name='L542'></a> 542                 set_bit(i, allocated_irqs);
+<a id='L543' name='L543'></a> 543                 <a href='../S/343.html#L346' title='Defined at 346 in irq/irqdesc.c.'>irq_insert_desc</a>(i, desc);
+<a id='L544' name='L544'></a> 544         <em class='brace'>}</em>
+<a id='L545' name='L545'></a> 545         <strong class='reserved'>return</strong> <a href='../S/198.html#L769' title='Defined at 769 in softirq.c.'>arch_early_irq_init</a>();
+<a id='L546' name='L546'></a> 546 <em class='brace'>}</em>
+<a id='L547' name='L547'></a> 547 
+<a id='L548' name='L548'></a> 548 <em class='sharp'>#else</em> <em class='comment'>/* !CONFIG_SPARSE_IRQ */</em>
+<a id='L549' name='L549'></a> 549 
+<a id='L550' name='L550'></a> 550 <strong class='reserved'>struct</strong> irq_desc irq_desc[NR_IRQS] __cacheline_aligned_in_smp = <em class='brace'>{</em>
+<a id='L551' name='L551'></a> 551         [0 ... NR_IRQS-1] = <em class='brace'>{</em>
+<a id='L552' name='L552'></a> 552                 .handle_irq     = <a href='../S/347.html#L31' title='Defined at 31 in irq/handle.c.'>handle_bad_irq</a>,
+<a id='L553' name='L553'></a> 553                 .depth          = 1,
+<a id='L554' name='L554'></a> 554                 .lock           = __RAW_SPIN_LOCK_UNLOCKED(irq_desc-&gt;lock),
+<a id='L555' name='L555'></a> 555         <em class='brace'>}</em>
+<a id='L556' name='L556'></a> 556 <em class='brace'>}</em>;
+<a id='L557' name='L557'></a> 557 
+<a id='L558' name='L558'></a> 558 <strong class='reserved'>int</strong> __init early_irq_init(<strong class='reserved'>void</strong>)
+<a id='L559' name='L559'></a> 559 <em class='brace'>{</em>
+<a id='L560' name='L560'></a> 560         <strong class='reserved'>int</strong> count, i, <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a> = first_online_node;
+<a id='L561' name='L561'></a> 561         <strong class='reserved'>struct</strong> irq_desc *desc;
+<a id='L562' name='L562'></a> 562 
+<a id='L563' name='L563'></a> 563         <a href='../D/8037.html' title='Multiple defined in 2 places.'>init_irq_default_affinity</a>();
+<a id='L564' name='L564'></a> 564 
+<a id='L565' name='L565'></a> 565         <a href='../S/6.html#L2101' title='Defined at 2101 in printk/printk.c.'>printk</a>(KERN_INFO "NR_IRQS: %d\n", NR_IRQS);
+<a id='L566' name='L566'></a> 566 
+<a id='L567' name='L567'></a> 567         desc = irq_desc;
+<a id='L568' name='L568'></a> 568         count = ARRAY_SIZE(irq_desc);
+<a id='L569' name='L569'></a> 569 
+<a id='L570' name='L570'></a> 570         <strong class='reserved'>for</strong> (i = 0; i &lt; count; i++) <em class='brace'>{</em>
+<a id='L571' name='L571'></a> 571                 desc[i].<a href='../S/343.html#L987' title='Defined at 987 in irq/irqdesc.c.'>kstat_irqs</a> = alloc_percpu(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>);
+<a id='L572' name='L572'></a> 572                 <a href='../D/3106.html' title='Multiple defined in 2 places.'>alloc_masks</a>(&amp;desc[i], <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>);
+<a id='L573' name='L573'></a> 573                 raw_spin_lock_init(&amp;desc[i].lock);
+<a id='L574' name='L574'></a> 574                 lockdep_set_class(&amp;desc[i].lock, &amp;irq_desc_lock_class);
+<a id='L575' name='L575'></a> 575                 mutex_init(&amp;desc[i].request_mutex);
+<a id='L576' name='L576'></a> 576                 <a href='../S/343.html#L103' title='Defined at 103 in irq/irqdesc.c.'>desc_set_defaults</a>(i, &amp;desc[i], <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>, NULL, NULL);
+<a id='L577' name='L577'></a> 577         <em class='brace'>}</em>
+<a id='L578' name='L578'></a> 578         <strong class='reserved'>return</strong> <a href='../S/198.html#L769' title='Defined at 769 in softirq.c.'>arch_early_irq_init</a>();
+<a id='L579' name='L579'></a> 579 <em class='brace'>}</em>
+<a id='L580' name='L580'></a> 580 
+<a id='L581' name='L581'></a> 581 <strong class='reserved'>struct</strong> irq_desc *<a href='../R/8005.html' title='Multiple referred from 57 places.'>irq_to_desc</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq)
+<a id='L582' name='L582'></a> 582 <em class='brace'>{</em>
+<a id='L583' name='L583'></a> 583         <strong class='reserved'>return</strong> (irq &lt; NR_IRQS) ? irq_desc + irq : NULL;
+<a id='L584' name='L584'></a> 584 <em class='brace'>}</em>
+<a id='L585' name='L585'></a> 585 EXPORT_SYMBOL(<a href='../D/8483.html' title='Multiple defined in 2 places.'>irq_to_desc</a>);
+<a id='L586' name='L586'></a> 586 
+<a id='L587' name='L587'></a> 587 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/6506.html' title='Multiple referred from 3 places.'>free_desc</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq)
+<a id='L588' name='L588'></a> 588 <em class='brace'>{</em>
+<a id='L589' name='L589'></a> 589         <strong class='reserved'>struct</strong> irq_desc *desc = <a href='../D/8483.html' title='Multiple defined in 2 places.'>irq_to_desc</a>(irq);
+<a id='L590' name='L590'></a> 590         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> flags;
+<a id='L591' name='L591'></a> 591 
+<a id='L592' name='L592'></a> 592         raw_spin_lock_irqsave(&amp;desc-&gt;lock, flags);
+<a id='L593' name='L593'></a> 593         <a href='../S/343.html#L103' title='Defined at 103 in irq/irqdesc.c.'>desc_set_defaults</a>(irq, desc, <a href='../S/356.html#L262' title='Defined at 262 in irq/internals.h.'>irq_desc_get_node</a>(desc), NULL, NULL);
+<a id='L594' name='L594'></a> 594         raw_spin_unlock_irqrestore(&amp;desc-&gt;lock, flags);
+<a id='L595' name='L595'></a> 595 <em class='brace'>}</em>
+<a id='L596' name='L596'></a> 596 
+<a id='L597' name='L597'></a> 597 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>int</strong> <a href='../S/343.html#L806' title='Referred from 806 in irq/irqdesc.c.'>alloc_descs</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> start, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> cnt, <strong class='reserved'>int</strong> <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>,
+<a id='L598' name='L598'></a> 598                               <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> irq_affinity_desc *affinity,
+<a id='L599' name='L599'></a> 599                               <strong class='reserved'>struct</strong> module *owner)
+<a id='L600' name='L600'></a> 600 <em class='brace'>{</em>
+<a id='L601' name='L601'></a> 601         u32 i;
+<a id='L602' name='L602'></a> 602 
+<a id='L603' name='L603'></a> 603         <strong class='reserved'>for</strong> (i = 0; i &lt; cnt; i++) <em class='brace'>{</em>
+<a id='L604' name='L604'></a> 604                 <strong class='reserved'>struct</strong> irq_desc *desc = <a href='../D/8483.html' title='Multiple defined in 2 places.'>irq_to_desc</a>(start + i);
+<a id='L605' name='L605'></a> 605 
+<a id='L606' name='L606'></a> 606                 desc-&gt;owner = owner;
+<a id='L607' name='L607'></a> 607         <em class='brace'>}</em>
+<a id='L608' name='L608'></a> 608         bitmap_set(allocated_irqs, start, cnt);
+<a id='L609' name='L609'></a> 609         <strong class='reserved'>return</strong> start;
+<a id='L610' name='L610'></a> 610 <em class='brace'>}</em>
+<a id='L611' name='L611'></a> 611 
+<a id='L612' name='L612'></a> 612 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/343.html#L802' title='Referred from 802 in irq/irqdesc.c.'>irq_expand_nr_irqs</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> nr)
+<a id='L613' name='L613'></a> 613 <em class='brace'>{</em>
+<a id='L614' name='L614'></a> 614         <strong class='reserved'>return</strong> -ENOMEM;
+<a id='L615' name='L615'></a> 615 <em class='brace'>}</em>
+<a id='L616' name='L616'></a> 616 
+<a id='L617' name='L617'></a> 617 <strong class='reserved'>void</strong> <a href='../R/7876.html' title='Multiple referred from 2 places.'>irq_mark_irq</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq)
+<a id='L618' name='L618'></a> 618 <em class='brace'>{</em>
+<a id='L619' name='L619'></a> 619         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;sparse_irq_lock);
+<a id='L620' name='L620'></a> 620         bitmap_set(allocated_irqs, irq, 1);
+<a id='L621' name='L621'></a> 621         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;sparse_irq_lock);
+<a id='L622' name='L622'></a> 622 <em class='brace'>}</em>
+<a id='L623' name='L623'></a> 623 
+<a id='L624' name='L624'></a> 624 <em class='sharp'>#ifdef</em> CONFIG_GENERIC_IRQ_LEGACY
+<a id='L625' name='L625'></a> 625 <strong class='reserved'>void</strong> irq_init_desc(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq)
+<a id='L626' name='L626'></a> 626 <em class='brace'>{</em>
+<a id='L627' name='L627'></a> 627         <a href='../D/6887.html' title='Multiple defined in 2 places.'>free_desc</a>(irq);
+<a id='L628' name='L628'></a> 628 <em class='brace'>}</em>
+<a id='L629' name='L629'></a> 629 <em class='sharp'>#endif</em>
+<a id='L630' name='L630'></a> 630 
+<a id='L631' name='L631'></a> 631 <em class='sharp'>#endif</em> <em class='comment'>/* !CONFIG_SPARSE_IRQ */</em>
+<a id='L632' name='L632'></a> 632 
+<a id='L633' name='L633'></a> 633 <em class='comment'>/**</em>
+<a id='L634' name='L634'></a> 634 <em class='comment'> * generic_handle_irq - Invoke the handler for a particular irq</em>
+<a id='L635' name='L635'></a> 635 <em class='comment'> * @irq:        The irq number to handle</em>
+<a id='L636' name='L636'></a> 636 <em class='comment'> *</em>
+<a id='L637' name='L637'></a> 637 <em class='comment'> */</em>
+<a id='L638' name='L638'></a> 638 <strong class='reserved'>int</strong> <a href='../R/7005.html' title='Multiple referred from 3 places.'>generic_handle_irq</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq)
+<a id='L639' name='L639'></a> 639 <em class='brace'>{</em>
+<a id='L640' name='L640'></a> 640         <strong class='reserved'>struct</strong> irq_desc *desc = <a href='../D/8483.html' title='Multiple defined in 2 places.'>irq_to_desc</a>(irq);
+<a id='L641' name='L641'></a> 641         <strong class='reserved'>struct</strong> irq_data *data;
+<a id='L642' name='L642'></a> 642 
+<a id='L643' name='L643'></a> 643         <strong class='reserved'>if</strong> (!desc)
+<a id='L644' name='L644'></a> 644                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L645' name='L645'></a> 645 
+<a id='L646' name='L646'></a> 646         data = irq_desc_get_irq_data(desc);
+<a id='L647' name='L647'></a> 647         <strong class='reserved'>if</strong> (WARN_ON_ONCE(!in_irq() &amp;&amp; <a href='../D/7647.html' title='Multiple defined in 2 places.'>handle_enforce_irqctx</a>(data)))
+<a id='L648' name='L648'></a> 648                 <strong class='reserved'>return</strong> -EPERM;
+<a id='L649' name='L649'></a> 649 
+<a id='L650' name='L650'></a> 650         generic_handle_irq_desc(desc);
+<a id='L651' name='L651'></a> 651         <strong class='reserved'>return</strong> 0;
+<a id='L652' name='L652'></a> 652 <em class='brace'>}</em>
+<a id='L653' name='L653'></a> 653 EXPORT_SYMBOL_GPL(<a href='../S/343.html#L638' title='Defined at 638 in irq/irqdesc.c.'>generic_handle_irq</a>);
+<a id='L654' name='L654'></a> 654 
+<a id='L655' name='L655'></a> 655 <em class='sharp'>#ifdef</em> CONFIG_HANDLE_DOMAIN_IRQ
+<a id='L656' name='L656'></a> 656 <em class='comment'>/**</em>
+<a id='L657' name='L657'></a> 657 <em class='comment'> * __handle_domain_irq - Invoke the handler for a HW irq belonging to a domain</em>
+<a id='L658' name='L658'></a> 658 <em class='comment'> * @domain:     The domain where to perform the lookup</em>
+<a id='L659' name='L659'></a> 659 <em class='comment'> * @hwirq:      The HW irq number to convert to a logical one</em>
+<a id='L660' name='L660'></a> 660 <em class='comment'> * @lookup:     Whether to perform the domain lookup or not</em>
+<a id='L661' name='L661'></a> 661 <em class='comment'> * @regs:       Register file coming from the low-level handling code</em>
+<a id='L662' name='L662'></a> 662 <em class='comment'> *</em>
+<a id='L663' name='L663'></a> 663 <em class='comment'> * Returns:     0 on success, or -EINVAL if conversion has failed</em>
+<a id='L664' name='L664'></a> 664 <em class='comment'> */</em>
+<a id='L665' name='L665'></a> 665 <strong class='reserved'>int</strong> __handle_domain_irq(<strong class='reserved'>struct</strong> irq_domain *domain, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> hwirq,
+<a id='L666' name='L666'></a> 666                         bool lookup, <strong class='reserved'>struct</strong> pt_regs *regs)
+<a id='L667' name='L667'></a> 667 <em class='brace'>{</em>
+<a id='L668' name='L668'></a> 668         <strong class='reserved'>struct</strong> pt_regs *old_regs = set_irq_regs(regs);
+<a id='L669' name='L669'></a> 669         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq = hwirq;
+<a id='L670' name='L670'></a> 670         <strong class='reserved'>int</strong> ret = 0;
+<a id='L671' name='L671'></a> 671 
+<a id='L672' name='L672'></a> 672         <a href='../S/198.html#L380' title='Defined at 380 in softirq.c.'>irq_enter</a>();
+<a id='L673' name='L673'></a> 673 
+<a id='L674' name='L674'></a> 674 <em class='sharp'>#ifdef</em> CONFIG_IRQ_DOMAIN
+<a id='L675' name='L675'></a> 675         <strong class='reserved'>if</strong> (lookup)
+<a id='L676' name='L676'></a> 676                 irq = <a href='../S/358.html#L884' title='Defined at 884 in irq/irqdomain.c.'>irq_find_mapping</a>(domain, hwirq);
+<a id='L677' name='L677'></a> 677 <em class='sharp'>#endif</em>
+<a id='L678' name='L678'></a> 678 
+<a id='L679' name='L679'></a> 679         <em class='comment'>/*</em>
+<a id='L680' name='L680'></a> 680 <em class='comment'>         * Some hardware gives randomly wrong interrupts.  Rather</em>
+<a id='L681' name='L681'></a> 681 <em class='comment'>         * than crashing, do something sensible.</em>
+<a id='L682' name='L682'></a> 682 <em class='comment'>         */</em>
+<a id='L683' name='L683'></a> 683         <strong class='reserved'>if</strong> (unlikely(!irq || irq &gt;= nr_irqs)) <em class='brace'>{</em>
+<a id='L684' name='L684'></a> 684                 ack_bad_irq(irq);
+<a id='L685' name='L685'></a> 685                 ret = -EINVAL;
+<a id='L686' name='L686'></a> 686         <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L687' name='L687'></a> 687                 <a href='../S/343.html#L638' title='Defined at 638 in irq/irqdesc.c.'>generic_handle_irq</a>(irq);
+<a id='L688' name='L688'></a> 688         <em class='brace'>}</em>
+<a id='L689' name='L689'></a> 689 
+<a id='L690' name='L690'></a> 690         <a href='../S/198.html#L454' title='Defined at 454 in softirq.c.'>irq_exit</a>();
+<a id='L691' name='L691'></a> 691         set_irq_regs(old_regs);
+<a id='L692' name='L692'></a> 692         <strong class='reserved'>return</strong> ret;
+<a id='L693' name='L693'></a> 693 <em class='brace'>}</em>
+<a id='L694' name='L694'></a> 694 
+<a id='L695' name='L695'></a> 695 <em class='sharp'>#ifdef</em> CONFIG_IRQ_DOMAIN
+<a id='L696' name='L696'></a> 696 <em class='comment'>/**</em>
+<a id='L697' name='L697'></a> 697 <em class='comment'> * handle_domain_nmi - Invoke the handler for a HW irq belonging to a domain</em>
+<a id='L698' name='L698'></a> 698 <em class='comment'> * @domain:     The domain where to perform the lookup</em>
+<a id='L699' name='L699'></a> 699 <em class='comment'> * @hwirq:      The HW irq number to convert to a logical one</em>
+<a id='L700' name='L700'></a> 700 <em class='comment'> * @regs:       Register file coming from the low-level handling code</em>
+<a id='L701' name='L701'></a> 701 <em class='comment'> *</em>
+<a id='L702' name='L702'></a> 702 <em class='comment'> *              This function must be called from an NMI context.</em>
+<a id='L703' name='L703'></a> 703 <em class='comment'> *</em>
+<a id='L704' name='L704'></a> 704 <em class='comment'> * Returns:     0 on success, or -EINVAL if conversion has failed</em>
+<a id='L705' name='L705'></a> 705 <em class='comment'> */</em>
+<a id='L706' name='L706'></a> 706 <strong class='reserved'>int</strong> handle_domain_nmi(<strong class='reserved'>struct</strong> irq_domain *domain, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> hwirq,
+<a id='L707' name='L707'></a> 707                       <strong class='reserved'>struct</strong> pt_regs *regs)
+<a id='L708' name='L708'></a> 708 <em class='brace'>{</em>
+<a id='L709' name='L709'></a> 709         <strong class='reserved'>struct</strong> pt_regs *old_regs = set_irq_regs(regs);
+<a id='L710' name='L710'></a> 710         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq;
+<a id='L711' name='L711'></a> 711         <strong class='reserved'>int</strong> ret = 0;
+<a id='L712' name='L712'></a> 712 
+<a id='L713' name='L713'></a> 713         <em class='comment'>/*</em>
+<a id='L714' name='L714'></a> 714 <em class='comment'>         * NMI context needs to be setup earlier in order to deal with tracing.</em>
+<a id='L715' name='L715'></a> 715 <em class='comment'>         */</em>
+<a id='L716' name='L716'></a> 716         WARN_ON(!in_nmi());
+<a id='L717' name='L717'></a> 717 
+<a id='L718' name='L718'></a> 718         irq = <a href='../S/358.html#L884' title='Defined at 884 in irq/irqdomain.c.'>irq_find_mapping</a>(domain, hwirq);
+<a id='L719' name='L719'></a> 719 
+<a id='L720' name='L720'></a> 720         <em class='comment'>/*</em>
+<a id='L721' name='L721'></a> 721 <em class='comment'>         * ack_bad_irq is not NMI-safe, just report</em>
+<a id='L722' name='L722'></a> 722 <em class='comment'>         * an invalid interrupt.</em>
+<a id='L723' name='L723'></a> 723 <em class='comment'>         */</em>
+<a id='L724' name='L724'></a> 724         <strong class='reserved'>if</strong> (likely(irq))
+<a id='L725' name='L725'></a> 725                 <a href='../S/343.html#L638' title='Defined at 638 in irq/irqdesc.c.'>generic_handle_irq</a>(irq);
+<a id='L726' name='L726'></a> 726         <strong class='reserved'>else</strong>
+<a id='L727' name='L727'></a> 727                 ret = -EINVAL;
+<a id='L728' name='L728'></a> 728 
+<a id='L729' name='L729'></a> 729         set_irq_regs(old_regs);
+<a id='L730' name='L730'></a> 730         <strong class='reserved'>return</strong> ret;
+<a id='L731' name='L731'></a> 731 <em class='brace'>}</em>
+<a id='L732' name='L732'></a> 732 <em class='sharp'>#endif</em>
+<a id='L733' name='L733'></a> 733 <em class='sharp'>#endif</em>
+<a id='L734' name='L734'></a> 734 
+<a id='L735' name='L735'></a> 735 <em class='comment'>/* Dynamic interrupt handling */</em>
+<a id='L736' name='L736'></a> 736 
+<a id='L737' name='L737'></a> 737 <em class='comment'>/**</em>
+<a id='L738' name='L738'></a> 738 <em class='comment'> * irq_free_descs - free irq descriptors</em>
+<a id='L739' name='L739'></a> 739 <em class='comment'> * @from:       Start of descriptor range</em>
+<a id='L740' name='L740'></a> 740 <em class='comment'> * @cnt:        Number of consecutive irqs to free</em>
+<a id='L741' name='L741'></a> 741 <em class='comment'> */</em>
+<a id='L742' name='L742'></a> 742 <strong class='reserved'>void</strong> <a href='../R/7849.html' title='Multiple referred from 7 places.'>irq_free_descs</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> from, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> cnt)
+<a id='L743' name='L743'></a> 743 <em class='brace'>{</em>
+<a id='L744' name='L744'></a> 744         <strong class='reserved'>int</strong> i;
+<a id='L745' name='L745'></a> 745 
+<a id='L746' name='L746'></a> 746         <strong class='reserved'>if</strong> (from &gt;= nr_irqs || (from + cnt) &gt; nr_irqs)
+<a id='L747' name='L747'></a> 747                 <strong class='reserved'>return</strong>;
+<a id='L748' name='L748'></a> 748 
+<a id='L749' name='L749'></a> 749         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;sparse_irq_lock);
+<a id='L750' name='L750'></a> 750         <strong class='reserved'>for</strong> (i = 0; i &lt; cnt; i++)
+<a id='L751' name='L751'></a> 751                 <a href='../D/6887.html' title='Multiple defined in 2 places.'>free_desc</a>(from + i);
+<a id='L752' name='L752'></a> 752 
+<a id='L753' name='L753'></a> 753         bitmap_clear(allocated_irqs, from, cnt);
+<a id='L754' name='L754'></a> 754         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;sparse_irq_lock);
+<a id='L755' name='L755'></a> 755 <em class='brace'>}</em>
+<a id='L756' name='L756'></a> 756 EXPORT_SYMBOL_GPL(<a href='../S/343.html#L742' title='Defined at 742 in irq/irqdesc.c.'>irq_free_descs</a>);
+<a id='L757' name='L757'></a> 757 
+<a id='L758' name='L758'></a> 758 <em class='comment'>/**</em>
+<a id='L759' name='L759'></a> 759 <em class='comment'> * __irq_alloc_descs - allocate and initialize a range of irq descriptors</em>
+<a id='L760' name='L760'></a> 760 <em class='comment'> * @irq:        Allocate for specific irq number if irq &gt;= 0</em>
+<a id='L761' name='L761'></a> 761 <em class='comment'> * @from:       Start the search from this irq number</em>
+<a id='L762' name='L762'></a> 762 <em class='comment'> * @cnt:        Number of consecutive irqs to allocate.</em>
+<a id='L763' name='L763'></a> 763 <em class='comment'> * @node:       Preferred node on which the irq descriptor should be allocated</em>
+<a id='L764' name='L764'></a> 764 <em class='comment'> * @owner:      Owning module (can be NULL)</em>
+<a id='L765' name='L765'></a> 765 <em class='comment'> * @affinity:   Optional pointer to an affinity mask array of size @cnt which</em>
+<a id='L766' name='L766'></a> 766 <em class='comment'> *              hints where the irq descriptors should be allocated and which</em>
+<a id='L767' name='L767'></a> 767 <em class='comment'> *              default affinities to use</em>
+<a id='L768' name='L768'></a> 768 <em class='comment'> *</em>
+<a id='L769' name='L769'></a> 769 <em class='comment'> * Returns the first irq number or error code</em>
+<a id='L770' name='L770'></a> 770 <em class='comment'> */</em>
+<a id='L771' name='L771'></a> 771 <strong class='reserved'>int</strong> __ref
+<a id='L772' name='L772'></a> 772 <a href='../R/2086.html' title='Multiple referred from 6 places.'>__irq_alloc_descs</a>(<strong class='reserved'>int</strong> irq, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> from, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> cnt, <strong class='reserved'>int</strong> <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>,
+<a id='L773' name='L773'></a> 773                   <strong class='reserved'>struct</strong> module *owner, <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> irq_affinity_desc *affinity)
+<a id='L774' name='L774'></a> 774 <em class='brace'>{</em>
+<a id='L775' name='L775'></a> 775         <strong class='reserved'>int</strong> start, ret;
+<a id='L776' name='L776'></a> 776 
+<a id='L777' name='L777'></a> 777         <strong class='reserved'>if</strong> (!cnt)
+<a id='L778' name='L778'></a> 778                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L779' name='L779'></a> 779 
+<a id='L780' name='L780'></a> 780         <strong class='reserved'>if</strong> (irq &gt;= 0) <em class='brace'>{</em>
+<a id='L781' name='L781'></a> 781                 <strong class='reserved'>if</strong> (from &gt; irq)
+<a id='L782' name='L782'></a> 782                         <strong class='reserved'>return</strong> -EINVAL;
+<a id='L783' name='L783'></a> 783                 from = irq;
+<a id='L784' name='L784'></a> 784         <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L785' name='L785'></a> 785                 <em class='comment'>/*</em>
+<a id='L786' name='L786'></a> 786 <em class='comment'>                 * For interrupts which are freely allocated the</em>
+<a id='L787' name='L787'></a> 787 <em class='comment'>                 * architecture can force a lower bound to the @from</em>
+<a id='L788' name='L788'></a> 788 <em class='comment'>                 * argument. x86 uses this to exclude the GSI space.</em>
+<a id='L789' name='L789'></a> 789 <em class='comment'>                 */</em>
+<a id='L790' name='L790'></a> 790                 from = <a href='../S/198.html#L774' title='Defined at 774 in softirq.c.'>arch_dynirq_lower_bound</a>(from);
+<a id='L791' name='L791'></a> 791         <em class='brace'>}</em>
+<a id='L792' name='L792'></a> 792 
+<a id='L793' name='L793'></a> 793         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;sparse_irq_lock);
+<a id='L794' name='L794'></a> 794 
+<a id='L795' name='L795'></a> 795         start = bitmap_find_next_zero_area(allocated_irqs, <a href='../D/663.html' title='Multiple defined in 2 places.'>IRQ_BITMAP_BITS</a>,
+<a id='L796' name='L796'></a> 796                                            from, cnt, 0);
+<a id='L797' name='L797'></a> 797         ret = -EEXIST;
+<a id='L798' name='L798'></a> 798         <strong class='reserved'>if</strong> (irq &gt;=0 &amp;&amp; start != irq)
+<a id='L799' name='L799'></a> 799                 <strong class='reserved'>goto</strong> unlock;
+<a id='L800' name='L800'></a> 800 
+<a id='L801' name='L801'></a> 801         <strong class='reserved'>if</strong> (start + cnt &gt; nr_irqs) <em class='brace'>{</em>
+<a id='L802' name='L802'></a> 802                 ret = <a href='../D/8288.html' title='Multiple defined in 2 places.'>irq_expand_nr_irqs</a>(start + cnt);
+<a id='L803' name='L803'></a> 803                 <strong class='reserved'>if</strong> (ret)
+<a id='L804' name='L804'></a> 804                         <strong class='reserved'>goto</strong> unlock;
+<a id='L805' name='L805'></a> 805         <em class='brace'>}</em>
+<a id='L806' name='L806'></a> 806         ret = <a href='../D/3094.html' title='Multiple defined in 2 places.'>alloc_descs</a>(start, cnt, <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>, affinity, owner);
+<a id='L807' name='L807'></a> 807 unlock:
+<a id='L808' name='L808'></a> 808         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;sparse_irq_lock);
+<a id='L809' name='L809'></a> 809         <strong class='reserved'>return</strong> ret;
+<a id='L810' name='L810'></a> 810 <em class='brace'>}</em>
+<a id='L811' name='L811'></a> 811 EXPORT_SYMBOL_GPL(<a href='../S/343.html#L772' title='Defined at 772 in irq/irqdesc.c.'>__irq_alloc_descs</a>);
+<a id='L812' name='L812'></a> 812 
+<a id='L813' name='L813'></a> 813 <em class='sharp'>#ifdef</em> CONFIG_GENERIC_IRQ_LEGACY_ALLOC_HWIRQ
+<a id='L814' name='L814'></a> 814 <em class='comment'>/**</em>
+<a id='L815' name='L815'></a> 815 <em class='comment'> * irq_alloc_hwirqs - Allocate an irq descriptor and initialize the hardware</em>
+<a id='L816' name='L816'></a> 816 <em class='comment'> * @cnt:        number of interrupts to allocate</em>
+<a id='L817' name='L817'></a> 817 <em class='comment'> * @node:       node on which to allocate</em>
+<a id='L818' name='L818'></a> 818 <em class='comment'> *</em>
+<a id='L819' name='L819'></a> 819 <em class='comment'> * Returns an interrupt number &gt; 0 or 0, if the allocation fails.</em>
+<a id='L820' name='L820'></a> 820 <em class='comment'> */</em>
+<a id='L821' name='L821'></a> 821 <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> <a href='../S/343.html#L843' title='Referred from 843 in irq/irqdesc.c.'>irq_alloc_hwirqs</a>(<strong class='reserved'>int</strong> cnt, <strong class='reserved'>int</strong> <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>)
+<a id='L822' name='L822'></a> 822 <em class='brace'>{</em>
+<a id='L823' name='L823'></a> 823         <strong class='reserved'>int</strong> i, irq = <a href='../S/343.html#L772' title='Defined at 772 in irq/irqdesc.c.'>__irq_alloc_descs</a>(-1, 0, cnt, <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>, NULL, NULL);
+<a id='L824' name='L824'></a> 824 
+<a id='L825' name='L825'></a> 825         <strong class='reserved'>if</strong> (irq &lt; 0)
+<a id='L826' name='L826'></a> 826                 <strong class='reserved'>return</strong> 0;
+<a id='L827' name='L827'></a> 827 
+<a id='L828' name='L828'></a> 828         <strong class='reserved'>for</strong> (i = irq; cnt &gt; 0; i++, cnt--) <em class='brace'>{</em>
+<a id='L829' name='L829'></a> 829                 <strong class='reserved'>if</strong> (arch_setup_hwirq(i, <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>))
+<a id='L830' name='L830'></a> 830                         <strong class='reserved'>goto</strong> err;
+<a id='L831' name='L831'></a> 831                 irq_clear_status_flags(i, <a href='../S/340.html#L11' title='Defined at 11 in irq/settings.h.'>_IRQ_NOREQUEST</a>);
+<a id='L832' name='L832'></a> 832         <em class='brace'>}</em>
+<a id='L833' name='L833'></a> 833         <strong class='reserved'>return</strong> irq;
+<a id='L834' name='L834'></a> 834 
+<a id='L835' name='L835'></a> 835 err:
+<a id='L836' name='L836'></a> 836         <strong class='reserved'>for</strong> (i--; i &gt;= irq; i--) <em class='brace'>{</em>
+<a id='L837' name='L837'></a> 837                 irq_set_status_flags(i, <a href='../S/340.html#L11' title='Defined at 11 in irq/settings.h.'>_IRQ_NOREQUEST</a> | <a href='../S/340.html#L10' title='Defined at 10 in irq/settings.h.'>_IRQ_NOPROBE</a>);
+<a id='L838' name='L838'></a> 838                 arch_teardown_hwirq(i);
+<a id='L839' name='L839'></a> 839         <em class='brace'>}</em>
+<a id='L840' name='L840'></a> 840         <a href='../S/343.html#L742' title='Defined at 742 in irq/irqdesc.c.'>irq_free_descs</a>(irq, cnt);
+<a id='L841' name='L841'></a> 841         <strong class='reserved'>return</strong> 0;
+<a id='L842' name='L842'></a> 842 <em class='brace'>}</em>
+<a id='L843' name='L843'></a> 843 EXPORT_SYMBOL_GPL(<a href='../S/343.html#L821' title='Defined at 821 in irq/irqdesc.c.'>irq_alloc_hwirqs</a>);
+<a id='L844' name='L844'></a> 844 
+<a id='L845' name='L845'></a> 845 <em class='comment'>/**</em>
+<a id='L846' name='L846'></a> 846 <em class='comment'> * irq_free_hwirqs - Free irq descriptor and cleanup the hardware</em>
+<a id='L847' name='L847'></a> 847 <em class='comment'> * @from:       Free from irq number</em>
+<a id='L848' name='L848'></a> 848 <em class='comment'> * @cnt:        number of interrupts to free</em>
+<a id='L849' name='L849'></a> 849 <em class='comment'> *</em>
+<a id='L850' name='L850'></a> 850 <em class='comment'> */</em>
+<a id='L851' name='L851'></a> 851 <strong class='reserved'>void</strong> <a href='../S/343.html#L861' title='Referred from 861 in irq/irqdesc.c.'>irq_free_hwirqs</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> from, <strong class='reserved'>int</strong> cnt)
+<a id='L852' name='L852'></a> 852 <em class='brace'>{</em>
+<a id='L853' name='L853'></a> 853         <strong class='reserved'>int</strong> i, j;
+<a id='L854' name='L854'></a> 854 
+<a id='L855' name='L855'></a> 855         <strong class='reserved'>for</strong> (i = from, j = cnt; j &gt; 0; i++, j--) <em class='brace'>{</em>
+<a id='L856' name='L856'></a> 856                 irq_set_status_flags(i, <a href='../S/340.html#L11' title='Defined at 11 in irq/settings.h.'>_IRQ_NOREQUEST</a> | <a href='../S/340.html#L10' title='Defined at 10 in irq/settings.h.'>_IRQ_NOPROBE</a>);
+<a id='L857' name='L857'></a> 857                 arch_teardown_hwirq(i);
+<a id='L858' name='L858'></a> 858         <em class='brace'>}</em>
+<a id='L859' name='L859'></a> 859         <a href='../S/343.html#L742' title='Defined at 742 in irq/irqdesc.c.'>irq_free_descs</a>(from, cnt);
+<a id='L860' name='L860'></a> 860 <em class='brace'>}</em>
+<a id='L861' name='L861'></a> 861 EXPORT_SYMBOL_GPL(<a href='../S/343.html#L851' title='Defined at 851 in irq/irqdesc.c.'>irq_free_hwirqs</a>);
+<a id='L862' name='L862'></a> 862 <em class='sharp'>#endif</em>
+<a id='L863' name='L863'></a> 863 
+<a id='L864' name='L864'></a> 864 <em class='comment'>/**</em>
+<a id='L865' name='L865'></a> 865 <em class='comment'> * irq_get_next_irq - get next allocated irq number</em>
+<a id='L866' name='L866'></a> 866 <em class='comment'> * @offset:     where to start the search</em>
+<a id='L867' name='L867'></a> 867 <em class='comment'> *</em>
+<a id='L868' name='L868'></a> 868 <em class='comment'> * Returns next irq number after offset or nr_irqs if none is found.</em>
+<a id='L869' name='L869'></a> 869 <em class='comment'> */</em>
+<a id='L870' name='L870'></a> 870 <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq_get_next_irq(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> offset)
+<a id='L871' name='L871'></a> 871 <em class='brace'>{</em>
+<a id='L872' name='L872'></a> 872         <strong class='reserved'>return</strong> find_next_bit(allocated_irqs, nr_irqs, offset);
+<a id='L873' name='L873'></a> 873 <em class='brace'>}</em>
+<a id='L874' name='L874'></a> 874 
+<a id='L875' name='L875'></a> 875 <strong class='reserved'>struct</strong> irq_desc *
+<a id='L876' name='L876'></a> 876 <a href='../R/2099.html' title='Multiple referred from 3 places.'>__irq_get_desc_lock</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq, <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> *flags, bool bus,
+<a id='L877' name='L877'></a> 877                     <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> check)
+<a id='L878' name='L878'></a> 878 <em class='brace'>{</em>
+<a id='L879' name='L879'></a> 879         <strong class='reserved'>struct</strong> irq_desc *desc = <a href='../D/8483.html' title='Multiple defined in 2 places.'>irq_to_desc</a>(irq);
+<a id='L880' name='L880'></a> 880 
+<a id='L881' name='L881'></a> 881         <strong class='reserved'>if</strong> (desc) <em class='brace'>{</em>
+<a id='L882' name='L882'></a> 882                 <strong class='reserved'>if</strong> (check &amp; <a href='../S/356.html#L155' title='Defined at 155 in irq/internals.h.'>_IRQ_DESC_CHECK</a>) <em class='brace'>{</em>
+<a id='L883' name='L883'></a> 883                         <strong class='reserved'>if</strong> ((check &amp; <a href='../S/356.html#L156' title='Defined at 156 in irq/internals.h.'>_IRQ_DESC_PERCPU</a>) &amp;&amp;
+<a id='L884' name='L884'></a> 884                             !<a href='../S/340.html#L51' title='Defined at 51 in irq/settings.h.'>irq_settings_is_per_cpu_devid</a>(desc))
+<a id='L885' name='L885'></a> 885                                 <strong class='reserved'>return</strong> NULL;
+<a id='L886' name='L886'></a> 886 
+<a id='L887' name='L887'></a> 887                         <strong class='reserved'>if</strong> (!(check &amp; <a href='../S/356.html#L156' title='Defined at 156 in irq/internals.h.'>_IRQ_DESC_PERCPU</a>) &amp;&amp;
+<a id='L888' name='L888'></a> 888                             <a href='../S/340.html#L51' title='Defined at 51 in irq/settings.h.'>irq_settings_is_per_cpu_devid</a>(desc))
+<a id='L889' name='L889'></a> 889                                 <strong class='reserved'>return</strong> NULL;
+<a id='L890' name='L890'></a> 890                 <em class='brace'>}</em>
+<a id='L891' name='L891'></a> 891 
+<a id='L892' name='L892'></a> 892                 <strong class='reserved'>if</strong> (bus)
+<a id='L893' name='L893'></a> 893                         <a href='../S/356.html#L143' title='Defined at 143 in irq/internals.h.'>chip_bus_lock</a>(desc);
+<a id='L894' name='L894'></a> 894                 raw_spin_lock_irqsave(&amp;desc-&gt;lock, *flags);
+<a id='L895' name='L895'></a> 895         <em class='brace'>}</em>
+<a id='L896' name='L896'></a> 896         <strong class='reserved'>return</strong> desc;
+<a id='L897' name='L897'></a> 897 <em class='brace'>}</em>
+<a id='L898' name='L898'></a> 898 
+<a id='L899' name='L899'></a> 899 <strong class='reserved'>void</strong> <a href='../R/2102.html' title='Multiple referred from 3 places.'>__irq_put_desc_unlock</a>(<strong class='reserved'>struct</strong> irq_desc *desc, <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> flags, bool bus)
+<a id='L900' name='L900'></a> 900         __releases(&amp;desc-&gt;lock)
+<a id='L901' name='L901'></a> 901 <em class='brace'>{</em>
+<a id='L902' name='L902'></a> 902         raw_spin_unlock_irqrestore(&amp;desc-&gt;lock, flags);
+<a id='L903' name='L903'></a> 903         <strong class='reserved'>if</strong> (bus)
+<a id='L904' name='L904'></a> 904                 <a href='../S/356.html#L149' title='Defined at 149 in irq/internals.h.'>chip_bus_sync_unlock</a>(desc);
+<a id='L905' name='L905'></a> 905 <em class='brace'>}</em>
+<a id='L906' name='L906'></a> 906 
+<a id='L907' name='L907'></a> 907 <strong class='reserved'>int</strong> <a href='../S/343.html#L934' title='Referred from 934 in irq/irqdesc.c.'>irq_set_percpu_devid_partition</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq,
+<a id='L908' name='L908'></a> 908                                    <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> cpumask *affinity)
+<a id='L909' name='L909'></a> 909 <em class='brace'>{</em>
+<a id='L910' name='L910'></a> 910         <strong class='reserved'>struct</strong> irq_desc *desc = <a href='../D/8483.html' title='Multiple defined in 2 places.'>irq_to_desc</a>(irq);
+<a id='L911' name='L911'></a> 911 
+<a id='L912' name='L912'></a> 912         <strong class='reserved'>if</strong> (!desc)
+<a id='L913' name='L913'></a> 913                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L914' name='L914'></a> 914 
+<a id='L915' name='L915'></a> 915         <strong class='reserved'>if</strong> (desc-&gt;percpu_enabled)
+<a id='L916' name='L916'></a> 916                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L917' name='L917'></a> 917 
+<a id='L918' name='L918'></a> 918         desc-&gt;percpu_enabled = kzalloc(<strong class='reserved'>sizeof</strong>(*desc-&gt;percpu_enabled), GFP_KERNEL);
+<a id='L919' name='L919'></a> 919 
+<a id='L920' name='L920'></a> 920         <strong class='reserved'>if</strong> (!desc-&gt;percpu_enabled)
+<a id='L921' name='L921'></a> 921                 <strong class='reserved'>return</strong> -ENOMEM;
+<a id='L922' name='L922'></a> 922 
+<a id='L923' name='L923'></a> 923         <strong class='reserved'>if</strong> (affinity)
+<a id='L924' name='L924'></a> 924                 desc-&gt;percpu_affinity = affinity;
+<a id='L925' name='L925'></a> 925         <strong class='reserved'>else</strong>
+<a id='L926' name='L926'></a> 926                 desc-&gt;percpu_affinity = cpu_possible_mask;
+<a id='L927' name='L927'></a> 927 
+<a id='L928' name='L928'></a> 928         irq_set_percpu_devid_flags(irq);
+<a id='L929' name='L929'></a> 929         <strong class='reserved'>return</strong> 0;
+<a id='L930' name='L930'></a> 930 <em class='brace'>}</em>
+<a id='L931' name='L931'></a> 931 
+<a id='L932' name='L932'></a> 932 <strong class='reserved'>int</strong> irq_set_percpu_devid(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq)
+<a id='L933' name='L933'></a> 933 <em class='brace'>{</em>
+<a id='L934' name='L934'></a> 934         <strong class='reserved'>return</strong> <a href='../S/343.html#L907' title='Defined at 907 in irq/irqdesc.c.'>irq_set_percpu_devid_partition</a>(irq, NULL);
+<a id='L935' name='L935'></a> 935 <em class='brace'>}</em>
+<a id='L936' name='L936'></a> 936 
+<a id='L937' name='L937'></a> 937 <strong class='reserved'>int</strong> <a href='../S/343.html#L949' title='Referred from 949 in irq/irqdesc.c.'>irq_get_percpu_devid_partition</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq, <strong class='reserved'>struct</strong> cpumask *affinity)
+<a id='L938' name='L938'></a> 938 <em class='brace'>{</em>
+<a id='L939' name='L939'></a> 939         <strong class='reserved'>struct</strong> irq_desc *desc = <a href='../D/8483.html' title='Multiple defined in 2 places.'>irq_to_desc</a>(irq);
+<a id='L940' name='L940'></a> 940 
+<a id='L941' name='L941'></a> 941         <strong class='reserved'>if</strong> (!desc || !desc-&gt;percpu_enabled)
+<a id='L942' name='L942'></a> 942                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L943' name='L943'></a> 943 
+<a id='L944' name='L944'></a> 944         <strong class='reserved'>if</strong> (affinity)
+<a id='L945' name='L945'></a> 945                 cpumask_copy(affinity, desc-&gt;percpu_affinity);
+<a id='L946' name='L946'></a> 946 
+<a id='L947' name='L947'></a> 947         <strong class='reserved'>return</strong> 0;
+<a id='L948' name='L948'></a> 948 <em class='brace'>}</em>
+<a id='L949' name='L949'></a> 949 EXPORT_SYMBOL_GPL(<a href='../S/343.html#L937' title='Defined at 937 in irq/irqdesc.c.'>irq_get_percpu_devid_partition</a>);
+<a id='L950' name='L950'></a> 950 
+<a id='L951' name='L951'></a> 951 <strong class='reserved'>void</strong> kstat_incr_irq_this_cpu(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq)
+<a id='L952' name='L952'></a> 952 <em class='brace'>{</em>
+<a id='L953' name='L953'></a> 953         <a href='../S/356.html#L256' title='Defined at 256 in irq/internals.h.'>kstat_incr_irqs_this_cpu</a>(<a href='../D/8483.html' title='Multiple defined in 2 places.'>irq_to_desc</a>(irq));
+<a id='L954' name='L954'></a> 954 <em class='brace'>}</em>
+<a id='L955' name='L955'></a> 955 
+<a id='L956' name='L956'></a> 956 <em class='comment'>/**</em>
+<a id='L957' name='L957'></a> 957 <em class='comment'> * kstat_irqs_cpu - Get the statistics for an interrupt on a cpu</em>
+<a id='L958' name='L958'></a> 958 <em class='comment'> * @irq:        The interrupt number</em>
+<a id='L959' name='L959'></a> 959 <em class='comment'> * @cpu:        The cpu number</em>
+<a id='L960' name='L960'></a> 960 <em class='comment'> *</em>
+<a id='L961' name='L961'></a> 961 <em class='comment'> * Returns the sum of interrupt counts on @cpu since boot for</em>
+<a id='L962' name='L962'></a> 962 <em class='comment'> * @irq. The caller must ensure that the interrupt is not removed</em>
+<a id='L963' name='L963'></a> 963 <em class='comment'> * concurrently.</em>
+<a id='L964' name='L964'></a> 964 <em class='comment'> */</em>
+<a id='L965' name='L965'></a> 965 <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> <a href='../R/8709.html' title='Multiple referred from 2 places.'>kstat_irqs_cpu</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq, <strong class='reserved'>int</strong> cpu)
+<a id='L966' name='L966'></a> 966 <em class='brace'>{</em>
+<a id='L967' name='L967'></a> 967         <strong class='reserved'>struct</strong> irq_desc *desc = <a href='../D/8483.html' title='Multiple defined in 2 places.'>irq_to_desc</a>(irq);
+<a id='L968' name='L968'></a> 968 
+<a id='L969' name='L969'></a> 969         <strong class='reserved'>return</strong> desc &amp;&amp; desc-&gt;<a href='../S/343.html#L987' title='Defined at 987 in irq/irqdesc.c.'>kstat_irqs</a> ?
+<a id='L970' name='L970'></a> 970                         *per_cpu_ptr(desc-&gt;<a href='../S/343.html#L987' title='Defined at 987 in irq/irqdesc.c.'>kstat_irqs</a>, cpu) : 0;
+<a id='L971' name='L971'></a> 971 <em class='brace'>}</em>
+<a id='L972' name='L972'></a> 972 EXPORT_SYMBOL_GPL(<a href='../S/343.html#L965' title='Defined at 965 in irq/irqdesc.c.'>kstat_irqs_cpu</a>);
+<a id='L973' name='L973'></a> 973 
+<a id='L974' name='L974'></a> 974 <strong class='reserved'>static</strong> bool <a href='../S/343.html#L997' title='Referred from 997 in irq/irqdesc.c.'>irq_is_nmi</a>(<strong class='reserved'>struct</strong> irq_desc *desc)
+<a id='L975' name='L975'></a> 975 <em class='brace'>{</em>
+<a id='L976' name='L976'></a> 976         <strong class='reserved'>return</strong> desc-&gt;<a href='../S/356.html#L20' title='Defined at 20 in irq/internals.h.'>istate</a> &amp; <a href='../S/356.html#L64' title='Defined at 64 in irq/internals.h.'>IRQS_NMI</a>;
+<a id='L977' name='L977'></a> 977 <em class='brace'>}</em>
+<a id='L978' name='L978'></a> 978 
+<a id='L979' name='L979'></a> 979 <em class='comment'>/**</em>
+<a id='L980' name='L980'></a> 980 <em class='comment'> * kstat_irqs - Get the statistics for an interrupt</em>
+<a id='L981' name='L981'></a> 981 <em class='comment'> * @irq:        The interrupt number</em>
+<a id='L982' name='L982'></a> 982 <em class='comment'> *</em>
+<a id='L983' name='L983'></a> 983 <em class='comment'> * Returns the sum of interrupt counts on all cpus since boot for</em>
+<a id='L984' name='L984'></a> 984 <em class='comment'> * @irq. The caller must ensure that the interrupt is not removed</em>
+<a id='L985' name='L985'></a> 985 <em class='comment'> * concurrently.</em>
+<a id='L986' name='L986'></a> 986 <em class='comment'> */</em>
+<a id='L987' name='L987'></a> 987 <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> <a href='../R/8708.html' title='Multiple referred from 16 places.'>kstat_irqs</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq)
+<a id='L988' name='L988'></a> 988 <em class='brace'>{</em>
+<a id='L989' name='L989'></a> 989         <strong class='reserved'>struct</strong> irq_desc *desc = <a href='../D/8483.html' title='Multiple defined in 2 places.'>irq_to_desc</a>(irq);
+<a id='L990' name='L990'></a> 990         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> sum = 0;
+<a id='L991' name='L991'></a> 991         <strong class='reserved'>int</strong> cpu;
+<a id='L992' name='L992'></a> 992 
+<a id='L993' name='L993'></a> 993         <strong class='reserved'>if</strong> (!desc || !desc-&gt;<a href='../S/343.html#L987' title='Defined at 987 in irq/irqdesc.c.'>kstat_irqs</a>)
+<a id='L994' name='L994'></a> 994                 <strong class='reserved'>return</strong> 0;
+<a id='L995' name='L995'></a> 995         <strong class='reserved'>if</strong> (!<a href='../S/340.html#L51' title='Defined at 51 in irq/settings.h.'>irq_settings_is_per_cpu_devid</a>(desc) &amp;&amp;
+<a id='L996' name='L996'></a> 996             !<a href='../S/340.html#L46' title='Defined at 46 in irq/settings.h.'>irq_settings_is_per_cpu</a>(desc) &amp;&amp;
+<a id='L997' name='L997'></a> 997             !<a href='../S/343.html#L974' title='Defined at 974 in irq/irqdesc.c.'>irq_is_nmi</a>(desc))
+<a id='L998' name='L998'></a> 998             <strong class='reserved'>return</strong> desc-&gt;tot_count;
+<a id='L999' name='L999'></a> 999 
+<a id='L1000' name='L1000'></a>1000         for_each_possible_cpu(cpu)
+<a id='L1001' name='L1001'></a>1001                 sum += *per_cpu_ptr(desc-&gt;<a href='../S/343.html#L987' title='Defined at 987 in irq/irqdesc.c.'>kstat_irqs</a>, cpu);
+<a id='L1002' name='L1002'></a>1002         <strong class='reserved'>return</strong> sum;
+<a id='L1003' name='L1003'></a>1003 <em class='brace'>}</em>
+<a id='L1004' name='L1004'></a>1004 
+<a id='L1005' name='L1005'></a>1005 <em class='comment'>/**</em>
+<a id='L1006' name='L1006'></a>1006 <em class='comment'> * kstat_irqs_usr - Get the statistics for an interrupt</em>
+<a id='L1007' name='L1007'></a>1007 <em class='comment'> * @irq:        The interrupt number</em>
+<a id='L1008' name='L1008'></a>1008 <em class='comment'> *</em>
+<a id='L1009' name='L1009'></a>1009 <em class='comment'> * Returns the sum of interrupt counts on all cpus since boot for @irq.</em>
+<a id='L1010' name='L1010'></a>1010 <em class='comment'> * Contrary to kstat_irqs() this can be called from any context.</em>
+<a id='L1011' name='L1011'></a>1011 <em class='comment'> * It uses rcu since a concurrent removal of an interrupt descriptor is</em>
+<a id='L1012' name='L1012'></a>1012 <em class='comment'> * observing an rcu grace period before delayed_free_desc()/irq_kobj_release().</em>
+<a id='L1013' name='L1013'></a>1013 <em class='comment'> */</em>
+<a id='L1014' name='L1014'></a>1014 <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> <a href='../S/343.html#L1023' title='Referred from 1023 in irq/irqdesc.c.'>kstat_irqs_usr</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq)
+<a id='L1015' name='L1015'></a>1015 <em class='brace'>{</em>
+<a id='L1016' name='L1016'></a>1016         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> sum;
+<a id='L1017' name='L1017'></a>1017 
+<a id='L1018' name='L1018'></a>1018         rcu_read_lock();
+<a id='L1019' name='L1019'></a>1019         sum = <a href='../S/343.html#L987' title='Defined at 987 in irq/irqdesc.c.'>kstat_irqs</a>(irq);
+<a id='L1020' name='L1020'></a>1020         rcu_read_unlock();
+<a id='L1021' name='L1021'></a>1021         <strong class='reserved'>return</strong> sum;
+<a id='L1022' name='L1022'></a>1022 <em class='brace'>}</em>
+<a id='L1023' name='L1023'></a>1023 EXPORT_SYMBOL_GPL(<a href='../S/343.html#L1014' title='Defined at 1014 in irq/irqdesc.c.'>kstat_irqs_usr</a>);
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L28'>[^]</a><a href='#L1014'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>tracer_flags</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/290.html#L54'>tracer_flags</a>       54 trace/blktrace.c static struct tracer_flags blk_tracer_flags = {</span>
+<span class='curline'><a href='../S/271.html#L4790'>tracer_flags</a>     4790 trace/trace.c  	u32 tracer_flags;</span>
+<span class='curline'><a href='../S/271.html#L4794'>tracer_flags</a>     4794 trace/trace.c  	tracer_flags = tr-&gt;current_trace-&gt;flags-&gt;val;</span>
+<span class='curline'><a href='../S/271.html#L4805'>tracer_flags</a>     4805 trace/trace.c  		if (tracer_flags &amp; trace_opts[i].bit)</span>
+<span class='curline'><a href='../S/271.html#L4816'>tracer_flags</a>     4816 trace/trace.c  			       struct tracer_flags *tracer_flags,</span>
+<span class='curline'><a href='../S/271.html#L4819'>tracer_flags</a>     4819 trace/trace.c  	struct tracer *trace = tracer_flags-&gt;trace;</span>
+<span class='curline'><a href='../S/271.html#L4822'>tracer_flags</a>     4822 trace/trace.c  	ret = trace-&gt;set_flag(tr, tracer_flags-&gt;val, opts-&gt;bit, !neg);</span>
+<span class='curline'><a href='../S/271.html#L4827'>tracer_flags</a>     4827 trace/trace.c  		tracer_flags-&gt;val &amp;= ~opts-&gt;bit;</span>
+<span class='curline'><a href='../S/271.html#L4829'>tracer_flags</a>     4829 trace/trace.c  		tracer_flags-&gt;val |= opts-&gt;bit;</span>
+<span class='curline'><a href='../S/271.html#L4837'>tracer_flags</a>     4837 trace/trace.c  	struct tracer_flags *tracer_flags = trace-&gt;flags;</span>
+<span class='curline'><a href='../S/271.html#L4841'>tracer_flags</a>     4841 trace/trace.c  	for (i = 0; tracer_flags-&gt;opts[i].name; i++) {</span>
+<span class='curline'><a href='../S/271.html#L4842'>tracer_flags</a>     4842 trace/trace.c  		opts = &amp;tracer_flags-&gt;opts[i];</span>
+<span class='curline'><a href='../S/271.html#L8316'>tracer_flags</a>     8316 trace/trace.c  			 struct tracer_flags *flags,</span>
+<span class='curline'><a href='../S/271.html#L8339'>tracer_flags</a>     8339 trace/trace.c  	struct tracer_flags *flags;</span>
+<span class='curline'><a href='../S/256.html#L492'>tracer_flags</a>      492 trace/trace.h  	struct tracer_flags		*flags;</span>
+<span class='curline'><a href='../S/256.html#L550'>tracer_flags</a>      550 trace/trace.h  	struct tracer_flags	*flags;</span>
+<span class='curline'><a href='../S/307.html#L30'>tracer_flags</a>       30 trace/trace_functions.c static struct tracer_flags func_flags;</span>
+<span class='curline'><a href='../S/307.html#L221'>tracer_flags</a>      221 trace/trace_functions.c static struct tracer_flags func_flags = {</span>
+<span class='curline'><a href='../S/287.html#L72'>tracer_flags</a>       72 trace/trace_functions_graph.c static struct tracer_flags tracer_flags = {</span>
+<span class='curline'><a href='../S/287.html#L1102'>tracer_flags</a>     1102 trace/trace_functions_graph.c 	return print_graph_function_flags(iter, tracer_flags.val);</span>
+<span class='curline'><a href='../S/287.html#L1178'>tracer_flags</a>     1178 trace/trace_functions_graph.c 	print_graph_headers_flags(s, tracer_flags.val);</span>
+<span class='curline'><a href='../S/287.html#L1292'>tracer_flags</a>     1292 trace/trace_functions_graph.c 	.flags		= &amp;tracer_flags,</span>
+<span class='curline'><a href='../S/266.html#L29'>tracer_flags</a>       29 trace/trace_nop.c static struct tracer_flags nop_flags = {</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,628 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>bpf/trampoline.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/494.html'>bpf</a>/trampoline.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L29'>[^]</a><a href='#L566'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L29' title='Defined at 29.'>bpf_jit_alloc_exec_page</a></li>
+<li><a href='#L46' title='Defined at 46.'>bpf_image_ksym_add</a></li>
+<li><a href='#L55' title='Defined at 55.'>bpf_image_ksym_del</a></li>
+<li><a href='#L62' title='Defined at 62.'>bpf_trampoline_lookup</a></li>
+<li><a href='#L92' title='Defined at 92.'>is_ftrace_location</a></li>
+<li><a href='#L104' title='Defined at 104.'>unregister_fentry</a></li>
+<li><a href='#L116' title='Defined at 116.'>modify_fentry</a></li>
+<li><a href='#L129' title='Defined at 129.'>register_fentry</a></li>
+<li><a href='#L147' title='Defined at 147.'>bpf_trampoline_get_progs</a></li>
+<li><a href='#L170' title='Defined at 170.'>__bpf_tramp_image_put_deferred</a></li>
+<li><a href='#L184' title='Defined at 184.'>__bpf_tramp_image_put_rcu</a></li>
+<li><a href='#L194' title='Defined at 194.'>__bpf_tramp_image_release</a></li>
+<li><a href='#L203' title='Defined at 203.'>__bpf_tramp_image_put_rcu_tasks</a></li>
+<li><a href='#L216' title='Defined at 216.'>bpf_tramp_image_put</a></li>
+<li><a href='#L264' title='Defined at 264.'>bpf_tramp_image_alloc</a></li>
+<li><a href='#L304' title='Defined at 304.'>bpf_trampoline_update</a></li>
+<li><a href='#L358' title='Defined at 358.'>bpf_attach_type_to_tramp</a></li>
+<li><a href='#L380' title='Defined at 380.'>bpf_trampoline_link_prog</a></li>
+<li><a href='#L429' title='Defined at 429.'>bpf_trampoline_unlink_prog</a></li>
+<li><a href='#L451' title='Defined at 451.'>bpf_trampoline_get</a></li>
+<li><a href='#L471' title='Defined at 471.'>bpf_trampoline_put</a></li>
+<li><a href='#L502' title='Defined at 502.'>__bpf_prog_enter</a></li>
+<li><a href='#L514' title='Defined at 514.'>__bpf_prog_exit</a></li>
+<li><a href='#L536' title='Defined at 536.'>__bpf_prog_enter_sleepable</a></li>
+<li><a href='#L542' title='Defined at 542.'>__bpf_prog_exit_sleepable</a></li>
+<li><a href='#L547' title='Defined at 547.'>__bpf_tramp_enter</a></li>
+<li><a href='#L552' title='Defined at 552.'>__bpf_tramp_exit</a></li>
+<li><a href='#L558' title='Defined at 558.'>arch_prepare_bpf_trampoline</a></li>
+<li><a href='#L566' title='Defined at 566.'>init_trampolines</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0-only</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/* Copyright (c) 2019 Facebook */</em>
+<a id='L3' name='L3'></a>   3 <em class='sharp'>#include</em> &lt;linux/hash.h&gt;
+<a id='L4' name='L4'></a>   4 <em class='sharp'>#include</em> &lt;linux/bpf.h&gt;
+<a id='L5' name='L5'></a>   5 <em class='sharp'>#include</em> &lt;linux/filter.h&gt;
+<a id='L6' name='L6'></a>   6 <em class='sharp'>#include</em> &lt;linux/ftrace.h&gt;
+<a id='L7' name='L7'></a>   7 <em class='sharp'>#include</em> &lt;linux/rbtree_latch.h&gt;
+<a id='L8' name='L8'></a>   8 <em class='sharp'>#include</em> &lt;linux/perf_event.h&gt;
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> &lt;linux/btf.h&gt;
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;linux/rcupdate_trace.h&gt;
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;linux/rcupdate_wait.h&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;trace/hooks/memory.h&gt;
+<a id='L13' name='L13'></a>  13 
+<a id='L14' name='L14'></a>  14 <em class='comment'>/* dummy _ops. The verifier will operate on target program's ops. */</em>
+<a id='L15' name='L15'></a>  15 <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> bpf_verifier_ops bpf_extension_verifier_ops = <em class='brace'>{</em>
+<a id='L16' name='L16'></a>  16 <em class='brace'>}</em>;
+<a id='L17' name='L17'></a>  17 <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> bpf_prog_ops bpf_extension_prog_ops = <em class='brace'>{</em>
+<a id='L18' name='L18'></a>  18 <em class='brace'>}</em>;
+<a id='L19' name='L19'></a>  19 
+<a id='L20' name='L20'></a>  20 <em class='comment'>/* btf_vmlinux has ~22k attachable functions. 1k htab is enough. */</em>
+<a id='L21' name='L21'></a>  21 <em class='sharp'>#define</em> <a href='../R/1542.html' title='Multiple referred from 2 places.'>TRAMPOLINE_HASH_BITS</a> 10
+<a id='L22' name='L22'></a>  22 <em class='sharp'>#define</em> <a href='../R/1543.html' title='Multiple referred from 2 places.'>TRAMPOLINE_TABLE_SIZE</a> (1 &lt;&lt; <a href='../S/373.html#L21' title='Defined at 21 in bpf/trampoline.c.'>TRAMPOLINE_HASH_BITS</a>)
+<a id='L23' name='L23'></a>  23 
+<a id='L24' name='L24'></a>  24 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> hlist_head trampoline_table[<a href='../S/373.html#L22' title='Defined at 22 in bpf/trampoline.c.'>TRAMPOLINE_TABLE_SIZE</a>];
+<a id='L25' name='L25'></a>  25 
+<a id='L26' name='L26'></a>  26 <em class='comment'>/* serializes access to trampoline_table */</em>
+<a id='L27' name='L27'></a>  27 <strong class='reserved'>static</strong> DEFINE_MUTEX(trampoline_mutex);
+<a id='L28' name='L28'></a>  28 
+<a id='L29' name='L29'></a>  29 <strong class='reserved'>void</strong> *<a href='../R/3600.html' title='Multiple referred from 2 places.'>bpf_jit_alloc_exec_page</a>(<strong class='reserved'>void</strong>)
+<a id='L30' name='L30'></a>  30 <em class='brace'>{</em>
+<a id='L31' name='L31'></a>  31         <strong class='reserved'>void</strong> *image;
+<a id='L32' name='L32'></a>  32 
+<a id='L33' name='L33'></a>  33         image = <a href='../S/371.html#L848' title='Defined at 848 in bpf/core.c.'>bpf_jit_alloc_exec</a>(PAGE_SIZE);
+<a id='L34' name='L34'></a>  34         <strong class='reserved'>if</strong> (!image)
+<a id='L35' name='L35'></a>  35                 <strong class='reserved'>return</strong> NULL;
+<a id='L36' name='L36'></a>  36 
+<a id='L37' name='L37'></a>  37         set_vm_flush_reset_perms(image);
+<a id='L38' name='L38'></a>  38         <em class='comment'>/* Keep image as writeable. The alternative is to keep flipping ro/rw</em>
+<a id='L39' name='L39'></a>  39 <em class='comment'>         * everytime new program is attached or detached.</em>
+<a id='L40' name='L40'></a>  40 <em class='comment'>         */</em>
+<a id='L41' name='L41'></a>  41         set_memory_x((<strong class='reserved'>long</strong>)image, 1);
+<a id='L42' name='L42'></a>  42         trace_android_vh_set_memory_x((<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)image, 1);
+<a id='L43' name='L43'></a>  43         <strong class='reserved'>return</strong> image;
+<a id='L44' name='L44'></a>  44 <em class='brace'>}</em>
+<a id='L45' name='L45'></a>  45 
+<a id='L46' name='L46'></a>  46 <strong class='reserved'>void</strong> <a href='../R/3550.html' title='Multiple referred from 2 places.'>bpf_image_ksym_add</a>(<strong class='reserved'>void</strong> *data, <strong class='reserved'>struct</strong> bpf_ksym *ksym)
+<a id='L47' name='L47'></a>  47 <em class='brace'>{</em>
+<a id='L48' name='L48'></a>  48         ksym-&gt;start = (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>) data;
+<a id='L49' name='L49'></a>  49         ksym-&gt;end = ksym-&gt;start + PAGE_SIZE;
+<a id='L50' name='L50'></a>  50         <a href='../S/371.html#L616' title='Defined at 616 in bpf/core.c.'>bpf_ksym_add</a>(ksym);
+<a id='L51' name='L51'></a>  51         <a href='../S/331.html#L8566' title='Defined at 8566 in events/core.c.'>perf_event_ksymbol</a>(PERF_RECORD_KSYMBOL_TYPE_BPF, ksym-&gt;start,
+<a id='L52' name='L52'></a>  52                            PAGE_SIZE, false, ksym-&gt;name);
+<a id='L53' name='L53'></a>  53 <em class='brace'>}</em>
+<a id='L54' name='L54'></a>  54 
+<a id='L55' name='L55'></a>  55 <strong class='reserved'>void</strong> <a href='../S/373.html#L175' title='Referred from 175 in bpf/trampoline.c.'>bpf_image_ksym_del</a>(<strong class='reserved'>struct</strong> bpf_ksym *ksym)
+<a id='L56' name='L56'></a>  56 <em class='brace'>{</em>
+<a id='L57' name='L57'></a>  57         <a href='../S/371.html#L634' title='Defined at 634 in bpf/core.c.'>bpf_ksym_del</a>(ksym);
+<a id='L58' name='L58'></a>  58         <a href='../S/331.html#L8566' title='Defined at 8566 in events/core.c.'>perf_event_ksymbol</a>(PERF_RECORD_KSYMBOL_TYPE_BPF, ksym-&gt;start,
+<a id='L59' name='L59'></a>  59                            PAGE_SIZE, true, ksym-&gt;name);
+<a id='L60' name='L60'></a>  60 <em class='brace'>}</em>
+<a id='L61' name='L61'></a>  61 
+<a id='L62' name='L62'></a>  62 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> bpf_trampoline *<a href='../S/373.html#L456' title='Referred from 456 in bpf/trampoline.c.'>bpf_trampoline_lookup</a>(u64 key)
+<a id='L63' name='L63'></a>  63 <em class='brace'>{</em>
+<a id='L64' name='L64'></a>  64         <strong class='reserved'>struct</strong> bpf_trampoline *tr;
+<a id='L65' name='L65'></a>  65         <strong class='reserved'>struct</strong> hlist_head *head;
+<a id='L66' name='L66'></a>  66         <strong class='reserved'>int</strong> i;
+<a id='L67' name='L67'></a>  67 
+<a id='L68' name='L68'></a>  68         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;trampoline_mutex);
+<a id='L69' name='L69'></a>  69         head = &amp;trampoline_table[hash_64(key, <a href='../S/373.html#L21' title='Defined at 21 in bpf/trampoline.c.'>TRAMPOLINE_HASH_BITS</a>)];
+<a id='L70' name='L70'></a>  70         hlist_for_each_entry(tr, head, hlist) <em class='brace'>{</em>
+<a id='L71' name='L71'></a>  71                 <strong class='reserved'>if</strong> (tr-&gt;key == key) <em class='brace'>{</em>
+<a id='L72' name='L72'></a>  72                         refcount_inc(&amp;tr-&gt;refcnt);
+<a id='L73' name='L73'></a>  73                         <strong class='reserved'>goto</strong> out;
+<a id='L74' name='L74'></a>  74                 <em class='brace'>}</em>
+<a id='L75' name='L75'></a>  75         <em class='brace'>}</em>
+<a id='L76' name='L76'></a>  76         tr = kzalloc(<strong class='reserved'>sizeof</strong>(*tr), GFP_KERNEL);
+<a id='L77' name='L77'></a>  77         <strong class='reserved'>if</strong> (!tr)
+<a id='L78' name='L78'></a>  78                 <strong class='reserved'>goto</strong> out;
+<a id='L79' name='L79'></a>  79 
+<a id='L80' name='L80'></a>  80         tr-&gt;key = key;
+<a id='L81' name='L81'></a>  81         INIT_HLIST_NODE(&amp;tr-&gt;hlist);
+<a id='L82' name='L82'></a>  82         hlist_add_head(&amp;tr-&gt;hlist, head);
+<a id='L83' name='L83'></a>  83         refcount_set(&amp;tr-&gt;refcnt, 1);
+<a id='L84' name='L84'></a>  84         mutex_init(&amp;tr-&gt;mutex);
+<a id='L85' name='L85'></a>  85         <strong class='reserved'>for</strong> (i = 0; i &lt; BPF_TRAMP_MAX; i++)
+<a id='L86' name='L86'></a>  86                 INIT_HLIST_HEAD(&amp;tr-&gt;progs_hlist[i]);
+<a id='L87' name='L87'></a>  87 out:
+<a id='L88' name='L88'></a>  88         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;trampoline_mutex);
+<a id='L89' name='L89'></a>  89         <strong class='reserved'>return</strong> tr;
+<a id='L90' name='L90'></a>  90 <em class='brace'>}</em>
+<a id='L91' name='L91'></a>  91 
+<a id='L92' name='L92'></a>  92 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/373.html#L134' title='Referred from 134 in bpf/trampoline.c.'>is_ftrace_location</a>(<strong class='reserved'>void</strong> *ip)
+<a id='L93' name='L93'></a>  93 <em class='brace'>{</em>
+<a id='L94' name='L94'></a>  94         <strong class='reserved'>long</strong> addr;
+<a id='L95' name='L95'></a>  95 
+<a id='L96' name='L96'></a>  96         addr = <a href='../S/270.html#L1584' title='Defined at 1584 in trace/ftrace.c.'>ftrace_location</a>((<strong class='reserved'>long</strong>)ip);
+<a id='L97' name='L97'></a>  97         <strong class='reserved'>if</strong> (!addr)
+<a id='L98' name='L98'></a>  98                 <strong class='reserved'>return</strong> 0;
+<a id='L99' name='L99'></a>  99         <strong class='reserved'>if</strong> (WARN_ON_ONCE(addr != (<strong class='reserved'>long</strong>)ip))
+<a id='L100' name='L100'></a> 100                 <strong class='reserved'>return</strong> -EFAULT;
+<a id='L101' name='L101'></a> 101         <strong class='reserved'>return</strong> 1;
+<a id='L102' name='L102'></a> 102 <em class='brace'>}</em>
+<a id='L103' name='L103'></a> 103 
+<a id='L104' name='L104'></a> 104 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/373.html#L316' title='Referred from 316 in bpf/trampoline.c.'>unregister_fentry</a>(<strong class='reserved'>struct</strong> bpf_trampoline *tr, <strong class='reserved'>void</strong> *old_addr)
+<a id='L105' name='L105'></a> 105 <em class='brace'>{</em>
+<a id='L106' name='L106'></a> 106         <strong class='reserved'>void</strong> *ip = tr-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>.addr;
+<a id='L107' name='L107'></a> 107         <strong class='reserved'>int</strong> ret;
+<a id='L108' name='L108'></a> 108 
+<a id='L109' name='L109'></a> 109         <strong class='reserved'>if</strong> (tr-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>.ftrace_managed)
+<a id='L110' name='L110'></a> 110                 ret = <a href='../S/270.html#L5212' title='Defined at 5212 in trace/ftrace.c.'>unregister_ftrace_direct</a>((<strong class='reserved'>long</strong>)ip, (<strong class='reserved'>long</strong>)old_addr);
+<a id='L111' name='L111'></a> 111         <strong class='reserved'>else</strong>
+<a id='L112' name='L112'></a> 112                 ret = <a href='../S/371.html#L2291' title='Defined at 2291 in bpf/core.c.'>bpf_arch_text_poke</a>(ip, BPF_MOD_CALL, old_addr, NULL);
+<a id='L113' name='L113'></a> 113         <strong class='reserved'>return</strong> ret;
+<a id='L114' name='L114'></a> 114 <em class='brace'>}</em>
+<a id='L115' name='L115'></a> 115 
+<a id='L116' name='L116'></a> 116 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/373.html#L343' title='Referred from 343 in bpf/trampoline.c.'>modify_fentry</a>(<strong class='reserved'>struct</strong> bpf_trampoline *tr, <strong class='reserved'>void</strong> *old_addr, <strong class='reserved'>void</strong> *new_addr)
+<a id='L117' name='L117'></a> 117 <em class='brace'>{</em>
+<a id='L118' name='L118'></a> 118         <strong class='reserved'>void</strong> *ip = tr-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>.addr;
+<a id='L119' name='L119'></a> 119         <strong class='reserved'>int</strong> ret;
+<a id='L120' name='L120'></a> 120 
+<a id='L121' name='L121'></a> 121         <strong class='reserved'>if</strong> (tr-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>.ftrace_managed)
+<a id='L122' name='L122'></a> 122                 ret = <a href='../S/270.html#L5340' title='Defined at 5340 in trace/ftrace.c.'>modify_ftrace_direct</a>((<strong class='reserved'>long</strong>)ip, (<strong class='reserved'>long</strong>)old_addr, (<strong class='reserved'>long</strong>)new_addr);
+<a id='L123' name='L123'></a> 123         <strong class='reserved'>else</strong>
+<a id='L124' name='L124'></a> 124                 ret = <a href='../S/371.html#L2291' title='Defined at 2291 in bpf/core.c.'>bpf_arch_text_poke</a>(ip, BPF_MOD_CALL, old_addr, new_addr);
+<a id='L125' name='L125'></a> 125         <strong class='reserved'>return</strong> ret;
+<a id='L126' name='L126'></a> 126 <em class='brace'>}</em>
+<a id='L127' name='L127'></a> 127 
+<a id='L128' name='L128'></a> 128 <em class='comment'>/* first time registering */</em>
+<a id='L129' name='L129'></a> 129 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/373.html#L346' title='Referred from 346 in bpf/trampoline.c.'>register_fentry</a>(<strong class='reserved'>struct</strong> bpf_trampoline *tr, <strong class='reserved'>void</strong> *new_addr)
+<a id='L130' name='L130'></a> 130 <em class='brace'>{</em>
+<a id='L131' name='L131'></a> 131         <strong class='reserved'>void</strong> *ip = tr-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>.addr;
+<a id='L132' name='L132'></a> 132         <strong class='reserved'>int</strong> ret;
+<a id='L133' name='L133'></a> 133 
+<a id='L134' name='L134'></a> 134         ret = <a href='../S/373.html#L92' title='Defined at 92 in bpf/trampoline.c.'>is_ftrace_location</a>(ip);
+<a id='L135' name='L135'></a> 135         <strong class='reserved'>if</strong> (ret &lt; 0)
+<a id='L136' name='L136'></a> 136                 <strong class='reserved'>return</strong> ret;
+<a id='L137' name='L137'></a> 137         tr-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>.ftrace_managed = ret;
+<a id='L138' name='L138'></a> 138 
+<a id='L139' name='L139'></a> 139         <strong class='reserved'>if</strong> (tr-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>.ftrace_managed)
+<a id='L140' name='L140'></a> 140                 ret = <a href='../S/270.html#L5080' title='Defined at 5080 in trace/ftrace.c.'>register_ftrace_direct</a>((<strong class='reserved'>long</strong>)ip, (<strong class='reserved'>long</strong>)new_addr);
+<a id='L141' name='L141'></a> 141         <strong class='reserved'>else</strong>
+<a id='L142' name='L142'></a> 142                 ret = <a href='../S/371.html#L2291' title='Defined at 2291 in bpf/core.c.'>bpf_arch_text_poke</a>(ip, BPF_MOD_CALL, NULL, new_addr);
+<a id='L143' name='L143'></a> 143         <strong class='reserved'>return</strong> ret;
+<a id='L144' name='L144'></a> 144 <em class='brace'>}</em>
+<a id='L145' name='L145'></a> 145 
+<a id='L146' name='L146'></a> 146 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> bpf_tramp_progs *
+<a id='L147' name='L147'></a> 147 <a href='../S/373.html#L311' title='Referred from 311 in bpf/trampoline.c.'>bpf_trampoline_get_progs</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> bpf_trampoline *tr, <strong class='reserved'>int</strong> *total)
+<a id='L148' name='L148'></a> 148 <em class='brace'>{</em>
+<a id='L149' name='L149'></a> 149         <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> <a href='../S/387.html#L41' title='Defined at 41 in bpf/preload/iterators/iterators.bpf.c.'>bpf_prog_aux</a> *aux;
+<a id='L150' name='L150'></a> 150         <strong class='reserved'>struct</strong> bpf_tramp_progs *tprogs;
+<a id='L151' name='L151'></a> 151         <strong class='reserved'>struct</strong> <a href='../S/387.html#L50' title='Defined at 50 in bpf/preload/iterators/iterators.bpf.c.'>bpf_prog</a> **progs;
+<a id='L152' name='L152'></a> 152         <strong class='reserved'>int</strong> kind;
+<a id='L153' name='L153'></a> 153 
+<a id='L154' name='L154'></a> 154         *total = 0;
+<a id='L155' name='L155'></a> 155         tprogs = kcalloc(BPF_TRAMP_MAX, <strong class='reserved'>sizeof</strong>(*tprogs), GFP_KERNEL);
+<a id='L156' name='L156'></a> 156         <strong class='reserved'>if</strong> (!tprogs)
+<a id='L157' name='L157'></a> 157                 <strong class='reserved'>return</strong> ERR_PTR(-ENOMEM);
+<a id='L158' name='L158'></a> 158 
+<a id='L159' name='L159'></a> 159         <strong class='reserved'>for</strong> (kind = 0; kind &lt; BPF_TRAMP_MAX; kind++) <em class='brace'>{</em>
+<a id='L160' name='L160'></a> 160                 tprogs[kind].nr_progs = tr-&gt;progs_cnt[kind];
+<a id='L161' name='L161'></a> 161                 *total += tr-&gt;progs_cnt[kind];
+<a id='L162' name='L162'></a> 162                 progs = tprogs[kind].progs;
+<a id='L163' name='L163'></a> 163 
+<a id='L164' name='L164'></a> 164                 hlist_for_each_entry(aux, &amp;tr-&gt;progs_hlist[kind], tramp_hlist)
+<a id='L165' name='L165'></a> 165                         *progs++ = aux-&gt;prog;
+<a id='L166' name='L166'></a> 166         <em class='brace'>}</em>
+<a id='L167' name='L167'></a> 167         <strong class='reserved'>return</strong> tprogs;
+<a id='L168' name='L168'></a> 168 <em class='brace'>}</em>
+<a id='L169' name='L169'></a> 169 
+<a id='L170' name='L170'></a> 170 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/373.html#L189' title='Referred from 189 in bpf/trampoline.c.'>__bpf_tramp_image_put_deferred</a>(<strong class='reserved'>struct</strong> work_struct *work)
+<a id='L171' name='L171'></a> 171 <em class='brace'>{</em>
+<a id='L172' name='L172'></a> 172         <strong class='reserved'>struct</strong> bpf_tramp_image *im;
+<a id='L173' name='L173'></a> 173 
+<a id='L174' name='L174'></a> 174         im = container_of(work, <strong class='reserved'>struct</strong> bpf_tramp_image, work);
+<a id='L175' name='L175'></a> 175         <a href='../S/373.html#L55' title='Defined at 55 in bpf/trampoline.c.'>bpf_image_ksym_del</a>(&amp;im-&gt;ksym);
+<a id='L176' name='L176'></a> 176         trace_android_vh_set_memory_nx((<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)im-&gt;image, 1);
+<a id='L177' name='L177'></a> 177         <a href='../S/371.html#L853' title='Defined at 853 in bpf/core.c.'>bpf_jit_free_exec</a>(im-&gt;image);
+<a id='L178' name='L178'></a> 178         <a href='../S/371.html#L843' title='Defined at 843 in bpf/core.c.'>bpf_jit_uncharge_modmem</a>(1);
+<a id='L179' name='L179'></a> 179         percpu_ref_exit(&amp;im-&gt;pcref);
+<a id='L180' name='L180'></a> 180         kfree_rcu(im, rcu);
+<a id='L181' name='L181'></a> 181 <em class='brace'>}</em>
+<a id='L182' name='L182'></a> 182 
+<a id='L183' name='L183'></a> 183 <em class='comment'>/* callback, fexit step 3 or fentry step 2 */</em>
+<a id='L184' name='L184'></a> 184 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/1814.html' title='Multiple referred from 2 places.'>__bpf_tramp_image_put_rcu</a>(<strong class='reserved'>struct</strong> rcu_head *rcu)
+<a id='L185' name='L185'></a> 185 <em class='brace'>{</em>
+<a id='L186' name='L186'></a> 186         <strong class='reserved'>struct</strong> bpf_tramp_image *im;
+<a id='L187' name='L187'></a> 187 
+<a id='L188' name='L188'></a> 188         im = container_of(rcu, <strong class='reserved'>struct</strong> bpf_tramp_image, rcu);
+<a id='L189' name='L189'></a> 189         INIT_WORK(&amp;im-&gt;work, <a href='../S/373.html#L170' title='Defined at 170 in bpf/trampoline.c.'>__bpf_tramp_image_put_deferred</a>);
+<a id='L190' name='L190'></a> 190         schedule_work(&amp;im-&gt;work);
+<a id='L191' name='L191'></a> 191 <em class='brace'>}</em>
+<a id='L192' name='L192'></a> 192 
+<a id='L193' name='L193'></a> 193 <em class='comment'>/* callback, fexit step 2. Called after percpu_ref_kill confirms. */</em>
+<a id='L194' name='L194'></a> 194 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/373.html#L284' title='Referred from 284 in bpf/trampoline.c.'>__bpf_tramp_image_release</a>(<strong class='reserved'>struct</strong> percpu_ref *pcref)
+<a id='L195' name='L195'></a> 195 <em class='brace'>{</em>
+<a id='L196' name='L196'></a> 196         <strong class='reserved'>struct</strong> bpf_tramp_image *im;
+<a id='L197' name='L197'></a> 197 
+<a id='L198' name='L198'></a> 198         im = container_of(pcref, <strong class='reserved'>struct</strong> bpf_tramp_image, pcref);
+<a id='L199' name='L199'></a> 199         <a href='../S/125.html#L517' title='Defined at 517 in rcu/tasks.h.'>call_rcu_tasks</a>(&amp;im-&gt;rcu, <a href='../S/373.html#L184' title='Defined at 184 in bpf/trampoline.c.'>__bpf_tramp_image_put_rcu</a>);
+<a id='L200' name='L200'></a> 200 <em class='brace'>}</em>
+<a id='L201' name='L201'></a> 201 
+<a id='L202' name='L202'></a> 202 <em class='comment'>/* callback, fexit or fentry step 1 */</em>
+<a id='L203' name='L203'></a> 203 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/1815.html' title='Multiple referred from 2 places.'>__bpf_tramp_image_put_rcu_tasks</a>(<strong class='reserved'>struct</strong> rcu_head *rcu)
+<a id='L204' name='L204'></a> 204 <em class='brace'>{</em>
+<a id='L205' name='L205'></a> 205         <strong class='reserved'>struct</strong> bpf_tramp_image *im;
+<a id='L206' name='L206'></a> 206 
+<a id='L207' name='L207'></a> 207         im = container_of(rcu, <strong class='reserved'>struct</strong> bpf_tramp_image, rcu);
+<a id='L208' name='L208'></a> 208         <strong class='reserved'>if</strong> (im-&gt;ip_after_call)
+<a id='L209' name='L209'></a> 209                 <em class='comment'>/* the case of fmod_ret/fexit trampoline and CONFIG_PREEMPTION=y */</em>
+<a id='L210' name='L210'></a> 210                 percpu_ref_kill(&amp;im-&gt;pcref);
+<a id='L211' name='L211'></a> 211         <strong class='reserved'>else</strong>
+<a id='L212' name='L212'></a> 212                 <em class='comment'>/* the case of fentry trampoline */</em>
+<a id='L213' name='L213'></a> 213                 <a href='../S/125.html#L517' title='Defined at 517 in rcu/tasks.h.'>call_rcu_tasks</a>(&amp;im-&gt;rcu, <a href='../S/373.html#L184' title='Defined at 184 in bpf/trampoline.c.'>__bpf_tramp_image_put_rcu</a>);
+<a id='L214' name='L214'></a> 214 <em class='brace'>}</em>
+<a id='L215' name='L215'></a> 215 
+<a id='L216' name='L216'></a> 216 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/3940.html' title='Multiple referred from 2 places.'>bpf_tramp_image_put</a>(<strong class='reserved'>struct</strong> bpf_tramp_image *im)
+<a id='L217' name='L217'></a> 217 <em class='brace'>{</em>
+<a id='L218' name='L218'></a> 218         <em class='comment'>/* The trampoline image that calls original function is using:</em>
+<a id='L219' name='L219'></a> 219 <em class='comment'>         * rcu_read_lock_trace to protect sleepable bpf progs</em>
+<a id='L220' name='L220'></a> 220 <em class='comment'>         * rcu_read_lock to protect normal bpf progs</em>
+<a id='L221' name='L221'></a> 221 <em class='comment'>         * percpu_ref to protect trampoline itself</em>
+<a id='L222' name='L222'></a> 222 <em class='comment'>         * rcu tasks to protect trampoline asm not covered by percpu_ref</em>
+<a id='L223' name='L223'></a> 223 <em class='comment'>         * (which are few asm insns before __bpf_tramp_enter and</em>
+<a id='L224' name='L224'></a> 224 <em class='comment'>         *  after __bpf_tramp_exit)</em>
+<a id='L225' name='L225'></a> 225 <em class='comment'>         *</em>
+<a id='L226' name='L226'></a> 226 <em class='comment'>         * The trampoline is unreachable before bpf_tramp_image_put().</em>
+<a id='L227' name='L227'></a> 227 <em class='comment'>         *</em>
+<a id='L228' name='L228'></a> 228 <em class='comment'>         * First, patch the trampoline to avoid calling into fexit progs.</em>
+<a id='L229' name='L229'></a> 229 <em class='comment'>         * The progs will be freed even if the original function is still</em>
+<a id='L230' name='L230'></a> 230 <em class='comment'>         * executing or sleeping.</em>
+<a id='L231' name='L231'></a> 231 <em class='comment'>         * In case of CONFIG_PREEMPT=y use call_rcu_tasks() to wait on</em>
+<a id='L232' name='L232'></a> 232 <em class='comment'>         * first few asm instructions to execute and call into</em>
+<a id='L233' name='L233'></a> 233 <em class='comment'>         * __bpf_tramp_enter-&gt;percpu_ref_get.</em>
+<a id='L234' name='L234'></a> 234 <em class='comment'>         * Then use percpu_ref_kill to wait for the trampoline and the original</em>
+<a id='L235' name='L235'></a> 235 <em class='comment'>         * function to finish.</em>
+<a id='L236' name='L236'></a> 236 <em class='comment'>         * Then use call_rcu_tasks() to make sure few asm insns in</em>
+<a id='L237' name='L237'></a> 237 <em class='comment'>         * the trampoline epilogue are done as well.</em>
+<a id='L238' name='L238'></a> 238 <em class='comment'>         *</em>
+<a id='L239' name='L239'></a> 239 <em class='comment'>         * In !PREEMPT case the task that got interrupted in the first asm</em>
+<a id='L240' name='L240'></a> 240 <em class='comment'>         * insns won't go through an RCU quiescent state which the</em>
+<a id='L241' name='L241'></a> 241 <em class='comment'>         * percpu_ref_kill will be waiting for. Hence the first</em>
+<a id='L242' name='L242'></a> 242 <em class='comment'>         * call_rcu_tasks() is not necessary.</em>
+<a id='L243' name='L243'></a> 243 <em class='comment'>         */</em>
+<a id='L244' name='L244'></a> 244         <strong class='reserved'>if</strong> (im-&gt;ip_after_call) <em class='brace'>{</em>
+<a id='L245' name='L245'></a> 245                 <strong class='reserved'>int</strong> err = <a href='../S/371.html#L2291' title='Defined at 2291 in bpf/core.c.'>bpf_arch_text_poke</a>(im-&gt;ip_after_call, BPF_MOD_JUMP,
+<a id='L246' name='L246'></a> 246                                              NULL, im-&gt;ip_epilogue);
+<a id='L247' name='L247'></a> 247                 WARN_ON(err);
+<a id='L248' name='L248'></a> 248                 <strong class='reserved'>if</strong> (IS_ENABLED(CONFIG_PREEMPTION))
+<a id='L249' name='L249'></a> 249                         <a href='../S/125.html#L517' title='Defined at 517 in rcu/tasks.h.'>call_rcu_tasks</a>(&amp;im-&gt;rcu, <a href='../S/373.html#L203' title='Defined at 203 in bpf/trampoline.c.'>__bpf_tramp_image_put_rcu_tasks</a>);
+<a id='L250' name='L250'></a> 250                 <strong class='reserved'>else</strong>
+<a id='L251' name='L251'></a> 251                         percpu_ref_kill(&amp;im-&gt;pcref);
+<a id='L252' name='L252'></a> 252                 <strong class='reserved'>return</strong>;
+<a id='L253' name='L253'></a> 253         <em class='brace'>}</em>
+<a id='L254' name='L254'></a> 254 
+<a id='L255' name='L255'></a> 255         <em class='comment'>/* The trampoline without fexit and fmod_ret progs doesn't call original</em>
+<a id='L256' name='L256'></a> 256 <em class='comment'>         * function and doesn't use percpu_ref.</em>
+<a id='L257' name='L257'></a> 257 <em class='comment'>         * Use call_rcu_tasks_trace() to wait for sleepable progs to finish.</em>
+<a id='L258' name='L258'></a> 258 <em class='comment'>         * Then use call_rcu_tasks() to wait for the rest of trampoline asm</em>
+<a id='L259' name='L259'></a> 259 <em class='comment'>         * and normal progs.</em>
+<a id='L260' name='L260'></a> 260 <em class='comment'>         */</em>
+<a id='L261' name='L261'></a> 261         <a href='../S/125.html#L1142' title='Defined at 1142 in rcu/tasks.h.'>call_rcu_tasks_trace</a>(&amp;im-&gt;rcu, <a href='../S/373.html#L203' title='Defined at 203 in bpf/trampoline.c.'>__bpf_tramp_image_put_rcu_tasks</a>);
+<a id='L262' name='L262'></a> 262 <em class='brace'>}</em>
+<a id='L263' name='L263'></a> 263 
+<a id='L264' name='L264'></a> 264 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> bpf_tramp_image *<a href='../S/373.html#L323' title='Referred from 323 in bpf/trampoline.c.'>bpf_tramp_image_alloc</a>(u64 key, u32 idx)
+<a id='L265' name='L265'></a> 265 <em class='brace'>{</em>
+<a id='L266' name='L266'></a> 266         <strong class='reserved'>struct</strong> bpf_tramp_image *im;
+<a id='L267' name='L267'></a> 267         <strong class='reserved'>struct</strong> bpf_ksym *ksym;
+<a id='L268' name='L268'></a> 268         <strong class='reserved'>void</strong> *image;
+<a id='L269' name='L269'></a> 269         <strong class='reserved'>int</strong> err = -ENOMEM;
+<a id='L270' name='L270'></a> 270 
+<a id='L271' name='L271'></a> 271         im = kzalloc(<strong class='reserved'>sizeof</strong>(*im), GFP_KERNEL);
+<a id='L272' name='L272'></a> 272         <strong class='reserved'>if</strong> (!im)
+<a id='L273' name='L273'></a> 273                 <strong class='reserved'>goto</strong> out;
+<a id='L274' name='L274'></a> 274 
+<a id='L275' name='L275'></a> 275         err = <a href='../S/371.html#L830' title='Defined at 830 in bpf/core.c.'>bpf_jit_charge_modmem</a>(1);
+<a id='L276' name='L276'></a> 276         <strong class='reserved'>if</strong> (err)
+<a id='L277' name='L277'></a> 277                 <strong class='reserved'>goto</strong> out_free_im;
+<a id='L278' name='L278'></a> 278 
+<a id='L279' name='L279'></a> 279         err = -ENOMEM;
+<a id='L280' name='L280'></a> 280         im-&gt;image = image = <a href='../S/373.html#L29' title='Defined at 29 in bpf/trampoline.c.'>bpf_jit_alloc_exec_page</a>();
+<a id='L281' name='L281'></a> 281         <strong class='reserved'>if</strong> (!image)
+<a id='L282' name='L282'></a> 282                 <strong class='reserved'>goto</strong> out_uncharge;
+<a id='L283' name='L283'></a> 283 
+<a id='L284' name='L284'></a> 284         err = percpu_ref_init(&amp;im-&gt;pcref, <a href='../S/373.html#L194' title='Defined at 194 in bpf/trampoline.c.'>__bpf_tramp_image_release</a>, 0, GFP_KERNEL);
+<a id='L285' name='L285'></a> 285         <strong class='reserved'>if</strong> (err)
+<a id='L286' name='L286'></a> 286                 <strong class='reserved'>goto</strong> out_free_image;
+<a id='L287' name='L287'></a> 287 
+<a id='L288' name='L288'></a> 288         ksym = &amp;im-&gt;ksym;
+<a id='L289' name='L289'></a> 289         INIT_LIST_HEAD_RCU(&amp;ksym-&gt;lnode);
+<a id='L290' name='L290'></a> 290         snprintf(ksym-&gt;name, KSYM_NAME_LEN, "bpf_trampoline_%llu_%u", key, idx);
+<a id='L291' name='L291'></a> 291         <a href='../S/373.html#L46' title='Defined at 46 in bpf/trampoline.c.'>bpf_image_ksym_add</a>(image, ksym);
+<a id='L292' name='L292'></a> 292         <strong class='reserved'>return</strong> im;
+<a id='L293' name='L293'></a> 293 
+<a id='L294' name='L294'></a> 294 out_free_image:
+<a id='L295' name='L295'></a> 295         <a href='../S/371.html#L853' title='Defined at 853 in bpf/core.c.'>bpf_jit_free_exec</a>(im-&gt;image);
+<a id='L296' name='L296'></a> 296 out_uncharge:
+<a id='L297' name='L297'></a> 297         <a href='../S/371.html#L843' title='Defined at 843 in bpf/core.c.'>bpf_jit_uncharge_modmem</a>(1);
+<a id='L298' name='L298'></a> 298 out_free_im:
+<a id='L299' name='L299'></a> 299         kfree(im);
+<a id='L300' name='L300'></a> 300 out:
+<a id='L301' name='L301'></a> 301         <strong class='reserved'>return</strong> ERR_PTR(err);
+<a id='L302' name='L302'></a> 302 <em class='brace'>}</em>
+<a id='L303' name='L303'></a> 303 
+<a id='L304' name='L304'></a> 304 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../R/3947.html' title='Multiple referred from 2 places.'>bpf_trampoline_update</a>(<strong class='reserved'>struct</strong> bpf_trampoline *tr)
+<a id='L305' name='L305'></a> 305 <em class='brace'>{</em>
+<a id='L306' name='L306'></a> 306         <strong class='reserved'>struct</strong> bpf_tramp_image *im;
+<a id='L307' name='L307'></a> 307         <strong class='reserved'>struct</strong> bpf_tramp_progs *tprogs;
+<a id='L308' name='L308'></a> 308         u32 flags = BPF_TRAMP_F_RESTORE_REGS;
+<a id='L309' name='L309'></a> 309         <strong class='reserved'>int</strong> err, total;
+<a id='L310' name='L310'></a> 310 
+<a id='L311' name='L311'></a> 311         tprogs = <a href='../S/373.html#L147' title='Defined at 147 in bpf/trampoline.c.'>bpf_trampoline_get_progs</a>(tr, &amp;total);
+<a id='L312' name='L312'></a> 312         <strong class='reserved'>if</strong> (IS_ERR(tprogs))
+<a id='L313' name='L313'></a> 313                 <strong class='reserved'>return</strong> PTR_ERR(tprogs);
+<a id='L314' name='L314'></a> 314 
+<a id='L315' name='L315'></a> 315         <strong class='reserved'>if</strong> (total == 0) <em class='brace'>{</em>
+<a id='L316' name='L316'></a> 316                 err = <a href='../S/373.html#L104' title='Defined at 104 in bpf/trampoline.c.'>unregister_fentry</a>(tr, tr-&gt;cur_image-&gt;image);
+<a id='L317' name='L317'></a> 317                 <a href='../S/373.html#L216' title='Defined at 216 in bpf/trampoline.c.'>bpf_tramp_image_put</a>(tr-&gt;cur_image);
+<a id='L318' name='L318'></a> 318                 tr-&gt;cur_image = NULL;
+<a id='L319' name='L319'></a> 319                 tr-&gt;selector = 0;
+<a id='L320' name='L320'></a> 320                 <strong class='reserved'>goto</strong> out;
+<a id='L321' name='L321'></a> 321         <em class='brace'>}</em>
+<a id='L322' name='L322'></a> 322 
+<a id='L323' name='L323'></a> 323         im = <a href='../S/373.html#L264' title='Defined at 264 in bpf/trampoline.c.'>bpf_tramp_image_alloc</a>(tr-&gt;key, tr-&gt;selector);
+<a id='L324' name='L324'></a> 324         <strong class='reserved'>if</strong> (IS_ERR(im)) <em class='brace'>{</em>
+<a id='L325' name='L325'></a> 325                 err = PTR_ERR(im);
+<a id='L326' name='L326'></a> 326                 <strong class='reserved'>goto</strong> out;
+<a id='L327' name='L327'></a> 327         <em class='brace'>}</em>
+<a id='L328' name='L328'></a> 328 
+<a id='L329' name='L329'></a> 329         <strong class='reserved'>if</strong> (tprogs[BPF_TRAMP_FEXIT].nr_progs ||
+<a id='L330' name='L330'></a> 330             tprogs[BPF_TRAMP_MODIFY_RETURN].nr_progs)
+<a id='L331' name='L331'></a> 331                 flags = BPF_TRAMP_F_CALL_ORIG | BPF_TRAMP_F_SKIP_FRAME;
+<a id='L332' name='L332'></a> 332 
+<a id='L333' name='L333'></a> 333         err = <a href='../S/373.html#L558' title='Defined at 558 in bpf/trampoline.c.'>arch_prepare_bpf_trampoline</a>(im, im-&gt;image, im-&gt;image + PAGE_SIZE,
+<a id='L334' name='L334'></a> 334                                           &amp;tr-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>.model, flags, tprogs,
+<a id='L335' name='L335'></a> 335                                           tr-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>.addr);
+<a id='L336' name='L336'></a> 336         <strong class='reserved'>if</strong> (err &lt; 0)
+<a id='L337' name='L337'></a> 337                 <strong class='reserved'>goto</strong> out;
+<a id='L338' name='L338'></a> 338 
+<a id='L339' name='L339'></a> 339         WARN_ON(tr-&gt;cur_image &amp;&amp; tr-&gt;selector == 0);
+<a id='L340' name='L340'></a> 340         WARN_ON(!tr-&gt;cur_image &amp;&amp; tr-&gt;selector);
+<a id='L341' name='L341'></a> 341         <strong class='reserved'>if</strong> (tr-&gt;cur_image)
+<a id='L342' name='L342'></a> 342                 <em class='comment'>/* progs already running at this address */</em>
+<a id='L343' name='L343'></a> 343                 err = <a href='../S/373.html#L116' title='Defined at 116 in bpf/trampoline.c.'>modify_fentry</a>(tr, tr-&gt;cur_image-&gt;image, im-&gt;image);
+<a id='L344' name='L344'></a> 344         <strong class='reserved'>else</strong>
+<a id='L345' name='L345'></a> 345                 <em class='comment'>/* first time registering */</em>
+<a id='L346' name='L346'></a> 346                 err = <a href='../S/373.html#L129' title='Defined at 129 in bpf/trampoline.c.'>register_fentry</a>(tr, im-&gt;image);
+<a id='L347' name='L347'></a> 347         <strong class='reserved'>if</strong> (err)
+<a id='L348' name='L348'></a> 348                 <strong class='reserved'>goto</strong> out;
+<a id='L349' name='L349'></a> 349         <strong class='reserved'>if</strong> (tr-&gt;cur_image)
+<a id='L350' name='L350'></a> 350                 <a href='../S/373.html#L216' title='Defined at 216 in bpf/trampoline.c.'>bpf_tramp_image_put</a>(tr-&gt;cur_image);
+<a id='L351' name='L351'></a> 351         tr-&gt;cur_image = im;
+<a id='L352' name='L352'></a> 352         tr-&gt;selector++;
+<a id='L353' name='L353'></a> 353 out:
+<a id='L354' name='L354'></a> 354         kfree(tprogs);
+<a id='L355' name='L355'></a> 355         <strong class='reserved'>return</strong> err;
+<a id='L356' name='L356'></a> 356 <em class='brace'>}</em>
+<a id='L357' name='L357'></a> 357 
+<a id='L358' name='L358'></a> 358 <strong class='reserved'>static</strong> <strong class='reserved'>enum</strong> bpf_tramp_prog_type <a href='../R/3456.html' title='Multiple referred from 2 places.'>bpf_attach_type_to_tramp</a>(<strong class='reserved'>struct</strong> <a href='../S/387.html#L50' title='Defined at 50 in bpf/preload/iterators/iterators.bpf.c.'>bpf_prog</a> *prog)
+<a id='L359' name='L359'></a> 359 <em class='brace'>{</em>
+<a id='L360' name='L360'></a> 360         <strong class='reserved'>switch</strong> (prog-&gt;expected_attach_type) <em class='brace'>{</em>
+<a id='L361' name='L361'></a> 361         <strong class='reserved'>case</strong> BPF_TRACE_FENTRY:
+<a id='L362' name='L362'></a> 362                 <strong class='reserved'>return</strong> BPF_TRAMP_FENTRY;
+<a id='L363' name='L363'></a> 363         <strong class='reserved'>case</strong> BPF_MODIFY_RETURN:
+<a id='L364' name='L364'></a> 364                 <strong class='reserved'>return</strong> BPF_TRAMP_MODIFY_RETURN;
+<a id='L365' name='L365'></a> 365         <strong class='reserved'>case</strong> BPF_TRACE_FEXIT:
+<a id='L366' name='L366'></a> 366                 <strong class='reserved'>return</strong> BPF_TRAMP_FEXIT;
+<a id='L367' name='L367'></a> 367         <strong class='reserved'>case</strong> BPF_LSM_MAC:
+<a id='L368' name='L368'></a> 368                 <strong class='reserved'>if</strong> (!prog-&gt;aux-&gt;attach_func_proto-&gt;type)
+<a id='L369' name='L369'></a> 369                         <em class='comment'>/* The function returns void, we cannot modify its</em>
+<a id='L370' name='L370'></a> 370 <em class='comment'>                         * return value.</em>
+<a id='L371' name='L371'></a> 371 <em class='comment'>                         */</em>
+<a id='L372' name='L372'></a> 372                         <strong class='reserved'>return</strong> BPF_TRAMP_FEXIT;
+<a id='L373' name='L373'></a> 373                 <strong class='reserved'>else</strong>
+<a id='L374' name='L374'></a> 374                         <strong class='reserved'>return</strong> BPF_TRAMP_MODIFY_RETURN;
+<a id='L375' name='L375'></a> 375         <strong class='reserved'>default</strong>:
+<a id='L376' name='L376'></a> 376                 <strong class='reserved'>return</strong> BPF_TRAMP_REPLACE;
+<a id='L377' name='L377'></a> 377         <em class='brace'>}</em>
+<a id='L378' name='L378'></a> 378 <em class='brace'>}</em>
+<a id='L379' name='L379'></a> 379 
+<a id='L380' name='L380'></a> 380 <strong class='reserved'>int</strong> <a href='../S/418.html#L2685' title='Referred from 2685 in bpf/syscall.c.'>bpf_trampoline_link_prog</a>(<strong class='reserved'>struct</strong> <a href='../S/387.html#L50' title='Defined at 50 in bpf/preload/iterators/iterators.bpf.c.'>bpf_prog</a> *prog, <strong class='reserved'>struct</strong> bpf_trampoline *tr)
+<a id='L381' name='L381'></a> 381 <em class='brace'>{</em>
+<a id='L382' name='L382'></a> 382         <strong class='reserved'>enum</strong> bpf_tramp_prog_type kind;
+<a id='L383' name='L383'></a> 383         <strong class='reserved'>int</strong> err = 0;
+<a id='L384' name='L384'></a> 384         <strong class='reserved'>int</strong> cnt;
+<a id='L385' name='L385'></a> 385 
+<a id='L386' name='L386'></a> 386         kind = <a href='../S/373.html#L358' title='Defined at 358 in bpf/trampoline.c.'>bpf_attach_type_to_tramp</a>(prog);
+<a id='L387' name='L387'></a> 387         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;tr-&gt;mutex);
+<a id='L388' name='L388'></a> 388         <strong class='reserved'>if</strong> (tr-&gt;extension_prog) <em class='brace'>{</em>
+<a id='L389' name='L389'></a> 389                 <em class='comment'>/* cannot attach fentry/fexit if extension prog is attached.</em>
+<a id='L390' name='L390'></a> 390 <em class='comment'>                 * cannot overwrite extension prog either.</em>
+<a id='L391' name='L391'></a> 391 <em class='comment'>                 */</em>
+<a id='L392' name='L392'></a> 392                 err = -EBUSY;
+<a id='L393' name='L393'></a> 393                 <strong class='reserved'>goto</strong> out;
+<a id='L394' name='L394'></a> 394         <em class='brace'>}</em>
+<a id='L395' name='L395'></a> 395         cnt = tr-&gt;progs_cnt[BPF_TRAMP_FENTRY] + tr-&gt;progs_cnt[BPF_TRAMP_FEXIT];
+<a id='L396' name='L396'></a> 396         <strong class='reserved'>if</strong> (kind == BPF_TRAMP_REPLACE) <em class='brace'>{</em>
+<a id='L397' name='L397'></a> 397                 <em class='comment'>/* Cannot attach extension if fentry/fexit are in use. */</em>
+<a id='L398' name='L398'></a> 398                 <strong class='reserved'>if</strong> (cnt) <em class='brace'>{</em>
+<a id='L399' name='L399'></a> 399                         err = -EBUSY;
+<a id='L400' name='L400'></a> 400                         <strong class='reserved'>goto</strong> out;
+<a id='L401' name='L401'></a> 401                 <em class='brace'>}</em>
+<a id='L402' name='L402'></a> 402                 tr-&gt;extension_prog = prog;
+<a id='L403' name='L403'></a> 403                 err = <a href='../S/371.html#L2291' title='Defined at 2291 in bpf/core.c.'>bpf_arch_text_poke</a>(tr-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>.addr, BPF_MOD_JUMP, NULL,
+<a id='L404' name='L404'></a> 404                                          prog-&gt;bpf_func);
+<a id='L405' name='L405'></a> 405                 <strong class='reserved'>goto</strong> out;
+<a id='L406' name='L406'></a> 406         <em class='brace'>}</em>
+<a id='L407' name='L407'></a> 407         <strong class='reserved'>if</strong> (cnt &gt;= BPF_MAX_TRAMP_PROGS) <em class='brace'>{</em>
+<a id='L408' name='L408'></a> 408                 err = -E2BIG;
+<a id='L409' name='L409'></a> 409                 <strong class='reserved'>goto</strong> out;
+<a id='L410' name='L410'></a> 410         <em class='brace'>}</em>
+<a id='L411' name='L411'></a> 411         <strong class='reserved'>if</strong> (!hlist_unhashed(&amp;prog-&gt;aux-&gt;tramp_hlist)) <em class='brace'>{</em>
+<a id='L412' name='L412'></a> 412                 <em class='comment'>/* prog already linked */</em>
+<a id='L413' name='L413'></a> 413                 err = -EBUSY;
+<a id='L414' name='L414'></a> 414                 <strong class='reserved'>goto</strong> out;
+<a id='L415' name='L415'></a> 415         <em class='brace'>}</em>
+<a id='L416' name='L416'></a> 416         hlist_add_head(&amp;prog-&gt;aux-&gt;tramp_hlist, &amp;tr-&gt;progs_hlist[kind]);
+<a id='L417' name='L417'></a> 417         tr-&gt;progs_cnt[kind]++;
+<a id='L418' name='L418'></a> 418         err = <a href='../S/373.html#L304' title='Defined at 304 in bpf/trampoline.c.'>bpf_trampoline_update</a>(tr);
+<a id='L419' name='L419'></a> 419         <strong class='reserved'>if</strong> (err) <em class='brace'>{</em>
+<a id='L420' name='L420'></a> 420                 hlist_del(&amp;prog-&gt;aux-&gt;tramp_hlist);
+<a id='L421' name='L421'></a> 421                 tr-&gt;progs_cnt[kind]--;
+<a id='L422' name='L422'></a> 422         <em class='brace'>}</em>
+<a id='L423' name='L423'></a> 423 out:
+<a id='L424' name='L424'></a> 424         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;tr-&gt;mutex);
+<a id='L425' name='L425'></a> 425         <strong class='reserved'>return</strong> err;
+<a id='L426' name='L426'></a> 426 <em class='brace'>}</em>
+<a id='L427' name='L427'></a> 427 
+<a id='L428' name='L428'></a> 428 <em class='comment'>/* bpf_trampoline_unlink_prog() should never fail. */</em>
+<a id='L429' name='L429'></a> 429 <strong class='reserved'>int</strong> <a href='../S/418.html#L2511' title='Referred from 2511 in bpf/syscall.c.'>bpf_trampoline_unlink_prog</a>(<strong class='reserved'>struct</strong> <a href='../S/387.html#L50' title='Defined at 50 in bpf/preload/iterators/iterators.bpf.c.'>bpf_prog</a> *prog, <strong class='reserved'>struct</strong> bpf_trampoline *tr)
+<a id='L430' name='L430'></a> 430 <em class='brace'>{</em>
+<a id='L431' name='L431'></a> 431         <strong class='reserved'>enum</strong> bpf_tramp_prog_type kind;
+<a id='L432' name='L432'></a> 432         <strong class='reserved'>int</strong> err;
+<a id='L433' name='L433'></a> 433 
+<a id='L434' name='L434'></a> 434         kind = <a href='../S/373.html#L358' title='Defined at 358 in bpf/trampoline.c.'>bpf_attach_type_to_tramp</a>(prog);
+<a id='L435' name='L435'></a> 435         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;tr-&gt;mutex);
+<a id='L436' name='L436'></a> 436         <strong class='reserved'>if</strong> (kind == BPF_TRAMP_REPLACE) <em class='brace'>{</em>
+<a id='L437' name='L437'></a> 437                 WARN_ON_ONCE(!tr-&gt;extension_prog);
+<a id='L438' name='L438'></a> 438                 err = <a href='../S/371.html#L2291' title='Defined at 2291 in bpf/core.c.'>bpf_arch_text_poke</a>(tr-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>.addr, BPF_MOD_JUMP,
+<a id='L439' name='L439'></a> 439                                          tr-&gt;extension_prog-&gt;bpf_func, NULL);
+<a id='L440' name='L440'></a> 440                 tr-&gt;extension_prog = NULL;
+<a id='L441' name='L441'></a> 441                 <strong class='reserved'>goto</strong> out;
+<a id='L442' name='L442'></a> 442         <em class='brace'>}</em>
+<a id='L443' name='L443'></a> 443         hlist_del(&amp;prog-&gt;aux-&gt;tramp_hlist);
+<a id='L444' name='L444'></a> 444         tr-&gt;progs_cnt[kind]--;
+<a id='L445' name='L445'></a> 445         err = <a href='../S/373.html#L304' title='Defined at 304 in bpf/trampoline.c.'>bpf_trampoline_update</a>(tr);
+<a id='L446' name='L446'></a> 446 out:
+<a id='L447' name='L447'></a> 447         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;tr-&gt;mutex);
+<a id='L448' name='L448'></a> 448         <strong class='reserved'>return</strong> err;
+<a id='L449' name='L449'></a> 449 <em class='brace'>}</em>
+<a id='L450' name='L450'></a> 450 
+<a id='L451' name='L451'></a> 451 <strong class='reserved'>struct</strong> bpf_trampoline *<a href='../R/3941.html' title='Multiple referred from 2 places.'>bpf_trampoline_get</a>(u64 key,
+<a id='L452' name='L452'></a> 452                                           <strong class='reserved'>struct</strong> bpf_attach_target_info *tgt_info)
+<a id='L453' name='L453'></a> 453 <em class='brace'>{</em>
+<a id='L454' name='L454'></a> 454         <strong class='reserved'>struct</strong> bpf_trampoline *tr;
+<a id='L455' name='L455'></a> 455 
+<a id='L456' name='L456'></a> 456         tr = <a href='../S/373.html#L62' title='Defined at 62 in bpf/trampoline.c.'>bpf_trampoline_lookup</a>(key);
+<a id='L457' name='L457'></a> 457         <strong class='reserved'>if</strong> (!tr)
+<a id='L458' name='L458'></a> 458                 <strong class='reserved'>return</strong> NULL;
+<a id='L459' name='L459'></a> 459 
+<a id='L460' name='L460'></a> 460         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;tr-&gt;mutex);
+<a id='L461' name='L461'></a> 461         <strong class='reserved'>if</strong> (tr-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>.addr)
+<a id='L462' name='L462'></a> 462                 <strong class='reserved'>goto</strong> out;
+<a id='L463' name='L463'></a> 463 
+<a id='L464' name='L464'></a> 464         memcpy(&amp;tr-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>.model, &amp;tgt_info-&gt;fmodel, <strong class='reserved'>sizeof</strong>(tgt_info-&gt;fmodel));
+<a id='L465' name='L465'></a> 465         tr-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>.addr = (<strong class='reserved'>void</strong> *)tgt_info-&gt;tgt_addr;
+<a id='L466' name='L466'></a> 466 out:
+<a id='L467' name='L467'></a> 467         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;tr-&gt;mutex);
+<a id='L468' name='L468'></a> 468         <strong class='reserved'>return</strong> tr;
+<a id='L469' name='L469'></a> 469 <em class='brace'>}</em>
+<a id='L470' name='L470'></a> 470 
+<a id='L471' name='L471'></a> 471 <strong class='reserved'>void</strong> <a href='../R/3945.html' title='Multiple referred from 4 places.'>bpf_trampoline_put</a>(<strong class='reserved'>struct</strong> bpf_trampoline *tr)
+<a id='L472' name='L472'></a> 472 <em class='brace'>{</em>
+<a id='L473' name='L473'></a> 473         <strong class='reserved'>if</strong> (!tr)
+<a id='L474' name='L474'></a> 474                 <strong class='reserved'>return</strong>;
+<a id='L475' name='L475'></a> 475         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;trampoline_mutex);
+<a id='L476' name='L476'></a> 476         <strong class='reserved'>if</strong> (!refcount_dec_and_test(&amp;tr-&gt;refcnt))
+<a id='L477' name='L477'></a> 477                 <strong class='reserved'>goto</strong> out;
+<a id='L478' name='L478'></a> 478         WARN_ON_ONCE(<a href='../S/25.html#L85' title='Defined at 85 in locking/mutex.c.'>mutex_is_locked</a>(&amp;tr-&gt;mutex));
+<a id='L479' name='L479'></a> 479         <strong class='reserved'>if</strong> (WARN_ON_ONCE(!hlist_empty(&amp;tr-&gt;progs_hlist[BPF_TRAMP_FENTRY])))
+<a id='L480' name='L480'></a> 480                 <strong class='reserved'>goto</strong> out;
+<a id='L481' name='L481'></a> 481         <strong class='reserved'>if</strong> (WARN_ON_ONCE(!hlist_empty(&amp;tr-&gt;progs_hlist[BPF_TRAMP_FEXIT])))
+<a id='L482' name='L482'></a> 482                 <strong class='reserved'>goto</strong> out;
+<a id='L483' name='L483'></a> 483         <em class='comment'>/* This code will be executed even when the last bpf_tramp_image</em>
+<a id='L484' name='L484'></a> 484 <em class='comment'>         * is alive. All progs are detached from the trampoline and the</em>
+<a id='L485' name='L485'></a> 485 <em class='comment'>         * trampoline image is patched with jmp into epilogue to skip</em>
+<a id='L486' name='L486'></a> 486 <em class='comment'>         * fexit progs. The fentry-only trampoline will be freed via</em>
+<a id='L487' name='L487'></a> 487 <em class='comment'>         * multiple rcu callbacks.</em>
+<a id='L488' name='L488'></a> 488 <em class='comment'>         */</em>
+<a id='L489' name='L489'></a> 489         hlist_del(&amp;tr-&gt;hlist);
+<a id='L490' name='L490'></a> 490         kfree(tr);
+<a id='L491' name='L491'></a> 491 out:
+<a id='L492' name='L492'></a> 492         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;trampoline_mutex);
+<a id='L493' name='L493'></a> 493 <em class='brace'>}</em>
+<a id='L494' name='L494'></a> 494 
+<a id='L495' name='L495'></a> 495 <em class='comment'>/* The logic is similar to BPF_PROG_RUN, but with an explicit</em>
+<a id='L496' name='L496'></a> 496 <em class='comment'> * rcu_read_lock() and migrate_disable() which are required</em>
+<a id='L497' name='L497'></a> 497 <em class='comment'> * for the trampoline. The macro is split into</em>
+<a id='L498' name='L498'></a> 498 <em class='comment'> * call _bpf_prog_enter</em>
+<a id='L499' name='L499'></a> 499 <em class='comment'> * call prog-&gt;bpf_func</em>
+<a id='L500' name='L500'></a> 500 <em class='comment'> * call __bpf_prog_exit</em>
+<a id='L501' name='L501'></a> 501 <em class='comment'> */</em>
+<a id='L502' name='L502'></a> 502 u64 notrace __bpf_prog_enter(<strong class='reserved'>void</strong>)
+<a id='L503' name='L503'></a> 503         __acquires(RCU)
+<a id='L504' name='L504'></a> 504 <em class='brace'>{</em>
+<a id='L505' name='L505'></a> 505         u64 start = 0;
+<a id='L506' name='L506'></a> 506 
+<a id='L507' name='L507'></a> 507         rcu_read_lock();
+<a id='L508' name='L508'></a> 508         migrate_disable();
+<a id='L509' name='L509'></a> 509         <strong class='reserved'>if</strong> (static_branch_unlikely(&amp;bpf_stats_enabled_key))
+<a id='L510' name='L510'></a> 510                 start = <a href='../D/12614.html' title='Multiple defined in 2 places.'>sched_clock</a>();
+<a id='L511' name='L511'></a> 511         <strong class='reserved'>return</strong> start;
+<a id='L512' name='L512'></a> 512 <em class='brace'>}</em>
+<a id='L513' name='L513'></a> 513 
+<a id='L514' name='L514'></a> 514 <strong class='reserved'>void</strong> notrace __bpf_prog_exit(<strong class='reserved'>struct</strong> <a href='../S/387.html#L50' title='Defined at 50 in bpf/preload/iterators/iterators.bpf.c.'>bpf_prog</a> *prog, u64 start)
+<a id='L515' name='L515'></a> 515         __releases(RCU)
+<a id='L516' name='L516'></a> 516 <em class='brace'>{</em>
+<a id='L517' name='L517'></a> 517         <strong class='reserved'>struct</strong> bpf_prog_stats *stats;
+<a id='L518' name='L518'></a> 518 
+<a id='L519' name='L519'></a> 519         <strong class='reserved'>if</strong> (static_branch_unlikely(&amp;bpf_stats_enabled_key) &amp;&amp;
+<a id='L520' name='L520'></a> 520             <em class='comment'>/* static_key could be enabled in __bpf_prog_enter</em>
+<a id='L521' name='L521'></a> 521 <em class='comment'>             * and disabled in __bpf_prog_exit.</em>
+<a id='L522' name='L522'></a> 522 <em class='comment'>             * And vice versa.</em>
+<a id='L523' name='L523'></a> 523 <em class='comment'>             * Hence check that 'start' is not zero.</em>
+<a id='L524' name='L524'></a> 524 <em class='comment'>             */</em>
+<a id='L525' name='L525'></a> 525             start) <em class='brace'>{</em>
+<a id='L526' name='L526'></a> 526                 stats = this_cpu_ptr(prog-&gt;aux-&gt;stats);
+<a id='L527' name='L527'></a> 527                 u64_stats_update_begin(&amp;stats-&gt;syncp);
+<a id='L528' name='L528'></a> 528                 stats-&gt;cnt++;
+<a id='L529' name='L529'></a> 529                 stats-&gt;nsecs += <a href='../D/12614.html' title='Multiple defined in 2 places.'>sched_clock</a>() - start;
+<a id='L530' name='L530'></a> 530                 u64_stats_update_end(&amp;stats-&gt;syncp);
+<a id='L531' name='L531'></a> 531         <em class='brace'>}</em>
+<a id='L532' name='L532'></a> 532         migrate_enable();
+<a id='L533' name='L533'></a> 533         rcu_read_unlock();
+<a id='L534' name='L534'></a> 534 <em class='brace'>}</em>
+<a id='L535' name='L535'></a> 535 
+<a id='L536' name='L536'></a> 536 <strong class='reserved'>void</strong> notrace __bpf_prog_enter_sleepable(<strong class='reserved'>void</strong>)
+<a id='L537' name='L537'></a> 537 <em class='brace'>{</em>
+<a id='L538' name='L538'></a> 538         rcu_read_lock_trace();
+<a id='L539' name='L539'></a> 539         might_fault();
+<a id='L540' name='L540'></a> 540 <em class='brace'>}</em>
+<a id='L541' name='L541'></a> 541 
+<a id='L542' name='L542'></a> 542 <strong class='reserved'>void</strong> notrace __bpf_prog_exit_sleepable(<strong class='reserved'>void</strong>)
+<a id='L543' name='L543'></a> 543 <em class='brace'>{</em>
+<a id='L544' name='L544'></a> 544         rcu_read_unlock_trace();
+<a id='L545' name='L545'></a> 545 <em class='brace'>}</em>
+<a id='L546' name='L546'></a> 546 
+<a id='L547' name='L547'></a> 547 <strong class='reserved'>void</strong> notrace __bpf_tramp_enter(<strong class='reserved'>struct</strong> bpf_tramp_image *tr)
+<a id='L548' name='L548'></a> 548 <em class='brace'>{</em>
+<a id='L549' name='L549'></a> 549         percpu_ref_get(&amp;tr-&gt;pcref);
+<a id='L550' name='L550'></a> 550 <em class='brace'>}</em>
+<a id='L551' name='L551'></a> 551 
+<a id='L552' name='L552'></a> 552 <strong class='reserved'>void</strong> notrace __bpf_tramp_exit(<strong class='reserved'>struct</strong> bpf_tramp_image *tr)
+<a id='L553' name='L553'></a> 553 <em class='brace'>{</em>
+<a id='L554' name='L554'></a> 554         percpu_ref_put(&amp;tr-&gt;pcref);
+<a id='L555' name='L555'></a> 555 <em class='brace'>}</em>
+<a id='L556' name='L556'></a> 556 
+<a id='L557' name='L557'></a> 557 <strong class='reserved'>int</strong> __weak
+<a id='L558' name='L558'></a> 558 <a href='../R/3005.html' title='Multiple referred from 2 places.'>arch_prepare_bpf_trampoline</a>(<strong class='reserved'>struct</strong> bpf_tramp_image *tr, <strong class='reserved'>void</strong> *image, <strong class='reserved'>void</strong> *image_end,
+<a id='L559' name='L559'></a> 559                             <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> btf_func_model *m, u32 flags,
+<a id='L560' name='L560'></a> 560                             <strong class='reserved'>struct</strong> bpf_tramp_progs *tprogs,
+<a id='L561' name='L561'></a> 561                             <strong class='reserved'>void</strong> *orig_call)
+<a id='L562' name='L562'></a> 562 <em class='brace'>{</em>
+<a id='L563' name='L563'></a> 563         <strong class='reserved'>return</strong> -ENOTSUPP;
+<a id='L564' name='L564'></a> 564 <em class='brace'>}</em>
+<a id='L565' name='L565'></a> 565 
+<a id='L566' name='L566'></a> 566 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __init <a href='../S/373.html#L574' title='Referred from 574 in bpf/trampoline.c.'>init_trampolines</a>(<strong class='reserved'>void</strong>)
+<a id='L567' name='L567'></a> 567 <em class='brace'>{</em>
+<a id='L568' name='L568'></a> 568         <strong class='reserved'>int</strong> i;
+<a id='L569' name='L569'></a> 569 
+<a id='L570' name='L570'></a> 570         <strong class='reserved'>for</strong> (i = 0; i &lt; <a href='../S/373.html#L22' title='Defined at 22 in bpf/trampoline.c.'>TRAMPOLINE_TABLE_SIZE</a>; i++)
+<a id='L571' name='L571'></a> 571                 INIT_HLIST_HEAD(&amp;trampoline_table[i]);
+<a id='L572' name='L572'></a> 572         <strong class='reserved'>return</strong> 0;
+<a id='L573' name='L573'></a> 573 <em class='brace'>}</em>
+<a id='L574' name='L574'></a> 574 late_initcall(<a href='../S/373.html#L566' title='Defined at 566 in bpf/trampoline.c.'>init_trampolines</a>);
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L29'>[^]</a><a href='#L566'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

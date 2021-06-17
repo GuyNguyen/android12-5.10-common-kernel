@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>btf_type</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/416.html#L453'>btf_type</a>          453 bpf/arraymap.c 			       const struct btf_type *key_type,</span>
+<span class='curline'><a href='../S/416.html#L454'>btf_type</a>          454 bpf/arraymap.c 			       const struct btf_type *value_type)</span>
+<span class='curline'><a href='../S/378.html#L587'>btf_type</a>          587 bpf/bpf_local_storage.c 				    const struct btf_type *key_type,</span>
+<span class='curline'><a href='../S/378.html#L588'>btf_type</a>          588 bpf/bpf_local_storage.c 				    const struct btf_type *value_type)</span>
+<span class='curline'><a href='../S/399.html#L98'>btf_type</a>           98 bpf/bpf_struct_ops.c static const struct btf_type *module_type;</span>
+<span class='curline'><a href='../S/399.html#L105'>btf_type</a>          105 bpf/bpf_struct_ops.c 	const struct btf_type *t;</span>
+<span class='curline'><a href='../S/399.html#L156'>btf_type</a>          156 bpf/bpf_struct_ops.c 			const struct btf_type *func_proto;</span>
+<span class='curline'><a href='../S/399.html#L278'>btf_type</a>          278 bpf/bpf_struct_ops.c 	const struct btf_type *t = st_map-&gt;st_ops-&gt;type;</span>
+<span class='curline'><a href='../S/399.html#L289'>btf_type</a>          289 bpf/bpf_struct_ops.c static int check_zero_holes(const struct btf_type *t, void *data)</span>
+<span class='curline'><a href='../S/399.html#L293'>btf_type</a>          293 bpf/bpf_struct_ops.c 	const struct btf_type *mtype;</span>
+<span class='curline'><a href='../S/399.html#L322'>btf_type</a>          322 bpf/bpf_struct_ops.c 	const struct btf_type *t = st_ops-&gt;type;</span>
+<span class='curline'><a href='../S/399.html#L368'>btf_type</a>          368 bpf/bpf_struct_ops.c 		const struct btf_type *mtype, *ptype;</span>
+<span class='curline'><a href='../S/399.html#L558'>btf_type</a>          558 bpf/bpf_struct_ops.c 	const struct btf_type *t, *vt;</span>
+<span class='curline'><a href='../S/411.html#L201'>btf_type</a>          201 bpf/btf.c      	struct btf_type **types;</span>
+<span class='curline'><a href='../S/411.html#L221'>btf_type</a>          221 bpf/btf.c      	const struct btf_type *t;</span>
+<span class='curline'><a href='../S/411.html#L277'>btf_type</a>          277 bpf/btf.c      static const char *btf_type_str(const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L355'>btf_type</a>          355 bpf/btf.c      		const struct btf_type *type;</span>
+<span class='curline'><a href='../S/411.html#L369'>btf_type</a>          369 bpf/btf.c      			  const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L374'>btf_type</a>          374 bpf/btf.c      			    const struct btf_type *struct_type,</span>
+<span class='curline'><a href='../S/411.html#L376'>btf_type</a>          376 bpf/btf.c      			    const struct btf_type *member_type);</span>
+<span class='curline'><a href='../S/411.html#L378'>btf_type</a>          378 bpf/btf.c      				  const struct btf_type *struct_type,</span>
+<span class='curline'><a href='../S/411.html#L380'>btf_type</a>          380 bpf/btf.c      				  const struct btf_type *member_type);</span>
+<span class='curline'><a href='../S/411.html#L382'>btf_type</a>          382 bpf/btf.c      			    const struct btf_type *t);</span>
+<span class='curline'><a href='../S/411.html#L383'>btf_type</a>          383 bpf/btf.c      	void (*show)(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L389'>btf_type</a>          389 bpf/btf.c      static struct btf_type btf_void;</span>
+<span class='curline'><a href='../S/411.html#L392'>btf_type</a>          392 bpf/btf.c      		       const struct btf_type *t, u32 type_id);</span>
+<span class='curline'><a href='../S/411.html#L394'>btf_type</a>          394 bpf/btf.c      static bool btf_type_is_modifier(const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L417'>btf_type</a>          417 bpf/btf.c      bool btf_type_is_void(const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L422'>btf_type</a>          422 bpf/btf.c      static bool btf_type_is_fwd(const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L427'>btf_type</a>          427 bpf/btf.c      static bool btf_type_nosize(const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L433'>btf_type</a>          433 bpf/btf.c      static bool btf_type_nosize_or_null(const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L438'>btf_type</a>          438 bpf/btf.c      static bool __btf_type_is_struct(const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L443'>btf_type</a>          443 bpf/btf.c      static bool btf_type_is_array(const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L448'>btf_type</a>          448 bpf/btf.c      static bool btf_type_is_datasec(const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L455'>btf_type</a>          455 bpf/btf.c      	const struct btf_type *t;</span>
+<span class='curline'><a href='../S/411.html#L472'>btf_type</a>          472 bpf/btf.c      const struct btf_type *btf_type_skip_modifiers(const struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L475'>btf_type</a>          475 bpf/btf.c      	const struct btf_type *t = btf_type_by_id(btf, id);</span>
+<span class='curline'><a href='../S/411.html#L488'>btf_type</a>          488 bpf/btf.c      const struct btf_type *btf_type_resolve_ptr(const struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L491'>btf_type</a>          491 bpf/btf.c      	const struct btf_type *t;</span>
+<span class='curline'><a href='../S/411.html#L500'>btf_type</a>          500 bpf/btf.c      const struct btf_type *btf_type_resolve_func_ptr(const struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L503'>btf_type</a>          503 bpf/btf.c      	const struct btf_type *ptype;</span>
+<span class='curline'><a href='../S/411.html#L515'>btf_type</a>          515 bpf/btf.c      static bool btf_type_is_resolve_source_only(const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L537'>btf_type</a>          537 bpf/btf.c      static bool btf_type_needs_resolve(const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L548'>btf_type</a>          548 bpf/btf.c      static bool btf_type_has_size(const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L576'>btf_type</a>          576 bpf/btf.c      static u32 btf_type_int(const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L581'>btf_type</a>          581 bpf/btf.c      static const struct btf_array *btf_type_array(const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L586'>btf_type</a>          586 bpf/btf.c      static const struct btf_enum *btf_type_enum(const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L591'>btf_type</a>          591 bpf/btf.c      static const struct btf_var *btf_type_var(const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L596'>btf_type</a>          596 bpf/btf.c      static const struct btf_kind_operations *btf_type_ops(const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L670'>btf_type</a>          670 bpf/btf.c      const struct btf_type *btf_type_by_id(const struct btf *btf, u32 type_id)</span>
+<span class='curline'><a href='../S/411.html#L682'>btf_type</a>          682 bpf/btf.c      static bool btf_type_int_is_regular(const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L705'>btf_type</a>          705 bpf/btf.c      bool btf_member_is_reg_int(const struct btf *btf, const struct btf_type *s,</span>
+<span class='curline'><a href='../S/411.html#L709'>btf_type</a>          709 bpf/btf.c      	const struct btf_type *t;</span>
+<span class='curline'><a href='../S/411.html#L743'>btf_type</a>          743 bpf/btf.c      static const struct btf_type *btf_type_skip_qualifiers(const struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L746'>btf_type</a>          746 bpf/btf.c      	const struct btf_type *t = btf_type_by_id(btf, id);</span>
+<span class='curline'><a href='../S/411.html#L777'>btf_type</a>          777 bpf/btf.c      	const struct btf_type *t = show-&gt;state.type;</span>
+<span class='curline'><a href='../S/411.html#L1052'>btf_type</a>         1052 bpf/btf.c      			       const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L1055'>btf_type</a>         1055 bpf/btf.c      	const struct btf_type *rt;</span>
+<span class='curline'><a href='../S/411.html#L1128'>btf_type</a>         1128 bpf/btf.c      				 const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L1146'>btf_type</a>         1146 bpf/btf.c      				      const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L1194'>btf_type</a>         1194 bpf/btf.c      				       const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L1212'>btf_type</a>         1212 bpf/btf.c      					const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L1249'>btf_type</a>         1249 bpf/btf.c      						   const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L1294'>btf_type</a>         1294 bpf/btf.c      				    const struct btf_type *struct_type,</span>
+<span class='curline'><a href='../S/411.html#L1340'>btf_type</a>         1340 bpf/btf.c      				 const struct btf_type *datasec_type,</span>
+<span class='curline'><a href='../S/411.html#L1390'>btf_type</a>         1390 bpf/btf.c      static int btf_add_type(struct btf_verifier_env *env, struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L1401'>btf_type</a>         1401 bpf/btf.c      		struct btf_type **new_types;</span>
+<span class='curline'><a href='../S/411.html#L1538'>btf_type</a>         1538 bpf/btf.c      				     const struct btf_type *next_type)</span>
+<span class='curline'><a href='../S/411.html#L1569'>btf_type</a>         1569 bpf/btf.c      			  const struct btf_type *t, u32 type_id)</span>
+<span class='curline'><a href='../S/411.html#L1639'>btf_type</a>         1639 bpf/btf.c      static const struct btf_type *</span>
+<span class='curline'><a href='../S/411.html#L1640'>btf_type</a>         1640 bpf/btf.c      __btf_resolve_size(const struct btf *btf, const struct btf_type *type,</span>
+<span class='curline'><a href='../S/411.html#L1641'>btf_type</a>         1641 bpf/btf.c      		   u32 *type_size, const struct btf_type **elem_type,</span>
+<span class='curline'><a href='../S/411.html#L1644'>btf_type</a>         1644 bpf/btf.c      	const struct btf_type *array_type = NULL;</span>
+<span class='curline'><a href='../S/411.html#L1706'>btf_type</a>         1706 bpf/btf.c      const struct btf_type *</span>
+<span class='curline'><a href='../S/411.html#L1707'>btf_type</a>         1707 bpf/btf.c      btf_resolve_size(const struct btf *btf, const struct btf_type *type,</span>
+<span class='curline'><a href='../S/411.html#L1714'>btf_type</a>         1714 bpf/btf.c      static const struct btf_type *btf_type_id_resolve(const struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L1721'>btf_type</a>         1721 bpf/btf.c      const struct btf_type *btf_type_id_size(const struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L1724'>btf_type</a>         1724 bpf/btf.c      	const struct btf_type *size_type;</span>
+<span class='curline'><a href='../S/411.html#L1765'>btf_type</a>         1765 bpf/btf.c      			       const struct btf_type *struct_type,</span>
+<span class='curline'><a href='../S/411.html#L1767'>btf_type</a>         1767 bpf/btf.c      			       const struct btf_type *member_type)</span>
+<span class='curline'><a href='../S/411.html#L1775'>btf_type</a>         1775 bpf/btf.c      				     const struct btf_type *struct_type,</span>
+<span class='curline'><a href='../S/411.html#L1777'>btf_type</a>         1777 bpf/btf.c      				     const struct btf_type *member_type)</span>
+<span class='curline'><a href='../S/411.html#L1788'>btf_type</a>         1788 bpf/btf.c      					  const struct btf_type *struct_type,</span>
+<span class='curline'><a href='../S/411.html#L1790'>btf_type</a>         1790 bpf/btf.c      					  const struct btf_type *member_type)</span>
+<span class='curline'><a href='../S/411.html#L1813'>btf_type</a>         1813 bpf/btf.c      static void btf_df_show(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L1821'>btf_type</a>         1821 bpf/btf.c      				const struct btf_type *struct_type,</span>
+<span class='curline'><a href='../S/411.html#L1823'>btf_type</a>         1823 bpf/btf.c      				const struct btf_type *member_type)</span>
+<span class='curline'><a href='../S/411.html#L1859'>btf_type</a>         1859 bpf/btf.c      				      const struct btf_type *struct_type,</span>
+<span class='curline'><a href='../S/411.html#L1861'>btf_type</a>         1861 bpf/btf.c      				      const struct btf_type *member_type)</span>
+<span class='curline'><a href='../S/411.html#L1915'>btf_type</a>         1915 bpf/btf.c      			      const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L1979'>btf_type</a>         1979 bpf/btf.c      			const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L2082'>btf_type</a>         2082 bpf/btf.c      			      const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L2100'>btf_type</a>         2100 bpf/btf.c      static void btf_int_show(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L2180'>btf_type</a>         2180 bpf/btf.c      				     const struct btf_type *struct_type,</span>
+<span class='curline'><a href='../S/411.html#L2182'>btf_type</a>         2182 bpf/btf.c      				     const struct btf_type *member_type)</span>
+<span class='curline'><a href='../S/411.html#L2184'>btf_type</a>         2184 bpf/btf.c      	const struct btf_type *resolved_type;</span>
+<span class='curline'><a href='../S/411.html#L2205'>btf_type</a>         2205 bpf/btf.c      					   const struct btf_type *struct_type,</span>
+<span class='curline'><a href='../S/411.html#L2207'>btf_type</a>         2207 bpf/btf.c      					   const struct btf_type *member_type)</span>
+<span class='curline'><a href='../S/411.html#L2209'>btf_type</a>         2209 bpf/btf.c      	const struct btf_type *resolved_type;</span>
+<span class='curline'><a href='../S/411.html#L2230'>btf_type</a>         2230 bpf/btf.c      				const struct btf_type *struct_type,</span>
+<span class='curline'><a href='../S/411.html#L2232'>btf_type</a>         2232 bpf/btf.c      				const struct btf_type *member_type)</span>
+<span class='curline'><a href='../S/411.html#L2256'>btf_type</a>         2256 bpf/btf.c      				   const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L2298'>btf_type</a>         2298 bpf/btf.c      	const struct btf_type *t = v-&gt;t;</span>
+<span class='curline'><a href='../S/411.html#L2299'>btf_type</a>         2299 bpf/btf.c      	const struct btf_type *next_type;</span>
+<span class='curline'><a href='../S/411.html#L2340'>btf_type</a>         2340 bpf/btf.c      	const struct btf_type *next_type;</span>
+<span class='curline'><a href='../S/411.html#L2341'>btf_type</a>         2341 bpf/btf.c      	const struct btf_type *t = v-&gt;t;</span>
+<span class='curline'><a href='../S/411.html#L2356'>btf_type</a>         2356 bpf/btf.c      		const struct btf_type *resolved_type;</span>
+<span class='curline'><a href='../S/411.html#L2386'>btf_type</a>         2386 bpf/btf.c      	const struct btf_type *next_type;</span>
+<span class='curline'><a href='../S/411.html#L2387'>btf_type</a>         2387 bpf/btf.c      	const struct btf_type *t = v-&gt;t;</span>
+<span class='curline'><a href='../S/411.html#L2410'>btf_type</a>         2410 bpf/btf.c      		const struct btf_type *resolved_type;</span>
+<span class='curline'><a href='../S/411.html#L2441'>btf_type</a>         2441 bpf/btf.c      			      const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L2453'>btf_type</a>         2453 bpf/btf.c      static void btf_var_show(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L2462'>btf_type</a>         2462 bpf/btf.c      static void btf_ptr_show(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L2481'>btf_type</a>         2481 bpf/btf.c      			     const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L2505'>btf_type</a>         2505 bpf/btf.c      			      const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L2531'>btf_type</a>         2531 bpf/btf.c      			     const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L2546'>btf_type</a>         2546 bpf/btf.c      				  const struct btf_type *struct_type,</span>
+<span class='curline'><a href='../S/411.html#L2548'>btf_type</a>         2548 bpf/btf.c      				  const struct btf_type *member_type)</span>
+<span class='curline'><a href='../S/411.html#L2575'>btf_type</a>         2575 bpf/btf.c      				const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L2631'>btf_type</a>         2631 bpf/btf.c      	const struct btf_type *elem_type, *index_type;</span>
+<span class='curline'><a href='../S/411.html#L2693'>btf_type</a>         2693 bpf/btf.c      			  const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L2701'>btf_type</a>         2701 bpf/btf.c      static void __btf_array_show(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L2707'>btf_type</a>         2707 bpf/btf.c      	const struct btf_type *elem_type;</span>
+<span class='curline'><a href='../S/411.html#L2754'>btf_type</a>         2754 bpf/btf.c      static void btf_array_show(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L2797'>btf_type</a>         2797 bpf/btf.c      				   const struct btf_type *struct_type,</span>
+<span class='curline'><a href='../S/411.html#L2799'>btf_type</a>         2799 bpf/btf.c      				   const struct btf_type *member_type)</span>
+<span class='curline'><a href='../S/411.html#L2822'>btf_type</a>         2822 bpf/btf.c      				 const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L2914'>btf_type</a>         2914 bpf/btf.c      		const struct btf_type *last_member_type;</span>
+<span class='curline'><a href='../S/411.html#L2940'>btf_type</a>         2940 bpf/btf.c      		const struct btf_type *member_type = btf_type_by_id(env-&gt;btf,</span>
+<span class='curline'><a href='../S/411.html#L2974'>btf_type</a>         2974 bpf/btf.c      			   const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L2983'>btf_type</a>         2983 bpf/btf.c      int btf_find_spin_lock(const struct btf *btf, const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L2992'>btf_type</a>         2992 bpf/btf.c      		const struct btf_type *member_type = btf_type_by_id(btf,</span>
+<span class='curline'><a href='../S/411.html#L3016'>btf_type</a>         3016 bpf/btf.c      static void __btf_struct_show(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L3029'>btf_type</a>         3029 bpf/btf.c      		const struct btf_type *member_type = btf_type_by_id(btf,</span>
+<span class='curline'><a href='../S/411.html#L3063'>btf_type</a>         3063 bpf/btf.c      static void btf_struct_show(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L3107'>btf_type</a>         3107 bpf/btf.c      				 const struct btf_type *struct_type,</span>
+<span class='curline'><a href='../S/411.html#L3109'>btf_type</a>         3109 bpf/btf.c      				 const struct btf_type *member_type)</span>
+<span class='curline'><a href='../S/411.html#L3132'>btf_type</a>         3132 bpf/btf.c      				       const struct btf_type *struct_type,</span>
+<span class='curline'><a href='../S/411.html#L3134'>btf_type</a>         3134 bpf/btf.c      				       const struct btf_type *member_type)</span>
+<span class='curline'><a href='../S/411.html#L3167'>btf_type</a>         3167 bpf/btf.c      			       const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L3229'>btf_type</a>         3229 bpf/btf.c      			 const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L3234'>btf_type</a>         3234 bpf/btf.c      static void btf_enum_show(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L3275'>btf_type</a>         3275 bpf/btf.c      				     const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L3303'>btf_type</a>         3303 bpf/btf.c      			       const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L3362'>btf_type</a>         3362 bpf/btf.c      			       const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L3396'>btf_type</a>         3396 bpf/btf.c      			      const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L3443'>btf_type</a>         3443 bpf/btf.c      static void btf_var_log(struct btf_verifier_env *env, const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L3460'>btf_type</a>         3460 bpf/btf.c      				  const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L3546'>btf_type</a>         3546 bpf/btf.c      		const struct btf_type *var_type = btf_type_by_id(env-&gt;btf,</span>
+<span class='curline'><a href='../S/411.html#L3577'>btf_type</a>         3577 bpf/btf.c      			    const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L3583'>btf_type</a>         3583 bpf/btf.c      			     const struct btf_type *t, u32 type_id,</span>
+<span class='curline'><a href='../S/411.html#L3588'>btf_type</a>         3588 bpf/btf.c      	const struct btf_type *var;</span>
+<span class='curline'><a href='../S/411.html#L3616'>btf_type</a>         3616 bpf/btf.c      				const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L3618'>btf_type</a>         3618 bpf/btf.c      	const struct btf_type *ret_type;</span>
+<span class='curline'><a href='../S/411.html#L3667'>btf_type</a>         3667 bpf/btf.c      		const struct btf_type *arg_type;</span>
+<span class='curline'><a href='../S/411.html#L3705'>btf_type</a>         3705 bpf/btf.c      			  const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L3707'>btf_type</a>         3707 bpf/btf.c      	const struct btf_type *proto_type;</span>
+<span class='curline'><a href='../S/411.html#L3751'>btf_type</a>         3751 bpf/btf.c      			  const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L3804'>btf_type</a>         3804 bpf/btf.c      		struct btf_type *t = cur;</span>
+<span class='curline'><a href='../S/411.html#L3820'>btf_type</a>         3820 bpf/btf.c      			      const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L3843'>btf_type</a>         3843 bpf/btf.c      		const struct btf_type *elem_type;</span>
+<span class='curline'><a href='../S/411.html#L3857'>btf_type</a>         3857 bpf/btf.c      		       const struct btf_type *t, u32 type_id)</span>
+<span class='curline'><a href='../S/411.html#L3901'>btf_type</a>         3901 bpf/btf.c      		const struct btf_type *t = btf_type_by_id(btf, type_id);</span>
+<span class='curline'><a href='../S/411.html#L4211'>btf_type</a>         4211 bpf/btf.c      	const struct btf_type *t;</span>
+<span class='curline'><a href='../S/411.html#L4232'>btf_type</a>         4232 bpf/btf.c      		      const struct btf_type *t, enum bpf_prog_type prog_type,</span>
+<span class='curline'><a href='../S/411.html#L4235'>btf_type</a>         4235 bpf/btf.c      	const struct btf_type *conv_struct;</span>
+<span class='curline'><a href='../S/411.html#L4236'>btf_type</a>         4236 bpf/btf.c      	const struct btf_type *ctx_struct;</span>
+<span class='curline'><a href='../S/411.html#L4327'>btf_type</a>         4327 bpf/btf.c      				     const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L4415'>btf_type</a>         4415 bpf/btf.c      static bool is_string_ptr(struct btf *btf, const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L4432'>btf_type</a>         4432 bpf/btf.c      	const struct btf_type *t = prog-&gt;aux-&gt;attach_func_proto;</span>
+<span class='curline'><a href='../S/411.html#L4603'>btf_type</a>         4603 bpf/btf.c      			   const struct btf_type *t, int off, int size,</span>
+<span class='curline'><a href='../S/411.html#L4607'>btf_type</a>         4607 bpf/btf.c      	const struct btf_type *mtype, *elem_type = NULL;</span>
+<span class='curline'><a href='../S/411.html#L4793'>btf_type</a>         4793 bpf/btf.c      			const struct btf_type *stype;</span>
+<span class='curline'><a href='../S/411.html#L4829'>btf_type</a>         4829 bpf/btf.c      		      const struct btf_type *t, int off, int size,</span>
+<span class='curline'><a href='../S/411.html#L4872'>btf_type</a>         4872 bpf/btf.c      	const struct btf_type *type;</span>
+<span class='curline'><a href='../S/411.html#L4901'>btf_type</a>         4901 bpf/btf.c      			   const struct btf_type **bad_type)</span>
+<span class='curline'><a href='../S/411.html#L4903'>btf_type</a>         4903 bpf/btf.c      	const struct btf_type *t;</span>
+<span class='curline'><a href='../S/411.html#L4926'>btf_type</a>         4926 bpf/btf.c      			   const struct btf_type *func,</span>
+<span class='curline'><a href='../S/411.html#L4931'>btf_type</a>         4931 bpf/btf.c      	const struct btf_type *t;</span>
+<span class='curline'><a href='../S/411.html#L4985'>btf_type</a>         4985 bpf/btf.c      				     struct btf *btf1, const struct btf_type *t1,</span>
+<span class='curline'><a href='../S/411.html#L4986'>btf_type</a>         4986 bpf/btf.c      				     struct btf *btf2, const struct btf_type *t2)</span>
+<span class='curline'><a href='../S/411.html#L5096'>btf_type</a>         5096 bpf/btf.c      			 struct btf *btf2, const struct btf_type *t2)</span>
+<span class='curline'><a href='../S/411.html#L5099'>btf_type</a>         5099 bpf/btf.c      	const struct btf_type *t1;</span>
+<span class='curline'><a href='../S/411.html#L5132'>btf_type</a>         5132 bpf/btf.c      	const struct btf_type *t;</span>
+<span class='curline'><a href='../S/411.html#L5230'>btf_type</a>         5230 bpf/btf.c      	const struct btf_type *t;</span>
+<span class='curline'><a href='../S/411.html#L5316'>btf_type</a>         5316 bpf/btf.c      	const struct btf_type *t = btf_type_by_id(btf, type_id);</span>
+<span class='curline'><a href='../S/371.html#L549'>btf_type</a>          549 bpf/core.c     	const struct btf_type *type;</span>
+<span class='curline'><a href='../S/402.html#L362'>btf_type</a>          362 bpf/local_storage.c 				    const struct btf_type *key_type,</span>
+<span class='curline'><a href='../S/402.html#L363'>btf_type</a>          363 bpf/local_storage.c 				    const struct btf_type *value_type)</span>
+<span class='curline'><a href='../S/405.html#L725'>btf_type</a>          725 bpf/lpm_trie.c 			  const struct btf_type *key_type,</span>
+<span class='curline'><a href='../S/405.html#L726'>btf_type</a>          726 bpf/lpm_trie.c 			  const struct btf_type *value_type)</span>
+<span class='curline'><a href='../S/387.html#L37'>btf_type</a>           37 bpf/preload/iterators/iterators.bpf.c 	struct btf_type **types;</span>
+<span class='curline'><a href='../S/387.html#L62'>btf_type</a>           62 bpf/preload/iterators/iterators.bpf.c 	struct btf_type **types, *t;</span>
+<span class='curline'><a href='../S/418.html#L739'>btf_type</a>          739 bpf/syscall.c  		     const struct btf_type *key_type,</span>
+<span class='curline'><a href='../S/418.html#L740'>btf_type</a>          740 bpf/syscall.c  		     const struct btf_type *value_type)</span>
+<span class='curline'><a href='../S/418.html#L748'>btf_type</a>          748 bpf/syscall.c  	const struct btf_type *key_type, *value_type;</span>
+<span class='curline'><a href='../S/401.html#L3551'>btf_type</a>         3551 bpf/verifier.c 	const struct btf_type *t = btf_type_by_id(btf_vmlinux, reg-&gt;btf_id);</span>
+<span class='curline'><a href='../S/401.html#L3602'>btf_type</a>         3602 bpf/verifier.c 	const struct btf_type *t;</span>
+<span class='curline'><a href='../S/401.html#L5484'>btf_type</a>         5484 bpf/verifier.c 		const struct btf_type *t;</span>
+<span class='curline'><a href='../S/401.html#L5490'>btf_type</a>         5490 bpf/verifier.c 			const struct btf_type *ret;</span>
+<span class='curline'><a href='../S/401.html#L8632'>btf_type</a>         8632 bpf/verifier.c 	const struct btf_type *type, *func_proto, *ret_type;</span>
+<span class='curline'><a href='../S/401.html#L10056'>btf_type</a>         10056 bpf/verifier.c 	const struct btf_type *datasec;</span>
+<span class='curline'><a href='../S/401.html#L10057'>btf_type</a>         10057 bpf/verifier.c 	const struct btf_type *t;</span>
+<span class='curline'><a href='../S/401.html#L10116'>btf_type</a>         10116 bpf/verifier.c 		const struct btf_type *ret;</span>
+<span class='curline'><a href='../S/401.html#L11879'>btf_type</a>         11879 bpf/verifier.c 	const struct btf_type *t, *func_proto;</span>
+<span class='curline'><a href='../S/401.html#L11984'>btf_type</a>         11984 bpf/verifier.c 	const struct btf_type *t;</span>
+<span class='curline'><a href='../S/284.html#L1185'>btf_type</a>         1185 trace/bpf_trace.c 	const struct btf_type *t;</span>
+</pre>
+</body>
+</html>

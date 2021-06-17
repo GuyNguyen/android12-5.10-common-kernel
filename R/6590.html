@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>freezer</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/241.html#L3641'>freezer</a>          3641 cgroup/cgroup.c 	seq_printf(seq, "%d\n", cgrp-&gt;freezer.freeze);</span>
+<span class='curline'><a href='../S/241.html#L5245'>freezer</a>          5245 cgroup/cgroup.c 	cgrp-&gt;freezer.e_freeze = parent-&gt;freezer.e_freeze;</span>
+<span class='curline'><a href='../S/241.html#L5246'>freezer</a>          5246 cgroup/cgroup.c 	if (cgrp-&gt;freezer.e_freeze) {</span>
+<span class='curline'><a href='../S/241.html#L5269'>freezer</a>          5269 cgroup/cgroup.c 			if (cgrp-&gt;freezer.e_freeze)</span>
+<span class='curline'><a href='../S/241.html#L5270'>freezer</a>          5270 cgroup/cgroup.c 				tcgrp-&gt;freezer.nr_frozen_descendants++;</span>
+<span class='curline'><a href='../S/241.html#L5552'>freezer</a>          5552 cgroup/cgroup.c 			tcgrp-&gt;freezer.nr_frozen_descendants--;</span>
+<span class='curline'><a href='../S/239.html#L26'>freezer</a>            26 cgroup/freezer.c 			cgrp-&gt;freezer.nr_frozen_descendants += desc;</span>
+<span class='curline'><a href='../S/239.html#L29'>freezer</a>            29 cgroup/freezer.c 			    cgrp-&gt;freezer.nr_frozen_descendants ==</span>
+<span class='curline'><a href='../S/239.html#L37'>freezer</a>            37 cgroup/freezer.c 			cgrp-&gt;freezer.nr_frozen_descendants -= desc;</span>
+<span class='curline'><a href='../S/239.html#L64'>freezer</a>            64 cgroup/freezer.c 		cgrp-&gt;freezer.nr_frozen_tasks == __cgroup_task_count(cgrp);</span>
+<span class='curline'><a href='../S/239.html#L91'>freezer</a>            91 cgroup/freezer.c 	cgrp-&gt;freezer.nr_frozen_tasks++;</span>
+<span class='curline'><a href='../S/239.html#L99'>freezer</a>            99 cgroup/freezer.c 	cgrp-&gt;freezer.nr_frozen_tasks--;</span>
+<span class='curline'><a href='../S/239.html#L100'>freezer</a>           100 cgroup/freezer.c 	WARN_ON_ONCE(cgrp-&gt;freezer.nr_frozen_tasks &lt; 0);</span>
+<span class='curline'><a href='../S/239.html#L213'>freezer</a>           213 cgroup/freezer.c 	if (cgrp-&gt;nr_descendants == cgrp-&gt;freezer.nr_frozen_descendants)</span>
+<span class='curline'><a href='../S/239.html#L271'>freezer</a>           271 cgroup/freezer.c 	if (cgrp-&gt;freezer.freeze == freeze)</span>
+<span class='curline'><a href='../S/239.html#L274'>freezer</a>           274 cgroup/freezer.c 	cgrp-&gt;freezer.freeze = freeze;</span>
+<span class='curline'><a href='../S/239.html#L286'>freezer</a>           286 cgroup/freezer.c 			dsct-&gt;freezer.e_freeze++;</span>
+<span class='curline'><a href='../S/239.html#L290'>freezer</a>           290 cgroup/freezer.c 			if (dsct-&gt;freezer.e_freeze &gt; 1)</span>
+<span class='curline'><a href='../S/239.html#L293'>freezer</a>           293 cgroup/freezer.c 			dsct-&gt;freezer.e_freeze--;</span>
+<span class='curline'><a href='../S/239.html#L297'>freezer</a>           297 cgroup/freezer.c 			if (dsct-&gt;freezer.e_freeze &gt; 0)</span>
+<span class='curline'><a href='../S/239.html#L300'>freezer</a>           300 cgroup/freezer.c 			WARN_ON_ONCE(dsct-&gt;freezer.e_freeze &lt; 0);</span>
+<span class='curline'><a href='../S/237.html#L50'>freezer</a>            50 cgroup/legacy_freezer.c static inline struct freezer *css_freezer(struct cgroup_subsys_state *css)</span>
+<span class='curline'><a href='../S/237.html#L52'>freezer</a>            52 cgroup/legacy_freezer.c 	return css ? container_of(css, struct freezer, css) : NULL;</span>
+<span class='curline'><a href='../S/237.html#L55'>freezer</a>            55 cgroup/legacy_freezer.c static inline struct freezer *task_freezer(struct task_struct *task)</span>
+<span class='curline'><a href='../S/237.html#L60'>freezer</a>            60 cgroup/legacy_freezer.c static struct freezer *parent_freezer(struct freezer *freezer)</span>
+<span class='curline'><a href='../S/237.html#L62'>freezer</a>            62 cgroup/legacy_freezer.c 	return css_freezer(freezer-&gt;css.parent);</span>
+<span class='curline'><a href='../S/237.html#L88'>freezer</a>            88 cgroup/legacy_freezer.c 	struct freezer *freezer;</span>
+<span class='curline'><a href='../S/237.html#L90'>freezer</a>            90 cgroup/legacy_freezer.c 	freezer = kzalloc(sizeof(struct freezer), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/237.html#L91'>freezer</a>            91 cgroup/legacy_freezer.c 	if (!freezer)</span>
+<span class='curline'><a href='../S/237.html#L94'>freezer</a>            94 cgroup/legacy_freezer.c 	return &amp;freezer-&gt;css;</span>
+<span class='curline'><a href='../S/237.html#L107'>freezer</a>           107 cgroup/legacy_freezer.c 	struct freezer *freezer = css_freezer(css);</span>
+<span class='curline'><a href='../S/237.html#L108'>freezer</a>           108 cgroup/legacy_freezer.c 	struct freezer *parent = parent_freezer(freezer);</span>
+<span class='curline'><a href='../S/237.html#L112'>freezer</a>           112 cgroup/legacy_freezer.c 	freezer-&gt;state |= CGROUP_FREEZER_ONLINE;</span>
+<span class='curline'><a href='../S/237.html#L115'>freezer</a>           115 cgroup/legacy_freezer.c 		freezer-&gt;state |= CGROUP_FREEZING_PARENT | CGROUP_FROZEN;</span>
+<span class='curline'><a href='../S/237.html#L132'>freezer</a>           132 cgroup/legacy_freezer.c 	struct freezer *freezer = css_freezer(css);</span>
+<span class='curline'><a href='../S/237.html#L136'>freezer</a>           136 cgroup/legacy_freezer.c 	if (freezer-&gt;state &amp; CGROUP_FREEZING)</span>
+<span class='curline'><a href='../S/237.html#L139'>freezer</a>           139 cgroup/legacy_freezer.c 	freezer-&gt;state = 0;</span>
+<span class='curline'><a href='../S/237.html#L176'>freezer</a>           176 cgroup/legacy_freezer.c 		struct freezer *freezer = css_freezer(new_css);</span>
+<span class='curline'><a href='../S/237.html#L178'>freezer</a>           178 cgroup/legacy_freezer.c 		if (!(freezer-&gt;state &amp; CGROUP_FREEZING)) {</span>
+<span class='curline'><a href='../S/237.html#L183'>freezer</a>           183 cgroup/legacy_freezer.c 			while (freezer &amp;&amp; (freezer-&gt;state &amp; CGROUP_FROZEN)) {</span>
+<span class='curline'><a href='../S/237.html#L184'>freezer</a>           184 cgroup/legacy_freezer.c 				freezer-&gt;state &amp;= ~CGROUP_FROZEN;</span>
+<span class='curline'><a href='../S/237.html#L185'>freezer</a>           185 cgroup/legacy_freezer.c 				freezer = parent_freezer(freezer);</span>
+<span class='curline'><a href='../S/237.html#L205'>freezer</a>           205 cgroup/legacy_freezer.c 	struct freezer *freezer;</span>
+<span class='curline'><a href='../S/237.html#L220'>freezer</a>           220 cgroup/legacy_freezer.c 	freezer = task_freezer(task);</span>
+<span class='curline'><a href='../S/237.html#L221'>freezer</a>           221 cgroup/legacy_freezer.c 	if (freezer-&gt;state &amp; CGROUP_FREEZING)</span>
+<span class='curline'><a href='../S/237.html#L246'>freezer</a>           246 cgroup/legacy_freezer.c 	struct freezer *freezer = css_freezer(css);</span>
+<span class='curline'><a href='../S/237.html#L253'>freezer</a>           253 cgroup/legacy_freezer.c 	if (!(freezer-&gt;state &amp; CGROUP_FREEZING) ||</span>
+<span class='curline'><a href='../S/237.html#L254'>freezer</a>           254 cgroup/legacy_freezer.c 	    (freezer-&gt;state &amp; CGROUP_FROZEN))</span>
+<span class='curline'><a href='../S/237.html#L260'>freezer</a>           260 cgroup/legacy_freezer.c 		struct freezer *child = css_freezer(pos);</span>
+<span class='curline'><a href='../S/237.html#L286'>freezer</a>           286 cgroup/legacy_freezer.c 	freezer-&gt;state |= CGROUP_FROZEN;</span>
+<span class='curline'><a href='../S/237.html#L318'>freezer</a>           318 cgroup/legacy_freezer.c static void freeze_cgroup(struct freezer *freezer)</span>
+<span class='curline'><a href='../S/237.html#L323'>freezer</a>           323 cgroup/legacy_freezer.c 	css_task_iter_start(&amp;freezer-&gt;css, 0, &amp;it);</span>
+<span class='curline'><a href='../S/237.html#L329'>freezer</a>           329 cgroup/legacy_freezer.c static void unfreeze_cgroup(struct freezer *freezer)</span>
+<span class='curline'><a href='../S/237.html#L334'>freezer</a>           334 cgroup/legacy_freezer.c 	css_task_iter_start(&amp;freezer-&gt;css, 0, &amp;it);</span>
+<span class='curline'><a href='../S/237.html#L349'>freezer</a>           349 cgroup/legacy_freezer.c static void freezer_apply_state(struct freezer *freezer, bool freeze,</span>
+<span class='curline'><a href='../S/237.html#L355'>freezer</a>           355 cgroup/legacy_freezer.c 	if (!(freezer-&gt;state &amp; CGROUP_FREEZER_ONLINE))</span>
+<span class='curline'><a href='../S/237.html#L359'>freezer</a>           359 cgroup/legacy_freezer.c 		if (!(freezer-&gt;state &amp; CGROUP_FREEZING))</span>
+<span class='curline'><a href='../S/237.html#L361'>freezer</a>           361 cgroup/legacy_freezer.c 		freezer-&gt;state |= state;</span>
+<span class='curline'><a href='../S/237.html#L362'>freezer</a>           362 cgroup/legacy_freezer.c 		freeze_cgroup(freezer);</span>
+<span class='curline'><a href='../S/237.html#L364'>freezer</a>           364 cgroup/legacy_freezer.c 		bool was_freezing = freezer-&gt;state &amp; CGROUP_FREEZING;</span>
+<span class='curline'><a href='../S/237.html#L366'>freezer</a>           366 cgroup/legacy_freezer.c 		freezer-&gt;state &amp;= ~state;</span>
+<span class='curline'><a href='../S/237.html#L368'>freezer</a>           368 cgroup/legacy_freezer.c 		if (!(freezer-&gt;state &amp; CGROUP_FREEZING)) {</span>
+<span class='curline'><a href='../S/237.html#L371'>freezer</a>           371 cgroup/legacy_freezer.c 			freezer-&gt;state &amp;= ~CGROUP_FROZEN;</span>
+<span class='curline'><a href='../S/237.html#L372'>freezer</a>           372 cgroup/legacy_freezer.c 			unfreeze_cgroup(freezer);</span>
+<span class='curline'><a href='../S/237.html#L385'>freezer</a>           385 cgroup/legacy_freezer.c static void freezer_change_state(struct freezer *freezer, bool freeze)</span>
+<span class='curline'><a href='../S/237.html#L396'>freezer</a>           396 cgroup/legacy_freezer.c 	css_for_each_descendant_pre(pos, &amp;freezer-&gt;css) {</span>
+<span class='curline'><a href='../S/237.html#L397'>freezer</a>           397 cgroup/legacy_freezer.c 		struct freezer *pos_f = css_freezer(pos);</span>
+<span class='curline'><a href='../S/237.html#L398'>freezer</a>           398 cgroup/legacy_freezer.c 		struct freezer *parent = parent_freezer(pos_f);</span>
+<span class='curline'><a href='../S/237.html#L404'>freezer</a>           404 cgroup/legacy_freezer.c 		if (pos_f == freezer)</span>
+<span class='curline'><a href='../S/237.html#L440'>freezer</a>           440 cgroup/legacy_freezer.c 	struct freezer *freezer = css_freezer(css);</span>
+<span class='curline'><a href='../S/237.html#L442'>freezer</a>           442 cgroup/legacy_freezer.c 	return (bool)(freezer-&gt;state &amp; CGROUP_FREEZING_SELF);</span>
+<span class='curline'><a href='../S/237.html#L448'>freezer</a>           448 cgroup/legacy_freezer.c 	struct freezer *freezer = css_freezer(css);</span>
+<span class='curline'><a href='../S/237.html#L450'>freezer</a>           450 cgroup/legacy_freezer.c 	return (bool)(freezer-&gt;state &amp; CGROUP_FREEZING_PARENT);</span>
+</pre>
+</body>
+</html>

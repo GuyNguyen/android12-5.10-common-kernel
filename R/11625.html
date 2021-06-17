@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>ring_buffer_per_cpu</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/258.html#L546'>ring_buffer_per_cpu</a>  546 trace/ring_buffer.c 	struct ring_buffer_per_cpu	**buffers;</span>
+<span class='curline'><a href='../S/258.html#L556'>ring_buffer_per_cpu</a>  556 trace/ring_buffer.c 	struct ring_buffer_per_cpu	*cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L815'>ring_buffer_per_cpu</a>  815 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L927'>ring_buffer_per_cpu</a>  927 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L968'>ring_buffer_per_cpu</a>  968 trace/ring_buffer.c 			if (__same_type(*(b), struct ring_buffer_per_cpu)) { \</span>
+<span class='curline'><a href='../S/258.html#L969'>ring_buffer_per_cpu</a>  969 trace/ring_buffer.c 				struct ring_buffer_per_cpu *__b =	\</span>
+<span class='curline'><a href='../S/258.html#L1114'>ring_buffer_per_cpu</a> 1114 trace/ring_buffer.c rb_is_head_page(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L1144'>ring_buffer_per_cpu</a> 1144 trace/ring_buffer.c static void rb_set_list_to_head(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L1157'>ring_buffer_per_cpu</a> 1157 trace/ring_buffer.c static void rb_head_page_activate(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L1182'>ring_buffer_per_cpu</a> 1182 trace/ring_buffer.c rb_head_page_deactivate(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L1193'>ring_buffer_per_cpu</a> 1193 trace/ring_buffer.c static int rb_head_page_set(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L1216'>ring_buffer_per_cpu</a> 1216 trace/ring_buffer.c static int rb_head_page_set_update(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L1225'>ring_buffer_per_cpu</a> 1225 trace/ring_buffer.c static int rb_head_page_set_head(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L1234'>ring_buffer_per_cpu</a> 1234 trace/ring_buffer.c static int rb_head_page_set_normal(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L1243'>ring_buffer_per_cpu</a> 1243 trace/ring_buffer.c static inline void rb_inc_page(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L1252'>ring_buffer_per_cpu</a> 1252 trace/ring_buffer.c rb_set_head_page(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L1307'>ring_buffer_per_cpu</a> 1307 trace/ring_buffer.c static void rb_tail_page_update(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L1368'>ring_buffer_per_cpu</a> 1368 trace/ring_buffer.c static int rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L1382'>ring_buffer_per_cpu</a> 1382 trace/ring_buffer.c static int rb_check_list(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L1399'>ring_buffer_per_cpu</a> 1399 trace/ring_buffer.c static int rb_check_pages(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L1505'>ring_buffer_per_cpu</a> 1505 trace/ring_buffer.c static int rb_allocate_pages(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L1530'>ring_buffer_per_cpu</a> 1530 trace/ring_buffer.c static struct ring_buffer_per_cpu *</span>
+<span class='curline'><a href='../S/258.html#L1533'>ring_buffer_per_cpu</a> 1533 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L1591'>ring_buffer_per_cpu</a> 1591 trace/ring_buffer.c static void rb_free_cpu_buffer(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L1728'>ring_buffer_per_cpu</a> 1728 trace/ring_buffer.c static void rb_reset_cpu(struct ring_buffer_per_cpu *cpu_buffer);</span>
+<span class='curline'><a href='../S/258.html#L1741'>ring_buffer_per_cpu</a> 1741 trace/ring_buffer.c rb_remove_pages(struct ring_buffer_per_cpu *cpu_buffer, unsigned long nr_pages)</span>
+<span class='curline'><a href='../S/258.html#L1853'>ring_buffer_per_cpu</a> 1853 trace/ring_buffer.c rb_insert_pages(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L1929'>ring_buffer_per_cpu</a> 1929 trace/ring_buffer.c static void rb_update_pages(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L1945'>ring_buffer_per_cpu</a> 1945 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer = container_of(work,</span>
+<span class='curline'><a href='../S/258.html#L1946'>ring_buffer_per_cpu</a> 1946 trace/ring_buffer.c 			struct ring_buffer_per_cpu, update_pages_work);</span>
+<span class='curline'><a href='../S/258.html#L1964'>ring_buffer_per_cpu</a> 1964 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L2174'>ring_buffer_per_cpu</a> 2174 trace/ring_buffer.c rb_reader_event(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L2246'>ring_buffer_per_cpu</a> 2246 trace/ring_buffer.c rb_commit_index(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L2261'>ring_buffer_per_cpu</a> 2261 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer = iter-&gt;cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L2287'>ring_buffer_per_cpu</a> 2287 trace/ring_buffer.c rb_handle_head_page(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L2441'>ring_buffer_per_cpu</a> 2441 trace/ring_buffer.c rb_reset_tail(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L2510'>ring_buffer_per_cpu</a> 2510 trace/ring_buffer.c static inline void rb_end_commit(struct ring_buffer_per_cpu *cpu_buffer);</span>
+<span class='curline'><a href='../S/258.html#L2516'>ring_buffer_per_cpu</a> 2516 trace/ring_buffer.c rb_move_tail(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L2640'>ring_buffer_per_cpu</a> 2640 trace/ring_buffer.c static inline bool rb_event_is_commit(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L2651'>ring_buffer_per_cpu</a> 2651 trace/ring_buffer.c rb_check_timestamp(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L2669'>ring_buffer_per_cpu</a> 2669 trace/ring_buffer.c static void rb_add_timestamp(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L2715'>ring_buffer_per_cpu</a> 2715 trace/ring_buffer.c rb_update_event(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L2771'>ring_buffer_per_cpu</a> 2771 trace/ring_buffer.c rb_event_is_commit(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L2804'>ring_buffer_per_cpu</a> 2804 trace/ring_buffer.c rb_try_to_discard(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L2878'>ring_buffer_per_cpu</a> 2878 trace/ring_buffer.c static void rb_start_commit(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L2885'>ring_buffer_per_cpu</a> 2885 trace/ring_buffer.c rb_set_commit_to_write(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L2935'>ring_buffer_per_cpu</a> 2935 trace/ring_buffer.c static __always_inline void rb_end_commit(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L2980'>ring_buffer_per_cpu</a> 2980 trace/ring_buffer.c static void rb_commit(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L2988'>ring_buffer_per_cpu</a> 2988 trace/ring_buffer.c rb_wakeups(struct trace_buffer *buffer, struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L3092'>ring_buffer_per_cpu</a> 3092 trace/ring_buffer.c trace_recursive_lock(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L3122'>ring_buffer_per_cpu</a> 3122 trace/ring_buffer.c trace_recursive_unlock(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L3146'>ring_buffer_per_cpu</a> 3146 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L3166'>ring_buffer_per_cpu</a> 3166 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L3189'>ring_buffer_per_cpu</a> 3189 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L3207'>ring_buffer_per_cpu</a> 3207 trace/ring_buffer.c __rb_reserve_next(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L3358'>ring_buffer_per_cpu</a> 3358 trace/ring_buffer.c 		      struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L3442'>ring_buffer_per_cpu</a> 3442 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L3489'>ring_buffer_per_cpu</a> 3489 trace/ring_buffer.c rb_decrement_entry(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L3544'>ring_buffer_per_cpu</a> 3544 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L3591'>ring_buffer_per_cpu</a> 3591 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L3642'>ring_buffer_per_cpu</a> 3642 trace/ring_buffer.c static bool rb_per_cpu_empty(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L3771'>ring_buffer_per_cpu</a> 3771 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L3791'>ring_buffer_per_cpu</a> 3791 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L3808'>ring_buffer_per_cpu</a> 3808 trace/ring_buffer.c rb_num_of_entries(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L3822'>ring_buffer_per_cpu</a> 3822 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L3854'>ring_buffer_per_cpu</a> 3854 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L3874'>ring_buffer_per_cpu</a> 3874 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L3893'>ring_buffer_per_cpu</a> 3893 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L3916'>ring_buffer_per_cpu</a> 3916 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L3938'>ring_buffer_per_cpu</a> 3938 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L3959'>ring_buffer_per_cpu</a> 3959 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L3978'>ring_buffer_per_cpu</a> 3978 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L4001'>ring_buffer_per_cpu</a> 4001 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L4017'>ring_buffer_per_cpu</a> 4017 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer = iter-&gt;cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L4045'>ring_buffer_per_cpu</a> 4045 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L4065'>ring_buffer_per_cpu</a> 4065 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L4108'>ring_buffer_per_cpu</a> 4108 trace/ring_buffer.c rb_update_read_stamp(struct ring_buffer_per_cpu *cpu_buffer,</span>
+<span class='curline'><a href='../S/258.html#L4168'>ring_buffer_per_cpu</a> 4168 trace/ring_buffer.c rb_get_reader_page(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L4302'>ring_buffer_per_cpu</a> 4302 trace/ring_buffer.c static void rb_advance_reader(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L4327'>ring_buffer_per_cpu</a> 4327 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L4354'>ring_buffer_per_cpu</a> 4354 trace/ring_buffer.c static int rb_lost_events(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L4360'>ring_buffer_per_cpu</a> 4360 trace/ring_buffer.c rb_buffer_peek(struct ring_buffer_per_cpu *cpu_buffer, u64 *ts,</span>
+<span class='curline'><a href='../S/258.html#L4436'>ring_buffer_per_cpu</a> 4436 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L4521'>ring_buffer_per_cpu</a> 4521 trace/ring_buffer.c static inline bool rb_reader_lock(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L4546'>ring_buffer_per_cpu</a> 4546 trace/ring_buffer.c rb_reader_unlock(struct ring_buffer_per_cpu *cpu_buffer, bool locked)</span>
+<span class='curline'><a href='../S/258.html#L4567'>ring_buffer_per_cpu</a> 4567 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer = buffer-&gt;buffers[cpu];</span>
+<span class='curline'><a href='../S/258.html#L4615'>ring_buffer_per_cpu</a> 4615 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer = iter-&gt;cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L4645'>ring_buffer_per_cpu</a> 4645 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L4704'>ring_buffer_per_cpu</a> 4704 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L4758'>ring_buffer_per_cpu</a> 4758 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L4784'>ring_buffer_per_cpu</a> 4784 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer = iter-&gt;cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L4812'>ring_buffer_per_cpu</a> 4812 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer = iter-&gt;cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L4844'>ring_buffer_per_cpu</a> 4844 trace/ring_buffer.c rb_reset_cpu(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L4890'>ring_buffer_per_cpu</a> 4890 trace/ring_buffer.c static void reset_disabled_cpu_buffer(struct ring_buffer_per_cpu *cpu_buffer)</span>
+<span class='curline'><a href='../S/258.html#L4916'>ring_buffer_per_cpu</a> 4916 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer = buffer-&gt;buffers[cpu];</span>
+<span class='curline'><a href='../S/258.html#L4946'>ring_buffer_per_cpu</a> 4946 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L4980'>ring_buffer_per_cpu</a> 4980 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L5010'>ring_buffer_per_cpu</a> 5010 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L5040'>ring_buffer_per_cpu</a> 5040 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L5074'>ring_buffer_per_cpu</a> 5074 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer_a;</span>
+<span class='curline'><a href='../S/258.html#L5075'>ring_buffer_per_cpu</a> 5075 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer_b;</span>
+<span class='curline'><a href='../S/258.html#L5153'>ring_buffer_per_cpu</a> 5153 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer;</span>
+<span class='curline'><a href='../S/258.html#L5200'>ring_buffer_per_cpu</a> 5200 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer = buffer-&gt;buffers[cpu];</span>
+<span class='curline'><a href='../S/258.html#L5261'>ring_buffer_per_cpu</a> 5261 trace/ring_buffer.c 	struct ring_buffer_per_cpu *cpu_buffer = buffer-&gt;buffers[cpu];</span>
+</pre>
+</body>
+</html>

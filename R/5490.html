@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>delayed_free</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/35.html#L370'>delayed_free</a>      370 locking/lockdep.c } delayed_free;</span>
+<span class='curline'><a href='../S/35.html#L1027'>delayed_free</a>     1027 locking/lockdep.c 	for (i = 0, pf = delayed_free.pf; i &lt; ARRAY_SIZE(delayed_free.pf); i++, pf++) {</span>
+<span class='curline'><a href='../S/35.html#L1144'>delayed_free</a>     1144 locking/lockdep.c 		init_rcu_head(&amp;delayed_free.rcu_head);</span>
+<span class='curline'><a href='../S/35.html#L1153'>delayed_free</a>     1153 locking/lockdep.c 	INIT_LIST_HEAD(&amp;delayed_free.pf[0].zapped);</span>
+<span class='curline'><a href='../S/35.html#L1154'>delayed_free</a>     1154 locking/lockdep.c 	INIT_LIST_HEAD(&amp;delayed_free.pf[1].zapped);</span>
+<span class='curline'><a href='../S/35.html#L5840'>delayed_free</a>     5840 locking/lockdep.c 	return delayed_free.pf + delayed_free.index;</span>
+<span class='curline'><a href='../S/35.html#L5856'>delayed_free</a>     5856 locking/lockdep.c 	if (delayed_free.scheduled)</span>
+<span class='curline'><a href='../S/35.html#L5859'>delayed_free</a>     5859 locking/lockdep.c 	delayed_free.scheduled = true;</span>
+<span class='curline'><a href='../S/35.html#L5861'>delayed_free</a>     5861 locking/lockdep.c 	WARN_ON_ONCE(delayed_free.pf + delayed_free.index != pf);</span>
+<span class='curline'><a href='../S/35.html#L5862'>delayed_free</a>     5862 locking/lockdep.c 	delayed_free.index ^= 1;</span>
+<span class='curline'><a href='../S/35.html#L5864'>delayed_free</a>     5864 locking/lockdep.c 	call_rcu(&amp;delayed_free.rcu_head, free_zapped_rcu);</span>
+<span class='curline'><a href='../S/35.html#L5891'>delayed_free</a>     5891 locking/lockdep.c 	if (WARN_ON_ONCE(ch != &amp;delayed_free.rcu_head))</span>
+<span class='curline'><a href='../S/35.html#L5898'>delayed_free</a>     5898 locking/lockdep.c 	pf = delayed_free.pf + (delayed_free.index ^ 1);</span>
+<span class='curline'><a href='../S/35.html#L5900'>delayed_free</a>     5900 locking/lockdep.c 	delayed_free.scheduled = false;</span>
+<span class='curline'><a href='../S/35.html#L5905'>delayed_free</a>     5905 locking/lockdep.c 	call_rcu_zapped(delayed_free.pf + delayed_free.index);</span>
+<span class='curline'><a href='../S/35.html#L5972'>delayed_free</a>     5972 locking/lockdep.c 	struct pending_free *pf = delayed_free.pf;</span>
+<span class='curline'><a href='../S/35.html#L6073'>delayed_free</a>     6073 locking/lockdep.c 	struct pending_free *pf = delayed_free.pf;</span>
+<span class='curline'><a href='../S/35.html#L6151'>delayed_free</a>     6151 locking/lockdep.c 		sizeof(delayed_free)</span>
+</pre>
+</body>
+</html>

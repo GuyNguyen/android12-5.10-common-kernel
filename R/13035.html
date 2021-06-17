@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>task_group</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/448.html#L20'>task_group</a>         20 sched/autogroup.c void autogroup_free(struct task_group *tg)</span>
+<span class='curline'><a href='../S/448.html#L66'>task_group</a>         66 sched/autogroup.c 	struct task_group *tg;</span>
+<span class='curline'><a href='../S/448.html#L107'>task_group</a>        107 sched/autogroup.c bool task_wants_autogroup(struct task_struct *p, struct task_group *tg)</span>
+<span class='curline'><a href='../S/448.html#L262'>task_group</a>        262 sched/autogroup.c int autogroup_path(struct task_group *tg, char *buf, int buflen)</span>
+<span class='curline'><a href='../S/443.html#L11'>task_group</a>         11 sched/autogroup.h 	struct task_group	*tg;</span>
+<span class='curline'><a href='../S/443.html#L18'>task_group</a>         18 sched/autogroup.h extern void autogroup_free(struct task_group *tg);</span>
+<span class='curline'><a href='../S/443.html#L20'>task_group</a>         20 sched/autogroup.h static inline bool task_group_is_autogroup(struct task_group *tg)</span>
+<span class='curline'><a href='../S/443.html#L25'>task_group</a>         25 sched/autogroup.h extern bool task_wants_autogroup(struct task_struct *p, struct task_group *tg);</span>
+<span class='curline'><a href='../S/443.html#L27'>task_group</a>         27 sched/autogroup.h static inline struct task_group *</span>
+<span class='curline'><a href='../S/443.html#L28'>task_group</a>         28 sched/autogroup.h autogroup_task_group(struct task_struct *p, struct task_group *tg)</span>
+<span class='curline'><a href='../S/443.html#L38'>task_group</a>         38 sched/autogroup.h extern int autogroup_path(struct task_group *tg, char *buf, int buflen);</span>
+<span class='curline'><a href='../S/443.html#L43'>task_group</a>         43 sched/autogroup.h static inline void autogroup_free(struct task_group *tg) { }</span>
+<span class='curline'><a href='../S/443.html#L44'>task_group</a>         44 sched/autogroup.h static inline bool task_group_is_autogroup(struct task_group *tg)</span>
+<span class='curline'><a href='../S/443.html#L49'>task_group</a>         49 sched/autogroup.h static inline struct task_group *</span>
+<span class='curline'><a href='../S/443.html#L50'>task_group</a>         50 sched/autogroup.h autogroup_task_group(struct task_struct *p, struct task_group *tg)</span>
+<span class='curline'><a href='../S/443.html#L55'>task_group</a>         55 sched/autogroup.h static inline int autogroup_path(struct task_group *tg, char *buf, int buflen)</span>
+<span class='curline'><a href='../S/441.html#L846'>task_group</a>        846 sched/core.c   int walk_tg_tree_from(struct task_group *from,</span>
+<span class='curline'><a href='../S/441.html#L849'>task_group</a>        849 sched/core.c   	struct task_group *parent, *child;</span>
+<span class='curline'><a href='../S/441.html#L877'>task_group</a>        877 sched/core.c   int tg_nop(struct task_group *tg, void *data)</span>
+<span class='curline'><a href='../S/441.html#L1112'>task_group</a>       1112 sched/core.c   	if (task_group_is_autogroup(task_group(p)))</span>
+<span class='curline'><a href='../S/441.html#L1114'>task_group</a>       1114 sched/core.c   	if (task_group(p) == &amp;root_task_group)</span>
+<span class='curline'><a href='../S/441.html#L1117'>task_group</a>       1117 sched/core.c   	uc_max = task_group(p)-&gt;uclamp[clamp_id];</span>
+<span class='curline'><a href='../S/441.html#L1376'>task_group</a>       1376 sched/core.c   	struct task_group *tg = &amp;root_task_group;</span>
+<span class='curline'><a href='../S/441.html#L5606'>task_group</a>       5606 sched/core.c   				task_group(p)-&gt;rt_bandwidth.rt_runtime == 0 &amp;&amp;</span>
+<span class='curline'><a href='../S/441.html#L5607'>task_group</a>       5607 sched/core.c   				!task_group_is_autogroup(task_group(p))) {</span>
+<span class='curline'><a href='../S/441.html#L7408'>task_group</a>       7408 sched/core.c   struct task_group root_task_group;</span>
+<span class='curline'><a href='../S/441.html#L7485'>task_group</a>       7485 sched/core.c   	task_group_cache = KMEM_CACHE(task_group, 0);</span>
+<span class='curline'><a href='../S/441.html#L7789'>task_group</a>       7789 sched/core.c   static inline void alloc_uclamp_sched_group(struct task_group *tg,</span>
+<span class='curline'><a href='../S/441.html#L7790'>task_group</a>       7790 sched/core.c   					    struct task_group *parent)</span>
+<span class='curline'><a href='../S/441.html#L7803'>task_group</a>       7803 sched/core.c   static void sched_free_group(struct task_group *tg)</span>
+<span class='curline'><a href='../S/441.html#L7812'>task_group</a>       7812 sched/core.c   struct task_group *sched_create_group(struct task_group *parent)</span>
+<span class='curline'><a href='../S/441.html#L7814'>task_group</a>       7814 sched/core.c   	struct task_group *tg;</span>
+<span class='curline'><a href='../S/441.html#L7835'>task_group</a>       7835 sched/core.c   void sched_online_group(struct task_group *tg, struct task_group *parent)</span>
+<span class='curline'><a href='../S/441.html#L7857'>task_group</a>       7857 sched/core.c   	sched_free_group(container_of(rhp, struct task_group, rcu));</span>
+<span class='curline'><a href='../S/441.html#L7860'>task_group</a>       7860 sched/core.c   void sched_destroy_group(struct task_group *tg)</span>
+<span class='curline'><a href='../S/441.html#L7866'>task_group</a>       7866 sched/core.c   void sched_offline_group(struct task_group *tg)</span>
+<span class='curline'><a href='../S/441.html#L7881'>task_group</a>       7881 sched/core.c   	struct task_group *tg;</span>
+<span class='curline'><a href='../S/441.html#L7889'>task_group</a>       7889 sched/core.c   			  struct task_group, css);</span>
+<span class='curline'><a href='../S/441.html#L7943'>task_group</a>       7943 sched/core.c   static inline struct task_group *css_tg(struct cgroup_subsys_state *css)</span>
+<span class='curline'><a href='../S/441.html#L7945'>task_group</a>       7945 sched/core.c   	return css ? container_of(css, struct task_group, css) : NULL;</span>
+<span class='curline'><a href='../S/441.html#L7951'>task_group</a>       7951 sched/core.c   	struct task_group *parent = css_tg(parent_css);</span>
+<span class='curline'><a href='../S/441.html#L7952'>task_group</a>       7952 sched/core.c   	struct task_group *tg;</span>
+<span class='curline'><a href='../S/441.html#L7969'>task_group</a>       7969 sched/core.c   	struct task_group *tg = css_tg(css);</span>
+<span class='curline'><a href='../S/441.html#L7970'>task_group</a>       7970 sched/core.c   	struct task_group *parent = css_tg(css-&gt;parent);</span>
+<span class='curline'><a href='../S/441.html#L7986'>task_group</a>       7986 sched/core.c   	struct task_group *tg = css_tg(css);</span>
+<span class='curline'><a href='../S/441.html#L7993'>task_group</a>       7993 sched/core.c   	struct task_group *tg = css_tg(css);</span>
+<span class='curline'><a href='../S/441.html#L8157'>task_group</a>       8157 sched/core.c   	struct task_group *tg;</span>
+<span class='curline'><a href='../S/441.html#L8204'>task_group</a>       8204 sched/core.c   	struct task_group *tg;</span>
+<span class='curline'><a href='../S/441.html#L8239'>task_group</a>       8239 sched/core.c   	struct task_group *tg;</span>
+<span class='curline'><a href='../S/441.html#L8252'>task_group</a>       8252 sched/core.c   	struct task_group *tg = css_tg(css);</span>
+<span class='curline'><a href='../S/441.html#L8270'>task_group</a>       8270 sched/core.c   	struct task_group *tg = css_tg(css);</span>
+<span class='curline'><a href='../S/441.html#L8283'>task_group</a>       8283 sched/core.c   static int __cfs_schedulable(struct task_group *tg, u64 period, u64 runtime);</span>
+<span class='curline'><a href='../S/441.html#L8285'>task_group</a>       8285 sched/core.c   static int tg_set_cfs_bandwidth(struct task_group *tg, u64 period, u64 quota)</span>
+<span class='curline'><a href='../S/441.html#L8367'>task_group</a>       8367 sched/core.c   static int tg_set_cfs_quota(struct task_group *tg, long cfs_quota_us)</span>
+<span class='curline'><a href='../S/441.html#L8382'>task_group</a>       8382 sched/core.c   static long tg_get_cfs_quota(struct task_group *tg)</span>
+<span class='curline'><a href='../S/441.html#L8395'>task_group</a>       8395 sched/core.c   static int tg_set_cfs_period(struct task_group *tg, long cfs_period_us)</span>
+<span class='curline'><a href='../S/441.html#L8408'>task_group</a>       8408 sched/core.c   static long tg_get_cfs_period(struct task_group *tg)</span>
+<span class='curline'><a href='../S/441.html#L8443'>task_group</a>       8443 sched/core.c   	struct task_group *tg;</span>
+<span class='curline'><a href='../S/441.html#L8451'>task_group</a>       8451 sched/core.c   static u64 normalize_cfs_quota(struct task_group *tg,</span>
+<span class='curline'><a href='../S/441.html#L8471'>task_group</a>       8471 sched/core.c   static int tg_cfs_schedulable_down(struct task_group *tg, void *data)</span>
+<span class='curline'><a href='../S/441.html#L8504'>task_group</a>       8504 sched/core.c   static int __cfs_schedulable(struct task_group *tg, u64 period, u64 quota)</span>
+<span class='curline'><a href='../S/441.html#L8527'>task_group</a>       8527 sched/core.c   	struct task_group *tg = css_tg(seq_css(sf));</span>
+<span class='curline'><a href='../S/441.html#L8639'>task_group</a>       8639 sched/core.c   		struct task_group *tg = css_tg(css);</span>
+<span class='curline'><a href='../S/441.html#L8660'>task_group</a>       8660 sched/core.c   	struct task_group *tg = css_tg(css);</span>
+<span class='curline'><a href='../S/441.html#L8754'>task_group</a>       8754 sched/core.c   	struct task_group *tg = css_tg(seq_css(sf));</span>
+<span class='curline'><a href='../S/441.html#L8763'>task_group</a>       8763 sched/core.c   	struct task_group *tg = css_tg(of_css(of));</span>
+<span class='curline'><a href='../S/460.html#L429'>task_group</a>        429 sched/debug.c  static void print_cfs_group_stats(struct seq_file *m, int cpu, struct task_group *tg)</span>
+<span class='curline'><a href='../S/460.html#L476'>task_group</a>        476 sched/debug.c  static void task_group_path(struct task_group *tg, char *path, int plen)</span>
+<span class='curline'><a href='../S/460.html#L530'>task_group</a>        530 sched/debug.c  	SEQ_printf_task_group_path(m, task_group(p), " %s")</span>
+<span class='curline'><a href='../S/464.html#L3220'>task_group</a>       3220 sched/fair.c   	struct task_group *tg = cfs_rq-&gt;tg;</span>
+<span class='curline'><a href='../S/464.html#L4670'>task_group</a>       4670 sched/fair.c   static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)</span>
+<span class='curline'><a href='../S/464.html#L4759'>task_group</a>       4759 sched/fair.c   static inline int throttled_lb_pair(struct task_group *tg,</span>
+<span class='curline'><a href='../S/464.html#L4771'>task_group</a>       4771 sched/fair.c   static int tg_unthrottle_up(struct task_group *tg, void *data)</span>
+<span class='curline'><a href='../S/464.html#L4789'>task_group</a>       4789 sched/fair.c   static int tg_throttle_down(struct task_group *tg, void *data)</span>
+<span class='curline'><a href='../S/464.html#L5200'>task_group</a>       5200 sched/fair.c   static void sync_throttle(struct task_group *tg, int cpu)</span>
+<span class='curline'><a href='../S/464.html#L5355'>task_group</a>       5355 sched/fair.c   	struct task_group *tg;</span>
+<span class='curline'><a href='../S/464.html#L5374'>task_group</a>       5374 sched/fair.c   	struct task_group *tg;</span>
+<span class='curline'><a href='../S/464.html#L5412'>task_group</a>       5412 sched/fair.c   static inline void sync_throttle(struct task_group *tg, int cpu) {}</span>
+<span class='curline'><a href='../S/464.html#L5425'>task_group</a>       5425 sched/fair.c   static inline int throttled_lb_pair(struct task_group *tg,</span>
+<span class='curline'><a href='../S/464.html#L5437'>task_group</a>       5437 sched/fair.c   static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)</span>
+<span class='curline'><a href='../S/464.html#L7695'>task_group</a>       7695 sched/fair.c   	if (throttled_lb_pair(task_group(p), env-&gt;src_cpu, env-&gt;dst_cpu))</span>
+<span class='curline'><a href='../S/464.html#L11205'>task_group</a>       11205 sched/fair.c   void free_fair_sched_group(struct task_group *tg)</span>
+<span class='curline'><a href='../S/464.html#L11222'>task_group</a>       11222 sched/fair.c   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)</span>
+<span class='curline'><a href='../S/464.html#L11263'>task_group</a>       11263 sched/fair.c   void online_fair_sched_group(struct task_group *tg)</span>
+<span class='curline'><a href='../S/464.html#L11281'>task_group</a>       11281 sched/fair.c   void unregister_fair_sched_group(struct task_group *tg)</span>
+<span class='curline'><a href='../S/464.html#L11306'>task_group</a>       11306 sched/fair.c   void init_tg_cfs_entry(struct task_group *tg, struct cfs_rq *cfs_rq,</span>
+<span class='curline'><a href='../S/464.html#L11339'>task_group</a>       11339 sched/fair.c   int sched_group_set_shares(struct task_group *tg, unsigned long shares)</span>
+<span class='curline'><a href='../S/464.html#L11377'>task_group</a>       11377 sched/fair.c   void free_fair_sched_group(struct task_group *tg) { }</span>
+<span class='curline'><a href='../S/464.html#L11379'>task_group</a>       11379 sched/fair.c   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)</span>
+<span class='curline'><a href='../S/464.html#L11384'>task_group</a>       11384 sched/fair.c   void online_fair_sched_group(struct task_group *tg) { }</span>
+<span class='curline'><a href='../S/464.html#L11386'>task_group</a>       11386 sched/fair.c   void unregister_fair_sched_group(struct task_group *tg) { }</span>
+<span class='curline'><a href='../S/450.html#L142'>task_group</a>        142 sched/rt.c     void free_rt_sched_group(struct task_group *tg)</span>
+<span class='curline'><a href='../S/450.html#L160'>task_group</a>        160 sched/rt.c     void init_tg_rt_entry(struct task_group *tg, struct rt_rq *rt_rq,</span>
+<span class='curline'><a href='../S/450.html#L187'>task_group</a>        187 sched/rt.c     int alloc_rt_sched_group(struct task_group *tg, struct task_group *parent)</span>
+<span class='curline'><a href='../S/450.html#L255'>task_group</a>        255 sched/rt.c     void free_rt_sched_group(struct task_group *tg) { }</span>
+<span class='curline'><a href='../S/450.html#L257'>task_group</a>        257 sched/rt.c     int alloc_rt_sched_group(struct task_group *tg, struct task_group *parent)</span>
+<span class='curline'><a href='../S/450.html#L498'>task_group</a>        498 sched/rt.c     typedef struct task_group *rt_rq_iter_t;</span>
+<span class='curline'><a href='../S/450.html#L500'>task_group</a>        500 sched/rt.c     static inline struct task_group *next_task_group(struct task_group *tg)</span>
+<span class='curline'><a href='../S/450.html#L504'>task_group</a>        504 sched/rt.c     			typeof(struct task_group), list);</span>
+<span class='curline'><a href='../S/450.html#L598'>task_group</a>        598 sched/rt.c     	return container_of(rt_b, struct task_group, rt_bandwidth)-&gt;rt_rq[cpu];</span>
+<span class='curline'><a href='../S/450.html#L2568'>task_group</a>       2568 sched/rt.c     static inline int tg_has_rt_tasks(struct task_group *tg)</span>
+<span class='curline'><a href='../S/450.html#L2589'>task_group</a>       2589 sched/rt.c     	struct task_group *tg;</span>
+<span class='curline'><a href='../S/450.html#L2594'>task_group</a>       2594 sched/rt.c     static int tg_rt_schedulable(struct task_group *tg, void *data)</span>
+<span class='curline'><a href='../S/450.html#L2597'>task_group</a>       2597 sched/rt.c     	struct task_group *child;</span>
+<span class='curline'><a href='../S/450.html#L2651'>task_group</a>       2651 sched/rt.c     static int __rt_schedulable(struct task_group *tg, u64 period, u64 runtime)</span>
+<span class='curline'><a href='../S/450.html#L2668'>task_group</a>       2668 sched/rt.c     static int tg_set_rt_bandwidth(struct task_group *tg,</span>
+<span class='curline'><a href='../S/450.html#L2713'>task_group</a>       2713 sched/rt.c     int sched_group_set_rt_runtime(struct task_group *tg, long rt_runtime_us)</span>
+<span class='curline'><a href='../S/450.html#L2727'>task_group</a>       2727 sched/rt.c     long sched_group_rt_runtime(struct task_group *tg)</span>
+<span class='curline'><a href='../S/450.html#L2739'>task_group</a>       2739 sched/rt.c     int sched_group_set_rt_period(struct task_group *tg, u64 rt_period_us)</span>
+<span class='curline'><a href='../S/450.html#L2752'>task_group</a>       2752 sched/rt.c     long sched_group_rt_period(struct task_group *tg)</span>
+<span class='curline'><a href='../S/450.html#L2772'>task_group</a>       2772 sched/rt.c     int sched_rt_can_attach(struct task_group *tg, struct task_struct *tsk)</span>
+<span class='curline'><a href='../S/447.html#L417'>task_group</a>        417 sched/sched.h  	struct task_group	*parent;</span>
+<span class='curline'><a href='../S/447.html#L461'>task_group</a>        461 sched/sched.h  typedef int (*tg_visitor)(struct task_group *, void *);</span>
+<span class='curline'><a href='../S/447.html#L463'>task_group</a>        463 sched/sched.h  extern int walk_tg_tree_from(struct task_group *from,</span>
+<span class='curline'><a href='../S/447.html#L477'>task_group</a>        477 sched/sched.h  extern int tg_nop(struct task_group *tg, void *data);</span>
+<span class='curline'><a href='../S/447.html#L479'>task_group</a>        479 sched/sched.h  extern void free_fair_sched_group(struct task_group *tg);</span>
+<span class='curline'><a href='../S/447.html#L480'>task_group</a>        480 sched/sched.h  extern int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent);</span>
+<span class='curline'><a href='../S/447.html#L481'>task_group</a>        481 sched/sched.h  extern void online_fair_sched_group(struct task_group *tg);</span>
+<span class='curline'><a href='../S/447.html#L482'>task_group</a>        482 sched/sched.h  extern void unregister_fair_sched_group(struct task_group *tg);</span>
+<span class='curline'><a href='../S/447.html#L483'>task_group</a>        483 sched/sched.h  extern void init_tg_cfs_entry(struct task_group *tg, struct cfs_rq *cfs_rq,</span>
+<span class='curline'><a href='../S/447.html#L492'>task_group</a>        492 sched/sched.h  extern void free_rt_sched_group(struct task_group *tg);</span>
+<span class='curline'><a href='../S/447.html#L493'>task_group</a>        493 sched/sched.h  extern int alloc_rt_sched_group(struct task_group *tg, struct task_group *parent);</span>
+<span class='curline'><a href='../S/447.html#L494'>task_group</a>        494 sched/sched.h  extern void init_tg_rt_entry(struct task_group *tg, struct rt_rq *rt_rq,</span>
+<span class='curline'><a href='../S/447.html#L497'>task_group</a>        497 sched/sched.h  extern int sched_group_set_rt_runtime(struct task_group *tg, long rt_runtime_us);</span>
+<span class='curline'><a href='../S/447.html#L498'>task_group</a>        498 sched/sched.h  extern int sched_group_set_rt_period(struct task_group *tg, u64 rt_period_us);</span>
+<span class='curline'><a href='../S/447.html#L499'>task_group</a>        499 sched/sched.h  extern long sched_group_rt_runtime(struct task_group *tg);</span>
+<span class='curline'><a href='../S/447.html#L500'>task_group</a>        500 sched/sched.h  extern long sched_group_rt_period(struct task_group *tg);</span>
+<span class='curline'><a href='../S/447.html#L501'>task_group</a>        501 sched/sched.h  extern int sched_rt_can_attach(struct task_group *tg, struct task_struct *tsk);</span>
+<span class='curline'><a href='../S/447.html#L503'>task_group</a>        503 sched/sched.h  extern struct task_group *sched_create_group(struct task_group *parent);</span>
+<span class='curline'><a href='../S/447.html#L504'>task_group</a>        504 sched/sched.h  extern void sched_online_group(struct task_group *tg,</span>
+<span class='curline'><a href='../S/447.html#L505'>task_group</a>        505 sched/sched.h  			       struct task_group *parent);</span>
+<span class='curline'><a href='../S/447.html#L506'>task_group</a>        506 sched/sched.h  extern void sched_destroy_group(struct task_group *tg);</span>
+<span class='curline'><a href='../S/447.html#L507'>task_group</a>        507 sched/sched.h  extern void sched_offline_group(struct task_group *tg);</span>
+<span class='curline'><a href='../S/447.html#L512'>task_group</a>        512 sched/sched.h  extern int sched_group_set_shares(struct task_group *tg, unsigned long shares);</span>
+<span class='curline'><a href='../S/447.html#L603'>task_group</a>        603 sched/sched.h  	struct task_group	*tg;	/* group that "owns" this runqueue */</span>
+<span class='curline'><a href='../S/447.html#L661'>task_group</a>        661 sched/sched.h  	struct task_group	*tg;</span>
+<span class='curline'><a href='../S/447.html#L1592'>task_group</a>       1592 sched/sched.h  static inline struct task_group *task_group(struct task_struct *p)</span>
+<span class='curline'><a href='../S/447.html#L1601'>task_group</a>       1601 sched/sched.h  	struct task_group *tg = task_group(p);</span>
+<span class='curline'><a href='../S/447.html#L1619'>task_group</a>       1619 sched/sched.h  static inline struct task_group *task_group(struct task_struct *p)</span>
+<span class='curline'><a href='../S/447.html#L2527'>task_group</a>       2527 sched/sched.h  	struct task_group *tg;</span>
+<span class='curline'><a href='../S/447.html#L2531'>task_group</a>       2531 sched/sched.h  	tg = container_of(css, struct task_group, css);</span>
+</pre>
+</body>
+</html>

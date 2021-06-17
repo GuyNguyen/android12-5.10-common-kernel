@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rcu_seq_ctr</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/139.html#L543'>rcu_seq_ctr</a>       543 rcu/srcutree.c 	idx = rcu_seq_ctr(gpseq) % ARRAY_SIZE(snp-&gt;srcu_have_cbs);</span>
+<span class='curline'><a href='../S/139.html#L635'>rcu_seq_ctr</a>       635 rcu/srcutree.c 	int idx = rcu_seq_ctr(s) % ARRAY_SIZE(sdp-&gt;mynode-&gt;srcu_have_cbs);</span>
+<span class='curline'><a href='../S/144.html#L1682'>rcu_seq_ctr</a>      1682 rcu/tree.c     	    !(rcu_seq_ctr(rcu_state.gp_seq) %</span>
+<span class='curline'><a href='../S/131.html#L313'>rcu_seq_ctr</a>       313 rcu/tree_exp.h 			wait_event(rnp-&gt;exp_wq[rcu_seq_ctr(s) &amp; 0x3],</span>
+<span class='curline'><a href='../S/131.html#L602'>rcu_seq_ctr</a>       602 rcu/tree_exp.h 		wake_up_all(&amp;rnp-&gt;exp_wq[rcu_seq_ctr(s) &amp; 0x3]);</span>
+<span class='curline'><a href='../S/131.html#L853'>rcu_seq_ctr</a>       853 rcu/tree_exp.h 	wait_event(rnp-&gt;exp_wq[rcu_seq_ctr(s) &amp; 0x3],</span>
+<span class='curline'><a href='../S/126.html#L1613'>rcu_seq_ctr</a>      1613 rcu/tree_plugin.h 	return &amp;rnp-&gt;nocb_gp_wq[rcu_seq_ctr(rnp-&gt;gp_seq) &amp; 0x1];</span>
+<span class='curline'><a href='../S/126.html#L2048'>rcu_seq_ctr</a>      2048 rcu/tree_plugin.h 			rnp-&gt;nocb_gp_wq[rcu_seq_ctr(wait_gp_seq) &amp; 0x1],</span>
+<span class='curline'><a href='../S/130.html#L415'>rcu_seq_ctr</a>       415 rcu/tree_stall.h 	ticks_value = rcu_seq_ctr(rcu_state.gp_seq - rdp-&gt;gp_seq);</span>
+<span class='curline'><a href='../S/130.html#L423'>rcu_seq_ctr</a>       423 rcu/tree_stall.h 	delta = rcu_seq_ctr(rdp-&gt;mynode-&gt;gp_seq - rdp-&gt;rcu_iw_gp_seq);</span>
+</pre>
+</body>
+</html>

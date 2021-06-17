@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>read_event</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/331.html#L7300'>read_event</a>       7300 events/core.c  	struct perf_read_event read_event = {</span>
+<span class='curline'><a href='../S/331.html#L7304'>read_event</a>       7304 events/core.c  			.size = sizeof(read_event) + event-&gt;read_size,</span>
+<span class='curline'><a href='../S/331.html#L7311'>read_event</a>       7311 events/core.c  	perf_event_header__init_id(&amp;read_event.header, &amp;sample, event);</span>
+<span class='curline'><a href='../S/331.html#L7312'>read_event</a>       7312 events/core.c  	ret = perf_output_begin(&amp;handle, &amp;sample, event, read_event.header.size);</span>
+<span class='curline'><a href='../S/331.html#L7316'>read_event</a>       7316 events/core.c  	perf_output_put(&amp;handle, read_event);</span>
+<span class='curline'><a href='../S/278.html#L203'>read_event</a>        203 trace/ring_buffer_benchmark.c 					stat = read_event(cpu);</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,1338 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rcu/tasks.h</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/510.html'>rcu</a>/tasks.h</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L132'>[^]</a><a href='#L1251'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'><a href='140.html#L578' title='Included from 578 in rcu/update.c.'>INCLUDED FROM</a></h2>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L132' title='Defined at 132.'>set_tasks_gp_state</a></li>
+<li><a href='#L140' title='Defined at 140.'>tasks_gp_state_getname</a></li>
+<li><a href='#L152' title='Defined at 152.'>call_rcu_tasks_generic</a></li>
+<li><a href='#L171' title='Defined at 171.'>synchronize_rcu_tasks_generic</a></li>
+<li><a href='#L182' title='Defined at 182.'>rcu_tasks_kthread</a></li>
+<li><a href='#L245' title='Defined at 245.'>rcu_spawn_tasks_kthread_generic</a></li>
+<li><a href='#L260' title='Defined at 260.'>rcu_tasks_bootup_oddness</a></li>
+<li><a href='#L281' title='Defined at 281.'>show_rcu_tasks_generic_gp_kthread</a></li>
+<li><a href='#L304' title='Defined at 304.'>rcu_tasks_wait_gp</a></li>
+<li><a href='#L387' title='Defined at 387.'>rcu_tasks_pregp_step</a></li>
+<li><a href='#L406' title='Defined at 406.'>rcu_tasks_pertask</a></li>
+<li><a href='#L417' title='Defined at 417.'>rcu_tasks_postscan</a></li>
+<li><a href='#L430' title='Defined at 430.'>check_holdout_task</a></li>
+<li><a href='#L462' title='Defined at 462.'>check_all_holdout_tasks</a></li>
+<li><a href='#L474' title='Defined at 474.'>rcu_tasks_postgp</a></li>
+<li><a href='#L517' title='Defined at 517.'>call_rcu_tasks</a></li>
+<li><a href='#L541' title='Defined at 541.'>synchronize_rcu_tasks</a></li>
+<li><a href='#L553' title='Defined at 553.'>rcu_barrier_tasks</a></li>
+<li><a href='#L560' title='Defined at 560.'>rcu_spawn_tasks_kthread</a></li>
+<li><a href='#L574' title='Defined at 574.'>show_rcu_tasks_classic_gp_kthread</a></li>
+<li><a href='#L581' title='Defined at 581.'>exit_tasks_rcu_start</a></li>
+<li><a href='#L589' title='Defined at 589.'>exit_tasks_rcu_finish</a></li>
+<li><a href='#L600' title='Defined at 600.'>show_rcu_tasks_classic_gp_kthread</a></li>
+<li><a href='#L601' title='Defined at 601.'>exit_tasks_rcu_start</a></li>
+<li><a href='#L602' title='Defined at 602.'>exit_tasks_rcu_finish</a></li>
+<li><a href='#L617' title='Defined at 617.'>rcu_tasks_be_rude</a></li>
+<li><a href='#L622' title='Defined at 622.'>rcu_tasks_rude_wait_gp</a></li>
+<li><a href='#L650' title='Defined at 650.'>call_rcu_tasks_rude</a></li>
+<li><a href='#L674' title='Defined at 674.'>synchronize_rcu_tasks_rude</a></li>
+<li><a href='#L686' title='Defined at 686.'>rcu_barrier_tasks_rude</a></li>
+<li><a href='#L693' title='Defined at 693.'>rcu_spawn_tasks_rude_kthread</a></li>
+<li><a href='#L701' title='Defined at 701.'>show_rcu_tasks_rude_gp_kthread</a></li>
+<li><a href='#L708' title='Defined at 708.'>show_rcu_tasks_rude_gp_kthread</a></li>
+<li><a href='#L767' title='Defined at 767.'>rcu_read_unlock_iw</a></li>
+<li><a href='#L774' title='Defined at 774.'>rcu_read_unlock_trace_special</a></li>
+<li><a href='#L791' title='Defined at 791.'>trc_add_holdout</a></li>
+<li><a href='#L800' title='Defined at 800.'>trc_del_holdout</a></li>
+<li><a href='#L809' title='Defined at 809.'>trc_read_check_handler</a></li>
+<li><a href='#L854' title='Defined at 854.'>trc_inspect_reader</a></li>
+<li><a href='#L900' title='Defined at 900.'>trc_wait_for_one_reader</a></li>
+<li><a href='#L956' title='Defined at 956.'>rcu_tasks_trace_pregp_step</a></li>
+<li><a href='#L973' title='Defined at 973.'>rcu_tasks_trace_pertask</a></li>
+<li><a href='#L991' title='Defined at 991.'>rcu_tasks_trace_postscan</a></li>
+<li><a href='#L1008' title='Defined at 1008.'>show_stalled_task_trace</a></li>
+<li><a href='#L1030' title='Defined at 1030.'>show_stalled_ipi_trace</a></li>
+<li><a href='#L1040' title='Defined at 1040.'>check_all_holdout_tasks_trace</a></li>
+<li><a href='#L1072' title='Defined at 1072.'>rcu_tasks_trace_postgp</a></li>
+<li><a href='#L1115' title='Defined at 1115.'>exit_tasks_rcu_finish_trace</a></li>
+<li><a href='#L1142' title='Defined at 1142.'>call_rcu_tasks_trace</a></li>
+<li><a href='#L1165' title='Defined at 1165.'>synchronize_rcu_tasks_trace</a></li>
+<li><a href='#L1178' title='Defined at 1178.'>rcu_barrier_tasks_trace</a></li>
+<li><a href='#L1185' title='Defined at 1185.'>rcu_spawn_tasks_trace_kthread</a></li>
+<li><a href='#L1208' title='Defined at 1208.'>show_rcu_tasks_trace_gp_kthread</a></li>
+<li><a href='#L1221' title='Defined at 1221.'>exit_tasks_rcu_finish_trace</a></li>
+<li><a href='#L1222' title='Defined at 1222.'>show_rcu_tasks_trace_gp_kthread</a></li>
+<li><a href='#L1226' title='Defined at 1226.'>show_rcu_tasks_gp_kthreads</a></li>
+<li><a href='#L1234' title='Defined at 1234.'>rcu_init_tasks_generic</a></li>
+<li><a href='#L1250' title='Defined at 1250.'>rcu_tasks_bootup_oddness</a></li>
+<li><a href='#L1251' title='Defined at 1251.'>show_rcu_tasks_gp_kthreads</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>/* SPDX-License-Identifier: GPL-2.0+ */</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * Task-based RCU implementations.</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> *</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * Copyright (C) 2020 Paul E. McKenney</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> */</em>
+<a id='L7' name='L7'></a>   7 
+<a id='L8' name='L8'></a>   8 <em class='sharp'>#ifdef</em> CONFIG_TASKS_RCU_GENERIC
+<a id='L9' name='L9'></a>   9 
+<a id='L10' name='L10'></a>  10 <em class='comment'>////////////////////////////////////////////////////////////////////////</em>
+<a id='L11' name='L11'></a>  11 <em class='comment'>//</em>
+<a id='L12' name='L12'></a>  12 <em class='comment'>// Generic data structures.</em>
+<a id='L13' name='L13'></a>  13 
+<a id='L14' name='L14'></a>  14 <strong class='reserved'>struct</strong> <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a>;
+<a id='L15' name='L15'></a>  15 <strong class='reserved'>typedef</strong> <strong class='reserved'>void</strong> (*rcu_tasks_gp_func_t)(<strong class='reserved'>struct</strong> <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a> *rtp);
+<a id='L16' name='L16'></a>  16 <strong class='reserved'>typedef</strong> <strong class='reserved'>void</strong> (*pregp_func_t)(<strong class='reserved'>void</strong>);
+<a id='L17' name='L17'></a>  17 <strong class='reserved'>typedef</strong> <strong class='reserved'>void</strong> (*pertask_func_t)(<strong class='reserved'>struct</strong> task_struct *t, <strong class='reserved'>struct</strong> list_head *hop);
+<a id='L18' name='L18'></a>  18 <strong class='reserved'>typedef</strong> <strong class='reserved'>void</strong> (*postscan_func_t)(<strong class='reserved'>struct</strong> list_head *hop);
+<a id='L19' name='L19'></a>  19 <strong class='reserved'>typedef</strong> <strong class='reserved'>void</strong> (*holdouts_func_t)(<strong class='reserved'>struct</strong> list_head *hop, bool ndrpt, bool *frptp);
+<a id='L20' name='L20'></a>  20 <strong class='reserved'>typedef</strong> <strong class='reserved'>void</strong> (*postgp_func_t)(<strong class='reserved'>struct</strong> <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a> *rtp);
+<a id='L21' name='L21'></a>  21 
+<a id='L22' name='L22'></a>  22 <em class='comment'>/**</em>
+<a id='L23' name='L23'></a>  23 <em class='comment'> * Definition for a Tasks-RCU-like mechanism.</em>
+<a id='L24' name='L24'></a>  24 <em class='comment'> * @cbs_head: Head of callback list.</em>
+<a id='L25' name='L25'></a>  25 <em class='comment'> * @cbs_tail: Tail pointer for callback list.</em>
+<a id='L26' name='L26'></a>  26 <em class='comment'> * @cbs_wq: Wait queue allowning new callback to get kthread's attention.</em>
+<a id='L27' name='L27'></a>  27 <em class='comment'> * @cbs_lock: Lock protecting callback list.</em>
+<a id='L28' name='L28'></a>  28 <em class='comment'> * @kthread_ptr: This flavor's grace-period/callback-invocation kthread.</em>
+<a id='L29' name='L29'></a>  29 <em class='comment'> * @gp_func: This flavor's grace-period-wait function.</em>
+<a id='L30' name='L30'></a>  30 <em class='comment'> * @gp_state: Grace period's most recent state transition (debugging).</em>
+<a id='L31' name='L31'></a>  31 <em class='comment'> * @gp_sleep: Per-grace-period sleep to prevent CPU-bound looping.</em>
+<a id='L32' name='L32'></a>  32 <em class='comment'> * @init_fract: Initial backoff sleep interval.</em>
+<a id='L33' name='L33'></a>  33 <em class='comment'> * @gp_jiffies: Time of last @gp_state transition.</em>
+<a id='L34' name='L34'></a>  34 <em class='comment'> * @gp_start: Most recent grace-period start in jiffies.</em>
+<a id='L35' name='L35'></a>  35 <em class='comment'> * @n_gps: Number of grace periods completed since boot.</em>
+<a id='L36' name='L36'></a>  36 <em class='comment'> * @n_ipis: Number of IPIs sent to encourage grace periods to end.</em>
+<a id='L37' name='L37'></a>  37 <em class='comment'> * @n_ipis_fails: Number of IPI-send failures.</em>
+<a id='L38' name='L38'></a>  38 <em class='comment'> * @pregp_func: This flavor's pre-grace-period function (optional).</em>
+<a id='L39' name='L39'></a>  39 <em class='comment'> * @pertask_func: This flavor's per-task scan function (optional).</em>
+<a id='L40' name='L40'></a>  40 <em class='comment'> * @postscan_func: This flavor's post-task scan function (optional).</em>
+<a id='L41' name='L41'></a>  41 <em class='comment'> * @holdout_func: This flavor's holdout-list scan function (optional).</em>
+<a id='L42' name='L42'></a>  42 <em class='comment'> * @postgp_func: This flavor's post-grace-period function (optional).</em>
+<a id='L43' name='L43'></a>  43 <em class='comment'> * @call_func: This flavor's call_rcu()-equivalent function.</em>
+<a id='L44' name='L44'></a>  44 <em class='comment'> * @name: This flavor's textual name.</em>
+<a id='L45' name='L45'></a>  45 <em class='comment'> * @kname: This flavor's kthread name.</em>
+<a id='L46' name='L46'></a>  46 <em class='comment'> */</em>
+<a id='L47' name='L47'></a>  47 <strong class='reserved'>struct</strong> <a href='../R/11136.html' title='Multiple referred from 27 places.'>rcu_tasks</a> <em class='brace'>{</em>
+<a id='L48' name='L48'></a>  48         <strong class='reserved'>struct</strong> rcu_head *cbs_head;
+<a id='L49' name='L49'></a>  49         <strong class='reserved'>struct</strong> rcu_head **cbs_tail;
+<a id='L50' name='L50'></a>  50         <strong class='reserved'>struct</strong> wait_queue_head cbs_wq;
+<a id='L51' name='L51'></a>  51         raw_spinlock_t cbs_lock;
+<a id='L52' name='L52'></a>  52         <strong class='reserved'>int</strong> gp_state;
+<a id='L53' name='L53'></a>  53         <strong class='reserved'>int</strong> gp_sleep;
+<a id='L54' name='L54'></a>  54         <strong class='reserved'>int</strong> init_fract;
+<a id='L55' name='L55'></a>  55         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> gp_jiffies;
+<a id='L56' name='L56'></a>  56         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> gp_start;
+<a id='L57' name='L57'></a>  57         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> n_gps;
+<a id='L58' name='L58'></a>  58         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> n_ipis;
+<a id='L59' name='L59'></a>  59         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> n_ipis_fails;
+<a id='L60' name='L60'></a>  60         <strong class='reserved'>struct</strong> task_struct *kthread_ptr;
+<a id='L61' name='L61'></a>  61         rcu_tasks_gp_func_t gp_func;
+<a id='L62' name='L62'></a>  62         pregp_func_t pregp_func;
+<a id='L63' name='L63'></a>  63         pertask_func_t pertask_func;
+<a id='L64' name='L64'></a>  64         postscan_func_t postscan_func;
+<a id='L65' name='L65'></a>  65         holdouts_func_t holdouts_func;
+<a id='L66' name='L66'></a>  66         postgp_func_t postgp_func;
+<a id='L67' name='L67'></a>  67         call_rcu_func_t call_func;
+<a id='L68' name='L68'></a>  68         <strong class='reserved'>char</strong> *name;
+<a id='L69' name='L69'></a>  69         <strong class='reserved'>char</strong> *kname;
+<a id='L70' name='L70'></a>  70 <em class='brace'>}</em>;
+<a id='L71' name='L71'></a>  71 
+<a id='L72' name='L72'></a>  72 <em class='sharp'>#define</em> <a href='../R/258.html' title='Multiple referred from 3 places.'>DEFINE_RCU_TASKS</a>(rt_name, gp, call, n)                          \
+<a id='L73' name='L73'></a>  73 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a> rt_name =                                       \
+<a id='L74' name='L74'></a>  74 <em class='brace'>{</em>                                                                       \
+<a id='L75' name='L75'></a>  75         .cbs_tail = &amp;rt_name.cbs_head,                                  \
+<a id='L76' name='L76'></a>  76         .cbs_wq = __WAIT_QUEUE_HEAD_INITIALIZER(rt_name.cbs_wq),        \
+<a id='L77' name='L77'></a>  77         .cbs_lock = __RAW_SPIN_LOCK_UNLOCKED(rt_name.cbs_lock),         \
+<a id='L78' name='L78'></a>  78         .gp_func = gp,                                                  \
+<a id='L79' name='L79'></a>  79         .call_func = call,                                              \
+<a id='L80' name='L80'></a>  80         .name = n,                                                      \
+<a id='L81' name='L81'></a>  81         .kname = #rt_name,                                              \
+<a id='L82' name='L82'></a>  82 <em class='brace'>}</em>
+<a id='L83' name='L83'></a>  83 
+<a id='L84' name='L84'></a>  84 <em class='comment'>/* Track exiting tasks in order to allow them to be waited for. */</em>
+<a id='L85' name='L85'></a>  85 DEFINE_STATIC_SRCU(tasks_rcu_exit_srcu);
+<a id='L86' name='L86'></a>  86 
+<a id='L87' name='L87'></a>  87 <em class='comment'>/* Avoid IPIing CPUs early in the grace period. */</em>
+<a id='L88' name='L88'></a>  88 <em class='sharp'>#define</em> <a href='../S/125.html#L89' title='Referred from 89 in rcu/tasks.h.'>RCU_TASK_IPI_DELAY</a> (IS_ENABLED(CONFIG_TASKS_TRACE_RCU_READ_MB) ? HZ / 2 : 0)
+<a id='L89' name='L89'></a>  89 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> rcu_task_ipi_delay __read_mostly = <a href='../S/125.html#L88' title='Defined at 88 in rcu/tasks.h.'>RCU_TASK_IPI_DELAY</a>;
+<a id='L90' name='L90'></a>  90 module_param(rcu_task_ipi_delay, <strong class='reserved'>int</strong>, 0644);
+<a id='L91' name='L91'></a>  91 
+<a id='L92' name='L92'></a>  92 <em class='comment'>/* Control stall timeouts.  Disable with &lt;= 0, otherwise jiffies till stall. */</em>
+<a id='L93' name='L93'></a>  93 <em class='sharp'>#define</em> <a href='../R/1166.html' title='Multiple referred from 2 places.'>RCU_TASK_STALL_TIMEOUT</a> (HZ * 60 * 10)
+<a id='L94' name='L94'></a>  94 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> rcu_task_stall_timeout __read_mostly = <a href='../S/125.html#L93' title='Defined at 93 in rcu/tasks.h.'>RCU_TASK_STALL_TIMEOUT</a>;
+<a id='L95' name='L95'></a>  95 module_param(rcu_task_stall_timeout, <strong class='reserved'>int</strong>, 0644);
+<a id='L96' name='L96'></a>  96 
+<a id='L97' name='L97'></a>  97 <em class='comment'>/* RCU tasks grace-period state for debugging. */</em>
+<a id='L98' name='L98'></a>  98 <em class='sharp'>#define</em> RTGS_INIT                0
+<a id='L99' name='L99'></a>  99 <em class='sharp'>#define</em> <a href='../S/125.html#L215' title='Referred from 215 in rcu/tasks.h.'>RTGS_WAIT_WAIT_CBS</a>       1
+<a id='L100' name='L100'></a> 100 <em class='sharp'>#define</em> <a href='../S/125.html#L222' title='Referred from 222 in rcu/tasks.h.'>RTGS_WAIT_GP</a>             2
+<a id='L101' name='L101'></a> 101 <em class='sharp'>#define</em> <a href='../S/125.html#L311' title='Referred from 311 in rcu/tasks.h.'>RTGS_PRE_WAIT_GP</a>         3
+<a id='L102' name='L102'></a> 102 <em class='sharp'>#define</em> <a href='../S/125.html#L320' title='Referred from 320 in rcu/tasks.h.'>RTGS_SCAN_TASKLIST</a>       4
+<a id='L103' name='L103'></a> 103 <em class='sharp'>#define</em> <a href='../S/125.html#L326' title='Referred from 326 in rcu/tasks.h.'>RTGS_POST_SCAN_TASKLIST</a>  5
+<a id='L104' name='L104'></a> 104 <em class='sharp'>#define</em> <a href='../S/125.html#L350' title='Referred from 350 in rcu/tasks.h.'>RTGS_WAIT_SCAN_HOLDOUTS</a>  6
+<a id='L105' name='L105'></a> 105 <em class='sharp'>#define</em> <a href='../S/125.html#L362' title='Referred from 362 in rcu/tasks.h.'>RTGS_SCAN_HOLDOUTS</a>       7
+<a id='L106' name='L106'></a> 106 <em class='sharp'>#define</em> <a href='../S/125.html#L366' title='Referred from 366 in rcu/tasks.h.'>RTGS_POST_GP</a>             8
+<a id='L107' name='L107'></a> 107 <em class='sharp'>#define</em> <a href='../S/125.html#L1085' title='Referred from 1085 in rcu/tasks.h.'>RTGS_WAIT_READERS</a>        9
+<a id='L108' name='L108'></a> 108 <em class='sharp'>#define</em> <a href='../S/125.html#L228' title='Referred from 228 in rcu/tasks.h.'>RTGS_INVOKE_CBS</a>         10
+<a id='L109' name='L109'></a> 109 <em class='sharp'>#define</em> <a href='../S/125.html#L240' title='Referred from 240 in rcu/tasks.h.'>RTGS_WAIT_CBS</a>           11
+<a id='L110' name='L110'></a> 110 <em class='sharp'>#ifndef</em> CONFIG_TINY_RCU
+<a id='L111' name='L111'></a> 111 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> * <strong class='reserved'>const</strong> rcu_tasks_gp_state_names[] = <em class='brace'>{</em>
+<a id='L112' name='L112'></a> 112         "RTGS_INIT",
+<a id='L113' name='L113'></a> 113         "RTGS_WAIT_WAIT_CBS",
+<a id='L114' name='L114'></a> 114         "RTGS_WAIT_GP",
+<a id='L115' name='L115'></a> 115         "RTGS_PRE_WAIT_GP",
+<a id='L116' name='L116'></a> 116         "RTGS_SCAN_TASKLIST",
+<a id='L117' name='L117'></a> 117         "RTGS_POST_SCAN_TASKLIST",
+<a id='L118' name='L118'></a> 118         "RTGS_WAIT_SCAN_HOLDOUTS",
+<a id='L119' name='L119'></a> 119         "RTGS_SCAN_HOLDOUTS",
+<a id='L120' name='L120'></a> 120         "RTGS_POST_GP",
+<a id='L121' name='L121'></a> 121         "RTGS_WAIT_READERS",
+<a id='L122' name='L122'></a> 122         "RTGS_INVOKE_CBS",
+<a id='L123' name='L123'></a> 123         "RTGS_WAIT_CBS",
+<a id='L124' name='L124'></a> 124 <em class='brace'>}</em>;
+<a id='L125' name='L125'></a> 125 <em class='sharp'>#endif</em> <em class='comment'>/* #ifndef CONFIG_TINY_RCU */</em>
+<a id='L126' name='L126'></a> 126 
+<a id='L127' name='L127'></a> 127 <em class='comment'>////////////////////////////////////////////////////////////////////////</em>
+<a id='L128' name='L128'></a> 128 <em class='comment'>//</em>
+<a id='L129' name='L129'></a> 129 <em class='comment'>// Generic code.</em>
+<a id='L130' name='L130'></a> 130 
+<a id='L131' name='L131'></a> 131 <em class='comment'>/* Record grace-period phase and time. */</em>
+<a id='L132' name='L132'></a> 132 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/12322.html' title='Multiple referred from 11 places.'>set_tasks_gp_state</a>(<strong class='reserved'>struct</strong> <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a> *rtp, <strong class='reserved'>int</strong> newstate)
+<a id='L133' name='L133'></a> 133 <em class='brace'>{</em>
+<a id='L134' name='L134'></a> 134         rtp-&gt;gp_state = newstate;
+<a id='L135' name='L135'></a> 135         rtp-&gt;gp_jiffies = jiffies;
+<a id='L136' name='L136'></a> 136 <em class='brace'>}</em>
+<a id='L137' name='L137'></a> 137 
+<a id='L138' name='L138'></a> 138 <em class='sharp'>#ifndef</em> CONFIG_TINY_RCU
+<a id='L139' name='L139'></a> 139 <em class='comment'>/* Return state name. */</em>
+<a id='L140' name='L140'></a> 140 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *<a href='../S/125.html#L285' title='Referred from 285 in rcu/tasks.h.'>tasks_gp_state_getname</a>(<strong class='reserved'>struct</strong> <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a> *rtp)
+<a id='L141' name='L141'></a> 141 <em class='brace'>{</em>
+<a id='L142' name='L142'></a> 142         <strong class='reserved'>int</strong> i = data_race(rtp-&gt;gp_state); <em class='comment'>// Let KCSAN detect update races</em>
+<a id='L143' name='L143'></a> 143         <strong class='reserved'>int</strong> j = READ_ONCE(i); <em class='comment'>// Prevent the compiler from reading twice</em>
+<a id='L144' name='L144'></a> 144 
+<a id='L145' name='L145'></a> 145         <strong class='reserved'>if</strong> (j &gt;= ARRAY_SIZE(rcu_tasks_gp_state_names))
+<a id='L146' name='L146'></a> 146                 <strong class='reserved'>return</strong> "???";
+<a id='L147' name='L147'></a> 147         <strong class='reserved'>return</strong> rcu_tasks_gp_state_names[j];
+<a id='L148' name='L148'></a> 148 <em class='brace'>}</em>
+<a id='L149' name='L149'></a> 149 <em class='sharp'>#endif</em> <em class='comment'>/* #ifndef CONFIG_TINY_RCU */</em>
+<a id='L150' name='L150'></a> 150 
+<a id='L151' name='L151'></a> 151 <em class='comment'>// Enqueue a callback for the specified flavor of Tasks RCU.</em>
+<a id='L152' name='L152'></a> 152 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/4203.html' title='Multiple referred from 3 places.'>call_rcu_tasks_generic</a>(<strong class='reserved'>struct</strong> rcu_head *rhp, rcu_callback_t <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>,
+<a id='L153' name='L153'></a> 153                                    <strong class='reserved'>struct</strong> <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a> *rtp)
+<a id='L154' name='L154'></a> 154 <em class='brace'>{</em>
+<a id='L155' name='L155'></a> 155         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> flags;
+<a id='L156' name='L156'></a> 156         bool needwake;
+<a id='L157' name='L157'></a> 157 
+<a id='L158' name='L158'></a> 158         rhp-&gt;next = NULL;
+<a id='L159' name='L159'></a> 159         rhp-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a> = <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>;
+<a id='L160' name='L160'></a> 160         raw_spin_lock_irqsave(&amp;rtp-&gt;cbs_lock, flags);
+<a id='L161' name='L161'></a> 161         needwake = !rtp-&gt;cbs_head;
+<a id='L162' name='L162'></a> 162         WRITE_ONCE(*rtp-&gt;cbs_tail, rhp);
+<a id='L163' name='L163'></a> 163         rtp-&gt;cbs_tail = &amp;rhp-&gt;next;
+<a id='L164' name='L164'></a> 164         raw_spin_unlock_irqrestore(&amp;rtp-&gt;cbs_lock, flags);
+<a id='L165' name='L165'></a> 165         <em class='comment'>/* We can't create the thread unless interrupts are enabled. */</em>
+<a id='L166' name='L166'></a> 166         <strong class='reserved'>if</strong> (needwake &amp;&amp; READ_ONCE(rtp-&gt;kthread_ptr))
+<a id='L167' name='L167'></a> 167                 wake_up(&amp;rtp-&gt;cbs_wq);
+<a id='L168' name='L168'></a> 168 <em class='brace'>}</em>
+<a id='L169' name='L169'></a> 169 
+<a id='L170' name='L170'></a> 170 <em class='comment'>// Wait for a grace period for the specified flavor of Tasks RCU.</em>
+<a id='L171' name='L171'></a> 171 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/12879.html' title='Multiple referred from 3 places.'>synchronize_rcu_tasks_generic</a>(<strong class='reserved'>struct</strong> <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a> *rtp)
+<a id='L172' name='L172'></a> 172 <em class='brace'>{</em>
+<a id='L173' name='L173'></a> 173         <em class='comment'>/* Complain if the scheduler has not started.  */</em>
+<a id='L174' name='L174'></a> 174         RCU_LOCKDEP_WARN(rcu_scheduler_active == <a href='../S/133.html#L438' title='Defined at 438 in rcu/rcu.h.'>RCU_SCHEDULER_INACTIVE</a>,
+<a id='L175' name='L175'></a> 175                          "synchronize_rcu_tasks called too soon");
+<a id='L176' name='L176'></a> 176 
+<a id='L177' name='L177'></a> 177         <em class='comment'>/* Wait for the grace period. */</em>
+<a id='L178' name='L178'></a> 178         wait_rcu_gp(rtp-&gt;call_func);
+<a id='L179' name='L179'></a> 179 <em class='brace'>}</em>
+<a id='L180' name='L180'></a> 180 
+<a id='L181' name='L181'></a> 181 <em class='comment'>/* RCU-tasks kthread that detects grace periods and invokes callbacks. */</em>
+<a id='L182' name='L182'></a> 182 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __noreturn <a href='../S/125.html#L249' title='Referred from 249 in rcu/tasks.h.'>rcu_tasks_kthread</a>(<strong class='reserved'>void</strong> *arg)
+<a id='L183' name='L183'></a> 183 <em class='brace'>{</em>
+<a id='L184' name='L184'></a> 184         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> flags;
+<a id='L185' name='L185'></a> 185         <strong class='reserved'>struct</strong> rcu_head *list;
+<a id='L186' name='L186'></a> 186         <strong class='reserved'>struct</strong> rcu_head *next;
+<a id='L187' name='L187'></a> 187         <strong class='reserved'>struct</strong> <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a> *rtp = arg;
+<a id='L188' name='L188'></a> 188 
+<a id='L189' name='L189'></a> 189         <em class='comment'>/* Run on housekeeping CPUs by default.  Sysadm can move if desired. */</em>
+<a id='L190' name='L190'></a> 190         <a href='../S/446.html#L49' title='Defined at 49 in sched/isolation.c.'>housekeeping_affine</a>(current, HK_FLAG_RCU);
+<a id='L191' name='L191'></a> 191         WRITE_ONCE(rtp-&gt;kthread_ptr, current); <em class='comment'>// Let GPs start!</em>
+<a id='L192' name='L192'></a> 192 
+<a id='L193' name='L193'></a> 193         <em class='comment'>/*</em>
+<a id='L194' name='L194'></a> 194 <em class='comment'>         * Each pass through the following loop makes one check for</em>
+<a id='L195' name='L195'></a> 195 <em class='comment'>         * newly arrived callbacks, and, if there are some, waits for</em>
+<a id='L196' name='L196'></a> 196 <em class='comment'>         * one RCU-tasks grace period and then invokes the callbacks.</em>
+<a id='L197' name='L197'></a> 197 <em class='comment'>         * This loop is terminated by the system going down.  ;-)</em>
+<a id='L198' name='L198'></a> 198 <em class='comment'>         */</em>
+<a id='L199' name='L199'></a> 199         <strong class='reserved'>for</strong> (;;) <em class='brace'>{</em>
+<a id='L200' name='L200'></a> 200 
+<a id='L201' name='L201'></a> 201                 <em class='comment'>/* Pick up any new callbacks. */</em>
+<a id='L202' name='L202'></a> 202                 raw_spin_lock_irqsave(&amp;rtp-&gt;cbs_lock, flags);
+<a id='L203' name='L203'></a> 203                 smp_mb__after_spinlock(); <em class='comment'>// Order updates vs. GP.</em>
+<a id='L204' name='L204'></a> 204                 list = rtp-&gt;cbs_head;
+<a id='L205' name='L205'></a> 205                 rtp-&gt;cbs_head = NULL;
+<a id='L206' name='L206'></a> 206                 rtp-&gt;cbs_tail = &amp;rtp-&gt;cbs_head;
+<a id='L207' name='L207'></a> 207                 raw_spin_unlock_irqrestore(&amp;rtp-&gt;cbs_lock, flags);
+<a id='L208' name='L208'></a> 208 
+<a id='L209' name='L209'></a> 209                 <em class='comment'>/* If there were none, wait a bit and start over. */</em>
+<a id='L210' name='L210'></a> 210                 <strong class='reserved'>if</strong> (!list) <em class='brace'>{</em>
+<a id='L211' name='L211'></a> 211                         wait_event_interruptible(rtp-&gt;cbs_wq,
+<a id='L212' name='L212'></a> 212                                                  READ_ONCE(rtp-&gt;cbs_head));
+<a id='L213' name='L213'></a> 213                         <strong class='reserved'>if</strong> (!rtp-&gt;cbs_head) <em class='brace'>{</em>
+<a id='L214' name='L214'></a> 214                                 WARN_ON(signal_pending(current));
+<a id='L215' name='L215'></a> 215                                 <a href='../S/125.html#L132' title='Defined at 132 in rcu/tasks.h.'>set_tasks_gp_state</a>(rtp, <a href='../S/125.html#L99' title='Defined at 99 in rcu/tasks.h.'>RTGS_WAIT_WAIT_CBS</a>);
+<a id='L216' name='L216'></a> 216                                 <a href='../S/115.html#L1919' title='Defined at 1919 in time/timer.c.'>schedule_timeout_idle</a>(HZ/10);
+<a id='L217' name='L217'></a> 217                         <em class='brace'>}</em>
+<a id='L218' name='L218'></a> 218                         <strong class='reserved'>continue</strong>;
+<a id='L219' name='L219'></a> 219                 <em class='brace'>}</em>
+<a id='L220' name='L220'></a> 220 
+<a id='L221' name='L221'></a> 221                 <em class='comment'>// Wait for one grace period.</em>
+<a id='L222' name='L222'></a> 222                 <a href='../S/125.html#L132' title='Defined at 132 in rcu/tasks.h.'>set_tasks_gp_state</a>(rtp, <a href='../S/125.html#L100' title='Defined at 100 in rcu/tasks.h.'>RTGS_WAIT_GP</a>);
+<a id='L223' name='L223'></a> 223                 rtp-&gt;gp_start = jiffies;
+<a id='L224' name='L224'></a> 224                 rtp-&gt;gp_func(rtp);
+<a id='L225' name='L225'></a> 225                 rtp-&gt;n_gps++;
+<a id='L226' name='L226'></a> 226 
+<a id='L227' name='L227'></a> 227                 <em class='comment'>/* Invoke the callbacks. */</em>
+<a id='L228' name='L228'></a> 228                 <a href='../S/125.html#L132' title='Defined at 132 in rcu/tasks.h.'>set_tasks_gp_state</a>(rtp, <a href='../S/125.html#L108' title='Defined at 108 in rcu/tasks.h.'>RTGS_INVOKE_CBS</a>);
+<a id='L229' name='L229'></a> 229                 <strong class='reserved'>while</strong> (list) <em class='brace'>{</em>
+<a id='L230' name='L230'></a> 230                         next = list-&gt;next;
+<a id='L231' name='L231'></a> 231                         local_bh_disable();
+<a id='L232' name='L232'></a> 232                         list-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>(list);
+<a id='L233' name='L233'></a> 233                         local_bh_enable();
+<a id='L234' name='L234'></a> 234                         list = next;
+<a id='L235' name='L235'></a> 235                         cond_resched();
+<a id='L236' name='L236'></a> 236                 <em class='brace'>}</em>
+<a id='L237' name='L237'></a> 237                 <em class='comment'>/* Paranoid sleep to keep this from entering a tight loop */</em>
+<a id='L238' name='L238'></a> 238                 <a href='../S/115.html#L1919' title='Defined at 1919 in time/timer.c.'>schedule_timeout_idle</a>(rtp-&gt;gp_sleep);
+<a id='L239' name='L239'></a> 239 
+<a id='L240' name='L240'></a> 240                 <a href='../S/125.html#L132' title='Defined at 132 in rcu/tasks.h.'>set_tasks_gp_state</a>(rtp, <a href='../S/125.html#L109' title='Defined at 109 in rcu/tasks.h.'>RTGS_WAIT_CBS</a>);
+<a id='L241' name='L241'></a> 241         <em class='brace'>}</em>
+<a id='L242' name='L242'></a> 242 <em class='brace'>}</em>
+<a id='L243' name='L243'></a> 243 
+<a id='L244' name='L244'></a> 244 <em class='comment'>/* Spawn RCU-tasks grace-period kthread. */</em>
+<a id='L245' name='L245'></a> 245 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> __init <a href='../R/11115.html' title='Multiple referred from 3 places.'>rcu_spawn_tasks_kthread_generic</a>(<strong class='reserved'>struct</strong> <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a> *rtp)
+<a id='L246' name='L246'></a> 246 <em class='brace'>{</em>
+<a id='L247' name='L247'></a> 247         <strong class='reserved'>struct</strong> task_struct *t;
+<a id='L248' name='L248'></a> 248 
+<a id='L249' name='L249'></a> 249         t = kthread_run(<a href='../S/125.html#L182' title='Defined at 182 in rcu/tasks.h.'>rcu_tasks_kthread</a>, rtp, "%s_kthread", rtp-&gt;kname);
+<a id='L250' name='L250'></a> 250         <strong class='reserved'>if</strong> (WARN_ONCE(IS_ERR(t), "%s: Could not start %s grace-period kthread, OOM is now expected behavior\n", __func__, rtp-&gt;name))
+<a id='L251' name='L251'></a> 251                 <strong class='reserved'>return</strong>;
+<a id='L252' name='L252'></a> 252         smp_mb(); <em class='comment'>/* Ensure others see full kthread. */</em>
+<a id='L253' name='L253'></a> 253 <em class='brace'>}</em>
+<a id='L254' name='L254'></a> 254 
+<a id='L255' name='L255'></a> 255 <em class='sharp'>#ifndef</em> CONFIG_TINY_RCU
+<a id='L256' name='L256'></a> 256 
+<a id='L257' name='L257'></a> 257 <em class='comment'>/*</em>
+<a id='L258' name='L258'></a> 258 <em class='comment'> * Print any non-default Tasks RCU settings.</em>
+<a id='L259' name='L259'></a> 259 <em class='comment'> */</em>
+<a id='L260' name='L260'></a> 260 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> __init <a href='../S/140.html#L597' title='Referred from 597 in rcu/update.c.'>rcu_tasks_bootup_oddness</a>(<strong class='reserved'>void</strong>)
+<a id='L261' name='L261'></a> 261 <em class='brace'>{</em>
+<a id='L262' name='L262'></a> 262 <em class='sharp'>#if</em> <strong class='reserved'>defined</strong>(CONFIG_TASKS_RCU) || <strong class='reserved'>defined</strong>(CONFIG_TASKS_TRACE_RCU)
+<a id='L263' name='L263'></a> 263         <strong class='reserved'>if</strong> (rcu_task_stall_timeout != <a href='../S/125.html#L93' title='Defined at 93 in rcu/tasks.h.'>RCU_TASK_STALL_TIMEOUT</a>)
+<a id='L264' name='L264'></a> 264                 pr_info("\tTasks-RCU CPU stall warnings timeout set to %d (rcu_task_stall_timeout).\n", rcu_task_stall_timeout);
+<a id='L265' name='L265'></a> 265 <em class='sharp'>#endif</em> <em class='comment'>/* #ifdef CONFIG_TASKS_RCU */</em>
+<a id='L266' name='L266'></a> 266 <em class='sharp'>#ifdef</em> CONFIG_TASKS_RCU
+<a id='L267' name='L267'></a> 267         pr_info("\tTrampoline variant of Tasks RCU enabled.\n");
+<a id='L268' name='L268'></a> 268 <em class='sharp'>#endif</em> <em class='comment'>/* #ifdef CONFIG_TASKS_RCU */</em>
+<a id='L269' name='L269'></a> 269 <em class='sharp'>#ifdef</em> CONFIG_TASKS_RUDE_RCU
+<a id='L270' name='L270'></a> 270         pr_info("\tRude variant of Tasks RCU enabled.\n");
+<a id='L271' name='L271'></a> 271 <em class='sharp'>#endif</em> <em class='comment'>/* #ifdef CONFIG_TASKS_RUDE_RCU */</em>
+<a id='L272' name='L272'></a> 272 <em class='sharp'>#ifdef</em> CONFIG_TASKS_TRACE_RCU
+<a id='L273' name='L273'></a> 273         pr_info("\tTracing variant of Tasks RCU enabled.\n");
+<a id='L274' name='L274'></a> 274 <em class='sharp'>#endif</em> <em class='comment'>/* #ifdef CONFIG_TASKS_TRACE_RCU */</em>
+<a id='L275' name='L275'></a> 275 <em class='brace'>}</em>
+<a id='L276' name='L276'></a> 276 
+<a id='L277' name='L277'></a> 277 <em class='sharp'>#endif</em> <em class='comment'>/* #ifndef CONFIG_TINY_RCU */</em>
+<a id='L278' name='L278'></a> 278 
+<a id='L279' name='L279'></a> 279 <em class='sharp'>#ifndef</em> CONFIG_TINY_RCU
+<a id='L280' name='L280'></a> 280 <em class='comment'>/* Dump out rcutorture-relevant state common to all RCU-tasks flavors. */</em>
+<a id='L281' name='L281'></a> 281 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/12388.html' title='Multiple referred from 3 places.'>show_rcu_tasks_generic_gp_kthread</a>(<strong class='reserved'>struct</strong> <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a> *rtp, <strong class='reserved'>char</strong> *s)
+<a id='L282' name='L282'></a> 282 <em class='brace'>{</em>
+<a id='L283' name='L283'></a> 283         pr_info("%s: %s(%d) since %lu g:%lu i:%lu/%lu %c%c %s\n",
+<a id='L284' name='L284'></a> 284                 rtp-&gt;kname,
+<a id='L285' name='L285'></a> 285                 <a href='../S/125.html#L140' title='Defined at 140 in rcu/tasks.h.'>tasks_gp_state_getname</a>(rtp), data_race(rtp-&gt;gp_state),
+<a id='L286' name='L286'></a> 286                 jiffies - data_race(rtp-&gt;gp_jiffies),
+<a id='L287' name='L287'></a> 287                 data_race(rtp-&gt;n_gps),
+<a id='L288' name='L288'></a> 288                 data_race(rtp-&gt;n_ipis_fails), data_race(rtp-&gt;n_ipis),
+<a id='L289' name='L289'></a> 289                 ".k"[!!data_race(rtp-&gt;kthread_ptr)],
+<a id='L290' name='L290'></a> 290                 ".C"[!!data_race(rtp-&gt;cbs_head)],
+<a id='L291' name='L291'></a> 291                 s);
+<a id='L292' name='L292'></a> 292 <em class='brace'>}</em>
+<a id='L293' name='L293'></a> 293 <em class='sharp'>#endif</em> <em class='comment'>/* #ifndef CONFIG_TINY_RCU */</em>
+<a id='L294' name='L294'></a> 294 
+<a id='L295' name='L295'></a> 295 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../D/6556.html' title='Multiple defined in 2 places.'>exit_tasks_rcu_finish_trace</a>(<strong class='reserved'>struct</strong> task_struct *t);
+<a id='L296' name='L296'></a> 296 
+<a id='L297' name='L297'></a> 297 <em class='sharp'>#if</em> <strong class='reserved'>defined</strong>(CONFIG_TASKS_RCU) || <strong class='reserved'>defined</strong>(CONFIG_TASKS_TRACE_RCU)
+<a id='L298' name='L298'></a> 298 
+<a id='L299' name='L299'></a> 299 <em class='comment'>////////////////////////////////////////////////////////////////////////</em>
+<a id='L300' name='L300'></a> 300 <em class='comment'>//</em>
+<a id='L301' name='L301'></a> 301 <em class='comment'>// Shared code between task-list-scanning variants of Tasks RCU.</em>
+<a id='L302' name='L302'></a> 302 
+<a id='L303' name='L303'></a> 303 <em class='comment'>/* Wait for one RCU-tasks grace period. */</em>
+<a id='L304' name='L304'></a> 304 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/11154.html' title='Multiple referred from 2 places.'>rcu_tasks_wait_gp</a>(<strong class='reserved'>struct</strong> <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a> *rtp)
+<a id='L305' name='L305'></a> 305 <em class='brace'>{</em>
+<a id='L306' name='L306'></a> 306         <strong class='reserved'>struct</strong> task_struct *g, *t;
+<a id='L307' name='L307'></a> 307         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> lastreport;
+<a id='L308' name='L308'></a> 308         LIST_HEAD(holdouts);
+<a id='L309' name='L309'></a> 309         <strong class='reserved'>int</strong> fract;
+<a id='L310' name='L310'></a> 310 
+<a id='L311' name='L311'></a> 311         <a href='../S/125.html#L132' title='Defined at 132 in rcu/tasks.h.'>set_tasks_gp_state</a>(rtp, <a href='../S/125.html#L101' title='Defined at 101 in rcu/tasks.h.'>RTGS_PRE_WAIT_GP</a>);
+<a id='L312' name='L312'></a> 312         rtp-&gt;pregp_func();
+<a id='L313' name='L313'></a> 313 
+<a id='L314' name='L314'></a> 314         <em class='comment'>/*</em>
+<a id='L315' name='L315'></a> 315 <em class='comment'>         * There were callbacks, so we need to wait for an RCU-tasks</em>
+<a id='L316' name='L316'></a> 316 <em class='comment'>         * grace period.  Start off by scanning the task list for tasks</em>
+<a id='L317' name='L317'></a> 317 <em class='comment'>         * that are not already voluntarily blocked.  Mark these tasks</em>
+<a id='L318' name='L318'></a> 318 <em class='comment'>         * and make a list of them in holdouts.</em>
+<a id='L319' name='L319'></a> 319 <em class='comment'>         */</em>
+<a id='L320' name='L320'></a> 320         <a href='../S/125.html#L132' title='Defined at 132 in rcu/tasks.h.'>set_tasks_gp_state</a>(rtp, <a href='../S/125.html#L102' title='Defined at 102 in rcu/tasks.h.'>RTGS_SCAN_TASKLIST</a>);
+<a id='L321' name='L321'></a> 321         rcu_read_lock();
+<a id='L322' name='L322'></a> 322         for_each_process_thread(g, t)
+<a id='L323' name='L323'></a> 323                 rtp-&gt;pertask_func(t, &amp;holdouts);
+<a id='L324' name='L324'></a> 324         rcu_read_unlock();
+<a id='L325' name='L325'></a> 325 
+<a id='L326' name='L326'></a> 326         <a href='../S/125.html#L132' title='Defined at 132 in rcu/tasks.h.'>set_tasks_gp_state</a>(rtp, <a href='../S/125.html#L103' title='Defined at 103 in rcu/tasks.h.'>RTGS_POST_SCAN_TASKLIST</a>);
+<a id='L327' name='L327'></a> 327         rtp-&gt;postscan_func(&amp;holdouts);
+<a id='L328' name='L328'></a> 328 
+<a id='L329' name='L329'></a> 329         <em class='comment'>/*</em>
+<a id='L330' name='L330'></a> 330 <em class='comment'>         * Each pass through the following loop scans the list of holdout</em>
+<a id='L331' name='L331'></a> 331 <em class='comment'>         * tasks, removing any that are no longer holdouts.  When the list</em>
+<a id='L332' name='L332'></a> 332 <em class='comment'>         * is empty, we are done.</em>
+<a id='L333' name='L333'></a> 333 <em class='comment'>         */</em>
+<a id='L334' name='L334'></a> 334         lastreport = jiffies;
+<a id='L335' name='L335'></a> 335 
+<a id='L336' name='L336'></a> 336         <em class='comment'>// Start off with initial wait and slowly back off to 1 HZ wait.</em>
+<a id='L337' name='L337'></a> 337         fract = rtp-&gt;init_fract;
+<a id='L338' name='L338'></a> 338         <strong class='reserved'>if</strong> (fract &gt; HZ)
+<a id='L339' name='L339'></a> 339                 fract = HZ;
+<a id='L340' name='L340'></a> 340 
+<a id='L341' name='L341'></a> 341         <strong class='reserved'>for</strong> (;;) <em class='brace'>{</em>
+<a id='L342' name='L342'></a> 342                 bool firstreport;
+<a id='L343' name='L343'></a> 343                 bool needreport;
+<a id='L344' name='L344'></a> 344                 <strong class='reserved'>int</strong> rtst;
+<a id='L345' name='L345'></a> 345 
+<a id='L346' name='L346'></a> 346                 <strong class='reserved'>if</strong> (list_empty(&amp;holdouts))
+<a id='L347' name='L347'></a> 347                         <strong class='reserved'>break</strong>;
+<a id='L348' name='L348'></a> 348 
+<a id='L349' name='L349'></a> 349                 <em class='comment'>/* Slowly back off waiting for holdouts */</em>
+<a id='L350' name='L350'></a> 350                 <a href='../S/125.html#L132' title='Defined at 132 in rcu/tasks.h.'>set_tasks_gp_state</a>(rtp, <a href='../S/125.html#L104' title='Defined at 104 in rcu/tasks.h.'>RTGS_WAIT_SCAN_HOLDOUTS</a>);
+<a id='L351' name='L351'></a> 351                 <a href='../S/115.html#L1919' title='Defined at 1919 in time/timer.c.'>schedule_timeout_idle</a>(HZ/fract);
+<a id='L352' name='L352'></a> 352 
+<a id='L353' name='L353'></a> 353                 <strong class='reserved'>if</strong> (fract &gt; 1)
+<a id='L354' name='L354'></a> 354                         fract--;
+<a id='L355' name='L355'></a> 355 
+<a id='L356' name='L356'></a> 356                 rtst = READ_ONCE(rcu_task_stall_timeout);
+<a id='L357' name='L357'></a> 357                 needreport = rtst &gt; 0 &amp;&amp; time_after(jiffies, lastreport + rtst);
+<a id='L358' name='L358'></a> 358                 <strong class='reserved'>if</strong> (needreport)
+<a id='L359' name='L359'></a> 359                         lastreport = jiffies;
+<a id='L360' name='L360'></a> 360                 firstreport = true;
+<a id='L361' name='L361'></a> 361                 WARN_ON(signal_pending(current));
+<a id='L362' name='L362'></a> 362                 <a href='../S/125.html#L132' title='Defined at 132 in rcu/tasks.h.'>set_tasks_gp_state</a>(rtp, <a href='../S/125.html#L105' title='Defined at 105 in rcu/tasks.h.'>RTGS_SCAN_HOLDOUTS</a>);
+<a id='L363' name='L363'></a> 363                 rtp-&gt;holdouts_func(&amp;holdouts, needreport, &amp;firstreport);
+<a id='L364' name='L364'></a> 364         <em class='brace'>}</em>
+<a id='L365' name='L365'></a> 365 
+<a id='L366' name='L366'></a> 366         <a href='../S/125.html#L132' title='Defined at 132 in rcu/tasks.h.'>set_tasks_gp_state</a>(rtp, <a href='../S/125.html#L106' title='Defined at 106 in rcu/tasks.h.'>RTGS_POST_GP</a>);
+<a id='L367' name='L367'></a> 367         rtp-&gt;postgp_func(rtp);
+<a id='L368' name='L368'></a> 368 <em class='brace'>}</em>
+<a id='L369' name='L369'></a> 369 
+<a id='L370' name='L370'></a> 370 <em class='sharp'>#endif</em> <em class='comment'>/* #if defined(CONFIG_TASKS_RCU) || defined(CONFIG_TASKS_TRACE_RCU) */</em>
+<a id='L371' name='L371'></a> 371 
+<a id='L372' name='L372'></a> 372 <em class='sharp'>#ifdef</em> CONFIG_TASKS_RCU
+<a id='L373' name='L373'></a> 373 
+<a id='L374' name='L374'></a> 374 <em class='comment'>////////////////////////////////////////////////////////////////////////</em>
+<a id='L375' name='L375'></a> 375 <em class='comment'>//</em>
+<a id='L376' name='L376'></a> 376 <em class='comment'>// Simple variant of RCU whose quiescent states are voluntary context</em>
+<a id='L377' name='L377'></a> 377 <em class='comment'>// switch, cond_resched_rcu_qs(), user-space execution, and idle.</em>
+<a id='L378' name='L378'></a> 378 <em class='comment'>// As such, grace periods can take one good long time.  There are no</em>
+<a id='L379' name='L379'></a> 379 <em class='comment'>// read-side primitives similar to rcu_read_lock() and rcu_read_unlock()</em>
+<a id='L380' name='L380'></a> 380 <em class='comment'>// because this implementation is intended to get the system into a safe</em>
+<a id='L381' name='L381'></a> 381 <em class='comment'>// state for some of the manipulations involved in tracing and the like.</em>
+<a id='L382' name='L382'></a> 382 <em class='comment'>// Finally, this implementation does not support high call_rcu_tasks()</em>
+<a id='L383' name='L383'></a> 383 <em class='comment'>// rates from multiple CPUs.  If this is required, per-CPU callback lists</em>
+<a id='L384' name='L384'></a> 384 <em class='comment'>// will be needed.</em>
+<a id='L385' name='L385'></a> 385 
+<a id='L386' name='L386'></a> 386 <em class='comment'>/* Pre-grace-period preparation. */</em>
+<a id='L387' name='L387'></a> 387 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L564' title='Referred from 564 in rcu/tasks.h.'>rcu_tasks_pregp_step</a>(<strong class='reserved'>void</strong>)
+<a id='L388' name='L388'></a> 388 <em class='brace'>{</em>
+<a id='L389' name='L389'></a> 389         <em class='comment'>/*</em>
+<a id='L390' name='L390'></a> 390 <em class='comment'>         * Wait for all pre-existing t-&gt;on_rq and t-&gt;nvcsw transitions</em>
+<a id='L391' name='L391'></a> 391 <em class='comment'>         * to complete.  Invoking synchronize_rcu() suffices because all</em>
+<a id='L392' name='L392'></a> 392 <em class='comment'>         * these transitions occur with interrupts disabled.  Without this</em>
+<a id='L393' name='L393'></a> 393 <em class='comment'>         * synchronize_rcu(), a read-side critical section that started</em>
+<a id='L394' name='L394'></a> 394 <em class='comment'>         * before the grace period might be incorrectly seen as having</em>
+<a id='L395' name='L395'></a> 395 <em class='comment'>         * started after the grace period.</em>
+<a id='L396' name='L396'></a> 396 <em class='comment'>         *</em>
+<a id='L397' name='L397'></a> 397 <em class='comment'>         * This synchronize_rcu() also dispenses with the need for a</em>
+<a id='L398' name='L398'></a> 398 <em class='comment'>         * memory barrier on the first store to t-&gt;rcu_tasks_holdout,</em>
+<a id='L399' name='L399'></a> 399 <em class='comment'>         * as it forces the store to happen after the beginning of the</em>
+<a id='L400' name='L400'></a> 400 <em class='comment'>         * grace period.</em>
+<a id='L401' name='L401'></a> 401 <em class='comment'>         */</em>
+<a id='L402' name='L402'></a> 402         <a href='../D/13579.html' title='Multiple defined in 2 places.'>synchronize_rcu</a>();
+<a id='L403' name='L403'></a> 403 <em class='brace'>}</em>
+<a id='L404' name='L404'></a> 404 
+<a id='L405' name='L405'></a> 405 <em class='comment'>/* Per-task initial processing. */</em>
+<a id='L406' name='L406'></a> 406 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L565' title='Referred from 565 in rcu/tasks.h.'>rcu_tasks_pertask</a>(<strong class='reserved'>struct</strong> task_struct *t, <strong class='reserved'>struct</strong> list_head *hop)
+<a id='L407' name='L407'></a> 407 <em class='brace'>{</em>
+<a id='L408' name='L408'></a> 408         <strong class='reserved'>if</strong> (t != current &amp;&amp; READ_ONCE(t-&gt;on_rq) &amp;&amp; !is_idle_task(t)) <em class='brace'>{</em>
+<a id='L409' name='L409'></a> 409                 get_task_struct(t);
+<a id='L410' name='L410'></a> 410                 t-&gt;rcu_tasks_nvcsw = READ_ONCE(t-&gt;nvcsw);
+<a id='L411' name='L411'></a> 411                 WRITE_ONCE(t-&gt;rcu_tasks_holdout, true);
+<a id='L412' name='L412'></a> 412                 list_add(&amp;t-&gt;rcu_tasks_holdout_list, hop);
+<a id='L413' name='L413'></a> 413         <em class='brace'>}</em>
+<a id='L414' name='L414'></a> 414 <em class='brace'>}</em>
+<a id='L415' name='L415'></a> 415 
+<a id='L416' name='L416'></a> 416 <em class='comment'>/* Processing between scanning taskslist and draining the holdout list. */</em>
+<a id='L417' name='L417'></a> 417 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L566' title='Referred from 566 in rcu/tasks.h.'>rcu_tasks_postscan</a>(<strong class='reserved'>struct</strong> list_head *hop)
+<a id='L418' name='L418'></a> 418 <em class='brace'>{</em>
+<a id='L419' name='L419'></a> 419         <em class='comment'>/*</em>
+<a id='L420' name='L420'></a> 420 <em class='comment'>         * Wait for tasks that are in the process of exiting.  This</em>
+<a id='L421' name='L421'></a> 421 <em class='comment'>         * does only part of the job, ensuring that all tasks that were</em>
+<a id='L422' name='L422'></a> 422 <em class='comment'>         * previously exiting reach the point where they have disabled</em>
+<a id='L423' name='L423'></a> 423 <em class='comment'>         * preemption, allowing the later synchronize_rcu() to finish</em>
+<a id='L424' name='L424'></a> 424 <em class='comment'>         * the job.</em>
+<a id='L425' name='L425'></a> 425 <em class='comment'>         */</em>
+<a id='L426' name='L426'></a> 426         <a href='../D/13590.html' title='Multiple defined in 2 places.'>synchronize_srcu</a>(&amp;tasks_rcu_exit_srcu);
+<a id='L427' name='L427'></a> 427 <em class='brace'>}</em>
+<a id='L428' name='L428'></a> 428 
+<a id='L429' name='L429'></a> 429 <em class='comment'>/* See if tasks are still holding out, complain if so. */</em>
+<a id='L430' name='L430'></a> 430 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L468' title='Referred from 468 in rcu/tasks.h.'>check_holdout_task</a>(<strong class='reserved'>struct</strong> task_struct *t,
+<a id='L431' name='L431'></a> 431                                bool needreport, bool *firstreport)
+<a id='L432' name='L432'></a> 432 <em class='brace'>{</em>
+<a id='L433' name='L433'></a> 433         <strong class='reserved'>int</strong> cpu;
+<a id='L434' name='L434'></a> 434 
+<a id='L435' name='L435'></a> 435         <strong class='reserved'>if</strong> (!READ_ONCE(t-&gt;rcu_tasks_holdout) ||
+<a id='L436' name='L436'></a> 436             t-&gt;rcu_tasks_nvcsw != READ_ONCE(t-&gt;nvcsw) ||
+<a id='L437' name='L437'></a> 437             !READ_ONCE(t-&gt;on_rq) ||
+<a id='L438' name='L438'></a> 438             (IS_ENABLED(CONFIG_NO_HZ_FULL) &amp;&amp;
+<a id='L439' name='L439'></a> 439              !is_idle_task(t) &amp;&amp; t-&gt;rcu_tasks_idle_cpu &gt;= 0)) <em class='brace'>{</em>
+<a id='L440' name='L440'></a> 440                 WRITE_ONCE(t-&gt;rcu_tasks_holdout, false);
+<a id='L441' name='L441'></a> 441                 list_del_init(&amp;t-&gt;rcu_tasks_holdout_list);
+<a id='L442' name='L442'></a> 442                 put_task_struct(t);
+<a id='L443' name='L443'></a> 443                 <strong class='reserved'>return</strong>;
+<a id='L444' name='L444'></a> 444         <em class='brace'>}</em>
+<a id='L445' name='L445'></a> 445         <a href='../D/11689.html' title='Multiple defined in 2 places.'>rcu_request_urgent_qs_task</a>(t);
+<a id='L446' name='L446'></a> 446         <strong class='reserved'>if</strong> (!needreport)
+<a id='L447' name='L447'></a> 447                 <strong class='reserved'>return</strong>;
+<a id='L448' name='L448'></a> 448         <strong class='reserved'>if</strong> (*firstreport) <em class='brace'>{</em>
+<a id='L449' name='L449'></a> 449                 pr_err("INFO: rcu_tasks detected stalls on tasks:\n");
+<a id='L450' name='L450'></a> 450                 *firstreport = false;
+<a id='L451' name='L451'></a> 451         <em class='brace'>}</em>
+<a id='L452' name='L452'></a> 452         cpu = task_cpu(t);
+<a id='L453' name='L453'></a> 453         pr_alert("%p: %c%c nvcsw: %lu/%lu holdout: %d idle_cpu: %d/%d\n",
+<a id='L454' name='L454'></a> 454                  t, ".I"[is_idle_task(t)],
+<a id='L455' name='L455'></a> 455                  "N."[cpu &lt; 0 || !tick_nohz_full_cpu(cpu)],
+<a id='L456' name='L456'></a> 456                  t-&gt;rcu_tasks_nvcsw, t-&gt;nvcsw, t-&gt;rcu_tasks_holdout,
+<a id='L457' name='L457'></a> 457                  t-&gt;rcu_tasks_idle_cpu, cpu);
+<a id='L458' name='L458'></a> 458         <a href='../S/441.html#L6662' title='Defined at 6662 in sched/core.c.'>sched_show_task</a>(t);
+<a id='L459' name='L459'></a> 459 <em class='brace'>}</em>
+<a id='L460' name='L460'></a> 460 
+<a id='L461' name='L461'></a> 461 <em class='comment'>/* Scan the holdout lists for tasks no longer holding out. */</em>
+<a id='L462' name='L462'></a> 462 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L567' title='Referred from 567 in rcu/tasks.h.'>check_all_holdout_tasks</a>(<strong class='reserved'>struct</strong> list_head *hop,
+<a id='L463' name='L463'></a> 463                                     bool needreport, bool *firstreport)
+<a id='L464' name='L464'></a> 464 <em class='brace'>{</em>
+<a id='L465' name='L465'></a> 465         <strong class='reserved'>struct</strong> task_struct *t, *t1;
+<a id='L466' name='L466'></a> 466 
+<a id='L467' name='L467'></a> 467         list_for_each_entry_safe(t, t1, hop, rcu_tasks_holdout_list) <em class='brace'>{</em>
+<a id='L468' name='L468'></a> 468                 <a href='../S/125.html#L430' title='Defined at 430 in rcu/tasks.h.'>check_holdout_task</a>(t, needreport, firstreport);
+<a id='L469' name='L469'></a> 469                 cond_resched();
+<a id='L470' name='L470'></a> 470         <em class='brace'>}</em>
+<a id='L471' name='L471'></a> 471 <em class='brace'>}</em>
+<a id='L472' name='L472'></a> 472 
+<a id='L473' name='L473'></a> 473 <em class='comment'>/* Finish off the Tasks-RCU grace period. */</em>
+<a id='L474' name='L474'></a> 474 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L568' title='Referred from 568 in rcu/tasks.h.'>rcu_tasks_postgp</a>(<strong class='reserved'>struct</strong> <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a> *rtp)
+<a id='L475' name='L475'></a> 475 <em class='brace'>{</em>
+<a id='L476' name='L476'></a> 476         <em class='comment'>/*</em>
+<a id='L477' name='L477'></a> 477 <em class='comment'>         * Because -&gt;on_rq and -&gt;nvcsw are not guaranteed to have a full</em>
+<a id='L478' name='L478'></a> 478 <em class='comment'>         * memory barriers prior to them in the schedule() path, memory</em>
+<a id='L479' name='L479'></a> 479 <em class='comment'>         * reordering on other CPUs could cause their RCU-tasks read-side</em>
+<a id='L480' name='L480'></a> 480 <em class='comment'>         * critical sections to extend past the end of the grace period.</em>
+<a id='L481' name='L481'></a> 481 <em class='comment'>         * However, because these -&gt;nvcsw updates are carried out with</em>
+<a id='L482' name='L482'></a> 482 <em class='comment'>         * interrupts disabled, we can use synchronize_rcu() to force the</em>
+<a id='L483' name='L483'></a> 483 <em class='comment'>         * needed ordering on all such CPUs.</em>
+<a id='L484' name='L484'></a> 484 <em class='comment'>         *</em>
+<a id='L485' name='L485'></a> 485 <em class='comment'>         * This synchronize_rcu() also confines all -&gt;rcu_tasks_holdout</em>
+<a id='L486' name='L486'></a> 486 <em class='comment'>         * accesses to be within the grace period, avoiding the need for</em>
+<a id='L487' name='L487'></a> 487 <em class='comment'>         * memory barriers for -&gt;rcu_tasks_holdout accesses.</em>
+<a id='L488' name='L488'></a> 488 <em class='comment'>         *</em>
+<a id='L489' name='L489'></a> 489 <em class='comment'>         * In addition, this synchronize_rcu() waits for exiting tasks</em>
+<a id='L490' name='L490'></a> 490 <em class='comment'>         * to complete their final preempt_disable() region of execution,</em>
+<a id='L491' name='L491'></a> 491 <em class='comment'>         * cleaning up after the synchronize_srcu() above.</em>
+<a id='L492' name='L492'></a> 492 <em class='comment'>         */</em>
+<a id='L493' name='L493'></a> 493         <a href='../D/13579.html' title='Multiple defined in 2 places.'>synchronize_rcu</a>();
+<a id='L494' name='L494'></a> 494 <em class='brace'>}</em>
+<a id='L495' name='L495'></a> 495 
+<a id='L496' name='L496'></a> 496 <strong class='reserved'>void</strong> <a href='../S/125.html#L517' title='Defined at 517 in rcu/tasks.h.'>call_rcu_tasks</a>(<strong class='reserved'>struct</strong> rcu_head *rhp, rcu_callback_t <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>);
+<a id='L497' name='L497'></a> 497 <a href='../S/125.html#L72' title='Defined at 72 in rcu/tasks.h.'>DEFINE_RCU_TASKS</a>(<a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a>, <a href='../S/125.html#L304' title='Defined at 304 in rcu/tasks.h.'>rcu_tasks_wait_gp</a>, <a href='../S/125.html#L517' title='Defined at 517 in rcu/tasks.h.'>call_rcu_tasks</a>, "RCU Tasks");
+<a id='L498' name='L498'></a> 498 
+<a id='L499' name='L499'></a> 499 <em class='comment'>/**</em>
+<a id='L500' name='L500'></a> 500 <em class='comment'> * call_rcu_tasks() - Queue an RCU for invocation task-based grace period</em>
+<a id='L501' name='L501'></a> 501 <em class='comment'> * @rhp: structure to be used for queueing the RCU updates.</em>
+<a id='L502' name='L502'></a> 502 <em class='comment'> * @func: actual callback function to be invoked after the grace period</em>
+<a id='L503' name='L503'></a> 503 <em class='comment'> *</em>
+<a id='L504' name='L504'></a> 504 <em class='comment'> * The callback function will be invoked some time after a full grace</em>
+<a id='L505' name='L505'></a> 505 <em class='comment'> * period elapses, in other words after all currently executing RCU</em>
+<a id='L506' name='L506'></a> 506 <em class='comment'> * read-side critical sections have completed. call_rcu_tasks() assumes</em>
+<a id='L507' name='L507'></a> 507 <em class='comment'> * that the read-side critical sections end at a voluntary context</em>
+<a id='L508' name='L508'></a> 508 <em class='comment'> * switch (not a preemption!), cond_resched_rcu_qs(), entry into idle,</em>
+<a id='L509' name='L509'></a> 509 <em class='comment'> * or transition to usermode execution.  As such, there are no read-side</em>
+<a id='L510' name='L510'></a> 510 <em class='comment'> * primitives analogous to rcu_read_lock() and rcu_read_unlock() because</em>
+<a id='L511' name='L511'></a> 511 <em class='comment'> * this primitive is intended to determine that all tasks have passed</em>
+<a id='L512' name='L512'></a> 512 <em class='comment'> * through a safe state, not so much for data-strcuture synchronization.</em>
+<a id='L513' name='L513'></a> 513 <em class='comment'> *</em>
+<a id='L514' name='L514'></a> 514 <em class='comment'> * See the description of call_rcu() for more detailed information on</em>
+<a id='L515' name='L515'></a> 515 <em class='comment'> * memory ordering guarantees.</em>
+<a id='L516' name='L516'></a> 516 <em class='comment'> */</em>
+<a id='L517' name='L517'></a> 517 <strong class='reserved'>void</strong> <a href='../R/4202.html' title='Multiple referred from 10 places.'>call_rcu_tasks</a>(<strong class='reserved'>struct</strong> rcu_head *rhp, rcu_callback_t <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>)
+<a id='L518' name='L518'></a> 518 <em class='brace'>{</em>
+<a id='L519' name='L519'></a> 519         <a href='../S/125.html#L152' title='Defined at 152 in rcu/tasks.h.'>call_rcu_tasks_generic</a>(rhp, <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>, &amp;<a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a>);
+<a id='L520' name='L520'></a> 520 <em class='brace'>}</em>
+<a id='L521' name='L521'></a> 521 EXPORT_SYMBOL_GPL(<a href='../S/125.html#L517' title='Defined at 517 in rcu/tasks.h.'>call_rcu_tasks</a>);
+<a id='L522' name='L522'></a> 522 
+<a id='L523' name='L523'></a> 523 <em class='comment'>/**</em>
+<a id='L524' name='L524'></a> 524 <em class='comment'> * synchronize_rcu_tasks - wait until an rcu-tasks grace period has elapsed.</em>
+<a id='L525' name='L525'></a> 525 <em class='comment'> *</em>
+<a id='L526' name='L526'></a> 526 <em class='comment'> * Control will return to the caller some time after a full rcu-tasks</em>
+<a id='L527' name='L527'></a> 527 <em class='comment'> * grace period has elapsed, in other words after all currently</em>
+<a id='L528' name='L528'></a> 528 <em class='comment'> * executing rcu-tasks read-side critical sections have elapsed.  These</em>
+<a id='L529' name='L529'></a> 529 <em class='comment'> * read-side critical sections are delimited by calls to schedule(),</em>
+<a id='L530' name='L530'></a> 530 <em class='comment'> * cond_resched_tasks_rcu_qs(), idle execution, userspace execution, calls</em>
+<a id='L531' name='L531'></a> 531 <em class='comment'> * to synchronize_rcu_tasks(), and (in theory, anyway) cond_resched().</em>
+<a id='L532' name='L532'></a> 532 <em class='comment'> *</em>
+<a id='L533' name='L533'></a> 533 <em class='comment'> * This is a very specialized primitive, intended only for a few uses in</em>
+<a id='L534' name='L534'></a> 534 <em class='comment'> * tracing and other situations requiring manipulation of function</em>
+<a id='L535' name='L535'></a> 535 <em class='comment'> * preambles and profiling hooks.  The synchronize_rcu_tasks() function</em>
+<a id='L536' name='L536'></a> 536 <em class='comment'> * is not (yet) intended for heavy use from multiple CPUs.</em>
+<a id='L537' name='L537'></a> 537 <em class='comment'> *</em>
+<a id='L538' name='L538'></a> 538 <em class='comment'> * See the description of synchronize_rcu() for more detailed information</em>
+<a id='L539' name='L539'></a> 539 <em class='comment'> * on memory ordering guarantees.</em>
+<a id='L540' name='L540'></a> 540 <em class='comment'> */</em>
+<a id='L541' name='L541'></a> 541 <strong class='reserved'>void</strong> <a href='../R/12878.html' title='Multiple referred from 11 places.'>synchronize_rcu_tasks</a>(<strong class='reserved'>void</strong>)
+<a id='L542' name='L542'></a> 542 <em class='brace'>{</em>
+<a id='L543' name='L543'></a> 543         <a href='../S/125.html#L171' title='Defined at 171 in rcu/tasks.h.'>synchronize_rcu_tasks_generic</a>(&amp;<a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a>);
+<a id='L544' name='L544'></a> 544 <em class='brace'>}</em>
+<a id='L545' name='L545'></a> 545 EXPORT_SYMBOL_GPL(<a href='../S/125.html#L541' title='Defined at 541 in rcu/tasks.h.'>synchronize_rcu_tasks</a>);
+<a id='L546' name='L546'></a> 546 
+<a id='L547' name='L547'></a> 547 <em class='comment'>/**</em>
+<a id='L548' name='L548'></a> 548 <em class='comment'> * rcu_barrier_tasks - Wait for in-flight call_rcu_tasks() callbacks.</em>
+<a id='L549' name='L549'></a> 549 <em class='comment'> *</em>
+<a id='L550' name='L550'></a> 550 <em class='comment'> * Although the current implementation is guaranteed to wait, it is not</em>
+<a id='L551' name='L551'></a> 551 <em class='comment'> * obligated to, for example, if there are no pending callbacks.</em>
+<a id='L552' name='L552'></a> 552 <em class='comment'> */</em>
+<a id='L553' name='L553'></a> 553 <strong class='reserved'>void</strong> <a href='../R/10844.html' title='Multiple referred from 3 places.'>rcu_barrier_tasks</a>(<strong class='reserved'>void</strong>)
+<a id='L554' name='L554'></a> 554 <em class='brace'>{</em>
+<a id='L555' name='L555'></a> 555         <em class='comment'>/* There is only one callback queue, so this is easy.  ;-) */</em>
+<a id='L556' name='L556'></a> 556         <a href='../S/125.html#L541' title='Defined at 541 in rcu/tasks.h.'>synchronize_rcu_tasks</a>();
+<a id='L557' name='L557'></a> 557 <em class='brace'>}</em>
+<a id='L558' name='L558'></a> 558 EXPORT_SYMBOL_GPL(<a href='../S/125.html#L553' title='Defined at 553 in rcu/tasks.h.'>rcu_barrier_tasks</a>);
+<a id='L559' name='L559'></a> 559 
+<a id='L560' name='L560'></a> 560 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __init <a href='../S/125.html#L1237' title='Referred from 1237 in rcu/tasks.h.'>rcu_spawn_tasks_kthread</a>(<strong class='reserved'>void</strong>)
+<a id='L561' name='L561'></a> 561 <em class='brace'>{</em>
+<a id='L562' name='L562'></a> 562         <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a>.gp_sleep = HZ / 10;
+<a id='L563' name='L563'></a> 563         <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a>.init_fract = 10;
+<a id='L564' name='L564'></a> 564         <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a>.pregp_func = <a href='../S/125.html#L387' title='Defined at 387 in rcu/tasks.h.'>rcu_tasks_pregp_step</a>;
+<a id='L565' name='L565'></a> 565         <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a>.pertask_func = <a href='../S/125.html#L406' title='Defined at 406 in rcu/tasks.h.'>rcu_tasks_pertask</a>;
+<a id='L566' name='L566'></a> 566         <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a>.postscan_func = <a href='../S/125.html#L417' title='Defined at 417 in rcu/tasks.h.'>rcu_tasks_postscan</a>;
+<a id='L567' name='L567'></a> 567         <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a>.holdouts_func = <a href='../S/125.html#L462' title='Defined at 462 in rcu/tasks.h.'>check_all_holdout_tasks</a>;
+<a id='L568' name='L568'></a> 568         <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a>.postgp_func = <a href='../S/125.html#L474' title='Defined at 474 in rcu/tasks.h.'>rcu_tasks_postgp</a>;
+<a id='L569' name='L569'></a> 569         <a href='../S/125.html#L245' title='Defined at 245 in rcu/tasks.h.'>rcu_spawn_tasks_kthread_generic</a>(&amp;<a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a>);
+<a id='L570' name='L570'></a> 570         <strong class='reserved'>return</strong> 0;
+<a id='L571' name='L571'></a> 571 <em class='brace'>}</em>
+<a id='L572' name='L572'></a> 572 
+<a id='L573' name='L573'></a> 573 <em class='sharp'>#ifndef</em> CONFIG_TINY_RCU
+<a id='L574' name='L574'></a> 574 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L1228' title='Referred from 1228 in rcu/tasks.h.'>show_rcu_tasks_classic_gp_kthread</a>(<strong class='reserved'>void</strong>)
+<a id='L575' name='L575'></a> 575 <em class='brace'>{</em>
+<a id='L576' name='L576'></a> 576         <a href='../S/125.html#L281' title='Defined at 281 in rcu/tasks.h.'>show_rcu_tasks_generic_gp_kthread</a>(&amp;<a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a>, "");
+<a id='L577' name='L577'></a> 577 <em class='brace'>}</em>
+<a id='L578' name='L578'></a> 578 <em class='sharp'>#endif</em> <em class='comment'>/* #ifndef CONFIG_TINY_RCU */</em>
+<a id='L579' name='L579'></a> 579 
+<a id='L580' name='L580'></a> 580 <em class='comment'>/* Do the srcu_read_lock() for the above synchronize_srcu().  */</em>
+<a id='L581' name='L581'></a> 581 <strong class='reserved'>void</strong> <a href='../S/63.html#L832' title='Referred from 832 in exit.c.'>exit_tasks_rcu_start</a>(<strong class='reserved'>void</strong>) __acquires(&amp;tasks_rcu_exit_srcu)
+<a id='L582' name='L582'></a> 582 <em class='brace'>{</em>
+<a id='L583' name='L583'></a> 583         preempt_disable();
+<a id='L584' name='L584'></a> 584         current-&gt;rcu_tasks_idx = <a href='../S/139.html#L403' title='Defined at 403 in rcu/srcutree.c.'>__srcu_read_lock</a>(&amp;tasks_rcu_exit_srcu);
+<a id='L585' name='L585'></a> 585         preempt_enable();
+<a id='L586' name='L586'></a> 586 <em class='brace'>}</em>
+<a id='L587' name='L587'></a> 587 
+<a id='L588' name='L588'></a> 588 <em class='comment'>/* Do the srcu_read_unlock() for the above synchronize_srcu().  */</em>
+<a id='L589' name='L589'></a> 589 <strong class='reserved'>void</strong> <a href='../S/63.html#L861' title='Referred from 861 in exit.c.'>exit_tasks_rcu_finish</a>(<strong class='reserved'>void</strong>) __releases(&amp;tasks_rcu_exit_srcu)
+<a id='L590' name='L590'></a> 590 <em class='brace'>{</em>
+<a id='L591' name='L591'></a> 591         <strong class='reserved'>struct</strong> task_struct *t = current;
+<a id='L592' name='L592'></a> 592 
+<a id='L593' name='L593'></a> 593         preempt_disable();
+<a id='L594' name='L594'></a> 594         <a href='../D/2671.html' title='Multiple defined in 2 places.'>__srcu_read_unlock</a>(&amp;tasks_rcu_exit_srcu, t-&gt;rcu_tasks_idx);
+<a id='L595' name='L595'></a> 595         preempt_enable();
+<a id='L596' name='L596'></a> 596         <a href='../D/6556.html' title='Multiple defined in 2 places.'>exit_tasks_rcu_finish_trace</a>(t);
+<a id='L597' name='L597'></a> 597 <em class='brace'>}</em>
+<a id='L598' name='L598'></a> 598 
+<a id='L599' name='L599'></a> 599 <em class='sharp'>#else</em> <em class='comment'>/* #ifdef CONFIG_TASKS_RCU */</em>
+<a id='L600' name='L600'></a> 600 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L1228' title='Referred from 1228 in rcu/tasks.h.'>show_rcu_tasks_classic_gp_kthread</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em> <em class='brace'>}</em>
+<a id='L601' name='L601'></a> 601 <strong class='reserved'>void</strong> <a href='../S/63.html#L832' title='Referred from 832 in exit.c.'>exit_tasks_rcu_start</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em> <em class='brace'>}</em>
+<a id='L602' name='L602'></a> 602 <strong class='reserved'>void</strong> <a href='../S/63.html#L861' title='Referred from 861 in exit.c.'>exit_tasks_rcu_finish</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em> <a href='../D/6556.html' title='Multiple defined in 2 places.'>exit_tasks_rcu_finish_trace</a>(current); <em class='brace'>}</em>
+<a id='L603' name='L603'></a> 603 <em class='sharp'>#endif</em> <em class='comment'>/* #else #ifdef CONFIG_TASKS_RCU */</em>
+<a id='L604' name='L604'></a> 604 
+<a id='L605' name='L605'></a> 605 <em class='sharp'>#ifdef</em> CONFIG_TASKS_RUDE_RCU
+<a id='L606' name='L606'></a> 606 
+<a id='L607' name='L607'></a> 607 <em class='comment'>////////////////////////////////////////////////////////////////////////</em>
+<a id='L608' name='L608'></a> 608 <em class='comment'>//</em>
+<a id='L609' name='L609'></a> 609 <em class='comment'>// "Rude" variant of Tasks RCU, inspired by Steve Rostedt's trick of</em>
+<a id='L610' name='L610'></a> 610 <em class='comment'>// passing an empty function to schedule_on_each_cpu().  This approach</em>
+<a id='L611' name='L611'></a> 611 <em class='comment'>// provides an asynchronous call_rcu_tasks_rude() API and batching</em>
+<a id='L612' name='L612'></a> 612 <em class='comment'>// of concurrent calls to the synchronous synchronize_rcu_rude() API.</em>
+<a id='L613' name='L613'></a> 613 <em class='comment'>// This sends IPIs far and wide and induces otherwise unnecessary context</em>
+<a id='L614' name='L614'></a> 614 <em class='comment'>// switches on all online CPUs, whether idle or not.</em>
+<a id='L615' name='L615'></a> 615 
+<a id='L616' name='L616'></a> 616 <em class='comment'>// Empty function to allow workqueues to force a context switch.</em>
+<a id='L617' name='L617'></a> 617 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L625' title='Referred from 625 in rcu/tasks.h.'>rcu_tasks_be_rude</a>(<strong class='reserved'>struct</strong> work_struct *work)
+<a id='L618' name='L618'></a> 618 <em class='brace'>{</em>
+<a id='L619' name='L619'></a> 619 <em class='brace'>}</em>
+<a id='L620' name='L620'></a> 620 
+<a id='L621' name='L621'></a> 621 <em class='comment'>// Wait for one rude RCU-tasks grace period.</em>
+<a id='L622' name='L622'></a> 622 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L629' title='Referred from 629 in rcu/tasks.h.'>rcu_tasks_rude_wait_gp</a>(<strong class='reserved'>struct</strong> <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a> *rtp)
+<a id='L623' name='L623'></a> 623 <em class='brace'>{</em>
+<a id='L624' name='L624'></a> 624         rtp-&gt;n_ipis += cpumask_weight(cpu_online_mask);
+<a id='L625' name='L625'></a> 625         <a href='../S/365.html#L3299' title='Defined at 3299 in workqueue.c.'>schedule_on_each_cpu</a>(<a href='../S/125.html#L617' title='Defined at 617 in rcu/tasks.h.'>rcu_tasks_be_rude</a>);
+<a id='L626' name='L626'></a> 626 <em class='brace'>}</em>
+<a id='L627' name='L627'></a> 627 
+<a id='L628' name='L628'></a> 628 <strong class='reserved'>void</strong> <a href='../S/125.html#L650' title='Defined at 650 in rcu/tasks.h.'>call_rcu_tasks_rude</a>(<strong class='reserved'>struct</strong> rcu_head *rhp, rcu_callback_t <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>);
+<a id='L629' name='L629'></a> 629 <a href='../S/125.html#L72' title='Defined at 72 in rcu/tasks.h.'>DEFINE_RCU_TASKS</a>(rcu_tasks_rude, <a href='../S/125.html#L622' title='Defined at 622 in rcu/tasks.h.'>rcu_tasks_rude_wait_gp</a>, <a href='../S/125.html#L650' title='Defined at 650 in rcu/tasks.h.'>call_rcu_tasks_rude</a>,
+<a id='L630' name='L630'></a> 630                  "RCU Tasks Rude");
+<a id='L631' name='L631'></a> 631 
+<a id='L632' name='L632'></a> 632 <em class='comment'>/**</em>
+<a id='L633' name='L633'></a> 633 <em class='comment'> * call_rcu_tasks_rude() - Queue a callback rude task-based grace period</em>
+<a id='L634' name='L634'></a> 634 <em class='comment'> * @rhp: structure to be used for queueing the RCU updates.</em>
+<a id='L635' name='L635'></a> 635 <em class='comment'> * @func: actual callback function to be invoked after the grace period</em>
+<a id='L636' name='L636'></a> 636 <em class='comment'> *</em>
+<a id='L637' name='L637'></a> 637 <em class='comment'> * The callback function will be invoked some time after a full grace</em>
+<a id='L638' name='L638'></a> 638 <em class='comment'> * period elapses, in other words after all currently executing RCU</em>
+<a id='L639' name='L639'></a> 639 <em class='comment'> * read-side critical sections have completed. call_rcu_tasks_rude()</em>
+<a id='L640' name='L640'></a> 640 <em class='comment'> * assumes that the read-side critical sections end at context switch,</em>
+<a id='L641' name='L641'></a> 641 <em class='comment'> * cond_resched_rcu_qs(), or transition to usermode execution.  As such,</em>
+<a id='L642' name='L642'></a> 642 <em class='comment'> * there are no read-side primitives analogous to rcu_read_lock() and</em>
+<a id='L643' name='L643'></a> 643 <em class='comment'> * rcu_read_unlock() because this primitive is intended to determine</em>
+<a id='L644' name='L644'></a> 644 <em class='comment'> * that all tasks have passed through a safe state, not so much for</em>
+<a id='L645' name='L645'></a> 645 <em class='comment'> * data-strcuture synchronization.</em>
+<a id='L646' name='L646'></a> 646 <em class='comment'> *</em>
+<a id='L647' name='L647'></a> 647 <em class='comment'> * See the description of call_rcu() for more detailed information on</em>
+<a id='L648' name='L648'></a> 648 <em class='comment'> * memory ordering guarantees.</em>
+<a id='L649' name='L649'></a> 649 <em class='comment'> */</em>
+<a id='L650' name='L650'></a> 650 <strong class='reserved'>void</strong> <a href='../R/4204.html' title='Multiple referred from 5 places.'>call_rcu_tasks_rude</a>(<strong class='reserved'>struct</strong> rcu_head *rhp, rcu_callback_t <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>)
+<a id='L651' name='L651'></a> 651 <em class='brace'>{</em>
+<a id='L652' name='L652'></a> 652         <a href='../S/125.html#L152' title='Defined at 152 in rcu/tasks.h.'>call_rcu_tasks_generic</a>(rhp, <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>, &amp;rcu_tasks_rude);
+<a id='L653' name='L653'></a> 653 <em class='brace'>}</em>
+<a id='L654' name='L654'></a> 654 EXPORT_SYMBOL_GPL(<a href='../S/125.html#L650' title='Defined at 650 in rcu/tasks.h.'>call_rcu_tasks_rude</a>);
+<a id='L655' name='L655'></a> 655 
+<a id='L656' name='L656'></a> 656 <em class='comment'>/**</em>
+<a id='L657' name='L657'></a> 657 <em class='comment'> * synchronize_rcu_tasks_rude - wait for a rude rcu-tasks grace period</em>
+<a id='L658' name='L658'></a> 658 <em class='comment'> *</em>
+<a id='L659' name='L659'></a> 659 <em class='comment'> * Control will return to the caller some time after a rude rcu-tasks</em>
+<a id='L660' name='L660'></a> 660 <em class='comment'> * grace period has elapsed, in other words after all currently</em>
+<a id='L661' name='L661'></a> 661 <em class='comment'> * executing rcu-tasks read-side critical sections have elapsed.  These</em>
+<a id='L662' name='L662'></a> 662 <em class='comment'> * read-side critical sections are delimited by calls to schedule(),</em>
+<a id='L663' name='L663'></a> 663 <em class='comment'> * cond_resched_tasks_rcu_qs(), userspace execution, and (in theory,</em>
+<a id='L664' name='L664'></a> 664 <em class='comment'> * anyway) cond_resched().</em>
+<a id='L665' name='L665'></a> 665 <em class='comment'> *</em>
+<a id='L666' name='L666'></a> 666 <em class='comment'> * This is a very specialized primitive, intended only for a few uses in</em>
+<a id='L667' name='L667'></a> 667 <em class='comment'> * tracing and other situations requiring manipulation of function preambles</em>
+<a id='L668' name='L668'></a> 668 <em class='comment'> * and profiling hooks.  The synchronize_rcu_tasks_rude() function is not</em>
+<a id='L669' name='L669'></a> 669 <em class='comment'> * (yet) intended for heavy use from multiple CPUs.</em>
+<a id='L670' name='L670'></a> 670 <em class='comment'> *</em>
+<a id='L671' name='L671'></a> 671 <em class='comment'> * See the description of synchronize_rcu() for more detailed information</em>
+<a id='L672' name='L672'></a> 672 <em class='comment'> * on memory ordering guarantees.</em>
+<a id='L673' name='L673'></a> 673 <em class='comment'> */</em>
+<a id='L674' name='L674'></a> 674 <strong class='reserved'>void</strong> <a href='../R/12880.html' title='Multiple referred from 7 places.'>synchronize_rcu_tasks_rude</a>(<strong class='reserved'>void</strong>)
+<a id='L675' name='L675'></a> 675 <em class='brace'>{</em>
+<a id='L676' name='L676'></a> 676         <a href='../S/125.html#L171' title='Defined at 171 in rcu/tasks.h.'>synchronize_rcu_tasks_generic</a>(&amp;rcu_tasks_rude);
+<a id='L677' name='L677'></a> 677 <em class='brace'>}</em>
+<a id='L678' name='L678'></a> 678 EXPORT_SYMBOL_GPL(<a href='../S/125.html#L674' title='Defined at 674 in rcu/tasks.h.'>synchronize_rcu_tasks_rude</a>);
+<a id='L679' name='L679'></a> 679 
+<a id='L680' name='L680'></a> 680 <em class='comment'>/**</em>
+<a id='L681' name='L681'></a> 681 <em class='comment'> * rcu_barrier_tasks_rude - Wait for in-flight call_rcu_tasks_rude() callbacks.</em>
+<a id='L682' name='L682'></a> 682 <em class='comment'> *</em>
+<a id='L683' name='L683'></a> 683 <em class='comment'> * Although the current implementation is guaranteed to wait, it is not</em>
+<a id='L684' name='L684'></a> 684 <em class='comment'> * obligated to, for example, if there are no pending callbacks.</em>
+<a id='L685' name='L685'></a> 685 <em class='comment'> */</em>
+<a id='L686' name='L686'></a> 686 <strong class='reserved'>void</strong> <a href='../R/10845.html' title='Multiple referred from 2 places.'>rcu_barrier_tasks_rude</a>(<strong class='reserved'>void</strong>)
+<a id='L687' name='L687'></a> 687 <em class='brace'>{</em>
+<a id='L688' name='L688'></a> 688         <em class='comment'>/* There is only one callback queue, so this is easy.  ;-) */</em>
+<a id='L689' name='L689'></a> 689         <a href='../S/125.html#L674' title='Defined at 674 in rcu/tasks.h.'>synchronize_rcu_tasks_rude</a>();
+<a id='L690' name='L690'></a> 690 <em class='brace'>}</em>
+<a id='L691' name='L691'></a> 691 EXPORT_SYMBOL_GPL(<a href='../S/125.html#L686' title='Defined at 686 in rcu/tasks.h.'>rcu_barrier_tasks_rude</a>);
+<a id='L692' name='L692'></a> 692 
+<a id='L693' name='L693'></a> 693 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __init <a href='../S/125.html#L1241' title='Referred from 1241 in rcu/tasks.h.'>rcu_spawn_tasks_rude_kthread</a>(<strong class='reserved'>void</strong>)
+<a id='L694' name='L694'></a> 694 <em class='brace'>{</em>
+<a id='L695' name='L695'></a> 695         rcu_tasks_rude.gp_sleep = HZ / 10;
+<a id='L696' name='L696'></a> 696         <a href='../S/125.html#L245' title='Defined at 245 in rcu/tasks.h.'>rcu_spawn_tasks_kthread_generic</a>(&amp;rcu_tasks_rude);
+<a id='L697' name='L697'></a> 697         <strong class='reserved'>return</strong> 0;
+<a id='L698' name='L698'></a> 698 <em class='brace'>}</em>
+<a id='L699' name='L699'></a> 699 
+<a id='L700' name='L700'></a> 700 <em class='sharp'>#ifndef</em> CONFIG_TINY_RCU
+<a id='L701' name='L701'></a> 701 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L1229' title='Referred from 1229 in rcu/tasks.h.'>show_rcu_tasks_rude_gp_kthread</a>(<strong class='reserved'>void</strong>)
+<a id='L702' name='L702'></a> 702 <em class='brace'>{</em>
+<a id='L703' name='L703'></a> 703         <a href='../S/125.html#L281' title='Defined at 281 in rcu/tasks.h.'>show_rcu_tasks_generic_gp_kthread</a>(&amp;rcu_tasks_rude, "");
+<a id='L704' name='L704'></a> 704 <em class='brace'>}</em>
+<a id='L705' name='L705'></a> 705 <em class='sharp'>#endif</em> <em class='comment'>/* #ifndef CONFIG_TINY_RCU */</em>
+<a id='L706' name='L706'></a> 706 
+<a id='L707' name='L707'></a> 707 <em class='sharp'>#else</em> <em class='comment'>/* #ifdef CONFIG_TASKS_RUDE_RCU */</em>
+<a id='L708' name='L708'></a> 708 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L1229' title='Referred from 1229 in rcu/tasks.h.'>show_rcu_tasks_rude_gp_kthread</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L709' name='L709'></a> 709 <em class='sharp'>#endif</em> <em class='comment'>/* #else #ifdef CONFIG_TASKS_RUDE_RCU */</em>
+<a id='L710' name='L710'></a> 710 
+<a id='L711' name='L711'></a> 711 <em class='comment'>////////////////////////////////////////////////////////////////////////</em>
+<a id='L712' name='L712'></a> 712 <em class='comment'>//</em>
+<a id='L713' name='L713'></a> 713 <em class='comment'>// Tracing variant of Tasks RCU.  This variant is designed to be used</em>
+<a id='L714' name='L714'></a> 714 <em class='comment'>// to protect tracing hooks, including those of BPF.  This variant</em>
+<a id='L715' name='L715'></a> 715 <em class='comment'>// therefore:</em>
+<a id='L716' name='L716'></a> 716 <em class='comment'>//</em>
+<a id='L717' name='L717'></a> 717 <em class='comment'>// 1.   Has explicit read-side markers to allow finite grace periods</em>
+<a id='L718' name='L718'></a> 718 <em class='comment'>//      in the face of in-kernel loops for PREEMPT=n builds.</em>
+<a id='L719' name='L719'></a> 719 <em class='comment'>//</em>
+<a id='L720' name='L720'></a> 720 <em class='comment'>// 2.   Protects code in the idle loop, exception entry/exit, and</em>
+<a id='L721' name='L721'></a> 721 <em class='comment'>//      CPU-hotplug code paths, similar to the capabilities of SRCU.</em>
+<a id='L722' name='L722'></a> 722 <em class='comment'>//</em>
+<a id='L723' name='L723'></a> 723 <em class='comment'>// 3.   Avoids expensive read-side instruction, having overhead similar</em>
+<a id='L724' name='L724'></a> 724 <em class='comment'>//      to that of Preemptible RCU.</em>
+<a id='L725' name='L725'></a> 725 <em class='comment'>//</em>
+<a id='L726' name='L726'></a> 726 <em class='comment'>// There are of course downsides.  The grace-period code can send IPIs to</em>
+<a id='L727' name='L727'></a> 727 <em class='comment'>// CPUs, even when those CPUs are in the idle loop or in nohz_full userspace.</em>
+<a id='L728' name='L728'></a> 728 <em class='comment'>// It is necessary to scan the full tasklist, much as for Tasks RCU.  There</em>
+<a id='L729' name='L729'></a> 729 <em class='comment'>// is a single callback queue guarded by a single lock, again, much as for</em>
+<a id='L730' name='L730'></a> 730 <em class='comment'>// Tasks RCU.  If needed, these downsides can be at least partially remedied.</em>
+<a id='L731' name='L731'></a> 731 <em class='comment'>//</em>
+<a id='L732' name='L732'></a> 732 <em class='comment'>// Perhaps most important, this variant of RCU does not affect the vanilla</em>
+<a id='L733' name='L733'></a> 733 <em class='comment'>// flavors, rcu_preempt and rcu_sched.  The fact that RCU Tasks Trace</em>
+<a id='L734' name='L734'></a> 734 <em class='comment'>// readers can operate from idle, offline, and exception entry/exit in no</em>
+<a id='L735' name='L735'></a> 735 <em class='comment'>// way allows rcu_preempt and rcu_sched readers to also do so.</em>
+<a id='L736' name='L736'></a> 736 
+<a id='L737' name='L737'></a> 737 <em class='comment'>// The lockdep state must be outside of #ifdef to be useful.</em>
+<a id='L738' name='L738'></a> 738 <em class='sharp'>#ifdef</em> CONFIG_DEBUG_LOCK_ALLOC
+<a id='L739' name='L739'></a> 739 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> lock_class_key rcu_lock_trace_key;
+<a id='L740' name='L740'></a> 740 <strong class='reserved'>struct</strong> lockdep_map rcu_trace_lock_map =
+<a id='L741' name='L741'></a> 741         STATIC_LOCKDEP_MAP_INIT("rcu_read_lock_trace", &amp;rcu_lock_trace_key);
+<a id='L742' name='L742'></a> 742 EXPORT_SYMBOL_GPL(rcu_trace_lock_map);
+<a id='L743' name='L743'></a> 743 <em class='sharp'>#endif</em> <em class='comment'>/* #ifdef CONFIG_DEBUG_LOCK_ALLOC */</em>
+<a id='L744' name='L744'></a> 744 
+<a id='L745' name='L745'></a> 745 <em class='sharp'>#ifdef</em> CONFIG_TASKS_TRACE_RCU
+<a id='L746' name='L746'></a> 746 
+<a id='L747' name='L747'></a> 747 <strong class='reserved'>static</strong> atomic_t trc_n_readers_need_end;         <em class='comment'>// Number of waited-for readers.</em>
+<a id='L748' name='L748'></a> 748 <strong class='reserved'>static</strong> DECLARE_WAIT_QUEUE_HEAD(trc_wait);       <em class='comment'>// List of holdout tasks.</em>
+<a id='L749' name='L749'></a> 749 
+<a id='L750' name='L750'></a> 750 <em class='comment'>// Record outstanding IPIs to each CPU.  No point in sending two...</em>
+<a id='L751' name='L751'></a> 751 <strong class='reserved'>static</strong> DEFINE_PER_CPU(bool, trc_ipi_to_cpu);
+<a id='L752' name='L752'></a> 752 
+<a id='L753' name='L753'></a> 753 <em class='comment'>// The number of detections of task quiescent state relying on</em>
+<a id='L754' name='L754'></a> 754 <em class='comment'>// heavyweight readers executing explicit memory barriers.</em>
+<a id='L755' name='L755'></a> 755 <strong class='reserved'>static</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> n_heavy_reader_attempts;
+<a id='L756' name='L756'></a> 756 <strong class='reserved'>static</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> n_heavy_reader_updates;
+<a id='L757' name='L757'></a> 757 <strong class='reserved'>static</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> n_heavy_reader_ofl_updates;
+<a id='L758' name='L758'></a> 758 
+<a id='L759' name='L759'></a> 759 <strong class='reserved'>void</strong> <a href='../S/125.html#L1142' title='Defined at 1142 in rcu/tasks.h.'>call_rcu_tasks_trace</a>(<strong class='reserved'>struct</strong> rcu_head *rhp, rcu_callback_t <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>);
+<a id='L760' name='L760'></a> 760 <a href='../S/125.html#L72' title='Defined at 72 in rcu/tasks.h.'>DEFINE_RCU_TASKS</a>(rcu_tasks_trace, <a href='../S/125.html#L304' title='Defined at 304 in rcu/tasks.h.'>rcu_tasks_wait_gp</a>, <a href='../S/125.html#L1142' title='Defined at 1142 in rcu/tasks.h.'>call_rcu_tasks_trace</a>,
+<a id='L761' name='L761'></a> 761                  "RCU Tasks Trace");
+<a id='L762' name='L762'></a> 762 
+<a id='L763' name='L763'></a> 763 <em class='comment'>/*</em>
+<a id='L764' name='L764'></a> 764 <em class='comment'> * This irq_work handler allows rcu_read_unlock_trace() to be invoked</em>
+<a id='L765' name='L765'></a> 765 <em class='comment'> * while the scheduler locks are held.</em>
+<a id='L766' name='L766'></a> 766 <em class='comment'> */</em>
+<a id='L767' name='L767'></a> 767 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L771' title='Referred from 771 in rcu/tasks.h.'>rcu_read_unlock_iw</a>(<strong class='reserved'>struct</strong> irq_work *iwp)
+<a id='L768' name='L768'></a> 768 <em class='brace'>{</em>
+<a id='L769' name='L769'></a> 769         wake_up(&amp;trc_wait);
+<a id='L770' name='L770'></a> 770 <em class='brace'>}</em>
+<a id='L771' name='L771'></a> 771 <strong class='reserved'>static</strong> DEFINE_IRQ_WORK(rcu_tasks_trace_iw, <a href='../S/125.html#L767' title='Defined at 767 in rcu/tasks.h.'>rcu_read_unlock_iw</a>);
+<a id='L772' name='L772'></a> 772 
+<a id='L773' name='L773'></a> 773 <em class='comment'>/* If we are the last reader, wake up the grace-period kthread. */</em>
+<a id='L774' name='L774'></a> 774 <strong class='reserved'>void</strong> <a href='../R/11039.html' title='Multiple referred from 2 places.'>rcu_read_unlock_trace_special</a>(<strong class='reserved'>struct</strong> task_struct *t, <strong class='reserved'>int</strong> nesting)
+<a id='L775' name='L775'></a> 775 <em class='brace'>{</em>
+<a id='L776' name='L776'></a> 776         <strong class='reserved'>int</strong> nq = t-&gt;trc_reader_special.b.need_qs;
+<a id='L777' name='L777'></a> 777 
+<a id='L778' name='L778'></a> 778         <strong class='reserved'>if</strong> (IS_ENABLED(CONFIG_TASKS_TRACE_RCU_READ_MB) &amp;&amp;
+<a id='L779' name='L779'></a> 779             t-&gt;trc_reader_special.b.need_mb)
+<a id='L780' name='L780'></a> 780                 smp_mb(); <em class='comment'>// Pairs with update-side barriers.</em>
+<a id='L781' name='L781'></a> 781         <em class='comment'>// Update .need_qs before -&gt;trc_reader_nesting for irq/NMI handlers.</em>
+<a id='L782' name='L782'></a> 782         <strong class='reserved'>if</strong> (nq)
+<a id='L783' name='L783'></a> 783                 WRITE_ONCE(t-&gt;trc_reader_special.b.need_qs, false);
+<a id='L784' name='L784'></a> 784         WRITE_ONCE(t-&gt;trc_reader_nesting, nesting);
+<a id='L785' name='L785'></a> 785         <strong class='reserved'>if</strong> (nq &amp;&amp; atomic_dec_and_test(&amp;trc_n_readers_need_end))
+<a id='L786' name='L786'></a> 786                 <a href='../S/196.html#L67' title='Defined at 67 in irq_work.c.'>irq_work_queue</a>(&amp;rcu_tasks_trace_iw);
+<a id='L787' name='L787'></a> 787 <em class='brace'>}</em>
+<a id='L788' name='L788'></a> 788 EXPORT_SYMBOL_GPL(<a href='../S/125.html#L774' title='Defined at 774 in rcu/tasks.h.'>rcu_read_unlock_trace_special</a>);
+<a id='L789' name='L789'></a> 789 
+<a id='L790' name='L790'></a> 790 <em class='comment'>/* Add a task to the holdout list, if it is not already on the list. */</em>
+<a id='L791' name='L791'></a> 791 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/14159.html' title='Multiple referred from 2 places.'>trc_add_holdout</a>(<strong class='reserved'>struct</strong> task_struct *t, <strong class='reserved'>struct</strong> list_head *bhp)
+<a id='L792' name='L792'></a> 792 <em class='brace'>{</em>
+<a id='L793' name='L793'></a> 793         <strong class='reserved'>if</strong> (list_empty(&amp;t-&gt;trc_holdout_list)) <em class='brace'>{</em>
+<a id='L794' name='L794'></a> 794                 get_task_struct(t);
+<a id='L795' name='L795'></a> 795                 list_add(&amp;t-&gt;trc_holdout_list, bhp);
+<a id='L796' name='L796'></a> 796         <em class='brace'>}</em>
+<a id='L797' name='L797'></a> 797 <em class='brace'>}</em>
+<a id='L798' name='L798'></a> 798 
+<a id='L799' name='L799'></a> 799 <em class='comment'>/* Remove a task from the holdout list, if it is in fact present. */</em>
+<a id='L800' name='L800'></a> 800 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/14160.html' title='Multiple referred from 4 places.'>trc_del_holdout</a>(<strong class='reserved'>struct</strong> task_struct *t)
+<a id='L801' name='L801'></a> 801 <em class='brace'>{</em>
+<a id='L802' name='L802'></a> 802         <strong class='reserved'>if</strong> (!list_empty(&amp;t-&gt;trc_holdout_list)) <em class='brace'>{</em>
+<a id='L803' name='L803'></a> 803                 list_del_init(&amp;t-&gt;trc_holdout_list);
+<a id='L804' name='L804'></a> 804                 put_task_struct(t);
+<a id='L805' name='L805'></a> 805         <em class='brace'>}</em>
+<a id='L806' name='L806'></a> 806 <em class='brace'>}</em>
+<a id='L807' name='L807'></a> 807 
+<a id='L808' name='L808'></a> 808 <em class='comment'>/* IPI handler to check task state. */</em>
+<a id='L809' name='L809'></a> 809 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L941' title='Referred from 941 in rcu/tasks.h.'>trc_read_check_handler</a>(<strong class='reserved'>void</strong> *t_in)
+<a id='L810' name='L810'></a> 810 <em class='brace'>{</em>
+<a id='L811' name='L811'></a> 811         <strong class='reserved'>struct</strong> task_struct *t = current;
+<a id='L812' name='L812'></a> 812         <strong class='reserved'>struct</strong> task_struct *texp = t_in;
+<a id='L813' name='L813'></a> 813 
+<a id='L814' name='L814'></a> 814         <em class='comment'>// If the task is no longer running on this CPU, leave.</em>
+<a id='L815' name='L815'></a> 815         <strong class='reserved'>if</strong> (unlikely(texp != t)) <em class='brace'>{</em>
+<a id='L816' name='L816'></a> 816                 <strong class='reserved'>if</strong> (WARN_ON_ONCE(atomic_dec_and_test(&amp;trc_n_readers_need_end)))
+<a id='L817' name='L817'></a> 817                         wake_up(&amp;trc_wait);
+<a id='L818' name='L818'></a> 818                 <strong class='reserved'>goto</strong> reset_ipi; <em class='comment'>// Already on holdout list, so will check later.</em>
+<a id='L819' name='L819'></a> 819         <em class='brace'>}</em>
+<a id='L820' name='L820'></a> 820 
+<a id='L821' name='L821'></a> 821         <em class='comment'>// If the task is not in a read-side critical section, and</em>
+<a id='L822' name='L822'></a> 822         <em class='comment'>// if this is the last reader, awaken the grace-period kthread.</em>
+<a id='L823' name='L823'></a> 823         <strong class='reserved'>if</strong> (likely(!t-&gt;trc_reader_nesting)) <em class='brace'>{</em>
+<a id='L824' name='L824'></a> 824                 <strong class='reserved'>if</strong> (WARN_ON_ONCE(atomic_dec_and_test(&amp;trc_n_readers_need_end)))
+<a id='L825' name='L825'></a> 825                         wake_up(&amp;trc_wait);
+<a id='L826' name='L826'></a> 826                 <em class='comment'>// Mark as checked after decrement to avoid false</em>
+<a id='L827' name='L827'></a> 827                 <em class='comment'>// positives on the above WARN_ON_ONCE().</em>
+<a id='L828' name='L828'></a> 828                 WRITE_ONCE(t-&gt;trc_reader_checked, true);
+<a id='L829' name='L829'></a> 829                 <strong class='reserved'>goto</strong> reset_ipi;
+<a id='L830' name='L830'></a> 830         <em class='brace'>}</em>
+<a id='L831' name='L831'></a> 831         <em class='comment'>// If we are racing with an rcu_read_unlock_trace(), try again later.</em>
+<a id='L832' name='L832'></a> 832         <strong class='reserved'>if</strong> (unlikely(t-&gt;trc_reader_nesting &lt; 0)) <em class='brace'>{</em>
+<a id='L833' name='L833'></a> 833                 <strong class='reserved'>if</strong> (WARN_ON_ONCE(atomic_dec_and_test(&amp;trc_n_readers_need_end)))
+<a id='L834' name='L834'></a> 834                         wake_up(&amp;trc_wait);
+<a id='L835' name='L835'></a> 835                 <strong class='reserved'>goto</strong> reset_ipi;
+<a id='L836' name='L836'></a> 836         <em class='brace'>}</em>
+<a id='L837' name='L837'></a> 837         WRITE_ONCE(t-&gt;trc_reader_checked, true);
+<a id='L838' name='L838'></a> 838 
+<a id='L839' name='L839'></a> 839         <em class='comment'>// Get here if the task is in a read-side critical section.  Set</em>
+<a id='L840' name='L840'></a> 840         <em class='comment'>// its state so that it will awaken the grace-period kthread upon</em>
+<a id='L841' name='L841'></a> 841         <em class='comment'>// exit from that critical section.</em>
+<a id='L842' name='L842'></a> 842         WARN_ON_ONCE(t-&gt;trc_reader_special.b.need_qs);
+<a id='L843' name='L843'></a> 843         WRITE_ONCE(t-&gt;trc_reader_special.b.need_qs, true);
+<a id='L844' name='L844'></a> 844 
+<a id='L845' name='L845'></a> 845 reset_ipi:
+<a id='L846' name='L846'></a> 846         <em class='comment'>// Allow future IPIs to be sent on CPU and for task.</em>
+<a id='L847' name='L847'></a> 847         <em class='comment'>// Also order this IPI handler against any later manipulations of</em>
+<a id='L848' name='L848'></a> 848         <em class='comment'>// the intended task.</em>
+<a id='L849' name='L849'></a> 849         smp_store_release(&amp;per_cpu(trc_ipi_to_cpu, smp_processor_id()), false); <em class='comment'>// ^^^</em>
+<a id='L850' name='L850'></a> 850         smp_store_release(&amp;texp-&gt;trc_ipi_to_cpu, -1); <em class='comment'>// ^^^</em>
+<a id='L851' name='L851'></a> 851 <em class='brace'>}</em>
+<a id='L852' name='L852'></a> 852 
+<a id='L853' name='L853'></a> 853 <em class='comment'>/* Callback function for scheduler to check locked-down task.  */</em>
+<a id='L854' name='L854'></a> 854 <strong class='reserved'>static</strong> bool <a href='../S/125.html#L919' title='Referred from 919 in rcu/tasks.h.'>trc_inspect_reader</a>(<strong class='reserved'>struct</strong> task_struct *t, <strong class='reserved'>void</strong> *arg)
+<a id='L855' name='L855'></a> 855 <em class='brace'>{</em>
+<a id='L856' name='L856'></a> 856         <strong class='reserved'>int</strong> cpu = task_cpu(t);
+<a id='L857' name='L857'></a> 857         bool in_qs = false;
+<a id='L858' name='L858'></a> 858         bool ofl = cpu_is_offline(cpu);
+<a id='L859' name='L859'></a> 859 
+<a id='L860' name='L860'></a> 860         <strong class='reserved'>if</strong> (<a href='../S/441.html#L1738' title='Defined at 1738 in sched/core.c.'>task_curr</a>(t)) <em class='brace'>{</em>
+<a id='L861' name='L861'></a> 861                 WARN_ON_ONCE(ofl &amp;&amp; !is_idle_task(t));
+<a id='L862' name='L862'></a> 862 
+<a id='L863' name='L863'></a> 863                 <em class='comment'>// If no chance of heavyweight readers, do it the hard way.</em>
+<a id='L864' name='L864'></a> 864                 <strong class='reserved'>if</strong> (!ofl &amp;&amp; !IS_ENABLED(CONFIG_TASKS_TRACE_RCU_READ_MB))
+<a id='L865' name='L865'></a> 865                         <strong class='reserved'>return</strong> false;
+<a id='L866' name='L866'></a> 866 
+<a id='L867' name='L867'></a> 867                 <em class='comment'>// If heavyweight readers are enabled on the remote task,</em>
+<a id='L868' name='L868'></a> 868                 <em class='comment'>// we can inspect its state despite its currently running.</em>
+<a id='L869' name='L869'></a> 869                 <em class='comment'>// However, we cannot safely change its state.</em>
+<a id='L870' name='L870'></a> 870                 n_heavy_reader_attempts++;
+<a id='L871' name='L871'></a> 871                 <strong class='reserved'>if</strong> (!ofl &amp;&amp; <em class='comment'>// Check for "running" idle tasks on offline CPUs.</em>
+<a id='L872' name='L872'></a> 872                     !<a href='../D/11527.html' title='Multiple defined in 2 places.'>rcu_dynticks_zero_in_eqs</a>(cpu, &amp;t-&gt;trc_reader_nesting))
+<a id='L873' name='L873'></a> 873                         <strong class='reserved'>return</strong> false; <em class='comment'>// No quiescent state, do it the hard way.</em>
+<a id='L874' name='L874'></a> 874                 n_heavy_reader_updates++;
+<a id='L875' name='L875'></a> 875                 <strong class='reserved'>if</strong> (ofl)
+<a id='L876' name='L876'></a> 876                         n_heavy_reader_ofl_updates++;
+<a id='L877' name='L877'></a> 877                 in_qs = true;
+<a id='L878' name='L878'></a> 878         <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L879' name='L879'></a> 879                 in_qs = likely(!t-&gt;trc_reader_nesting);
+<a id='L880' name='L880'></a> 880         <em class='brace'>}</em>
+<a id='L881' name='L881'></a> 881 
+<a id='L882' name='L882'></a> 882         <em class='comment'>// Mark as checked.  Because this is called from the grace-period</em>
+<a id='L883' name='L883'></a> 883         <em class='comment'>// kthread, also remove the task from the holdout list.</em>
+<a id='L884' name='L884'></a> 884         t-&gt;trc_reader_checked = true;
+<a id='L885' name='L885'></a> 885         <a href='../S/125.html#L800' title='Defined at 800 in rcu/tasks.h.'>trc_del_holdout</a>(t);
+<a id='L886' name='L886'></a> 886 
+<a id='L887' name='L887'></a> 887         <strong class='reserved'>if</strong> (in_qs)
+<a id='L888' name='L888'></a> 888                 <strong class='reserved'>return</strong> true;  <em class='comment'>// Already in quiescent state, done!!!</em>
+<a id='L889' name='L889'></a> 889 
+<a id='L890' name='L890'></a> 890         <em class='comment'>// The task is in a read-side critical section, so set up its</em>
+<a id='L891' name='L891'></a> 891         <em class='comment'>// state so that it will awaken the grace-period kthread upon exit</em>
+<a id='L892' name='L892'></a> 892         <em class='comment'>// from that critical section.</em>
+<a id='L893' name='L893'></a> 893         atomic_inc(&amp;trc_n_readers_need_end); <em class='comment'>// One more to wait on.</em>
+<a id='L894' name='L894'></a> 894         WARN_ON_ONCE(t-&gt;trc_reader_special.b.need_qs);
+<a id='L895' name='L895'></a> 895         WRITE_ONCE(t-&gt;trc_reader_special.b.need_qs, true);
+<a id='L896' name='L896'></a> 896         <strong class='reserved'>return</strong> true;
+<a id='L897' name='L897'></a> 897 <em class='brace'>}</em>
+<a id='L898' name='L898'></a> 898 
+<a id='L899' name='L899'></a> 899 <em class='comment'>/* Attempt to extract the state for the specified task. */</em>
+<a id='L900' name='L900'></a> 900 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/14163.html' title='Multiple referred from 2 places.'>trc_wait_for_one_reader</a>(<strong class='reserved'>struct</strong> task_struct *t,
+<a id='L901' name='L901'></a> 901                                     <strong class='reserved'>struct</strong> list_head *bhp)
+<a id='L902' name='L902'></a> 902 <em class='brace'>{</em>
+<a id='L903' name='L903'></a> 903         <strong class='reserved'>int</strong> cpu;
+<a id='L904' name='L904'></a> 904 
+<a id='L905' name='L905'></a> 905         <em class='comment'>// If a previous IPI is still in flight, let it complete.</em>
+<a id='L906' name='L906'></a> 906         <strong class='reserved'>if</strong> (smp_load_acquire(&amp;t-&gt;trc_ipi_to_cpu) != -1) <em class='comment'>// Order IPI</em>
+<a id='L907' name='L907'></a> 907                 <strong class='reserved'>return</strong>;
+<a id='L908' name='L908'></a> 908 
+<a id='L909' name='L909'></a> 909         <em class='comment'>// The current task had better be in a quiescent state.</em>
+<a id='L910' name='L910'></a> 910         <strong class='reserved'>if</strong> (t == current) <em class='brace'>{</em>
+<a id='L911' name='L911'></a> 911                 t-&gt;trc_reader_checked = true;
+<a id='L912' name='L912'></a> 912                 <a href='../S/125.html#L800' title='Defined at 800 in rcu/tasks.h.'>trc_del_holdout</a>(t);
+<a id='L913' name='L913'></a> 913                 WARN_ON_ONCE(t-&gt;trc_reader_nesting);
+<a id='L914' name='L914'></a> 914                 <strong class='reserved'>return</strong>;
+<a id='L915' name='L915'></a> 915         <em class='brace'>}</em>
+<a id='L916' name='L916'></a> 916 
+<a id='L917' name='L917'></a> 917         <em class='comment'>// Attempt to nail down the task for inspection.</em>
+<a id='L918' name='L918'></a> 918         get_task_struct(t);
+<a id='L919' name='L919'></a> 919         <strong class='reserved'>if</strong> (<a href='../S/441.html#L3221' title='Defined at 3221 in sched/core.c.'>try_invoke_on_locked_down_task</a>(t, <a href='../S/125.html#L854' title='Defined at 854 in rcu/tasks.h.'>trc_inspect_reader</a>, NULL)) <em class='brace'>{</em>
+<a id='L920' name='L920'></a> 920                 put_task_struct(t);
+<a id='L921' name='L921'></a> 921                 <strong class='reserved'>return</strong>;
+<a id='L922' name='L922'></a> 922         <em class='brace'>}</em>
+<a id='L923' name='L923'></a> 923         put_task_struct(t);
+<a id='L924' name='L924'></a> 924 
+<a id='L925' name='L925'></a> 925         <em class='comment'>// If currently running, send an IPI, either way, add to list.</em>
+<a id='L926' name='L926'></a> 926         <a href='../S/125.html#L791' title='Defined at 791 in rcu/tasks.h.'>trc_add_holdout</a>(t, bhp);
+<a id='L927' name='L927'></a> 927         <strong class='reserved'>if</strong> (<a href='../S/441.html#L1738' title='Defined at 1738 in sched/core.c.'>task_curr</a>(t) &amp;&amp;
+<a id='L928' name='L928'></a> 928             time_after(jiffies + 1, rcu_tasks_trace.gp_start + rcu_task_ipi_delay)) <em class='brace'>{</em>
+<a id='L929' name='L929'></a> 929                 <em class='comment'>// The task is currently running, so try IPIing it.</em>
+<a id='L930' name='L930'></a> 930                 cpu = task_cpu(t);
+<a id='L931' name='L931'></a> 931 
+<a id='L932' name='L932'></a> 932                 <em class='comment'>// If there is already an IPI outstanding, let it happen.</em>
+<a id='L933' name='L933'></a> 933                 <strong class='reserved'>if</strong> (per_cpu(trc_ipi_to_cpu, cpu) || t-&gt;trc_ipi_to_cpu &gt;= 0)
+<a id='L934' name='L934'></a> 934                         <strong class='reserved'>return</strong>;
+<a id='L935' name='L935'></a> 935 
+<a id='L936' name='L936'></a> 936                 atomic_inc(&amp;trc_n_readers_need_end);
+<a id='L937' name='L937'></a> 937                 per_cpu(trc_ipi_to_cpu, cpu) = true;
+<a id='L938' name='L938'></a> 938                 t-&gt;trc_ipi_to_cpu = cpu;
+<a id='L939' name='L939'></a> 939                 rcu_tasks_trace.n_ipis++;
+<a id='L940' name='L940'></a> 940                 <strong class='reserved'>if</strong> (<a href='../D/13135.html' title='Multiple defined in 2 places.'>smp_call_function_single</a>(cpu,
+<a id='L941' name='L941'></a> 941                                              <a href='../S/125.html#L809' title='Defined at 809 in rcu/tasks.h.'>trc_read_check_handler</a>, t, 0)) <em class='brace'>{</em>
+<a id='L942' name='L942'></a> 942                         <em class='comment'>// Just in case there is some other reason for</em>
+<a id='L943' name='L943'></a> 943                         <em class='comment'>// failure than the target CPU being offline.</em>
+<a id='L944' name='L944'></a> 944                         rcu_tasks_trace.n_ipis_fails++;
+<a id='L945' name='L945'></a> 945                         per_cpu(trc_ipi_to_cpu, cpu) = false;
+<a id='L946' name='L946'></a> 946                         t-&gt;trc_ipi_to_cpu = cpu;
+<a id='L947' name='L947'></a> 947                         <strong class='reserved'>if</strong> (atomic_dec_and_test(&amp;trc_n_readers_need_end)) <em class='brace'>{</em>
+<a id='L948' name='L948'></a> 948                                 WARN_ON_ONCE(1);
+<a id='L949' name='L949'></a> 949                                 wake_up(&amp;trc_wait);
+<a id='L950' name='L950'></a> 950                         <em class='brace'>}</em>
+<a id='L951' name='L951'></a> 951                 <em class='brace'>}</em>
+<a id='L952' name='L952'></a> 952         <em class='brace'>}</em>
+<a id='L953' name='L953'></a> 953 <em class='brace'>}</em>
+<a id='L954' name='L954'></a> 954 
+<a id='L955' name='L955'></a> 955 <em class='comment'>/* Initialize for a new RCU-tasks-trace grace period. */</em>
+<a id='L956' name='L956'></a> 956 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L1198' title='Referred from 1198 in rcu/tasks.h.'>rcu_tasks_trace_pregp_step</a>(<strong class='reserved'>void</strong>)
+<a id='L957' name='L957'></a> 957 <em class='brace'>{</em>
+<a id='L958' name='L958'></a> 958         <strong class='reserved'>int</strong> cpu;
+<a id='L959' name='L959'></a> 959 
+<a id='L960' name='L960'></a> 960         <em class='comment'>// Allow for fast-acting IPIs.</em>
+<a id='L961' name='L961'></a> 961         atomic_set(&amp;trc_n_readers_need_end, 1);
+<a id='L962' name='L962'></a> 962 
+<a id='L963' name='L963'></a> 963         <em class='comment'>// There shouldn't be any old IPIs, but...</em>
+<a id='L964' name='L964'></a> 964         for_each_possible_cpu(cpu)
+<a id='L965' name='L965'></a> 965                 WARN_ON_ONCE(per_cpu(trc_ipi_to_cpu, cpu));
+<a id='L966' name='L966'></a> 966 
+<a id='L967' name='L967'></a> 967         <em class='comment'>// Disable CPU hotplug across the tasklist scan.</em>
+<a id='L968' name='L968'></a> 968         <em class='comment'>// This also waits for all readers in CPU-hotplug code paths.</em>
+<a id='L969' name='L969'></a> 969         <a href='../S/327.html#L299' title='Defined at 299 in cpu.c.'>cpus_read_lock</a>();
+<a id='L970' name='L970'></a> 970 <em class='brace'>}</em>
+<a id='L971' name='L971'></a> 971 
+<a id='L972' name='L972'></a> 972 <em class='comment'>/* Do first-round processing for the specified task. */</em>
+<a id='L973' name='L973'></a> 973 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/11149.html' title='Multiple referred from 2 places.'>rcu_tasks_trace_pertask</a>(<strong class='reserved'>struct</strong> task_struct *t,
+<a id='L974' name='L974'></a> 974                                     <strong class='reserved'>struct</strong> list_head *hop)
+<a id='L975' name='L975'></a> 975 <em class='brace'>{</em>
+<a id='L976' name='L976'></a> 976         <em class='comment'>// During early boot when there is only the one boot CPU, there</em>
+<a id='L977' name='L977'></a> 977         <em class='comment'>// is no idle task for the other CPUs. Just return.</em>
+<a id='L978' name='L978'></a> 978         <strong class='reserved'>if</strong> (unlikely(t == NULL))
+<a id='L979' name='L979'></a> 979                 <strong class='reserved'>return</strong>;
+<a id='L980' name='L980'></a> 980 
+<a id='L981' name='L981'></a> 981         WRITE_ONCE(t-&gt;trc_reader_special.b.need_qs, false);
+<a id='L982' name='L982'></a> 982         WRITE_ONCE(t-&gt;trc_reader_checked, false);
+<a id='L983' name='L983'></a> 983         t-&gt;trc_ipi_to_cpu = -1;
+<a id='L984' name='L984'></a> 984         <a href='../S/125.html#L900' title='Defined at 900 in rcu/tasks.h.'>trc_wait_for_one_reader</a>(t, hop);
+<a id='L985' name='L985'></a> 985 <em class='brace'>}</em>
+<a id='L986' name='L986'></a> 986 
+<a id='L987' name='L987'></a> 987 <em class='comment'>/*</em>
+<a id='L988' name='L988'></a> 988 <em class='comment'> * Do intermediate processing between task and holdout scans and</em>
+<a id='L989' name='L989'></a> 989 <em class='comment'> * pick up the idle tasks.</em>
+<a id='L990' name='L990'></a> 990 <em class='comment'> */</em>
+<a id='L991' name='L991'></a> 991 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L1200' title='Referred from 1200 in rcu/tasks.h.'>rcu_tasks_trace_postscan</a>(<strong class='reserved'>struct</strong> list_head *hop)
+<a id='L992' name='L992'></a> 992 <em class='brace'>{</em>
+<a id='L993' name='L993'></a> 993         <strong class='reserved'>int</strong> cpu;
+<a id='L994' name='L994'></a> 994 
+<a id='L995' name='L995'></a> 995         for_each_possible_cpu(cpu)
+<a id='L996' name='L996'></a> 996                 <a href='../S/125.html#L973' title='Defined at 973 in rcu/tasks.h.'>rcu_tasks_trace_pertask</a>(<a href='../S/441.html#L5357' title='Defined at 5357 in sched/core.c.'>idle_task</a>(cpu), hop);
+<a id='L997' name='L997'></a> 997 
+<a id='L998' name='L998'></a> 998         <em class='comment'>// Re-enable CPU hotplug now that the tasklist scan has completed.</em>
+<a id='L999' name='L999'></a> 999         <a href='../S/327.html#L311' title='Defined at 311 in cpu.c.'>cpus_read_unlock</a>();
+<a id='L1000' name='L1000'></a>1000 
+<a id='L1001' name='L1001'></a>1001         <em class='comment'>// Wait for late-stage exiting tasks to finish exiting.</em>
+<a id='L1002' name='L1002'></a>1002         <em class='comment'>// These might have passed the call to exit_tasks_rcu_finish().</em>
+<a id='L1003' name='L1003'></a>1003         <a href='../D/13579.html' title='Multiple defined in 2 places.'>synchronize_rcu</a>();
+<a id='L1004' name='L1004'></a>1004         <em class='comment'>// Any tasks that exit after this point will set -&gt;trc_reader_checked.</em>
+<a id='L1005' name='L1005'></a>1005 <em class='brace'>}</em>
+<a id='L1006' name='L1006'></a>1006 
+<a id='L1007' name='L1007'></a>1007 <em class='comment'>/* Show the state of a task stalling the current RCU tasks trace GP. */</em>
+<a id='L1008' name='L1008'></a>1008 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/12400.html' title='Multiple referred from 2 places.'>show_stalled_task_trace</a>(<strong class='reserved'>struct</strong> task_struct *t, bool *firstreport)
+<a id='L1009' name='L1009'></a>1009 <em class='brace'>{</em>
+<a id='L1010' name='L1010'></a>1010         <strong class='reserved'>int</strong> cpu;
+<a id='L1011' name='L1011'></a>1011 
+<a id='L1012' name='L1012'></a>1012         <strong class='reserved'>if</strong> (*firstreport) <em class='brace'>{</em>
+<a id='L1013' name='L1013'></a>1013                 pr_err("INFO: rcu_tasks_trace detected stalls on tasks:\n");
+<a id='L1014' name='L1014'></a>1014                 *firstreport = false;
+<a id='L1015' name='L1015'></a>1015         <em class='brace'>}</em>
+<a id='L1016' name='L1016'></a>1016         <em class='comment'>// FIXME: This should attempt to use try_invoke_on_nonrunning_task().</em>
+<a id='L1017' name='L1017'></a>1017         cpu = task_cpu(t);
+<a id='L1018' name='L1018'></a>1018         pr_alert("P%d: %c%c%c nesting: %d%c cpu: %d\n",
+<a id='L1019' name='L1019'></a>1019                  t-&gt;pid,
+<a id='L1020' name='L1020'></a>1020                  ".I"[READ_ONCE(t-&gt;trc_ipi_to_cpu) &gt; 0],
+<a id='L1021' name='L1021'></a>1021                  ".i"[is_idle_task(t)],
+<a id='L1022' name='L1022'></a>1022                  ".N"[cpu &gt; 0 &amp;&amp; tick_nohz_full_cpu(cpu)],
+<a id='L1023' name='L1023'></a>1023                  t-&gt;trc_reader_nesting,
+<a id='L1024' name='L1024'></a>1024                  " N"[!!t-&gt;trc_reader_special.b.need_qs],
+<a id='L1025' name='L1025'></a>1025                  cpu);
+<a id='L1026' name='L1026'></a>1026         <a href='../S/441.html#L6662' title='Defined at 6662 in sched/core.c.'>sched_show_task</a>(t);
+<a id='L1027' name='L1027'></a>1027 <em class='brace'>}</em>
+<a id='L1028' name='L1028'></a>1028 
+<a id='L1029' name='L1029'></a>1029 <em class='comment'>/* List stalled IPIs for RCU tasks trace. */</em>
+<a id='L1030' name='L1030'></a>1030 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/12399.html' title='Multiple referred from 2 places.'>show_stalled_ipi_trace</a>(<strong class='reserved'>void</strong>)
+<a id='L1031' name='L1031'></a>1031 <em class='brace'>{</em>
+<a id='L1032' name='L1032'></a>1032         <strong class='reserved'>int</strong> cpu;
+<a id='L1033' name='L1033'></a>1033 
+<a id='L1034' name='L1034'></a>1034         for_each_possible_cpu(cpu)
+<a id='L1035' name='L1035'></a>1035                 <strong class='reserved'>if</strong> (per_cpu(trc_ipi_to_cpu, cpu))
+<a id='L1036' name='L1036'></a>1036                         pr_alert("\tIPI outstanding to CPU %d\n", cpu);
+<a id='L1037' name='L1037'></a>1037 <em class='brace'>}</em>
+<a id='L1038' name='L1038'></a>1038 
+<a id='L1039' name='L1039'></a>1039 <em class='comment'>/* Do one scan of the holdout list. */</em>
+<a id='L1040' name='L1040'></a>1040 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L1201' title='Referred from 1201 in rcu/tasks.h.'>check_all_holdout_tasks_trace</a>(<strong class='reserved'>struct</strong> list_head *hop,
+<a id='L1041' name='L1041'></a>1041                                           bool needreport, bool *firstreport)
+<a id='L1042' name='L1042'></a>1042 <em class='brace'>{</em>
+<a id='L1043' name='L1043'></a>1043         <strong class='reserved'>struct</strong> task_struct *g, *t;
+<a id='L1044' name='L1044'></a>1044 
+<a id='L1045' name='L1045'></a>1045         <em class='comment'>// Disable CPU hotplug across the holdout list scan.</em>
+<a id='L1046' name='L1046'></a>1046         <a href='../S/327.html#L299' title='Defined at 299 in cpu.c.'>cpus_read_lock</a>();
+<a id='L1047' name='L1047'></a>1047 
+<a id='L1048' name='L1048'></a>1048         list_for_each_entry_safe(t, g, hop, trc_holdout_list) <em class='brace'>{</em>
+<a id='L1049' name='L1049'></a>1049                 <em class='comment'>// If safe and needed, try to check the current task.</em>
+<a id='L1050' name='L1050'></a>1050                 <strong class='reserved'>if</strong> (READ_ONCE(t-&gt;trc_ipi_to_cpu) == -1 &amp;&amp;
+<a id='L1051' name='L1051'></a>1051                     !READ_ONCE(t-&gt;trc_reader_checked))
+<a id='L1052' name='L1052'></a>1052                         <a href='../S/125.html#L900' title='Defined at 900 in rcu/tasks.h.'>trc_wait_for_one_reader</a>(t, hop);
+<a id='L1053' name='L1053'></a>1053 
+<a id='L1054' name='L1054'></a>1054                 <em class='comment'>// If check succeeded, remove this task from the list.</em>
+<a id='L1055' name='L1055'></a>1055                 <strong class='reserved'>if</strong> (READ_ONCE(t-&gt;trc_reader_checked))
+<a id='L1056' name='L1056'></a>1056                         <a href='../S/125.html#L800' title='Defined at 800 in rcu/tasks.h.'>trc_del_holdout</a>(t);
+<a id='L1057' name='L1057'></a>1057                 <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (needreport)
+<a id='L1058' name='L1058'></a>1058                         <a href='../S/125.html#L1008' title='Defined at 1008 in rcu/tasks.h.'>show_stalled_task_trace</a>(t, firstreport);
+<a id='L1059' name='L1059'></a>1059         <em class='brace'>}</em>
+<a id='L1060' name='L1060'></a>1060 
+<a id='L1061' name='L1061'></a>1061         <em class='comment'>// Re-enable CPU hotplug now that the holdout list scan has completed.</em>
+<a id='L1062' name='L1062'></a>1062         <a href='../S/327.html#L311' title='Defined at 311 in cpu.c.'>cpus_read_unlock</a>();
+<a id='L1063' name='L1063'></a>1063 
+<a id='L1064' name='L1064'></a>1064         <strong class='reserved'>if</strong> (needreport) <em class='brace'>{</em>
+<a id='L1065' name='L1065'></a>1065                 <strong class='reserved'>if</strong> (firstreport)
+<a id='L1066' name='L1066'></a>1066                         pr_err("INFO: rcu_tasks_trace detected stalls? (Late IPI?)\n");
+<a id='L1067' name='L1067'></a>1067                 <a href='../S/125.html#L1030' title='Defined at 1030 in rcu/tasks.h.'>show_stalled_ipi_trace</a>();
+<a id='L1068' name='L1068'></a>1068         <em class='brace'>}</em>
+<a id='L1069' name='L1069'></a>1069 <em class='brace'>}</em>
+<a id='L1070' name='L1070'></a>1070 
+<a id='L1071' name='L1071'></a>1071 <em class='comment'>/* Wait for grace period to complete and provide ordering. */</em>
+<a id='L1072' name='L1072'></a>1072 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L1202' title='Referred from 1202 in rcu/tasks.h.'>rcu_tasks_trace_postgp</a>(<strong class='reserved'>struct</strong> <a href='../S/125.html#L47' title='Defined at 47 in rcu/tasks.h.'>rcu_tasks</a> *rtp)
+<a id='L1073' name='L1073'></a>1073 <em class='brace'>{</em>
+<a id='L1074' name='L1074'></a>1074         bool firstreport;
+<a id='L1075' name='L1075'></a>1075         <strong class='reserved'>struct</strong> task_struct *g, *t;
+<a id='L1076' name='L1076'></a>1076         LIST_HEAD(holdouts);
+<a id='L1077' name='L1077'></a>1077         <strong class='reserved'>long</strong> ret;
+<a id='L1078' name='L1078'></a>1078 
+<a id='L1079' name='L1079'></a>1079         <em class='comment'>// Remove the safety count.</em>
+<a id='L1080' name='L1080'></a>1080         smp_mb__before_atomic();  <em class='comment'>// Order vs. earlier atomics</em>
+<a id='L1081' name='L1081'></a>1081         atomic_dec(&amp;trc_n_readers_need_end);
+<a id='L1082' name='L1082'></a>1082         smp_mb__after_atomic();  <em class='comment'>// Order vs. later atomics</em>
+<a id='L1083' name='L1083'></a>1083 
+<a id='L1084' name='L1084'></a>1084         <em class='comment'>// Wait for readers.</em>
+<a id='L1085' name='L1085'></a>1085         <a href='../S/125.html#L132' title='Defined at 132 in rcu/tasks.h.'>set_tasks_gp_state</a>(rtp, <a href='../S/125.html#L107' title='Defined at 107 in rcu/tasks.h.'>RTGS_WAIT_READERS</a>);
+<a id='L1086' name='L1086'></a>1086         <strong class='reserved'>for</strong> (;;) <em class='brace'>{</em>
+<a id='L1087' name='L1087'></a>1087                 ret = wait_event_idle_exclusive_timeout(
+<a id='L1088' name='L1088'></a>1088                                 trc_wait,
+<a id='L1089' name='L1089'></a>1089                                 atomic_read(&amp;trc_n_readers_need_end) == 0,
+<a id='L1090' name='L1090'></a>1090                                 READ_ONCE(rcu_task_stall_timeout));
+<a id='L1091' name='L1091'></a>1091                 <strong class='reserved'>if</strong> (ret)
+<a id='L1092' name='L1092'></a>1092                         <strong class='reserved'>break</strong>;  <em class='comment'>// Count reached zero.</em>
+<a id='L1093' name='L1093'></a>1093                 <em class='comment'>// Stall warning time, so make a list of the offenders.</em>
+<a id='L1094' name='L1094'></a>1094                 rcu_read_lock();
+<a id='L1095' name='L1095'></a>1095                 for_each_process_thread(g, t)
+<a id='L1096' name='L1096'></a>1096                         <strong class='reserved'>if</strong> (READ_ONCE(t-&gt;trc_reader_special.b.need_qs))
+<a id='L1097' name='L1097'></a>1097                                 <a href='../S/125.html#L791' title='Defined at 791 in rcu/tasks.h.'>trc_add_holdout</a>(t, &amp;holdouts);
+<a id='L1098' name='L1098'></a>1098                 rcu_read_unlock();
+<a id='L1099' name='L1099'></a>1099                 firstreport = true;
+<a id='L1100' name='L1100'></a>1100                 list_for_each_entry_safe(t, g, &amp;holdouts, trc_holdout_list) <em class='brace'>{</em>
+<a id='L1101' name='L1101'></a>1101                         <strong class='reserved'>if</strong> (READ_ONCE(t-&gt;trc_reader_special.b.need_qs))
+<a id='L1102' name='L1102'></a>1102                                 <a href='../S/125.html#L1008' title='Defined at 1008 in rcu/tasks.h.'>show_stalled_task_trace</a>(t, &amp;firstreport);
+<a id='L1103' name='L1103'></a>1103                         <a href='../S/125.html#L800' title='Defined at 800 in rcu/tasks.h.'>trc_del_holdout</a>(t); <em class='comment'>// Release task_struct reference.</em>
+<a id='L1104' name='L1104'></a>1104                 <em class='brace'>}</em>
+<a id='L1105' name='L1105'></a>1105                 <strong class='reserved'>if</strong> (firstreport)
+<a id='L1106' name='L1106'></a>1106                         pr_err("INFO: rcu_tasks_trace detected stalls? (Counter/taskslist mismatch?)\n");
+<a id='L1107' name='L1107'></a>1107                 <a href='../S/125.html#L1030' title='Defined at 1030 in rcu/tasks.h.'>show_stalled_ipi_trace</a>();
+<a id='L1108' name='L1108'></a>1108                 pr_err("\t%d holdouts\n", atomic_read(&amp;trc_n_readers_need_end));
+<a id='L1109' name='L1109'></a>1109         <em class='brace'>}</em>
+<a id='L1110' name='L1110'></a>1110         smp_mb(); <em class='comment'>// Caller's code must be ordered after wakeup.</em>
+<a id='L1111' name='L1111'></a>1111                   <em class='comment'>// Pairs with pretty much every ordering primitive.</em>
+<a id='L1112' name='L1112'></a>1112 <em class='brace'>}</em>
+<a id='L1113' name='L1113'></a>1113 
+<a id='L1114' name='L1114'></a>1114 <em class='comment'>/* Report any needed quiescent state for this exiting task. */</em>
+<a id='L1115' name='L1115'></a>1115 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/6187.html' title='Multiple referred from 3 places.'>exit_tasks_rcu_finish_trace</a>(<strong class='reserved'>struct</strong> task_struct *t)
+<a id='L1116' name='L1116'></a>1116 <em class='brace'>{</em>
+<a id='L1117' name='L1117'></a>1117         WRITE_ONCE(t-&gt;trc_reader_checked, true);
+<a id='L1118' name='L1118'></a>1118         WARN_ON_ONCE(t-&gt;trc_reader_nesting);
+<a id='L1119' name='L1119'></a>1119         WRITE_ONCE(t-&gt;trc_reader_nesting, 0);
+<a id='L1120' name='L1120'></a>1120         <strong class='reserved'>if</strong> (WARN_ON_ONCE(READ_ONCE(t-&gt;trc_reader_special.b.need_qs)))
+<a id='L1121' name='L1121'></a>1121                 <a href='../S/125.html#L774' title='Defined at 774 in rcu/tasks.h.'>rcu_read_unlock_trace_special</a>(t, 0);
+<a id='L1122' name='L1122'></a>1122 <em class='brace'>}</em>
+<a id='L1123' name='L1123'></a>1123 
+<a id='L1124' name='L1124'></a>1124 <em class='comment'>/**</em>
+<a id='L1125' name='L1125'></a>1125 <em class='comment'> * call_rcu_tasks_trace() - Queue a callback trace task-based grace period</em>
+<a id='L1126' name='L1126'></a>1126 <em class='comment'> * @rhp: structure to be used for queueing the RCU updates.</em>
+<a id='L1127' name='L1127'></a>1127 <em class='comment'> * @func: actual callback function to be invoked after the grace period</em>
+<a id='L1128' name='L1128'></a>1128 <em class='comment'> *</em>
+<a id='L1129' name='L1129'></a>1129 <em class='comment'> * The callback function will be invoked some time after a full grace</em>
+<a id='L1130' name='L1130'></a>1130 <em class='comment'> * period elapses, in other words after all currently executing RCU</em>
+<a id='L1131' name='L1131'></a>1131 <em class='comment'> * read-side critical sections have completed. call_rcu_tasks_trace()</em>
+<a id='L1132' name='L1132'></a>1132 <em class='comment'> * assumes that the read-side critical sections end at context switch,</em>
+<a id='L1133' name='L1133'></a>1133 <em class='comment'> * cond_resched_rcu_qs(), or transition to usermode execution.  As such,</em>
+<a id='L1134' name='L1134'></a>1134 <em class='comment'> * there are no read-side primitives analogous to rcu_read_lock() and</em>
+<a id='L1135' name='L1135'></a>1135 <em class='comment'> * rcu_read_unlock() because this primitive is intended to determine</em>
+<a id='L1136' name='L1136'></a>1136 <em class='comment'> * that all tasks have passed through a safe state, not so much for</em>
+<a id='L1137' name='L1137'></a>1137 <em class='comment'> * data-strcuture synchronization.</em>
+<a id='L1138' name='L1138'></a>1138 <em class='comment'> *</em>
+<a id='L1139' name='L1139'></a>1139 <em class='comment'> * See the description of call_rcu() for more detailed information on</em>
+<a id='L1140' name='L1140'></a>1140 <em class='comment'> * memory ordering guarantees.</em>
+<a id='L1141' name='L1141'></a>1141 <em class='comment'> */</em>
+<a id='L1142' name='L1142'></a>1142 <strong class='reserved'>void</strong> <a href='../R/4205.html' title='Multiple referred from 7 places.'>call_rcu_tasks_trace</a>(<strong class='reserved'>struct</strong> rcu_head *rhp, rcu_callback_t <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>)
+<a id='L1143' name='L1143'></a>1143 <em class='brace'>{</em>
+<a id='L1144' name='L1144'></a>1144         <a href='../S/125.html#L152' title='Defined at 152 in rcu/tasks.h.'>call_rcu_tasks_generic</a>(rhp, <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>, &amp;rcu_tasks_trace);
+<a id='L1145' name='L1145'></a>1145 <em class='brace'>}</em>
+<a id='L1146' name='L1146'></a>1146 EXPORT_SYMBOL_GPL(<a href='../S/125.html#L1142' title='Defined at 1142 in rcu/tasks.h.'>call_rcu_tasks_trace</a>);
+<a id='L1147' name='L1147'></a>1147 
+<a id='L1148' name='L1148'></a>1148 <em class='comment'>/**</em>
+<a id='L1149' name='L1149'></a>1149 <em class='comment'> * synchronize_rcu_tasks_trace - wait for a trace rcu-tasks grace period</em>
+<a id='L1150' name='L1150'></a>1150 <em class='comment'> *</em>
+<a id='L1151' name='L1151'></a>1151 <em class='comment'> * Control will return to the caller some time after a trace rcu-tasks</em>
+<a id='L1152' name='L1152'></a>1152 <em class='comment'> * grace period has elapsed, in other words after all currently executing</em>
+<a id='L1153' name='L1153'></a>1153 <em class='comment'> * rcu-tasks read-side critical sections have elapsed.  These read-side</em>
+<a id='L1154' name='L1154'></a>1154 <em class='comment'> * critical sections are delimited by calls to rcu_read_lock_trace()</em>
+<a id='L1155' name='L1155'></a>1155 <em class='comment'> * and rcu_read_unlock_trace().</em>
+<a id='L1156' name='L1156'></a>1156 <em class='comment'> *</em>
+<a id='L1157' name='L1157'></a>1157 <em class='comment'> * This is a very specialized primitive, intended only for a few uses in</em>
+<a id='L1158' name='L1158'></a>1158 <em class='comment'> * tracing and other situations requiring manipulation of function preambles</em>
+<a id='L1159' name='L1159'></a>1159 <em class='comment'> * and profiling hooks.  The synchronize_rcu_tasks_trace() function is not</em>
+<a id='L1160' name='L1160'></a>1160 <em class='comment'> * (yet) intended for heavy use from multiple CPUs.</em>
+<a id='L1161' name='L1161'></a>1161 <em class='comment'> *</em>
+<a id='L1162' name='L1162'></a>1162 <em class='comment'> * See the description of synchronize_rcu() for more detailed information</em>
+<a id='L1163' name='L1163'></a>1163 <em class='comment'> * on memory ordering guarantees.</em>
+<a id='L1164' name='L1164'></a>1164 <em class='comment'> */</em>
+<a id='L1165' name='L1165'></a>1165 <strong class='reserved'>void</strong> <a href='../R/12881.html' title='Multiple referred from 4 places.'>synchronize_rcu_tasks_trace</a>(<strong class='reserved'>void</strong>)
+<a id='L1166' name='L1166'></a>1166 <em class='brace'>{</em>
+<a id='L1167' name='L1167'></a>1167         RCU_LOCKDEP_WARN(lock_is_held(&amp;rcu_trace_lock_map), "Illegal synchronize_rcu_tasks_trace() in RCU Tasks Trace read-side critical section");
+<a id='L1168' name='L1168'></a>1168         <a href='../S/125.html#L171' title='Defined at 171 in rcu/tasks.h.'>synchronize_rcu_tasks_generic</a>(&amp;rcu_tasks_trace);
+<a id='L1169' name='L1169'></a>1169 <em class='brace'>}</em>
+<a id='L1170' name='L1170'></a>1170 EXPORT_SYMBOL_GPL(<a href='../S/125.html#L1165' title='Defined at 1165 in rcu/tasks.h.'>synchronize_rcu_tasks_trace</a>);
+<a id='L1171' name='L1171'></a>1171 
+<a id='L1172' name='L1172'></a>1172 <em class='comment'>/**</em>
+<a id='L1173' name='L1173'></a>1173 <em class='comment'> * rcu_barrier_tasks_trace - Wait for in-flight call_rcu_tasks_trace() callbacks.</em>
+<a id='L1174' name='L1174'></a>1174 <em class='comment'> *</em>
+<a id='L1175' name='L1175'></a>1175 <em class='comment'> * Although the current implementation is guaranteed to wait, it is not</em>
+<a id='L1176' name='L1176'></a>1176 <em class='comment'> * obligated to, for example, if there are no pending callbacks.</em>
+<a id='L1177' name='L1177'></a>1177 <em class='comment'> */</em>
+<a id='L1178' name='L1178'></a>1178 <strong class='reserved'>void</strong> <a href='../R/10846.html' title='Multiple referred from 2 places.'>rcu_barrier_tasks_trace</a>(<strong class='reserved'>void</strong>)
+<a id='L1179' name='L1179'></a>1179 <em class='brace'>{</em>
+<a id='L1180' name='L1180'></a>1180         <em class='comment'>/* There is only one callback queue, so this is easy.  ;-) */</em>
+<a id='L1181' name='L1181'></a>1181         <a href='../S/125.html#L1165' title='Defined at 1165 in rcu/tasks.h.'>synchronize_rcu_tasks_trace</a>();
+<a id='L1182' name='L1182'></a>1182 <em class='brace'>}</em>
+<a id='L1183' name='L1183'></a>1183 EXPORT_SYMBOL_GPL(<a href='../S/125.html#L1178' title='Defined at 1178 in rcu/tasks.h.'>rcu_barrier_tasks_trace</a>);
+<a id='L1184' name='L1184'></a>1184 
+<a id='L1185' name='L1185'></a>1185 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __init <a href='../S/125.html#L1245' title='Referred from 1245 in rcu/tasks.h.'>rcu_spawn_tasks_trace_kthread</a>(<strong class='reserved'>void</strong>)
+<a id='L1186' name='L1186'></a>1186 <em class='brace'>{</em>
+<a id='L1187' name='L1187'></a>1187         <strong class='reserved'>if</strong> (IS_ENABLED(CONFIG_TASKS_TRACE_RCU_READ_MB)) <em class='brace'>{</em>
+<a id='L1188' name='L1188'></a>1188                 rcu_tasks_trace.gp_sleep = HZ / 10;
+<a id='L1189' name='L1189'></a>1189                 rcu_tasks_trace.init_fract = 10;
+<a id='L1190' name='L1190'></a>1190         <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L1191' name='L1191'></a>1191                 rcu_tasks_trace.gp_sleep = HZ / 200;
+<a id='L1192' name='L1192'></a>1192                 <strong class='reserved'>if</strong> (rcu_tasks_trace.gp_sleep &lt;= 0)
+<a id='L1193' name='L1193'></a>1193                         rcu_tasks_trace.gp_sleep = 1;
+<a id='L1194' name='L1194'></a>1194                 rcu_tasks_trace.init_fract = HZ / 5;
+<a id='L1195' name='L1195'></a>1195                 <strong class='reserved'>if</strong> (rcu_tasks_trace.init_fract &lt;= 0)
+<a id='L1196' name='L1196'></a>1196                         rcu_tasks_trace.init_fract = 1;
+<a id='L1197' name='L1197'></a>1197         <em class='brace'>}</em>
+<a id='L1198' name='L1198'></a>1198         rcu_tasks_trace.pregp_func = <a href='../S/125.html#L956' title='Defined at 956 in rcu/tasks.h.'>rcu_tasks_trace_pregp_step</a>;
+<a id='L1199' name='L1199'></a>1199         rcu_tasks_trace.pertask_func = <a href='../S/125.html#L973' title='Defined at 973 in rcu/tasks.h.'>rcu_tasks_trace_pertask</a>;
+<a id='L1200' name='L1200'></a>1200         rcu_tasks_trace.postscan_func = <a href='../S/125.html#L991' title='Defined at 991 in rcu/tasks.h.'>rcu_tasks_trace_postscan</a>;
+<a id='L1201' name='L1201'></a>1201         rcu_tasks_trace.holdouts_func = <a href='../S/125.html#L1040' title='Defined at 1040 in rcu/tasks.h.'>check_all_holdout_tasks_trace</a>;
+<a id='L1202' name='L1202'></a>1202         rcu_tasks_trace.postgp_func = <a href='../S/125.html#L1072' title='Defined at 1072 in rcu/tasks.h.'>rcu_tasks_trace_postgp</a>;
+<a id='L1203' name='L1203'></a>1203         <a href='../S/125.html#L245' title='Defined at 245 in rcu/tasks.h.'>rcu_spawn_tasks_kthread_generic</a>(&amp;rcu_tasks_trace);
+<a id='L1204' name='L1204'></a>1204         <strong class='reserved'>return</strong> 0;
+<a id='L1205' name='L1205'></a>1205 <em class='brace'>}</em>
+<a id='L1206' name='L1206'></a>1206 
+<a id='L1207' name='L1207'></a>1207 <em class='sharp'>#ifndef</em> CONFIG_TINY_RCU
+<a id='L1208' name='L1208'></a>1208 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L1230' title='Referred from 1230 in rcu/tasks.h.'>show_rcu_tasks_trace_gp_kthread</a>(<strong class='reserved'>void</strong>)
+<a id='L1209' name='L1209'></a>1209 <em class='brace'>{</em>
+<a id='L1210' name='L1210'></a>1210         <strong class='reserved'>char</strong> buf[64];
+<a id='L1211' name='L1211'></a>1211 
+<a id='L1212' name='L1212'></a>1212         sprintf(buf, "N%d h:%lu/%lu/%lu", atomic_read(&amp;trc_n_readers_need_end),
+<a id='L1213' name='L1213'></a>1213                 data_race(n_heavy_reader_ofl_updates),
+<a id='L1214' name='L1214'></a>1214                 data_race(n_heavy_reader_updates),
+<a id='L1215' name='L1215'></a>1215                 data_race(n_heavy_reader_attempts));
+<a id='L1216' name='L1216'></a>1216         <a href='../S/125.html#L281' title='Defined at 281 in rcu/tasks.h.'>show_rcu_tasks_generic_gp_kthread</a>(&amp;rcu_tasks_trace, buf);
+<a id='L1217' name='L1217'></a>1217 <em class='brace'>}</em>
+<a id='L1218' name='L1218'></a>1218 <em class='sharp'>#endif</em> <em class='comment'>/* #ifndef CONFIG_TINY_RCU */</em>
+<a id='L1219' name='L1219'></a>1219 
+<a id='L1220' name='L1220'></a>1220 <em class='sharp'>#else</em> <em class='comment'>/* #ifdef CONFIG_TASKS_TRACE_RCU */</em>
+<a id='L1221' name='L1221'></a>1221 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/6187.html' title='Multiple referred from 3 places.'>exit_tasks_rcu_finish_trace</a>(<strong class='reserved'>struct</strong> task_struct *t) <em class='brace'>{</em> <em class='brace'>}</em>
+<a id='L1222' name='L1222'></a>1222 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/125.html#L1230' title='Referred from 1230 in rcu/tasks.h.'>show_rcu_tasks_trace_gp_kthread</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L1223' name='L1223'></a>1223 <em class='sharp'>#endif</em> <em class='comment'>/* #else #ifdef CONFIG_TASKS_TRACE_RCU */</em>
+<a id='L1224' name='L1224'></a>1224 
+<a id='L1225' name='L1225'></a>1225 <em class='sharp'>#ifndef</em> CONFIG_TINY_RCU
+<a id='L1226' name='L1226'></a>1226 <strong class='reserved'>void</strong> <a href='../R/12389.html' title='Multiple referred from 2 places.'>show_rcu_tasks_gp_kthreads</a>(<strong class='reserved'>void</strong>)
+<a id='L1227' name='L1227'></a>1227 <em class='brace'>{</em>
+<a id='L1228' name='L1228'></a>1228         <a href='../D/13070.html' title='Multiple defined in 2 places.'>show_rcu_tasks_classic_gp_kthread</a>();
+<a id='L1229' name='L1229'></a>1229         <a href='../D/13073.html' title='Multiple defined in 2 places.'>show_rcu_tasks_rude_gp_kthread</a>();
+<a id='L1230' name='L1230'></a>1230         <a href='../D/13074.html' title='Multiple defined in 2 places.'>show_rcu_tasks_trace_gp_kthread</a>();
+<a id='L1231' name='L1231'></a>1231 <em class='brace'>}</em>
+<a id='L1232' name='L1232'></a>1232 <em class='sharp'>#endif</em> <em class='comment'>/* #ifndef CONFIG_TINY_RCU */</em>
+<a id='L1233' name='L1233'></a>1233 
+<a id='L1234' name='L1234'></a>1234 <strong class='reserved'>void</strong> __init rcu_init_tasks_generic(<strong class='reserved'>void</strong>)
+<a id='L1235' name='L1235'></a>1235 <em class='brace'>{</em>
+<a id='L1236' name='L1236'></a>1236 <em class='sharp'>#ifdef</em> CONFIG_TASKS_RCU
+<a id='L1237' name='L1237'></a>1237         <a href='../S/125.html#L560' title='Defined at 560 in rcu/tasks.h.'>rcu_spawn_tasks_kthread</a>();
+<a id='L1238' name='L1238'></a>1238 <em class='sharp'>#endif</em>
+<a id='L1239' name='L1239'></a>1239 
+<a id='L1240' name='L1240'></a>1240 <em class='sharp'>#ifdef</em> CONFIG_TASKS_RUDE_RCU
+<a id='L1241' name='L1241'></a>1241         <a href='../S/125.html#L693' title='Defined at 693 in rcu/tasks.h.'>rcu_spawn_tasks_rude_kthread</a>();
+<a id='L1242' name='L1242'></a>1242 <em class='sharp'>#endif</em>
+<a id='L1243' name='L1243'></a>1243 
+<a id='L1244' name='L1244'></a>1244 <em class='sharp'>#ifdef</em> CONFIG_TASKS_TRACE_RCU
+<a id='L1245' name='L1245'></a>1245         <a href='../S/125.html#L1185' title='Defined at 1185 in rcu/tasks.h.'>rcu_spawn_tasks_trace_kthread</a>();
+<a id='L1246' name='L1246'></a>1246 <em class='sharp'>#endif</em>
+<a id='L1247' name='L1247'></a>1247 <em class='brace'>}</em>
+<a id='L1248' name='L1248'></a>1248 
+<a id='L1249' name='L1249'></a>1249 <em class='sharp'>#else</em> <em class='comment'>/* #ifdef CONFIG_TASKS_RCU_GENERIC */</em>
+<a id='L1250' name='L1250'></a>1250 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/140.html#L597' title='Referred from 597 in rcu/update.c.'>rcu_tasks_bootup_oddness</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L1251' name='L1251'></a>1251 <strong class='reserved'>void</strong> <a href='../R/12389.html' title='Multiple referred from 2 places.'>show_rcu_tasks_gp_kthreads</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L1252' name='L1252'></a>1252 <em class='sharp'>#endif</em> <em class='comment'>/* #else #ifdef CONFIG_TASKS_RCU_GENERIC */</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L132'>[^]</a><a href='#L1251'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

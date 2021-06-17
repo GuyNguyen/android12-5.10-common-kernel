@@ -1,0 +1,1042 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>node</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/12.html#L166'>node</a>              166 async.c        					  int node, struct async_domain *domain)</span>
+<span class='curline'><a href='../S/12.html#L212'>node</a>              212 async.c        	queue_work_node(node, system_unbound_wq, &amp;entry-&gt;work);</span>
+<span class='curline'><a href='../S/12.html#L231'>node</a>              231 async.c        async_cookie_t async_schedule_node(async_func_t func, void *data, int node)</span>
+<span class='curline'><a href='../S/12.html#L233'>node</a>              233 async.c        	return async_schedule_node_domain(func, data, node, &amp;async_dfl_domain);</span>
+<span class='curline'><a href='../S/72.html#L272'>node</a>              272 audit_tree.c   static struct audit_chunk *find_chunk(struct node *p)</span>
+<span class='curline'><a href='../S/72.html#L325'>node</a>              325 audit_tree.c   static void remove_chunk_node(struct audit_chunk *chunk, struct node *p)</span>
+<span class='curline'><a href='../S/72.html#L462'>node</a>              462 audit_tree.c   	struct node *p;</span>
+<span class='curline'><a href='../S/72.html#L573'>node</a>              573 audit_tree.c   		struct node *p;</span>
+<span class='curline'><a href='../S/72.html#L577'>node</a>              577 audit_tree.c   		p = list_first_entry(&amp;victim-&gt;chunks, struct node, list);</span>
+<span class='curline'><a href='../S/72.html#L619'>node</a>              619 audit_tree.c   		struct node *node = list_entry(p, struct node, list);</span>
+<span class='curline'><a href='../S/72.html#L621'>node</a>              621 audit_tree.c   		if (node-&gt;index &amp; (1U&lt;&lt;31)) {</span>
+<span class='curline'><a href='../S/72.html#L687'>node</a>              687 audit_tree.c   		struct node *node;</span>
+<span class='curline'><a href='../S/72.html#L706'>node</a>              706 audit_tree.c   		list_for_each_entry(node, &amp;tree-&gt;chunks, list) {</span>
+<span class='curline'><a href='../S/72.html#L707'>node</a>              707 audit_tree.c   			struct audit_chunk *chunk = find_chunk(node);</span>
+<span class='curline'><a href='../S/72.html#L709'>node</a>              709 audit_tree.c   			node-&gt;index |= 1U&lt;&lt;31;</span>
+<span class='curline'><a href='../S/72.html#L713'>node</a>              713 audit_tree.c   				node-&gt;index &amp;= ~(1U&lt;&lt;31);</span>
+<span class='curline'><a href='../S/72.html#L843'>node</a>              843 audit_tree.c   		struct node *node;</span>
+<span class='curline'><a href='../S/72.html#L845'>node</a>              845 audit_tree.c   		list_for_each_entry(node, &amp;tree-&gt;chunks, list)</span>
+<span class='curline'><a href='../S/72.html#L846'>node</a>              846 audit_tree.c   			node-&gt;index &amp;= ~(1U&lt;&lt;31);</span>
+<span class='curline'><a href='../S/72.html#L945'>node</a>              945 audit_tree.c   			struct node *node;</span>
+<span class='curline'><a href='../S/72.html#L947'>node</a>              947 audit_tree.c   			list_for_each_entry(node, &amp;tree-&gt;chunks, list)</span>
+<span class='curline'><a href='../S/72.html#L948'>node</a>              948 audit_tree.c   				node-&gt;index &amp;= ~(1U&lt;&lt;31);</span>
+<span class='curline'><a href='../S/404.html#L42'>node</a>               42 bpf/bpf_lru_list.c static bool bpf_lru_node_is_ref(const struct bpf_lru_node *node)</span>
+<span class='curline'><a href='../S/404.html#L44'>node</a>               44 bpf/bpf_lru_list.c 	return node-&gt;ref;</span>
+<span class='curline'><a href='../S/404.html#L62'>node</a>               62 bpf/bpf_lru_list.c 					struct bpf_lru_node *node,</span>
+<span class='curline'><a href='../S/404.html#L66'>node</a>               66 bpf/bpf_lru_list.c 	if (WARN_ON_ONCE(IS_LOCAL_LIST_TYPE(node-&gt;type)))</span>
+<span class='curline'><a href='../S/404.html#L72'>node</a>               72 bpf/bpf_lru_list.c 	if (&amp;node-&gt;list == l-&gt;next_inactive_rotation)</span>
+<span class='curline'><a href='../S/404.html#L75'>node</a>               75 bpf/bpf_lru_list.c 	bpf_lru_list_count_dec(l, node-&gt;type);</span>
+<span class='curline'><a href='../S/404.html#L77'>node</a>               77 bpf/bpf_lru_list.c 	node-&gt;type = tgt_free_type;</span>
+<span class='curline'><a href='../S/404.html#L78'>node</a>               78 bpf/bpf_lru_list.c 	list_move(&amp;node-&gt;list, free_list);</span>
+<span class='curline'><a href='../S/404.html#L83'>node</a>               83 bpf/bpf_lru_list.c 				   struct bpf_lru_node *node,</span>
+<span class='curline'><a href='../S/404.html#L86'>node</a>               86 bpf/bpf_lru_list.c 	if (WARN_ON_ONCE(!IS_LOCAL_LIST_TYPE(node-&gt;type)) ||</span>
+<span class='curline'><a href='../S/404.html#L91'>node</a>               91 bpf/bpf_lru_list.c 	node-&gt;type = tgt_type;</span>
+<span class='curline'><a href='../S/404.html#L92'>node</a>               92 bpf/bpf_lru_list.c 	node-&gt;ref = 0;</span>
+<span class='curline'><a href='../S/404.html#L93'>node</a>               93 bpf/bpf_lru_list.c 	list_move(&amp;node-&gt;list, &amp;l-&gt;lists[tgt_type]);</span>
+<span class='curline'><a href='../S/404.html#L101'>node</a>              101 bpf/bpf_lru_list.c 				struct bpf_lru_node *node,</span>
+<span class='curline'><a href='../S/404.html#L104'>node</a>              104 bpf/bpf_lru_list.c 	if (WARN_ON_ONCE(IS_LOCAL_LIST_TYPE(node-&gt;type)) ||</span>
+<span class='curline'><a href='../S/404.html#L108'>node</a>              108 bpf/bpf_lru_list.c 	if (node-&gt;type != tgt_type) {</span>
+<span class='curline'><a href='../S/404.html#L109'>node</a>              109 bpf/bpf_lru_list.c 		bpf_lru_list_count_dec(l, node-&gt;type);</span>
+<span class='curline'><a href='../S/404.html#L111'>node</a>              111 bpf/bpf_lru_list.c 		node-&gt;type = tgt_type;</span>
+<span class='curline'><a href='../S/404.html#L113'>node</a>              113 bpf/bpf_lru_list.c 	node-&gt;ref = 0;</span>
+<span class='curline'><a href='../S/404.html#L118'>node</a>              118 bpf/bpf_lru_list.c 	if (&amp;node-&gt;list == l-&gt;next_inactive_rotation)</span>
+<span class='curline'><a href='../S/404.html#L121'>node</a>              121 bpf/bpf_lru_list.c 	list_move(&amp;node-&gt;list, &amp;l-&gt;lists[tgt_type]);</span>
+<span class='curline'><a href='../S/404.html#L143'>node</a>              143 bpf/bpf_lru_list.c 	struct bpf_lru_node *node, *tmp_node, *first_node;</span>
+<span class='curline'><a href='../S/404.html#L147'>node</a>              147 bpf/bpf_lru_list.c 	list_for_each_entry_safe_reverse(node, tmp_node, active, list) {</span>
+<span class='curline'><a href='../S/404.html#L148'>node</a>              148 bpf/bpf_lru_list.c 		if (bpf_lru_node_is_ref(node))</span>
+<span class='curline'><a href='../S/404.html#L149'>node</a>              149 bpf/bpf_lru_list.c 			__bpf_lru_node_move(l, node, BPF_LRU_LIST_T_ACTIVE);</span>
+<span class='curline'><a href='../S/404.html#L151'>node</a>              151 bpf/bpf_lru_list.c 			__bpf_lru_node_move(l, node, BPF_LRU_LIST_T_INACTIVE);</span>
+<span class='curline'><a href='../S/404.html#L153'>node</a>              153 bpf/bpf_lru_list.c 		if (++i == lru-&gt;nr_scans || node == first_node)</span>
+<span class='curline'><a href='../S/404.html#L171'>node</a>              171 bpf/bpf_lru_list.c 	struct bpf_lru_node *node;</span>
+<span class='curline'><a href='../S/404.html#L188'>node</a>              188 bpf/bpf_lru_list.c 		node = list_entry(cur, struct bpf_lru_node, list);</span>
+<span class='curline'><a href='../S/404.html#L190'>node</a>              190 bpf/bpf_lru_list.c 		if (bpf_lru_node_is_ref(node))</span>
+<span class='curline'><a href='../S/404.html#L191'>node</a>              191 bpf/bpf_lru_list.c 			__bpf_lru_node_move(l, node, BPF_LRU_LIST_T_ACTIVE);</span>
+<span class='curline'><a href='../S/404.html#L213'>node</a>              213 bpf/bpf_lru_list.c 	struct bpf_lru_node *node, *tmp_node;</span>
+<span class='curline'><a href='../S/404.html#L217'>node</a>              217 bpf/bpf_lru_list.c 	list_for_each_entry_safe_reverse(node, tmp_node, inactive, list) {</span>
+<span class='curline'><a href='../S/404.html#L218'>node</a>              218 bpf/bpf_lru_list.c 		if (bpf_lru_node_is_ref(node)) {</span>
+<span class='curline'><a href='../S/404.html#L219'>node</a>              219 bpf/bpf_lru_list.c 			__bpf_lru_node_move(l, node, BPF_LRU_LIST_T_ACTIVE);</span>
+<span class='curline'><a href='../S/404.html#L220'>node</a>              220 bpf/bpf_lru_list.c 		} else if (lru-&gt;del_from_htab(lru-&gt;del_arg, node)) {</span>
+<span class='curline'><a href='../S/404.html#L221'>node</a>              221 bpf/bpf_lru_list.c 			__bpf_lru_node_move_to_free(l, node, free_list,</span>
+<span class='curline'><a href='../S/404.html#L262'>node</a>              262 bpf/bpf_lru_list.c 	struct bpf_lru_node *node, *tmp_node;</span>
+<span class='curline'><a href='../S/404.html#L277'>node</a>              277 bpf/bpf_lru_list.c 	list_for_each_entry_safe_reverse(node, tmp_node, force_shrink_list,</span>
+<span class='curline'><a href='../S/404.html#L279'>node</a>              279 bpf/bpf_lru_list.c 		if (lru-&gt;del_from_htab(lru-&gt;del_arg, node)) {</span>
+<span class='curline'><a href='../S/404.html#L280'>node</a>              280 bpf/bpf_lru_list.c 			__bpf_lru_node_move_to_free(l, node, free_list,</span>
+<span class='curline'><a href='../S/404.html#L293'>node</a>              293 bpf/bpf_lru_list.c 	struct bpf_lru_node *node, *tmp_node;</span>
+<span class='curline'><a href='../S/404.html#L295'>node</a>              295 bpf/bpf_lru_list.c 	list_for_each_entry_safe_reverse(node, tmp_node,</span>
+<span class='curline'><a href='../S/404.html#L297'>node</a>              297 bpf/bpf_lru_list.c 		if (bpf_lru_node_is_ref(node))</span>
+<span class='curline'><a href='../S/404.html#L298'>node</a>              298 bpf/bpf_lru_list.c 			__bpf_lru_node_move_in(l, node, BPF_LRU_LIST_T_ACTIVE);</span>
+<span class='curline'><a href='../S/404.html#L300'>node</a>              300 bpf/bpf_lru_list.c 			__bpf_lru_node_move_in(l, node,</span>
+<span class='curline'><a href='../S/404.html#L306'>node</a>              306 bpf/bpf_lru_list.c 				   struct bpf_lru_node *node)</span>
+<span class='curline'><a href='../S/404.html#L310'>node</a>              310 bpf/bpf_lru_list.c 	if (WARN_ON_ONCE(IS_LOCAL_LIST_TYPE(node-&gt;type)))</span>
+<span class='curline'><a href='../S/404.html#L314'>node</a>              314 bpf/bpf_lru_list.c 	__bpf_lru_node_move(l, node, BPF_LRU_LIST_T_FREE);</span>
+<span class='curline'><a href='../S/404.html#L322'>node</a>              322 bpf/bpf_lru_list.c 	struct bpf_lru_node *node, *tmp_node;</span>
+<span class='curline'><a href='../S/404.html#L331'>node</a>              331 bpf/bpf_lru_list.c 	list_for_each_entry_safe(node, tmp_node, &amp;l-&gt;lists[BPF_LRU_LIST_T_FREE],</span>
+<span class='curline'><a href='../S/404.html#L333'>node</a>              333 bpf/bpf_lru_list.c 		__bpf_lru_node_move_to_free(l, node, local_free_list(loc_l),</span>
+<span class='curline'><a href='../S/404.html#L350'>node</a>              350 bpf/bpf_lru_list.c 				     struct bpf_lru_node *node,</span>
+<span class='curline'><a href='../S/404.html#L353'>node</a>              353 bpf/bpf_lru_list.c 	*(u32 *)((void *)node + lru-&gt;hash_offset) = hash;</span>
+<span class='curline'><a href='../S/404.html#L354'>node</a>              354 bpf/bpf_lru_list.c 	node-&gt;cpu = cpu;</span>
+<span class='curline'><a href='../S/404.html#L355'>node</a>              355 bpf/bpf_lru_list.c 	node-&gt;type = BPF_LRU_LOCAL_LIST_T_PENDING;</span>
+<span class='curline'><a href='../S/404.html#L356'>node</a>              356 bpf/bpf_lru_list.c 	node-&gt;ref = 0;</span>
+<span class='curline'><a href='../S/404.html#L357'>node</a>              357 bpf/bpf_lru_list.c 	list_add(&amp;node-&gt;list, local_pending_list(loc_l));</span>
+<span class='curline'><a href='../S/404.html#L363'>node</a>              363 bpf/bpf_lru_list.c 	struct bpf_lru_node *node;</span>
+<span class='curline'><a href='../S/404.html#L365'>node</a>              365 bpf/bpf_lru_list.c 	node = list_first_entry_or_null(local_free_list(loc_l),</span>
+<span class='curline'><a href='../S/404.html#L368'>node</a>              368 bpf/bpf_lru_list.c 	if (node)</span>
+<span class='curline'><a href='../S/404.html#L369'>node</a>              369 bpf/bpf_lru_list.c 		list_del(&amp;node-&gt;list);</span>
+<span class='curline'><a href='../S/404.html#L371'>node</a>              371 bpf/bpf_lru_list.c 	return node;</span>
+<span class='curline'><a href='../S/404.html#L377'>node</a>              377 bpf/bpf_lru_list.c 	struct bpf_lru_node *node;</span>
+<span class='curline'><a href='../S/404.html#L382'>node</a>              382 bpf/bpf_lru_list.c 	list_for_each_entry_reverse(node, local_pending_list(loc_l),</span>
+<span class='curline'><a href='../S/404.html#L384'>node</a>              384 bpf/bpf_lru_list.c 		if ((!bpf_lru_node_is_ref(node) || force) &amp;&amp;</span>
+<span class='curline'><a href='../S/404.html#L385'>node</a>              385 bpf/bpf_lru_list.c 		    lru-&gt;del_from_htab(lru-&gt;del_arg, node)) {</span>
+<span class='curline'><a href='../S/404.html#L386'>node</a>              386 bpf/bpf_lru_list.c 			list_del(&amp;node-&gt;list);</span>
+<span class='curline'><a href='../S/404.html#L387'>node</a>              387 bpf/bpf_lru_list.c 			return node;</span>
+<span class='curline'><a href='../S/404.html#L403'>node</a>              403 bpf/bpf_lru_list.c 	struct bpf_lru_node *node = NULL;</span>
+<span class='curline'><a href='../S/404.html#L420'>node</a>              420 bpf/bpf_lru_list.c 		node = list_first_entry(free_list, struct bpf_lru_node, list);</span>
+<span class='curline'><a href='../S/404.html#L421'>node</a>              421 bpf/bpf_lru_list.c 		*(u32 *)((void *)node + lru-&gt;hash_offset) = hash;</span>
+<span class='curline'><a href='../S/404.html#L422'>node</a>              422 bpf/bpf_lru_list.c 		node-&gt;ref = 0;</span>
+<span class='curline'><a href='../S/404.html#L423'>node</a>              423 bpf/bpf_lru_list.c 		__bpf_lru_node_move(l, node, BPF_LRU_LIST_T_INACTIVE);</span>
+<span class='curline'><a href='../S/404.html#L428'>node</a>              428 bpf/bpf_lru_list.c 	return node;</span>
+<span class='curline'><a href='../S/404.html#L436'>node</a>              436 bpf/bpf_lru_list.c 	struct bpf_lru_node *node;</span>
+<span class='curline'><a href='../S/404.html#L445'>node</a>              445 bpf/bpf_lru_list.c 	node = __local_list_pop_free(loc_l);</span>
+<span class='curline'><a href='../S/404.html#L446'>node</a>              446 bpf/bpf_lru_list.c 	if (!node) {</span>
+<span class='curline'><a href='../S/404.html#L448'>node</a>              448 bpf/bpf_lru_list.c 		node = __local_list_pop_free(loc_l);</span>
+<span class='curline'><a href='../S/404.html#L451'>node</a>              451 bpf/bpf_lru_list.c 	if (node)</span>
+<span class='curline'><a href='../S/404.html#L452'>node</a>              452 bpf/bpf_lru_list.c 		__local_list_add_pending(lru, loc_l, cpu, node, hash);</span>
+<span class='curline'><a href='../S/404.html#L456'>node</a>              456 bpf/bpf_lru_list.c 	if (node)</span>
+<span class='curline'><a href='../S/404.html#L457'>node</a>              457 bpf/bpf_lru_list.c 		return node;</span>
+<span class='curline'><a href='../S/404.html#L474'>node</a>              474 bpf/bpf_lru_list.c 		node = __local_list_pop_free(steal_loc_l);</span>
+<span class='curline'><a href='../S/404.html#L475'>node</a>              475 bpf/bpf_lru_list.c 		if (!node)</span>
+<span class='curline'><a href='../S/404.html#L476'>node</a>              476 bpf/bpf_lru_list.c 			node = __local_list_pop_pending(lru, steal_loc_l);</span>
+<span class='curline'><a href='../S/404.html#L481'>node</a>              481 bpf/bpf_lru_list.c 	} while (!node &amp;&amp; steal != first_steal);</span>
+<span class='curline'><a href='../S/404.html#L485'>node</a>              485 bpf/bpf_lru_list.c 	if (node) {</span>
+<span class='curline'><a href='../S/404.html#L487'>node</a>              487 bpf/bpf_lru_list.c 		__local_list_add_pending(lru, loc_l, cpu, node, hash);</span>
+<span class='curline'><a href='../S/404.html#L491'>node</a>              491 bpf/bpf_lru_list.c 	return node;</span>
+<span class='curline'><a href='../S/404.html#L503'>node</a>              503 bpf/bpf_lru_list.c 				     struct bpf_lru_node *node)</span>
+<span class='curline'><a href='../S/404.html#L505'>node</a>              505 bpf/bpf_lru_list.c 	u8 node_type = READ_ONCE(node-&gt;type);</span>
+<span class='curline'><a href='../S/404.html#L515'>node</a>              515 bpf/bpf_lru_list.c 		loc_l = per_cpu_ptr(lru-&gt;common_lru.local_list, node-&gt;cpu);</span>
+<span class='curline'><a href='../S/404.html#L519'>node</a>              519 bpf/bpf_lru_list.c 		if (unlikely(node-&gt;type != BPF_LRU_LOCAL_LIST_T_PENDING)) {</span>
+<span class='curline'><a href='../S/404.html#L524'>node</a>              524 bpf/bpf_lru_list.c 		node-&gt;type = BPF_LRU_LOCAL_LIST_T_FREE;</span>
+<span class='curline'><a href='../S/404.html#L525'>node</a>              525 bpf/bpf_lru_list.c 		node-&gt;ref = 0;</span>
+<span class='curline'><a href='../S/404.html#L526'>node</a>              526 bpf/bpf_lru_list.c 		list_move(&amp;node-&gt;list, local_free_list(loc_l));</span>
+<span class='curline'><a href='../S/404.html#L533'>node</a>              533 bpf/bpf_lru_list.c 	bpf_lru_list_push_free(&amp;lru-&gt;common_lru.lru_list, node);</span>
+<span class='curline'><a href='../S/404.html#L537'>node</a>              537 bpf/bpf_lru_list.c 				     struct bpf_lru_node *node)</span>
+<span class='curline'><a href='../S/404.html#L542'>node</a>              542 bpf/bpf_lru_list.c 	l = per_cpu_ptr(lru-&gt;percpu_lru, node-&gt;cpu);</span>
+<span class='curline'><a href='../S/404.html#L546'>node</a>              546 bpf/bpf_lru_list.c 	__bpf_lru_node_move(l, node, BPF_LRU_LIST_T_FREE);</span>
+<span class='curline'><a href='../S/404.html#L551'>node</a>              551 bpf/bpf_lru_list.c void bpf_lru_push_free(struct bpf_lru *lru, struct bpf_lru_node *node)</span>
+<span class='curline'><a href='../S/404.html#L554'>node</a>              554 bpf/bpf_lru_list.c 		bpf_percpu_lru_push_free(lru, node);</span>
+<span class='curline'><a href='../S/404.html#L556'>node</a>              556 bpf/bpf_lru_list.c 		bpf_common_lru_push_free(lru, node);</span>
+<span class='curline'><a href='../S/404.html#L567'>node</a>              567 bpf/bpf_lru_list.c 		struct bpf_lru_node *node;</span>
+<span class='curline'><a href='../S/404.html#L569'>node</a>              569 bpf/bpf_lru_list.c 		node = (struct bpf_lru_node *)(buf + node_offset);</span>
+<span class='curline'><a href='../S/404.html#L570'>node</a>              570 bpf/bpf_lru_list.c 		node-&gt;type = BPF_LRU_LIST_T_FREE;</span>
+<span class='curline'><a href='../S/404.html#L571'>node</a>              571 bpf/bpf_lru_list.c 		node-&gt;ref = 0;</span>
+<span class='curline'><a href='../S/404.html#L572'>node</a>              572 bpf/bpf_lru_list.c 		list_add(&amp;node-&gt;list, &amp;l-&gt;lists[BPF_LRU_LIST_T_FREE]);</span>
+<span class='curline'><a href='../S/404.html#L590'>node</a>              590 bpf/bpf_lru_list.c 		struct bpf_lru_node *node;</span>
+<span class='curline'><a href='../S/404.html#L594'>node</a>              594 bpf/bpf_lru_list.c 		node = (struct bpf_lru_node *)(buf + node_offset);</span>
+<span class='curline'><a href='../S/404.html#L595'>node</a>              595 bpf/bpf_lru_list.c 		node-&gt;cpu = cpu;</span>
+<span class='curline'><a href='../S/404.html#L596'>node</a>              596 bpf/bpf_lru_list.c 		node-&gt;type = BPF_LRU_LIST_T_FREE;</span>
+<span class='curline'><a href='../S/404.html#L597'>node</a>              597 bpf/bpf_lru_list.c 		node-&gt;ref = 0;</span>
+<span class='curline'><a href='../S/404.html#L598'>node</a>              598 bpf/bpf_lru_list.c 		list_add(&amp;node-&gt;list, &amp;l-&gt;lists[BPF_LRU_LIST_T_FREE]);</span>
+<span class='curline'><a href='../S/381.html#L50'>node</a>               50 bpf/bpf_lru_list.h typedef bool (*del_from_htab_func)(void *arg, struct bpf_lru_node *node);</span>
+<span class='curline'><a href='../S/381.html#L64'>node</a>               64 bpf/bpf_lru_list.h static inline void bpf_lru_node_set_ref(struct bpf_lru_node *node)</span>
+<span class='curline'><a href='../S/381.html#L69'>node</a>               69 bpf/bpf_lru_list.h 	if (!node-&gt;ref)</span>
+<span class='curline'><a href='../S/381.html#L70'>node</a>               70 bpf/bpf_lru_list.h 		node-&gt;ref = 1;</span>
+<span class='curline'><a href='../S/381.html#L79'>node</a>               79 bpf/bpf_lru_list.h void bpf_lru_push_free(struct bpf_lru *lru, struct bpf_lru_node *node);</span>
+<span class='curline'><a href='../S/381.html#L80'>node</a>               80 bpf/bpf_lru_list.h void bpf_lru_promote(struct bpf_lru *lru, struct bpf_lru_node *node);</span>
+<span class='curline'><a href='../S/417.html#L124'>node</a>              124 bpf/cgroup.c   		list_for_each_entry_safe(pl, pltmp, progs, node) {</span>
+<span class='curline'><a href='../S/417.html#L125'>node</a>              125 bpf/cgroup.c   			list_del(&amp;pl-&gt;node);</span>
+<span class='curline'><a href='../S/417.html#L186'>node</a>              186 bpf/cgroup.c   	list_for_each_entry(pl, head, node) {</span>
+<span class='curline'><a href='../S/417.html#L255'>node</a>              255 bpf/cgroup.c   		list_for_each_entry(pl, &amp;p-&gt;bpf.progs[type], node) {</span>
+<span class='curline'><a href='../S/417.html#L394'>node</a>              394 bpf/cgroup.c   		return list_first_entry(progs, typeof(*pl), node);</span>
+<span class='curline'><a href='../S/417.html#L397'>node</a>              397 bpf/cgroup.c   	list_for_each_entry(pl, progs, node) {</span>
+<span class='curline'><a href='../S/417.html#L408'>node</a>              408 bpf/cgroup.c   		list_for_each_entry(pl, progs, node) {</span>
+<span class='curline'><a href='../S/417.html#L487'>node</a>              487 bpf/cgroup.c   		list_add_tail(&amp;pl-&gt;node, progs);</span>
+<span class='curline'><a href='../S/417.html#L513'>node</a>              513 bpf/cgroup.c   		list_del(&amp;pl-&gt;node);</span>
+<span class='curline'><a href='../S/417.html#L546'>node</a>              546 bpf/cgroup.c   			list_for_each_entry(pl, head, node) {</span>
+<span class='curline'><a href='../S/417.html#L585'>node</a>              585 bpf/cgroup.c   	list_for_each_entry(pl, progs, node) {</span>
+<span class='curline'><a href='../S/417.html#L639'>node</a>              639 bpf/cgroup.c   		return list_first_entry(progs, typeof(*pl), node);</span>
+<span class='curline'><a href='../S/417.html#L649'>node</a>              649 bpf/cgroup.c   	list_for_each_entry(pl, progs, node) {</span>
+<span class='curline'><a href='../S/417.html#L694'>node</a>              694 bpf/cgroup.c   	list_del(&amp;pl-&gt;node);</span>
+<span class='curline'><a href='../S/417.html#L750'>node</a>              750 bpf/cgroup.c   		list_for_each_entry(pl, progs, node) {</span>
+<span class='curline'><a href='../S/383.html#L170'>node</a>              170 bpf/hashtab.c  static bool htab_lru_map_delete_node(void *arg, struct bpf_lru_node *node);</span>
+<span class='curline'><a href='../S/383.html#L238'>node</a>              238 bpf/hashtab.c  	struct bpf_lru_node *node = bpf_lru_pop_free(&amp;htab-&gt;lru, hash);</span>
+<span class='curline'><a href='../S/383.html#L241'>node</a>              241 bpf/hashtab.c  	if (node) {</span>
+<span class='curline'><a href='../S/383.html#L242'>node</a>              242 bpf/hashtab.c  		l = container_of(node, struct htab_elem, lru_node);</span>
+<span class='curline'><a href='../S/383.html#L682'>node</a>              682 bpf/hashtab.c  static bool htab_lru_map_delete_node(void *arg, struct bpf_lru_node *node)</span>
+<span class='curline'><a href='../S/383.html#L691'>node</a>              691 bpf/hashtab.c  	tgt_l = container_of(node, struct htab_elem, lru_node);</span>
+<span class='curline'><a href='../S/402.html#L71'>node</a>               71 bpf/local_storage.c 	struct rb_node *node;</span>
+<span class='curline'><a href='../S/402.html#L76'>node</a>               76 bpf/local_storage.c 	node = root-&gt;rb_node;</span>
+<span class='curline'><a href='../S/402.html#L77'>node</a>               77 bpf/local_storage.c 	while (node) {</span>
+<span class='curline'><a href='../S/402.html#L80'>node</a>               80 bpf/local_storage.c 		storage = container_of(node, struct bpf_cgroup_storage, node);</span>
+<span class='curline'><a href='../S/402.html#L84'>node</a>               84 bpf/local_storage.c 			node = node-&gt;rb_left;</span>
+<span class='curline'><a href='../S/402.html#L87'>node</a>               87 bpf/local_storage.c 			node = node-&gt;rb_right;</span>
+<span class='curline'><a href='../S/402.html#L111'>node</a>              111 bpf/local_storage.c 		this = container_of(*new, struct bpf_cgroup_storage, node);</span>
+<span class='curline'><a href='../S/402.html#L126'>node</a>              126 bpf/local_storage.c 	rb_link_node(&amp;storage-&gt;node, parent, new);</span>
+<span class='curline'><a href='../S/402.html#L127'>node</a>              127 bpf/local_storage.c 	rb_insert_color(&amp;storage-&gt;node, root);</span>
+<span class='curline'><a href='../S/402.html#L614'>node</a>              614 bpf/local_storage.c 	rb_erase(&amp;storage-&gt;node, root);</span>
+<span class='curline'><a href='../S/405.html#L165'>node</a>              165 bpf/lpm_trie.c 				   const struct lpm_trie_node *node,</span>
+<span class='curline'><a href='../S/405.html#L168'>node</a>              168 bpf/lpm_trie.c 	u32 limit = min(node-&gt;prefixlen, key-&gt;prefixlen);</span>
+<span class='curline'><a href='../S/405.html#L180'>node</a>              180 bpf/lpm_trie.c 		u64 diff = be64_to_cpu(*(__be64 *)node-&gt;data ^</span>
+<span class='curline'><a href='../S/405.html#L193'>node</a>              193 bpf/lpm_trie.c 		u32 diff = be32_to_cpu(*(__be32 *)&amp;node-&gt;data[i] ^</span>
+<span class='curline'><a href='../S/405.html#L205'>node</a>              205 bpf/lpm_trie.c 		u16 diff = be16_to_cpu(*(__be16 *)&amp;node-&gt;data[i] ^</span>
+<span class='curline'><a href='../S/405.html#L217'>node</a>              217 bpf/lpm_trie.c 		prefixlen += 8 - fls(node-&gt;data[i] ^ key-&gt;data[i]);</span>
+<span class='curline'><a href='../S/405.html#L230'>node</a>              230 bpf/lpm_trie.c 	struct lpm_trie_node *node, *found = NULL;</span>
+<span class='curline'><a href='../S/405.html#L235'>node</a>              235 bpf/lpm_trie.c 	for (node = rcu_dereference(trie-&gt;root); node;) {</span>
+<span class='curline'><a href='../S/405.html#L243'>node</a>              243 bpf/lpm_trie.c 		matchlen = longest_prefix_match(trie, node, key);</span>
+<span class='curline'><a href='../S/405.html#L245'>node</a>              245 bpf/lpm_trie.c 			found = node;</span>
+<span class='curline'><a href='../S/405.html#L253'>node</a>              253 bpf/lpm_trie.c 		if (matchlen &lt; node-&gt;prefixlen)</span>
+<span class='curline'><a href='../S/405.html#L259'>node</a>              259 bpf/lpm_trie.c 		if (!(node-&gt;flags &amp; LPM_TREE_NODE_FLAG_IM))</span>
+<span class='curline'><a href='../S/405.html#L260'>node</a>              260 bpf/lpm_trie.c 			found = node;</span>
+<span class='curline'><a href='../S/405.html#L266'>node</a>              266 bpf/lpm_trie.c 		next_bit = extract_bit(key-&gt;data, node-&gt;prefixlen);</span>
+<span class='curline'><a href='../S/405.html#L267'>node</a>              267 bpf/lpm_trie.c 		node = rcu_dereference(node-&gt;child[next_bit]);</span>
+<span class='curline'><a href='../S/405.html#L279'>node</a>              279 bpf/lpm_trie.c 	struct lpm_trie_node *node;</span>
+<span class='curline'><a href='../S/405.html#L285'>node</a>              285 bpf/lpm_trie.c 	node = kmalloc_node(size, GFP_ATOMIC | __GFP_NOWARN,</span>
+<span class='curline'><a href='../S/405.html#L287'>node</a>              287 bpf/lpm_trie.c 	if (!node)</span>
+<span class='curline'><a href='../S/405.html#L290'>node</a>              290 bpf/lpm_trie.c 	node-&gt;flags = 0;</span>
+<span class='curline'><a href='../S/405.html#L293'>node</a>              293 bpf/lpm_trie.c 		memcpy(node-&gt;data + trie-&gt;data_size, value,</span>
+<span class='curline'><a href='../S/405.html#L296'>node</a>              296 bpf/lpm_trie.c 	return node;</span>
+<span class='curline'><a href='../S/405.html#L304'>node</a>              304 bpf/lpm_trie.c 	struct lpm_trie_node *node, *im_node = NULL, *new_node = NULL;</span>
+<span class='curline'><a href='../S/405.html#L347'>node</a>              347 bpf/lpm_trie.c 	while ((node = rcu_dereference_protected(*slot,</span>
+<span class='curline'><a href='../S/405.html#L349'>node</a>              349 bpf/lpm_trie.c 		matchlen = longest_prefix_match(trie, node, key);</span>
+<span class='curline'><a href='../S/405.html#L351'>node</a>              351 bpf/lpm_trie.c 		if (node-&gt;prefixlen != matchlen ||</span>
+<span class='curline'><a href='../S/405.html#L352'>node</a>              352 bpf/lpm_trie.c 		    node-&gt;prefixlen == key-&gt;prefixlen ||</span>
+<span class='curline'><a href='../S/405.html#L353'>node</a>              353 bpf/lpm_trie.c 		    node-&gt;prefixlen == trie-&gt;max_prefixlen)</span>
+<span class='curline'><a href='../S/405.html#L356'>node</a>              356 bpf/lpm_trie.c 		next_bit = extract_bit(key-&gt;data, node-&gt;prefixlen);</span>
+<span class='curline'><a href='../S/405.html#L357'>node</a>              357 bpf/lpm_trie.c 		slot = &amp;node-&gt;child[next_bit];</span>
+<span class='curline'><a href='../S/405.html#L363'>node</a>              363 bpf/lpm_trie.c 	if (!node) {</span>
+<span class='curline'><a href='../S/405.html#L371'>node</a>              371 bpf/lpm_trie.c 	if (node-&gt;prefixlen == matchlen) {</span>
+<span class='curline'><a href='../S/405.html#L372'>node</a>              372 bpf/lpm_trie.c 		new_node-&gt;child[0] = node-&gt;child[0];</span>
+<span class='curline'><a href='../S/405.html#L373'>node</a>              373 bpf/lpm_trie.c 		new_node-&gt;child[1] = node-&gt;child[1];</span>
+<span class='curline'><a href='../S/405.html#L375'>node</a>              375 bpf/lpm_trie.c 		if (!(node-&gt;flags &amp; LPM_TREE_NODE_FLAG_IM))</span>
+<span class='curline'><a href='../S/405.html#L379'>node</a>              379 bpf/lpm_trie.c 		kfree_rcu(node, rcu);</span>
+<span class='curline'><a href='../S/405.html#L388'>node</a>              388 bpf/lpm_trie.c 		next_bit = extract_bit(node-&gt;data, matchlen);</span>
+<span class='curline'><a href='../S/405.html#L389'>node</a>              389 bpf/lpm_trie.c 		rcu_assign_pointer(new_node-&gt;child[next_bit], node);</span>
+<span class='curline'><a href='../S/405.html#L402'>node</a>              402 bpf/lpm_trie.c 	memcpy(im_node-&gt;data, node-&gt;data, trie-&gt;data_size);</span>
+<span class='curline'><a href='../S/405.html#L406'>node</a>              406 bpf/lpm_trie.c 		rcu_assign_pointer(im_node-&gt;child[0], node);</span>
+<span class='curline'><a href='../S/405.html#L410'>node</a>              410 bpf/lpm_trie.c 		rcu_assign_pointer(im_node-&gt;child[1], node);</span>
+<span class='curline'><a href='../S/405.html#L436'>node</a>              436 bpf/lpm_trie.c 	struct lpm_trie_node *node, *parent;</span>
+<span class='curline'><a href='../S/405.html#L456'>node</a>              456 bpf/lpm_trie.c 	while ((node = rcu_dereference_protected(</span>
+<span class='curline'><a href='../S/405.html#L458'>node</a>              458 bpf/lpm_trie.c 		matchlen = longest_prefix_match(trie, node, key);</span>
+<span class='curline'><a href='../S/405.html#L460'>node</a>              460 bpf/lpm_trie.c 		if (node-&gt;prefixlen != matchlen ||</span>
+<span class='curline'><a href='../S/405.html#L461'>node</a>              461 bpf/lpm_trie.c 		    node-&gt;prefixlen == key-&gt;prefixlen)</span>
+<span class='curline'><a href='../S/405.html#L464'>node</a>              464 bpf/lpm_trie.c 		parent = node;</span>
+<span class='curline'><a href='../S/405.html#L466'>node</a>              466 bpf/lpm_trie.c 		next_bit = extract_bit(key-&gt;data, node-&gt;prefixlen);</span>
+<span class='curline'><a href='../S/405.html#L467'>node</a>              467 bpf/lpm_trie.c 		trim = &amp;node-&gt;child[next_bit];</span>
+<span class='curline'><a href='../S/405.html#L470'>node</a>              470 bpf/lpm_trie.c 	if (!node || node-&gt;prefixlen != key-&gt;prefixlen ||</span>
+<span class='curline'><a href='../S/405.html#L471'>node</a>              471 bpf/lpm_trie.c 	    node-&gt;prefixlen != matchlen ||</span>
+<span class='curline'><a href='../S/405.html#L472'>node</a>              472 bpf/lpm_trie.c 	    (node-&gt;flags &amp; LPM_TREE_NODE_FLAG_IM)) {</span>
+<span class='curline'><a href='../S/405.html#L482'>node</a>              482 bpf/lpm_trie.c 	if (rcu_access_pointer(node-&gt;child[0]) &amp;&amp;</span>
+<span class='curline'><a href='../S/405.html#L483'>node</a>              483 bpf/lpm_trie.c 	    rcu_access_pointer(node-&gt;child[1])) {</span>
+<span class='curline'><a href='../S/405.html#L484'>node</a>              484 bpf/lpm_trie.c 		node-&gt;flags |= LPM_TREE_NODE_FLAG_IM;</span>
+<span class='curline'><a href='../S/405.html#L496'>node</a>              496 bpf/lpm_trie.c 	    !node-&gt;child[0] &amp;&amp; !node-&gt;child[1]) {</span>
+<span class='curline'><a href='../S/405.html#L497'>node</a>              497 bpf/lpm_trie.c 		if (node == rcu_access_pointer(parent-&gt;child[0]))</span>
+<span class='curline'><a href='../S/405.html#L504'>node</a>              504 bpf/lpm_trie.c 		kfree_rcu(node, rcu);</span>
+<span class='curline'><a href='../S/405.html#L512'>node</a>              512 bpf/lpm_trie.c 	if (node-&gt;child[0])</span>
+<span class='curline'><a href='../S/405.html#L513'>node</a>              513 bpf/lpm_trie.c 		rcu_assign_pointer(*trim, rcu_access_pointer(node-&gt;child[0]));</span>
+<span class='curline'><a href='../S/405.html#L514'>node</a>              514 bpf/lpm_trie.c 	else if (node-&gt;child[1])</span>
+<span class='curline'><a href='../S/405.html#L515'>node</a>              515 bpf/lpm_trie.c 		rcu_assign_pointer(*trim, rcu_access_pointer(node-&gt;child[1]));</span>
+<span class='curline'><a href='../S/405.html#L518'>node</a>              518 bpf/lpm_trie.c 	kfree_rcu(node, rcu);</span>
+<span class='curline'><a href='../S/405.html#L590'>node</a>              590 bpf/lpm_trie.c 	struct lpm_trie_node *node;</span>
+<span class='curline'><a href='../S/405.html#L601'>node</a>              601 bpf/lpm_trie.c 			node = rcu_dereference_protected(*slot, 1);</span>
+<span class='curline'><a href='../S/405.html#L602'>node</a>              602 bpf/lpm_trie.c 			if (!node)</span>
+<span class='curline'><a href='../S/405.html#L605'>node</a>              605 bpf/lpm_trie.c 			if (rcu_access_pointer(node-&gt;child[0])) {</span>
+<span class='curline'><a href='../S/405.html#L606'>node</a>              606 bpf/lpm_trie.c 				slot = &amp;node-&gt;child[0];</span>
+<span class='curline'><a href='../S/405.html#L610'>node</a>              610 bpf/lpm_trie.c 			if (rcu_access_pointer(node-&gt;child[1])) {</span>
+<span class='curline'><a href='../S/405.html#L611'>node</a>              611 bpf/lpm_trie.c 				slot = &amp;node-&gt;child[1];</span>
+<span class='curline'><a href='../S/405.html#L615'>node</a>              615 bpf/lpm_trie.c 			kfree(node);</span>
+<span class='curline'><a href='../S/405.html#L627'>node</a>              627 bpf/lpm_trie.c 	struct lpm_trie_node *node, *next_node = NULL, *parent, *search_root;</span>
+<span class='curline'><a href='../S/405.html#L662'>node</a>              662 bpf/lpm_trie.c 	for (node = search_root; node;) {</span>
+<span class='curline'><a href='../S/405.html#L663'>node</a>              663 bpf/lpm_trie.c 		node_stack[++stack_ptr] = node;</span>
+<span class='curline'><a href='../S/405.html#L664'>node</a>              664 bpf/lpm_trie.c 		matchlen = longest_prefix_match(trie, node, key);</span>
+<span class='curline'><a href='../S/405.html#L665'>node</a>              665 bpf/lpm_trie.c 		if (node-&gt;prefixlen != matchlen ||</span>
+<span class='curline'><a href='../S/405.html#L666'>node</a>              666 bpf/lpm_trie.c 		    node-&gt;prefixlen == key-&gt;prefixlen)</span>
+<span class='curline'><a href='../S/405.html#L669'>node</a>              669 bpf/lpm_trie.c 		next_bit = extract_bit(key-&gt;data, node-&gt;prefixlen);</span>
+<span class='curline'><a href='../S/405.html#L670'>node</a>              670 bpf/lpm_trie.c 		node = rcu_dereference(node-&gt;child[next_bit]);</span>
+<span class='curline'><a href='../S/405.html#L672'>node</a>              672 bpf/lpm_trie.c 	if (!node || node-&gt;prefixlen != key-&gt;prefixlen ||</span>
+<span class='curline'><a href='../S/405.html#L673'>node</a>              673 bpf/lpm_trie.c 	    (node-&gt;flags &amp; LPM_TREE_NODE_FLAG_IM))</span>
+<span class='curline'><a href='../S/405.html#L679'>node</a>              679 bpf/lpm_trie.c 	node = node_stack[stack_ptr];</span>
+<span class='curline'><a href='../S/405.html#L682'>node</a>              682 bpf/lpm_trie.c 		if (rcu_dereference(parent-&gt;child[0]) == node) {</span>
+<span class='curline'><a href='../S/405.html#L692'>node</a>              692 bpf/lpm_trie.c 		node = parent;</span>
+<span class='curline'><a href='../S/405.html#L704'>node</a>              704 bpf/lpm_trie.c 	for (node = search_root; node;) {</span>
+<span class='curline'><a href='../S/405.html#L705'>node</a>              705 bpf/lpm_trie.c 		if (node-&gt;flags &amp; LPM_TREE_NODE_FLAG_IM) {</span>
+<span class='curline'><a href='../S/405.html#L706'>node</a>              706 bpf/lpm_trie.c 			node = rcu_dereference(node-&gt;child[0]);</span>
+<span class='curline'><a href='../S/405.html#L708'>node</a>              708 bpf/lpm_trie.c 			next_node = node;</span>
+<span class='curline'><a href='../S/405.html#L709'>node</a>              709 bpf/lpm_trie.c 			node = rcu_dereference(node-&gt;child[0]);</span>
+<span class='curline'><a href='../S/405.html#L710'>node</a>              710 bpf/lpm_trie.c 			if (!node)</span>
+<span class='curline'><a href='../S/405.html#L711'>node</a>              711 bpf/lpm_trie.c 				node = rcu_dereference(next_node-&gt;child[1]);</span>
+<span class='curline'><a href='../S/403.html#L22'>node</a>               22 bpf/net_namespace.c 	struct list_head node; /* node in list of links attached to net */</span>
+<span class='curline'><a href='../S/403.html#L71'>node</a>               71 bpf/net_namespace.c 	list_for_each_entry(pos, &amp;net-&gt;bpf.links[type], node) {</span>
+<span class='curline'><a href='../S/403.html#L95'>node</a>               95 bpf/net_namespace.c 	list_for_each_entry(pos, &amp;net-&gt;bpf.links[type], node) {</span>
+<span class='curline'><a href='../S/403.html#L125'>node</a>              125 bpf/net_namespace.c 	list_del(&amp;net_link-&gt;node);</span>
+<span class='curline'><a href='../S/403.html#L461'>node</a>              461 bpf/net_namespace.c 	list_add_tail(&amp;net_link-&gt;node, &amp;net-&gt;bpf.links[type]);</span>
+<span class='curline'><a href='../S/403.html#L546'>node</a>              546 bpf/net_namespace.c 		list_for_each_entry(net_link, &amp;net-&gt;bpf.links[type], node) {</span>
+<span class='curline'><a href='../S/396.html#L31'>node</a>               31 bpf/percpu_freelist.c 					   struct pcpu_freelist_node *node)</span>
+<span class='curline'><a href='../S/396.html#L33'>node</a>               33 bpf/percpu_freelist.c 	node-&gt;next = head-&gt;first;</span>
+<span class='curline'><a href='../S/396.html#L34'>node</a>               34 bpf/percpu_freelist.c 	head-&gt;first = node;</span>
+<span class='curline'><a href='../S/396.html#L38'>node</a>               38 bpf/percpu_freelist.c 					 struct pcpu_freelist_node *node)</span>
+<span class='curline'><a href='../S/396.html#L41'>node</a>               41 bpf/percpu_freelist.c 	pcpu_freelist_push_node(head, node);</span>
+<span class='curline'><a href='../S/396.html#L46'>node</a>               46 bpf/percpu_freelist.c 						struct pcpu_freelist_node *node)</span>
+<span class='curline'><a href='../S/396.html#L51'>node</a>               51 bpf/percpu_freelist.c 	pcpu_freelist_push_node(&amp;s-&gt;extralist, node);</span>
+<span class='curline'><a href='../S/396.html#L57'>node</a>               57 bpf/percpu_freelist.c 					     struct pcpu_freelist_node *node)</span>
+<span class='curline'><a href='../S/396.html#L67'>node</a>               67 bpf/percpu_freelist.c 			pcpu_freelist_push_node(head, node);</span>
+<span class='curline'><a href='../S/396.html#L77'>node</a>               77 bpf/percpu_freelist.c 		    pcpu_freelist_try_push_extra(s, node))</span>
+<span class='curline'><a href='../S/396.html#L83'>node</a>               83 bpf/percpu_freelist.c 			struct pcpu_freelist_node *node)</span>
+<span class='curline'><a href='../S/396.html#L86'>node</a>               86 bpf/percpu_freelist.c 		___pcpu_freelist_push_nmi(s, node);</span>
+<span class='curline'><a href='../S/396.html#L88'>node</a>               88 bpf/percpu_freelist.c 		___pcpu_freelist_push(this_cpu_ptr(s-&gt;freelist), node);</span>
+<span class='curline'><a href='../S/396.html#L92'>node</a>               92 bpf/percpu_freelist.c 			struct pcpu_freelist_node *node)</span>
+<span class='curline'><a href='../S/396.html#L97'>node</a>               97 bpf/percpu_freelist.c 	__pcpu_freelist_push(s, node);</span>
+<span class='curline'><a href='../S/396.html#L127'>node</a>              127 bpf/percpu_freelist.c 	struct pcpu_freelist_node *node;</span>
+<span class='curline'><a href='../S/396.html#L134'>node</a>              134 bpf/percpu_freelist.c 		node = head-&gt;first;</span>
+<span class='curline'><a href='../S/396.html#L135'>node</a>              135 bpf/percpu_freelist.c 		if (node) {</span>
+<span class='curline'><a href='../S/396.html#L136'>node</a>              136 bpf/percpu_freelist.c 			head-&gt;first = node-&gt;next;</span>
+<span class='curline'><a href='../S/396.html#L138'>node</a>              138 bpf/percpu_freelist.c 			return node;</span>
+<span class='curline'><a href='../S/396.html#L150'>node</a>              150 bpf/percpu_freelist.c 	node = s-&gt;extralist.first;</span>
+<span class='curline'><a href='../S/396.html#L151'>node</a>              151 bpf/percpu_freelist.c 	if (node)</span>
+<span class='curline'><a href='../S/396.html#L152'>node</a>              152 bpf/percpu_freelist.c 		s-&gt;extralist.first = node-&gt;next;</span>
+<span class='curline'><a href='../S/396.html#L154'>node</a>              154 bpf/percpu_freelist.c 	return node;</span>
+<span class='curline'><a href='../S/396.html#L161'>node</a>              161 bpf/percpu_freelist.c 	struct pcpu_freelist_node *node;</span>
+<span class='curline'><a href='../S/396.html#L168'>node</a>              168 bpf/percpu_freelist.c 			node = head-&gt;first;</span>
+<span class='curline'><a href='../S/396.html#L169'>node</a>              169 bpf/percpu_freelist.c 			if (node) {</span>
+<span class='curline'><a href='../S/396.html#L170'>node</a>              170 bpf/percpu_freelist.c 				head-&gt;first = node-&gt;next;</span>
+<span class='curline'><a href='../S/396.html#L172'>node</a>              172 bpf/percpu_freelist.c 				return node;</span>
+<span class='curline'><a href='../S/396.html#L186'>node</a>              186 bpf/percpu_freelist.c 	node = s-&gt;extralist.first;</span>
+<span class='curline'><a href='../S/396.html#L187'>node</a>              187 bpf/percpu_freelist.c 	if (node)</span>
+<span class='curline'><a href='../S/396.html#L188'>node</a>              188 bpf/percpu_freelist.c 		s-&gt;extralist.first = node-&gt;next;</span>
+<span class='curline'><a href='../S/396.html#L190'>node</a>              190 bpf/percpu_freelist.c 	return node;</span>
+<span class='curline'><a href='../S/241.html#L1661'>node</a>             1661 cgroup/cgroup.c 		list_for_each_entry(cfts, &amp;css-&gt;ss-&gt;cfts, node)</span>
+<span class='curline'><a href='../S/241.html#L1691'>node</a>             1691 cgroup/cgroup.c 		list_for_each_entry(cfts, &amp;css-&gt;ss-&gt;cfts, node) {</span>
+<span class='curline'><a href='../S/241.html#L1704'>node</a>             1704 cgroup/cgroup.c 	list_for_each_entry(cfts, &amp;css-&gt;ss-&gt;cfts, node) {</span>
+<span class='curline'><a href='../S/241.html#L3994'>node</a>             3994 cgroup/cgroup.c 	list_del(&amp;cfts-&gt;node);</span>
+<span class='curline'><a href='../S/241.html#L4051'>node</a>             4051 cgroup/cgroup.c 	list_add_tail(&amp;cfts-&gt;node, &amp;ss-&gt;cfts);</span>
+<span class='curline'><a href='../S/238.html#L3479'>node</a>             3479 cgroup/cpuset.c bool __cpuset_node_allowed(int node, gfp_t gfp_mask)</span>
+<span class='curline'><a href='../S/238.html#L3487'>node</a>             3487 cgroup/cpuset.c 	if (node_isset(node, current-&gt;mems_allowed))</span>
+<span class='curline'><a href='../S/238.html#L3506'>node</a>             3506 cgroup/cpuset.c 	allowed = node_isset(node, cs-&gt;mems_allowed);</span>
+<span class='curline'><a href='../S/327.html#L72'>node</a>               72 cpu.c          	struct hlist_node	*node;</span>
+<span class='curline'><a href='../S/327.html#L124'>node</a>              124 cpu.c          					 struct hlist_node *node);</span>
+<span class='curline'><a href='../S/327.html#L129'>node</a>              129 cpu.c          					 struct hlist_node *node);</span>
+<span class='curline'><a href='../S/327.html#L155'>node</a>              155 cpu.c          				 bool bringup, struct hlist_node *node,</span>
+<span class='curline'><a href='../S/327.html#L160'>node</a>              160 cpu.c          	int (*cbm)(unsigned int cpu, struct hlist_node *node);</span>
+<span class='curline'><a href='../S/327.html#L188'>node</a>              188 cpu.c          	if (node) {</span>
+<span class='curline'><a href='../S/327.html#L190'>node</a>              190 cpu.c          		trace_cpuhp_multi_enter(cpu, st-&gt;target, state, cbm, node);</span>
+<span class='curline'><a href='../S/327.html#L191'>node</a>              191 cpu.c          		ret = cbm(cpu, node);</span>
+<span class='curline'><a href='../S/327.html#L198'>node</a>              198 cpu.c          	hlist_for_each(node, &amp;step-&gt;list) {</span>
+<span class='curline'><a href='../S/327.html#L199'>node</a>              199 cpu.c          		if (lastp &amp;&amp; node == *lastp)</span>
+<span class='curline'><a href='../S/327.html#L202'>node</a>              202 cpu.c          		trace_cpuhp_multi_enter(cpu, st-&gt;target, state, cbm, node);</span>
+<span class='curline'><a href='../S/327.html#L203'>node</a>              203 cpu.c          		ret = cbm(cpu, node);</span>
+<span class='curline'><a href='../S/327.html#L209'>node</a>              209 cpu.c          			*lastp = node;</span>
+<span class='curline'><a href='../S/327.html#L223'>node</a>              223 cpu.c          	hlist_for_each(node, &amp;step-&gt;list) {</span>
+<span class='curline'><a href='../S/327.html#L227'>node</a>              227 cpu.c          		trace_cpuhp_multi_enter(cpu, st-&gt;target, state, cbm, node);</span>
+<span class='curline'><a href='../S/327.html#L228'>node</a>              228 cpu.c          		ret = cbm(cpu, node);</span>
+<span class='curline'><a href='../S/327.html#L711'>node</a>              711 cpu.c          		st-&gt;result = cpuhp_invoke_callback(cpu, state, bringup, st-&gt;node, &amp;st-&gt;last);</span>
+<span class='curline'><a href='../S/327.html#L719'>node</a>              719 cpu.c          		st-&gt;result = cpuhp_invoke_callback(cpu, state, bringup, st-&gt;node, &amp;st-&gt;last);</span>
+<span class='curline'><a href='../S/327.html#L742'>node</a>              742 cpu.c          			 struct hlist_node *node)</span>
+<span class='curline'><a href='../S/327.html#L761'>node</a>              761 cpu.c          		return cpuhp_invoke_callback(cpu, state, bringup, node, NULL);</span>
+<span class='curline'><a href='../S/327.html#L766'>node</a>              766 cpu.c          	st-&gt;node = node;</span>
+<span class='curline'><a href='../S/327.html#L787'>node</a>              787 cpu.c          	st-&gt;node = st-&gt;last = NULL;</span>
+<span class='curline'><a href='../S/327.html#L2028'>node</a>             2028 cpu.c          			    struct hlist_node *node)</span>
+<span class='curline'><a href='../S/327.html#L2046'>node</a>             2046 cpu.c          		ret = cpuhp_invoke_ap_callback(cpu, state, bringup, node);</span>
+<span class='curline'><a href='../S/327.html#L2048'>node</a>             2048 cpu.c          		ret = cpuhp_invoke_callback(cpu, state, bringup, node, NULL);</span>
+<span class='curline'><a href='../S/327.html#L2050'>node</a>             2050 cpu.c          	ret = cpuhp_invoke_callback(cpu, state, bringup, node, NULL);</span>
+<span class='curline'><a href='../S/327.html#L2062'>node</a>             2062 cpu.c          				   struct hlist_node *node)</span>
+<span class='curline'><a href='../S/327.html#L2076'>node</a>             2076 cpu.c          			cpuhp_issue_call(cpu, state, false, node);</span>
+<span class='curline'><a href='../S/327.html#L2081'>node</a>             2081 cpu.c          					  struct hlist_node *node,</span>
+<span class='curline'><a href='../S/327.html#L2110'>node</a>             2110 cpu.c          		ret = cpuhp_issue_call(cpu, state, true, node);</span>
+<span class='curline'><a href='../S/327.html#L2113'>node</a>             2113 cpu.c          				cpuhp_rollback_install(cpu, state, node);</span>
+<span class='curline'><a href='../S/327.html#L2119'>node</a>             2119 cpu.c          	hlist_add_head(node, &amp;sp-&gt;list);</span>
+<span class='curline'><a href='../S/327.html#L2125'>node</a>             2125 cpu.c          int __cpuhp_state_add_instance(enum cpuhp_state state, struct hlist_node *node,</span>
+<span class='curline'><a href='../S/327.html#L2131'>node</a>             2131 cpu.c          	ret = __cpuhp_state_add_instance_cpuslocked(state, node, invoke);</span>
+<span class='curline'><a href='../S/327.html#L2230'>node</a>             2230 cpu.c          				  struct hlist_node *node, bool invoke)</span>
+<span class='curline'><a href='../S/327.html#L2255'>node</a>             2255 cpu.c          			cpuhp_issue_call(cpu, state, false, node);</span>
+<span class='curline'><a href='../S/327.html#L2259'>node</a>             2259 cpu.c          	hlist_del(node);</span>
+<span class='curline'><a href='../S/155.html#L354'>node</a>              354 dma/coherent.c 	unsigned long node = rmem-&gt;fdt_node;</span>
+<span class='curline'><a href='../S/155.html#L356'>node</a>              356 dma/coherent.c 	if (of_get_flat_dt_prop(node, "reusable", NULL))</span>
+<span class='curline'><a href='../S/155.html#L360'>node</a>              360 dma/coherent.c 	if (!of_get_flat_dt_prop(node, "no-map", NULL)) {</span>
+<span class='curline'><a href='../S/155.html#L365'>node</a>              365 dma/coherent.c 	if (of_get_flat_dt_prop(node, "linux,dma-default", NULL)) {</span>
+<span class='curline'><a href='../S/149.html#L407'>node</a>              407 dma/contiguous.c 	unsigned long node = rmem-&gt;fdt_node;</span>
+<span class='curline'><a href='../S/149.html#L408'>node</a>              408 dma/contiguous.c 	bool default_cma = of_get_flat_dt_prop(node, "linux,cma-default", NULL);</span>
+<span class='curline'><a href='../S/149.html#L418'>node</a>              418 dma/contiguous.c 	if (!of_get_flat_dt_prop(node, "reusable", NULL) ||</span>
+<span class='curline'><a href='../S/149.html#L419'>node</a>              419 dma/contiguous.c 	    of_get_flat_dt_prop(node, "no-map", NULL))</span>
+<span class='curline'><a href='../S/159.html#L82'>node</a>               82 dma/direct.c   	int node = dev_to_node(dev);</span>
+<span class='curline'><a href='../S/159.html#L97'>node</a>               97 dma/direct.c   		page = alloc_pages_node(node, gfp, get_order(size));</span>
+<span class='curline'><a href='../S/331.html#L1654'>node</a>             1654 events/core.c  	struct rb_node **node;</span>
+<span class='curline'><a href='../S/331.html#L1658'>node</a>             1658 events/core.c  	node = &amp;groups-&gt;tree.rb_node;</span>
+<span class='curline'><a href='../S/331.html#L1659'>node</a>             1659 events/core.c  	parent = *node;</span>
+<span class='curline'><a href='../S/331.html#L1661'>node</a>             1661 events/core.c  	while (*node) {</span>
+<span class='curline'><a href='../S/331.html#L1662'>node</a>             1662 events/core.c  		parent = *node;</span>
+<span class='curline'><a href='../S/331.html#L1663'>node</a>             1663 events/core.c  		node_event = container_of(*node, struct perf_event, group_node);</span>
+<span class='curline'><a href='../S/331.html#L1666'>node</a>             1666 events/core.c  			node = &amp;parent-&gt;rb_left;</span>
+<span class='curline'><a href='../S/331.html#L1668'>node</a>             1668 events/core.c  			node = &amp;parent-&gt;rb_right;</span>
+<span class='curline'><a href='../S/331.html#L1671'>node</a>             1671 events/core.c  	rb_link_node(&amp;event-&gt;group_node, parent, node);</span>
+<span class='curline'><a href='../S/331.html#L1721'>node</a>             1721 events/core.c  	struct rb_node *node = groups-&gt;tree.rb_node;</span>
+<span class='curline'><a href='../S/331.html#L1729'>node</a>             1729 events/core.c  	while (node) {</span>
+<span class='curline'><a href='../S/331.html#L1730'>node</a>             1730 events/core.c  		node_event = container_of(node, struct perf_event, group_node);</span>
+<span class='curline'><a href='../S/331.html#L1733'>node</a>             1733 events/core.c  			node = node-&gt;rb_left;</span>
+<span class='curline'><a href='../S/331.html#L1737'>node</a>             1737 events/core.c  			node = node-&gt;rb_right;</span>
+<span class='curline'><a href='../S/331.html#L1746'>node</a>             1746 events/core.c  			node = node-&gt;rb_left;</span>
+<span class='curline'><a href='../S/331.html#L1750'>node</a>             1750 events/core.c  			node = node-&gt;rb_right;</span>
+<span class='curline'><a href='../S/331.html#L1755'>node</a>             1755 events/core.c  		node = node-&gt;rb_left;</span>
+<span class='curline'><a href='../S/331.html#L9883'>node</a>             9883 events/core.c  	int node = cpu_to_node(event-&gt;cpu == -1 ? 0 : event-&gt;cpu);</span>
+<span class='curline'><a href='../S/331.html#L9886'>node</a>             9886 events/core.c  	filter = kzalloc_node(sizeof(*filter), GFP_KERNEL, node);</span>
+<span class='curline'><a href='../S/330.html#L605'>node</a>              605 events/ring_buffer.c static struct page *rb_alloc_aux_page(int node, int order)</span>
+<span class='curline'><a href='../S/330.html#L613'>node</a>              613 events/ring_buffer.c 		page = alloc_pages_node(node, PERF_AUX_GFP, order);</span>
+<span class='curline'><a href='../S/330.html#L671'>node</a>              671 events/ring_buffer.c 	int node = (event-&gt;cpu == -1) ? -1 : cpu_to_node(event-&gt;cpu);</span>
+<span class='curline'><a href='../S/330.html#L695'>node</a>              695 events/ring_buffer.c 				     node);</span>
+<span class='curline'><a href='../S/330.html#L705'>node</a>              705 events/ring_buffer.c 		page = rb_alloc_aux_page(node, order);</span>
+<span class='curline'><a href='../S/330.html#L785'>node</a>              785 events/ring_buffer.c 	int node;</span>
+<span class='curline'><a href='../S/330.html#L787'>node</a>              787 events/ring_buffer.c 	node = (cpu == -1) ? cpu : cpu_to_node(cpu);</span>
+<span class='curline'><a href='../S/330.html#L788'>node</a>              788 events/ring_buffer.c 	page = alloc_pages_node(node, GFP_KERNEL | __GFP_ZERO, 0);</span>
+<span class='curline'><a href='../S/48.html#L172'>node</a>              172 fork.c         static inline struct task_struct *alloc_task_struct_node(int node)</span>
+<span class='curline'><a href='../S/48.html#L174'>node</a>              174 fork.c         	return kmem_cache_alloc_node(task_struct_cachep, GFP_KERNEL, node);</span>
+<span class='curline'><a href='../S/48.html#L218'>node</a>              218 fork.c         static unsigned long *alloc_thread_stack_node(struct task_struct *tsk, int node)</span>
+<span class='curline'><a href='../S/48.html#L252'>node</a>              252 fork.c         				     0, node, __builtin_return_address(0));</span>
+<span class='curline'><a href='../S/48.html#L265'>node</a>              265 fork.c         	struct page *page = alloc_pages_node(node, THREADINFO_GFP,</span>
+<span class='curline'><a href='../S/48.html#L306'>node</a>              306 fork.c         						  int node)</span>
+<span class='curline'><a href='../S/48.html#L309'>node</a>              309 fork.c         	stack = kmem_cache_alloc_node(thread_stack_cache, THREADINFO_GFP, node);</span>
+<span class='curline'><a href='../S/48.html#L883'>node</a>              883 fork.c         static struct task_struct *dup_task_struct(struct task_struct *orig, int node)</span>
+<span class='curline'><a href='../S/48.html#L890'>node</a>              890 fork.c         	if (node == NUMA_NO_NODE)</span>
+<span class='curline'><a href='../S/48.html#L891'>node</a>              891 fork.c         		node = tsk_fork_get_node(orig);</span>
+<span class='curline'><a href='../S/48.html#L892'>node</a>              892 fork.c         	tsk = alloc_task_struct_node(node);</span>
+<span class='curline'><a href='../S/48.html#L896'>node</a>              896 fork.c         	stack = alloc_thread_stack_node(tsk, node);</span>
+<span class='curline'><a href='../S/48.html#L923'>node</a>              923 fork.c         	err = scs_prepare(tsk, node);</span>
+<span class='curline'><a href='../S/48.html#L1890'>node</a>             1890 fork.c         					int node,</span>
+<span class='curline'><a href='../S/48.html#L1971'>node</a>             1971 fork.c         	INIT_HLIST_NODE(&amp;delayed.node);</span>
+<span class='curline'><a href='../S/48.html#L1975'>node</a>             1975 fork.c         		hlist_add_head(&amp;delayed.node, &amp;current-&gt;signal-&gt;multiprocess);</span>
+<span class='curline'><a href='../S/48.html#L1983'>node</a>             1983 fork.c         	p = dup_task_struct(current, node);</span>
+<span class='curline'><a href='../S/48.html#L2344'>node</a>             2344 fork.c         	hlist_del_init(&amp;delayed.node);</span>
+<span class='curline'><a href='../S/48.html#L2418'>node</a>             2418 fork.c         	hlist_del_init(&amp;delayed.node);</span>
+<span class='curline'><a href='../S/65.html#L145'>node</a>              145 gcov/fs.c      static struct gcov_info *get_node_info(struct gcov_node *node)</span>
+<span class='curline'><a href='../S/65.html#L147'>node</a>              147 gcov/fs.c      	if (node-&gt;num_loaded &gt; 0)</span>
+<span class='curline'><a href='../S/65.html#L148'>node</a>              148 gcov/fs.c      		return node-&gt;loaded_info[0];</span>
+<span class='curline'><a href='../S/65.html#L150'>node</a>              150 gcov/fs.c      	return node-&gt;unloaded_info;</span>
+<span class='curline'><a href='../S/65.html#L157'>node</a>              157 gcov/fs.c      static struct gcov_info *get_accumulated_info(struct gcov_node *node)</span>
+<span class='curline'><a href='../S/65.html#L162'>node</a>              162 gcov/fs.c      	if (node-&gt;unloaded_info)</span>
+<span class='curline'><a href='../S/65.html#L163'>node</a>              163 gcov/fs.c      		info = gcov_info_dup(node-&gt;unloaded_info);</span>
+<span class='curline'><a href='../S/65.html#L165'>node</a>              165 gcov/fs.c      		info = gcov_info_dup(node-&gt;loaded_info[i++]);</span>
+<span class='curline'><a href='../S/65.html#L168'>node</a>              168 gcov/fs.c      	for (; i &lt; node-&gt;num_loaded; i++)</span>
+<span class='curline'><a href='../S/65.html#L169'>node</a>              169 gcov/fs.c      		gcov_info_add(info, node-&gt;loaded_info[i]);</span>
+<span class='curline'><a href='../S/65.html#L180'>node</a>              180 gcov/fs.c      	struct gcov_node *node = inode-&gt;i_private;</span>
+<span class='curline'><a href='../S/65.html#L192'>node</a>              192 gcov/fs.c      	info = get_accumulated_info(node);</span>
+<span class='curline'><a href='../S/65.html#L240'>node</a>              240 gcov/fs.c      	struct gcov_node *node;</span>
+<span class='curline'><a href='../S/65.html#L243'>node</a>              243 gcov/fs.c      	list_for_each_entry(node, &amp;all_head, all) {</span>
+<span class='curline'><a href='../S/65.html#L244'>node</a>              244 gcov/fs.c      		info = get_node_info(node);</span>
+<span class='curline'><a href='../S/65.html#L246'>node</a>              246 gcov/fs.c      			return node;</span>
+<span class='curline'><a href='../S/65.html#L255'>node</a>              255 gcov/fs.c      static void reset_node(struct gcov_node *node)</span>
+<span class='curline'><a href='../S/65.html#L259'>node</a>              259 gcov/fs.c      	if (node-&gt;unloaded_info)</span>
+<span class='curline'><a href='../S/65.html#L260'>node</a>              260 gcov/fs.c      		gcov_info_reset(node-&gt;unloaded_info);</span>
+<span class='curline'><a href='../S/65.html#L261'>node</a>              261 gcov/fs.c      	for (i = 0; i &lt; node-&gt;num_loaded; i++)</span>
+<span class='curline'><a href='../S/65.html#L262'>node</a>              262 gcov/fs.c      		gcov_info_reset(node-&gt;loaded_info[i]);</span>
+<span class='curline'><a href='../S/65.html#L265'>node</a>              265 gcov/fs.c      static void remove_node(struct gcov_node *node);</span>
+<span class='curline'><a href='../S/65.html#L277'>node</a>              277 gcov/fs.c      	struct gcov_node *node;</span>
+<span class='curline'><a href='../S/65.html#L282'>node</a>              282 gcov/fs.c      	node = get_node_by_name(gcov_info_filename(info));</span>
+<span class='curline'><a href='../S/65.html#L283'>node</a>              283 gcov/fs.c      	if (node) {</span>
+<span class='curline'><a href='../S/65.html#L285'>node</a>              285 gcov/fs.c      		if (node-&gt;num_loaded == 0)</span>
+<span class='curline'><a href='../S/65.html#L286'>node</a>              286 gcov/fs.c      			remove_node(node);</span>
+<span class='curline'><a href='../S/65.html#L288'>node</a>              288 gcov/fs.c      			reset_node(node);</span>
+<span class='curline'><a href='../S/65.html#L366'>node</a>              366 gcov/fs.c      static void add_links(struct gcov_node *node, struct dentry *parent)</span>
+<span class='curline'><a href='../S/65.html#L375'>node</a>              375 gcov/fs.c      	node-&gt;links = kcalloc(num, sizeof(struct dentry *), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/65.html#L376'>node</a>              376 gcov/fs.c      	if (!node-&gt;links)</span>
+<span class='curline'><a href='../S/65.html#L380'>node</a>              380 gcov/fs.c      				gcov_info_filename(get_node_info(node)),</span>
+<span class='curline'><a href='../S/65.html#L387'>node</a>              387 gcov/fs.c      		node-&gt;links[i] = debugfs_create_symlink(deskew(basename),</span>
+<span class='curline'><a href='../S/65.html#L396'>node</a>              396 gcov/fs.c      		debugfs_remove(node-&gt;links[i]);</span>
+<span class='curline'><a href='../S/65.html#L397'>node</a>              397 gcov/fs.c      	kfree(node-&gt;links);</span>
+<span class='curline'><a href='../S/65.html#L398'>node</a>              398 gcov/fs.c      	node-&gt;links = NULL;</span>
+<span class='curline'><a href='../S/65.html#L410'>node</a>              410 gcov/fs.c      static void init_node(struct gcov_node *node, struct gcov_info *info,</span>
+<span class='curline'><a href='../S/65.html#L413'>node</a>              413 gcov/fs.c      	INIT_LIST_HEAD(&amp;node-&gt;list);</span>
+<span class='curline'><a href='../S/65.html#L414'>node</a>              414 gcov/fs.c      	INIT_LIST_HEAD(&amp;node-&gt;children);</span>
+<span class='curline'><a href='../S/65.html#L415'>node</a>              415 gcov/fs.c      	INIT_LIST_HEAD(&amp;node-&gt;all);</span>
+<span class='curline'><a href='../S/65.html#L416'>node</a>              416 gcov/fs.c      	if (node-&gt;loaded_info) {</span>
+<span class='curline'><a href='../S/65.html#L417'>node</a>              417 gcov/fs.c      		node-&gt;loaded_info[0] = info;</span>
+<span class='curline'><a href='../S/65.html#L418'>node</a>              418 gcov/fs.c      		node-&gt;num_loaded = 1;</span>
+<span class='curline'><a href='../S/65.html#L420'>node</a>              420 gcov/fs.c      	node-&gt;parent = parent;</span>
+<span class='curline'><a href='../S/65.html#L422'>node</a>              422 gcov/fs.c      		strcpy(node-&gt;name, name);</span>
+<span class='curline'><a href='../S/65.html#L432'>node</a>              432 gcov/fs.c      	struct gcov_node *node;</span>
+<span class='curline'><a href='../S/65.html#L434'>node</a>              434 gcov/fs.c      	node = kzalloc(sizeof(struct gcov_node) + strlen(name) + 1, GFP_KERNEL);</span>
+<span class='curline'><a href='../S/65.html#L435'>node</a>              435 gcov/fs.c      	if (!node)</span>
+<span class='curline'><a href='../S/65.html#L438'>node</a>              438 gcov/fs.c      		node-&gt;loaded_info = kcalloc(1, sizeof(struct gcov_info *),</span>
+<span class='curline'><a href='../S/65.html#L440'>node</a>              440 gcov/fs.c      		if (!node-&gt;loaded_info)</span>
+<span class='curline'><a href='../S/65.html#L443'>node</a>              443 gcov/fs.c      	init_node(node, info, name, parent);</span>
+<span class='curline'><a href='../S/65.html#L446'>node</a>              446 gcov/fs.c      		node-&gt;dentry = debugfs_create_file(deskew(node-&gt;name), 0600,</span>
+<span class='curline'><a href='../S/65.html#L447'>node</a>              447 gcov/fs.c      					parent-&gt;dentry, node, &amp;gcov_data_fops);</span>
+<span class='curline'><a href='../S/65.html#L449'>node</a>              449 gcov/fs.c      		node-&gt;dentry = debugfs_create_dir(node-&gt;name, parent-&gt;dentry);</span>
+<span class='curline'><a href='../S/65.html#L451'>node</a>              451 gcov/fs.c      		add_links(node, parent-&gt;dentry);</span>
+<span class='curline'><a href='../S/65.html#L452'>node</a>              452 gcov/fs.c      	list_add(&amp;node-&gt;list, &amp;parent-&gt;children);</span>
+<span class='curline'><a href='../S/65.html#L453'>node</a>              453 gcov/fs.c      	list_add(&amp;node-&gt;all, &amp;all_head);</span>
+<span class='curline'><a href='../S/65.html#L455'>node</a>              455 gcov/fs.c      	return node;</span>
+<span class='curline'><a href='../S/65.html#L458'>node</a>              458 gcov/fs.c      	kfree(node);</span>
+<span class='curline'><a href='../S/65.html#L464'>node</a>              464 gcov/fs.c      static void remove_links(struct gcov_node *node)</span>
+<span class='curline'><a href='../S/65.html#L468'>node</a>              468 gcov/fs.c      	if (!node-&gt;links)</span>
+<span class='curline'><a href='../S/65.html#L471'>node</a>              471 gcov/fs.c      		debugfs_remove(node-&gt;links[i]);</span>
+<span class='curline'><a href='../S/65.html#L472'>node</a>              472 gcov/fs.c      	kfree(node-&gt;links);</span>
+<span class='curline'><a href='../S/65.html#L473'>node</a>              473 gcov/fs.c      	node-&gt;links = NULL;</span>
+<span class='curline'><a href='../S/65.html#L480'>node</a>              480 gcov/fs.c      static void release_node(struct gcov_node *node)</span>
+<span class='curline'><a href='../S/65.html#L482'>node</a>              482 gcov/fs.c      	list_del(&amp;node-&gt;list);</span>
+<span class='curline'><a href='../S/65.html#L483'>node</a>              483 gcov/fs.c      	list_del(&amp;node-&gt;all);</span>
+<span class='curline'><a href='../S/65.html#L484'>node</a>              484 gcov/fs.c      	debugfs_remove(node-&gt;dentry);</span>
+<span class='curline'><a href='../S/65.html#L485'>node</a>              485 gcov/fs.c      	remove_links(node);</span>
+<span class='curline'><a href='../S/65.html#L486'>node</a>              486 gcov/fs.c      	kfree(node-&gt;loaded_info);</span>
+<span class='curline'><a href='../S/65.html#L487'>node</a>              487 gcov/fs.c      	if (node-&gt;unloaded_info)</span>
+<span class='curline'><a href='../S/65.html#L488'>node</a>              488 gcov/fs.c      		gcov_info_free(node-&gt;unloaded_info);</span>
+<span class='curline'><a href='../S/65.html#L489'>node</a>              489 gcov/fs.c      	kfree(node);</span>
+<span class='curline'><a href='../S/65.html#L493'>node</a>              493 gcov/fs.c      static void remove_node(struct gcov_node *node)</span>
+<span class='curline'><a href='../S/65.html#L497'>node</a>              497 gcov/fs.c      	while ((node != &amp;root_node) &amp;&amp; list_empty(&amp;node-&gt;children)) {</span>
+<span class='curline'><a href='../S/65.html#L498'>node</a>              498 gcov/fs.c      		parent = node-&gt;parent;</span>
+<span class='curline'><a href='../S/65.html#L499'>node</a>              499 gcov/fs.c      		release_node(node);</span>
+<span class='curline'><a href='../S/65.html#L500'>node</a>              500 gcov/fs.c      		node = parent;</span>
+<span class='curline'><a href='../S/65.html#L511'>node</a>              511 gcov/fs.c      	struct gcov_node *node;</span>
+<span class='curline'><a href='../S/65.html#L513'>node</a>              513 gcov/fs.c      	list_for_each_entry(node, &amp;parent-&gt;children, list) {</span>
+<span class='curline'><a href='../S/65.html#L514'>node</a>              514 gcov/fs.c      		if (strcmp(node-&gt;name, name) == 0)</span>
+<span class='curline'><a href='../S/65.html#L515'>node</a>              515 gcov/fs.c      			return node;</span>
+<span class='curline'><a href='../S/65.html#L528'>node</a>              528 gcov/fs.c      	struct gcov_node *node;</span>
+<span class='curline'><a href='../S/65.html#L532'>node</a>              532 gcov/fs.c      	list_for_each_entry(node, &amp;all_head, all) {</span>
+<span class='curline'><a href='../S/65.html#L533'>node</a>              533 gcov/fs.c      		if (node-&gt;num_loaded &gt; 0)</span>
+<span class='curline'><a href='../S/65.html#L534'>node</a>              534 gcov/fs.c      			reset_node(node);</span>
+<span class='curline'><a href='../S/65.html#L535'>node</a>              535 gcov/fs.c      		else if (list_empty(&amp;node-&gt;children)) {</span>
+<span class='curline'><a href='../S/65.html#L536'>node</a>              536 gcov/fs.c      			remove_node(node);</span>
+<span class='curline'><a href='../S/65.html#L570'>node</a>              570 gcov/fs.c      	struct gcov_node *node;</span>
+<span class='curline'><a href='../S/65.html#L589'>node</a>              589 gcov/fs.c      		node = get_child_by_name(parent, curr);</span>
+<span class='curline'><a href='../S/65.html#L590'>node</a>              590 gcov/fs.c      		if (!node) {</span>
+<span class='curline'><a href='../S/65.html#L591'>node</a>              591 gcov/fs.c      			node = new_node(parent, NULL, curr);</span>
+<span class='curline'><a href='../S/65.html#L592'>node</a>              592 gcov/fs.c      			if (!node)</span>
+<span class='curline'><a href='../S/65.html#L595'>node</a>              595 gcov/fs.c      		parent = node;</span>
+<span class='curline'><a href='../S/65.html#L598'>node</a>              598 gcov/fs.c      	node = new_node(parent, info, curr);</span>
+<span class='curline'><a href='../S/65.html#L599'>node</a>              599 gcov/fs.c      	if (!node)</span>
+<span class='curline'><a href='../S/65.html#L614'>node</a>              614 gcov/fs.c      static void add_info(struct gcov_node *node, struct gcov_info *info)</span>
+<span class='curline'><a href='../S/65.html#L617'>node</a>              617 gcov/fs.c      	int num = node-&gt;num_loaded;</span>
+<span class='curline'><a href='../S/65.html#L630'>node</a>              630 gcov/fs.c      	memcpy(loaded_info, node-&gt;loaded_info,</span>
+<span class='curline'><a href='../S/65.html#L639'>node</a>              639 gcov/fs.c      		if (!gcov_info_is_compatible(node-&gt;unloaded_info, info)) {</span>
+<span class='curline'><a href='../S/65.html#L643'>node</a>              643 gcov/fs.c      			gcov_info_free(node-&gt;unloaded_info);</span>
+<span class='curline'><a href='../S/65.html#L644'>node</a>              644 gcov/fs.c      			node-&gt;unloaded_info = NULL;</span>
+<span class='curline'><a href='../S/65.html#L651'>node</a>              651 gcov/fs.c      		if (!gcov_info_is_compatible(node-&gt;loaded_info[0], info)) {</span>
+<span class='curline'><a href='../S/65.html#L659'>node</a>              659 gcov/fs.c      	kfree(node-&gt;loaded_info);</span>
+<span class='curline'><a href='../S/65.html#L660'>node</a>              660 gcov/fs.c      	node-&gt;loaded_info = loaded_info;</span>
+<span class='curline'><a href='../S/65.html#L661'>node</a>              661 gcov/fs.c      	node-&gt;num_loaded = num + 1;</span>
+<span class='curline'><a href='../S/65.html#L667'>node</a>              667 gcov/fs.c      static int get_info_index(struct gcov_node *node, struct gcov_info *info)</span>
+<span class='curline'><a href='../S/65.html#L671'>node</a>              671 gcov/fs.c      	for (i = 0; i &lt; node-&gt;num_loaded; i++) {</span>
+<span class='curline'><a href='../S/65.html#L672'>node</a>              672 gcov/fs.c      		if (node-&gt;loaded_info[i] == info)</span>
+<span class='curline'><a href='../S/65.html#L681'>node</a>              681 gcov/fs.c      static void save_info(struct gcov_node *node, struct gcov_info *info)</span>
+<span class='curline'><a href='../S/65.html#L683'>node</a>              683 gcov/fs.c      	if (node-&gt;unloaded_info)</span>
+<span class='curline'><a href='../S/65.html#L684'>node</a>              684 gcov/fs.c      		gcov_info_add(node-&gt;unloaded_info, info);</span>
+<span class='curline'><a href='../S/65.html#L686'>node</a>              686 gcov/fs.c      		node-&gt;unloaded_info = gcov_info_dup(info);</span>
+<span class='curline'><a href='../S/65.html#L687'>node</a>              687 gcov/fs.c      		if (!node-&gt;unloaded_info) {</span>
+<span class='curline'><a href='../S/65.html#L699'>node</a>              699 gcov/fs.c      static void remove_info(struct gcov_node *node, struct gcov_info *info)</span>
+<span class='curline'><a href='../S/65.html#L703'>node</a>              703 gcov/fs.c      	i = get_info_index(node, info);</span>
+<span class='curline'><a href='../S/65.html#L710'>node</a>              710 gcov/fs.c      		save_info(node, info);</span>
+<span class='curline'><a href='../S/65.html#L712'>node</a>              712 gcov/fs.c      	node-&gt;loaded_info[i] = node-&gt;loaded_info[node-&gt;num_loaded - 1];</span>
+<span class='curline'><a href='../S/65.html#L713'>node</a>              713 gcov/fs.c      	node-&gt;num_loaded--;</span>
+<span class='curline'><a href='../S/65.html#L714'>node</a>              714 gcov/fs.c      	if (node-&gt;num_loaded &gt; 0)</span>
+<span class='curline'><a href='../S/65.html#L717'>node</a>              717 gcov/fs.c      	kfree(node-&gt;loaded_info);</span>
+<span class='curline'><a href='../S/65.html#L718'>node</a>              718 gcov/fs.c      	node-&gt;loaded_info = NULL;</span>
+<span class='curline'><a href='../S/65.html#L719'>node</a>              719 gcov/fs.c      	node-&gt;num_loaded = 0;</span>
+<span class='curline'><a href='../S/65.html#L720'>node</a>              720 gcov/fs.c      	if (!node-&gt;unloaded_info)</span>
+<span class='curline'><a href='../S/65.html#L721'>node</a>              721 gcov/fs.c      		remove_node(node);</span>
+<span class='curline'><a href='../S/65.html#L730'>node</a>              730 gcov/fs.c      	struct gcov_node *node;</span>
+<span class='curline'><a href='../S/65.html#L733'>node</a>              733 gcov/fs.c      	node = get_node_by_name(gcov_info_filename(info));</span>
+<span class='curline'><a href='../S/65.html#L736'>node</a>              736 gcov/fs.c      		if (node)</span>
+<span class='curline'><a href='../S/65.html#L737'>node</a>              737 gcov/fs.c      			add_info(node, info);</span>
+<span class='curline'><a href='../S/65.html#L742'>node</a>              742 gcov/fs.c      		if (node)</span>
+<span class='curline'><a href='../S/65.html#L743'>node</a>              743 gcov/fs.c      			remove_info(node, info);</span>
+<span class='curline'><a href='../S/350.html#L46'>node</a>               46 irq/affinity.c 	int node;</span>
+<span class='curline'><a href='../S/350.html#L52'>node</a>               52 irq/affinity.c 	for (node = 0; node &lt; nr_node_ids; node++) {</span>
+<span class='curline'><a href='../S/350.html#L53'>node</a>               53 irq/affinity.c 		if (!zalloc_cpumask_var(&amp;masks[node], GFP_KERNEL))</span>
+<span class='curline'><a href='../S/350.html#L60'>node</a>               60 irq/affinity.c 	while (--node &gt;= 0)</span>
+<span class='curline'><a href='../S/350.html#L61'>node</a>               61 irq/affinity.c 		free_cpumask_var(masks[node]);</span>
+<span class='curline'><a href='../S/350.html#L68'>node</a>               68 irq/affinity.c 	int node;</span>
+<span class='curline'><a href='../S/350.html#L70'>node</a>               70 irq/affinity.c 	for (node = 0; node &lt; nr_node_ids; node++)</span>
+<span class='curline'><a href='../S/350.html#L71'>node</a>               71 irq/affinity.c 		free_cpumask_var(masks[node]);</span>
+<span class='curline'><a href='../S/346.html#L179'>node</a>              179 irq/devres.c   			   unsigned int cnt, int node, struct module *owner,</span>
+<span class='curline'><a href='../S/346.html#L189'>node</a>              189 irq/devres.c   	base = __irq_alloc_descs(irq, from, cnt, node, owner, affinity);</span>
+<span class='curline'><a href='../S/356.html#L104'>node</a>              104 irq/internals.h extern void init_kstat_irqs(struct irq_desc *desc, int node, int nr);</span>
+<span class='curline'><a href='../S/343.html#L55'>node</a>               55 irq/irqdesc.c  static int alloc_masks(struct irq_desc *desc, int node)</span>
+<span class='curline'><a href='../S/343.html#L58'>node</a>               58 irq/irqdesc.c  				     GFP_KERNEL, node))</span>
+<span class='curline'><a href='../S/343.html#L63'>node</a>               63 irq/irqdesc.c  				     GFP_KERNEL, node)) {</span>
+<span class='curline'><a href='../S/343.html#L70'>node</a>               70 irq/irqdesc.c  	if (!zalloc_cpumask_var_node(&amp;desc-&gt;pending_mask, GFP_KERNEL, node)) {</span>
+<span class='curline'><a href='../S/343.html#L81'>node</a>               81 irq/irqdesc.c  static void desc_smp_init(struct irq_desc *desc, int node,</span>
+<span class='curline'><a href='../S/343.html#L92'>node</a>               92 irq/irqdesc.c  	desc-&gt;irq_common_data.node = node;</span>
+<span class='curline'><a href='../S/343.html#L98'>node</a>               98 irq/irqdesc.c  alloc_masks(struct irq_desc *desc, int node) { return 0; }</span>
+<span class='curline'><a href='../S/343.html#L100'>node</a>              100 irq/irqdesc.c  desc_smp_init(struct irq_desc *desc, int node, const struct cpumask *affinity) { }</span>
+<span class='curline'><a href='../S/343.html#L103'>node</a>              103 irq/irqdesc.c  static void desc_set_defaults(unsigned int irq, struct irq_desc *desc, int node,</span>
+<span class='curline'><a href='../S/343.html#L127'>node</a>              127 irq/irqdesc.c  	desc_smp_init(desc, node, affinity);</span>
+<span class='curline'><a href='../S/343.html#L387'>node</a>              387 irq/irqdesc.c  static struct irq_desc *alloc_desc(int irq, int node, unsigned int flags,</span>
+<span class='curline'><a href='../S/343.html#L393'>node</a>              393 irq/irqdesc.c  	desc = kzalloc_node(sizeof(*desc), GFP_KERNEL, node);</span>
+<span class='curline'><a href='../S/343.html#L401'>node</a>              401 irq/irqdesc.c  	if (alloc_masks(desc, node))</span>
+<span class='curline'><a href='../S/343.html#L409'>node</a>              409 irq/irqdesc.c  	desc_set_defaults(irq, desc, node, affinity, owner);</span>
+<span class='curline'><a href='../S/343.html#L466'>node</a>              466 irq/irqdesc.c  static int alloc_descs(unsigned int start, unsigned int cnt, int node,</span>
+<span class='curline'><a href='../S/343.html#L491'>node</a>              491 irq/irqdesc.c  			node = cpu_to_node(cpumask_first(mask));</span>
+<span class='curline'><a href='../S/343.html#L495'>node</a>              495 irq/irqdesc.c  		desc = alloc_desc(start + i, node, flags, mask, owner);</span>
+<span class='curline'><a href='../S/343.html#L521'>node</a>              521 irq/irqdesc.c  	int i, initcnt, node = first_online_node;</span>
+<span class='curline'><a href='../S/343.html#L541'>node</a>              541 irq/irqdesc.c  		desc = alloc_desc(i, node, 0, NULL, NULL);</span>
+<span class='curline'><a href='../S/343.html#L560'>node</a>              560 irq/irqdesc.c  	int count, i, node = first_online_node;</span>
+<span class='curline'><a href='../S/343.html#L572'>node</a>              572 irq/irqdesc.c  		alloc_masks(&amp;desc[i], node);</span>
+<span class='curline'><a href='../S/343.html#L576'>node</a>              576 irq/irqdesc.c  		desc_set_defaults(i, &amp;desc[i], node, NULL, NULL);</span>
+<span class='curline'><a href='../S/343.html#L597'>node</a>              597 irq/irqdesc.c  static inline int alloc_descs(unsigned int start, unsigned int cnt, int node,</span>
+<span class='curline'><a href='../S/343.html#L772'>node</a>              772 irq/irqdesc.c  __irq_alloc_descs(int irq, unsigned int from, unsigned int cnt, int node,</span>
+<span class='curline'><a href='../S/343.html#L806'>node</a>              806 irq/irqdesc.c  	ret = alloc_descs(start, cnt, node, affinity, owner);</span>
+<span class='curline'><a href='../S/343.html#L821'>node</a>              821 irq/irqdesc.c  unsigned int irq_alloc_hwirqs(int cnt, int node)</span>
+<span class='curline'><a href='../S/343.html#L823'>node</a>              823 irq/irqdesc.c  	int i, irq = __irq_alloc_descs(-1, 0, cnt, node, NULL, NULL);</span>
+<span class='curline'><a href='../S/343.html#L829'>node</a>              829 irq/irqdesc.c  		if (arch_setup_hwirq(i, node))</span>
+<span class='curline'><a href='../S/358.html#L1019'>node</a>             1019 irq/irqdomain.c 			   int node, const struct irq_affinity_desc *affinity)</span>
+<span class='curline'><a href='../S/358.html#L1024'>node</a>             1024 irq/irqdomain.c 		virq = __irq_alloc_descs(virq, virq, cnt, node, THIS_MODULE,</span>
+<span class='curline'><a href='../S/358.html#L1030'>node</a>             1030 irq/irqdomain.c 		virq = __irq_alloc_descs(-1, hint, cnt, node, THIS_MODULE,</span>
+<span class='curline'><a href='../S/358.html#L1033'>node</a>             1033 irq/irqdomain.c 			virq = __irq_alloc_descs(-1, 1, cnt, node, THIS_MODULE,</span>
+<span class='curline'><a href='../S/358.html#L1424'>node</a>             1424 irq/irqdomain.c 			    unsigned int nr_irqs, int node, void *arg,</span>
+<span class='curline'><a href='../S/358.html#L1438'>node</a>             1438 irq/irqdomain.c 		virq = irq_domain_alloc_descs(irq_base, nr_irqs, 0, node,</span>
+<span class='curline'><a href='../S/338.html#L486'>node</a>              486 irq/manage.c   	int ret, node = irq_desc_get_node(desc);</span>
+<span class='curline'><a href='../S/338.html#L512'>node</a>              512 irq/manage.c   	if (node != NUMA_NO_NODE) {</span>
+<span class='curline'><a href='../S/338.html#L513'>node</a>              513 irq/manage.c   		const struct cpumask *nodemask = cpumask_of_node(node);</span>
+<span class='curline'><a href='../S/435.html#L43'>node</a>               43 kthread.c      	int node;</span>
+<span class='curline'><a href='../S/435.html#L312'>node</a>              312 kthread.c      	current-&gt;pref_node_fork = create-&gt;node;</span>
+<span class='curline'><a href='../S/435.html#L331'>node</a>              331 kthread.c      						    void *data, int node,</span>
+<span class='curline'><a href='../S/435.html#L344'>node</a>              344 kthread.c      	create-&gt;node = node;</span>
+<span class='curline'><a href='../S/435.html#L418'>node</a>              418 kthread.c      					   void *data, int node,</span>
+<span class='curline'><a href='../S/435.html#L426'>node</a>              426 kthread.c      	task = __kthread_create_on_node(threadfn, data, node, namefmt, args);</span>
+<span class='curline'><a href='../S/435.html#L726'>node</a>              726 kthread.c      					struct kthread_work, node);</span>
+<span class='curline'><a href='../S/435.html#L727'>node</a>              727 kthread.c      		list_del_init(&amp;work-&gt;node);</span>
+<span class='curline'><a href='../S/435.html#L750'>node</a>              750 kthread.c      	int node = NUMA_NO_NODE;</span>
+<span class='curline'><a href='../S/435.html#L759'>node</a>              759 kthread.c      		node = cpu_to_node(cpu);</span>
+<span class='curline'><a href='../S/435.html#L762'>node</a>              762 kthread.c      						node, namefmt, args);</span>
+<span class='curline'><a href='../S/435.html#L844'>node</a>              844 kthread.c      	return !list_empty(&amp;work-&gt;node) || work-&gt;canceling;</span>
+<span class='curline'><a href='../S/435.html#L851'>node</a>              851 kthread.c      	WARN_ON_ONCE(!list_empty(&amp;work-&gt;node));</span>
+<span class='curline'><a href='../S/435.html#L863'>node</a>              863 kthread.c      	list_add_tail(&amp;work-&gt;node, pos);</span>
+<span class='curline'><a href='../S/435.html#L924'>node</a>              924 kthread.c      	WARN_ON_ONCE(list_empty(&amp;work-&gt;node));</span>
+<span class='curline'><a href='../S/435.html#L925'>node</a>              925 kthread.c      	list_del_init(&amp;work-&gt;node);</span>
+<span class='curline'><a href='../S/435.html#L962'>node</a>              962 kthread.c      	list_add(&amp;work-&gt;node, &amp;worker-&gt;delayed_work_list);</span>
+<span class='curline'><a href='../S/435.html#L1038'>node</a>             1038 kthread.c      	if (!list_empty(&amp;work-&gt;node))</span>
+<span class='curline'><a href='../S/435.html#L1039'>node</a>             1039 kthread.c      		kthread_insert_work(worker, &amp;fwork.work, work-&gt;node.next);</span>
+<span class='curline'><a href='../S/435.html#L1089'>node</a>             1089 kthread.c      	if (!list_empty(&amp;work-&gt;node)) {</span>
+<span class='curline'><a href='../S/435.html#L1090'>node</a>             1090 kthread.c      		list_del_init(&amp;work-&gt;node);</span>
+<span class='curline'><a href='../S/203.html#L605'>node</a>              605 livepatch/core.c 		list_del(&amp;func-&gt;node);</span>
+<span class='curline'><a href='../S/203.html#L635'>node</a>              635 livepatch/core.c 		list_del(&amp;obj-&gt;node);</span>
+<span class='curline'><a href='../S/203.html#L855'>node</a>              855 livepatch/core.c 	list_add_tail(&amp;func-&gt;node, &amp;obj-&gt;func_list);</span>
+<span class='curline'><a href='../S/203.html#L863'>node</a>              863 livepatch/core.c 	list_add_tail(&amp;obj-&gt;node, &amp;patch-&gt;obj_list);</span>
+<span class='curline'><a href='../S/205.html#L30'>node</a>               30 livepatch/patch.c 	list_for_each_entry(ops, &amp;klp_ops, node) {</span>
+<span class='curline'><a href='../S/205.html#L160'>node</a>              160 livepatch/patch.c 		list_del(&amp;ops-&gt;node);</span>
+<span class='curline'><a href='../S/205.html#L202'>node</a>              202 livepatch/patch.c 		list_add(&amp;ops-&gt;node, &amp;klp_ops);</span>
+<span class='curline'><a href='../S/205.html#L233'>node</a>              233 livepatch/patch.c 	list_del(&amp;ops-&gt;node);</span>
+<span class='curline'><a href='../S/210.html#L23'>node</a>               23 livepatch/patch.h 	struct list_head node;</span>
+<span class='curline'><a href='../S/208.html#L55'>node</a>               55 livepatch/shadow.c 	struct hlist_node node;</span>
+<span class='curline'><a href='../S/208.html#L89'>node</a>               89 livepatch/shadow.c 	hash_for_each_possible_rcu(klp_shadow_hash, shadow, node,</span>
+<span class='curline'><a href='../S/208.html#L157'>node</a>              157 livepatch/shadow.c 	hash_add_rcu(klp_shadow_hash, &amp;new_shadow-&gt;node,</span>
+<span class='curline'><a href='../S/208.html#L237'>node</a>              237 livepatch/shadow.c 	hash_del_rcu(&amp;shadow-&gt;node);</span>
+<span class='curline'><a href='../S/208.html#L261'>node</a>              261 livepatch/shadow.c 	hash_for_each_possible(klp_shadow_hash, shadow, node,</span>
+<span class='curline'><a href='../S/208.html#L292'>node</a>              292 livepatch/shadow.c 	hash_for_each(klp_shadow_hash, i, shadow, node) {</span>
+<span class='curline'><a href='../S/42.html#L65'>node</a>               65 locking/mcs_spinlock.h void mcs_spin_lock(struct mcs_spinlock **lock, struct mcs_spinlock *node)</span>
+<span class='curline'><a href='../S/42.html#L70'>node</a>               70 locking/mcs_spinlock.h 	node-&gt;locked = 0;</span>
+<span class='curline'><a href='../S/42.html#L71'>node</a>               71 locking/mcs_spinlock.h 	node-&gt;next   = NULL;</span>
+<span class='curline'><a href='../S/42.html#L79'>node</a>               79 locking/mcs_spinlock.h 	prev = xchg(lock, node);</span>
+<span class='curline'><a href='../S/42.html#L91'>node</a>               91 locking/mcs_spinlock.h 	WRITE_ONCE(prev-&gt;next, node);</span>
+<span class='curline'><a href='../S/42.html#L94'>node</a>               94 locking/mcs_spinlock.h 	arch_mcs_spin_lock_contended(&amp;node-&gt;locked);</span>
+<span class='curline'><a href='../S/42.html#L102'>node</a>              102 locking/mcs_spinlock.h void mcs_spin_unlock(struct mcs_spinlock **lock, struct mcs_spinlock *node)</span>
+<span class='curline'><a href='../S/42.html#L104'>node</a>              104 locking/mcs_spinlock.h 	struct mcs_spinlock *next = READ_ONCE(node-&gt;next);</span>
+<span class='curline'><a href='../S/42.html#L110'>node</a>              110 locking/mcs_spinlock.h 		if (likely(cmpxchg_release(lock, node, NULL) == node))</span>
+<span class='curline'><a href='../S/42.html#L113'>node</a>              113 locking/mcs_spinlock.h 		while (!(next = READ_ONCE(node-&gt;next)))</span>
+<span class='curline'><a href='../S/45.html#L25'>node</a>               25 locking/osq_lock.c static inline int node_cpu(struct optimistic_spin_node *node)</span>
+<span class='curline'><a href='../S/45.html#L27'>node</a>               27 locking/osq_lock.c 	return node-&gt;cpu - 1;</span>
+<span class='curline'><a href='../S/45.html#L43'>node</a>               43 locking/osq_lock.c 	      struct optimistic_spin_node *node,</span>
+<span class='curline'><a href='../S/45.html#L78'>node</a>               78 locking/osq_lock.c 		if (node-&gt;next) {</span>
+<span class='curline'><a href='../S/45.html#L79'>node</a>               79 locking/osq_lock.c 			next = xchg(&amp;node-&gt;next, NULL);</span>
+<span class='curline'><a href='../S/45.html#L92'>node</a>               92 locking/osq_lock.c 	struct optimistic_spin_node *node = this_cpu_ptr(&amp;osq_node);</span>
+<span class='curline'><a href='../S/45.html#L97'>node</a>               97 locking/osq_lock.c 	node-&gt;locked = 0;</span>
+<span class='curline'><a href='../S/45.html#L98'>node</a>               98 locking/osq_lock.c 	node-&gt;next = NULL;</span>
+<span class='curline'><a href='../S/45.html#L99'>node</a>               99 locking/osq_lock.c 	node-&gt;cpu = curr;</span>
+<span class='curline'><a href='../S/45.html#L112'>node</a>              112 locking/osq_lock.c 	node-&gt;prev = prev;</span>
+<span class='curline'><a href='../S/45.html#L126'>node</a>              126 locking/osq_lock.c 	WRITE_ONCE(prev-&gt;next, node);</span>
+<span class='curline'><a href='../S/45.html#L143'>node</a>              143 locking/osq_lock.c 	if (smp_cond_load_relaxed(&amp;node-&gt;locked, VAL || need_resched() ||</span>
+<span class='curline'><a href='../S/45.html#L144'>node</a>              144 locking/osq_lock.c 				  vcpu_is_preempted(node_cpu(node-&gt;prev))))</span>
+<span class='curline'><a href='../S/45.html#L161'>node</a>              161 locking/osq_lock.c 		if (data_race(prev-&gt;next) == node &amp;&amp;</span>
+<span class='curline'><a href='../S/45.html#L162'>node</a>              162 locking/osq_lock.c 		    cmpxchg(&amp;prev-&gt;next, node, NULL) == node)</span>
+<span class='curline'><a href='../S/45.html#L170'>node</a>              170 locking/osq_lock.c 		if (smp_load_acquire(&amp;node-&gt;locked))</span>
+<span class='curline'><a href='../S/45.html#L179'>node</a>              179 locking/osq_lock.c 		prev = READ_ONCE(node-&gt;prev);</span>
+<span class='curline'><a href='../S/45.html#L189'>node</a>              189 locking/osq_lock.c 	next = osq_wait_next(lock, node, prev);</span>
+<span class='curline'><a href='../S/45.html#L209'>node</a>              209 locking/osq_lock.c 	struct optimistic_spin_node *node, *next;</span>
+<span class='curline'><a href='../S/45.html#L222'>node</a>              222 locking/osq_lock.c 	node = this_cpu_ptr(&amp;osq_node);</span>
+<span class='curline'><a href='../S/45.html#L223'>node</a>              223 locking/osq_lock.c 	next = xchg(&amp;node-&gt;next, NULL);</span>
+<span class='curline'><a href='../S/45.html#L229'>node</a>              229 locking/osq_lock.c 	next = osq_wait_next(lock, node, NULL);</span>
+<span class='curline'><a href='../S/43.html#L272'>node</a>              272 locking/qspinlock.c static __always_inline void __pv_init_node(struct mcs_spinlock *node) { }</span>
+<span class='curline'><a href='../S/43.html#L273'>node</a>              273 locking/qspinlock.c static __always_inline void __pv_wait_node(struct mcs_spinlock *node,</span>
+<span class='curline'><a href='../S/43.html#L276'>node</a>              276 locking/qspinlock.c 					   struct mcs_spinlock *node) { }</span>
+<span class='curline'><a href='../S/43.html#L278'>node</a>              278 locking/qspinlock.c 						   struct mcs_spinlock *node)</span>
+<span class='curline'><a href='../S/43.html#L317'>node</a>              317 locking/qspinlock.c 	struct mcs_spinlock *prev, *next, *node;</span>
+<span class='curline'><a href='../S/43.html#L400'>node</a>              400 locking/qspinlock.c 	node = this_cpu_ptr(&amp;qnodes[0].mcs);</span>
+<span class='curline'><a href='../S/43.html#L401'>node</a>              401 locking/qspinlock.c 	idx = node-&gt;count++;</span>
+<span class='curline'><a href='../S/43.html#L420'>node</a>              420 locking/qspinlock.c 	node = grab_mcs_node(node, idx);</span>
+<span class='curline'><a href='../S/43.html#L434'>node</a>              434 locking/qspinlock.c 	node-&gt;locked = 0;</span>
+<span class='curline'><a href='../S/43.html#L435'>node</a>              435 locking/qspinlock.c 	node-&gt;next = NULL;</span>
+<span class='curline'><a href='../S/43.html#L436'>node</a>              436 locking/qspinlock.c 	pv_init_node(node);</span>
+<span class='curline'><a href='../S/43.html#L471'>node</a>              471 locking/qspinlock.c 		WRITE_ONCE(prev-&gt;next, node);</span>
+<span class='curline'><a href='../S/43.html#L473'>node</a>              473 locking/qspinlock.c 		pv_wait_node(node, prev);</span>
+<span class='curline'><a href='../S/43.html#L474'>node</a>              474 locking/qspinlock.c 		arch_mcs_spin_lock_contended(&amp;node-&gt;locked);</span>
+<span class='curline'><a href='../S/43.html#L482'>node</a>              482 locking/qspinlock.c 		next = READ_ONCE(node-&gt;next);</span>
+<span class='curline'><a href='../S/43.html#L508'>node</a>              508 locking/qspinlock.c 	if ((val = pv_wait_head_or_lock(lock, node)))</span>
+<span class='curline'><a href='../S/43.html#L551'>node</a>              551 locking/qspinlock.c 		next = smp_cond_load_relaxed(&amp;node-&gt;next, (VAL));</span>
+<span class='curline'><a href='../S/20.html#L173'>node</a>              173 locking/qspinlock_paravirt.h 	struct pv_node   *node;</span>
+<span class='curline'><a href='../S/20.html#L212'>node</a>              212 locking/qspinlock_paravirt.h static struct qspinlock **pv_hash(struct qspinlock *lock, struct pv_node *node)</span>
+<span class='curline'><a href='../S/20.html#L221'>node</a>              221 locking/qspinlock_paravirt.h 			WRITE_ONCE(he-&gt;node, node);</span>
+<span class='curline'><a href='../S/20.html#L243'>node</a>              243 locking/qspinlock_paravirt.h 	struct pv_node *node;</span>
+<span class='curline'><a href='../S/20.html#L247'>node</a>              247 locking/qspinlock_paravirt.h 			node = READ_ONCE(he-&gt;node);</span>
+<span class='curline'><a href='../S/20.html#L249'>node</a>              249 locking/qspinlock_paravirt.h 			return node;</span>
+<span class='curline'><a href='../S/20.html#L278'>node</a>              278 locking/qspinlock_paravirt.h static void pv_init_node(struct mcs_spinlock *node)</span>
+<span class='curline'><a href='../S/20.html#L280'>node</a>              280 locking/qspinlock_paravirt.h 	struct pv_node *pn = (struct pv_node *)node;</span>
+<span class='curline'><a href='../S/20.html#L293'>node</a>              293 locking/qspinlock_paravirt.h static void pv_wait_node(struct mcs_spinlock *node, struct mcs_spinlock *prev)</span>
+<span class='curline'><a href='../S/20.html#L295'>node</a>              295 locking/qspinlock_paravirt.h 	struct pv_node *pn = (struct pv_node *)node;</span>
+<span class='curline'><a href='../S/20.html#L302'>node</a>              302 locking/qspinlock_paravirt.h 			if (READ_ONCE(node-&gt;locked))</span>
+<span class='curline'><a href='../S/20.html#L322'>node</a>              322 locking/qspinlock_paravirt.h 		if (!READ_ONCE(node-&gt;locked)) {</span>
+<span class='curline'><a href='../S/20.html#L343'>node</a>              343 locking/qspinlock_paravirt.h 				  !READ_ONCE(node-&gt;locked));</span>
+<span class='curline'><a href='../S/20.html#L360'>node</a>              360 locking/qspinlock_paravirt.h static void pv_kick_node(struct qspinlock *lock, struct mcs_spinlock *node)</span>
+<span class='curline'><a href='../S/20.html#L362'>node</a>              362 locking/qspinlock_paravirt.h 	struct pv_node *pn = (struct pv_node *)node;</span>
+<span class='curline'><a href='../S/20.html#L403'>node</a>              403 locking/qspinlock_paravirt.h pv_wait_head_or_lock(struct qspinlock *lock, struct mcs_spinlock *node)</span>
+<span class='curline'><a href='../S/20.html#L405'>node</a>              405 locking/qspinlock_paravirt.h 	struct pv_node *pn = (struct pv_node *)node;</span>
+<span class='curline'><a href='../S/20.html#L495'>node</a>              495 locking/qspinlock_paravirt.h 	struct pv_node *node;</span>
+<span class='curline'><a href='../S/20.html#L517'>node</a>              517 locking/qspinlock_paravirt.h 	node = pv_unhash(lock);</span>
+<span class='curline'><a href='../S/20.html#L533'>node</a>              533 locking/qspinlock_paravirt.h 	pv_kick(node-&gt;cpu);</span>
+<span class='curline'><a href='../S/476.html#L115'>node</a>              115 module.c       	struct module_layout *layout = container_of(n, struct module_layout, mtn.node);</span>
+<span class='curline'><a href='../S/476.html#L122'>node</a>              122 module.c       	struct module_layout *layout = container_of(n, struct module_layout, mtn.node);</span>
+<span class='curline'><a href='../S/476.html#L166'>node</a>              166 module.c       static noinline void __mod_tree_insert(struct mod_tree_node *node)</span>
+<span class='curline'><a href='../S/476.html#L168'>node</a>              168 module.c       	latch_tree_insert(&amp;node-&gt;node, &amp;mod_tree.root, &amp;mod_tree_ops);</span>
+<span class='curline'><a href='../S/476.html#L171'>node</a>              171 module.c       static void __mod_tree_remove(struct mod_tree_node *node)</span>
+<span class='curline'><a href='../S/476.html#L173'>node</a>              173 module.c       	latch_tree_erase(&amp;node-&gt;node, &amp;mod_tree.root, &amp;mod_tree_ops);</span>
+<span class='curline'><a href='../S/476.html#L210'>node</a>              210 module.c       	return container_of(ltn, struct mod_tree_node, node)-&gt;mod;</span>
+<span class='curline'><a href='../S/476.html#L3700'>node</a>             3700 module.c       	struct llist_node node;</span>
+<span class='curline'><a href='../S/476.html#L3714'>node</a>             3714 module.c       		initfree = container_of(pos, struct mod_initfree, node);</span>
+<span class='curline'><a href='../S/476.html#L3823'>node</a>             3823 module.c       	if (llist_add(&amp;freeinit-&gt;node, &amp;init_free_list))</span>
+<span class='curline'><a href='../S/325.html#L800'>node</a>              800 padata.c       static int padata_cpu_online(unsigned int cpu, struct hlist_node *node)</span>
+<span class='curline'><a href='../S/325.html#L805'>node</a>              805 padata.c       	pinst = hlist_entry_safe(node, struct padata_instance, cpu_online_node);</span>
+<span class='curline'><a href='../S/325.html#L815'>node</a>              815 padata.c       static int padata_cpu_dead(unsigned int cpu, struct hlist_node *node)</span>
+<span class='curline'><a href='../S/325.html#L820'>node</a>              820 padata.c       	pinst = hlist_entry_safe(node, struct padata_instance, cpu_dead_node);</span>
+<span class='curline'><a href='../S/168.html#L98'>node</a>               98 power/qos.c    int pm_qos_update_target(struct pm_qos_constraints *c, struct plist_node *node,</span>
+<span class='curline'><a href='../S/168.html#L114'>node</a>              114 power/qos.c    		plist_del(node, &amp;c-&gt;list);</span>
+<span class='curline'><a href='../S/168.html#L121'>node</a>              121 power/qos.c    		plist_del(node, &amp;c-&gt;list);</span>
+<span class='curline'><a href='../S/168.html#L124'>node</a>              124 power/qos.c    		plist_node_init(node, new_value);</span>
+<span class='curline'><a href='../S/168.html#L125'>node</a>              125 power/qos.c    		plist_add(node, &amp;c-&gt;list);</span>
+<span class='curline'><a href='../S/168.html#L158'>node</a>              158 power/qos.c    	list_del(&amp;req-&gt;node);</span>
+<span class='curline'><a href='../S/168.html#L159'>node</a>              159 power/qos.c    	list_for_each_entry(req, &amp;pqf-&gt;list, node)</span>
+<span class='curline'><a href='../S/168.html#L194'>node</a>              194 power/qos.c    		INIT_LIST_HEAD(&amp;req-&gt;node);</span>
+<span class='curline'><a href='../S/168.html#L195'>node</a>              195 power/qos.c    		list_add_tail(&amp;req-&gt;node, &amp;pqf-&gt;list);</span>
+<span class='curline'><a href='../S/168.html#L247'>node</a>              247 power/qos.c    	int ret = pm_qos_update_target(req-&gt;qos, &amp;req-&gt;node, action, value);</span>
+<span class='curline'><a href='../S/168.html#L302'>node</a>              302 power/qos.c    	if (new_value == req-&gt;node.prio)</span>
+<span class='curline'><a href='../S/177.html#L371'>node</a>              371 power/snapshot.c 	struct rtree_node *node;</span>
+<span class='curline'><a href='../S/177.html#L405'>node</a>              405 power/snapshot.c 	struct rtree_node *node;</span>
+<span class='curline'><a href='../S/177.html#L407'>node</a>              407 power/snapshot.c 	node = chain_alloc(ca, sizeof(struct rtree_node));</span>
+<span class='curline'><a href='../S/177.html#L408'>node</a>              408 power/snapshot.c 	if (!node)</span>
+<span class='curline'><a href='../S/177.html#L411'>node</a>              411 power/snapshot.c 	node-&gt;data = get_image_page(gfp_mask, safe_needed);</span>
+<span class='curline'><a href='../S/177.html#L412'>node</a>              412 power/snapshot.c 	if (!node-&gt;data)</span>
+<span class='curline'><a href='../S/177.html#L415'>node</a>              415 power/snapshot.c 	list_add_tail(&amp;node-&gt;list, list);</span>
+<span class='curline'><a href='../S/177.html#L417'>node</a>              417 power/snapshot.c 	return node;</span>
+<span class='curline'><a href='../S/177.html#L430'>node</a>              430 power/snapshot.c 	struct rtree_node *node, *block, **dst;</span>
+<span class='curline'><a href='../S/177.html#L445'>node</a>              445 power/snapshot.c 		node = alloc_rtree_node(gfp_mask, safe_needed, ca,</span>
+<span class='curline'><a href='../S/177.html#L447'>node</a>              447 power/snapshot.c 		if (!node)</span>
+<span class='curline'><a href='../S/177.html#L450'>node</a>              450 power/snapshot.c 		node-&gt;data[0] = (unsigned long)zone-&gt;rtree;</span>
+<span class='curline'><a href='../S/177.html#L451'>node</a>              451 power/snapshot.c 		zone-&gt;rtree = node;</span>
+<span class='curline'><a href='../S/177.html#L461'>node</a>              461 power/snapshot.c 	node = zone-&gt;rtree;</span>
+<span class='curline'><a href='../S/177.html#L467'>node</a>              467 power/snapshot.c 		if (!node) {</span>
+<span class='curline'><a href='../S/177.html#L468'>node</a>              468 power/snapshot.c 			node = alloc_rtree_node(gfp_mask, safe_needed, ca,</span>
+<span class='curline'><a href='../S/177.html#L470'>node</a>              470 power/snapshot.c 			if (!node)</span>
+<span class='curline'><a href='../S/177.html#L472'>node</a>              472 power/snapshot.c 			*dst = node;</span>
+<span class='curline'><a href='../S/177.html#L478'>node</a>              478 power/snapshot.c 		node = *dst;</span>
+<span class='curline'><a href='../S/177.html#L538'>node</a>              538 power/snapshot.c 	struct rtree_node *node;</span>
+<span class='curline'><a href='../S/177.html#L540'>node</a>              540 power/snapshot.c 	list_for_each_entry(node, &amp;zone-&gt;nodes, list)</span>
+<span class='curline'><a href='../S/177.html#L541'>node</a>              541 power/snapshot.c 		free_image_page(node-&gt;data, clear_nosave_free);</span>
+<span class='curline'><a href='../S/177.html#L543'>node</a>              543 power/snapshot.c 	list_for_each_entry(node, &amp;zone-&gt;leaves, list)</span>
+<span class='curline'><a href='../S/177.html#L544'>node</a>              544 power/snapshot.c 		free_image_page(node-&gt;data, clear_nosave_free);</span>
+<span class='curline'><a href='../S/177.html#L551'>node</a>              551 power/snapshot.c 	bm-&gt;cur.node = list_entry(bm-&gt;cur.zone-&gt;leaves.next,</span>
+<span class='curline'><a href='../S/177.html#L710'>node</a>              710 power/snapshot.c 	struct rtree_node *node;</span>
+<span class='curline'><a href='../S/177.html#L742'>node</a>              742 power/snapshot.c 	node = bm-&gt;cur.node;</span>
+<span class='curline'><a href='../S/177.html#L747'>node</a>              747 power/snapshot.c 	node      = zone-&gt;rtree;</span>
+<span class='curline'><a href='../S/177.html#L755'>node</a>              755 power/snapshot.c 		BUG_ON(node-&gt;data[index] == 0);</span>
+<span class='curline'><a href='../S/177.html#L756'>node</a>              756 power/snapshot.c 		node = (struct rtree_node *)node-&gt;data[index];</span>
+<span class='curline'><a href='../S/177.html#L762'>node</a>              762 power/snapshot.c 	bm-&gt;cur.node = node;</span>
+<span class='curline'><a href='../S/177.html#L766'>node</a>              766 power/snapshot.c 	*addr = node-&gt;data;</span>
+<span class='curline'><a href='../S/177.html#L812'>node</a>              812 power/snapshot.c 	clear_bit(bit, bm-&gt;cur.node-&gt;data);</span>
+<span class='curline'><a href='../S/177.html#L846'>node</a>              846 power/snapshot.c 	if (!list_is_last(&amp;bm-&gt;cur.node-&gt;list, &amp;bm-&gt;cur.zone-&gt;leaves)) {</span>
+<span class='curline'><a href='../S/177.html#L847'>node</a>              847 power/snapshot.c 		bm-&gt;cur.node = list_entry(bm-&gt;cur.node-&gt;list.next,</span>
+<span class='curline'><a href='../S/177.html#L859'>node</a>              859 power/snapshot.c 		bm-&gt;cur.node = list_entry(bm-&gt;cur.zone-&gt;leaves.next,</span>
+<span class='curline'><a href='../S/177.html#L889'>node</a>              889 power/snapshot.c 		bit	  = find_next_bit(bm-&gt;cur.node-&gt;data, bits,</span>
+<span class='curline'><a href='../S/177.html#L915'>node</a>              915 power/snapshot.c 	struct rtree_node *node;</span>
+<span class='curline'><a href='../S/177.html#L917'>node</a>              917 power/snapshot.c 	list_for_each_entry(node, &amp;zone-&gt;nodes, list)</span>
+<span class='curline'><a href='../S/177.html#L918'>node</a>              918 power/snapshot.c 		recycle_safe_page(node-&gt;data);</span>
+<span class='curline'><a href='../S/177.html#L920'>node</a>              920 power/snapshot.c 	list_for_each_entry(node, &amp;zone-&gt;leaves, list)</span>
+<span class='curline'><a href='../S/177.html#L921'>node</a>              921 power/snapshot.c 		recycle_safe_page(node-&gt;data);</span>
+<span class='curline'><a href='../S/165.html#L123'>node</a>              123 power/swap.c   	struct rb_node node;</span>
+<span class='curline'><a href='../S/165.html#L138'>node</a>              138 power/swap.c   		ext = rb_entry(*new, struct swsusp_extent, node);</span>
+<span class='curline'><a href='../S/165.html#L166'>node</a>              166 power/swap.c   	rb_link_node(&amp;ext-&gt;node, parent, new);</span>
+<span class='curline'><a href='../S/165.html#L167'>node</a>              167 power/swap.c   	rb_insert_color(&amp;ext-&gt;node, &amp;swsusp_extents);</span>
+<span class='curline'><a href='../S/165.html#L198'>node</a>              198 power/swap.c   	struct rb_node *node;</span>
+<span class='curline'><a href='../S/165.html#L200'>node</a>              200 power/swap.c   	while ((node = swsusp_extents.rb_node)) {</span>
+<span class='curline'><a href='../S/165.html#L204'>node</a>              204 power/swap.c   		ext = rb_entry(node, struct swsusp_extent, node);</span>
+<span class='curline'><a href='../S/165.html#L205'>node</a>              205 power/swap.c   		rb_erase(node, &amp;swsusp_extents);</span>
+<span class='curline'><a href='../S/172.html#L29'>node</a>               29 power/wakelock.c 	struct rb_node		node;</span>
+<span class='curline'><a href='../S/172.html#L40'>node</a>               40 power/wakelock.c 	struct rb_node *node;</span>
+<span class='curline'><a href='../S/172.html#L47'>node</a>               47 power/wakelock.c 	for (node = rb_first(&amp;wakelocks_tree); node; node = rb_next(node)) {</span>
+<span class='curline'><a href='../S/172.html#L48'>node</a>               48 power/wakelock.c 		wl = rb_entry(node, struct wakelock, node);</span>
+<span class='curline'><a href='../S/172.html#L125'>node</a>              125 power/wakelock.c 			rb_erase(&amp;wl-&gt;node, &amp;wakelocks_tree);</span>
+<span class='curline'><a href='../S/172.html#L153'>node</a>              153 power/wakelock.c 	struct rb_node **node = &amp;wakelocks_tree.rb_node;</span>
+<span class='curline'><a href='../S/172.html#L154'>node</a>              154 power/wakelock.c 	struct rb_node *parent = *node;</span>
+<span class='curline'><a href='../S/172.html#L157'>node</a>              157 power/wakelock.c 	while (*node) {</span>
+<span class='curline'><a href='../S/172.html#L160'>node</a>              160 power/wakelock.c 		parent = *node;</span>
+<span class='curline'><a href='../S/172.html#L161'>node</a>              161 power/wakelock.c 		wl = rb_entry(*node, struct wakelock, node);</span>
+<span class='curline'><a href='../S/172.html#L170'>node</a>              170 power/wakelock.c 			node = &amp;(*node)-&gt;rb_left;</span>
+<span class='curline'><a href='../S/172.html#L172'>node</a>              172 power/wakelock.c 			node = &amp;(*node)-&gt;rb_right;</span>
+<span class='curline'><a href='../S/172.html#L199'>node</a>              199 power/wakelock.c 	rb_link_node(&amp;wl-&gt;node, parent, node);</span>
+<span class='curline'><a href='../S/172.html#L200'>node</a>              200 power/wakelock.c 	rb_insert_color(&amp;wl-&gt;node, &amp;wakelocks_tree);</span>
+<span class='curline'><a href='../S/194.html#L354'>node</a>              354 profile.c      	int i, node = cpu_to_mem(cpu);</span>
+<span class='curline'><a href='../S/194.html#L363'>node</a>              363 profile.c      		page = __alloc_pages_node(node, GFP_KERNEL | __GFP_ZERO, 0);</span>
+<span class='curline'><a href='../S/133.html#L318'>node</a>              318 rcu/rcu.h      #define rcu_is_last_leaf_node(rnp) ((rnp) == &amp;rcu_state.node[rcu_num_nodes - 1])</span>
+<span class='curline'><a href='../S/133.html#L326'>node</a>              326 rcu/rcu.h      	for ((rnp) = &amp;(sp)-&gt;node[0]; \</span>
+<span class='curline'><a href='../S/133.html#L327'>node</a>              327 rcu/rcu.h      	     (rnp) &lt; &amp;(sp)-&gt;node[rcu_num_nodes]; (rnp)++)</span>
+<span class='curline'><a href='../S/133.html#L339'>node</a>              339 rcu/rcu.h      	     (rnp) &lt; &amp;rcu_state.node[rcu_num_nodes]; (rnp)++)</span>
+<span class='curline'><a href='../S/139.html#L94'>node</a>               94 rcu/srcutree.c 	ssp-&gt;level[0] = &amp;ssp-&gt;node[0];</span>
+<span class='curline'><a href='../S/139.html#L111'>node</a>              111 rcu/srcutree.c 		if (snp == &amp;ssp-&gt;node[0]) {</span>
+<span class='curline'><a href='../S/144.html#L88'>node</a>               88 rcu/tree.c     	.level = { &amp;rcu_state.node[0] },</span>
+<span class='curline'><a href='../S/144.html#L592'>node</a>              592 rcu/tree.c     	return &amp;rcu_state.node[0];</span>
+<span class='curline'><a href='../S/134.html#L296'>node</a>              296 rcu/tree.h     	struct rcu_node node[NUM_RCU_NODES];	/* Hierarchy. */</span>
+<span class='curline'><a href='../S/426.html#L1703'>node</a>             1703 resource.c     		INIT_LIST_HEAD(&amp;entry-&gt;node);</span>
+<span class='curline'><a href='../S/426.html#L1715'>node</a>             1715 resource.c     	list_for_each_entry_safe(entry, tmp, head, node)</span>
+<span class='curline'><a href='../S/441.html#L531'>node</a>              531 sched/core.c   	struct wake_q_node *node = &amp;task-&gt;wake_q;</span>
+<span class='curline'><a href='../S/441.html#L542'>node</a>              542 sched/core.c   	if (unlikely(cmpxchg_relaxed(&amp;node-&gt;next, NULL, WAKE_Q_TAIL)))</span>
+<span class='curline'><a href='../S/441.html#L548'>node</a>              548 sched/core.c   	*head-&gt;lastp = node;</span>
+<span class='curline'><a href='../S/441.html#L549'>node</a>              549 sched/core.c   	head-&gt;lastp = &amp;node-&gt;next;</span>
+<span class='curline'><a href='../S/441.html#L597'>node</a>              597 sched/core.c   	struct wake_q_node *node = head-&gt;first;</span>
+<span class='curline'><a href='../S/441.html#L599'>node</a>              599 sched/core.c   	while (node != WAKE_Q_TAIL) {</span>
+<span class='curline'><a href='../S/441.html#L602'>node</a>              602 sched/core.c   		task = container_of(node, struct task_struct, wake_q);</span>
+<span class='curline'><a href='../S/441.html#L605'>node</a>              605 sched/core.c   		node = node-&gt;next;</span>
+<span class='curline'><a href='../S/460.html#L899'>node</a>              899 sched/debug.c  void print_numa_stats(struct seq_file *m, int node, unsigned long tsf,</span>
+<span class='curline'><a href='../S/460.html#L902'>node</a>              902 sched/debug.c  	SEQ_printf(m, "numa_faults node=%d ", node);</span>
+<span class='curline'><a href='../S/464.html#L1293'>node</a>             1293 sched/fair.c   	int node;</span>
+<span class='curline'><a href='../S/464.html#L1295'>node</a>             1295 sched/fair.c   	for_each_online_node(node) {</span>
+<span class='curline'><a href='../S/464.html#L1296'>node</a>             1296 sched/fair.c   		faults += ng-&gt;faults[task_faults_idx(NUMA_MEM, node, 1)];</span>
+<span class='curline'><a href='../S/464.html#L1305'>node</a>             1305 sched/fair.c   	int node;</span>
+<span class='curline'><a href='../S/464.html#L1307'>node</a>             1307 sched/fair.c   	for_each_online_node(node) {</span>
+<span class='curline'><a href='../S/464.html#L1308'>node</a>             1308 sched/fair.c   		faults += ng-&gt;faults[task_faults_idx(NUMA_MEM, node, 0)];</span>
+<span class='curline'><a href='../S/464.html#L1331'>node</a>             1331 sched/fair.c   	int node;</span>
+<span class='curline'><a href='../S/464.html#L1344'>node</a>             1344 sched/fair.c   	for_each_online_node(node) {</span>
+<span class='curline'><a href='../S/464.html#L1346'>node</a>             1346 sched/fair.c   		int dist = node_distance(nid, node);</span>
+<span class='curline'><a href='../S/464.html#L1352'>node</a>             1352 sched/fair.c   		if (dist == sched_max_numa_distance || node == nid)</span>
+<span class='curline'><a href='../S/464.html#L1368'>node</a>             1368 sched/fair.c   			faults = task_faults(p, node);</span>
+<span class='curline'><a href='../S/464.html#L1370'>node</a>             1370 sched/fair.c   			faults = group_faults(p, node);</span>
+<span class='curline'><a href='../S/464.html#L2307'>node</a>             2307 sched/fair.c   		int node, max_node = nid;</span>
+<span class='curline'><a href='../S/464.html#L2311'>node</a>             2311 sched/fair.c   		for_each_online_node(node) {</span>
+<span class='curline'><a href='../S/464.html#L2312'>node</a>             2312 sched/fair.c   			score = group_weight(p, node, dist);</span>
+<span class='curline'><a href='../S/464.html#L2315'>node</a>             2315 sched/fair.c   				max_node = node;</span>
+<span class='curline'><a href='../S/464.html#L11468'>node</a>             11468 sched/fair.c   	int node;</span>
+<span class='curline'><a href='../S/464.html#L11474'>node</a>             11474 sched/fair.c   	for_each_online_node(node) {</span>
+<span class='curline'><a href='../S/464.html#L11476'>node</a>             11476 sched/fair.c   			tsf = p-&gt;numa_faults[task_faults_idx(NUMA_MEM, node, 0)];</span>
+<span class='curline'><a href='../S/464.html#L11477'>node</a>             11477 sched/fair.c   			tpf = p-&gt;numa_faults[task_faults_idx(NUMA_MEM, node, 1)];</span>
+<span class='curline'><a href='../S/464.html#L11480'>node</a>             11480 sched/fair.c   			gsf = ng-&gt;faults[task_faults_idx(NUMA_MEM, node, 0)],</span>
+<span class='curline'><a href='../S/464.html#L11481'>node</a>             11481 sched/fair.c   			gpf = ng-&gt;faults[task_faults_idx(NUMA_MEM, node, 1)];</span>
+<span class='curline'><a href='../S/464.html#L11483'>node</a>             11483 sched/fair.c   		print_numa_stats(m, node, tsf, tpf, gsf, gpf);</span>
+<span class='curline'><a href='../S/462.html#L496'>node</a>              496 sched/psi.c    	list_for_each_entry(t, &amp;group-&gt;triggers, node)</span>
+<span class='curline'><a href='../S/462.html#L514'>node</a>              514 sched/psi.c    	list_for_each_entry(t, &amp;group-&gt;triggers, node) {</span>
+<span class='curline'><a href='../S/462.html#L1141'>node</a>             1141 sched/psi.c    	list_add(&amp;t-&gt;node, &amp;group-&gt;triggers);</span>
+<span class='curline'><a href='../S/462.html#L1169'>node</a>             1169 sched/psi.c    	if (!list_empty(&amp;t-&gt;node)) {</span>
+<span class='curline'><a href='../S/462.html#L1173'>node</a>             1173 sched/psi.c    		list_del(&amp;t-&gt;node);</span>
+<span class='curline'><a href='../S/462.html#L1178'>node</a>             1178 sched/psi.c    		list_for_each_entry(tmp, &amp;group-&gt;triggers, node)</span>
+<span class='curline'><a href='../S/447.html#L1404'>node</a>             1404 sched/sched.h  extern void sched_setnuma(struct task_struct *p, int node);</span>
+<span class='curline'><a href='../S/447.html#L2315'>node</a>             2315 sched/sched.h  print_numa_stats(struct seq_file *m, int node, unsigned long tsf,</span>
+<span class='curline'><a href='../S/452.html#L1697'>node</a>             1697 sched/topology.c 	int node = cpu_to_node(cpu);</span>
+<span class='curline'><a href='../S/452.html#L1702'>node</a>             1702 sched/topology.c 			if (node_distance(j, node) &lt;= sched_domains_numa_distance[i])</span>
+<span class='curline'><a href='../S/366.html#L27'>node</a>               27 scs.c          static void *__scs_alloc(int node)</span>
+<span class='curline'><a href='../S/366.html#L42'>node</a>               42 scs.c          				    GFP_SCS, PAGE_KERNEL, 0, node,</span>
+<span class='curline'><a href='../S/366.html#L46'>node</a>               46 scs.c          void *scs_alloc(int node)</span>
+<span class='curline'><a href='../S/366.html#L50'>node</a>               50 scs.c          	s = __scs_alloc(node);</span>
+<span class='curline'><a href='../S/366.html#L103'>node</a>              103 scs.c          int scs_prepare(struct task_struct *tsk, int node)</span>
+<span class='curline'><a href='../S/366.html#L105'>node</a>              105 scs.c          	void *s = scs_alloc(node);</span>
+<span class='curline'><a href='../S/246.html#L1173'>node</a>             1173 signal.c       		hlist_for_each_entry(delayed, &amp;t-&gt;signal-&gt;multiprocess, node) {</span>
+<span class='curline'><a href='../S/229.html#L258'>node</a>              258 smp.c          void __smp_call_single_queue(int cpu, struct llist_node *node)</span>
+<span class='curline'><a href='../S/229.html#L271'>node</a>              271 smp.c          	if (llist_add(node, &amp;per_cpu(call_single_queue, cpu)))</span>
+<span class='curline'><a href='../S/84.html#L163'>node</a>              163 time/alarmtimer.c 		timerqueue_del(&amp;base-&gt;timerqueue, &amp;alarm-&gt;node);</span>
+<span class='curline'><a href='../S/84.html#L165'>node</a>              165 time/alarmtimer.c 	timerqueue_add(&amp;base-&gt;timerqueue, &amp;alarm-&gt;node);</span>
+<span class='curline'><a href='../S/84.html#L183'>node</a>              183 time/alarmtimer.c 	timerqueue_del(&amp;base-&gt;timerqueue, &amp;alarm-&gt;node);</span>
+<span class='curline'><a href='../S/84.html#L214'>node</a>              214 time/alarmtimer.c 		hrtimer_set_expires(&amp;alarm-&gt;timer, alarm-&gt;node.expires);</span>
+<span class='curline'><a href='../S/84.html#L228'>node</a>              228 time/alarmtimer.c 	return ktime_sub(alarm-&gt;node.expires, base-&gt;get_ktime());</span>
+<span class='curline'><a href='../S/84.html#L329'>node</a>              329 time/alarmtimer.c 	timerqueue_init(&amp;alarm-&gt;node);</span>
+<span class='curline'><a href='../S/84.html#L362'>node</a>              362 time/alarmtimer.c 	alarm-&gt;node.expires = start;</span>
+<span class='curline'><a href='../S/84.html#L364'>node</a>              364 time/alarmtimer.c 	hrtimer_start(&amp;alarm-&gt;timer, alarm-&gt;node.expires, HRTIMER_MODE_ABS);</span>
+<span class='curline'><a href='../S/84.html#L391'>node</a>              391 time/alarmtimer.c 	hrtimer_set_expires(&amp;alarm-&gt;timer, alarm-&gt;node.expires);</span>
+<span class='curline'><a href='../S/84.html#L446'>node</a>              446 time/alarmtimer.c 	delta = ktime_sub(now, alarm-&gt;node.expires);</span>
+<span class='curline'><a href='../S/84.html#L456'>node</a>              456 time/alarmtimer.c 		alarm-&gt;node.expires = ktime_add_ns(alarm-&gt;node.expires,</span>
+<span class='curline'><a href='../S/84.html#L459'>node</a>              459 time/alarmtimer.c 		if (alarm-&gt;node.expires &gt; now)</span>
+<span class='curline'><a href='../S/84.html#L468'>node</a>              468 time/alarmtimer.c 	alarm-&gt;node.expires = ktime_add_safe(alarm-&gt;node.expires, interval);</span>
+<span class='curline'><a href='../S/84.html#L572'>node</a>              572 time/alarmtimer.c 	alarm_start(alarm, alarm-&gt;node.expires);</span>
+<span class='curline'><a href='../S/84.html#L596'>node</a>              596 time/alarmtimer.c 	return ktime_sub(alarm-&gt;node.expires, now);</span>
+<span class='curline'><a href='../S/84.html#L637'>node</a>              637 time/alarmtimer.c 		alarm-&gt;node.expires = expires;</span>
+<span class='curline'><a href='../S/88.html#L515'>node</a>              515 time/hrtimer.c 		timer = container_of(next, struct hrtimer, node);</span>
+<span class='curline'><a href='../S/88.html#L522'>node</a>              522 time/hrtimer.c 			timer = container_of(next, struct hrtimer, node);</span>
+<span class='curline'><a href='../S/88.html#L989'>node</a>              989 time/hrtimer.c 	return timerqueue_add(&amp;base-&gt;active, &amp;timer-&gt;node);</span>
+<span class='curline'><a href='../S/88.html#L1014'>node</a>             1014 time/hrtimer.c 	if (!timerqueue_del(&amp;base-&gt;active, &amp;timer-&gt;node))</span>
+<span class='curline'><a href='../S/88.html#L1426'>node</a>             1426 time/hrtimer.c 	timerqueue_init(&amp;timer-&gt;node);</span>
+<span class='curline'><a href='../S/88.html#L1576'>node</a>             1576 time/hrtimer.c 		struct timerqueue_node *node;</span>
+<span class='curline'><a href='../S/88.html#L1581'>node</a>             1581 time/hrtimer.c 		while ((node = timerqueue_getnext(&amp;base-&gt;active))) {</span>
+<span class='curline'><a href='../S/88.html#L1584'>node</a>             1584 time/hrtimer.c 			timer = container_of(node, struct hrtimer, node);</span>
+<span class='curline'><a href='../S/88.html#L2043'>node</a>             2043 time/hrtimer.c 	struct timerqueue_node *node;</span>
+<span class='curline'><a href='../S/88.html#L2045'>node</a>             2045 time/hrtimer.c 	while ((node = timerqueue_getnext(&amp;old_base-&gt;active))) {</span>
+<span class='curline'><a href='../S/88.html#L2046'>node</a>             2046 time/hrtimer.c 		timer = container_of(node, struct hrtimer, node);</span>
+<span class='curline'><a href='../S/99.html#L117'>node</a>              117 time/posix-cpu-timers.c 	u64 delta, incr, expires = timer-&gt;it.cpu.node.expires;</span>
+<span class='curline'><a href='../S/99.html#L137'>node</a>              137 time/posix-cpu-timers.c 		timer-&gt;it.cpu.node.expires += incr;</span>
+<span class='curline'><a href='../S/99.html#L141'>node</a>              141 time/posix-cpu-timers.c 	return timer-&gt;it.cpu.node.expires;</span>
+<span class='curline'><a href='../S/99.html#L402'>node</a>              402 time/posix-cpu-timers.c 	timerqueue_init(&amp;new_timer-&gt;it.cpu.node);</span>
+<span class='curline'><a href='../S/99.html#L437'>node</a>              437 time/posix-cpu-timers.c 		WARN_ON_ONCE(ctmr-&gt;head || timerqueue_node_queued(&amp;ctmr-&gt;node));</span>
+<span class='curline'><a href='../S/99.html#L457'>node</a>              457 time/posix-cpu-timers.c 	struct timerqueue_node *node;</span>
+<span class='curline'><a href='../S/99.html#L460'>node</a>              460 time/posix-cpu-timers.c 	while ((node = timerqueue_getnext(head))) {</span>
+<span class='curline'><a href='../S/99.html#L461'>node</a>              461 time/posix-cpu-timers.c 		timerqueue_del(head, node);</span>
+<span class='curline'><a href='../S/99.html#L462'>node</a>              462 time/posix-cpu-timers.c 		ctmr = container_of(node, struct cpu_timer, node);</span>
+<span class='curline'><a href='../S/99.html#L778'>node</a>              778 time/posix-cpu-timers.c 		ctmr = container_of(next, struct cpu_timer, node);</span>
+<span class='curline'><a href='../S/98.html#L100'>node</a>              100 time/timer_list.c 		timer = container_of(curr, struct hrtimer, node);</span>
+<span class='curline'><a href='../S/270.html#L386'>node</a>              386 trace/ftrace.c 	struct hlist_node		node;</span>
+<span class='curline'><a href='../S/270.html#L702'>node</a>              702 trace/ftrace.c 	hlist_for_each_entry_rcu_notrace(rec, hhd, node) {</span>
+<span class='curline'><a href='../S/270.html#L716'>node</a>              716 trace/ftrace.c 	hlist_add_head_rcu(&amp;rec-&gt;node, &amp;stat-&gt;hash[key]);</span>
+<span class='curline'><a href='../S/258.html#L548'>node</a>              548 trace/ring_buffer.c 	struct hlist_node		node;</span>
+<span class='curline'><a href='../S/258.html#L1667'>node</a>             1667 trace/ring_buffer.c 	ret = cpuhp_state_add_instance(CPUHP_TRACE_RB_PREPARE, &amp;buffer-&gt;node);</span>
+<span class='curline'><a href='../S/258.html#L1700'>node</a>             1700 trace/ring_buffer.c 	cpuhp_state_remove_instance(CPUHP_TRACE_RB_PREPARE, &amp;buffer-&gt;node);</span>
+<span class='curline'><a href='../S/258.html#L5427'>node</a>             5427 trace/ring_buffer.c int trace_rb_cpu_prepare(unsigned int cpu, struct hlist_node *node)</span>
+<span class='curline'><a href='../S/258.html#L5434'>node</a>             5434 trace/ring_buffer.c 	buffer = container_of(node, struct trace_buffer, node);</span>
+<span class='curline'><a href='../S/310.html#L25'>node</a>               25 trace/trace_boot.c trace_boot_set_instance_options(struct trace_array *tr, struct xbc_node *node)</span>
+<span class='curline'><a href='../S/310.html#L33'>node</a>               33 trace/trace_boot.c 	xbc_node_for_each_array_value(node, "options", anode, p) {</span>
+<span class='curline'><a href='../S/310.html#L43'>node</a>               43 trace/trace_boot.c 	p = xbc_node_find_value(node, "tracing_on", NULL);</span>
+<span class='curline'><a href='../S/310.html#L53'>node</a>               53 trace/trace_boot.c 	p = xbc_node_find_value(node, "trace_clock", NULL);</span>
+<span class='curline'><a href='../S/310.html#L59'>node</a>               59 trace/trace_boot.c 	p = xbc_node_find_value(node, "buffer_size", NULL);</span>
+<span class='curline'><a href='../S/310.html#L68'>node</a>               68 trace/trace_boot.c 	p = xbc_node_find_value(node, "cpumask", NULL);</span>
+<span class='curline'><a href='../S/310.html#L83'>node</a>               83 trace/trace_boot.c trace_boot_enable_events(struct trace_array *tr, struct xbc_node *node)</span>
+<span class='curline'><a href='../S/310.html#L89'>node</a>               89 trace/trace_boot.c 	xbc_node_for_each_array_value(node, "events", anode, p) {</span>
+<span class='curline'><a href='../S/310.html#L102'>node</a>              102 trace/trace_boot.c trace_boot_add_kprobe_event(struct xbc_node *node, const char *event)</span>
+<span class='curline'><a href='../S/310.html#L110'>node</a>              110 trace/trace_boot.c 	xbc_node_for_each_array_value(node, "probes", anode, val) {</span>
+<span class='curline'><a href='../S/310.html#L130'>node</a>              130 trace/trace_boot.c trace_boot_add_kprobe_event(struct xbc_node *node, const char *event)</span>
+<span class='curline'><a href='../S/310.html#L139'>node</a>              139 trace/trace_boot.c trace_boot_add_synth_event(struct xbc_node *node, const char *event)</span>
+<span class='curline'><a href='../S/310.html#L153'>node</a>              153 trace/trace_boot.c 	xbc_node_for_each_array_value(node, "fields", anode, p) {</span>
+<span class='curline'><a href='../S/310.html#L167'>node</a>              167 trace/trace_boot.c trace_boot_add_synth_event(struct xbc_node *node, const char *event)</span>
+<span class='curline'><a href='../S/310.html#L225'>node</a>              225 trace/trace_boot.c trace_boot_init_events(struct trace_array *tr, struct xbc_node *node)</span>
+<span class='curline'><a href='../S/310.html#L229'>node</a>              229 trace/trace_boot.c 	node = xbc_node_find_child(node, "event");</span>
+<span class='curline'><a href='../S/310.html#L230'>node</a>              230 trace/trace_boot.c 	if (!node)</span>
+<span class='curline'><a href='../S/310.html#L233'>node</a>              233 trace/trace_boot.c 	xbc_node_for_each_child(node, gnode)</span>
+<span class='curline'><a href='../S/310.html#L238'>node</a>              238 trace/trace_boot.c #define trace_boot_enable_events(tr, node) do {} while (0)</span>
+<span class='curline'><a href='../S/310.html#L239'>node</a>              239 trace/trace_boot.c #define trace_boot_init_events(tr, node) do {} while (0)</span>
+<span class='curline'><a href='../S/310.html#L244'>node</a>              244 trace/trace_boot.c trace_boot_set_ftrace_filter(struct trace_array *tr, struct xbc_node *node)</span>
+<span class='curline'><a href='../S/310.html#L250'>node</a>              250 trace/trace_boot.c 	xbc_node_for_each_array_value(node, "ftrace.filters", anode, p) {</span>
+<span class='curline'><a href='../S/310.html#L260'>node</a>              260 trace/trace_boot.c 	xbc_node_for_each_array_value(node, "ftrace.notraces", anode, p) {</span>
+<span class='curline'><a href='../S/310.html#L272'>node</a>              272 trace/trace_boot.c #define trace_boot_set_ftrace_filter(tr, node) do {} while (0)</span>
+<span class='curline'><a href='../S/310.html#L276'>node</a>              276 trace/trace_boot.c trace_boot_enable_tracer(struct trace_array *tr, struct xbc_node *node)</span>
+<span class='curline'><a href='../S/310.html#L280'>node</a>              280 trace/trace_boot.c 	trace_boot_set_ftrace_filter(tr, node);</span>
+<span class='curline'><a href='../S/310.html#L282'>node</a>              282 trace/trace_boot.c 	p = xbc_node_find_value(node, "tracer", NULL);</span>
+<span class='curline'><a href='../S/310.html#L289'>node</a>              289 trace/trace_boot.c 	if (xbc_node_find_value(node, "alloc_snapshot", NULL)) {</span>
+<span class='curline'><a href='../S/310.html#L296'>node</a>              296 trace/trace_boot.c trace_boot_init_one_instance(struct trace_array *tr, struct xbc_node *node)</span>
+<span class='curline'><a href='../S/310.html#L298'>node</a>              298 trace/trace_boot.c 	trace_boot_set_instance_options(tr, node);</span>
+<span class='curline'><a href='../S/310.html#L299'>node</a>              299 trace/trace_boot.c 	trace_boot_init_events(tr, node);</span>
+<span class='curline'><a href='../S/310.html#L300'>node</a>              300 trace/trace_boot.c 	trace_boot_enable_events(tr, node);</span>
+<span class='curline'><a href='../S/310.html#L301'>node</a>              301 trace/trace_boot.c 	trace_boot_enable_tracer(tr, node);</span>
+<span class='curline'><a href='../S/310.html#L305'>node</a>              305 trace/trace_boot.c trace_boot_init_instances(struct xbc_node *node)</span>
+<span class='curline'><a href='../S/310.html#L311'>node</a>              311 trace/trace_boot.c 	node = xbc_node_find_child(node, "instance");</span>
+<span class='curline'><a href='../S/310.html#L312'>node</a>              312 trace/trace_boot.c 	if (!node)</span>
+<span class='curline'><a href='../S/310.html#L315'>node</a>              315 trace/trace_boot.c 	xbc_node_for_each_child(node, inode) {</span>
+<span class='curline'><a href='../S/267.html#L1296'>node</a>             1296 trace/trace_events.c 	struct list_head *node = v;</span>
+<span class='curline'><a href='../S/267.html#L1302'>node</a>             1302 trace/trace_events.c 		node = common_head;</span>
+<span class='curline'><a href='../S/267.html#L1306'>node</a>             1306 trace/trace_events.c 		node = head;</span>
+<span class='curline'><a href='../S/267.html#L1314'>node</a>             1314 trace/trace_events.c 	node = node-&gt;prev;</span>
+<span class='curline'><a href='../S/267.html#L1315'>node</a>             1315 trace/trace_events.c 	if (node == common_head)</span>
+<span class='curline'><a href='../S/267.html#L1317'>node</a>             1317 trace/trace_events.c 	else if (node == head)</span>
+<span class='curline'><a href='../S/267.html#L1320'>node</a>             1320 trace/trace_events.c 		return node;</span>
+<span class='curline'><a href='../S/279.html#L665'>node</a>              665 trace/trace_output.c 	hlist_for_each_entry(event, &amp;event_hash[key], node) {</span>
+<span class='curline'><a href='../S/279.html#L784'>node</a>              784 trace/trace_output.c 	hlist_add_head(&amp;event-&gt;node, &amp;event_hash[key]);</span>
+<span class='curline'><a href='../S/279.html#L799'>node</a>              799 trace/trace_output.c 	hlist_del(&amp;event-&gt;node);</span>
+<span class='curline'><a href='../S/285.html#L27'>node</a>               27 trace/trace_stat.c 	struct rb_node		node;</span>
+<span class='curline'><a href='../S/285.html#L51'>node</a>               51 trace/trace_stat.c 	rbtree_postorder_for_each_entry_safe(snode, n, &amp;session-&gt;stat_root, node) {</span>
+<span class='curline'><a href='../S/285.html#L93'>node</a>               93 trace/trace_stat.c 		this = container_of(*new, struct stat_node, node);</span>
+<span class='curline'><a href='../S/285.html#L103'>node</a>              103 trace/trace_stat.c 	rb_link_node(&amp;data-&gt;node, parent, new);</span>
+<span class='curline'><a href='../S/285.html#L104'>node</a>              104 trace/trace_stat.c 	rb_insert_color(&amp;data-&gt;node, root);</span>
+<span class='curline'><a href='../S/285.html#L174'>node</a>              174 trace/trace_stat.c 	struct rb_node *node;</span>
+<span class='curline'><a href='../S/285.html#L188'>node</a>              188 trace/trace_stat.c 	node = rb_first(&amp;session-&gt;stat_root);</span>
+<span class='curline'><a href='../S/285.html#L189'>node</a>              189 trace/trace_stat.c 	for (i = 0; node &amp;&amp; i &lt; n; i++)</span>
+<span class='curline'><a href='../S/285.html#L190'>node</a>              190 trace/trace_stat.c 		node = rb_next(node);</span>
+<span class='curline'><a href='../S/285.html#L192'>node</a>              192 trace/trace_stat.c 	return node;</span>
+<span class='curline'><a href='../S/285.html#L198'>node</a>              198 trace/trace_stat.c 	struct rb_node *node = p;</span>
+<span class='curline'><a href='../S/285.html#L205'>node</a>              205 trace/trace_stat.c 	return rb_next(node);</span>
+<span class='curline'><a href='../S/285.html#L217'>node</a>              217 trace/trace_stat.c 	struct stat_node *l = container_of(v, struct stat_node, node);</span>
+<span class='curline'><a href='../S/285.html#L310'>node</a>              310 trace/trace_stat.c 	struct stat_session *session, *node;</span>
+<span class='curline'><a href='../S/285.html#L321'>node</a>              321 trace/trace_stat.c 	list_for_each_entry(node, &amp;all_stat_sessions, session_list) {</span>
+<span class='curline'><a href='../S/285.html#L322'>node</a>              322 trace/trace_stat.c 		if (node-&gt;ts == trace)</span>
+<span class='curline'><a href='../S/285.html#L353'>node</a>              353 trace/trace_stat.c 	struct stat_session *node, *tmp;</span>
+<span class='curline'><a href='../S/285.html#L356'>node</a>              356 trace/trace_stat.c 	list_for_each_entry_safe(node, tmp, &amp;all_stat_sessions, session_list) {</span>
+<span class='curline'><a href='../S/285.html#L357'>node</a>              357 trace/trace_stat.c 		if (node-&gt;ts == trace) {</span>
+<span class='curline'><a href='../S/285.html#L358'>node</a>              358 trace/trace_stat.c 			list_del(&amp;node-&gt;session_list);</span>
+<span class='curline'><a href='../S/285.html#L359'>node</a>              359 trace/trace_stat.c 			destroy_session(node);</span>
+<span class='curline'><a href='../S/252.html#L121'>node</a>              121 ucount.c       	hlist_for_each_entry(ucounts, hashent, node) {</span>
+<span class='curline'><a href='../S/252.html#L151'>node</a>              151 ucount.c       			hlist_add_head(&amp;new-&gt;node, hashent);</span>
+<span class='curline'><a href='../S/252.html#L170'>node</a>              170 ucount.c       		hlist_del_init(&amp;ucounts-&gt;node);</span>
+<span class='curline'><a href='../S/365.html#L155'>node</a>              155 workqueue.c    	int			node;		/* I: the associated node ID */</span>
+<span class='curline'><a href='../S/365.html#L416'>node</a>              416 workqueue.c    	list_for_each_entry((worker), &amp;(pool)-&gt;workers, node)		\</span>
+<span class='curline'><a href='../S/365.html#L568'>node</a>              568 workqueue.c    						  int node)</span>
+<span class='curline'><a href='../S/365.html#L578'>node</a>              578 workqueue.c    	if (unlikely(node == NUMA_NO_NODE))</span>
+<span class='curline'><a href='../S/365.html#L581'>node</a>              581 workqueue.c    	return rcu_dereference_raw(wq-&gt;numa_pwq_tbl[node]);</span>
+<span class='curline'><a href='../S/365.html#L1550'>node</a>             1550 workqueue.c    static int workqueue_select_cpu_near(int node)</span>
+<span class='curline'><a href='../S/365.html#L1559'>node</a>             1559 workqueue.c    	if (node &lt; 0 || node &gt;= MAX_NUMNODES || !node_online(node))</span>
+<span class='curline'><a href='../S/365.html#L1564'>node</a>             1564 workqueue.c    	if (node == cpu_to_node(cpu))</span>
+<span class='curline'><a href='../S/365.html#L1568'>node</a>             1568 workqueue.c    	cpu = cpumask_any_and(cpumask_of_node(node), cpu_online_mask);</span>
+<span class='curline'><a href='../S/365.html#L1594'>node</a>             1594 workqueue.c    bool queue_work_node(int node, struct workqueue_struct *wq,</span>
+<span class='curline'><a href='../S/365.html#L1614'>node</a>             1614 workqueue.c    		int cpu = workqueue_select_cpu_near(node);</span>
+<span class='curline'><a href='../S/365.html#L1837'>node</a>             1837 workqueue.c    static struct worker *alloc_worker(int node)</span>
+<span class='curline'><a href='../S/365.html#L1841'>node</a>             1841 workqueue.c    	worker = kzalloc_node(sizeof(*worker), GFP_KERNEL, node);</span>
+<span class='curline'><a href='../S/365.html#L1845'>node</a>             1845 workqueue.c    		INIT_LIST_HEAD(&amp;worker-&gt;node);</span>
+<span class='curline'><a href='../S/365.html#L1877'>node</a>             1877 workqueue.c    	list_add_tail(&amp;worker-&gt;node, &amp;pool-&gt;workers);</span>
+<span class='curline'><a href='../S/365.html#L1898'>node</a>             1898 workqueue.c    	list_del(&amp;worker-&gt;node);</span>
+<span class='curline'><a href='../S/365.html#L1935'>node</a>             1935 workqueue.c    	worker = alloc_worker(pool-&gt;node);</span>
+<span class='curline'><a href='../S/365.html#L1947'>node</a>             1947 workqueue.c    	worker-&gt;task = kthread_create_on_node(worker_thread, worker, pool-&gt;node,</span>
+<span class='curline'><a href='../S/365.html#L3440'>node</a>             3440 workqueue.c    	pool-&gt;node = NUMA_NO_NODE;</span>
+<span class='curline'><a href='../S/365.html#L3619'>node</a>             3619 workqueue.c    	int node;</span>
+<span class='curline'><a href='../S/365.html#L3634'>node</a>             3634 workqueue.c    		for_each_node(node) {</span>
+<span class='curline'><a href='../S/365.html#L3636'>node</a>             3636 workqueue.c    					   wq_numa_possible_cpumask[node])) {</span>
+<span class='curline'><a href='../S/365.html#L3637'>node</a>             3637 workqueue.c    				target_node = node;</span>
+<span class='curline'><a href='../S/365.html#L3650'>node</a>             3650 workqueue.c    	pool-&gt;node = target_node;</span>
+<span class='curline'><a href='../S/365.html#L3824'>node</a>             3824 workqueue.c    	pwq = kmem_cache_alloc_node(pwq_cache, GFP_KERNEL, pool-&gt;node);</span>
+<span class='curline'><a href='../S/365.html#L3856'>node</a>             3856 workqueue.c    static bool wq_calc_node_cpumask(const struct workqueue_attrs *attrs, int node,</span>
+<span class='curline'><a href='../S/365.html#L3863'>node</a>             3863 workqueue.c    	cpumask_and(cpumask, cpumask_of_node(node), attrs-&gt;cpumask);</span>
+<span class='curline'><a href='../S/365.html#L3871'>node</a>             3871 workqueue.c    	cpumask_and(cpumask, attrs-&gt;cpumask, wq_numa_possible_cpumask[node]);</span>
+<span class='curline'><a href='../S/365.html#L3888'>node</a>             3888 workqueue.c    						   int node,</span>
+<span class='curline'><a href='../S/365.html#L3899'>node</a>             3899 workqueue.c    	old_pwq = rcu_access_pointer(wq-&gt;numa_pwq_tbl[node]);</span>
+<span class='curline'><a href='../S/365.html#L3900'>node</a>             3900 workqueue.c    	rcu_assign_pointer(wq-&gt;numa_pwq_tbl[node], pwq);</span>
+<span class='curline'><a href='../S/365.html#L3917'>node</a>             3917 workqueue.c    		int node;</span>
+<span class='curline'><a href='../S/365.html#L3919'>node</a>             3919 workqueue.c    		for_each_node(node)</span>
+<span class='curline'><a href='../S/365.html#L3920'>node</a>             3920 workqueue.c    			put_pwq_unlocked(ctx-&gt;pwq_tbl[node]);</span>
+<span class='curline'><a href='../S/365.html#L3936'>node</a>             3936 workqueue.c    	int node;</span>
+<span class='curline'><a href='../S/365.html#L3973'>node</a>             3973 workqueue.c    	for_each_node(node) {</span>
+<span class='curline'><a href='../S/365.html#L3974'>node</a>             3974 workqueue.c    		if (wq_calc_node_cpumask(new_attrs, node, -1, tmp_attrs-&gt;cpumask)) {</span>
+<span class='curline'><a href='../S/365.html#L3975'>node</a>             3975 workqueue.c    			ctx-&gt;pwq_tbl[node] = alloc_unbound_pwq(wq, tmp_attrs);</span>
+<span class='curline'><a href='../S/365.html#L3976'>node</a>             3976 workqueue.c    			if (!ctx-&gt;pwq_tbl[node])</span>
+<span class='curline'><a href='../S/365.html#L3980'>node</a>             3980 workqueue.c    			ctx-&gt;pwq_tbl[node] = ctx-&gt;dfl_pwq;</span>
+<span class='curline'><a href='../S/365.html#L4003'>node</a>             4003 workqueue.c    	int node;</span>
+<span class='curline'><a href='../S/365.html#L4011'>node</a>             4011 workqueue.c    	for_each_node(node)</span>
+<span class='curline'><a href='../S/365.html#L4012'>node</a>             4012 workqueue.c    		ctx-&gt;pwq_tbl[node] = numa_pwq_tbl_install(ctx-&gt;wq, node,</span>
+<span class='curline'><a href='../S/365.html#L4013'>node</a>             4013 workqueue.c    							  ctx-&gt;pwq_tbl[node]);</span>
+<span class='curline'><a href='../S/365.html#L4120'>node</a>             4120 workqueue.c    	int node = cpu_to_node(cpu);</span>
+<span class='curline'><a href='../S/365.html#L4141'>node</a>             4141 workqueue.c    	pwq = unbound_pwq_by_node(wq, node);</span>
+<span class='curline'><a href='../S/365.html#L4149'>node</a>             4149 workqueue.c    	if (wq_calc_node_cpumask(wq-&gt;dfl_pwq-&gt;pool-&gt;attrs, node, cpu_off, cpumask)) {</span>
+<span class='curline'><a href='../S/365.html#L4166'>node</a>             4166 workqueue.c    	old_pwq = numa_pwq_tbl_install(wq, node, pwq);</span>
+<span class='curline'><a href='../S/365.html#L4174'>node</a>             4174 workqueue.c    	old_pwq = numa_pwq_tbl_install(wq, node, wq-&gt;dfl_pwq);</span>
+<span class='curline'><a href='../S/365.html#L4386'>node</a>             4386 workqueue.c    	int node;</span>
+<span class='curline'><a href='../S/365.html#L4453'>node</a>             4453 workqueue.c    		for_each_node(node) {</span>
+<span class='curline'><a href='../S/365.html#L4454'>node</a>             4454 workqueue.c    			pwq = rcu_access_pointer(wq-&gt;numa_pwq_tbl[node]);</span>
+<span class='curline'><a href='../S/365.html#L4455'>node</a>             4455 workqueue.c    			RCU_INIT_POINTER(wq-&gt;numa_pwq_tbl[node], NULL);</span>
+<span class='curline'><a href='../S/365.html#L4684'>node</a>             4684 workqueue.c    	if (pool-&gt;node != NUMA_NO_NODE)</span>
+<span class='curline'><a href='../S/365.html#L4685'>node</a>             4685 workqueue.c    		pr_cont(" node=%d", pool-&gt;node);</span>
+<span class='curline'><a href='../S/365.html#L5442'>node</a>             5442 workqueue.c    	int node, written = 0;</span>
+<span class='curline'><a href='../S/365.html#L5446'>node</a>             5446 workqueue.c    	for_each_node(node) {</span>
+<span class='curline'><a href='../S/365.html#L5448'>node</a>             5448 workqueue.c    				     "%s%d:%d", delim, node,</span>
+<span class='curline'><a href='../S/365.html#L5449'>node</a>             5449 workqueue.c    				     unbound_pwq_by_node(wq, node)-&gt;pool-&gt;id);</span>
+<span class='curline'><a href='../S/365.html#L5892'>node</a>             5892 workqueue.c    	int node, cpu;</span>
+<span class='curline'><a href='../S/365.html#L5913'>node</a>             5913 workqueue.c    	for_each_node(node)</span>
+<span class='curline'><a href='../S/365.html#L5914'>node</a>             5914 workqueue.c    		BUG_ON(!zalloc_cpumask_var_node(&amp;tbl[node], GFP_KERNEL,</span>
+<span class='curline'><a href='../S/365.html#L5915'>node</a>             5915 workqueue.c    				node_online(node) ? node : NUMA_NO_NODE));</span>
+<span class='curline'><a href='../S/365.html#L5918'>node</a>             5918 workqueue.c    		node = cpu_to_node(cpu);</span>
+<span class='curline'><a href='../S/365.html#L5919'>node</a>             5919 workqueue.c    		if (WARN_ON(node == NUMA_NO_NODE)) {</span>
+<span class='curline'><a href='../S/365.html#L5924'>node</a>             5924 workqueue.c    		cpumask_set_cpu(cpu, tbl[node]);</span>
+<span class='curline'><a href='../S/365.html#L5964'>node</a>             5964 workqueue.c    			pool-&gt;node = cpu_to_node(cpu);</span>
+<span class='curline'><a href='../S/365.html#L6040'>node</a>             6040 workqueue.c    			pool-&gt;node = cpu_to_node(cpu);</span>
+<span class='curline'><a href='../S/191.html#L41'>node</a>               41 workqueue_internal.h 	struct list_head	node;		/* A: anchored at pool-&gt;workers */</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>pool_workqueue</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/365.html#L262'>pool_workqueue</a>    262 workqueue.c    	struct pool_workqueue	*dfl_pwq;	/* PW: only for unbound wqs */</span>
+<span class='curline'><a href='../S/365.html#L283'>pool_workqueue</a>    283 workqueue.c    	struct pool_workqueue __percpu *cpu_pwqs; /* I: per-cpu pwqs */</span>
+<span class='curline'><a href='../S/365.html#L284'>pool_workqueue</a>    284 workqueue.c    	struct pool_workqueue __rcu *numa_pwq_tbl[]; /* PWR: unbound pwqs indexed by node */</span>
+<span class='curline'><a href='../S/365.html#L364'>pool_workqueue</a>    364 workqueue.c    static void show_pwq(struct pool_workqueue *pwq);</span>
+<span class='curline'><a href='../S/365.html#L567'>pool_workqueue</a>    567 workqueue.c    static struct pool_workqueue *unbound_pwq_by_node(struct workqueue_struct *wq,</span>
+<span class='curline'><a href='../S/365.html#L627'>pool_workqueue</a>    627 workqueue.c    static void set_work_pwq(struct work_struct *work, struct pool_workqueue *pwq,</span>
+<span class='curline'><a href='../S/365.html#L689'>pool_workqueue</a>    689 workqueue.c    static struct pool_workqueue *get_work_pwq(struct work_struct *work)</span>
+<span class='curline'><a href='../S/365.html#L722'>pool_workqueue</a>    722 workqueue.c    		return ((struct pool_workqueue *)</span>
+<span class='curline'><a href='../S/365.html#L744'>pool_workqueue</a>    744 workqueue.c    		return ((struct pool_workqueue *)</span>
+<span class='curline'><a href='../S/365.html#L1095'>pool_workqueue</a>   1095 workqueue.c    static void get_pwq(struct pool_workqueue *pwq)</span>
+<span class='curline'><a href='../S/365.html#L1109'>pool_workqueue</a>   1109 workqueue.c    static void put_pwq(struct pool_workqueue *pwq)</span>
+<span class='curline'><a href='../S/365.html#L1133'>pool_workqueue</a>   1133 workqueue.c    static void put_pwq_unlocked(struct pool_workqueue *pwq)</span>
+<span class='curline'><a href='../S/365.html#L1148'>pool_workqueue</a>   1148 workqueue.c    	struct pool_workqueue *pwq = get_work_pwq(work);</span>
+<span class='curline'><a href='../S/365.html#L1158'>pool_workqueue</a>   1158 workqueue.c    static void pwq_activate_first_delayed(struct pool_workqueue *pwq)</span>
+<span class='curline'><a href='../S/365.html#L1177'>pool_workqueue</a>   1177 workqueue.c    static void pwq_dec_nr_in_flight(struct pool_workqueue *pwq, int color)</span>
+<span class='curline'><a href='../S/365.html#L1247'>pool_workqueue</a>   1247 workqueue.c    	struct pool_workqueue *pwq;</span>
+<span class='curline'><a href='../S/365.html#L1333'>pool_workqueue</a>   1333 workqueue.c    static void insert_work(struct pool_workqueue *pwq, struct work_struct *work,</span>
+<span class='curline'><a href='../S/365.html#L1409'>pool_workqueue</a>   1409 workqueue.c    	struct pool_workqueue *pwq;</span>
+<span class='curline'><a href='../S/365.html#L2032'>pool_workqueue</a>   2032 workqueue.c    	struct pool_workqueue *pwq = get_work_pwq(work);</span>
+<span class='curline'><a href='../S/365.html#L2185'>pool_workqueue</a>   2185 workqueue.c    	struct pool_workqueue *pwq = get_work_pwq(work);</span>
+<span class='curline'><a href='../S/365.html#L2511'>pool_workqueue</a>   2511 workqueue.c    		struct pool_workqueue *pwq = list_first_entry(&amp;wq-&gt;maydays,</span>
+<span class='curline'><a href='../S/365.html#L2512'>pool_workqueue</a>   2512 workqueue.c    					struct pool_workqueue, mayday_node);</span>
+<span class='curline'><a href='../S/365.html#L2669'>pool_workqueue</a>   2669 workqueue.c    static void insert_wq_barrier(struct pool_workqueue *pwq,</span>
+<span class='curline'><a href='../S/365.html#L2744'>pool_workqueue</a>   2744 workqueue.c    	struct pool_workqueue *pwq;</span>
+<span class='curline'><a href='../S/365.html#L2952'>pool_workqueue</a>   2952 workqueue.c    	struct pool_workqueue *pwq;</span>
+<span class='curline'><a href='../S/365.html#L2998'>pool_workqueue</a>   2998 workqueue.c    	struct pool_workqueue *pwq;</span>
+<span class='curline'><a href='../S/365.html#L3678'>pool_workqueue</a>   3678 workqueue.c    			container_of(rcu, struct pool_workqueue, rcu));</span>
+<span class='curline'><a href='../S/365.html#L3687'>pool_workqueue</a>   3687 workqueue.c    	struct pool_workqueue *pwq = container_of(work, struct pool_workqueue,</span>
+<span class='curline'><a href='../S/365.html#L3725'>pool_workqueue</a>   3725 workqueue.c    static void pwq_adjust_max_active(struct pool_workqueue *pwq)</span>
+<span class='curline'><a href='../S/365.html#L3773'>pool_workqueue</a>   3773 workqueue.c    static void init_pwq(struct pool_workqueue *pwq, struct workqueue_struct *wq,</span>
+<span class='curline'><a href='../S/365.html#L3791'>pool_workqueue</a>   3791 workqueue.c    static void link_pwq(struct pool_workqueue *pwq)</span>
+<span class='curline'><a href='../S/365.html#L3812'>pool_workqueue</a>   3812 workqueue.c    static struct pool_workqueue *alloc_unbound_pwq(struct workqueue_struct *wq,</span>
+<span class='curline'><a href='../S/365.html#L3816'>pool_workqueue</a>   3816 workqueue.c    	struct pool_workqueue *pwq;</span>
+<span class='curline'><a href='../S/365.html#L3887'>pool_workqueue</a>   3887 workqueue.c    static struct pool_workqueue *numa_pwq_tbl_install(struct workqueue_struct *wq,</span>
+<span class='curline'><a href='../S/365.html#L3889'>pool_workqueue</a>   3889 workqueue.c    						   struct pool_workqueue *pwq)</span>
+<span class='curline'><a href='../S/365.html#L3891'>pool_workqueue</a>   3891 workqueue.c    	struct pool_workqueue *old_pwq;</span>
+<span class='curline'><a href='../S/365.html#L3909'>pool_workqueue</a>   3909 workqueue.c    	struct pool_workqueue	*dfl_pwq;</span>
+<span class='curline'><a href='../S/365.html#L3910'>pool_workqueue</a>   3910 workqueue.c    	struct pool_workqueue	*pwq_tbl[];</span>
+<span class='curline'><a href='../S/365.html#L4122'>pool_workqueue</a>   4122 workqueue.c    	struct pool_workqueue *old_pwq = NULL, *pwq;</span>
+<span class='curline'><a href='../S/365.html#L4186'>pool_workqueue</a>   4186 workqueue.c    		wq-&gt;cpu_pwqs = alloc_percpu(struct pool_workqueue);</span>
+<span class='curline'><a href='../S/365.html#L4191'>pool_workqueue</a>   4191 workqueue.c    			struct pool_workqueue *pwq =</span>
+<span class='curline'><a href='../S/365.html#L4271'>pool_workqueue</a>   4271 workqueue.c    	struct pool_workqueue *pwq;</span>
+<span class='curline'><a href='../S/365.html#L4361'>pool_workqueue</a>   4361 workqueue.c    static bool pwq_busy(struct pool_workqueue *pwq)</span>
+<span class='curline'><a href='../S/365.html#L4385'>pool_workqueue</a>   4385 workqueue.c    	struct pool_workqueue *pwq;</span>
+<span class='curline'><a href='../S/365.html#L4482'>pool_workqueue</a>   4482 workqueue.c    	struct pool_workqueue *pwq;</span>
+<span class='curline'><a href='../S/365.html#L4553'>pool_workqueue</a>   4553 workqueue.c    	struct pool_workqueue *pwq;</span>
+<span class='curline'><a href='../S/365.html#L4650'>pool_workqueue</a>   4650 workqueue.c    	struct pool_workqueue *pwq = NULL;</span>
+<span class='curline'><a href='../S/365.html#L4703'>pool_workqueue</a>   4703 workqueue.c    static void show_pwq(struct pool_workqueue *pwq)</span>
+<span class='curline'><a href='../S/365.html#L4793'>pool_workqueue</a>   4793 workqueue.c    		struct pool_workqueue *pwq;</span>
+<span class='curline'><a href='../S/365.html#L5193'>pool_workqueue</a>   5193 workqueue.c    	struct pool_workqueue *pwq;</span>
+<span class='curline'><a href='../S/365.html#L5227'>pool_workqueue</a>   5227 workqueue.c    	struct pool_workqueue *pwq;</span>
+<span class='curline'><a href='../S/365.html#L5268'>pool_workqueue</a>   5268 workqueue.c    	struct pool_workqueue *pwq;</span>
+<span class='curline'><a href='../S/365.html#L5947'>pool_workqueue</a>   5947 workqueue.c    	BUILD_BUG_ON(__alignof__(struct pool_workqueue) &lt; __alignof__(long long));</span>
+<span class='curline'><a href='../S/365.html#L5952'>pool_workqueue</a>   5952 workqueue.c    	pwq_cache = KMEM_CACHE(pool_workqueue, SLAB_PANIC);</span>
+<span class='curline'><a href='../S/191.html#L33'>pool_workqueue</a>     33 workqueue_internal.h 	struct pool_workqueue	*current_pwq; /* L: current_work's pwq */</span>
+</pre>
+</body>
+</html>

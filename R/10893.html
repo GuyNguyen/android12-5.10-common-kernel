@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rcu_dynticks_snap</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/144.html#L351'>rcu_dynticks_snap</a>  351 rcu/tree.c     	return snap != rcu_dynticks_snap(rdp);</span>
+<span class='curline'><a href='../S/144.html#L1193'>rcu_dynticks_snap</a> 1193 rcu/tree.c     	rdp-&gt;dynticks_snap = rcu_dynticks_snap(rdp);</span>
+<span class='curline'><a href='../S/144.html#L3958'>rcu_dynticks_snap</a> 3958 rcu/tree.c     	WARN_ON_ONCE(rcu_dynticks_in_eqs(rcu_dynticks_snap(rdp)));</span>
+<span class='curline'><a href='../S/131.html#L361'>rcu_dynticks_snap</a>  361 rcu/tree_exp.h 			snap = rcu_dynticks_snap(rdp);</span>
+<span class='curline'><a href='../S/130.html#L425'>rcu_dynticks_snap</a>  425 rcu/tree_stall.h 			rcu_dynticks_in_eqs(rcu_dynticks_snap(rdp));</span>
+<span class='curline'><a href='../S/130.html#L435'>rcu_dynticks_snap</a>  435 rcu/tree_stall.h 	       rcu_dynticks_snap(rdp) &amp; 0xfff,</span>
+</pre>
+</body>
+</html>

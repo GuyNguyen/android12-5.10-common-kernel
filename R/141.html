@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>C</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/256.html#L1313'>C</a>                1313 trace/trace.h  		C(DISPLAY_GRAPH,	"display-graph"),</span>
+<span class='curline'><a href='../S/256.html#L1320'>C</a>                1320 trace/trace.h  		C(BRANCH,		"branch"),</span>
+<span class='curline'><a href='../S/256.html#L1327'>C</a>                1327 trace/trace.h  		C(FUNCTION,		"function-trace"),	\</span>
+<span class='curline'><a href='../S/256.html#L1328'>C</a>                1328 trace/trace.h  		C(FUNC_FORK,		"function-fork"),</span>
+<span class='curline'><a href='../S/256.html#L1338'>C</a>                1338 trace/trace.h  		C(STACKTRACE,		"stacktrace"),</span>
+<span class='curline'><a href='../S/256.html#L1351'>C</a>                1351 trace/trace.h  		C(PRINT_PARENT,		"print-parent"),	\</span>
+<span class='curline'><a href='../S/256.html#L1352'>C</a>                1352 trace/trace.h  		C(SYM_OFFSET,		"sym-offset"),		\</span>
+<span class='curline'><a href='../S/256.html#L1353'>C</a>                1353 trace/trace.h  		C(SYM_ADDR,		"sym-addr"),		\</span>
+<span class='curline'><a href='../S/256.html#L1354'>C</a>                1354 trace/trace.h  		C(VERBOSE,		"verbose"),		\</span>
+<span class='curline'><a href='../S/256.html#L1355'>C</a>                1355 trace/trace.h  		C(RAW,			"raw"),			\</span>
+<span class='curline'><a href='../S/256.html#L1356'>C</a>                1356 trace/trace.h  		C(HEX,			"hex"),			\</span>
+<span class='curline'><a href='../S/256.html#L1357'>C</a>                1357 trace/trace.h  		C(BIN,			"bin"),			\</span>
+<span class='curline'><a href='../S/256.html#L1358'>C</a>                1358 trace/trace.h  		C(BLOCK,		"block"),		\</span>
+<span class='curline'><a href='../S/256.html#L1359'>C</a>                1359 trace/trace.h  		C(PRINTK,		"trace_printk"),	\</span>
+<span class='curline'><a href='../S/256.html#L1360'>C</a>                1360 trace/trace.h  		C(ANNOTATE,		"annotate"),		\</span>
+<span class='curline'><a href='../S/256.html#L1361'>C</a>                1361 trace/trace.h  		C(USERSTACKTRACE,	"userstacktrace"),	\</span>
+<span class='curline'><a href='../S/256.html#L1362'>C</a>                1362 trace/trace.h  		C(SYM_USEROBJ,		"sym-userobj"),		\</span>
+<span class='curline'><a href='../S/256.html#L1363'>C</a>                1363 trace/trace.h  		C(PRINTK_MSGONLY,	"printk-msg-only"),	\</span>
+<span class='curline'><a href='../S/256.html#L1364'>C</a>                1364 trace/trace.h  		C(CONTEXT_INFO,		"context-info"),   /* Print pid/cpu/time */ \</span>
+<span class='curline'><a href='../S/256.html#L1365'>C</a>                1365 trace/trace.h  		C(LATENCY_FMT,		"latency-format"),	\</span>
+<span class='curline'><a href='../S/256.html#L1366'>C</a>                1366 trace/trace.h  		C(RECORD_CMD,		"record-cmd"),		\</span>
+<span class='curline'><a href='../S/256.html#L1367'>C</a>                1367 trace/trace.h  		C(RECORD_TGID,		"record-tgid"),		\</span>
+<span class='curline'><a href='../S/256.html#L1368'>C</a>                1368 trace/trace.h  		C(OVERWRITE,		"overwrite"),		\</span>
+<span class='curline'><a href='../S/256.html#L1369'>C</a>                1369 trace/trace.h  		C(STOP_ON_FREE,		"disable_on_free"),	\</span>
+<span class='curline'><a href='../S/256.html#L1370'>C</a>                1370 trace/trace.h  		C(IRQ_INFO,		"irq-info"),		\</span>
+<span class='curline'><a href='../S/256.html#L1371'>C</a>                1371 trace/trace.h  		C(MARKERS,		"markers"),		\</span>
+<span class='curline'><a href='../S/256.html#L1372'>C</a>                1372 trace/trace.h  		C(EVENT_FORK,		"event-fork"),		\</span>
+<span class='curline'><a href='../S/256.html#L1373'>C</a>                1373 trace/trace.h  		C(PAUSE_ON_TRACE,	"pause-on-trace"),	\</span>
+<span class='curline'><a href='../S/304.html#L25'>C</a>                  25 trace/trace_events_filter.c 	C( OP_GLOB,	"~"  ),			\</span>
+<span class='curline'><a href='../S/304.html#L26'>C</a>                  26 trace/trace_events_filter.c 	C( OP_NE,	"!=" ),			\</span>
+<span class='curline'><a href='../S/304.html#L27'>C</a>                  27 trace/trace_events_filter.c 	C( OP_EQ,	"==" ),			\</span>
+<span class='curline'><a href='../S/304.html#L28'>C</a>                  28 trace/trace_events_filter.c 	C( OP_LE,	"&lt;=" ),			\</span>
+<span class='curline'><a href='../S/304.html#L29'>C</a>                  29 trace/trace_events_filter.c 	C( OP_LT,	"&lt;"  ),			\</span>
+<span class='curline'><a href='../S/304.html#L30'>C</a>                  30 trace/trace_events_filter.c 	C( OP_GE,	"&gt;=" ),			\</span>
+<span class='curline'><a href='../S/304.html#L31'>C</a>                  31 trace/trace_events_filter.c 	C( OP_GT,	"&gt;"  ),			\</span>
+<span class='curline'><a href='../S/304.html#L32'>C</a>                  32 trace/trace_events_filter.c 	C( OP_BAND,	"&amp;"  ),			\</span>
+<span class='curline'><a href='../S/304.html#L33'>C</a>                  33 trace/trace_events_filter.c 	C( OP_MAX,	NULL )</span>
+<span class='curline'><a href='../S/304.html#L53'>C</a>                  53 trace/trace_events_filter.c 	C(NONE,			"No error"),				\</span>
+<span class='curline'><a href='../S/304.html#L54'>C</a>                  54 trace/trace_events_filter.c 	C(INVALID_OP,		"Invalid operator"),			\</span>
+<span class='curline'><a href='../S/304.html#L55'>C</a>                  55 trace/trace_events_filter.c 	C(TOO_MANY_OPEN,	"Too many '('"),			\</span>
+<span class='curline'><a href='../S/304.html#L56'>C</a>                  56 trace/trace_events_filter.c 	C(TOO_MANY_CLOSE,	"Too few '('"),				\</span>
+<span class='curline'><a href='../S/304.html#L57'>C</a>                  57 trace/trace_events_filter.c 	C(MISSING_QUOTE,	"Missing matching quote"),		\</span>
+<span class='curline'><a href='../S/304.html#L58'>C</a>                  58 trace/trace_events_filter.c 	C(OPERAND_TOO_LONG,	"Operand too long"),			\</span>
+<span class='curline'><a href='../S/304.html#L59'>C</a>                  59 trace/trace_events_filter.c 	C(EXPECT_STRING,	"Expecting string field"),		\</span>
+<span class='curline'><a href='../S/304.html#L60'>C</a>                  60 trace/trace_events_filter.c 	C(EXPECT_DIGIT,		"Expecting numeric field"),		\</span>
+<span class='curline'><a href='../S/304.html#L61'>C</a>                  61 trace/trace_events_filter.c 	C(ILLEGAL_FIELD_OP,	"Illegal operation for field type"),	\</span>
+<span class='curline'><a href='../S/304.html#L62'>C</a>                  62 trace/trace_events_filter.c 	C(FIELD_NOT_FOUND,	"Field not found"),			\</span>
+<span class='curline'><a href='../S/304.html#L63'>C</a>                  63 trace/trace_events_filter.c 	C(ILLEGAL_INTVAL,	"Illegal integer value"),		\</span>
+<span class='curline'><a href='../S/304.html#L64'>C</a>                  64 trace/trace_events_filter.c 	C(BAD_SUBSYS_FILTER,	"Couldn't find or set field in one of a subsystem's events"), \</span>
+<span class='curline'><a href='../S/304.html#L65'>C</a>                  65 trace/trace_events_filter.c 	C(TOO_MANY_PREDS,	"Too many terms in predicate expression"), \</span>
+<span class='curline'><a href='../S/304.html#L66'>C</a>                  66 trace/trace_events_filter.c 	C(INVALID_FILTER,	"Meaningless filter expression"),	\</span>
+<span class='curline'><a href='../S/304.html#L67'>C</a>                  67 trace/trace_events_filter.c 	C(IP_FIELD_ONLY,	"Only 'ip' field is supported for function trace"), \</span>
+<span class='curline'><a href='../S/304.html#L68'>C</a>                  68 trace/trace_events_filter.c 	C(INVALID_VALUE,	"Invalid value (did you forget quotes)?"), \</span>
+<span class='curline'><a href='../S/304.html#L69'>C</a>                  69 trace/trace_events_filter.c 	C(ERRNO,		"Error"),				\</span>
+<span class='curline'><a href='../S/304.html#L70'>C</a>                  70 trace/trace_events_filter.c 	C(NO_FILTER,		"No filter found")</span>
+<span class='curline'><a href='../S/291.html#L25'>C</a>                  25 trace/trace_events_hist.c 	C(NONE,			"No error"),				\</span>
+<span class='curline'><a href='../S/291.html#L26'>C</a>                  26 trace/trace_events_hist.c 	C(DUPLICATE_VAR,	"Variable already defined"),		\</span>
+<span class='curline'><a href='../S/291.html#L27'>C</a>                  27 trace/trace_events_hist.c 	C(VAR_NOT_UNIQUE,	"Variable name not unique, need to use fully qualified name (subsys.event.var) for variable"), \</span>
+<span class='curline'><a href='../S/291.html#L28'>C</a>                  28 trace/trace_events_hist.c 	C(TOO_MANY_VARS,	"Too many variables defined"),		\</span>
+<span class='curline'><a href='../S/291.html#L29'>C</a>                  29 trace/trace_events_hist.c 	C(MALFORMED_ASSIGNMENT,	"Malformed assignment"),		\</span>
+<span class='curline'><a href='../S/291.html#L30'>C</a>                  30 trace/trace_events_hist.c 	C(NAMED_MISMATCH,	"Named hist trigger doesn't match existing named trigger (includes variables)"), \</span>
+<span class='curline'><a href='../S/291.html#L31'>C</a>                  31 trace/trace_events_hist.c 	C(TRIGGER_EEXIST,	"Hist trigger already exists"),		\</span>
+<span class='curline'><a href='../S/291.html#L32'>C</a>                  32 trace/trace_events_hist.c 	C(TRIGGER_ENOENT_CLEAR,	"Can't clear or continue a nonexistent hist trigger"), \</span>
+<span class='curline'><a href='../S/291.html#L33'>C</a>                  33 trace/trace_events_hist.c 	C(SET_CLOCK_FAIL,	"Couldn't set trace_clock"),		\</span>
+<span class='curline'><a href='../S/291.html#L34'>C</a>                  34 trace/trace_events_hist.c 	C(BAD_FIELD_MODIFIER,	"Invalid field modifier"),		\</span>
+<span class='curline'><a href='../S/291.html#L35'>C</a>                  35 trace/trace_events_hist.c 	C(TOO_MANY_SUBEXPR,	"Too many subexpressions (3 max)"),	\</span>
+<span class='curline'><a href='../S/291.html#L36'>C</a>                  36 trace/trace_events_hist.c 	C(TIMESTAMP_MISMATCH,	"Timestamp units in expression don't match"), \</span>
+<span class='curline'><a href='../S/291.html#L37'>C</a>                  37 trace/trace_events_hist.c 	C(TOO_MANY_FIELD_VARS,	"Too many field variables defined"),	\</span>
+<span class='curline'><a href='../S/291.html#L38'>C</a>                  38 trace/trace_events_hist.c 	C(EVENT_FILE_NOT_FOUND,	"Event file not found"),		\</span>
+<span class='curline'><a href='../S/291.html#L39'>C</a>                  39 trace/trace_events_hist.c 	C(HIST_NOT_FOUND,	"Matching event histogram not found"),	\</span>
+<span class='curline'><a href='../S/291.html#L40'>C</a>                  40 trace/trace_events_hist.c 	C(HIST_CREATE_FAIL,	"Couldn't create histogram for field"),	\</span>
+<span class='curline'><a href='../S/291.html#L41'>C</a>                  41 trace/trace_events_hist.c 	C(SYNTH_VAR_NOT_FOUND,	"Couldn't find synthetic variable"),	\</span>
+<span class='curline'><a href='../S/291.html#L42'>C</a>                  42 trace/trace_events_hist.c 	C(SYNTH_EVENT_NOT_FOUND,"Couldn't find synthetic event"),	\</span>
+<span class='curline'><a href='../S/291.html#L43'>C</a>                  43 trace/trace_events_hist.c 	C(SYNTH_TYPE_MISMATCH,	"Param type doesn't match synthetic event field type"), \</span>
+<span class='curline'><a href='../S/291.html#L44'>C</a>                  44 trace/trace_events_hist.c 	C(SYNTH_COUNT_MISMATCH,	"Param count doesn't match synthetic event field count"), \</span>
+<span class='curline'><a href='../S/291.html#L45'>C</a>                  45 trace/trace_events_hist.c 	C(FIELD_VAR_PARSE_FAIL,	"Couldn't parse field variable"),	\</span>
+<span class='curline'><a href='../S/291.html#L46'>C</a>                  46 trace/trace_events_hist.c 	C(VAR_CREATE_FIND_FAIL,	"Couldn't create or find variable"),	\</span>
+<span class='curline'><a href='../S/291.html#L47'>C</a>                  47 trace/trace_events_hist.c 	C(ONX_NOT_VAR,		"For onmax(x) or onchange(x), x must be a variable"), \</span>
+<span class='curline'><a href='../S/291.html#L48'>C</a>                  48 trace/trace_events_hist.c 	C(ONX_VAR_NOT_FOUND,	"Couldn't find onmax or onchange variable"), \</span>
+<span class='curline'><a href='../S/291.html#L49'>C</a>                  49 trace/trace_events_hist.c 	C(ONX_VAR_CREATE_FAIL,	"Couldn't create onmax or onchange variable"), \</span>
+<span class='curline'><a href='../S/291.html#L50'>C</a>                  50 trace/trace_events_hist.c 	C(FIELD_VAR_CREATE_FAIL,"Couldn't create field variable"),	\</span>
+<span class='curline'><a href='../S/291.html#L51'>C</a>                  51 trace/trace_events_hist.c 	C(TOO_MANY_PARAMS,	"Too many action params"),		\</span>
+<span class='curline'><a href='../S/291.html#L52'>C</a>                  52 trace/trace_events_hist.c 	C(PARAM_NOT_FOUND,	"Couldn't find param"),			\</span>
+<span class='curline'><a href='../S/291.html#L53'>C</a>                  53 trace/trace_events_hist.c 	C(INVALID_PARAM,	"Invalid action param"),		\</span>
+<span class='curline'><a href='../S/291.html#L54'>C</a>                  54 trace/trace_events_hist.c 	C(ACTION_NOT_FOUND,	"No action found"),			\</span>
+<span class='curline'><a href='../S/291.html#L55'>C</a>                  55 trace/trace_events_hist.c 	C(NO_SAVE_PARAMS,	"No params found for save()"),		\</span>
+<span class='curline'><a href='../S/291.html#L56'>C</a>                  56 trace/trace_events_hist.c 	C(TOO_MANY_SAVE_ACTIONS,"Can't have more than one save() action per hist"), \</span>
+<span class='curline'><a href='../S/291.html#L57'>C</a>                  57 trace/trace_events_hist.c 	C(ACTION_MISMATCH,	"Handler doesn't support action"),	\</span>
+<span class='curline'><a href='../S/291.html#L58'>C</a>                  58 trace/trace_events_hist.c 	C(NO_CLOSING_PAREN,	"No closing paren found"),		\</span>
+<span class='curline'><a href='../S/291.html#L59'>C</a>                  59 trace/trace_events_hist.c 	C(SUBSYS_NOT_FOUND,	"Missing subsystem"),			\</span>
+<span class='curline'><a href='../S/291.html#L60'>C</a>                  60 trace/trace_events_hist.c 	C(INVALID_SUBSYS_EVENT,	"Invalid subsystem or event name"),	\</span>
+<span class='curline'><a href='../S/291.html#L61'>C</a>                  61 trace/trace_events_hist.c 	C(INVALID_REF_KEY,	"Using variable references in keys not supported"), \</span>
+<span class='curline'><a href='../S/291.html#L62'>C</a>                  62 trace/trace_events_hist.c 	C(VAR_NOT_FOUND,	"Couldn't find variable"),		\</span>
+<span class='curline'><a href='../S/291.html#L63'>C</a>                  63 trace/trace_events_hist.c 	C(FIELD_NOT_FOUND,	"Couldn't find field"),			\</span>
+<span class='curline'><a href='../S/291.html#L64'>C</a>                  64 trace/trace_events_hist.c 	C(EMPTY_ASSIGNMENT,	"Empty assignment"),			\</span>
+<span class='curline'><a href='../S/291.html#L65'>C</a>                  65 trace/trace_events_hist.c 	C(INVALID_SORT_MODIFIER,"Invalid sort modifier"),		\</span>
+<span class='curline'><a href='../S/291.html#L66'>C</a>                  66 trace/trace_events_hist.c 	C(EMPTY_SORT_FIELD,	"Empty sort field"),			\</span>
+<span class='curline'><a href='../S/291.html#L67'>C</a>                  67 trace/trace_events_hist.c 	C(TOO_MANY_SORT_FIELDS,	"Too many sort fields (Max = 2)"),	\</span>
+<span class='curline'><a href='../S/291.html#L68'>C</a>                  68 trace/trace_events_hist.c 	C(INVALID_SORT_FIELD,	"Sort field must be a key or a val"),</span>
+<span class='curline'><a href='../S/255.html#L25'>C</a>                  25 trace/trace_events_synth.c 	C(BAD_NAME,		"Illegal name"),		\</span>
+<span class='curline'><a href='../S/255.html#L26'>C</a>                  26 trace/trace_events_synth.c 	C(CMD_INCOMPLETE,	"Incomplete command"),		\</span>
+<span class='curline'><a href='../S/255.html#L27'>C</a>                  27 trace/trace_events_synth.c 	C(EVENT_EXISTS,		"Event already exists"),	\</span>
+<span class='curline'><a href='../S/255.html#L28'>C</a>                  28 trace/trace_events_synth.c 	C(TOO_MANY_FIELDS,	"Too many fields"),		\</span>
+<span class='curline'><a href='../S/255.html#L29'>C</a>                  29 trace/trace_events_synth.c 	C(INCOMPLETE_TYPE,	"Incomplete type"),		\</span>
+<span class='curline'><a href='../S/255.html#L30'>C</a>                  30 trace/trace_events_synth.c 	C(INVALID_TYPE,		"Invalid type"),		\</span>
+<span class='curline'><a href='../S/255.html#L31'>C</a>                  31 trace/trace_events_synth.c 	C(INVALID_FIELD,	"Invalid field"),		\</span>
+<span class='curline'><a href='../S/255.html#L32'>C</a>                  32 trace/trace_events_synth.c 	C(CMD_TOO_LONG,		"Command too long"),</span>
+<span class='curline'><a href='../S/265.html#L383'>C</a>                 383 trace/trace_probe.h 	C(FILE_NOT_FOUND,	"Failed to find the given file"),	\</span>
+<span class='curline'><a href='../S/265.html#L384'>C</a>                 384 trace/trace_probe.h 	C(NO_REGULAR_FILE,	"Not a regular file"),			\</span>
+<span class='curline'><a href='../S/265.html#L385'>C</a>                 385 trace/trace_probe.h 	C(BAD_REFCNT,		"Invalid reference counter offset"),	\</span>
+<span class='curline'><a href='../S/265.html#L386'>C</a>                 386 trace/trace_probe.h 	C(REFCNT_OPEN_BRACE,	"Reference counter brace is not closed"), \</span>
+<span class='curline'><a href='../S/265.html#L387'>C</a>                 387 trace/trace_probe.h 	C(BAD_REFCNT_SUFFIX,	"Reference counter has wrong suffix"),	\</span>
+<span class='curline'><a href='../S/265.html#L388'>C</a>                 388 trace/trace_probe.h 	C(BAD_UPROBE_OFFS,	"Invalid uprobe offset"),		\</span>
+<span class='curline'><a href='../S/265.html#L389'>C</a>                 389 trace/trace_probe.h 	C(MAXACT_NO_KPROBE,	"Maxactive is not for kprobe"),		\</span>
+<span class='curline'><a href='../S/265.html#L390'>C</a>                 390 trace/trace_probe.h 	C(BAD_MAXACT,		"Invalid maxactive number"),		\</span>
+<span class='curline'><a href='../S/265.html#L391'>C</a>                 391 trace/trace_probe.h 	C(MAXACT_TOO_BIG,	"Maxactive is too big"),		\</span>
+<span class='curline'><a href='../S/265.html#L392'>C</a>                 392 trace/trace_probe.h 	C(BAD_PROBE_ADDR,	"Invalid probed address or symbol"),	\</span>
+<span class='curline'><a href='../S/265.html#L393'>C</a>                 393 trace/trace_probe.h 	C(BAD_RETPROBE,		"Retprobe address must be an function entry"), \</span>
+<span class='curline'><a href='../S/265.html#L394'>C</a>                 394 trace/trace_probe.h 	C(BAD_ADDR_SUFFIX,	"Invalid probed address suffix"), \</span>
+<span class='curline'><a href='../S/265.html#L395'>C</a>                 395 trace/trace_probe.h 	C(NO_GROUP_NAME,	"Group name is not specified"),		\</span>
+<span class='curline'><a href='../S/265.html#L396'>C</a>                 396 trace/trace_probe.h 	C(GROUP_TOO_LONG,	"Group name is too long"),		\</span>
+<span class='curline'><a href='../S/265.html#L397'>C</a>                 397 trace/trace_probe.h 	C(BAD_GROUP_NAME,	"Group name must follow the same rules as C identifiers"), \</span>
+<span class='curline'><a href='../S/265.html#L398'>C</a>                 398 trace/trace_probe.h 	C(NO_EVENT_NAME,	"Event name is not specified"),		\</span>
+<span class='curline'><a href='../S/265.html#L399'>C</a>                 399 trace/trace_probe.h 	C(EVENT_TOO_LONG,	"Event name is too long"),		\</span>
+<span class='curline'><a href='../S/265.html#L400'>C</a>                 400 trace/trace_probe.h 	C(BAD_EVENT_NAME,	"Event name must follow the same rules as C identifiers"), \</span>
+<span class='curline'><a href='../S/265.html#L401'>C</a>                 401 trace/trace_probe.h 	C(RETVAL_ON_PROBE,	"$retval is not available on probe"),	\</span>
+<span class='curline'><a href='../S/265.html#L402'>C</a>                 402 trace/trace_probe.h 	C(BAD_STACK_NUM,	"Invalid stack number"),		\</span>
+<span class='curline'><a href='../S/265.html#L403'>C</a>                 403 trace/trace_probe.h 	C(BAD_ARG_NUM,		"Invalid argument number"),		\</span>
+<span class='curline'><a href='../S/265.html#L404'>C</a>                 404 trace/trace_probe.h 	C(BAD_VAR,		"Invalid $-valiable specified"),	\</span>
+<span class='curline'><a href='../S/265.html#L405'>C</a>                 405 trace/trace_probe.h 	C(BAD_REG_NAME,		"Invalid register name"),		\</span>
+<span class='curline'><a href='../S/265.html#L406'>C</a>                 406 trace/trace_probe.h 	C(BAD_MEM_ADDR,		"Invalid memory address"),		\</span>
+<span class='curline'><a href='../S/265.html#L407'>C</a>                 407 trace/trace_probe.h 	C(BAD_IMM,		"Invalid immediate value"),		\</span>
+<span class='curline'><a href='../S/265.html#L408'>C</a>                 408 trace/trace_probe.h 	C(IMMSTR_NO_CLOSE,	"String is not closed with '\"'"),	\</span>
+<span class='curline'><a href='../S/265.html#L409'>C</a>                 409 trace/trace_probe.h 	C(FILE_ON_KPROBE,	"File offset is not available with kprobe"), \</span>
+<span class='curline'><a href='../S/265.html#L410'>C</a>                 410 trace/trace_probe.h 	C(BAD_FILE_OFFS,	"Invalid file offset value"),		\</span>
+<span class='curline'><a href='../S/265.html#L411'>C</a>                 411 trace/trace_probe.h 	C(SYM_ON_UPROBE,	"Symbol is not available with uprobe"),	\</span>
+<span class='curline'><a href='../S/265.html#L412'>C</a>                 412 trace/trace_probe.h 	C(TOO_MANY_OPS,		"Dereference is too much nested"), 	\</span>
+<span class='curline'><a href='../S/265.html#L413'>C</a>                 413 trace/trace_probe.h 	C(DEREF_NEED_BRACE,	"Dereference needs a brace"),		\</span>
+<span class='curline'><a href='../S/265.html#L414'>C</a>                 414 trace/trace_probe.h 	C(BAD_DEREF_OFFS,	"Invalid dereference offset"),		\</span>
+<span class='curline'><a href='../S/265.html#L415'>C</a>                 415 trace/trace_probe.h 	C(DEREF_OPEN_BRACE,	"Dereference brace is not closed"),	\</span>
+<span class='curline'><a href='../S/265.html#L416'>C</a>                 416 trace/trace_probe.h 	C(COMM_CANT_DEREF,	"$comm can not be dereferenced"),	\</span>
+<span class='curline'><a href='../S/265.html#L417'>C</a>                 417 trace/trace_probe.h 	C(BAD_FETCH_ARG,	"Invalid fetch argument"),		\</span>
+<span class='curline'><a href='../S/265.html#L418'>C</a>                 418 trace/trace_probe.h 	C(ARRAY_NO_CLOSE,	"Array is not closed"),			\</span>
+<span class='curline'><a href='../S/265.html#L419'>C</a>                 419 trace/trace_probe.h 	C(BAD_ARRAY_SUFFIX,	"Array has wrong suffix"),		\</span>
+<span class='curline'><a href='../S/265.html#L420'>C</a>                 420 trace/trace_probe.h 	C(BAD_ARRAY_NUM,	"Invalid array size"),			\</span>
+<span class='curline'><a href='../S/265.html#L421'>C</a>                 421 trace/trace_probe.h 	C(ARRAY_TOO_BIG,	"Array number is too big"),		\</span>
+<span class='curline'><a href='../S/265.html#L422'>C</a>                 422 trace/trace_probe.h 	C(BAD_TYPE,		"Unknown type is specified"),		\</span>
+<span class='curline'><a href='../S/265.html#L423'>C</a>                 423 trace/trace_probe.h 	C(BAD_STRING,		"String accepts only memory argument"),	\</span>
+<span class='curline'><a href='../S/265.html#L424'>C</a>                 424 trace/trace_probe.h 	C(BAD_BITFIELD,		"Invalid bitfield"),			\</span>
+<span class='curline'><a href='../S/265.html#L425'>C</a>                 425 trace/trace_probe.h 	C(ARG_NAME_TOO_LONG,	"Argument name is too long"),		\</span>
+<span class='curline'><a href='../S/265.html#L426'>C</a>                 426 trace/trace_probe.h 	C(NO_ARG_NAME,		"Argument name is not specified"),	\</span>
+<span class='curline'><a href='../S/265.html#L427'>C</a>                 427 trace/trace_probe.h 	C(BAD_ARG_NAME,		"Argument name must follow the same rules as C identifiers"), \</span>
+<span class='curline'><a href='../S/265.html#L428'>C</a>                 428 trace/trace_probe.h 	C(USED_ARG_NAME,	"This argument name is already used"),	\</span>
+<span class='curline'><a href='../S/265.html#L429'>C</a>                 429 trace/trace_probe.h 	C(ARG_TOO_LONG,		"Argument expression is too long"),	\</span>
+<span class='curline'><a href='../S/265.html#L430'>C</a>                 430 trace/trace_probe.h 	C(NO_ARG_BODY,		"No argument expression"),		\</span>
+<span class='curline'><a href='../S/265.html#L431'>C</a>                 431 trace/trace_probe.h 	C(BAD_INSN_BNDRY,	"Probe point is not an instruction boundary"),\</span>
+<span class='curline'><a href='../S/265.html#L432'>C</a>                 432 trace/trace_probe.h 	C(FAIL_REG_PROBE,	"Failed to register probe event"),\</span>
+<span class='curline'><a href='../S/265.html#L433'>C</a>                 433 trace/trace_probe.h 	C(DIFF_PROBE_TYPE,	"Probe type is different from existing probe"),\</span>
+<span class='curline'><a href='../S/265.html#L434'>C</a>                 434 trace/trace_probe.h 	C(DIFF_ARG_TYPE,	"Argument type or name is different from existing probe"),\</span>
+<span class='curline'><a href='../S/265.html#L435'>C</a>                 435 trace/trace_probe.h 	C(SAME_PROBE,		"There is already the exact same probe event"),</span>
+</pre>
+</body>
+</html>

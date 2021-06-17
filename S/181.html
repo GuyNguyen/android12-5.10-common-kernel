@@ -1,0 +1,587 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>audit_watch.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/audit_watch.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L58'>[^]</a><a href='#L524'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L58' title='Defined at 58.'>audit_free_parent</a></li>
+<li><a href='#L64' title='Defined at 64.'>audit_watch_free_mark</a></li>
+<li><a href='#L72' title='Defined at 72.'>audit_get_parent</a></li>
+<li><a href='#L78' title='Defined at 78.'>audit_put_parent</a></li>
+<li><a href='#L88' title='Defined at 88.'>audit_find_parent</a></li>
+<li><a href='#L100' title='Defined at 100.'>audit_get_watch</a></li>
+<li><a href='#L105' title='Defined at 105.'>audit_put_watch</a></li>
+<li><a href='#L115' title='Defined at 115.'>audit_remove_watch</a></li>
+<li><a href='#L123' title='Defined at 123.'>audit_watch_path</a></li>
+<li><a href='#L128' title='Defined at 128.'>audit_watch_compare</a></li>
+<li><a href='#L136' title='Defined at 136.'>audit_init_parent</a></li>
+<li><a href='#L160' title='Defined at 160.'>audit_init_watch</a></li>
+<li><a href='#L178' title='Defined at 178.'>audit_to_watch</a></li>
+<li><a href='#L202' title='Defined at 202.'>audit_dupe_watch</a></li>
+<li><a href='#L226' title='Defined at 226.'>audit_watch_log_rule_change</a></li>
+<li><a href='#L244' title='Defined at 244.'>audit_update_watch</a></li>
+<li><a href='#L321' title='Defined at 321.'>audit_remove_parent_watches</a></li>
+<li><a href='#L347' title='Defined at 347.'>audit_get_nd</a></li>
+<li><a href='#L364' title='Defined at 364.'>audit_add_to_parent</a></li>
+<li><a href='#L399' title='Defined at 399.'>audit_add_watch</a></li>
+<li><a href='#L446' title='Defined at 446.'>audit_remove_watch_rule</a></li>
+<li><a href='#L467' title='Defined at 467.'>audit_watch_handle_event</a></li>
+<li><a href='#L494' title='Defined at 494.'>audit_watch_init</a></li>
+<li><a href='#L505' title='Defined at 505.'>audit_dupe_exe</a></li>
+<li><a href='#L524' title='Defined at 524.'>audit_exe_compare</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0-or-later</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/* audit_watch.c -- watching inodes</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> *</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> * Copyright 2003-2009 Red Hat, Inc.</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * Copyright 2005 Hewlett-Packard Development Company, L.P.</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> * Copyright 2005 IBM Corporation</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> */</em>
+<a id='L8' name='L8'></a>   8 
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> &lt;linux/file.h&gt;
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;linux/kernel.h&gt;
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;<a href='120.html'>linux/audit.h</a>&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;linux/kthread.h&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;<a href='34.html'>linux/mutex.h</a>&gt;
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> &lt;linux/fs.h&gt;
+<a id='L15' name='L15'></a>  15 <em class='sharp'>#include</em> &lt;linux/fsnotify_backend.h&gt;
+<a id='L16' name='L16'></a>  16 <em class='sharp'>#include</em> &lt;linux/namei.h&gt;
+<a id='L17' name='L17'></a>  17 <em class='sharp'>#include</em> &lt;linux/netlink.h&gt;
+<a id='L18' name='L18'></a>  18 <em class='sharp'>#include</em> &lt;linux/refcount.h&gt;
+<a id='L19' name='L19'></a>  19 <em class='sharp'>#include</em> &lt;<a href='447.html'>linux/sched.h</a>&gt;
+<a id='L20' name='L20'></a>  20 <em class='sharp'>#include</em> &lt;linux/slab.h&gt;
+<a id='L21' name='L21'></a>  21 <em class='sharp'>#include</em> &lt;linux/security.h&gt;
+<a id='L22' name='L22'></a>  22 <em class='sharp'>#include</em> "<a href='120.html'>audit.h</a>"
+<a id='L23' name='L23'></a>  23 
+<a id='L24' name='L24'></a>  24 <em class='comment'>/*</em>
+<a id='L25' name='L25'></a>  25 <em class='comment'> * Reference counting:</em>
+<a id='L26' name='L26'></a>  26 <em class='comment'> *</em>
+<a id='L27' name='L27'></a>  27 <em class='comment'> * audit_parent: lifetime is from audit_init_parent() to receipt of an FS_IGNORED</em>
+<a id='L28' name='L28'></a>  28 <em class='comment'> *      event.  Each audit_watch holds a reference to its associated parent.</em>
+<a id='L29' name='L29'></a>  29 <em class='comment'> *</em>
+<a id='L30' name='L30'></a>  30 <em class='comment'> * audit_watch: if added to lists, lifetime is from audit_init_watch() to</em>
+<a id='L31' name='L31'></a>  31 <em class='comment'> *      audit_remove_watch().  Additionally, an audit_watch may exist</em>
+<a id='L32' name='L32'></a>  32 <em class='comment'> *      temporarily to assist in searching existing filter data.  Each</em>
+<a id='L33' name='L33'></a>  33 <em class='comment'> *      audit_krule holds a reference to its associated watch.</em>
+<a id='L34' name='L34'></a>  34 <em class='comment'> */</em>
+<a id='L35' name='L35'></a>  35 
+<a id='L36' name='L36'></a>  36 <strong class='reserved'>struct</strong> <a href='../R/3308.html' title='Multiple referred from 23 places.'>audit_watch</a> <em class='brace'>{</em>
+<a id='L37' name='L37'></a>  37         refcount_t              count;  <em class='comment'>/* reference count */</em>
+<a id='L38' name='L38'></a>  38         dev_t                   dev;    <em class='comment'>/* associated superblock device */</em>
+<a id='L39' name='L39'></a>  39         <strong class='reserved'>char</strong>                    *path;  <em class='comment'>/* insertion path */</em>
+<a id='L40' name='L40'></a>  40         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>           ino;    <em class='comment'>/* associated inode number */</em>
+<a id='L41' name='L41'></a>  41         <strong class='reserved'>struct</strong> <a href='../S/181.html#L46' title='Defined at 46 in audit_watch.c.'>audit_parent</a>     *<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>; <em class='comment'>/* associated parent */</em>
+<a id='L42' name='L42'></a>  42         <strong class='reserved'>struct</strong> list_head        wlist;  <em class='comment'>/* entry in parent-&gt;watches list */</em>
+<a id='L43' name='L43'></a>  43         <strong class='reserved'>struct</strong> list_head        rules;  <em class='comment'>/* anchor for krule-&gt;rlist */</em>
+<a id='L44' name='L44'></a>  44 <em class='brace'>}</em>;
+<a id='L45' name='L45'></a>  45 
+<a id='L46' name='L46'></a>  46 <strong class='reserved'>struct</strong> <a href='../R/3247.html' title='Multiple referred from 18 places.'>audit_parent</a> <em class='brace'>{</em>
+<a id='L47' name='L47'></a>  47         <strong class='reserved'>struct</strong> list_head        watches; <em class='comment'>/* anchor for audit_watch-&gt;wlist */</em>
+<a id='L48' name='L48'></a>  48         <strong class='reserved'>struct</strong> fsnotify_mark mark; <em class='comment'>/* fsnotify mark on the inode */</em>
+<a id='L49' name='L49'></a>  49 <em class='brace'>}</em>;
+<a id='L50' name='L50'></a>  50 
+<a id='L51' name='L51'></a>  51 <em class='comment'>/* fsnotify handle. */</em>
+<a id='L52' name='L52'></a>  52 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> fsnotify_group *audit_watch_group;
+<a id='L53' name='L53'></a>  53 
+<a id='L54' name='L54'></a>  54 <em class='comment'>/* fsnotify events we care about. */</em>
+<a id='L55' name='L55'></a>  55 <em class='sharp'>#define</em> <a href='../S/181.html#L149' title='Referred from 149 in audit_watch.c.'>AUDIT_FS_WATCH</a> (FS_MOVE | FS_CREATE | FS_DELETE | FS_DELETE_SELF |\
+<a id='L56' name='L56'></a>  56                         FS_MOVE_SELF | FS_UNMOUNT)
+<a id='L57' name='L57'></a>  57 
+<a id='L58' name='L58'></a>  58 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/3163.html' title='Multiple referred from 2 places.'>audit_free_parent</a>(<strong class='reserved'>struct</strong> <a href='../S/181.html#L46' title='Defined at 46 in audit_watch.c.'>audit_parent</a> *<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>)
+<a id='L59' name='L59'></a>  59 <em class='brace'>{</em>
+<a id='L60' name='L60'></a>  60         WARN_ON(!list_empty(&amp;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>-&gt;watches));
+<a id='L61' name='L61'></a>  61         kfree(<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>);
+<a id='L62' name='L62'></a>  62 <em class='brace'>}</em>
+<a id='L63' name='L63'></a>  63 
+<a id='L64' name='L64'></a>  64 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/181.html#L491' title='Referred from 491 in audit_watch.c.'>audit_watch_free_mark</a>(<strong class='reserved'>struct</strong> fsnotify_mark *entry)
+<a id='L65' name='L65'></a>  65 <em class='brace'>{</em>
+<a id='L66' name='L66'></a>  66         <strong class='reserved'>struct</strong> <a href='../S/181.html#L46' title='Defined at 46 in audit_watch.c.'>audit_parent</a> *<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>;
+<a id='L67' name='L67'></a>  67 
+<a id='L68' name='L68'></a>  68         <a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a> = container_of(entry, <strong class='reserved'>struct</strong> <a href='../S/181.html#L46' title='Defined at 46 in audit_watch.c.'>audit_parent</a>, mark);
+<a id='L69' name='L69'></a>  69         <a href='../S/181.html#L58' title='Defined at 58 in audit_watch.c.'>audit_free_parent</a>(<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>);
+<a id='L70' name='L70'></a>  70 <em class='brace'>}</em>
+<a id='L71' name='L71'></a>  71 
+<a id='L72' name='L72'></a>  72 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/3173.html' title='Multiple referred from 2 places.'>audit_get_parent</a>(<strong class='reserved'>struct</strong> <a href='../S/181.html#L46' title='Defined at 46 in audit_watch.c.'>audit_parent</a> *<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>)
+<a id='L73' name='L73'></a>  73 <em class='brace'>{</em>
+<a id='L74' name='L74'></a>  74         <strong class='reserved'>if</strong> (likely(<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>))
+<a id='L75' name='L75'></a>  75                 fsnotify_get_mark(&amp;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>-&gt;mark);
+<a id='L76' name='L76'></a>  76 <em class='brace'>}</em>
+<a id='L77' name='L77'></a>  77 
+<a id='L78' name='L78'></a>  78 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/3252.html' title='Multiple referred from 3 places.'>audit_put_parent</a>(<strong class='reserved'>struct</strong> <a href='../S/181.html#L46' title='Defined at 46 in audit_watch.c.'>audit_parent</a> *<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>)
+<a id='L79' name='L79'></a>  79 <em class='brace'>{</em>
+<a id='L80' name='L80'></a>  80         <strong class='reserved'>if</strong> (likely(<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>))
+<a id='L81' name='L81'></a>  81                 fsnotify_put_mark(&amp;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>-&gt;mark);
+<a id='L82' name='L82'></a>  82 <em class='brace'>}</em>
+<a id='L83' name='L83'></a>  83 
+<a id='L84' name='L84'></a>  84 <em class='comment'>/*</em>
+<a id='L85' name='L85'></a>  85 <em class='comment'> * Find and return the audit_parent on the given inode.  If found a reference</em>
+<a id='L86' name='L86'></a>  86 <em class='comment'> * is taken on this parent.</em>
+<a id='L87' name='L87'></a>  87 <em class='comment'> */</em>
+<a id='L88' name='L88'></a>  88 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>struct</strong> <a href='../S/181.html#L46' title='Defined at 46 in audit_watch.c.'>audit_parent</a> *<a href='../S/181.html#L427' title='Referred from 427 in audit_watch.c.'>audit_find_parent</a>(<strong class='reserved'>struct</strong> inode *inode)
+<a id='L89' name='L89'></a>  89 <em class='brace'>{</em>
+<a id='L90' name='L90'></a>  90         <strong class='reserved'>struct</strong> <a href='../S/181.html#L46' title='Defined at 46 in audit_watch.c.'>audit_parent</a> *<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a> = NULL;
+<a id='L91' name='L91'></a>  91         <strong class='reserved'>struct</strong> fsnotify_mark *entry;
+<a id='L92' name='L92'></a>  92 
+<a id='L93' name='L93'></a>  93         entry = fsnotify_find_mark(&amp;inode-&gt;i_fsnotify_marks, audit_watch_group);
+<a id='L94' name='L94'></a>  94         <strong class='reserved'>if</strong> (entry)
+<a id='L95' name='L95'></a>  95                 <a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a> = container_of(entry, <strong class='reserved'>struct</strong> <a href='../S/181.html#L46' title='Defined at 46 in audit_watch.c.'>audit_parent</a>, mark);
+<a id='L96' name='L96'></a>  96 
+<a id='L97' name='L97'></a>  97         <strong class='reserved'>return</strong> <a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>;
+<a id='L98' name='L98'></a>  98 <em class='brace'>}</em>
+<a id='L99' name='L99'></a>  99 
+<a id='L100' name='L100'></a> 100 <strong class='reserved'>void</strong> <a href='../R/3177.html' title='Multiple referred from 6 places.'>audit_get_watch</a>(<strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *watch)
+<a id='L101' name='L101'></a> 101 <em class='brace'>{</em>
+<a id='L102' name='L102'></a> 102         refcount_inc(&amp;watch-&gt;count);
+<a id='L103' name='L103'></a> 103 <em class='brace'>}</em>
+<a id='L104' name='L104'></a> 104 
+<a id='L105' name='L105'></a> 105 <strong class='reserved'>void</strong> <a href='../R/3255.html' title='Multiple referred from 7 places.'>audit_put_watch</a>(<strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *watch)
+<a id='L106' name='L106'></a> 106 <em class='brace'>{</em>
+<a id='L107' name='L107'></a> 107         <strong class='reserved'>if</strong> (refcount_dec_and_test(&amp;watch-&gt;count)) <em class='brace'>{</em>
+<a id='L108' name='L108'></a> 108                 WARN_ON(watch-&gt;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>);
+<a id='L109' name='L109'></a> 109                 WARN_ON(!list_empty(&amp;watch-&gt;rules));
+<a id='L110' name='L110'></a> 110                 kfree(watch-&gt;path);
+<a id='L111' name='L111'></a> 111                 kfree(watch);
+<a id='L112' name='L112'></a> 112         <em class='brace'>}</em>
+<a id='L113' name='L113'></a> 113 <em class='brace'>}</em>
+<a id='L114' name='L114'></a> 114 
+<a id='L115' name='L115'></a> 115 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/3263.html' title='Multiple referred from 3 places.'>audit_remove_watch</a>(<strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *watch)
+<a id='L116' name='L116'></a> 116 <em class='brace'>{</em>
+<a id='L117' name='L117'></a> 117         list_del(&amp;watch-&gt;wlist);
+<a id='L118' name='L118'></a> 118         <a href='../S/181.html#L78' title='Defined at 78 in audit_watch.c.'>audit_put_parent</a>(watch-&gt;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>);
+<a id='L119' name='L119'></a> 119         watch-&gt;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a> = NULL;
+<a id='L120' name='L120'></a> 120         <a href='../D/3475.html' title='Multiple defined in 2 places.'>audit_put_watch</a>(watch); <em class='comment'>/* match initial get */</em>
+<a id='L121' name='L121'></a> 121 <em class='brace'>}</em>
+<a id='L122' name='L122'></a> 122 
+<a id='L123' name='L123'></a> 123 <strong class='reserved'>char</strong> *<a href='../R/3314.html' title='Multiple referred from 4 places.'>audit_watch_path</a>(<strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *watch)
+<a id='L124' name='L124'></a> 124 <em class='brace'>{</em>
+<a id='L125' name='L125'></a> 125         <strong class='reserved'>return</strong> watch-&gt;path;
+<a id='L126' name='L126'></a> 126 <em class='brace'>}</em>
+<a id='L127' name='L127'></a> 127 
+<a id='L128' name='L128'></a> 128 <strong class='reserved'>int</strong> <a href='../R/3309.html' title='Multiple referred from 2 places.'>audit_watch_compare</a>(<strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *watch, <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> ino, dev_t dev)
+<a id='L129' name='L129'></a> 129 <em class='brace'>{</em>
+<a id='L130' name='L130'></a> 130         <strong class='reserved'>return</strong> (watch-&gt;ino != AUDIT_INO_UNSET) &amp;&amp;
+<a id='L131' name='L131'></a> 131                 (watch-&gt;ino == ino) &amp;&amp;
+<a id='L132' name='L132'></a> 132                 (watch-&gt;dev == dev);
+<a id='L133' name='L133'></a> 133 <em class='brace'>}</em>
+<a id='L134' name='L134'></a> 134 
+<a id='L135' name='L135'></a> 135 <em class='comment'>/* Initialize a parent watch entry. */</em>
+<a id='L136' name='L136'></a> 136 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../S/181.html#L46' title='Defined at 46 in audit_watch.c.'>audit_parent</a> *<a href='../S/181.html#L429' title='Referred from 429 in audit_watch.c.'>audit_init_parent</a>(<strong class='reserved'>struct</strong> path *path)
+<a id='L137' name='L137'></a> 137 <em class='brace'>{</em>
+<a id='L138' name='L138'></a> 138         <strong class='reserved'>struct</strong> inode *inode = d_backing_inode(path-&gt;dentry);
+<a id='L139' name='L139'></a> 139         <strong class='reserved'>struct</strong> <a href='../S/181.html#L46' title='Defined at 46 in audit_watch.c.'>audit_parent</a> *<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>;
+<a id='L140' name='L140'></a> 140         <strong class='reserved'>int</strong> ret;
+<a id='L141' name='L141'></a> 141 
+<a id='L142' name='L142'></a> 142         <a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a> = kzalloc(<strong class='reserved'>sizeof</strong>(*<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>), GFP_KERNEL);
+<a id='L143' name='L143'></a> 143         <strong class='reserved'>if</strong> (unlikely(!<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>))
+<a id='L144' name='L144'></a> 144                 <strong class='reserved'>return</strong> ERR_PTR(-ENOMEM);
+<a id='L145' name='L145'></a> 145 
+<a id='L146' name='L146'></a> 146         INIT_LIST_HEAD(&amp;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>-&gt;watches);
+<a id='L147' name='L147'></a> 147 
+<a id='L148' name='L148'></a> 148         fsnotify_init_mark(&amp;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>-&gt;mark, audit_watch_group);
+<a id='L149' name='L149'></a> 149         <a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>-&gt;mark.mask = <a href='../S/181.html#L55' title='Defined at 55 in audit_watch.c.'>AUDIT_FS_WATCH</a>;
+<a id='L150' name='L150'></a> 150         ret = fsnotify_add_inode_mark(&amp;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>-&gt;mark, inode, 0);
+<a id='L151' name='L151'></a> 151         <strong class='reserved'>if</strong> (ret &lt; 0) <em class='brace'>{</em>
+<a id='L152' name='L152'></a> 152                 <a href='../S/181.html#L58' title='Defined at 58 in audit_watch.c.'>audit_free_parent</a>(<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>);
+<a id='L153' name='L153'></a> 153                 <strong class='reserved'>return</strong> ERR_PTR(ret);
+<a id='L154' name='L154'></a> 154         <em class='brace'>}</em>
+<a id='L155' name='L155'></a> 155 
+<a id='L156' name='L156'></a> 156         <strong class='reserved'>return</strong> <a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>;
+<a id='L157' name='L157'></a> 157 <em class='brace'>}</em>
+<a id='L158' name='L158'></a> 158 
+<a id='L159' name='L159'></a> 159 <em class='comment'>/* Initialize a watch entry. */</em>
+<a id='L160' name='L160'></a> 160 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *<a href='../R/3184.html' title='Multiple referred from 2 places.'>audit_init_watch</a>(<strong class='reserved'>char</strong> *path)
+<a id='L161' name='L161'></a> 161 <em class='brace'>{</em>
+<a id='L162' name='L162'></a> 162         <strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *watch;
+<a id='L163' name='L163'></a> 163 
+<a id='L164' name='L164'></a> 164         watch = kzalloc(<strong class='reserved'>sizeof</strong>(*watch), GFP_KERNEL);
+<a id='L165' name='L165'></a> 165         <strong class='reserved'>if</strong> (unlikely(!watch))
+<a id='L166' name='L166'></a> 166                 <strong class='reserved'>return</strong> ERR_PTR(-ENOMEM);
+<a id='L167' name='L167'></a> 167 
+<a id='L168' name='L168'></a> 168         INIT_LIST_HEAD(&amp;watch-&gt;rules);
+<a id='L169' name='L169'></a> 169         refcount_set(&amp;watch-&gt;count, 1);
+<a id='L170' name='L170'></a> 170         watch-&gt;path = path;
+<a id='L171' name='L171'></a> 171         watch-&gt;dev = AUDIT_DEV_UNSET;
+<a id='L172' name='L172'></a> 172         watch-&gt;ino = AUDIT_INO_UNSET;
+<a id='L173' name='L173'></a> 173 
+<a id='L174' name='L174'></a> 174         <strong class='reserved'>return</strong> watch;
+<a id='L175' name='L175'></a> 175 <em class='brace'>}</em>
+<a id='L176' name='L176'></a> 176 
+<a id='L177' name='L177'></a> 177 <em class='comment'>/* Translate a watch string to kernel representation. */</em>
+<a id='L178' name='L178'></a> 178 <strong class='reserved'>int</strong> <a href='../R/3291.html' title='Multiple referred from 2 places.'>audit_to_watch</a>(<strong class='reserved'>struct</strong> audit_krule *krule, <strong class='reserved'>char</strong> *path, <strong class='reserved'>int</strong> len, u32 op)
+<a id='L179' name='L179'></a> 179 <em class='brace'>{</em>
+<a id='L180' name='L180'></a> 180         <strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *watch;
+<a id='L181' name='L181'></a> 181 
+<a id='L182' name='L182'></a> 182         <strong class='reserved'>if</strong> (!audit_watch_group)
+<a id='L183' name='L183'></a> 183                 <strong class='reserved'>return</strong> -EOPNOTSUPP;
+<a id='L184' name='L184'></a> 184 
+<a id='L185' name='L185'></a> 185         <strong class='reserved'>if</strong> (path[0] != '/' || path[len-1] == '/' ||
+<a id='L186' name='L186'></a> 186             krule-&gt;listnr != AUDIT_FILTER_EXIT ||
+<a id='L187' name='L187'></a> 187             op != Audit_equal ||
+<a id='L188' name='L188'></a> 188             krule-&gt;inode_f || krule-&gt;watch || krule-&gt;tree)
+<a id='L189' name='L189'></a> 189                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L190' name='L190'></a> 190 
+<a id='L191' name='L191'></a> 191         watch = <a href='../S/181.html#L160' title='Defined at 160 in audit_watch.c.'>audit_init_watch</a>(path);
+<a id='L192' name='L192'></a> 192         <strong class='reserved'>if</strong> (IS_ERR(watch))
+<a id='L193' name='L193'></a> 193                 <strong class='reserved'>return</strong> PTR_ERR(watch);
+<a id='L194' name='L194'></a> 194 
+<a id='L195' name='L195'></a> 195         krule-&gt;watch = watch;
+<a id='L196' name='L196'></a> 196 
+<a id='L197' name='L197'></a> 197         <strong class='reserved'>return</strong> 0;
+<a id='L198' name='L198'></a> 198 <em class='brace'>}</em>
+<a id='L199' name='L199'></a> 199 
+<a id='L200' name='L200'></a> 200 <em class='comment'>/* Duplicate the given audit watch.  The new watch's rules list is initialized</em>
+<a id='L201' name='L201'></a> 201 <em class='comment'> * to an empty list and wlist is undefined. */</em>
+<a id='L202' name='L202'></a> 202 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *<a href='../S/181.html#L267' title='Referred from 267 in audit_watch.c.'>audit_dupe_watch</a>(<strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *old)
+<a id='L203' name='L203'></a> 203 <em class='brace'>{</em>
+<a id='L204' name='L204'></a> 204         <strong class='reserved'>char</strong> *path;
+<a id='L205' name='L205'></a> 205         <strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *new;
+<a id='L206' name='L206'></a> 206 
+<a id='L207' name='L207'></a> 207         path = kstrdup(old-&gt;path, GFP_KERNEL);
+<a id='L208' name='L208'></a> 208         <strong class='reserved'>if</strong> (unlikely(!path))
+<a id='L209' name='L209'></a> 209                 <strong class='reserved'>return</strong> ERR_PTR(-ENOMEM);
+<a id='L210' name='L210'></a> 210 
+<a id='L211' name='L211'></a> 211         new = <a href='../S/181.html#L160' title='Defined at 160 in audit_watch.c.'>audit_init_watch</a>(path);
+<a id='L212' name='L212'></a> 212         <strong class='reserved'>if</strong> (IS_ERR(new)) <em class='brace'>{</em>
+<a id='L213' name='L213'></a> 213                 kfree(path);
+<a id='L214' name='L214'></a> 214                 <strong class='reserved'>goto</strong> out;
+<a id='L215' name='L215'></a> 215         <em class='brace'>}</em>
+<a id='L216' name='L216'></a> 216 
+<a id='L217' name='L217'></a> 217         new-&gt;dev = old-&gt;dev;
+<a id='L218' name='L218'></a> 218         new-&gt;ino = old-&gt;ino;
+<a id='L219' name='L219'></a> 219         <a href='../S/181.html#L72' title='Defined at 72 in audit_watch.c.'>audit_get_parent</a>(old-&gt;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>);
+<a id='L220' name='L220'></a> 220         new-&gt;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a> = old-&gt;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>;
+<a id='L221' name='L221'></a> 221 
+<a id='L222' name='L222'></a> 222 out:
+<a id='L223' name='L223'></a> 223         <strong class='reserved'>return</strong> new;
+<a id='L224' name='L224'></a> 224 <em class='brace'>}</em>
+<a id='L225' name='L225'></a> 225 
+<a id='L226' name='L226'></a> 226 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/181.html#L331' title='Referred from 331 in audit_watch.c.'>audit_watch_log_rule_change</a>(<strong class='reserved'>struct</strong> audit_krule *r, <strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *w, <strong class='reserved'>char</strong> *op)
+<a id='L227' name='L227'></a> 227 <em class='brace'>{</em>
+<a id='L228' name='L228'></a> 228         <strong class='reserved'>struct</strong> <a href='../S/162.html#L199' title='Defined at 199 in audit.c.'>audit_buffer</a> *ab;
+<a id='L229' name='L229'></a> 229 
+<a id='L230' name='L230'></a> 230         <strong class='reserved'>if</strong> (!audit_enabled)
+<a id='L231' name='L231'></a> 231                 <strong class='reserved'>return</strong>;
+<a id='L232' name='L232'></a> 232         ab = <a href='../S/162.html#L1809' title='Defined at 1809 in audit.c.'>audit_log_start</a>(<a href='../S/120.html#L98' title='Defined at 98 in audit.h.'>audit_context</a>(), GFP_NOFS, AUDIT_CONFIG_CHANGE);
+<a id='L233' name='L233'></a> 233         <strong class='reserved'>if</strong> (!ab)
+<a id='L234' name='L234'></a> 234                 <strong class='reserved'>return</strong>;
+<a id='L235' name='L235'></a> 235         <a href='../S/162.html#L2108' title='Defined at 2108 in audit.c.'>audit_log_session_info</a>(ab);
+<a id='L236' name='L236'></a> 236         <a href='../S/162.html#L1950' title='Defined at 1950 in audit.c.'>audit_log_format</a>(ab, "op=%s path=", op);
+<a id='L237' name='L237'></a> 237         <a href='../S/162.html#L2079' title='Defined at 2079 in audit.c.'>audit_log_untrustedstring</a>(ab, w-&gt;path);
+<a id='L238' name='L238'></a> 238         <a href='../S/162.html#L2116' title='Defined at 2116 in audit.c.'>audit_log_key</a>(ab, r-&gt;filterkey);
+<a id='L239' name='L239'></a> 239         <a href='../S/162.html#L1950' title='Defined at 1950 in audit.c.'>audit_log_format</a>(ab, " list=%d res=1", r-&gt;listnr);
+<a id='L240' name='L240'></a> 240         <a href='../S/162.html#L2368' title='Defined at 2368 in audit.c.'>audit_log_end</a>(ab);
+<a id='L241' name='L241'></a> 241 <em class='brace'>}</em>
+<a id='L242' name='L242'></a> 242 
+<a id='L243' name='L243'></a> 243 <em class='comment'>/* Update inode info in audit rules based on filesystem event. */</em>
+<a id='L244' name='L244'></a> 244 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/3307.html' title='Multiple referred from 2 places.'>audit_update_watch</a>(<strong class='reserved'>struct</strong> <a href='../S/181.html#L46' title='Defined at 46 in audit_watch.c.'>audit_parent</a> *<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>,
+<a id='L245' name='L245'></a> 245                                <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> qstr *dname, dev_t dev,
+<a id='L246' name='L246'></a> 246                                <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> ino, <strong class='reserved'>unsigned</strong> invalidating)
+<a id='L247' name='L247'></a> 247 <em class='brace'>{</em>
+<a id='L248' name='L248'></a> 248         <strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *owatch, *nwatch, *nextw;
+<a id='L249' name='L249'></a> 249         <strong class='reserved'>struct</strong> audit_krule *r, *nextr;
+<a id='L250' name='L250'></a> 250         <strong class='reserved'>struct</strong> <a href='../S/120.html#L45' title='Defined at 45 in audit.h.'>audit_entry</a> *oentry, *nentry;
+<a id='L251' name='L251'></a> 251 
+<a id='L252' name='L252'></a> 252         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;audit_filter_mutex);
+<a id='L253' name='L253'></a> 253         <em class='comment'>/* Run all of the watches on this parent looking for the one that</em>
+<a id='L254' name='L254'></a> 254 <em class='comment'>         * matches the given dname */</em>
+<a id='L255' name='L255'></a> 255         list_for_each_entry_safe(owatch, nextw, &amp;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>-&gt;watches, wlist) <em class='brace'>{</em>
+<a id='L256' name='L256'></a> 256                 <strong class='reserved'>if</strong> (<a href='../S/219.html#L1301' title='Defined at 1301 in auditfilter.c.'>audit_compare_dname_path</a>(dname, owatch-&gt;path,
+<a id='L257' name='L257'></a> 257                                              <a href='../S/120.html#L214' title='Defined at 214 in audit.h.'>AUDIT_NAME_FULL</a>))
+<a id='L258' name='L258'></a> 258                         <strong class='reserved'>continue</strong>;
+<a id='L259' name='L259'></a> 259 
+<a id='L260' name='L260'></a> 260                 <em class='comment'>/* If the update involves invalidating rules, do the inode-based</em>
+<a id='L261' name='L261'></a> 261 <em class='comment'>                 * filtering now, so we don't omit records. */</em>
+<a id='L262' name='L262'></a> 262                 <strong class='reserved'>if</strong> (invalidating &amp;&amp; !audit_dummy_context())
+<a id='L263' name='L263'></a> 263                         <a href='../D/3371.html' title='Multiple defined in 2 places.'>audit_filter_inodes</a>(current, <a href='../S/120.html#L98' title='Defined at 98 in audit.h.'>audit_context</a>());
+<a id='L264' name='L264'></a> 264 
+<a id='L265' name='L265'></a> 265                 <em class='comment'>/* updating ino will likely change which audit_hash_list we</em>
+<a id='L266' name='L266'></a> 266 <em class='comment'>                 * are on so we need a new watch for the new list */</em>
+<a id='L267' name='L267'></a> 267                 nwatch = <a href='../S/181.html#L202' title='Defined at 202 in audit_watch.c.'>audit_dupe_watch</a>(owatch);
+<a id='L268' name='L268'></a> 268                 <strong class='reserved'>if</strong> (IS_ERR(nwatch)) <em class='brace'>{</em>
+<a id='L269' name='L269'></a> 269                         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;audit_filter_mutex);
+<a id='L270' name='L270'></a> 270                         <a href='../S/162.html#L302' title='Defined at 302 in audit.c.'>audit_panic</a>("error updating watch, skipping");
+<a id='L271' name='L271'></a> 271                         <strong class='reserved'>return</strong>;
+<a id='L272' name='L272'></a> 272                 <em class='brace'>}</em>
+<a id='L273' name='L273'></a> 273                 nwatch-&gt;dev = dev;
+<a id='L274' name='L274'></a> 274                 nwatch-&gt;ino = ino;
+<a id='L275' name='L275'></a> 275 
+<a id='L276' name='L276'></a> 276                 list_for_each_entry_safe(r, nextr, &amp;owatch-&gt;rules, rlist) <em class='brace'>{</em>
+<a id='L277' name='L277'></a> 277 
+<a id='L278' name='L278'></a> 278                         oentry = container_of(r, <strong class='reserved'>struct</strong> <a href='../S/120.html#L45' title='Defined at 45 in audit.h.'>audit_entry</a>, rule);
+<a id='L279' name='L279'></a> 279                         list_del(&amp;oentry-&gt;rule.rlist);
+<a id='L280' name='L280'></a> 280                         list_del_rcu(&amp;oentry-&gt;list);
+<a id='L281' name='L281'></a> 281 
+<a id='L282' name='L282'></a> 282                         nentry = <a href='../S/219.html#L811' title='Defined at 811 in auditfilter.c.'>audit_dupe_rule</a>(&amp;oentry-&gt;rule);
+<a id='L283' name='L283'></a> 283                         <strong class='reserved'>if</strong> (IS_ERR(nentry)) <em class='brace'>{</em>
+<a id='L284' name='L284'></a> 284                                 list_del(&amp;oentry-&gt;rule.list);
+<a id='L285' name='L285'></a> 285                                 <a href='../S/162.html#L302' title='Defined at 302 in audit.c.'>audit_panic</a>("error updating watch, removing");
+<a id='L286' name='L286'></a> 286                         <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L287' name='L287'></a> 287                                 <strong class='reserved'>int</strong> <a href='../S/411.html#L4216' title='Defined at 4216 in bpf/btf.c.'>h</a> = <a href='../S/120.html#L208' title='Defined at 208 in audit.h.'>audit_hash_ino</a>((u32)ino);
+<a id='L288' name='L288'></a> 288 
+<a id='L289' name='L289'></a> 289                                 <em class='comment'>/*</em>
+<a id='L290' name='L290'></a> 290 <em class='comment'>                                 * nentry-&gt;rule.watch == oentry-&gt;rule.watch so</em>
+<a id='L291' name='L291'></a> 291 <em class='comment'>                                 * we must drop that reference and set it to our</em>
+<a id='L292' name='L292'></a> 292 <em class='comment'>                                 * new watch.</em>
+<a id='L293' name='L293'></a> 293 <em class='comment'>                                 */</em>
+<a id='L294' name='L294'></a> 294                                 <a href='../D/3475.html' title='Multiple defined in 2 places.'>audit_put_watch</a>(nentry-&gt;rule.watch);
+<a id='L295' name='L295'></a> 295                                 <a href='../D/3396.html' title='Multiple defined in 2 places.'>audit_get_watch</a>(nwatch);
+<a id='L296' name='L296'></a> 296                                 nentry-&gt;rule.watch = nwatch;
+<a id='L297' name='L297'></a> 297                                 list_add(&amp;nentry-&gt;rule.rlist, &amp;nwatch-&gt;rules);
+<a id='L298' name='L298'></a> 298                                 list_add_rcu(&amp;nentry-&gt;list, &amp;audit_inode_hash[<a href='../S/411.html#L4216' title='Defined at 4216 in bpf/btf.c.'>h</a>]);
+<a id='L299' name='L299'></a> 299                                 list_replace(&amp;oentry-&gt;rule.list,
+<a id='L300' name='L300'></a> 300                                              &amp;nentry-&gt;rule.list);
+<a id='L301' name='L301'></a> 301                         <em class='brace'>}</em>
+<a id='L302' name='L302'></a> 302                         <strong class='reserved'>if</strong> (oentry-&gt;rule.exe)
+<a id='L303' name='L303'></a> 303                                 <a href='../D/3480.html' title='Multiple defined in 2 places.'>audit_remove_mark</a>(oentry-&gt;rule.exe);
+<a id='L304' name='L304'></a> 304 
+<a id='L305' name='L305'></a> 305                         <a href='../D/4450.html' title='Multiple defined in 2 places.'>call_rcu</a>(&amp;oentry-&gt;rcu, <a href='../S/219.html#L97' title='Defined at 97 in auditfilter.c.'>audit_free_rule_rcu</a>);
+<a id='L306' name='L306'></a> 306                 <em class='brace'>}</em>
+<a id='L307' name='L307'></a> 307 
+<a id='L308' name='L308'></a> 308                 <a href='../S/181.html#L115' title='Defined at 115 in audit_watch.c.'>audit_remove_watch</a>(owatch);
+<a id='L309' name='L309'></a> 309                 <strong class='reserved'>goto</strong> add_watch_to_parent; <em class='comment'>/* event applies to a single watch */</em>
+<a id='L310' name='L310'></a> 310         <em class='brace'>}</em>
+<a id='L311' name='L311'></a> 311         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;audit_filter_mutex);
+<a id='L312' name='L312'></a> 312         <strong class='reserved'>return</strong>;
+<a id='L313' name='L313'></a> 313 
+<a id='L314' name='L314'></a> 314 add_watch_to_parent:
+<a id='L315' name='L315'></a> 315         list_add(&amp;nwatch-&gt;wlist, &amp;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>-&gt;watches);
+<a id='L316' name='L316'></a> 316         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;audit_filter_mutex);
+<a id='L317' name='L317'></a> 317         <strong class='reserved'>return</strong>;
+<a id='L318' name='L318'></a> 318 <em class='brace'>}</em>
+<a id='L319' name='L319'></a> 319 
+<a id='L320' name='L320'></a> 320 <em class='comment'>/* Remove all watches &amp; rules associated with a parent that is going away. */</em>
+<a id='L321' name='L321'></a> 321 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/181.html#L484' title='Referred from 484 in audit_watch.c.'>audit_remove_parent_watches</a>(<strong class='reserved'>struct</strong> <a href='../S/181.html#L46' title='Defined at 46 in audit_watch.c.'>audit_parent</a> *<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>)
+<a id='L322' name='L322'></a> 322 <em class='brace'>{</em>
+<a id='L323' name='L323'></a> 323         <strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *w, *nextw;
+<a id='L324' name='L324'></a> 324         <strong class='reserved'>struct</strong> audit_krule *r, *nextr;
+<a id='L325' name='L325'></a> 325         <strong class='reserved'>struct</strong> <a href='../S/120.html#L45' title='Defined at 45 in audit.h.'>audit_entry</a> *e;
+<a id='L326' name='L326'></a> 326 
+<a id='L327' name='L327'></a> 327         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;audit_filter_mutex);
+<a id='L328' name='L328'></a> 328         list_for_each_entry_safe(w, nextw, &amp;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>-&gt;watches, wlist) <em class='brace'>{</em>
+<a id='L329' name='L329'></a> 329                 list_for_each_entry_safe(r, nextr, &amp;w-&gt;rules, rlist) <em class='brace'>{</em>
+<a id='L330' name='L330'></a> 330                         e = container_of(r, <strong class='reserved'>struct</strong> <a href='../S/120.html#L45' title='Defined at 45 in audit.h.'>audit_entry</a>, rule);
+<a id='L331' name='L331'></a> 331                         <a href='../S/181.html#L226' title='Defined at 226 in audit_watch.c.'>audit_watch_log_rule_change</a>(r, w, "remove_rule");
+<a id='L332' name='L332'></a> 332                         <strong class='reserved'>if</strong> (e-&gt;rule.exe)
+<a id='L333' name='L333'></a> 333                                 <a href='../D/3480.html' title='Multiple defined in 2 places.'>audit_remove_mark</a>(e-&gt;rule.exe);
+<a id='L334' name='L334'></a> 334                         list_del(&amp;r-&gt;rlist);
+<a id='L335' name='L335'></a> 335                         list_del(&amp;r-&gt;list);
+<a id='L336' name='L336'></a> 336                         list_del_rcu(&amp;e-&gt;list);
+<a id='L337' name='L337'></a> 337                         <a href='../D/4450.html' title='Multiple defined in 2 places.'>call_rcu</a>(&amp;e-&gt;rcu, <a href='../S/219.html#L97' title='Defined at 97 in auditfilter.c.'>audit_free_rule_rcu</a>);
+<a id='L338' name='L338'></a> 338                 <em class='brace'>}</em>
+<a id='L339' name='L339'></a> 339                 <a href='../S/181.html#L115' title='Defined at 115 in audit_watch.c.'>audit_remove_watch</a>(w);
+<a id='L340' name='L340'></a> 340         <em class='brace'>}</em>
+<a id='L341' name='L341'></a> 341         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;audit_filter_mutex);
+<a id='L342' name='L342'></a> 342 
+<a id='L343' name='L343'></a> 343         fsnotify_destroy_mark(&amp;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>-&gt;mark, audit_watch_group);
+<a id='L344' name='L344'></a> 344 <em class='brace'>}</em>
+<a id='L345' name='L345'></a> 345 
+<a id='L346' name='L346'></a> 346 <em class='comment'>/* Get path information necessary for adding watches. */</em>
+<a id='L347' name='L347'></a> 347 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/181.html#L416' title='Referred from 416 in audit_watch.c.'>audit_get_nd</a>(<strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *watch, <strong class='reserved'>struct</strong> path *<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>)
+<a id='L348' name='L348'></a> 348 <em class='brace'>{</em>
+<a id='L349' name='L349'></a> 349         <strong class='reserved'>struct</strong> dentry *d = kern_path_locked(watch-&gt;path, <a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>);
+<a id='L350' name='L350'></a> 350         <strong class='reserved'>if</strong> (IS_ERR(d))
+<a id='L351' name='L351'></a> 351                 <strong class='reserved'>return</strong> PTR_ERR(d);
+<a id='L352' name='L352'></a> 352         <strong class='reserved'>if</strong> (d_is_positive(d)) <em class='brace'>{</em>
+<a id='L353' name='L353'></a> 353                 <em class='comment'>/* update watch filter fields */</em>
+<a id='L354' name='L354'></a> 354                 watch-&gt;dev = d-&gt;d_sb-&gt;s_dev;
+<a id='L355' name='L355'></a> 355                 watch-&gt;ino = d_backing_inode(d)-&gt;i_ino;
+<a id='L356' name='L356'></a> 356         <em class='brace'>}</em>
+<a id='L357' name='L357'></a> 357         inode_unlock(d_backing_inode(<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>-&gt;dentry));
+<a id='L358' name='L358'></a> 358         dput(d);
+<a id='L359' name='L359'></a> 359         <strong class='reserved'>return</strong> 0;
+<a id='L360' name='L360'></a> 360 <em class='brace'>}</em>
+<a id='L361' name='L361'></a> 361 
+<a id='L362' name='L362'></a> 362 <em class='comment'>/* Associate the given rule with an existing parent.</em>
+<a id='L363' name='L363'></a> 363 <em class='comment'> * Caller must hold audit_filter_mutex. */</em>
+<a id='L364' name='L364'></a> 364 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/181.html#L436' title='Referred from 436 in audit_watch.c.'>audit_add_to_parent</a>(<strong class='reserved'>struct</strong> audit_krule *krule,
+<a id='L365' name='L365'></a> 365                                 <strong class='reserved'>struct</strong> <a href='../S/181.html#L46' title='Defined at 46 in audit_watch.c.'>audit_parent</a> *<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>)
+<a id='L366' name='L366'></a> 366 <em class='brace'>{</em>
+<a id='L367' name='L367'></a> 367         <strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *w, *watch = krule-&gt;watch;
+<a id='L368' name='L368'></a> 368         <strong class='reserved'>int</strong> watch_found = 0;
+<a id='L369' name='L369'></a> 369 
+<a id='L370' name='L370'></a> 370         BUG_ON(!<a href='../S/25.html#L85' title='Defined at 85 in locking/mutex.c.'>mutex_is_locked</a>(&amp;audit_filter_mutex));
+<a id='L371' name='L371'></a> 371 
+<a id='L372' name='L372'></a> 372         list_for_each_entry(w, &amp;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>-&gt;watches, wlist) <em class='brace'>{</em>
+<a id='L373' name='L373'></a> 373                 <strong class='reserved'>if</strong> (strcmp(watch-&gt;path, w-&gt;path))
+<a id='L374' name='L374'></a> 374                         <strong class='reserved'>continue</strong>;
+<a id='L375' name='L375'></a> 375 
+<a id='L376' name='L376'></a> 376                 watch_found = 1;
+<a id='L377' name='L377'></a> 377 
+<a id='L378' name='L378'></a> 378                 <em class='comment'>/* put krule's ref to temporary watch */</em>
+<a id='L379' name='L379'></a> 379                 <a href='../D/3475.html' title='Multiple defined in 2 places.'>audit_put_watch</a>(watch);
+<a id='L380' name='L380'></a> 380 
+<a id='L381' name='L381'></a> 381                 <a href='../D/3396.html' title='Multiple defined in 2 places.'>audit_get_watch</a>(w);
+<a id='L382' name='L382'></a> 382                 krule-&gt;watch = watch = w;
+<a id='L383' name='L383'></a> 383 
+<a id='L384' name='L384'></a> 384                 <a href='../S/181.html#L78' title='Defined at 78 in audit_watch.c.'>audit_put_parent</a>(<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>);
+<a id='L385' name='L385'></a> 385                 <strong class='reserved'>break</strong>;
+<a id='L386' name='L386'></a> 386         <em class='brace'>}</em>
+<a id='L387' name='L387'></a> 387 
+<a id='L388' name='L388'></a> 388         <strong class='reserved'>if</strong> (!watch_found) <em class='brace'>{</em>
+<a id='L389' name='L389'></a> 389                 watch-&gt;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a> = <a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>;
+<a id='L390' name='L390'></a> 390 
+<a id='L391' name='L391'></a> 391                 <a href='../D/3396.html' title='Multiple defined in 2 places.'>audit_get_watch</a>(watch);
+<a id='L392' name='L392'></a> 392                 list_add(&amp;watch-&gt;wlist, &amp;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>-&gt;watches);
+<a id='L393' name='L393'></a> 393         <em class='brace'>}</em>
+<a id='L394' name='L394'></a> 394         list_add(&amp;krule-&gt;rlist, &amp;watch-&gt;rules);
+<a id='L395' name='L395'></a> 395 <em class='brace'>}</em>
+<a id='L396' name='L396'></a> 396 
+<a id='L397' name='L397'></a> 397 <em class='comment'>/* Find a matching watch entry, or add this one.</em>
+<a id='L398' name='L398'></a> 398 <em class='comment'> * Caller must hold audit_filter_mutex. */</em>
+<a id='L399' name='L399'></a> 399 <strong class='reserved'>int</strong> <a href='../R/3111.html' title='Multiple referred from 2 places.'>audit_add_watch</a>(<strong class='reserved'>struct</strong> audit_krule *krule, <strong class='reserved'>struct</strong> list_head **list)
+<a id='L400' name='L400'></a> 400 <em class='brace'>{</em>
+<a id='L401' name='L401'></a> 401         <strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *watch = krule-&gt;watch;
+<a id='L402' name='L402'></a> 402         <strong class='reserved'>struct</strong> <a href='../S/181.html#L46' title='Defined at 46 in audit_watch.c.'>audit_parent</a> *<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>;
+<a id='L403' name='L403'></a> 403         <strong class='reserved'>struct</strong> path parent_path;
+<a id='L404' name='L404'></a> 404         <strong class='reserved'>int</strong> <a href='../S/411.html#L4216' title='Defined at 4216 in bpf/btf.c.'>h</a>, ret = 0;
+<a id='L405' name='L405'></a> 405 
+<a id='L406' name='L406'></a> 406         <em class='comment'>/*</em>
+<a id='L407' name='L407'></a> 407 <em class='comment'>         * When we will be calling audit_add_to_parent, krule-&gt;watch might have</em>
+<a id='L408' name='L408'></a> 408 <em class='comment'>         * been updated and watch might have been freed.</em>
+<a id='L409' name='L409'></a> 409 <em class='comment'>         * So we need to keep a reference of watch.</em>
+<a id='L410' name='L410'></a> 410 <em class='comment'>         */</em>
+<a id='L411' name='L411'></a> 411         <a href='../D/3396.html' title='Multiple defined in 2 places.'>audit_get_watch</a>(watch);
+<a id='L412' name='L412'></a> 412 
+<a id='L413' name='L413'></a> 413         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;audit_filter_mutex);
+<a id='L414' name='L414'></a> 414 
+<a id='L415' name='L415'></a> 415         <em class='comment'>/* Avoid calling path_lookup under audit_filter_mutex. */</em>
+<a id='L416' name='L416'></a> 416         ret = <a href='../S/181.html#L347' title='Defined at 347 in audit_watch.c.'>audit_get_nd</a>(watch, &amp;parent_path);
+<a id='L417' name='L417'></a> 417 
+<a id='L418' name='L418'></a> 418         <em class='comment'>/* caller expects mutex locked */</em>
+<a id='L419' name='L419'></a> 419         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;audit_filter_mutex);
+<a id='L420' name='L420'></a> 420 
+<a id='L421' name='L421'></a> 421         <strong class='reserved'>if</strong> (ret) <em class='brace'>{</em>
+<a id='L422' name='L422'></a> 422                 <a href='../D/3475.html' title='Multiple defined in 2 places.'>audit_put_watch</a>(watch);
+<a id='L423' name='L423'></a> 423                 <strong class='reserved'>return</strong> ret;
+<a id='L424' name='L424'></a> 424         <em class='brace'>}</em>
+<a id='L425' name='L425'></a> 425 
+<a id='L426' name='L426'></a> 426         <em class='comment'>/* either find an old parent or attach a new one */</em>
+<a id='L427' name='L427'></a> 427         <a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a> = <a href='../S/181.html#L88' title='Defined at 88 in audit_watch.c.'>audit_find_parent</a>(d_backing_inode(parent_path.dentry));
+<a id='L428' name='L428'></a> 428         <strong class='reserved'>if</strong> (!<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>) <em class='brace'>{</em>
+<a id='L429' name='L429'></a> 429                 <a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a> = <a href='../S/181.html#L136' title='Defined at 136 in audit_watch.c.'>audit_init_parent</a>(&amp;parent_path);
+<a id='L430' name='L430'></a> 430                 <strong class='reserved'>if</strong> (IS_ERR(<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>)) <em class='brace'>{</em>
+<a id='L431' name='L431'></a> 431                         ret = PTR_ERR(<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>);
+<a id='L432' name='L432'></a> 432                         <strong class='reserved'>goto</strong> error;
+<a id='L433' name='L433'></a> 433                 <em class='brace'>}</em>
+<a id='L434' name='L434'></a> 434         <em class='brace'>}</em>
+<a id='L435' name='L435'></a> 435 
+<a id='L436' name='L436'></a> 436         <a href='../S/181.html#L364' title='Defined at 364 in audit_watch.c.'>audit_add_to_parent</a>(krule, <a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>);
+<a id='L437' name='L437'></a> 437 
+<a id='L438' name='L438'></a> 438         <a href='../S/411.html#L4216' title='Defined at 4216 in bpf/btf.c.'>h</a> = <a href='../S/120.html#L208' title='Defined at 208 in audit.h.'>audit_hash_ino</a>((u32)watch-&gt;ino);
+<a id='L439' name='L439'></a> 439         *list = &amp;audit_inode_hash[<a href='../S/411.html#L4216' title='Defined at 4216 in bpf/btf.c.'>h</a>];
+<a id='L440' name='L440'></a> 440 error:
+<a id='L441' name='L441'></a> 441         path_put(&amp;parent_path);
+<a id='L442' name='L442'></a> 442         <a href='../D/3475.html' title='Multiple defined in 2 places.'>audit_put_watch</a>(watch);
+<a id='L443' name='L443'></a> 443         <strong class='reserved'>return</strong> ret;
+<a id='L444' name='L444'></a> 444 <em class='brace'>}</em>
+<a id='L445' name='L445'></a> 445 
+<a id='L446' name='L446'></a> 446 <strong class='reserved'>void</strong> <a href='../R/3264.html' title='Multiple referred from 2 places.'>audit_remove_watch_rule</a>(<strong class='reserved'>struct</strong> audit_krule *krule)
+<a id='L447' name='L447'></a> 447 <em class='brace'>{</em>
+<a id='L448' name='L448'></a> 448         <strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *watch = krule-&gt;watch;
+<a id='L449' name='L449'></a> 449         <strong class='reserved'>struct</strong> <a href='../S/181.html#L46' title='Defined at 46 in audit_watch.c.'>audit_parent</a> *<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a> = watch-&gt;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>;
+<a id='L450' name='L450'></a> 450 
+<a id='L451' name='L451'></a> 451         list_del(&amp;krule-&gt;rlist);
+<a id='L452' name='L452'></a> 452 
+<a id='L453' name='L453'></a> 453         <strong class='reserved'>if</strong> (list_empty(&amp;watch-&gt;rules)) <em class='brace'>{</em>
+<a id='L454' name='L454'></a> 454                 <em class='comment'>/*</em>
+<a id='L455' name='L455'></a> 455 <em class='comment'>                 * audit_remove_watch() drops our reference to 'parent' which</em>
+<a id='L456' name='L456'></a> 456 <em class='comment'>                 * can get freed. Grab our own reference to be safe.</em>
+<a id='L457' name='L457'></a> 457 <em class='comment'>                 */</em>
+<a id='L458' name='L458'></a> 458                 <a href='../S/181.html#L72' title='Defined at 72 in audit_watch.c.'>audit_get_parent</a>(<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>);
+<a id='L459' name='L459'></a> 459                 <a href='../S/181.html#L115' title='Defined at 115 in audit_watch.c.'>audit_remove_watch</a>(watch);
+<a id='L460' name='L460'></a> 460                 <strong class='reserved'>if</strong> (list_empty(&amp;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>-&gt;watches))
+<a id='L461' name='L461'></a> 461                         fsnotify_destroy_mark(&amp;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>-&gt;mark, audit_watch_group);
+<a id='L462' name='L462'></a> 462                 <a href='../S/181.html#L78' title='Defined at 78 in audit_watch.c.'>audit_put_parent</a>(<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>);
+<a id='L463' name='L463'></a> 463         <em class='brace'>}</em>
+<a id='L464' name='L464'></a> 464 <em class='brace'>}</em>
+<a id='L465' name='L465'></a> 465 
+<a id='L466' name='L466'></a> 466 <em class='comment'>/* Update watch data in audit rules based on fsnotify events. */</em>
+<a id='L467' name='L467'></a> 467 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/181.html#L490' title='Referred from 490 in audit_watch.c.'>audit_watch_handle_event</a>(<strong class='reserved'>struct</strong> fsnotify_mark *inode_mark, u32 mask,
+<a id='L468' name='L468'></a> 468                                     <strong class='reserved'>struct</strong> inode *inode, <strong class='reserved'>struct</strong> inode *dir,
+<a id='L469' name='L469'></a> 469                                     <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> qstr *dname, u32 cookie)
+<a id='L470' name='L470'></a> 470 <em class='brace'>{</em>
+<a id='L471' name='L471'></a> 471         <strong class='reserved'>struct</strong> <a href='../S/181.html#L46' title='Defined at 46 in audit_watch.c.'>audit_parent</a> *<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>;
+<a id='L472' name='L472'></a> 472 
+<a id='L473' name='L473'></a> 473         <a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a> = container_of(inode_mark, <strong class='reserved'>struct</strong> <a href='../S/181.html#L46' title='Defined at 46 in audit_watch.c.'>audit_parent</a>, mark);
+<a id='L474' name='L474'></a> 474 
+<a id='L475' name='L475'></a> 475         <strong class='reserved'>if</strong> (WARN_ON_ONCE(inode_mark-&gt;group != audit_watch_group) ||
+<a id='L476' name='L476'></a> 476             WARN_ON_ONCE(!inode))
+<a id='L477' name='L477'></a> 477                 <strong class='reserved'>return</strong> 0;
+<a id='L478' name='L478'></a> 478 
+<a id='L479' name='L479'></a> 479         <strong class='reserved'>if</strong> (mask &amp; (FS_CREATE|FS_MOVED_TO) &amp;&amp; inode)
+<a id='L480' name='L480'></a> 480                 <a href='../S/181.html#L244' title='Defined at 244 in audit_watch.c.'>audit_update_watch</a>(<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>, dname, inode-&gt;i_sb-&gt;s_dev, inode-&gt;i_ino, 0);
+<a id='L481' name='L481'></a> 481         <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (mask &amp; (FS_DELETE|FS_MOVED_FROM))
+<a id='L482' name='L482'></a> 482                 <a href='../S/181.html#L244' title='Defined at 244 in audit_watch.c.'>audit_update_watch</a>(<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>, dname, AUDIT_DEV_UNSET, AUDIT_INO_UNSET, 1);
+<a id='L483' name='L483'></a> 483         <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (mask &amp; (FS_DELETE_SELF|FS_UNMOUNT|FS_MOVE_SELF))
+<a id='L484' name='L484'></a> 484                 <a href='../S/181.html#L321' title='Defined at 321 in audit_watch.c.'>audit_remove_parent_watches</a>(<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>);
+<a id='L485' name='L485'></a> 485 
+<a id='L486' name='L486'></a> 486         <strong class='reserved'>return</strong> 0;
+<a id='L487' name='L487'></a> 487 <em class='brace'>}</em>
+<a id='L488' name='L488'></a> 488 
+<a id='L489' name='L489'></a> 489 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> fsnotify_ops audit_watch_fsnotify_ops = <em class='brace'>{</em>
+<a id='L490' name='L490'></a> 490         .handle_inode_event =   <a href='../S/181.html#L467' title='Defined at 467 in audit_watch.c.'>audit_watch_handle_event</a>,
+<a id='L491' name='L491'></a> 491         .free_mark =            <a href='../S/181.html#L64' title='Defined at 64 in audit_watch.c.'>audit_watch_free_mark</a>,
+<a id='L492' name='L492'></a> 492 <em class='brace'>}</em>;
+<a id='L493' name='L493'></a> 493 
+<a id='L494' name='L494'></a> 494 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __init <a href='../S/181.html#L503' title='Referred from 503 in audit_watch.c.'>audit_watch_init</a>(<strong class='reserved'>void</strong>)
+<a id='L495' name='L495'></a> 495 <em class='brace'>{</em>
+<a id='L496' name='L496'></a> 496         audit_watch_group = fsnotify_alloc_group(&amp;audit_watch_fsnotify_ops);
+<a id='L497' name='L497'></a> 497         <strong class='reserved'>if</strong> (IS_ERR(audit_watch_group)) <em class='brace'>{</em>
+<a id='L498' name='L498'></a> 498                 audit_watch_group = NULL;
+<a id='L499' name='L499'></a> 499                 <a href='../S/162.html#L302' title='Defined at 302 in audit.c.'>audit_panic</a>("cannot create audit fsnotify group");
+<a id='L500' name='L500'></a> 500         <em class='brace'>}</em>
+<a id='L501' name='L501'></a> 501         <strong class='reserved'>return</strong> 0;
+<a id='L502' name='L502'></a> 502 <em class='brace'>}</em>
+<a id='L503' name='L503'></a> 503 device_initcall(<a href='../S/181.html#L494' title='Defined at 494 in audit_watch.c.'>audit_watch_init</a>);
+<a id='L504' name='L504'></a> 504 
+<a id='L505' name='L505'></a> 505 <strong class='reserved'>int</strong> <a href='../R/3140.html' title='Multiple referred from 2 places.'>audit_dupe_exe</a>(<strong class='reserved'>struct</strong> audit_krule *new, <strong class='reserved'>struct</strong> audit_krule *old)
+<a id='L506' name='L506'></a> 506 <em class='brace'>{</em>
+<a id='L507' name='L507'></a> 507         <strong class='reserved'>struct</strong> <a href='../S/367.html#L26' title='Defined at 26 in audit_fsnotify.c.'>audit_fsnotify_mark</a> *<a href='../S/72.html#L161' title='Defined at 161 in audit_tree.c.'>audit_mark</a>;
+<a id='L508' name='L508'></a> 508         <strong class='reserved'>char</strong> *pathname;
+<a id='L509' name='L509'></a> 509 
+<a id='L510' name='L510'></a> 510         pathname = kstrdup(<a href='../D/3449.html' title='Multiple defined in 2 places.'>audit_mark_path</a>(old-&gt;exe), GFP_KERNEL);
+<a id='L511' name='L511'></a> 511         <strong class='reserved'>if</strong> (!pathname)
+<a id='L512' name='L512'></a> 512                 <strong class='reserved'>return</strong> -ENOMEM;
+<a id='L513' name='L513'></a> 513 
+<a id='L514' name='L514'></a> 514         <a href='../S/72.html#L161' title='Defined at 161 in audit_tree.c.'>audit_mark</a> = <a href='../D/3331.html' title='Multiple defined in 2 places.'>audit_alloc_mark</a>(new, pathname, strlen(pathname));
+<a id='L515' name='L515'></a> 515         <strong class='reserved'>if</strong> (IS_ERR(<a href='../S/72.html#L161' title='Defined at 161 in audit_tree.c.'>audit_mark</a>)) <em class='brace'>{</em>
+<a id='L516' name='L516'></a> 516                 kfree(pathname);
+<a id='L517' name='L517'></a> 517                 <strong class='reserved'>return</strong> PTR_ERR(<a href='../S/72.html#L161' title='Defined at 161 in audit_tree.c.'>audit_mark</a>);
+<a id='L518' name='L518'></a> 518         <em class='brace'>}</em>
+<a id='L519' name='L519'></a> 519         new-&gt;exe = <a href='../S/72.html#L161' title='Defined at 161 in audit_tree.c.'>audit_mark</a>;
+<a id='L520' name='L520'></a> 520 
+<a id='L521' name='L521'></a> 521         <strong class='reserved'>return</strong> 0;
+<a id='L522' name='L522'></a> 522 <em class='brace'>}</em>
+<a id='L523' name='L523'></a> 523 
+<a id='L524' name='L524'></a> 524 <strong class='reserved'>int</strong> <a href='../R/3146.html' title='Multiple referred from 3 places.'>audit_exe_compare</a>(<strong class='reserved'>struct</strong> task_struct *tsk, <strong class='reserved'>struct</strong> <a href='../S/367.html#L26' title='Defined at 26 in audit_fsnotify.c.'>audit_fsnotify_mark</a> *mark)
+<a id='L525' name='L525'></a> 525 <em class='brace'>{</em>
+<a id='L526' name='L526'></a> 526         <strong class='reserved'>struct</strong> file *exe_file;
+<a id='L527' name='L527'></a> 527         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> ino;
+<a id='L528' name='L528'></a> 528         dev_t dev;
+<a id='L529' name='L529'></a> 529 
+<a id='L530' name='L530'></a> 530         exe_file = <a href='../S/48.html#L1222' title='Defined at 1222 in fork.c.'>get_task_exe_file</a>(tsk);
+<a id='L531' name='L531'></a> 531         <strong class='reserved'>if</strong> (!exe_file)
+<a id='L532' name='L532'></a> 532                 <strong class='reserved'>return</strong> 0;
+<a id='L533' name='L533'></a> 533         ino = file_inode(exe_file)-&gt;i_ino;
+<a id='L534' name='L534'></a> 534         dev = file_inode(exe_file)-&gt;i_sb-&gt;s_dev;
+<a id='L535' name='L535'></a> 535         fput(exe_file);
+<a id='L536' name='L536'></a> 536         <strong class='reserved'>return</strong> <a href='../D/3446.html' title='Multiple defined in 2 places.'>audit_mark_compare</a>(mark, ino, dev);
+<a id='L537' name='L537'></a> 537 <em class='brace'>}</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L58'>[^]</a><a href='#L524'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

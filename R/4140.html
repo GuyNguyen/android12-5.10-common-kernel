@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>bucket</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/383.html#L91'>bucket</a>             91 bpf/hashtab.c  	struct bucket *buckets;</span>
+<span class='curline'><a href='../S/383.html#L149'>bucket</a>            149 bpf/hashtab.c  					     struct bucket *b)</span>
+<span class='curline'><a href='../S/383.html#L161'>bucket</a>            161 bpf/hashtab.c  				      struct bucket *b,</span>
+<span class='curline'><a href='../S/383.html#L459'>bucket</a>            459 bpf/hashtab.c  	    htab-&gt;n_buckets &gt; U32_MAX / sizeof(struct bucket))</span>
+<span class='curline'><a href='../S/383.html#L462'>bucket</a>            462 bpf/hashtab.c  	cost = (u64) htab-&gt;n_buckets * sizeof(struct bucket) +</span>
+<span class='curline'><a href='../S/383.html#L478'>bucket</a>            478 bpf/hashtab.c  					   sizeof(struct bucket),</span>
+<span class='curline'><a href='../S/383.html#L523'>bucket</a>            523 bpf/hashtab.c  static inline struct bucket *__select_bucket(struct bpf_htab *htab, u32 hash)</span>
+<span class='curline'><a href='../S/383.html#L689'>bucket</a>            689 bpf/hashtab.c  	struct bucket *b;</span>
+<span class='curline'><a href='../S/383.html#L962'>bucket</a>            962 bpf/hashtab.c  	struct bucket *b;</span>
+<span class='curline'><a href='../S/383.html#L1053'>bucket</a>           1053 bpf/hashtab.c  	struct bucket *b;</span>
+<span class='curline'><a href='../S/383.html#L1117'>bucket</a>           1117 bpf/hashtab.c  	struct bucket *b;</span>
+<span class='curline'><a href='../S/383.html#L1169'>bucket</a>           1169 bpf/hashtab.c  	struct bucket *b;</span>
+<span class='curline'><a href='../S/383.html#L1243'>bucket</a>           1243 bpf/hashtab.c  	struct bucket *b;</span>
+<span class='curline'><a href='../S/383.html#L1275'>bucket</a>           1275 bpf/hashtab.c  	struct bucket *b;</span>
+<span class='curline'><a href='../S/383.html#L1386'>bucket</a>           1386 bpf/hashtab.c  	struct bucket *b;</span>
+<span class='curline'><a href='../S/383.html#L1665'>bucket</a>           1665 bpf/hashtab.c  	struct bucket *b;</span>
+<span class='curline'><a href='../S/406.html#L401'>bucket</a>            401 bpf/stackmap.c 	struct stack_map_bucket *bucket, *new_bucket, *old_bucket;</span>
+<span class='curline'><a href='../S/406.html#L425'>bucket</a>            425 bpf/stackmap.c 	bucket = READ_ONCE(smap-&gt;buckets[id]);</span>
+<span class='curline'><a href='../S/406.html#L427'>bucket</a>            427 bpf/stackmap.c 	hash_matches = bucket &amp;&amp; bucket-&gt;hash == hash;</span>
+<span class='curline'><a href='../S/406.html#L443'>bucket</a>            443 bpf/stackmap.c 		if (hash_matches &amp;&amp; bucket-&gt;nr == trace_nr &amp;&amp;</span>
+<span class='curline'><a href='../S/406.html#L444'>bucket</a>            444 bpf/stackmap.c 		    memcmp(bucket-&gt;data, new_bucket-&gt;data, trace_len) == 0) {</span>
+<span class='curline'><a href='../S/406.html#L448'>bucket</a>            448 bpf/stackmap.c 		if (bucket &amp;&amp; !(flags &amp; BPF_F_REUSE_STACKID)) {</span>
+<span class='curline'><a href='../S/406.html#L453'>bucket</a>            453 bpf/stackmap.c 		if (hash_matches &amp;&amp; bucket-&gt;nr == trace_nr &amp;&amp;</span>
+<span class='curline'><a href='../S/406.html#L454'>bucket</a>            454 bpf/stackmap.c 		    memcmp(bucket-&gt;data, ips, trace_len) == 0)</span>
+<span class='curline'><a href='../S/406.html#L456'>bucket</a>            456 bpf/stackmap.c 		if (bucket &amp;&amp; !(flags &amp; BPF_F_REUSE_STACKID))</span>
+<span class='curline'><a href='../S/406.html#L764'>bucket</a>            764 bpf/stackmap.c 	struct stack_map_bucket *bucket, *old_bucket;</span>
+<span class='curline'><a href='../S/406.html#L770'>bucket</a>            770 bpf/stackmap.c 	bucket = xchg(&amp;smap-&gt;buckets[id], NULL);</span>
+<span class='curline'><a href='../S/406.html#L771'>bucket</a>            771 bpf/stackmap.c 	if (!bucket)</span>
+<span class='curline'><a href='../S/406.html#L774'>bucket</a>            774 bpf/stackmap.c 	trace_len = bucket-&gt;nr * stack_map_data_size(map);</span>
+<span class='curline'><a href='../S/406.html#L775'>bucket</a>            775 bpf/stackmap.c 	memcpy(value, bucket-&gt;data, trace_len);</span>
+<span class='curline'><a href='../S/406.html#L778'>bucket</a>            778 bpf/stackmap.c 	old_bucket = xchg(&amp;smap-&gt;buckets[id], bucket);</span>
+<span class='curline'><a href='../S/156.html#L263'>bucket</a>            263 dma/debug.c    static void put_hash_bucket(struct hash_bucket *bucket,</span>
+<span class='curline'><a href='../S/156.html#L265'>bucket</a>            265 dma/debug.c    	__releases(&amp;bucket-&gt;lock)</span>
+<span class='curline'><a href='../S/156.html#L267'>bucket</a>            267 dma/debug.c    	spin_unlock_irqrestore(&amp;bucket-&gt;lock, flags);</span>
+<span class='curline'><a href='../S/156.html#L292'>bucket</a>            292 dma/debug.c    static struct dma_debug_entry *__hash_bucket_find(struct hash_bucket *bucket,</span>
+<span class='curline'><a href='../S/156.html#L299'>bucket</a>            299 dma/debug.c    	list_for_each_entry(entry, &amp;bucket-&gt;list, list) {</span>
+<span class='curline'><a href='../S/156.html#L342'>bucket</a>            342 dma/debug.c    static struct dma_debug_entry *bucket_find_exact(struct hash_bucket *bucket,</span>
+<span class='curline'><a href='../S/156.html#L345'>bucket</a>            345 dma/debug.c    	return __hash_bucket_find(bucket, ref, exact_match);</span>
+<span class='curline'><a href='../S/156.html#L348'>bucket</a>            348 dma/debug.c    static struct dma_debug_entry *bucket_find_contain(struct hash_bucket **bucket,</span>
+<span class='curline'><a href='../S/156.html#L358'>bucket</a>            358 dma/debug.c    		entry = __hash_bucket_find(*bucket, ref, containing_match);</span>
+<span class='curline'><a href='../S/156.html#L366'>bucket</a>            366 dma/debug.c    		put_hash_bucket(*bucket, *flags);</span>
+<span class='curline'><a href='../S/156.html#L369'>bucket</a>            369 dma/debug.c    		*bucket = get_hash_bucket(&amp;index, flags);</span>
+<span class='curline'><a href='../S/156.html#L378'>bucket</a>            378 dma/debug.c    static void hash_bucket_add(struct hash_bucket *bucket,</span>
+<span class='curline'><a href='../S/156.html#L381'>bucket</a>            381 dma/debug.c    	list_add_tail(&amp;entry-&gt;list, &amp;bucket-&gt;list);</span>
+<span class='curline'><a href='../S/156.html#L408'>bucket</a>            408 dma/debug.c    		struct hash_bucket *bucket = &amp;dma_entry_hash[idx];</span>
+<span class='curline'><a href='../S/156.html#L412'>bucket</a>            412 dma/debug.c    		spin_lock_irqsave(&amp;bucket-&gt;lock, flags);</span>
+<span class='curline'><a href='../S/156.html#L414'>bucket</a>            414 dma/debug.c    		list_for_each_entry(entry, &amp;bucket-&gt;list, list) {</span>
+<span class='curline'><a href='../S/156.html#L426'>bucket</a>            426 dma/debug.c    		spin_unlock_irqrestore(&amp;bucket-&gt;lock, flags);</span>
+<span class='curline'><a href='../S/156.html#L557'>bucket</a>            557 dma/debug.c    	struct hash_bucket *bucket;</span>
+<span class='curline'><a href='../S/156.html#L561'>bucket</a>            561 dma/debug.c    	bucket = get_hash_bucket(entry, &amp;flags);</span>
+<span class='curline'><a href='../S/156.html#L562'>bucket</a>            562 dma/debug.c    	hash_bucket_add(bucket, entry);</span>
+<span class='curline'><a href='../S/156.html#L563'>bucket</a>            563 dma/debug.c    	put_hash_bucket(bucket, flags);</span>
+<span class='curline'><a href='../S/156.html#L775'>bucket</a>            775 dma/debug.c    		struct hash_bucket *bucket = &amp;dma_entry_hash[idx];</span>
+<span class='curline'><a href='../S/156.html#L779'>bucket</a>            779 dma/debug.c    		spin_lock_irqsave(&amp;bucket-&gt;lock, flags);</span>
+<span class='curline'><a href='../S/156.html#L780'>bucket</a>            780 dma/debug.c    		list_for_each_entry(entry, &amp;bucket-&gt;list, list) {</span>
+<span class='curline'><a href='../S/156.html#L791'>bucket</a>            791 dma/debug.c    		spin_unlock_irqrestore(&amp;bucket-&gt;lock, flags);</span>
+<span class='curline'><a href='../S/156.html#L948'>bucket</a>            948 dma/debug.c    	struct hash_bucket *bucket;</span>
+<span class='curline'><a href='../S/156.html#L951'>bucket</a>            951 dma/debug.c    	bucket = get_hash_bucket(ref, &amp;flags);</span>
+<span class='curline'><a href='../S/156.html#L952'>bucket</a>            952 dma/debug.c    	entry = bucket_find_exact(bucket, ref);</span>
+<span class='curline'><a href='../S/156.html#L956'>bucket</a>            956 dma/debug.c    		put_hash_bucket(bucket, flags);</span>
+<span class='curline'><a href='../S/156.html#L1038'>bucket</a>           1038 dma/debug.c    	put_hash_bucket(bucket, flags);</span>
+<span class='curline'><a href='../S/156.html#L1091'>bucket</a>           1091 dma/debug.c    	struct hash_bucket *bucket;</span>
+<span class='curline'><a href='../S/156.html#L1094'>bucket</a>           1094 dma/debug.c    	bucket = get_hash_bucket(ref, &amp;flags);</span>
+<span class='curline'><a href='../S/156.html#L1096'>bucket</a>           1096 dma/debug.c    	entry = bucket_find_contain(&amp;bucket, ref, &amp;flags);</span>
+<span class='curline'><a href='../S/156.html#L1158'>bucket</a>           1158 dma/debug.c    	put_hash_bucket(bucket, flags);</span>
+<span class='curline'><a href='../S/156.html#L1242'>bucket</a>           1242 dma/debug.c    	struct hash_bucket *bucket;</span>
+<span class='curline'><a href='../S/156.html#L1250'>bucket</a>           1250 dma/debug.c    	bucket = get_hash_bucket(&amp;ref, &amp;flags);</span>
+<span class='curline'><a href='../S/156.html#L1252'>bucket</a>           1252 dma/debug.c    	list_for_each_entry(entry, &amp;bucket-&gt;list, list) {</span>
+<span class='curline'><a href='../S/156.html#L1272'>bucket</a>           1272 dma/debug.c    	put_hash_bucket(bucket, flags);</span>
+<span class='curline'><a href='../S/156.html#L1333'>bucket</a>           1333 dma/debug.c    	struct hash_bucket *bucket;</span>
+<span class='curline'><a href='../S/156.html#L1337'>bucket</a>           1337 dma/debug.c    	bucket       = get_hash_bucket(ref, &amp;flags);</span>
+<span class='curline'><a href='../S/156.html#L1338'>bucket</a>           1338 dma/debug.c    	entry        = bucket_find_exact(bucket, ref);</span>
+<span class='curline'><a href='../S/156.html#L1343'>bucket</a>           1343 dma/debug.c    	put_hash_bucket(bucket, flags);</span>
+<span class='curline'><a href='../S/35.html#L3078'>bucket</a>           3078 locking/lockdep.c #define for_each_chain_block(bucket, prev, curr)		\</span>
+<span class='curline'><a href='../S/35.html#L3079'>bucket</a>           3079 locking/lockdep.c 	for ((prev) = -1, (curr) = chain_block_buckets[bucket];	\</span>
+<span class='curline'><a href='../S/35.html#L3110'>bucket</a>           3110 locking/lockdep.c static inline void init_chain_block(int offset, int next, int bucket, int size)</span>
+<span class='curline'><a href='../S/35.html#L3115'>bucket</a>           3115 locking/lockdep.c 	if (size &amp;&amp; !bucket) {</span>
+<span class='curline'><a href='../S/35.html#L3123'>bucket</a>           3123 locking/lockdep.c 	int bucket = size_to_bucket(size);</span>
+<span class='curline'><a href='../S/35.html#L3124'>bucket</a>           3124 locking/lockdep.c 	int next = chain_block_buckets[bucket];</span>
+<span class='curline'><a href='../S/35.html#L3141'>bucket</a>           3141 locking/lockdep.c 	if (!bucket) {</span>
+<span class='curline'><a href='../S/35.html#L3161'>bucket</a>           3161 locking/lockdep.c 	init_chain_block(offset, next, bucket, size);</span>
+<span class='curline'><a href='../S/35.html#L3162'>bucket</a>           3162 locking/lockdep.c 	chain_block_buckets[bucket] = offset;</span>
+<span class='curline'><a href='../S/35.html#L3176'>bucket</a>           3176 locking/lockdep.c static inline void del_chain_block(int bucket, int size, int next)</span>
+<span class='curline'><a href='../S/35.html#L3179'>bucket</a>           3179 locking/lockdep.c 	chain_block_buckets[bucket] = next;</span>
+<span class='curline'><a href='../S/35.html#L3181'>bucket</a>           3181 locking/lockdep.c 	if (!bucket)</span>
+<span class='curline'><a href='../S/35.html#L3203'>bucket</a>           3203 locking/lockdep.c 	int bucket, curr, size;</span>
+<span class='curline'><a href='../S/35.html#L3221'>bucket</a>           3221 locking/lockdep.c 	bucket = size_to_bucket(req);</span>
+<span class='curline'><a href='../S/35.html#L3222'>bucket</a>           3222 locking/lockdep.c 	curr = chain_block_buckets[bucket];</span>
+<span class='curline'><a href='../S/35.html#L3224'>bucket</a>           3224 locking/lockdep.c 	if (bucket) {</span>
+<span class='curline'><a href='../S/35.html#L3226'>bucket</a>           3226 locking/lockdep.c 			del_chain_block(bucket, req, chain_block_next(curr));</span>
+<span class='curline'><a href='../S/35.html#L3250'>bucket</a>           3250 locking/lockdep.c 		bucket = size_to_bucket(size);</span>
+<span class='curline'><a href='../S/35.html#L3251'>bucket</a>           3251 locking/lockdep.c 		curr = chain_block_buckets[bucket];</span>
+<span class='curline'><a href='../S/35.html#L3255'>bucket</a>           3255 locking/lockdep.c 		del_chain_block(bucket, size, chain_block_next(curr));</span>
+<span class='curline'><a href='../S/441.html#L1026'>bucket</a>           1026 sched/core.c   	struct uclamp_bucket *bucket = rq-&gt;uclamp[clamp_id].bucket;</span>
+<span class='curline'><a href='../S/441.html#L1034'>bucket</a>           1034 sched/core.c   		if (!bucket[bucket_id].tasks)</span>
+<span class='curline'><a href='../S/441.html#L1036'>bucket</a>           1036 sched/core.c   		return bucket[bucket_id].value;</span>
+<span class='curline'><a href='../S/441.html#L1181'>bucket</a>           1181 sched/core.c   	struct uclamp_bucket *bucket;</span>
+<span class='curline'><a href='../S/441.html#L1188'>bucket</a>           1188 sched/core.c   	bucket = &amp;uc_rq-&gt;bucket[uc_se-&gt;bucket_id];</span>
+<span class='curline'><a href='../S/441.html#L1189'>bucket</a>           1189 sched/core.c   	bucket-&gt;tasks++;</span>
+<span class='curline'><a href='../S/441.html#L1198'>bucket</a>           1198 sched/core.c   	if (bucket-&gt;tasks == 1 || uc_se-&gt;value &gt; bucket-&gt;value)</span>
+<span class='curline'><a href='../S/441.html#L1199'>bucket</a>           1199 sched/core.c   		bucket-&gt;value = uc_se-&gt;value;</span>
+<span class='curline'><a href='../S/441.html#L1219'>bucket</a>           1219 sched/core.c   	struct uclamp_bucket *bucket;</span>
+<span class='curline'><a href='../S/441.html#L1251'>bucket</a>           1251 sched/core.c   	bucket = &amp;uc_rq-&gt;bucket[uc_se-&gt;bucket_id];</span>
+<span class='curline'><a href='../S/441.html#L1253'>bucket</a>           1253 sched/core.c   	SCHED_WARN_ON(!bucket-&gt;tasks);</span>
+<span class='curline'><a href='../S/441.html#L1254'>bucket</a>           1254 sched/core.c   	if (likely(bucket-&gt;tasks))</span>
+<span class='curline'><a href='../S/441.html#L1255'>bucket</a>           1255 sched/core.c   		bucket-&gt;tasks--;</span>
+<span class='curline'><a href='../S/441.html#L1265'>bucket</a>           1265 sched/core.c   	if (likely(bucket-&gt;tasks))</span>
+<span class='curline'><a href='../S/441.html#L1273'>bucket</a>           1273 sched/core.c   	SCHED_WARN_ON(bucket-&gt;value &gt; rq_clamp);</span>
+<span class='curline'><a href='../S/441.html#L1274'>bucket</a>           1274 sched/core.c   	if (bucket-&gt;value &gt;= rq_clamp) {</span>
+<span class='curline'><a href='../S/447.html#L901'>bucket</a>            901 sched/sched.h  	struct uclamp_bucket bucket[UCLAMP_BUCKETS];</span>
+</pre>
+</body>
+</html>

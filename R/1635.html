@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>_DESCS_COUNT</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/9.html#L311'>_DESCS_COUNT</a>      311 printk/printk_ringbuffer.c #define DESCS_COUNT(desc_ring)		_DESCS_COUNT((desc_ring)-&gt;count_bits)</span>
+<span class='curline'><a href='../S/9.html#L2041'>_DESCS_COUNT</a>     2041 printk/printk_ringbuffer.c 	memset(descs, 0, _DESCS_COUNT(descbits) * sizeof(descs[0]));</span>
+<span class='curline'><a href='../S/9.html#L2042'>_DESCS_COUNT</a>     2042 printk/printk_ringbuffer.c 	memset(infos, 0, _DESCS_COUNT(descbits) * sizeof(infos[0]));</span>
+<span class='curline'><a href='../S/9.html#L2057'>_DESCS_COUNT</a>     2057 printk/printk_ringbuffer.c 	atomic_long_set(&amp;(descs[_DESCS_COUNT(descbits) - 1].state_var), DESC0_SV(descbits));</span>
+<span class='curline'><a href='../S/9.html#L2058'>_DESCS_COUNT</a>     2058 printk/printk_ringbuffer.c 	descs[_DESCS_COUNT(descbits) - 1].text_blk_lpos.begin = FAILED_LPOS;</span>
+<span class='curline'><a href='../S/9.html#L2059'>_DESCS_COUNT</a>     2059 printk/printk_ringbuffer.c 	descs[_DESCS_COUNT(descbits) - 1].text_blk_lpos.next = FAILED_LPOS;</span>
+<span class='curline'><a href='../S/9.html#L2061'>_DESCS_COUNT</a>     2061 printk/printk_ringbuffer.c 	infos[0].seq = -(u64)_DESCS_COUNT(descbits);</span>
+<span class='curline'><a href='../S/9.html#L2062'>_DESCS_COUNT</a>     2062 printk/printk_ringbuffer.c 	infos[_DESCS_COUNT(descbits) - 1].seq = 0;</span>
+<span class='curline'><a href='../S/8.html#L221'>_DESCS_COUNT</a>      221 printk/printk_ringbuffer.h #define DESC0_ID(ct_bits)	DESC_ID(-(_DESCS_COUNT(ct_bits) + 1))</span>
+<span class='curline'><a href='../S/8.html#L233'>_DESCS_COUNT</a>      233 printk/printk_ringbuffer.h static struct prb_desc _##name##_descs[_DESCS_COUNT(descbits)] = {				\</span>
+<span class='curline'><a href='../S/8.html#L235'>_DESCS_COUNT</a>      235 printk/printk_ringbuffer.h 	[_DESCS_COUNT(descbits) - 1] = {							\</span>
+<span class='curline'><a href='../S/8.html#L242'>_DESCS_COUNT</a>      242 printk/printk_ringbuffer.h static struct printk_info _##name##_infos[_DESCS_COUNT(descbits)] = {				\</span>
+<span class='curline'><a href='../S/8.html#L246'>_DESCS_COUNT</a>      246 printk/printk_ringbuffer.h 		.seq = -(u64)_DESCS_COUNT(descbits),						\</span>
+<span class='curline'><a href='../S/8.html#L249'>_DESCS_COUNT</a>      249 printk/printk_ringbuffer.h 	[_DESCS_COUNT(descbits) - 1] = {							\</span>
+</pre>
+</body>
+</html>

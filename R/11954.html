@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>sched_clock_data</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/474.html#L96'>sched_clock_data</a>   96 sched/clock.c  static DEFINE_PER_CPU_SHARED_ALIGNED(struct sched_clock_data, sched_clock_data);</span>
+<span class='curline'><a href='../S/474.html#L98'>sched_clock_data</a>   98 sched/clock.c  static inline struct sched_clock_data *this_scd(void)</span>
+<span class='curline'><a href='../S/474.html#L100'>sched_clock_data</a>  100 sched/clock.c  	return this_cpu_ptr(&amp;sched_clock_data);</span>
+<span class='curline'><a href='../S/474.html#L103'>sched_clock_data</a>  103 sched/clock.c  static inline struct sched_clock_data *cpu_sdc(int cpu)</span>
+<span class='curline'><a href='../S/474.html#L105'>sched_clock_data</a>  105 sched/clock.c  	return &amp;per_cpu(sched_clock_data, cpu);</span>
+<span class='curline'><a href='../S/474.html#L113'>sched_clock_data</a>  113 sched/clock.c  static void __scd_stamp(struct sched_clock_data *scd)</span>
+<span class='curline'><a href='../S/474.html#L121'>sched_clock_data</a>  121 sched/clock.c  	struct sched_clock_data *scd;</span>
+<span class='curline'><a href='../S/474.html#L156'>sched_clock_data</a>  156 sched/clock.c  	struct sched_clock_data *scd;</span>
+<span class='curline'><a href='../S/474.html#L168'>sched_clock_data</a>  168 sched/clock.c  		per_cpu(sched_clock_data, cpu) = *scd;</span>
+<span class='curline'><a href='../S/474.html#L201'>sched_clock_data</a>  201 sched/clock.c  	struct sched_clock_data *scd = this_scd();</span>
+<span class='curline'><a href='../S/474.html#L265'>sched_clock_data</a>  265 sched/clock.c  static u64 sched_clock_local(struct sched_clock_data *scd)</span>
+<span class='curline'><a href='../S/474.html#L298'>sched_clock_data</a>  298 sched/clock.c  static u64 sched_clock_remote(struct sched_clock_data *scd)</span>
+<span class='curline'><a href='../S/474.html#L300'>sched_clock_data</a>  300 sched/clock.c  	struct sched_clock_data *my_scd = this_scd();</span>
+<span class='curline'><a href='../S/474.html#L367'>sched_clock_data</a>  367 sched/clock.c  	struct sched_clock_data *scd;</span>
+<span class='curline'><a href='../S/474.html#L391'>sched_clock_data</a>  391 sched/clock.c  	struct sched_clock_data *scd;</span>
+</pre>
+</body>
+</html>

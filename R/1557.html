@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>UINSNS_PER_PAGE</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/334.html#L34'>UINSNS_PER_PAGE</a>    34 events/uprobes.c #define MAX_UPROBE_XOL_SLOTS		UINSNS_PER_PAGE</span>
+<span class='curline'><a href='../S/334.html#L1492'>UINSNS_PER_PAGE</a>  1492 events/uprobes.c 	area-&gt;bitmap = kcalloc(BITS_TO_LONGS(UINSNS_PER_PAGE), sizeof(long),</span>
+<span class='curline'><a href='../S/334.html#L1590'>UINSNS_PER_PAGE</a>  1590 events/uprobes.c 		slot_nr = find_first_zero_bit(area-&gt;bitmap, UINSNS_PER_PAGE);</span>
+<span class='curline'><a href='../S/334.html#L1591'>UINSNS_PER_PAGE</a>  1591 events/uprobes.c 		if (slot_nr &lt; UINSNS_PER_PAGE) {</span>
+<span class='curline'><a href='../S/334.html#L1595'>UINSNS_PER_PAGE</a>  1595 events/uprobes.c 			slot_nr = UINSNS_PER_PAGE;</span>
+<span class='curline'><a href='../S/334.html#L1598'>UINSNS_PER_PAGE</a>  1598 events/uprobes.c 		wait_event(area-&gt;wq, (atomic_read(&amp;area-&gt;slot_count) &lt; UINSNS_PER_PAGE));</span>
+<span class='curline'><a href='../S/334.html#L1599'>UINSNS_PER_PAGE</a>  1599 events/uprobes.c 	} while (slot_nr &gt;= UINSNS_PER_PAGE);</span>
+<span class='curline'><a href='../S/334.html#L1656'>UINSNS_PER_PAGE</a>  1656 events/uprobes.c 		if (slot_nr &gt;= UINSNS_PER_PAGE)</span>
+</pre>
+</body>
+</html>

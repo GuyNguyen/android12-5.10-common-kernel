@@ -1,0 +1,717 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>cfs_rq</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/441.html#L3289'>cfs_rq</a>           3289 sched/core.c   	p-&gt;se.cfs_rq			= NULL;</span>
+<span class='curline'><a href='../S/441.html#L4155'>cfs_rq</a>           4155 sched/core.c   	struct sched_entity *curr = (&amp;p-&gt;se)-&gt;cfs_rq-&gt;curr;</span>
+<span class='curline'><a href='../S/441.html#L7448'>cfs_rq</a>           7448 sched/core.c   		root_task_group.cfs_rq = (struct cfs_rq **)ptr;</span>
+<span class='curline'><a href='../S/441.html#L8346'>cfs_rq</a>           8346 sched/core.c   		struct cfs_rq *cfs_rq = tg-&gt;cfs_rq[i];</span>
+<span class='curline'><a href='../S/441.html#L8347'>cfs_rq</a>           8347 sched/core.c   		struct rq *rq = cfs_rq-&gt;rq;</span>
+<span class='curline'><a href='../S/441.html#L8351'>cfs_rq</a>           8351 sched/core.c   		cfs_rq-&gt;runtime_enabled = runtime_enabled;</span>
+<span class='curline'><a href='../S/441.html#L8352'>cfs_rq</a>           8352 sched/core.c   		cfs_rq-&gt;runtime_remaining = 0;</span>
+<span class='curline'><a href='../S/441.html#L8354'>cfs_rq</a>           8354 sched/core.c   		if (cfs_rq-&gt;throttled)</span>
+<span class='curline'><a href='../S/441.html#L8355'>cfs_rq</a>           8355 sched/core.c   			unthrottle_cfs_rq(cfs_rq);</span>
+<span class='curline'><a href='../S/460.html#L557'>cfs_rq</a>            557 sched/debug.c  void print_cfs_rq(struct seq_file *m, int cpu, struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/460.html#L567'>cfs_rq</a>            567 sched/debug.c  	SEQ_printf_task_group_path(m, cfs_rq-&gt;tg, "cfs_rq[%d]:%s\n", cpu);</span>
+<span class='curline'><a href='../S/460.html#L573'>cfs_rq</a>            573 sched/debug.c  			SPLIT_NS(cfs_rq-&gt;exec_clock));</span>
+<span class='curline'><a href='../S/460.html#L576'>cfs_rq</a>            576 sched/debug.c  	if (rb_first_cached(&amp;cfs_rq-&gt;tasks_timeline))</span>
+<span class='curline'><a href='../S/460.html#L577'>cfs_rq</a>            577 sched/debug.c  		MIN_vruntime = (__pick_first_entity(cfs_rq))-&gt;vruntime;</span>
+<span class='curline'><a href='../S/460.html#L578'>cfs_rq</a>            578 sched/debug.c  	last = __pick_last_entity(cfs_rq);</span>
+<span class='curline'><a href='../S/460.html#L581'>cfs_rq</a>            581 sched/debug.c  	min_vruntime = cfs_rq-&gt;min_vruntime;</span>
+<span class='curline'><a href='../S/460.html#L597'>cfs_rq</a>            597 sched/debug.c  			cfs_rq-&gt;nr_spread_over);</span>
+<span class='curline'><a href='../S/460.html#L598'>cfs_rq</a>            598 sched/debug.c  	SEQ_printf(m, "  .%-30s: %d\n", "nr_running", cfs_rq-&gt;nr_running);</span>
+<span class='curline'><a href='../S/460.html#L599'>cfs_rq</a>            599 sched/debug.c  	SEQ_printf(m, "  .%-30s: %ld\n", "load", cfs_rq-&gt;load.weight);</span>
+<span class='curline'><a href='../S/460.html#L602'>cfs_rq</a>            602 sched/debug.c  			cfs_rq-&gt;avg.load_avg);</span>
+<span class='curline'><a href='../S/460.html#L604'>cfs_rq</a>            604 sched/debug.c  			cfs_rq-&gt;avg.runnable_avg);</span>
+<span class='curline'><a href='../S/460.html#L606'>cfs_rq</a>            606 sched/debug.c  			cfs_rq-&gt;avg.util_avg);</span>
+<span class='curline'><a href='../S/460.html#L608'>cfs_rq</a>            608 sched/debug.c  			cfs_rq-&gt;avg.util_est.enqueued);</span>
+<span class='curline'><a href='../S/460.html#L610'>cfs_rq</a>            610 sched/debug.c  			cfs_rq-&gt;removed.load_avg);</span>
+<span class='curline'><a href='../S/460.html#L612'>cfs_rq</a>            612 sched/debug.c  			cfs_rq-&gt;removed.util_avg);</span>
+<span class='curline'><a href='../S/460.html#L614'>cfs_rq</a>            614 sched/debug.c  			cfs_rq-&gt;removed.runnable_avg);</span>
+<span class='curline'><a href='../S/460.html#L617'>cfs_rq</a>            617 sched/debug.c  			cfs_rq-&gt;tg_load_avg_contrib);</span>
+<span class='curline'><a href='../S/460.html#L619'>cfs_rq</a>            619 sched/debug.c  			atomic_long_read(&amp;cfs_rq-&gt;tg-&gt;load_avg));</span>
+<span class='curline'><a href='../S/460.html#L624'>cfs_rq</a>            624 sched/debug.c  			cfs_rq-&gt;throttled);</span>
+<span class='curline'><a href='../S/460.html#L626'>cfs_rq</a>            626 sched/debug.c  			cfs_rq-&gt;throttle_count);</span>
+<span class='curline'><a href='../S/460.html#L630'>cfs_rq</a>            630 sched/debug.c  	print_cfs_group_stats(m, cpu, cfs_rq-&gt;tg);</span>
+<span class='curline'><a href='../S/464.html#L275'>cfs_rq</a>            275 sched/fair.c   static inline struct cfs_rq *task_cfs_rq(struct task_struct *p)</span>
+<span class='curline'><a href='../S/464.html#L277'>cfs_rq</a>            277 sched/fair.c   	return p-&gt;se.cfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L281'>cfs_rq</a>            281 sched/fair.c   static inline struct cfs_rq *cfs_rq_of(struct sched_entity *se)</span>
+<span class='curline'><a href='../S/464.html#L283'>cfs_rq</a>            283 sched/fair.c   	return se-&gt;cfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L287'>cfs_rq</a>            287 sched/fair.c   static inline struct cfs_rq *group_cfs_rq(struct sched_entity *grp)</span>
+<span class='curline'><a href='../S/464.html#L292'>cfs_rq</a>            292 sched/fair.c   static inline void cfs_rq_tg_path(struct cfs_rq *cfs_rq, char *path, int len)</span>
+<span class='curline'><a href='../S/464.html#L297'>cfs_rq</a>            297 sched/fair.c   	if (cfs_rq &amp;&amp; task_group_is_autogroup(cfs_rq-&gt;tg))</span>
+<span class='curline'><a href='../S/464.html#L298'>cfs_rq</a>            298 sched/fair.c   		autogroup_path(cfs_rq-&gt;tg, path, len);</span>
+<span class='curline'><a href='../S/464.html#L299'>cfs_rq</a>            299 sched/fair.c   	else if (cfs_rq &amp;&amp; cfs_rq-&gt;tg-&gt;css.cgroup)</span>
+<span class='curline'><a href='../S/464.html#L300'>cfs_rq</a>            300 sched/fair.c   		cgroup_path(cfs_rq-&gt;tg-&gt;css.cgroup, path, len);</span>
+<span class='curline'><a href='../S/464.html#L305'>cfs_rq</a>            305 sched/fair.c   static inline bool list_add_leaf_cfs_rq(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L307'>cfs_rq</a>            307 sched/fair.c   	struct rq *rq = rq_of(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L310'>cfs_rq</a>            310 sched/fair.c   	if (cfs_rq-&gt;on_list)</span>
+<span class='curline'><a href='../S/464.html#L313'>cfs_rq</a>            313 sched/fair.c   	cfs_rq-&gt;on_list = 1;</span>
+<span class='curline'><a href='../S/464.html#L324'>cfs_rq</a>            324 sched/fair.c   	if (cfs_rq-&gt;tg-&gt;parent &amp;&amp;</span>
+<span class='curline'><a href='../S/464.html#L325'>cfs_rq</a>            325 sched/fair.c   	    cfs_rq-&gt;tg-&gt;parent-&gt;cfs_rq[cpu]-&gt;on_list) {</span>
+<span class='curline'><a href='../S/464.html#L332'>cfs_rq</a>            332 sched/fair.c   		list_add_tail_rcu(&amp;cfs_rq-&gt;leaf_cfs_rq_list,</span>
+<span class='curline'><a href='../S/464.html#L333'>cfs_rq</a>            333 sched/fair.c   			&amp;(cfs_rq-&gt;tg-&gt;parent-&gt;cfs_rq[cpu]-&gt;leaf_cfs_rq_list));</span>
+<span class='curline'><a href='../S/464.html#L343'>cfs_rq</a>            343 sched/fair.c   	if (!cfs_rq-&gt;tg-&gt;parent) {</span>
+<span class='curline'><a href='../S/464.html#L348'>cfs_rq</a>            348 sched/fair.c   		list_add_tail_rcu(&amp;cfs_rq-&gt;leaf_cfs_rq_list,</span>
+<span class='curline'><a href='../S/464.html#L364'>cfs_rq</a>            364 sched/fair.c   	list_add_rcu(&amp;cfs_rq-&gt;leaf_cfs_rq_list, rq-&gt;tmp_alone_branch);</span>
+<span class='curline'><a href='../S/464.html#L369'>cfs_rq</a>            369 sched/fair.c   	rq-&gt;tmp_alone_branch = &amp;cfs_rq-&gt;leaf_cfs_rq_list;</span>
+<span class='curline'><a href='../S/464.html#L373'>cfs_rq</a>            373 sched/fair.c   static inline void list_del_leaf_cfs_rq(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L375'>cfs_rq</a>            375 sched/fair.c   	if (cfs_rq-&gt;on_list) {</span>
+<span class='curline'><a href='../S/464.html#L376'>cfs_rq</a>            376 sched/fair.c   		struct rq *rq = rq_of(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L385'>cfs_rq</a>            385 sched/fair.c   		if (rq-&gt;tmp_alone_branch == &amp;cfs_rq-&gt;leaf_cfs_rq_list)</span>
+<span class='curline'><a href='../S/464.html#L386'>cfs_rq</a>            386 sched/fair.c   			rq-&gt;tmp_alone_branch = cfs_rq-&gt;leaf_cfs_rq_list.prev;</span>
+<span class='curline'><a href='../S/464.html#L388'>cfs_rq</a>            388 sched/fair.c   		list_del_rcu(&amp;cfs_rq-&gt;leaf_cfs_rq_list);</span>
+<span class='curline'><a href='../S/464.html#L389'>cfs_rq</a>            389 sched/fair.c   		cfs_rq-&gt;on_list = 0;</span>
+<span class='curline'><a href='../S/464.html#L399'>cfs_rq</a>            399 sched/fair.c   #define for_each_leaf_cfs_rq_safe(rq, cfs_rq, pos)			\</span>
+<span class='curline'><a href='../S/464.html#L400'>cfs_rq</a>            400 sched/fair.c   	list_for_each_entry_safe(cfs_rq, pos, &amp;rq-&gt;leaf_cfs_rq_list,	\</span>
+<span class='curline'><a href='../S/464.html#L404'>cfs_rq</a>            404 sched/fair.c   static inline struct cfs_rq *</span>
+<span class='curline'><a href='../S/464.html#L407'>cfs_rq</a>            407 sched/fair.c   	if (se-&gt;cfs_rq == pse-&gt;cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L408'>cfs_rq</a>            408 sched/fair.c   		return se-&gt;cfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L460'>cfs_rq</a>            460 sched/fair.c   static inline struct cfs_rq *task_cfs_rq(struct task_struct *p)</span>
+<span class='curline'><a href='../S/464.html#L465'>cfs_rq</a>            465 sched/fair.c   static inline struct cfs_rq *cfs_rq_of(struct sched_entity *se)</span>
+<span class='curline'><a href='../S/464.html#L474'>cfs_rq</a>            474 sched/fair.c   static inline struct cfs_rq *group_cfs_rq(struct sched_entity *grp)</span>
+<span class='curline'><a href='../S/464.html#L479'>cfs_rq</a>            479 sched/fair.c   static inline void cfs_rq_tg_path(struct cfs_rq *cfs_rq, char *path, int len)</span>
+<span class='curline'><a href='../S/464.html#L485'>cfs_rq</a>            485 sched/fair.c   static inline bool list_add_leaf_cfs_rq(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L490'>cfs_rq</a>            490 sched/fair.c   static inline void list_del_leaf_cfs_rq(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L498'>cfs_rq</a>            498 sched/fair.c   #define for_each_leaf_cfs_rq_safe(rq, cfs_rq, pos)	\</span>
+<span class='curline'><a href='../S/464.html#L499'>cfs_rq</a>            499 sched/fair.c   		for (cfs_rq = &amp;rq-&gt;cfs, pos = NULL; cfs_rq; cfs_rq = pos)</span>
+<span class='curline'><a href='../S/464.html#L514'>cfs_rq</a>            514 sched/fair.c   void account_cfs_rq_runtime(struct cfs_rq *cfs_rq, u64 delta_exec);</span>
+<span class='curline'><a href='../S/464.html#L544'>cfs_rq</a>            544 sched/fair.c   static void update_min_vruntime(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L546'>cfs_rq</a>            546 sched/fair.c   	struct sched_entity *curr = cfs_rq-&gt;curr;</span>
+<span class='curline'><a href='../S/464.html#L547'>cfs_rq</a>            547 sched/fair.c   	struct rb_node *leftmost = rb_first_cached(&amp;cfs_rq-&gt;tasks_timeline);</span>
+<span class='curline'><a href='../S/464.html#L549'>cfs_rq</a>            549 sched/fair.c   	u64 vruntime = cfs_rq-&gt;min_vruntime;</span>
+<span class='curline'><a href='../S/464.html#L569'>cfs_rq</a>            569 sched/fair.c   	cfs_rq-&gt;min_vruntime = max_vruntime(cfs_rq-&gt;min_vruntime, vruntime);</span>
+<span class='curline'><a href='../S/464.html#L572'>cfs_rq</a>            572 sched/fair.c   	cfs_rq-&gt;min_vruntime_copy = cfs_rq-&gt;min_vruntime;</span>
+<span class='curline'><a href='../S/464.html#L579'>cfs_rq</a>            579 sched/fair.c   static void __enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)</span>
+<span class='curline'><a href='../S/464.html#L581'>cfs_rq</a>            581 sched/fair.c   	struct rb_node **link = &amp;cfs_rq-&gt;tasks_timeline.rb_root.rb_node;</span>
+<span class='curline'><a href='../S/464.html#L586'>cfs_rq</a>            586 sched/fair.c   	trace_android_rvh_enqueue_entity(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L607'>cfs_rq</a>            607 sched/fair.c   			       &amp;cfs_rq-&gt;tasks_timeline, leftmost);</span>
+<span class='curline'><a href='../S/464.html#L610'>cfs_rq</a>            610 sched/fair.c   static void __dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)</span>
+<span class='curline'><a href='../S/464.html#L612'>cfs_rq</a>            612 sched/fair.c   	trace_android_rvh_dequeue_entity(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L613'>cfs_rq</a>            613 sched/fair.c   	rb_erase_cached(&amp;se-&gt;run_node, &amp;cfs_rq-&gt;tasks_timeline);</span>
+<span class='curline'><a href='../S/464.html#L616'>cfs_rq</a>            616 sched/fair.c   struct sched_entity *__pick_first_entity(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L618'>cfs_rq</a>            618 sched/fair.c   	struct rb_node *left = rb_first_cached(&amp;cfs_rq-&gt;tasks_timeline);</span>
+<span class='curline'><a href='../S/464.html#L637'>cfs_rq</a>            637 sched/fair.c   struct sched_entity *__pick_last_entity(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L639'>cfs_rq</a>            639 sched/fair.c   	struct rb_node *last = rb_last(&amp;cfs_rq-&gt;tasks_timeline.rb_root);</span>
+<span class='curline'><a href='../S/464.html#L707'>cfs_rq</a>            707 sched/fair.c   static u64 sched_slice(struct cfs_rq *cfs_rq, struct sched_entity *se)</span>
+<span class='curline'><a href='../S/464.html#L709'>cfs_rq</a>            709 sched/fair.c   	unsigned int nr_running = cfs_rq-&gt;nr_running;</span>
+<span class='curline'><a href='../S/464.html#L713'>cfs_rq</a>            713 sched/fair.c   		nr_running = rq_of(cfs_rq)-&gt;cfs.h_nr_running;</span>
+<span class='curline'><a href='../S/464.html#L721'>cfs_rq</a>            721 sched/fair.c   		cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L722'>cfs_rq</a>            722 sched/fair.c   		load = &amp;cfs_rq-&gt;load;</span>
+<span class='curline'><a href='../S/464.html#L725'>cfs_rq</a>            725 sched/fair.c   			lw = cfs_rq-&gt;load;</span>
+<span class='curline'><a href='../S/464.html#L744'>cfs_rq</a>            744 sched/fair.c   static u64 sched_vslice(struct cfs_rq *cfs_rq, struct sched_entity *se)</span>
+<span class='curline'><a href='../S/464.html#L746'>cfs_rq</a>            746 sched/fair.c   	return calc_delta_fair(sched_slice(cfs_rq, se), se);</span>
+<span class='curline'><a href='../S/464.html#L806'>cfs_rq</a>            806 sched/fair.c   	struct cfs_rq *cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L808'>cfs_rq</a>            808 sched/fair.c   	long cpu_scale = arch_scale_cpu_capacity(cpu_of(rq_of(cfs_rq)));</span>
+<span class='curline'><a href='../S/464.html#L809'>cfs_rq</a>            809 sched/fair.c   	long cap = (long)(cpu_scale - cfs_rq-&gt;avg.util_avg) / 2;</span>
+<span class='curline'><a href='../S/464.html#L812'>cfs_rq</a>            812 sched/fair.c   		if (cfs_rq-&gt;avg.util_avg != 0) {</span>
+<span class='curline'><a href='../S/464.html#L813'>cfs_rq</a>            813 sched/fair.c   			sa-&gt;util_avg  = cfs_rq-&gt;avg.util_avg * se-&gt;load.weight;</span>
+<span class='curline'><a href='../S/464.html#L814'>cfs_rq</a>            814 sched/fair.c   			sa-&gt;util_avg /= (cfs_rq-&gt;avg.load_avg + 1);</span>
+<span class='curline'><a href='../S/464.html#L836'>cfs_rq</a>            836 sched/fair.c   		se-&gt;avg.last_update_time = cfs_rq_clock_pelt(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L852'>cfs_rq</a>            852 sched/fair.c   static void update_tg_load_avg(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L860'>cfs_rq</a>            860 sched/fair.c   static void update_curr(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L862'>cfs_rq</a>            862 sched/fair.c   	struct sched_entity *curr = cfs_rq-&gt;curr;</span>
+<span class='curline'><a href='../S/464.html#L863'>cfs_rq</a>            863 sched/fair.c   	u64 now = rq_clock_task(rq_of(cfs_rq));</span>
+<span class='curline'><a href='../S/464.html#L879'>cfs_rq</a>            879 sched/fair.c   	schedstat_add(cfs_rq-&gt;exec_clock, delta_exec);</span>
+<span class='curline'><a href='../S/464.html#L882'>cfs_rq</a>            882 sched/fair.c   	update_min_vruntime(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L892'>cfs_rq</a>            892 sched/fair.c   	account_cfs_rq_runtime(cfs_rq, delta_exec);</span>
+<span class='curline'><a href='../S/464.html#L901'>cfs_rq</a>            901 sched/fair.c   update_stats_wait_start(struct cfs_rq *cfs_rq, struct sched_entity *se)</span>
+<span class='curline'><a href='../S/464.html#L908'>cfs_rq</a>            908 sched/fair.c   	wait_start = rq_clock(rq_of(cfs_rq));</span>
+<span class='curline'><a href='../S/464.html#L919'>cfs_rq</a>            919 sched/fair.c   update_stats_wait_end(struct cfs_rq *cfs_rq, struct sched_entity *se)</span>
+<span class='curline'><a href='../S/464.html#L927'>cfs_rq</a>            927 sched/fair.c   	delta = rq_clock(rq_of(cfs_rq)) - schedstat_val(se-&gt;statistics.wait_start);</span>
+<span class='curline'><a href='../S/464.html#L951'>cfs_rq</a>            951 sched/fair.c   update_stats_enqueue_sleeper(struct cfs_rq *cfs_rq, struct sched_entity *se)</span>
+<span class='curline'><a href='../S/464.html#L966'>cfs_rq</a>            966 sched/fair.c   		u64 delta = rq_clock(rq_of(cfs_rq)) - sleep_start;</span>
+<span class='curline'><a href='../S/464.html#L983'>cfs_rq</a>            983 sched/fair.c   		u64 delta = rq_clock(rq_of(cfs_rq)) - block_start;</span>
+<span class='curline'><a href='../S/464.html#L1023'>cfs_rq</a>           1023 sched/fair.c   update_stats_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)</span>
+<span class='curline'><a href='../S/464.html#L1032'>cfs_rq</a>           1032 sched/fair.c   	if (se != cfs_rq-&gt;curr)</span>
+<span class='curline'><a href='../S/464.html#L1033'>cfs_rq</a>           1033 sched/fair.c   		update_stats_wait_start(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L1036'>cfs_rq</a>           1036 sched/fair.c   		update_stats_enqueue_sleeper(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L1040'>cfs_rq</a>           1040 sched/fair.c   update_stats_dequeue(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)</span>
+<span class='curline'><a href='../S/464.html#L1050'>cfs_rq</a>           1050 sched/fair.c   	if (se != cfs_rq-&gt;curr)</span>
+<span class='curline'><a href='../S/464.html#L1051'>cfs_rq</a>           1051 sched/fair.c   		update_stats_wait_end(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L1058'>cfs_rq</a>           1058 sched/fair.c   				      rq_clock(rq_of(cfs_rq)));</span>
+<span class='curline'><a href='../S/464.html#L1061'>cfs_rq</a>           1061 sched/fair.c   				      rq_clock(rq_of(cfs_rq)));</span>
+<span class='curline'><a href='../S/464.html#L1069'>cfs_rq</a>           1069 sched/fair.c   update_stats_curr_start(struct cfs_rq *cfs_rq, struct sched_entity *se)</span>
+<span class='curline'><a href='../S/464.html#L1074'>cfs_rq</a>           1074 sched/fair.c   	se-&gt;exec_start = rq_clock_task(rq_of(cfs_rq));</span>
+<span class='curline'><a href='../S/464.html#L3008'>cfs_rq</a>           3008 sched/fair.c   account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)</span>
+<span class='curline'><a href='../S/464.html#L3010'>cfs_rq</a>           3010 sched/fair.c   	update_load_add(&amp;cfs_rq-&gt;load, se-&gt;load.weight);</span>
+<span class='curline'><a href='../S/464.html#L3013'>cfs_rq</a>           3013 sched/fair.c   		struct rq *rq = rq_of(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L3019'>cfs_rq</a>           3019 sched/fair.c   	cfs_rq-&gt;nr_running++;</span>
+<span class='curline'><a href='../S/464.html#L3023'>cfs_rq</a>           3023 sched/fair.c   account_entity_dequeue(struct cfs_rq *cfs_rq, struct sched_entity *se)</span>
+<span class='curline'><a href='../S/464.html#L3025'>cfs_rq</a>           3025 sched/fair.c   	update_load_sub(&amp;cfs_rq-&gt;load, se-&gt;load.weight);</span>
+<span class='curline'><a href='../S/464.html#L3028'>cfs_rq</a>           3028 sched/fair.c   		account_numa_dequeue(rq_of(cfs_rq), task_of(se));</span>
+<span class='curline'><a href='../S/464.html#L3032'>cfs_rq</a>           3032 sched/fair.c   	cfs_rq-&gt;nr_running--;</span>
+<span class='curline'><a href='../S/464.html#L3085'>cfs_rq</a>           3085 sched/fair.c   enqueue_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se)</span>
+<span class='curline'><a href='../S/464.html#L3087'>cfs_rq</a>           3087 sched/fair.c   	cfs_rq-&gt;avg.load_avg += se-&gt;avg.load_avg;</span>
+<span class='curline'><a href='../S/464.html#L3088'>cfs_rq</a>           3088 sched/fair.c   	cfs_rq-&gt;avg.load_sum += se_weight(se) * se-&gt;avg.load_sum;</span>
+<span class='curline'><a href='../S/464.html#L3092'>cfs_rq</a>           3092 sched/fair.c   dequeue_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se)</span>
+<span class='curline'><a href='../S/464.html#L3094'>cfs_rq</a>           3094 sched/fair.c   	sub_positive(&amp;cfs_rq-&gt;avg.load_avg, se-&gt;avg.load_avg);</span>
+<span class='curline'><a href='../S/464.html#L3095'>cfs_rq</a>           3095 sched/fair.c   	sub_positive(&amp;cfs_rq-&gt;avg.load_sum, se_weight(se) * se-&gt;avg.load_sum);</span>
+<span class='curline'><a href='../S/464.html#L3099'>cfs_rq</a>           3099 sched/fair.c   enqueue_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se) { }</span>
+<span class='curline'><a href='../S/464.html#L3101'>cfs_rq</a>           3101 sched/fair.c   dequeue_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se) { }</span>
+<span class='curline'><a href='../S/464.html#L3104'>cfs_rq</a>           3104 sched/fair.c   static void reweight_entity(struct cfs_rq *cfs_rq, struct sched_entity *se,</span>
+<span class='curline'><a href='../S/464.html#L3109'>cfs_rq</a>           3109 sched/fair.c   		if (cfs_rq-&gt;curr == se)</span>
+<span class='curline'><a href='../S/464.html#L3110'>cfs_rq</a>           3110 sched/fair.c   			update_curr(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L3111'>cfs_rq</a>           3111 sched/fair.c   		update_load_sub(&amp;cfs_rq-&gt;load, se-&gt;load.weight);</span>
+<span class='curline'><a href='../S/464.html#L3113'>cfs_rq</a>           3113 sched/fair.c   	dequeue_load_avg(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L3125'>cfs_rq</a>           3125 sched/fair.c   	enqueue_load_avg(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L3127'>cfs_rq</a>           3127 sched/fair.c   		update_load_add(&amp;cfs_rq-&gt;load, se-&gt;load.weight);</span>
+<span class='curline'><a href='../S/464.html#L3134'>cfs_rq</a>           3134 sched/fair.c   	struct cfs_rq *cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L3138'>cfs_rq</a>           3138 sched/fair.c   	reweight_entity(cfs_rq, se, weight);</span>
+<span class='curline'><a href='../S/464.html#L3217'>cfs_rq</a>           3217 sched/fair.c   static long calc_group_shares(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L3220'>cfs_rq</a>           3220 sched/fair.c   	struct task_group *tg = cfs_rq-&gt;tg;</span>
+<span class='curline'><a href='../S/464.html#L3224'>cfs_rq</a>           3224 sched/fair.c   	load = max(scale_load_down(cfs_rq-&gt;load.weight), cfs_rq-&gt;avg.load_avg);</span>
+<span class='curline'><a href='../S/464.html#L3229'>cfs_rq</a>           3229 sched/fair.c   	tg_weight -= cfs_rq-&gt;tg_load_avg_contrib;</span>
+<span class='curline'><a href='../S/464.html#L3252'>cfs_rq</a>           3252 sched/fair.c   static inline int throttled_hierarchy(struct cfs_rq *cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L3260'>cfs_rq</a>           3260 sched/fair.c   	struct cfs_rq *gcfs_rq = group_cfs_rq(se);</span>
+<span class='curline'><a href='../S/464.html#L3287'>cfs_rq</a>           3287 sched/fair.c   static inline void cfs_rq_util_change(struct cfs_rq *cfs_rq, int flags)</span>
+<span class='curline'><a href='../S/464.html#L3289'>cfs_rq</a>           3289 sched/fair.c   	struct rq *rq = rq_of(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L3291'>cfs_rq</a>           3291 sched/fair.c   	if (&amp;rq-&gt;cfs == cfs_rq) {</span>
+<span class='curline'><a href='../S/464.html#L3326'>cfs_rq</a>           3326 sched/fair.c   static inline void update_tg_load_avg(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L3328'>cfs_rq</a>           3328 sched/fair.c   	long delta = cfs_rq-&gt;avg.load_avg - cfs_rq-&gt;tg_load_avg_contrib;</span>
+<span class='curline'><a href='../S/464.html#L3333'>cfs_rq</a>           3333 sched/fair.c   	if (cfs_rq-&gt;tg == &amp;root_task_group)</span>
+<span class='curline'><a href='../S/464.html#L3336'>cfs_rq</a>           3336 sched/fair.c   	if (abs(delta) &gt; cfs_rq-&gt;tg_load_avg_contrib / 64) {</span>
+<span class='curline'><a href='../S/464.html#L3337'>cfs_rq</a>           3337 sched/fair.c   		atomic_long_add(delta, &amp;cfs_rq-&gt;tg-&gt;load_avg);</span>
+<span class='curline'><a href='../S/464.html#L3338'>cfs_rq</a>           3338 sched/fair.c   		cfs_rq-&gt;tg_load_avg_contrib = cfs_rq-&gt;avg.load_avg;</span>
+<span class='curline'><a href='../S/464.html#L3348'>cfs_rq</a>           3348 sched/fair.c   		      struct cfs_rq *prev, struct cfs_rq *next)</span>
+<span class='curline'><a href='../S/464.html#L3461'>cfs_rq</a>           3461 sched/fair.c   update_tg_cfs_util(struct cfs_rq *cfs_rq, struct sched_entity *se, struct cfs_rq *gcfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L3474'>cfs_rq</a>           3474 sched/fair.c   	divider = get_pelt_divider(&amp;cfs_rq-&gt;avg);</span>
+<span class='curline'><a href='../S/464.html#L3481'>cfs_rq</a>           3481 sched/fair.c   	add_positive(&amp;cfs_rq-&gt;avg.util_avg, delta);</span>
+<span class='curline'><a href='../S/464.html#L3482'>cfs_rq</a>           3482 sched/fair.c   	cfs_rq-&gt;avg.util_sum = cfs_rq-&gt;avg.util_avg * divider;</span>
+<span class='curline'><a href='../S/464.html#L3486'>cfs_rq</a>           3486 sched/fair.c   update_tg_cfs_runnable(struct cfs_rq *cfs_rq, struct sched_entity *se, struct cfs_rq *gcfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L3499'>cfs_rq</a>           3499 sched/fair.c   	divider = get_pelt_divider(&amp;cfs_rq-&gt;avg);</span>
+<span class='curline'><a href='../S/464.html#L3506'>cfs_rq</a>           3506 sched/fair.c   	add_positive(&amp;cfs_rq-&gt;avg.runnable_avg, delta);</span>
+<span class='curline'><a href='../S/464.html#L3507'>cfs_rq</a>           3507 sched/fair.c   	cfs_rq-&gt;avg.runnable_sum = cfs_rq-&gt;avg.runnable_avg * divider;</span>
+<span class='curline'><a href='../S/464.html#L3511'>cfs_rq</a>           3511 sched/fair.c   update_tg_cfs_load(struct cfs_rq *cfs_rq, struct sched_entity *se, struct cfs_rq *gcfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L3528'>cfs_rq</a>           3528 sched/fair.c   	divider = get_pelt_divider(&amp;cfs_rq-&gt;avg);</span>
+<span class='curline'><a href='../S/464.html#L3568'>cfs_rq</a>           3568 sched/fair.c   	add_positive(&amp;cfs_rq-&gt;avg.load_avg, delta_avg);</span>
+<span class='curline'><a href='../S/464.html#L3569'>cfs_rq</a>           3569 sched/fair.c   	add_positive(&amp;cfs_rq-&gt;avg.load_sum, delta_sum);</span>
+<span class='curline'><a href='../S/464.html#L3572'>cfs_rq</a>           3572 sched/fair.c   static inline void add_tg_cfs_propagate(struct cfs_rq *cfs_rq, long runnable_sum)</span>
+<span class='curline'><a href='../S/464.html#L3574'>cfs_rq</a>           3574 sched/fair.c   	cfs_rq-&gt;propagate = 1;</span>
+<span class='curline'><a href='../S/464.html#L3575'>cfs_rq</a>           3575 sched/fair.c   	cfs_rq-&gt;prop_runnable_sum += runnable_sum;</span>
+<span class='curline'><a href='../S/464.html#L3581'>cfs_rq</a>           3581 sched/fair.c   	struct cfs_rq *cfs_rq, *gcfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L3592'>cfs_rq</a>           3592 sched/fair.c   	cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L3594'>cfs_rq</a>           3594 sched/fair.c   	add_tg_cfs_propagate(cfs_rq, gcfs_rq-&gt;prop_runnable_sum);</span>
+<span class='curline'><a href='../S/464.html#L3596'>cfs_rq</a>           3596 sched/fair.c   	update_tg_cfs_util(cfs_rq, se, gcfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L3597'>cfs_rq</a>           3597 sched/fair.c   	update_tg_cfs_runnable(cfs_rq, se, gcfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L3598'>cfs_rq</a>           3598 sched/fair.c   	update_tg_cfs_load(cfs_rq, se, gcfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L3600'>cfs_rq</a>           3600 sched/fair.c   	trace_pelt_cfs_tp(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L3612'>cfs_rq</a>           3612 sched/fair.c   	struct cfs_rq *gcfs_rq = group_cfs_rq(se);</span>
+<span class='curline'><a href='../S/464.html#L3638'>cfs_rq</a>           3638 sched/fair.c   static inline void update_tg_load_avg(struct cfs_rq *cfs_rq) {}</span>
+<span class='curline'><a href='../S/464.html#L3645'>cfs_rq</a>           3645 sched/fair.c   static inline void add_tg_cfs_propagate(struct cfs_rq *cfs_rq, long runnable_sum) {}</span>
+<span class='curline'><a href='../S/464.html#L3666'>cfs_rq</a>           3666 sched/fair.c   update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L3669'>cfs_rq</a>           3669 sched/fair.c   	struct sched_avg *sa = &amp;cfs_rq-&gt;avg;</span>
+<span class='curline'><a href='../S/464.html#L3672'>cfs_rq</a>           3672 sched/fair.c   	if (cfs_rq-&gt;removed.nr) {</span>
+<span class='curline'><a href='../S/464.html#L3674'>cfs_rq</a>           3674 sched/fair.c   		u32 divider = get_pelt_divider(&amp;cfs_rq-&gt;avg);</span>
+<span class='curline'><a href='../S/464.html#L3676'>cfs_rq</a>           3676 sched/fair.c   		raw_spin_lock(&amp;cfs_rq-&gt;removed.lock);</span>
+<span class='curline'><a href='../S/464.html#L3677'>cfs_rq</a>           3677 sched/fair.c   		swap(cfs_rq-&gt;removed.util_avg, removed_util);</span>
+<span class='curline'><a href='../S/464.html#L3678'>cfs_rq</a>           3678 sched/fair.c   		swap(cfs_rq-&gt;removed.load_avg, removed_load);</span>
+<span class='curline'><a href='../S/464.html#L3679'>cfs_rq</a>           3679 sched/fair.c   		swap(cfs_rq-&gt;removed.runnable_avg, removed_runnable);</span>
+<span class='curline'><a href='../S/464.html#L3680'>cfs_rq</a>           3680 sched/fair.c   		cfs_rq-&gt;removed.nr = 0;</span>
+<span class='curline'><a href='../S/464.html#L3681'>cfs_rq</a>           3681 sched/fair.c   		raw_spin_unlock(&amp;cfs_rq-&gt;removed.lock);</span>
+<span class='curline'><a href='../S/464.html#L3699'>cfs_rq</a>           3699 sched/fair.c   		add_tg_cfs_propagate(cfs_rq,</span>
+<span class='curline'><a href='../S/464.html#L3705'>cfs_rq</a>           3705 sched/fair.c   	decayed |= __update_load_avg_cfs_rq(now, cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L3709'>cfs_rq</a>           3709 sched/fair.c   	cfs_rq-&gt;load_last_update_time_copy = sa-&gt;last_update_time;</span>
+<span class='curline'><a href='../S/464.html#L3723'>cfs_rq</a>           3723 sched/fair.c   static void attach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se)</span>
+<span class='curline'><a href='../S/464.html#L3729'>cfs_rq</a>           3729 sched/fair.c   	u32 divider = get_pelt_divider(&amp;cfs_rq-&gt;avg);</span>
+<span class='curline'><a href='../S/464.html#L3738'>cfs_rq</a>           3738 sched/fair.c   	se-&gt;avg.last_update_time = cfs_rq-&gt;avg.last_update_time;</span>
+<span class='curline'><a href='../S/464.html#L3739'>cfs_rq</a>           3739 sched/fair.c   	se-&gt;avg.period_contrib = cfs_rq-&gt;avg.period_contrib;</span>
+<span class='curline'><a href='../S/464.html#L3757'>cfs_rq</a>           3757 sched/fair.c   	enqueue_load_avg(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L3758'>cfs_rq</a>           3758 sched/fair.c   	cfs_rq-&gt;avg.util_avg += se-&gt;avg.util_avg;</span>
+<span class='curline'><a href='../S/464.html#L3759'>cfs_rq</a>           3759 sched/fair.c   	cfs_rq-&gt;avg.util_sum += se-&gt;avg.util_sum;</span>
+<span class='curline'><a href='../S/464.html#L3760'>cfs_rq</a>           3760 sched/fair.c   	cfs_rq-&gt;avg.runnable_avg += se-&gt;avg.runnable_avg;</span>
+<span class='curline'><a href='../S/464.html#L3761'>cfs_rq</a>           3761 sched/fair.c   	cfs_rq-&gt;avg.runnable_sum += se-&gt;avg.runnable_sum;</span>
+<span class='curline'><a href='../S/464.html#L3763'>cfs_rq</a>           3763 sched/fair.c   	add_tg_cfs_propagate(cfs_rq, se-&gt;avg.load_sum);</span>
+<span class='curline'><a href='../S/464.html#L3765'>cfs_rq</a>           3765 sched/fair.c   	cfs_rq_util_change(cfs_rq, 0);</span>
+<span class='curline'><a href='../S/464.html#L3767'>cfs_rq</a>           3767 sched/fair.c   	trace_pelt_cfs_tp(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L3778'>cfs_rq</a>           3778 sched/fair.c   static void detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se)</span>
+<span class='curline'><a href='../S/464.html#L3780'>cfs_rq</a>           3780 sched/fair.c   	dequeue_load_avg(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L3781'>cfs_rq</a>           3781 sched/fair.c   	sub_positive(&amp;cfs_rq-&gt;avg.util_avg, se-&gt;avg.util_avg);</span>
+<span class='curline'><a href='../S/464.html#L3782'>cfs_rq</a>           3782 sched/fair.c   	sub_positive(&amp;cfs_rq-&gt;avg.util_sum, se-&gt;avg.util_sum);</span>
+<span class='curline'><a href='../S/464.html#L3783'>cfs_rq</a>           3783 sched/fair.c   	sub_positive(&amp;cfs_rq-&gt;avg.runnable_avg, se-&gt;avg.runnable_avg);</span>
+<span class='curline'><a href='../S/464.html#L3784'>cfs_rq</a>           3784 sched/fair.c   	sub_positive(&amp;cfs_rq-&gt;avg.runnable_sum, se-&gt;avg.runnable_sum);</span>
+<span class='curline'><a href='../S/464.html#L3786'>cfs_rq</a>           3786 sched/fair.c   	add_tg_cfs_propagate(cfs_rq, -se-&gt;avg.load_sum);</span>
+<span class='curline'><a href='../S/464.html#L3788'>cfs_rq</a>           3788 sched/fair.c   	cfs_rq_util_change(cfs_rq, 0);</span>
+<span class='curline'><a href='../S/464.html#L3790'>cfs_rq</a>           3790 sched/fair.c   	trace_pelt_cfs_tp(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L3801'>cfs_rq</a>           3801 sched/fair.c   static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)</span>
+<span class='curline'><a href='../S/464.html#L3803'>cfs_rq</a>           3803 sched/fair.c   	u64 now = cfs_rq_clock_pelt(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L3812'>cfs_rq</a>           3812 sched/fair.c   		__update_load_avg_se(now, cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L3816'>cfs_rq</a>           3816 sched/fair.c   	decayed  = update_cfs_rq_load_avg(now, cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L3828'>cfs_rq</a>           3828 sched/fair.c   		attach_entity_load_avg(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L3829'>cfs_rq</a>           3829 sched/fair.c   		update_tg_load_avg(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L3832'>cfs_rq</a>           3832 sched/fair.c   		cfs_rq_util_change(cfs_rq, 0);</span>
+<span class='curline'><a href='../S/464.html#L3835'>cfs_rq</a>           3835 sched/fair.c   			update_tg_load_avg(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L3840'>cfs_rq</a>           3840 sched/fair.c   static inline u64 cfs_rq_last_update_time(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L3846'>cfs_rq</a>           3846 sched/fair.c   		last_update_time_copy = cfs_rq-&gt;load_last_update_time_copy;</span>
+<span class='curline'><a href='../S/464.html#L3848'>cfs_rq</a>           3848 sched/fair.c   		last_update_time = cfs_rq-&gt;avg.last_update_time;</span>
+<span class='curline'><a href='../S/464.html#L3854'>cfs_rq</a>           3854 sched/fair.c   static inline u64 cfs_rq_last_update_time(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L3856'>cfs_rq</a>           3856 sched/fair.c   	return cfs_rq-&gt;avg.last_update_time;</span>
+<span class='curline'><a href='../S/464.html#L3866'>cfs_rq</a>           3866 sched/fair.c   	struct cfs_rq *cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L3869'>cfs_rq</a>           3869 sched/fair.c   	last_update_time = cfs_rq_last_update_time(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L3879'>cfs_rq</a>           3879 sched/fair.c   	struct cfs_rq *cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L3890'>cfs_rq</a>           3890 sched/fair.c   	raw_spin_lock_irqsave(&amp;cfs_rq-&gt;removed.lock, flags);</span>
+<span class='curline'><a href='../S/464.html#L3891'>cfs_rq</a>           3891 sched/fair.c   	++cfs_rq-&gt;removed.nr;</span>
+<span class='curline'><a href='../S/464.html#L3892'>cfs_rq</a>           3892 sched/fair.c   	cfs_rq-&gt;removed.util_avg	+= se-&gt;avg.util_avg;</span>
+<span class='curline'><a href='../S/464.html#L3893'>cfs_rq</a>           3893 sched/fair.c   	cfs_rq-&gt;removed.load_avg	+= se-&gt;avg.load_avg;</span>
+<span class='curline'><a href='../S/464.html#L3894'>cfs_rq</a>           3894 sched/fair.c   	cfs_rq-&gt;removed.runnable_avg	+= se-&gt;avg.runnable_avg;</span>
+<span class='curline'><a href='../S/464.html#L3895'>cfs_rq</a>           3895 sched/fair.c   	raw_spin_unlock_irqrestore(&amp;cfs_rq-&gt;removed.lock, flags);</span>
+<span class='curline'><a href='../S/464.html#L3898'>cfs_rq</a>           3898 sched/fair.c   static inline unsigned long cfs_rq_runnable_avg(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L3900'>cfs_rq</a>           3900 sched/fair.c   	return cfs_rq-&gt;avg.runnable_avg;</span>
+<span class='curline'><a href='../S/464.html#L3903'>cfs_rq</a>           3903 sched/fair.c   static inline unsigned long cfs_rq_load_avg(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L3905'>cfs_rq</a>           3905 sched/fair.c   	return cfs_rq-&gt;avg.load_avg;</span>
+<span class='curline'><a href='../S/464.html#L3941'>cfs_rq</a>           3941 sched/fair.c   static inline void util_est_enqueue(struct cfs_rq *cfs_rq,</span>
+<span class='curline'><a href='../S/464.html#L3950'>cfs_rq</a>           3950 sched/fair.c   	enqueued  = cfs_rq-&gt;avg.util_est.enqueued;</span>
+<span class='curline'><a href='../S/464.html#L3952'>cfs_rq</a>           3952 sched/fair.c   	WRITE_ONCE(cfs_rq-&gt;avg.util_est.enqueued, enqueued);</span>
+<span class='curline'><a href='../S/464.html#L3954'>cfs_rq</a>           3954 sched/fair.c   	trace_sched_util_est_cfs_tp(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L3957'>cfs_rq</a>           3957 sched/fair.c   static inline void util_est_dequeue(struct cfs_rq *cfs_rq,</span>
+<span class='curline'><a href='../S/464.html#L3966'>cfs_rq</a>           3966 sched/fair.c   	enqueued  = cfs_rq-&gt;avg.util_est.enqueued;</span>
+<span class='curline'><a href='../S/464.html#L3968'>cfs_rq</a>           3968 sched/fair.c   	WRITE_ONCE(cfs_rq-&gt;avg.util_est.enqueued, enqueued);</span>
+<span class='curline'><a href='../S/464.html#L3970'>cfs_rq</a>           3970 sched/fair.c   	trace_sched_util_est_cfs_tp(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L3988'>cfs_rq</a>           3988 sched/fair.c   static inline void util_est_update(struct cfs_rq *cfs_rq,</span>
+<span class='curline'><a href='../S/464.html#L3996'>cfs_rq</a>           3996 sched/fair.c   	trace_android_rvh_util_est_update(cfs_rq, p, task_sleep, &amp;ret);</span>
+<span class='curline'><a href='../S/464.html#L4049'>cfs_rq</a>           4049 sched/fair.c   	if (task_util(p) &gt; capacity_orig_of(cpu_of(rq_of(cfs_rq))))</span>
+<span class='curline'><a href='../S/464.html#L4114'>cfs_rq</a>           4114 sched/fair.c   static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int not_used1)</span>
+<span class='curline'><a href='../S/464.html#L4116'>cfs_rq</a>           4116 sched/fair.c   	cfs_rq_util_change(cfs_rq, 0);</span>
+<span class='curline'><a href='../S/464.html#L4122'>cfs_rq</a>           4122 sched/fair.c   attach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se) {}</span>
+<span class='curline'><a href='../S/464.html#L4124'>cfs_rq</a>           4124 sched/fair.c   detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se) {}</span>
+<span class='curline'><a href='../S/464.html#L4132'>cfs_rq</a>           4132 sched/fair.c   util_est_enqueue(struct cfs_rq *cfs_rq, struct task_struct *p) {}</span>
+<span class='curline'><a href='../S/464.html#L4135'>cfs_rq</a>           4135 sched/fair.c   util_est_dequeue(struct cfs_rq *cfs_rq, struct task_struct *p) {}</span>
+<span class='curline'><a href='../S/464.html#L4138'>cfs_rq</a>           4138 sched/fair.c   util_est_update(struct cfs_rq *cfs_rq, struct task_struct *p,</span>
+<span class='curline'><a href='../S/464.html#L4144'>cfs_rq</a>           4144 sched/fair.c   static void check_spread(struct cfs_rq *cfs_rq, struct sched_entity *se)</span>
+<span class='curline'><a href='../S/464.html#L4147'>cfs_rq</a>           4147 sched/fair.c   	s64 d = se-&gt;vruntime - cfs_rq-&gt;min_vruntime;</span>
+<span class='curline'><a href='../S/464.html#L4153'>cfs_rq</a>           4153 sched/fair.c   		schedstat_inc(cfs_rq-&gt;nr_spread_over);</span>
+<span class='curline'><a href='../S/464.html#L4158'>cfs_rq</a>           4158 sched/fair.c   place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)</span>
+<span class='curline'><a href='../S/464.html#L4160'>cfs_rq</a>           4160 sched/fair.c   	u64 vruntime = cfs_rq-&gt;min_vruntime;</span>
+<span class='curline'><a href='../S/464.html#L4169'>cfs_rq</a>           4169 sched/fair.c   		vruntime += sched_vslice(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L4187'>cfs_rq</a>           4187 sched/fair.c   	trace_android_rvh_place_entity(cfs_rq, se, initial, vruntime);</span>
+<span class='curline'><a href='../S/464.html#L4190'>cfs_rq</a>           4190 sched/fair.c   static void check_enqueue_throttle(struct cfs_rq *cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4245'>cfs_rq</a>           4245 sched/fair.c   enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)</span>
+<span class='curline'><a href='../S/464.html#L4248'>cfs_rq</a>           4248 sched/fair.c   	bool curr = cfs_rq-&gt;curr == se;</span>
+<span class='curline'><a href='../S/464.html#L4255'>cfs_rq</a>           4255 sched/fair.c   		se-&gt;vruntime += cfs_rq-&gt;min_vruntime;</span>
+<span class='curline'><a href='../S/464.html#L4257'>cfs_rq</a>           4257 sched/fair.c   	update_curr(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4266'>cfs_rq</a>           4266 sched/fair.c   		se-&gt;vruntime += cfs_rq-&gt;min_vruntime;</span>
+<span class='curline'><a href='../S/464.html#L4276'>cfs_rq</a>           4276 sched/fair.c   	update_load_avg(cfs_rq, se, UPDATE_TG | DO_ATTACH);</span>
+<span class='curline'><a href='../S/464.html#L4279'>cfs_rq</a>           4279 sched/fair.c   	account_entity_enqueue(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L4282'>cfs_rq</a>           4282 sched/fair.c   		place_entity(cfs_rq, se, 0);</span>
+<span class='curline'><a href='../S/464.html#L4285'>cfs_rq</a>           4285 sched/fair.c   	update_stats_enqueue(cfs_rq, se, flags);</span>
+<span class='curline'><a href='../S/464.html#L4286'>cfs_rq</a>           4286 sched/fair.c   	check_spread(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L4288'>cfs_rq</a>           4288 sched/fair.c   		__enqueue_entity(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L4296'>cfs_rq</a>           4296 sched/fair.c   	if (cfs_rq-&gt;nr_running == 1 || cfs_bandwidth_used())</span>
+<span class='curline'><a href='../S/464.html#L4297'>cfs_rq</a>           4297 sched/fair.c   		list_add_leaf_cfs_rq(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4299'>cfs_rq</a>           4299 sched/fair.c   	if (cfs_rq-&gt;nr_running == 1)</span>
+<span class='curline'><a href='../S/464.html#L4300'>cfs_rq</a>           4300 sched/fair.c   		check_enqueue_throttle(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4306'>cfs_rq</a>           4306 sched/fair.c   		struct cfs_rq *cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L4307'>cfs_rq</a>           4307 sched/fair.c   		if (cfs_rq-&gt;last != se)</span>
+<span class='curline'><a href='../S/464.html#L4310'>cfs_rq</a>           4310 sched/fair.c   		cfs_rq-&gt;last = NULL;</span>
+<span class='curline'><a href='../S/464.html#L4317'>cfs_rq</a>           4317 sched/fair.c   		struct cfs_rq *cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L4318'>cfs_rq</a>           4318 sched/fair.c   		if (cfs_rq-&gt;next != se)</span>
+<span class='curline'><a href='../S/464.html#L4321'>cfs_rq</a>           4321 sched/fair.c   		cfs_rq-&gt;next = NULL;</span>
+<span class='curline'><a href='../S/464.html#L4328'>cfs_rq</a>           4328 sched/fair.c   		struct cfs_rq *cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L4329'>cfs_rq</a>           4329 sched/fair.c   		if (cfs_rq-&gt;skip != se)</span>
+<span class='curline'><a href='../S/464.html#L4332'>cfs_rq</a>           4332 sched/fair.c   		cfs_rq-&gt;skip = NULL;</span>
+<span class='curline'><a href='../S/464.html#L4336'>cfs_rq</a>           4336 sched/fair.c   static void clear_buddies(struct cfs_rq *cfs_rq, struct sched_entity *se)</span>
+<span class='curline'><a href='../S/464.html#L4338'>cfs_rq</a>           4338 sched/fair.c   	if (cfs_rq-&gt;last == se)</span>
+<span class='curline'><a href='../S/464.html#L4341'>cfs_rq</a>           4341 sched/fair.c   	if (cfs_rq-&gt;next == se)</span>
+<span class='curline'><a href='../S/464.html#L4344'>cfs_rq</a>           4344 sched/fair.c   	if (cfs_rq-&gt;skip == se)</span>
+<span class='curline'><a href='../S/464.html#L4348'>cfs_rq</a>           4348 sched/fair.c   static __always_inline void return_cfs_rq_runtime(struct cfs_rq *cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4351'>cfs_rq</a>           4351 sched/fair.c   dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)</span>
+<span class='curline'><a href='../S/464.html#L4356'>cfs_rq</a>           4356 sched/fair.c   	update_curr(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4366'>cfs_rq</a>           4366 sched/fair.c   	update_load_avg(cfs_rq, se, UPDATE_TG);</span>
+<span class='curline'><a href='../S/464.html#L4369'>cfs_rq</a>           4369 sched/fair.c   	update_stats_dequeue(cfs_rq, se, flags);</span>
+<span class='curline'><a href='../S/464.html#L4371'>cfs_rq</a>           4371 sched/fair.c   	clear_buddies(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L4373'>cfs_rq</a>           4373 sched/fair.c   	if (se != cfs_rq-&gt;curr)</span>
+<span class='curline'><a href='../S/464.html#L4374'>cfs_rq</a>           4374 sched/fair.c   		__dequeue_entity(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L4376'>cfs_rq</a>           4376 sched/fair.c   	account_entity_dequeue(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L4385'>cfs_rq</a>           4385 sched/fair.c   		se-&gt;vruntime -= cfs_rq-&gt;min_vruntime;</span>
+<span class='curline'><a href='../S/464.html#L4388'>cfs_rq</a>           4388 sched/fair.c   	return_cfs_rq_runtime(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4399'>cfs_rq</a>           4399 sched/fair.c   		update_min_vruntime(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4406'>cfs_rq</a>           4406 sched/fair.c   check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)</span>
+<span class='curline'><a href='../S/464.html#L4413'>cfs_rq</a>           4413 sched/fair.c   	ideal_runtime = sched_slice(cfs_rq, curr);</span>
+<span class='curline'><a href='../S/464.html#L4416'>cfs_rq</a>           4416 sched/fair.c   			delta_exec, cfs_rq, curr, sysctl_sched_min_granularity);</span>
+<span class='curline'><a href='../S/464.html#L4420'>cfs_rq</a>           4420 sched/fair.c   		resched_curr(rq_of(cfs_rq));</span>
+<span class='curline'><a href='../S/464.html#L4425'>cfs_rq</a>           4425 sched/fair.c   		clear_buddies(cfs_rq, curr);</span>
+<span class='curline'><a href='../S/464.html#L4437'>cfs_rq</a>           4437 sched/fair.c   	se = __pick_first_entity(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4444'>cfs_rq</a>           4444 sched/fair.c   		resched_curr(rq_of(cfs_rq));</span>
+<span class='curline'><a href='../S/464.html#L4447'>cfs_rq</a>           4447 sched/fair.c   void set_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)</span>
+<span class='curline'><a href='../S/464.html#L4456'>cfs_rq</a>           4456 sched/fair.c   		update_stats_wait_end(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L4457'>cfs_rq</a>           4457 sched/fair.c   		__dequeue_entity(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L4458'>cfs_rq</a>           4458 sched/fair.c   		update_load_avg(cfs_rq, se, UPDATE_TG);</span>
+<span class='curline'><a href='../S/464.html#L4461'>cfs_rq</a>           4461 sched/fair.c   	update_stats_curr_start(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L4462'>cfs_rq</a>           4462 sched/fair.c   	cfs_rq-&gt;curr = se;</span>
+<span class='curline'><a href='../S/464.html#L4470'>cfs_rq</a>           4470 sched/fair.c   	    rq_of(cfs_rq)-&gt;cfs.load.weight &gt;= 2*se-&gt;load.weight) {</span>
+<span class='curline'><a href='../S/464.html#L4492'>cfs_rq</a>           4492 sched/fair.c   pick_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *curr)</span>
+<span class='curline'><a href='../S/464.html#L4494'>cfs_rq</a>           4494 sched/fair.c   	struct sched_entity *left = __pick_first_entity(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4497'>cfs_rq</a>           4497 sched/fair.c   	trace_android_rvh_pick_next_entity(cfs_rq, curr, &amp;se);</span>
+<span class='curline'><a href='../S/464.html#L4514'>cfs_rq</a>           4514 sched/fair.c   	if (cfs_rq-&gt;skip == se) {</span>
+<span class='curline'><a href='../S/464.html#L4518'>cfs_rq</a>           4518 sched/fair.c   			second = __pick_first_entity(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4529'>cfs_rq</a>           4529 sched/fair.c   	if (cfs_rq-&gt;next &amp;&amp; wakeup_preempt_entity(cfs_rq-&gt;next, left) &lt; 1) {</span>
+<span class='curline'><a href='../S/464.html#L4533'>cfs_rq</a>           4533 sched/fair.c   		se = cfs_rq-&gt;next;</span>
+<span class='curline'><a href='../S/464.html#L4534'>cfs_rq</a>           4534 sched/fair.c   	} else if (cfs_rq-&gt;last &amp;&amp; wakeup_preempt_entity(cfs_rq-&gt;last, left) &lt; 1) {</span>
+<span class='curline'><a href='../S/464.html#L4538'>cfs_rq</a>           4538 sched/fair.c   		se = cfs_rq-&gt;last;</span>
+<span class='curline'><a href='../S/464.html#L4542'>cfs_rq</a>           4542 sched/fair.c   	clear_buddies(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L4547'>cfs_rq</a>           4547 sched/fair.c   static bool check_cfs_rq_runtime(struct cfs_rq *cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4549'>cfs_rq</a>           4549 sched/fair.c   static void put_prev_entity(struct cfs_rq *cfs_rq, struct sched_entity *prev)</span>
+<span class='curline'><a href='../S/464.html#L4556'>cfs_rq</a>           4556 sched/fair.c   		update_curr(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4559'>cfs_rq</a>           4559 sched/fair.c   	check_cfs_rq_runtime(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4561'>cfs_rq</a>           4561 sched/fair.c   	check_spread(cfs_rq, prev);</span>
+<span class='curline'><a href='../S/464.html#L4564'>cfs_rq</a>           4564 sched/fair.c   		update_stats_wait_start(cfs_rq, prev);</span>
+<span class='curline'><a href='../S/464.html#L4566'>cfs_rq</a>           4566 sched/fair.c   		__enqueue_entity(cfs_rq, prev);</span>
+<span class='curline'><a href='../S/464.html#L4568'>cfs_rq</a>           4568 sched/fair.c   		update_load_avg(cfs_rq, prev, 0);</span>
+<span class='curline'><a href='../S/464.html#L4570'>cfs_rq</a>           4570 sched/fair.c   	cfs_rq-&gt;curr = NULL;</span>
+<span class='curline'><a href='../S/464.html#L4574'>cfs_rq</a>           4574 sched/fair.c   entity_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr, int queued)</span>
+<span class='curline'><a href='../S/464.html#L4579'>cfs_rq</a>           4579 sched/fair.c   	update_curr(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4584'>cfs_rq</a>           4584 sched/fair.c   	update_load_avg(cfs_rq, curr, UPDATE_TG);</span>
+<span class='curline'><a href='../S/464.html#L4593'>cfs_rq</a>           4593 sched/fair.c   		resched_curr(rq_of(cfs_rq));</span>
+<span class='curline'><a href='../S/464.html#L4600'>cfs_rq</a>           4600 sched/fair.c   			hrtimer_active(&amp;rq_of(cfs_rq)-&gt;hrtick_timer))</span>
+<span class='curline'><a href='../S/464.html#L4604'>cfs_rq</a>           4604 sched/fair.c   	if (cfs_rq-&gt;nr_running &gt; 1)</span>
+<span class='curline'><a href='../S/464.html#L4605'>cfs_rq</a>           4605 sched/fair.c   		check_preempt_tick(cfs_rq, curr);</span>
+<span class='curline'><a href='../S/464.html#L4606'>cfs_rq</a>           4606 sched/fair.c   	trace_android_rvh_entity_tick(cfs_rq, curr);</span>
+<span class='curline'><a href='../S/464.html#L4677'>cfs_rq</a>           4677 sched/fair.c   				   struct cfs_rq *cfs_rq, u64 target_runtime)</span>
+<span class='curline'><a href='../S/464.html#L4684'>cfs_rq</a>           4684 sched/fair.c   	min_amount = target_runtime - cfs_rq-&gt;runtime_remaining;</span>
+<span class='curline'><a href='../S/464.html#L4698'>cfs_rq</a>           4698 sched/fair.c   	cfs_rq-&gt;runtime_remaining += amount;</span>
+<span class='curline'><a href='../S/464.html#L4700'>cfs_rq</a>           4700 sched/fair.c   	return cfs_rq-&gt;runtime_remaining &gt; 0;</span>
+<span class='curline'><a href='../S/464.html#L4704'>cfs_rq</a>           4704 sched/fair.c   static int assign_cfs_rq_runtime(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L4706'>cfs_rq</a>           4706 sched/fair.c   	struct cfs_bandwidth *cfs_b = tg_cfs_bandwidth(cfs_rq-&gt;tg);</span>
+<span class='curline'><a href='../S/464.html#L4710'>cfs_rq</a>           4710 sched/fair.c   	ret = __assign_cfs_rq_runtime(cfs_b, cfs_rq, sched_cfs_bandwidth_slice());</span>
+<span class='curline'><a href='../S/464.html#L4716'>cfs_rq</a>           4716 sched/fair.c   static void __account_cfs_rq_runtime(struct cfs_rq *cfs_rq, u64 delta_exec)</span>
+<span class='curline'><a href='../S/464.html#L4719'>cfs_rq</a>           4719 sched/fair.c   	cfs_rq-&gt;runtime_remaining -= delta_exec;</span>
+<span class='curline'><a href='../S/464.html#L4721'>cfs_rq</a>           4721 sched/fair.c   	if (likely(cfs_rq-&gt;runtime_remaining &gt; 0))</span>
+<span class='curline'><a href='../S/464.html#L4724'>cfs_rq</a>           4724 sched/fair.c   	if (cfs_rq-&gt;throttled)</span>
+<span class='curline'><a href='../S/464.html#L4730'>cfs_rq</a>           4730 sched/fair.c   	if (!assign_cfs_rq_runtime(cfs_rq) &amp;&amp; likely(cfs_rq-&gt;curr))</span>
+<span class='curline'><a href='../S/464.html#L4731'>cfs_rq</a>           4731 sched/fair.c   		resched_curr(rq_of(cfs_rq));</span>
+<span class='curline'><a href='../S/464.html#L4735'>cfs_rq</a>           4735 sched/fair.c   void account_cfs_rq_runtime(struct cfs_rq *cfs_rq, u64 delta_exec)</span>
+<span class='curline'><a href='../S/464.html#L4737'>cfs_rq</a>           4737 sched/fair.c   	if (!cfs_bandwidth_used() || !cfs_rq-&gt;runtime_enabled)</span>
+<span class='curline'><a href='../S/464.html#L4740'>cfs_rq</a>           4740 sched/fair.c   	__account_cfs_rq_runtime(cfs_rq, delta_exec);</span>
+<span class='curline'><a href='../S/464.html#L4743'>cfs_rq</a>           4743 sched/fair.c   static inline int cfs_rq_throttled(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L4745'>cfs_rq</a>           4745 sched/fair.c   	return cfs_bandwidth_used() &amp;&amp; cfs_rq-&gt;throttled;</span>
+<span class='curline'><a href='../S/464.html#L4749'>cfs_rq</a>           4749 sched/fair.c   static inline int throttled_hierarchy(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L4751'>cfs_rq</a>           4751 sched/fair.c   	return cfs_bandwidth_used() &amp;&amp; cfs_rq-&gt;throttle_count;</span>
+<span class='curline'><a href='../S/464.html#L4762'>cfs_rq</a>           4762 sched/fair.c   	struct cfs_rq *src_cfs_rq, *dest_cfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L4764'>cfs_rq</a>           4764 sched/fair.c   	src_cfs_rq = tg-&gt;cfs_rq[src_cpu];</span>
+<span class='curline'><a href='../S/464.html#L4765'>cfs_rq</a>           4765 sched/fair.c   	dest_cfs_rq = tg-&gt;cfs_rq[dest_cpu];</span>
+<span class='curline'><a href='../S/464.html#L4774'>cfs_rq</a>           4774 sched/fair.c   	struct cfs_rq *cfs_rq = tg-&gt;cfs_rq[cpu_of(rq)];</span>
+<span class='curline'><a href='../S/464.html#L4776'>cfs_rq</a>           4776 sched/fair.c   	cfs_rq-&gt;throttle_count--;</span>
+<span class='curline'><a href='../S/464.html#L4777'>cfs_rq</a>           4777 sched/fair.c   	if (!cfs_rq-&gt;throttle_count) {</span>
+<span class='curline'><a href='../S/464.html#L4778'>cfs_rq</a>           4778 sched/fair.c   		cfs_rq-&gt;throttled_clock_task_time += rq_clock_task(rq) -</span>
+<span class='curline'><a href='../S/464.html#L4779'>cfs_rq</a>           4779 sched/fair.c   					     cfs_rq-&gt;throttled_clock_task;</span>
+<span class='curline'><a href='../S/464.html#L4782'>cfs_rq</a>           4782 sched/fair.c   		if (cfs_rq-&gt;nr_running &gt;= 1)</span>
+<span class='curline'><a href='../S/464.html#L4783'>cfs_rq</a>           4783 sched/fair.c   			list_add_leaf_cfs_rq(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4792'>cfs_rq</a>           4792 sched/fair.c   	struct cfs_rq *cfs_rq = tg-&gt;cfs_rq[cpu_of(rq)];</span>
+<span class='curline'><a href='../S/464.html#L4795'>cfs_rq</a>           4795 sched/fair.c   	if (!cfs_rq-&gt;throttle_count) {</span>
+<span class='curline'><a href='../S/464.html#L4796'>cfs_rq</a>           4796 sched/fair.c   		cfs_rq-&gt;throttled_clock_task = rq_clock_task(rq);</span>
+<span class='curline'><a href='../S/464.html#L4797'>cfs_rq</a>           4797 sched/fair.c   		list_del_leaf_cfs_rq(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4799'>cfs_rq</a>           4799 sched/fair.c   	cfs_rq-&gt;throttle_count++;</span>
+<span class='curline'><a href='../S/464.html#L4804'>cfs_rq</a>           4804 sched/fair.c   static bool throttle_cfs_rq(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L4806'>cfs_rq</a>           4806 sched/fair.c   	struct rq *rq = rq_of(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4807'>cfs_rq</a>           4807 sched/fair.c   	struct cfs_bandwidth *cfs_b = tg_cfs_bandwidth(cfs_rq-&gt;tg);</span>
+<span class='curline'><a href='../S/464.html#L4813'>cfs_rq</a>           4813 sched/fair.c   	if (__assign_cfs_rq_runtime(cfs_b, cfs_rq, 1)) {</span>
+<span class='curline'><a href='../S/464.html#L4824'>cfs_rq</a>           4824 sched/fair.c   		list_add_tail_rcu(&amp;cfs_rq-&gt;throttled_list,</span>
+<span class='curline'><a href='../S/464.html#L4832'>cfs_rq</a>           4832 sched/fair.c   	se = cfs_rq-&gt;tg-&gt;se[cpu_of(rq_of(cfs_rq))];</span>
+<span class='curline'><a href='../S/464.html#L4836'>cfs_rq</a>           4836 sched/fair.c   	walk_tg_tree_from(cfs_rq-&gt;tg, tg_throttle_down, tg_nop, (void *)rq);</span>
+<span class='curline'><a href='../S/464.html#L4839'>cfs_rq</a>           4839 sched/fair.c   	task_delta = cfs_rq-&gt;h_nr_running;</span>
+<span class='curline'><a href='../S/464.html#L4840'>cfs_rq</a>           4840 sched/fair.c   	idle_task_delta = cfs_rq-&gt;idle_h_nr_running;</span>
+<span class='curline'><a href='../S/464.html#L4842'>cfs_rq</a>           4842 sched/fair.c   		struct cfs_rq *qcfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L4868'>cfs_rq</a>           4868 sched/fair.c   	cfs_rq-&gt;throttled = 1;</span>
+<span class='curline'><a href='../S/464.html#L4869'>cfs_rq</a>           4869 sched/fair.c   	cfs_rq-&gt;throttled_clock = rq_clock(rq);</span>
+<span class='curline'><a href='../S/464.html#L4873'>cfs_rq</a>           4873 sched/fair.c   void unthrottle_cfs_rq(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L4875'>cfs_rq</a>           4875 sched/fair.c   	struct rq *rq = rq_of(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4876'>cfs_rq</a>           4876 sched/fair.c   	struct cfs_bandwidth *cfs_b = tg_cfs_bandwidth(cfs_rq-&gt;tg);</span>
+<span class='curline'><a href='../S/464.html#L4880'>cfs_rq</a>           4880 sched/fair.c   	se = cfs_rq-&gt;tg-&gt;se[cpu_of(rq)];</span>
+<span class='curline'><a href='../S/464.html#L4882'>cfs_rq</a>           4882 sched/fair.c   	cfs_rq-&gt;throttled = 0;</span>
+<span class='curline'><a href='../S/464.html#L4887'>cfs_rq</a>           4887 sched/fair.c   	cfs_b-&gt;throttled_time += rq_clock(rq) - cfs_rq-&gt;throttled_clock;</span>
+<span class='curline'><a href='../S/464.html#L4888'>cfs_rq</a>           4888 sched/fair.c   	list_del_rcu(&amp;cfs_rq-&gt;throttled_list);</span>
+<span class='curline'><a href='../S/464.html#L4892'>cfs_rq</a>           4892 sched/fair.c   	walk_tg_tree_from(cfs_rq-&gt;tg, tg_nop, tg_unthrottle_up, (void *)rq);</span>
+<span class='curline'><a href='../S/464.html#L4894'>cfs_rq</a>           4894 sched/fair.c   	if (!cfs_rq-&gt;load.weight)</span>
+<span class='curline'><a href='../S/464.html#L4897'>cfs_rq</a>           4897 sched/fair.c   	task_delta = cfs_rq-&gt;h_nr_running;</span>
+<span class='curline'><a href='../S/464.html#L4898'>cfs_rq</a>           4898 sched/fair.c   	idle_task_delta = cfs_rq-&gt;idle_h_nr_running;</span>
+<span class='curline'><a href='../S/464.html#L4902'>cfs_rq</a>           4902 sched/fair.c   		cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L4903'>cfs_rq</a>           4903 sched/fair.c   		enqueue_entity(cfs_rq, se, ENQUEUE_WAKEUP);</span>
+<span class='curline'><a href='../S/464.html#L4905'>cfs_rq</a>           4905 sched/fair.c   		cfs_rq-&gt;h_nr_running += task_delta;</span>
+<span class='curline'><a href='../S/464.html#L4906'>cfs_rq</a>           4906 sched/fair.c   		cfs_rq-&gt;idle_h_nr_running += idle_task_delta;</span>
+<span class='curline'><a href='../S/464.html#L4909'>cfs_rq</a>           4909 sched/fair.c   		if (cfs_rq_throttled(cfs_rq))</span>
+<span class='curline'><a href='../S/464.html#L4914'>cfs_rq</a>           4914 sched/fair.c   		cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L4916'>cfs_rq</a>           4916 sched/fair.c   		update_load_avg(cfs_rq, se, UPDATE_TG);</span>
+<span class='curline'><a href='../S/464.html#L4919'>cfs_rq</a>           4919 sched/fair.c   		cfs_rq-&gt;h_nr_running += task_delta;</span>
+<span class='curline'><a href='../S/464.html#L4920'>cfs_rq</a>           4920 sched/fair.c   		cfs_rq-&gt;idle_h_nr_running += idle_task_delta;</span>
+<span class='curline'><a href='../S/464.html#L4924'>cfs_rq</a>           4924 sched/fair.c   		if (cfs_rq_throttled(cfs_rq))</span>
+<span class='curline'><a href='../S/464.html#L4931'>cfs_rq</a>           4931 sched/fair.c   		if (throttled_hierarchy(cfs_rq))</span>
+<span class='curline'><a href='../S/464.html#L4932'>cfs_rq</a>           4932 sched/fair.c   			list_add_leaf_cfs_rq(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4945'>cfs_rq</a>           4945 sched/fair.c   		cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L4947'>cfs_rq</a>           4947 sched/fair.c   		if (list_add_leaf_cfs_rq(cfs_rq))</span>
+<span class='curline'><a href='../S/464.html#L4960'>cfs_rq</a>           4960 sched/fair.c   	struct cfs_rq *cfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L4964'>cfs_rq</a>           4964 sched/fair.c   	list_for_each_entry_rcu(cfs_rq, &amp;cfs_b-&gt;throttled_cfs_rq,</span>
+<span class='curline'><a href='../S/464.html#L4966'>cfs_rq</a>           4966 sched/fair.c   		struct rq *rq = rq_of(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L4970'>cfs_rq</a>           4970 sched/fair.c   		if (!cfs_rq_throttled(cfs_rq))</span>
+<span class='curline'><a href='../S/464.html#L4974'>cfs_rq</a>           4974 sched/fair.c   		SCHED_WARN_ON(cfs_rq-&gt;runtime_remaining &gt; 0);</span>
+<span class='curline'><a href='../S/464.html#L4977'>cfs_rq</a>           4977 sched/fair.c   		runtime = -cfs_rq-&gt;runtime_remaining + 1;</span>
+<span class='curline'><a href='../S/464.html#L4984'>cfs_rq</a>           4984 sched/fair.c   		cfs_rq-&gt;runtime_remaining += runtime;</span>
+<span class='curline'><a href='../S/464.html#L4987'>cfs_rq</a>           4987 sched/fair.c   		if (cfs_rq-&gt;runtime_remaining &gt; 0)</span>
+<span class='curline'><a href='../S/464.html#L4988'>cfs_rq</a>           4988 sched/fair.c   			unthrottle_cfs_rq(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L5110'>cfs_rq</a>           5110 sched/fair.c   static void __return_cfs_rq_runtime(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L5112'>cfs_rq</a>           5112 sched/fair.c   	struct cfs_bandwidth *cfs_b = tg_cfs_bandwidth(cfs_rq-&gt;tg);</span>
+<span class='curline'><a href='../S/464.html#L5113'>cfs_rq</a>           5113 sched/fair.c   	s64 slack_runtime = cfs_rq-&gt;runtime_remaining - min_cfs_rq_runtime;</span>
+<span class='curline'><a href='../S/464.html#L5130'>cfs_rq</a>           5130 sched/fair.c   	cfs_rq-&gt;runtime_remaining -= slack_runtime;</span>
+<span class='curline'><a href='../S/464.html#L5133'>cfs_rq</a>           5133 sched/fair.c   static __always_inline void return_cfs_rq_runtime(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L5138'>cfs_rq</a>           5138 sched/fair.c   	if (!cfs_rq-&gt;runtime_enabled || cfs_rq-&gt;nr_running)</span>
+<span class='curline'><a href='../S/464.html#L5141'>cfs_rq</a>           5141 sched/fair.c   	__return_cfs_rq_runtime(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L5181'>cfs_rq</a>           5181 sched/fair.c   static void check_enqueue_throttle(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L5187'>cfs_rq</a>           5187 sched/fair.c   	if (!cfs_rq-&gt;runtime_enabled || cfs_rq-&gt;curr)</span>
+<span class='curline'><a href='../S/464.html#L5191'>cfs_rq</a>           5191 sched/fair.c   	if (cfs_rq_throttled(cfs_rq))</span>
+<span class='curline'><a href='../S/464.html#L5195'>cfs_rq</a>           5195 sched/fair.c   	account_cfs_rq_runtime(cfs_rq, 0);</span>
+<span class='curline'><a href='../S/464.html#L5196'>cfs_rq</a>           5196 sched/fair.c   	if (cfs_rq-&gt;runtime_remaining &lt;= 0)</span>
+<span class='curline'><a href='../S/464.html#L5197'>cfs_rq</a>           5197 sched/fair.c   		throttle_cfs_rq(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L5202'>cfs_rq</a>           5202 sched/fair.c   	struct cfs_rq *pcfs_rq, *cfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L5210'>cfs_rq</a>           5210 sched/fair.c   	cfs_rq = tg-&gt;cfs_rq[cpu];</span>
+<span class='curline'><a href='../S/464.html#L5211'>cfs_rq</a>           5211 sched/fair.c   	pcfs_rq = tg-&gt;parent-&gt;cfs_rq[cpu];</span>
+<span class='curline'><a href='../S/464.html#L5213'>cfs_rq</a>           5213 sched/fair.c   	cfs_rq-&gt;throttle_count = pcfs_rq-&gt;throttle_count;</span>
+<span class='curline'><a href='../S/464.html#L5214'>cfs_rq</a>           5214 sched/fair.c   	cfs_rq-&gt;throttled_clock_task = rq_clock_task(cpu_rq(cpu));</span>
+<span class='curline'><a href='../S/464.html#L5218'>cfs_rq</a>           5218 sched/fair.c   static bool check_cfs_rq_runtime(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L5223'>cfs_rq</a>           5223 sched/fair.c   	if (likely(!cfs_rq-&gt;runtime_enabled || cfs_rq-&gt;runtime_remaining &gt; 0))</span>
+<span class='curline'><a href='../S/464.html#L5230'>cfs_rq</a>           5230 sched/fair.c   	if (cfs_rq_throttled(cfs_rq))</span>
+<span class='curline'><a href='../S/464.html#L5233'>cfs_rq</a>           5233 sched/fair.c   	return throttle_cfs_rq(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L5317'>cfs_rq</a>           5317 sched/fair.c   static void init_cfs_rq_runtime(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L5319'>cfs_rq</a>           5319 sched/fair.c   	cfs_rq-&gt;runtime_enabled = 0;</span>
+<span class='curline'><a href='../S/464.html#L5320'>cfs_rq</a>           5320 sched/fair.c   	INIT_LIST_HEAD(&amp;cfs_rq-&gt;throttled_list);</span>
+<span class='curline'><a href='../S/464.html#L5362'>cfs_rq</a>           5362 sched/fair.c   		struct cfs_rq *cfs_rq = tg-&gt;cfs_rq[cpu_of(rq)];</span>
+<span class='curline'><a href='../S/464.html#L5365'>cfs_rq</a>           5365 sched/fair.c   		cfs_rq-&gt;runtime_enabled = cfs_b-&gt;quota != RUNTIME_INF;</span>
+<span class='curline'><a href='../S/464.html#L5380'>cfs_rq</a>           5380 sched/fair.c   		struct cfs_rq *cfs_rq = tg-&gt;cfs_rq[cpu_of(rq)];</span>
+<span class='curline'><a href='../S/464.html#L5382'>cfs_rq</a>           5382 sched/fair.c   		if (!cfs_rq-&gt;runtime_enabled)</span>
+<span class='curline'><a href='../S/464.html#L5389'>cfs_rq</a>           5389 sched/fair.c   		cfs_rq-&gt;runtime_remaining = 1;</span>
+<span class='curline'><a href='../S/464.html#L5394'>cfs_rq</a>           5394 sched/fair.c   		cfs_rq-&gt;runtime_enabled = 0;</span>
+<span class='curline'><a href='../S/464.html#L5396'>cfs_rq</a>           5396 sched/fair.c   		if (cfs_rq_throttled(cfs_rq))</span>
+<span class='curline'><a href='../S/464.html#L5397'>cfs_rq</a>           5397 sched/fair.c   			unthrottle_cfs_rq(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L5409'>cfs_rq</a>           5409 sched/fair.c   static void account_cfs_rq_runtime(struct cfs_rq *cfs_rq, u64 delta_exec) {}</span>
+<span class='curline'><a href='../S/464.html#L5410'>cfs_rq</a>           5410 sched/fair.c   static bool check_cfs_rq_runtime(struct cfs_rq *cfs_rq) { return false; }</span>
+<span class='curline'><a href='../S/464.html#L5411'>cfs_rq</a>           5411 sched/fair.c   static void check_enqueue_throttle(struct cfs_rq *cfs_rq) {}</span>
+<span class='curline'><a href='../S/464.html#L5413'>cfs_rq</a>           5413 sched/fair.c   static __always_inline void return_cfs_rq_runtime(struct cfs_rq *cfs_rq) {}</span>
+<span class='curline'><a href='../S/464.html#L5415'>cfs_rq</a>           5415 sched/fair.c   static inline int cfs_rq_throttled(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L5420'>cfs_rq</a>           5420 sched/fair.c   static inline int throttled_hierarchy(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L5434'>cfs_rq</a>           5434 sched/fair.c   static void init_cfs_rq_runtime(struct cfs_rq *cfs_rq) {}</span>
+<span class='curline'><a href='../S/464.html#L5455'>cfs_rq</a>           5455 sched/fair.c   	struct cfs_rq *cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L5460'>cfs_rq</a>           5460 sched/fair.c   		u64 slice = sched_slice(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L5546'>cfs_rq</a>           5546 sched/fair.c   	struct cfs_rq *cfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L5573'>cfs_rq</a>           5573 sched/fair.c   		cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L5574'>cfs_rq</a>           5574 sched/fair.c   		enqueue_entity(cfs_rq, se, flags);</span>
+<span class='curline'><a href='../S/464.html#L5576'>cfs_rq</a>           5576 sched/fair.c   		cfs_rq-&gt;h_nr_running++;</span>
+<span class='curline'><a href='../S/464.html#L5577'>cfs_rq</a>           5577 sched/fair.c   		cfs_rq-&gt;idle_h_nr_running += idle_h_nr_running;</span>
+<span class='curline'><a href='../S/464.html#L5580'>cfs_rq</a>           5580 sched/fair.c   		if (cfs_rq_throttled(cfs_rq))</span>
+<span class='curline'><a href='../S/464.html#L5588'>cfs_rq</a>           5588 sched/fair.c   		cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L5590'>cfs_rq</a>           5590 sched/fair.c   		update_load_avg(cfs_rq, se, UPDATE_TG);</span>
+<span class='curline'><a href='../S/464.html#L5594'>cfs_rq</a>           5594 sched/fair.c   		cfs_rq-&gt;h_nr_running++;</span>
+<span class='curline'><a href='../S/464.html#L5595'>cfs_rq</a>           5595 sched/fair.c   		cfs_rq-&gt;idle_h_nr_running += idle_h_nr_running;</span>
+<span class='curline'><a href='../S/464.html#L5598'>cfs_rq</a>           5598 sched/fair.c   		if (cfs_rq_throttled(cfs_rq))</span>
+<span class='curline'><a href='../S/464.html#L5605'>cfs_rq</a>           5605 sched/fair.c                  if (throttled_hierarchy(cfs_rq))</span>
+<span class='curline'><a href='../S/464.html#L5606'>cfs_rq</a>           5606 sched/fair.c                          list_add_leaf_cfs_rq(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L5638'>cfs_rq</a>           5638 sched/fair.c   			cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L5640'>cfs_rq</a>           5640 sched/fair.c   			if (list_add_leaf_cfs_rq(cfs_rq))</span>
+<span class='curline'><a href='../S/464.html#L5659'>cfs_rq</a>           5659 sched/fair.c   	struct cfs_rq *cfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L5668'>cfs_rq</a>           5668 sched/fair.c   		cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L5669'>cfs_rq</a>           5669 sched/fair.c   		dequeue_entity(cfs_rq, se, flags);</span>
+<span class='curline'><a href='../S/464.html#L5671'>cfs_rq</a>           5671 sched/fair.c   		cfs_rq-&gt;h_nr_running--;</span>
+<span class='curline'><a href='../S/464.html#L5672'>cfs_rq</a>           5672 sched/fair.c   		cfs_rq-&gt;idle_h_nr_running -= idle_h_nr_running;</span>
+<span class='curline'><a href='../S/464.html#L5675'>cfs_rq</a>           5675 sched/fair.c   		if (cfs_rq_throttled(cfs_rq))</span>
+<span class='curline'><a href='../S/464.html#L5679'>cfs_rq</a>           5679 sched/fair.c   		if (cfs_rq-&gt;load.weight) {</span>
+<span class='curline'><a href='../S/464.html#L5686'>cfs_rq</a>           5686 sched/fair.c   			if (task_sleep &amp;&amp; se &amp;&amp; !throttled_hierarchy(cfs_rq))</span>
+<span class='curline'><a href='../S/464.html#L5695'>cfs_rq</a>           5695 sched/fair.c   		cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L5697'>cfs_rq</a>           5697 sched/fair.c   		update_load_avg(cfs_rq, se, UPDATE_TG);</span>
+<span class='curline'><a href='../S/464.html#L5701'>cfs_rq</a>           5701 sched/fair.c   		cfs_rq-&gt;h_nr_running--;</span>
+<span class='curline'><a href='../S/464.html#L5702'>cfs_rq</a>           5702 sched/fair.c   		cfs_rq-&gt;idle_h_nr_running -= idle_h_nr_running;</span>
+<span class='curline'><a href='../S/464.html#L5705'>cfs_rq</a>           5705 sched/fair.c   		if (cfs_rq_throttled(cfs_rq))</span>
+<span class='curline'><a href='../S/464.html#L5760'>cfs_rq</a>           5760 sched/fair.c   	struct cfs_rq *cfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L5767'>cfs_rq</a>           5767 sched/fair.c   	cfs_rq = &amp;rq-&gt;cfs;</span>
+<span class='curline'><a href='../S/464.html#L5768'>cfs_rq</a>           5768 sched/fair.c   	load = READ_ONCE(cfs_rq-&gt;avg.load_avg);</span>
+<span class='curline'><a href='../S/464.html#L5783'>cfs_rq</a>           5783 sched/fair.c   	struct cfs_rq *cfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L5790'>cfs_rq</a>           5790 sched/fair.c   	cfs_rq = &amp;rq-&gt;cfs;</span>
+<span class='curline'><a href='../S/464.html#L5791'>cfs_rq</a>           5791 sched/fair.c   	runnable = READ_ONCE(cfs_rq-&gt;avg.runnable_avg);</span>
+<span class='curline'><a href='../S/464.html#L6425'>cfs_rq</a>           6425 sched/fair.c   	struct cfs_rq *cfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L6428'>cfs_rq</a>           6428 sched/fair.c   	cfs_rq = &amp;cpu_rq(cpu)-&gt;cfs;</span>
+<span class='curline'><a href='../S/464.html#L6429'>cfs_rq</a>           6429 sched/fair.c   	util = READ_ONCE(cfs_rq-&gt;avg.util_avg);</span>
+<span class='curline'><a href='../S/464.html#L6432'>cfs_rq</a>           6432 sched/fair.c   		util = max(util, READ_ONCE(cfs_rq-&gt;avg.util_est.enqueued));</span>
+<span class='curline'><a href='../S/464.html#L6452'>cfs_rq</a>           6452 sched/fair.c   	struct cfs_rq *cfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L6459'>cfs_rq</a>           6459 sched/fair.c   	cfs_rq = &amp;cpu_rq(cpu)-&gt;cfs;</span>
+<span class='curline'><a href='../S/464.html#L6460'>cfs_rq</a>           6460 sched/fair.c   	util = READ_ONCE(cfs_rq-&gt;avg.util_avg);</span>
+<span class='curline'><a href='../S/464.html#L6493'>cfs_rq</a>           6493 sched/fair.c   			READ_ONCE(cfs_rq-&gt;avg.util_est.enqueued);</span>
+<span class='curline'><a href='../S/464.html#L6532'>cfs_rq</a>           6532 sched/fair.c   	struct cfs_rq *cfs_rq = &amp;cpu_rq(cpu)-&gt;cfs;</span>
+<span class='curline'><a href='../S/464.html#L6533'>cfs_rq</a>           6533 sched/fair.c   	unsigned long util_est, util = READ_ONCE(cfs_rq-&gt;avg.util_avg);</span>
+<span class='curline'><a href='../S/464.html#L6547'>cfs_rq</a>           6547 sched/fair.c   		util_est = READ_ONCE(cfs_rq-&gt;avg.util_est.enqueued);</span>
+<span class='curline'><a href='../S/464.html#L6911'>cfs_rq</a>           6911 sched/fair.c   		struct cfs_rq *cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L6918'>cfs_rq</a>           6918 sched/fair.c   			min_vruntime_copy = cfs_rq-&gt;min_vruntime_copy;</span>
+<span class='curline'><a href='../S/464.html#L6920'>cfs_rq</a>           6920 sched/fair.c   			min_vruntime = cfs_rq-&gt;min_vruntime;</span>
+<span class='curline'><a href='../S/464.html#L6923'>cfs_rq</a>           6923 sched/fair.c   		min_vruntime = cfs_rq-&gt;min_vruntime;</span>
+<span class='curline'><a href='../S/464.html#L7059'>cfs_rq</a>           7059 sched/fair.c   	struct cfs_rq *cfs_rq = task_cfs_rq(curr);</span>
+<span class='curline'><a href='../S/464.html#L7060'>cfs_rq</a>           7060 sched/fair.c   	int scale = cfs_rq-&gt;nr_running &gt;= sched_nr_latency;</span>
+<span class='curline'><a href='../S/464.html#L7152'>cfs_rq</a>           7152 sched/fair.c   	struct cfs_rq *cfs_rq = &amp;rq-&gt;cfs;</span>
+<span class='curline'><a href='../S/464.html#L7175'>cfs_rq</a>           7175 sched/fair.c   		struct sched_entity *curr = cfs_rq-&gt;curr;</span>
+<span class='curline'><a href='../S/464.html#L7185'>cfs_rq</a>           7185 sched/fair.c   				update_curr(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L7195'>cfs_rq</a>           7195 sched/fair.c   			if (unlikely(check_cfs_rq_runtime(cfs_rq))) {</span>
+<span class='curline'><a href='../S/464.html#L7196'>cfs_rq</a>           7196 sched/fair.c   				cfs_rq = &amp;rq-&gt;cfs;</span>
+<span class='curline'><a href='../S/464.html#L7198'>cfs_rq</a>           7198 sched/fair.c   				if (!cfs_rq-&gt;nr_running)</span>
+<span class='curline'><a href='../S/464.html#L7205'>cfs_rq</a>           7205 sched/fair.c   		se = pick_next_entity(cfs_rq, curr);</span>
+<span class='curline'><a href='../S/464.html#L7206'>cfs_rq</a>           7206 sched/fair.c   		cfs_rq = group_cfs_rq(se);</span>
+<span class='curline'><a href='../S/464.html#L7207'>cfs_rq</a>           7207 sched/fair.c   	} while (cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L7219'>cfs_rq</a>           7219 sched/fair.c   		while (!(cfs_rq = is_same_group(se, pse))) {</span>
+<span class='curline'><a href='../S/464.html#L7233'>cfs_rq</a>           7233 sched/fair.c   		put_prev_entity(cfs_rq, pse);</span>
+<span class='curline'><a href='../S/464.html#L7234'>cfs_rq</a>           7234 sched/fair.c   		set_next_entity(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L7251'>cfs_rq</a>           7251 sched/fair.c   		se = pick_next_entity(cfs_rq, NULL);</span>
+<span class='curline'><a href='../S/464.html#L7252'>cfs_rq</a>           7252 sched/fair.c   		set_next_entity(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L7253'>cfs_rq</a>           7253 sched/fair.c   		cfs_rq = group_cfs_rq(se);</span>
+<span class='curline'><a href='../S/464.html#L7254'>cfs_rq</a>           7254 sched/fair.c   	} while (cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L7312'>cfs_rq</a>           7312 sched/fair.c   	struct cfs_rq *cfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L7315'>cfs_rq</a>           7315 sched/fair.c   		cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L7316'>cfs_rq</a>           7316 sched/fair.c   		put_prev_entity(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L7328'>cfs_rq</a>           7328 sched/fair.c   	struct cfs_rq *cfs_rq = task_cfs_rq(curr);</span>
+<span class='curline'><a href='../S/464.html#L7337'>cfs_rq</a>           7337 sched/fair.c   	clear_buddies(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L7344'>cfs_rq</a>           7344 sched/fair.c   		update_curr(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L7998'>cfs_rq</a>           7998 sched/fair.c   static inline bool cfs_rq_has_blocked(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L8000'>cfs_rq</a>           8000 sched/fair.c   	if (cfs_rq-&gt;avg.load_avg)</span>
+<span class='curline'><a href='../S/464.html#L8003'>cfs_rq</a>           8003 sched/fair.c   	if (cfs_rq-&gt;avg.util_avg)</span>
+<span class='curline'><a href='../S/464.html#L8036'>cfs_rq</a>           8036 sched/fair.c   static inline bool cfs_rq_has_blocked(struct cfs_rq *cfs_rq) { return false; }</span>
+<span class='curline'><a href='../S/464.html#L8069'>cfs_rq</a>           8069 sched/fair.c   static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L8071'>cfs_rq</a>           8071 sched/fair.c   	if (cfs_rq-&gt;load.weight)</span>
+<span class='curline'><a href='../S/464.html#L8074'>cfs_rq</a>           8074 sched/fair.c   	if (cfs_rq-&gt;avg.load_sum)</span>
+<span class='curline'><a href='../S/464.html#L8077'>cfs_rq</a>           8077 sched/fair.c   	if (cfs_rq-&gt;avg.util_sum)</span>
+<span class='curline'><a href='../S/464.html#L8080'>cfs_rq</a>           8080 sched/fair.c   	if (cfs_rq-&gt;avg.runnable_sum)</span>
+<span class='curline'><a href='../S/464.html#L8088'>cfs_rq</a>           8088 sched/fair.c   	struct cfs_rq *cfs_rq, *pos;</span>
+<span class='curline'><a href='../S/464.html#L8096'>cfs_rq</a>           8096 sched/fair.c   	for_each_leaf_cfs_rq_safe(rq, cfs_rq, pos) {</span>
+<span class='curline'><a href='../S/464.html#L8099'>cfs_rq</a>           8099 sched/fair.c   		if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq)) {</span>
+<span class='curline'><a href='../S/464.html#L8100'>cfs_rq</a>           8100 sched/fair.c   			update_tg_load_avg(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L8102'>cfs_rq</a>           8102 sched/fair.c   			if (cfs_rq == &amp;rq-&gt;cfs)</span>
+<span class='curline'><a href='../S/464.html#L8107'>cfs_rq</a>           8107 sched/fair.c   		se = cfs_rq-&gt;tg-&gt;se[cpu];</span>
+<span class='curline'><a href='../S/464.html#L8115'>cfs_rq</a>           8115 sched/fair.c   		if (cfs_rq_is_decayed(cfs_rq))</span>
+<span class='curline'><a href='../S/464.html#L8116'>cfs_rq</a>           8116 sched/fair.c   			list_del_leaf_cfs_rq(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L8119'>cfs_rq</a>           8119 sched/fair.c   		if (cfs_rq_has_blocked(cfs_rq))</span>
+<span class='curline'><a href='../S/464.html#L8131'>cfs_rq</a>           8131 sched/fair.c   static void update_cfs_rq_h_load(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L8133'>cfs_rq</a>           8133 sched/fair.c   	struct rq *rq = rq_of(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L8134'>cfs_rq</a>           8134 sched/fair.c   	struct sched_entity *se = cfs_rq-&gt;tg-&gt;se[cpu_of(rq)];</span>
+<span class='curline'><a href='../S/464.html#L8138'>cfs_rq</a>           8138 sched/fair.c   	if (cfs_rq-&gt;last_h_load_update == now)</span>
+<span class='curline'><a href='../S/464.html#L8141'>cfs_rq</a>           8141 sched/fair.c   	WRITE_ONCE(cfs_rq-&gt;h_load_next, NULL);</span>
+<span class='curline'><a href='../S/464.html#L8143'>cfs_rq</a>           8143 sched/fair.c   		cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L8144'>cfs_rq</a>           8144 sched/fair.c   		WRITE_ONCE(cfs_rq-&gt;h_load_next, se);</span>
+<span class='curline'><a href='../S/464.html#L8145'>cfs_rq</a>           8145 sched/fair.c   		if (cfs_rq-&gt;last_h_load_update == now)</span>
+<span class='curline'><a href='../S/464.html#L8150'>cfs_rq</a>           8150 sched/fair.c   		cfs_rq-&gt;h_load = cfs_rq_load_avg(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L8151'>cfs_rq</a>           8151 sched/fair.c   		cfs_rq-&gt;last_h_load_update = now;</span>
+<span class='curline'><a href='../S/464.html#L8154'>cfs_rq</a>           8154 sched/fair.c   	while ((se = READ_ONCE(cfs_rq-&gt;h_load_next)) != NULL) {</span>
+<span class='curline'><a href='../S/464.html#L8155'>cfs_rq</a>           8155 sched/fair.c   		load = cfs_rq-&gt;h_load;</span>
+<span class='curline'><a href='../S/464.html#L8157'>cfs_rq</a>           8157 sched/fair.c   			cfs_rq_load_avg(cfs_rq) + 1);</span>
+<span class='curline'><a href='../S/464.html#L8158'>cfs_rq</a>           8158 sched/fair.c   		cfs_rq = group_cfs_rq(se);</span>
+<span class='curline'><a href='../S/464.html#L8159'>cfs_rq</a>           8159 sched/fair.c   		cfs_rq-&gt;h_load = load;</span>
+<span class='curline'><a href='../S/464.html#L8160'>cfs_rq</a>           8160 sched/fair.c   		cfs_rq-&gt;last_h_load_update = now;</span>
+<span class='curline'><a href='../S/464.html#L8166'>cfs_rq</a>           8166 sched/fair.c   	struct cfs_rq *cfs_rq = task_cfs_rq(p);</span>
+<span class='curline'><a href='../S/464.html#L8168'>cfs_rq</a>           8168 sched/fair.c   	update_cfs_rq_h_load(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L8169'>cfs_rq</a>           8169 sched/fair.c   	return div64_ul(p-&gt;se.avg.load_avg * cfs_rq-&gt;h_load,</span>
+<span class='curline'><a href='../S/464.html#L8170'>cfs_rq</a>           8170 sched/fair.c   			cfs_rq_load_avg(cfs_rq) + 1);</span>
+<span class='curline'><a href='../S/464.html#L8175'>cfs_rq</a>           8175 sched/fair.c   	struct cfs_rq *cfs_rq = &amp;rq-&gt;cfs;</span>
+<span class='curline'><a href='../S/464.html#L8178'>cfs_rq</a>           8178 sched/fair.c   	decayed = update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L8179'>cfs_rq</a>           8179 sched/fair.c   	if (cfs_rq_has_blocked(cfs_rq))</span>
+<span class='curline'><a href='../S/464.html#L10916'>cfs_rq</a>           10916 sched/fair.c   	struct cfs_rq *cfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L10920'>cfs_rq</a>           10920 sched/fair.c   		cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L10921'>cfs_rq</a>           10921 sched/fair.c   		entity_tick(cfs_rq, se, queued);</span>
+<span class='curline'><a href='../S/464.html#L10938'>cfs_rq</a>           10938 sched/fair.c   	struct cfs_rq *cfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L10946'>cfs_rq</a>           10946 sched/fair.c   	cfs_rq = task_cfs_rq(current);</span>
+<span class='curline'><a href='../S/464.html#L10947'>cfs_rq</a>           10947 sched/fair.c   	curr = cfs_rq-&gt;curr;</span>
+<span class='curline'><a href='../S/464.html#L10949'>cfs_rq</a>           10949 sched/fair.c   		update_curr(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L10952'>cfs_rq</a>           10952 sched/fair.c   	place_entity(cfs_rq, se, 1);</span>
+<span class='curline'><a href='../S/464.html#L10963'>cfs_rq</a>           10963 sched/fair.c   	se-&gt;vruntime -= cfs_rq-&gt;min_vruntime;</span>
+<span class='curline'><a href='../S/464.html#L11027'>cfs_rq</a>           11027 sched/fair.c   	struct cfs_rq *cfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L11035'>cfs_rq</a>           11035 sched/fair.c   		cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L11037'>cfs_rq</a>           11037 sched/fair.c   		if (!cfs_rq_throttled(cfs_rq)){</span>
+<span class='curline'><a href='../S/464.html#L11038'>cfs_rq</a>           11038 sched/fair.c   			update_load_avg(cfs_rq, se, UPDATE_TG);</span>
+<span class='curline'><a href='../S/464.html#L11039'>cfs_rq</a>           11039 sched/fair.c   			list_add_leaf_cfs_rq(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L11043'>cfs_rq</a>           11043 sched/fair.c   		if (list_add_leaf_cfs_rq(cfs_rq))</span>
+<span class='curline'><a href='../S/464.html#L11053'>cfs_rq</a>           11053 sched/fair.c   	struct cfs_rq *cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L11056'>cfs_rq</a>           11056 sched/fair.c   	update_load_avg(cfs_rq, se, 0);</span>
+<span class='curline'><a href='../S/464.html#L11057'>cfs_rq</a>           11057 sched/fair.c   	detach_entity_load_avg(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L11058'>cfs_rq</a>           11058 sched/fair.c   	update_tg_load_avg(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L11064'>cfs_rq</a>           11064 sched/fair.c   	struct cfs_rq *cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L11075'>cfs_rq</a>           11075 sched/fair.c   	update_load_avg(cfs_rq, se, sched_feat(ATTACH_AGE_LOAD) ? 0 : SKIP_AGE_LOAD);</span>
+<span class='curline'><a href='../S/464.html#L11076'>cfs_rq</a>           11076 sched/fair.c   	attach_entity_load_avg(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L11077'>cfs_rq</a>           11077 sched/fair.c   	update_tg_load_avg(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L11084'>cfs_rq</a>           11084 sched/fair.c   	struct cfs_rq *cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L11091'>cfs_rq</a>           11091 sched/fair.c   		place_entity(cfs_rq, se, 0);</span>
+<span class='curline'><a href='../S/464.html#L11092'>cfs_rq</a>           11092 sched/fair.c   		se-&gt;vruntime -= cfs_rq-&gt;min_vruntime;</span>
+<span class='curline'><a href='../S/464.html#L11101'>cfs_rq</a>           11101 sched/fair.c   	struct cfs_rq *cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L11106'>cfs_rq</a>           11106 sched/fair.c   		se-&gt;vruntime += cfs_rq-&gt;min_vruntime;</span>
+<span class='curline'><a href='../S/464.html#L11151'>cfs_rq</a>           11151 sched/fair.c   		struct cfs_rq *cfs_rq = cfs_rq_of(se);</span>
+<span class='curline'><a href='../S/464.html#L11153'>cfs_rq</a>           11153 sched/fair.c   		set_next_entity(cfs_rq, se);</span>
+<span class='curline'><a href='../S/464.html#L11155'>cfs_rq</a>           11155 sched/fair.c   		account_cfs_rq_runtime(cfs_rq, 0);</span>
+<span class='curline'><a href='../S/464.html#L11159'>cfs_rq</a>           11159 sched/fair.c   void init_cfs_rq(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L11161'>cfs_rq</a>           11161 sched/fair.c   	cfs_rq-&gt;tasks_timeline = RB_ROOT_CACHED;</span>
+<span class='curline'><a href='../S/464.html#L11162'>cfs_rq</a>           11162 sched/fair.c   	cfs_rq-&gt;min_vruntime = (u64)(-(1LL &lt;&lt; 20));</span>
+<span class='curline'><a href='../S/464.html#L11164'>cfs_rq</a>           11164 sched/fair.c   	cfs_rq-&gt;min_vruntime_copy = cfs_rq-&gt;min_vruntime;</span>
+<span class='curline'><a href='../S/464.html#L11167'>cfs_rq</a>           11167 sched/fair.c   	raw_spin_lock_init(&amp;cfs_rq-&gt;removed.lock);</span>
+<span class='curline'><a href='../S/464.html#L11212'>cfs_rq</a>           11212 sched/fair.c   		if (tg-&gt;cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L11213'>cfs_rq</a>           11213 sched/fair.c   			kfree(tg-&gt;cfs_rq[i]);</span>
+<span class='curline'><a href='../S/464.html#L11218'>cfs_rq</a>           11218 sched/fair.c   	kfree(tg-&gt;cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L11225'>cfs_rq</a>           11225 sched/fair.c   	struct cfs_rq *cfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L11228'>cfs_rq</a>           11228 sched/fair.c   	tg-&gt;cfs_rq = kcalloc(nr_cpu_ids, sizeof(cfs_rq), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/464.html#L11229'>cfs_rq</a>           11229 sched/fair.c   	if (!tg-&gt;cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L11240'>cfs_rq</a>           11240 sched/fair.c   		cfs_rq = kzalloc_node(sizeof(struct cfs_rq),</span>
+<span class='curline'><a href='../S/464.html#L11242'>cfs_rq</a>           11242 sched/fair.c   		if (!cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L11250'>cfs_rq</a>           11250 sched/fair.c   		init_cfs_rq(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L11251'>cfs_rq</a>           11251 sched/fair.c   		init_tg_cfs_entry(tg, cfs_rq, se, i, parent-&gt;se[i]);</span>
+<span class='curline'><a href='../S/464.html#L11258'>cfs_rq</a>           11258 sched/fair.c   	kfree(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L11295'>cfs_rq</a>           11295 sched/fair.c   		if (!tg-&gt;cfs_rq[cpu]-&gt;on_list)</span>
+<span class='curline'><a href='../S/464.html#L11301'>cfs_rq</a>           11301 sched/fair.c   		list_del_leaf_cfs_rq(tg-&gt;cfs_rq[cpu]);</span>
+<span class='curline'><a href='../S/464.html#L11306'>cfs_rq</a>           11306 sched/fair.c   void init_tg_cfs_entry(struct task_group *tg, struct cfs_rq *cfs_rq,</span>
+<span class='curline'><a href='../S/464.html#L11312'>cfs_rq</a>           11312 sched/fair.c   	cfs_rq-&gt;tg = tg;</span>
+<span class='curline'><a href='../S/464.html#L11313'>cfs_rq</a>           11313 sched/fair.c   	cfs_rq-&gt;rq = rq;</span>
+<span class='curline'><a href='../S/464.html#L11314'>cfs_rq</a>           11314 sched/fair.c   	init_cfs_rq_runtime(cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L11316'>cfs_rq</a>           11316 sched/fair.c   	tg-&gt;cfs_rq[cpu] = cfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L11324'>cfs_rq</a>           11324 sched/fair.c   		se-&gt;cfs_rq = &amp;rq-&gt;cfs;</span>
+<span class='curline'><a href='../S/464.html#L11327'>cfs_rq</a>           11327 sched/fair.c   		se-&gt;cfs_rq = parent-&gt;my_q;</span>
+<span class='curline'><a href='../S/464.html#L11331'>cfs_rq</a>           11331 sched/fair.c   	se-&gt;my_q = cfs_rq;</span>
+<span class='curline'><a href='../S/464.html#L11457'>cfs_rq</a>           11457 sched/fair.c   	struct cfs_rq *cfs_rq, *pos;</span>
+<span class='curline'><a href='../S/464.html#L11460'>cfs_rq</a>           11460 sched/fair.c   	for_each_leaf_cfs_rq_safe(cpu_rq(cpu), cfs_rq, pos)</span>
+<span class='curline'><a href='../S/464.html#L11461'>cfs_rq</a>           11461 sched/fair.c   		print_cfs_rq(m, cpu, cfs_rq);</span>
+<span class='curline'><a href='../S/464.html#L11508'>cfs_rq</a>           11508 sched/fair.c   const struct sched_avg *sched_trace_cfs_rq_avg(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L11511'>cfs_rq</a>           11511 sched/fair.c   	return cfs_rq ? &amp;cfs_rq-&gt;avg : NULL;</span>
+<span class='curline'><a href='../S/464.html#L11518'>cfs_rq</a>           11518 sched/fair.c   char *sched_trace_cfs_rq_path(struct cfs_rq *cfs_rq, char *str, int len)</span>
+<span class='curline'><a href='../S/464.html#L11520'>cfs_rq</a>           11520 sched/fair.c   	if (!cfs_rq) {</span>
+<span class='curline'><a href='../S/464.html#L11527'>cfs_rq</a>           11527 sched/fair.c   	cfs_rq_tg_path(cfs_rq, str, len);</span>
+<span class='curline'><a href='../S/464.html#L11532'>cfs_rq</a>           11532 sched/fair.c   int sched_trace_cfs_rq_cpu(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/464.html#L11534'>cfs_rq</a>           11534 sched/fair.c   	return cfs_rq ? cpu_of(rq_of(cfs_rq)) : -1;</span>
+<span class='curline'><a href='../S/463.html#L347'>cfs_rq</a>            347 sched/pelt.c   int __update_load_avg_se(u64 now, struct cfs_rq *cfs_rq, struct sched_entity *se)</span>
+<span class='curline'><a href='../S/463.html#L350'>cfs_rq</a>            350 sched/pelt.c   				cfs_rq-&gt;curr == se)) {</span>
+<span class='curline'><a href='../S/463.html#L361'>cfs_rq</a>            361 sched/pelt.c   int __update_load_avg_cfs_rq(u64 now, struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/463.html#L363'>cfs_rq</a>            363 sched/pelt.c   	if (___update_load_sum(now, &amp;cfs_rq-&gt;avg,</span>
+<span class='curline'><a href='../S/463.html#L364'>cfs_rq</a>            364 sched/pelt.c   				scale_load_down(cfs_rq-&gt;load.weight),</span>
+<span class='curline'><a href='../S/463.html#L365'>cfs_rq</a>            365 sched/pelt.c   				cfs_rq-&gt;h_nr_running,</span>
+<span class='curline'><a href='../S/463.html#L366'>cfs_rq</a>            366 sched/pelt.c   				cfs_rq-&gt;curr != NULL)) {</span>
+<span class='curline'><a href='../S/463.html#L368'>cfs_rq</a>            368 sched/pelt.c   		___update_load_avg(&amp;cfs_rq-&gt;avg, 1);</span>
+<span class='curline'><a href='../S/463.html#L369'>cfs_rq</a>            369 sched/pelt.c   		trace_pelt_cfs_tp(cfs_rq);</span>
+<span class='curline'><a href='../S/468.html#L5'>cfs_rq</a>              5 sched/pelt.h   int __update_load_avg_se(u64 now, struct cfs_rq *cfs_rq, struct sched_entity *se);</span>
+<span class='curline'><a href='../S/468.html#L6'>cfs_rq</a>              6 sched/pelt.h   int __update_load_avg_cfs_rq(u64 now, struct cfs_rq *cfs_rq);</span>
+<span class='curline'><a href='../S/468.html#L152'>cfs_rq</a>            152 sched/pelt.h   static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/468.html#L154'>cfs_rq</a>            154 sched/pelt.h   	if (unlikely(cfs_rq-&gt;throttle_count))</span>
+<span class='curline'><a href='../S/468.html#L155'>cfs_rq</a>            155 sched/pelt.h   		return cfs_rq-&gt;throttled_clock_task - cfs_rq-&gt;throttled_clock_task_time;</span>
+<span class='curline'><a href='../S/468.html#L157'>cfs_rq</a>            157 sched/pelt.h   	return rq_clock_pelt(rq_of(cfs_rq)) - cfs_rq-&gt;throttled_clock_task_time;</span>
+<span class='curline'><a href='../S/468.html#L160'>cfs_rq</a>            160 sched/pelt.h   static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/468.html#L162'>cfs_rq</a>            162 sched/pelt.h   	return rq_clock_pelt(rq_of(cfs_rq));</span>
+<span class='curline'><a href='../S/468.html#L169'>cfs_rq</a>            169 sched/pelt.h   update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/447.html#L359'>cfs_rq</a>            359 sched/sched.h  struct cfs_rq;</span>
+<span class='curline'><a href='../S/447.html#L394'>cfs_rq</a>            394 sched/sched.h  	struct cfs_rq		**cfs_rq;</span>
+<span class='curline'><a href='../S/447.html#L483'>cfs_rq</a>            483 sched/sched.h  extern void init_tg_cfs_entry(struct task_group *tg, struct cfs_rq *cfs_rq,</span>
+<span class='curline'><a href='../S/447.html#L490'>cfs_rq</a>            490 sched/sched.h  extern void unthrottle_cfs_rq(struct cfs_rq *cfs_rq);</span>
+<span class='curline'><a href='../S/447.html#L516'>cfs_rq</a>            516 sched/sched.h  			     struct cfs_rq *prev, struct cfs_rq *next);</span>
+<span class='curline'><a href='../S/447.html#L519'>cfs_rq</a>            519 sched/sched.h  			     struct cfs_rq *prev, struct cfs_rq *next) { }</span>
+<span class='curline'><a href='../S/447.html#L950'>cfs_rq</a>            950 sched/sched.h  	struct cfs_rq		cfs;</span>
+<span class='curline'><a href='../S/447.html#L1089'>cfs_rq</a>           1089 sched/sched.h  static inline struct rq *rq_of(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/447.html#L1091'>cfs_rq</a>           1091 sched/sched.h  	return cfs_rq-&gt;rq;</span>
+<span class='curline'><a href='../S/447.html#L1096'>cfs_rq</a>           1096 sched/sched.h  static inline struct rq *rq_of(struct cfs_rq *cfs_rq)</span>
+<span class='curline'><a href='../S/447.html#L1098'>cfs_rq</a>           1098 sched/sched.h  	return container_of(cfs_rq, struct rq, cfs);</span>
+<span class='curline'><a href='../S/447.html#L1605'>cfs_rq</a>           1605 sched/sched.h  	set_task_rq_fair(&amp;p-&gt;se, p-&gt;se.cfs_rq, tg-&gt;cfs_rq[cpu]);</span>
+<span class='curline'><a href='../S/447.html#L1606'>cfs_rq</a>           1606 sched/sched.h  	p-&gt;se.cfs_rq = tg-&gt;cfs_rq[cpu];</span>
+<span class='curline'><a href='../S/447.html#L2299'>cfs_rq</a>           2299 sched/sched.h  extern struct sched_entity *__pick_first_entity(struct cfs_rq *cfs_rq);</span>
+<span class='curline'><a href='../S/447.html#L2300'>cfs_rq</a>           2300 sched/sched.h  extern struct sched_entity *__pick_last_entity(struct cfs_rq *cfs_rq);</span>
+<span class='curline'><a href='../S/447.html#L2308'>cfs_rq</a>           2308 sched/sched.h  extern void print_cfs_rq(struct seq_file *m, int cpu, struct cfs_rq *cfs_rq);</span>
+<span class='curline'><a href='../S/447.html#L2320'>cfs_rq</a>           2320 sched/sched.h  extern void init_cfs_rq(struct cfs_rq *cfs_rq);</span>
+</pre>
+</body>
+</html>

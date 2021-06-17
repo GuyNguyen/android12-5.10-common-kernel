@@ -1,0 +1,440 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>sched/loadavg.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/511.html'>sched</a>/loadavg.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L72'>[^]</a><a href='#L387'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L72' title='Defined at 72.'>get_avenrun</a></li>
+<li><a href='#L80' title='Defined at 80.'>calc_load_fold_active</a></li>
+<li><a href='#L111' title='Defined at 111.'>fixed_power_int</a></li>
+<li><a href='#L158' title='Defined at 158.'>calc_load_n</a></li>
+<li><a href='#L210' title='Defined at 210.'>calc_load_write_idx</a></li>
+<li><a href='#L230' title='Defined at 230.'>calc_load_read_idx</a></li>
+<li><a href='#L235' title='Defined at 235.'>calc_load_nohz_fold</a></li>
+<li><a href='#L247' title='Defined at 247.'>calc_load_nohz_start</a></li>
+<li><a href='#L260' title='Defined at 260.'>calc_load_nohz_remote</a></li>
+<li><a href='#L265' title='Defined at 265.'>calc_load_nohz_stop</a></li>
+<li><a href='#L285' title='Defined at 285.'>calc_load_nohz_read</a></li>
+<li><a href='#L305' title='Defined at 305.'>calc_global_nohz</a></li>
+<li><a href='#L340' title='Defined at 340.'>calc_load_nohz_read</a></li>
+<li><a href='#L341' title='Defined at 341.'>calc_global_nohz</a></li>
+<li><a href='#L351' title='Defined at 351.'>calc_global_load</a></li>
+<li><a href='#L387' title='Defined at 387.'>calc_global_load_tick</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * kernel/sched/loadavg.c</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> *</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * This file contains the magic bits required to compute the global loadavg</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> * figure. Its a silly number but people think its important. We go through</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> * great pains to make it work on big machines and tickless kernels.</em>
+<a id='L8' name='L8'></a>   8 <em class='comment'> */</em>
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> "<a href='447.html'>sched.h</a>"
+<a id='L10' name='L10'></a>  10 
+<a id='L11' name='L11'></a>  11 <em class='comment'>/*</em>
+<a id='L12' name='L12'></a>  12 <em class='comment'> * Global load-average calculations</em>
+<a id='L13' name='L13'></a>  13 <em class='comment'> *</em>
+<a id='L14' name='L14'></a>  14 <em class='comment'> * We take a distributed and async approach to calculating the global load-avg</em>
+<a id='L15' name='L15'></a>  15 <em class='comment'> * in order to minimize overhead.</em>
+<a id='L16' name='L16'></a>  16 <em class='comment'> *</em>
+<a id='L17' name='L17'></a>  17 <em class='comment'> * The global load average is an exponentially decaying average of nr_running +</em>
+<a id='L18' name='L18'></a>  18 <em class='comment'> * nr_uninterruptible.</em>
+<a id='L19' name='L19'></a>  19 <em class='comment'> *</em>
+<a id='L20' name='L20'></a>  20 <em class='comment'> * Once every LOAD_FREQ:</em>
+<a id='L21' name='L21'></a>  21 <em class='comment'> *</em>
+<a id='L22' name='L22'></a>  22 <em class='comment'> *   nr_active = 0;</em>
+<a id='L23' name='L23'></a>  23 <em class='comment'> *   for_each_possible_cpu(cpu)</em>
+<a id='L24' name='L24'></a>  24 <em class='comment'> *      nr_active += cpu_of(cpu)-&gt;nr_running + cpu_of(cpu)-&gt;nr_uninterruptible;</em>
+<a id='L25' name='L25'></a>  25 <em class='comment'> *</em>
+<a id='L26' name='L26'></a>  26 <em class='comment'> *   avenrun[n] = avenrun[0] * exp_n + nr_active * (1 - exp_n)</em>
+<a id='L27' name='L27'></a>  27 <em class='comment'> *</em>
+<a id='L28' name='L28'></a>  28 <em class='comment'> * Due to a number of reasons the above turns in the mess below:</em>
+<a id='L29' name='L29'></a>  29 <em class='comment'> *</em>
+<a id='L30' name='L30'></a>  30 <em class='comment'> *  - for_each_possible_cpu() is prohibitively expensive on machines with</em>
+<a id='L31' name='L31'></a>  31 <em class='comment'> *    serious number of CPUs, therefore we need to take a distributed approach</em>
+<a id='L32' name='L32'></a>  32 <em class='comment'> *    to calculating nr_active.</em>
+<a id='L33' name='L33'></a>  33 <em class='comment'> *</em>
+<a id='L34' name='L34'></a>  34 <em class='comment'> *        \Sum_i x_i(t) = \Sum_i x_i(t) - x_i(t_0) | x_i(t_0) := 0</em>
+<a id='L35' name='L35'></a>  35 <em class='comment'> *                      = \Sum_i { \Sum_j=1 x_i(t_j) - x_i(t_j-1) }</em>
+<a id='L36' name='L36'></a>  36 <em class='comment'> *</em>
+<a id='L37' name='L37'></a>  37 <em class='comment'> *    So assuming nr_active := 0 when we start out -- true per definition, we</em>
+<a id='L38' name='L38'></a>  38 <em class='comment'> *    can simply take per-CPU deltas and fold those into a global accumulate</em>
+<a id='L39' name='L39'></a>  39 <em class='comment'> *    to obtain the same result. See calc_load_fold_active().</em>
+<a id='L40' name='L40'></a>  40 <em class='comment'> *</em>
+<a id='L41' name='L41'></a>  41 <em class='comment'> *    Furthermore, in order to avoid synchronizing all per-CPU delta folding</em>
+<a id='L42' name='L42'></a>  42 <em class='comment'> *    across the machine, we assume 10 ticks is sufficient time for every</em>
+<a id='L43' name='L43'></a>  43 <em class='comment'> *    CPU to have completed this task.</em>
+<a id='L44' name='L44'></a>  44 <em class='comment'> *</em>
+<a id='L45' name='L45'></a>  45 <em class='comment'> *    This places an upper-bound on the IRQ-off latency of the machine. Then</em>
+<a id='L46' name='L46'></a>  46 <em class='comment'> *    again, being late doesn't loose the delta, just wrecks the sample.</em>
+<a id='L47' name='L47'></a>  47 <em class='comment'> *</em>
+<a id='L48' name='L48'></a>  48 <em class='comment'> *  - cpu_rq()-&gt;nr_uninterruptible isn't accurately tracked per-CPU because</em>
+<a id='L49' name='L49'></a>  49 <em class='comment'> *    this would add another cross-CPU cacheline miss and atomic operation</em>
+<a id='L50' name='L50'></a>  50 <em class='comment'> *    to the wakeup path. Instead we increment on whatever CPU the task ran</em>
+<a id='L51' name='L51'></a>  51 <em class='comment'> *    when it went into uninterruptible state and decrement on whatever CPU</em>
+<a id='L52' name='L52'></a>  52 <em class='comment'> *    did the wakeup. This means that only the sum of nr_uninterruptible over</em>
+<a id='L53' name='L53'></a>  53 <em class='comment'> *    all CPUs yields the correct result.</em>
+<a id='L54' name='L54'></a>  54 <em class='comment'> *</em>
+<a id='L55' name='L55'></a>  55 <em class='comment'> *  This covers the NO_HZ=n code, for extra head-aches, see the comment below.</em>
+<a id='L56' name='L56'></a>  56 <em class='comment'> */</em>
+<a id='L57' name='L57'></a>  57 
+<a id='L58' name='L58'></a>  58 <em class='comment'>/* Variables and functions for calc_load */</em>
+<a id='L59' name='L59'></a>  59 atomic_long_t calc_load_tasks;
+<a id='L60' name='L60'></a>  60 <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> calc_load_update;
+<a id='L61' name='L61'></a>  61 <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> avenrun[3];
+<a id='L62' name='L62'></a>  62 EXPORT_SYMBOL(avenrun); <em class='comment'>/* should be removed */</em>
+<a id='L63' name='L63'></a>  63 
+<a id='L64' name='L64'></a>  64 <em class='comment'>/**</em>
+<a id='L65' name='L65'></a>  65 <em class='comment'> * get_avenrun - get the load average array</em>
+<a id='L66' name='L66'></a>  66 <em class='comment'> * @loads:      pointer to dest load array</em>
+<a id='L67' name='L67'></a>  67 <em class='comment'> * @offset:     offset to add</em>
+<a id='L68' name='L68'></a>  68 <em class='comment'> * @shift:      shift count to shift the result left</em>
+<a id='L69' name='L69'></a>  69 <em class='comment'> *</em>
+<a id='L70' name='L70'></a>  70 <em class='comment'> * These values are estimates at best, so no need for locking.</em>
+<a id='L71' name='L71'></a>  71 <em class='comment'> */</em>
+<a id='L72' name='L72'></a>  72 <strong class='reserved'>void</strong> <a href='../R/7014.html' title='Multiple referred from 2 places.'>get_avenrun</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> *loads, <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> offset, <strong class='reserved'>int</strong> shift)
+<a id='L73' name='L73'></a>  73 <em class='brace'>{</em>
+<a id='L74' name='L74'></a>  74         loads[0] = (avenrun[0] + offset) &lt;&lt; shift;
+<a id='L75' name='L75'></a>  75         loads[1] = (avenrun[1] + offset) &lt;&lt; shift;
+<a id='L76' name='L76'></a>  76         loads[2] = (avenrun[2] + offset) &lt;&lt; shift;
+<a id='L77' name='L77'></a>  77 <em class='brace'>}</em>
+<a id='L78' name='L78'></a>  78 EXPORT_SYMBOL_GPL(<a href='../S/454.html#L72' title='Defined at 72 in sched/loadavg.c.'>get_avenrun</a>);
+<a id='L79' name='L79'></a>  79 
+<a id='L80' name='L80'></a>  80 <strong class='reserved'>long</strong> <a href='../R/4178.html' title='Multiple referred from 4 places.'>calc_load_fold_active</a>(<strong class='reserved'>struct</strong> <a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a> *<a href='../S/447.html#L1128' title='Defined at 1128 in sched/sched.h.'>this_rq</a>, <strong class='reserved'>long</strong> adjust)
+<a id='L81' name='L81'></a>  81 <em class='brace'>{</em>
+<a id='L82' name='L82'></a>  82         <strong class='reserved'>long</strong> nr_active, delta = 0;
+<a id='L83' name='L83'></a>  83 
+<a id='L84' name='L84'></a>  84         nr_active = <a href='../S/447.html#L1128' title='Defined at 1128 in sched/sched.h.'>this_rq</a>-&gt;<a href='../S/441.html#L4013' title='Defined at 4013 in sched/core.c.'>nr_running</a> - adjust;
+<a id='L85' name='L85'></a>  85         nr_active += (<strong class='reserved'>long</strong>)<a href='../S/447.html#L1128' title='Defined at 1128 in sched/sched.h.'>this_rq</a>-&gt;nr_uninterruptible;
+<a id='L86' name='L86'></a>  86 
+<a id='L87' name='L87'></a>  87         <strong class='reserved'>if</strong> (nr_active != <a href='../S/447.html#L1128' title='Defined at 1128 in sched/sched.h.'>this_rq</a>-&gt;calc_load_active) <em class='brace'>{</em>
+<a id='L88' name='L88'></a>  88                 delta = nr_active - <a href='../S/447.html#L1128' title='Defined at 1128 in sched/sched.h.'>this_rq</a>-&gt;calc_load_active;
+<a id='L89' name='L89'></a>  89                 <a href='../S/447.html#L1128' title='Defined at 1128 in sched/sched.h.'>this_rq</a>-&gt;calc_load_active = nr_active;
+<a id='L90' name='L90'></a>  90         <em class='brace'>}</em>
+<a id='L91' name='L91'></a>  91 
+<a id='L92' name='L92'></a>  92         <strong class='reserved'>return</strong> delta;
+<a id='L93' name='L93'></a>  93 <em class='brace'>}</em>
+<a id='L94' name='L94'></a>  94 
+<a id='L95' name='L95'></a>  95 <em class='comment'>/**</em>
+<a id='L96' name='L96'></a>  96 <em class='comment'> * fixed_power_int - compute: x^n, in O(log n) time</em>
+<a id='L97' name='L97'></a>  97 <em class='comment'> *</em>
+<a id='L98' name='L98'></a>  98 <em class='comment'> * @x:         base of the power</em>
+<a id='L99' name='L99'></a>  99 <em class='comment'> * @frac_bits: fractional bits of @x</em>
+<a id='L100' name='L100'></a> 100 <em class='comment'> * @n:         power to raise @x to.</em>
+<a id='L101' name='L101'></a> 101 <em class='comment'> *</em>
+<a id='L102' name='L102'></a> 102 <em class='comment'> * By exploiting the relation between the definition of the natural power</em>
+<a id='L103' name='L103'></a> 103 <em class='comment'> * function: x^n := x*x*...*x (x multiplied by itself for n times), and</em>
+<a id='L104' name='L104'></a> 104 <em class='comment'> * the binary encoding of numbers used by computers: n := \Sum n_i * 2^i,</em>
+<a id='L105' name='L105'></a> 105 <em class='comment'> * (where: n_i \elem {0, 1}, the binary vector representing n),</em>
+<a id='L106' name='L106'></a> 106 <em class='comment'> * we find: x^n := x^(\Sum n_i * 2^i) := \Prod x^(n_i * 2^i), which is</em>
+<a id='L107' name='L107'></a> 107 <em class='comment'> * of course trivially computable in O(log_2 n), the length of our binary</em>
+<a id='L108' name='L108'></a> 108 <em class='comment'> * vector.</em>
+<a id='L109' name='L109'></a> 109 <em class='comment'> */</em>
+<a id='L110' name='L110'></a> 110 <strong class='reserved'>static</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>
+<a id='L111' name='L111'></a> 111 <a href='../S/454.html#L161' title='Referred from 161 in sched/loadavg.c.'>fixed_power_int</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> x, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> frac_bits, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> n)
+<a id='L112' name='L112'></a> 112 <em class='brace'>{</em>
+<a id='L113' name='L113'></a> 113         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> result = 1UL &lt;&lt; frac_bits;
+<a id='L114' name='L114'></a> 114 
+<a id='L115' name='L115'></a> 115         <strong class='reserved'>if</strong> (n) <em class='brace'>{</em>
+<a id='L116' name='L116'></a> 116                 <strong class='reserved'>for</strong> (;;) <em class='brace'>{</em>
+<a id='L117' name='L117'></a> 117                         <strong class='reserved'>if</strong> (n &amp; 1) <em class='brace'>{</em>
+<a id='L118' name='L118'></a> 118                                 result *= x;
+<a id='L119' name='L119'></a> 119                                 result += 1UL &lt;&lt; (frac_bits - 1);
+<a id='L120' name='L120'></a> 120                                 result &gt;&gt;= frac_bits;
+<a id='L121' name='L121'></a> 121                         <em class='brace'>}</em>
+<a id='L122' name='L122'></a> 122                         n &gt;&gt;= 1;
+<a id='L123' name='L123'></a> 123                         <strong class='reserved'>if</strong> (!n)
+<a id='L124' name='L124'></a> 124                                 <strong class='reserved'>break</strong>;
+<a id='L125' name='L125'></a> 125                         x *= x;
+<a id='L126' name='L126'></a> 126                         x += 1UL &lt;&lt; (frac_bits - 1);
+<a id='L127' name='L127'></a> 127                         x &gt;&gt;= frac_bits;
+<a id='L128' name='L128'></a> 128                 <em class='brace'>}</em>
+<a id='L129' name='L129'></a> 129         <em class='brace'>}</em>
+<a id='L130' name='L130'></a> 130 
+<a id='L131' name='L131'></a> 131         <strong class='reserved'>return</strong> result;
+<a id='L132' name='L132'></a> 132 <em class='brace'>}</em>
+<a id='L133' name='L133'></a> 133 
+<a id='L134' name='L134'></a> 134 <em class='comment'>/*</em>
+<a id='L135' name='L135'></a> 135 <em class='comment'> * a1 = a0 * e + a * (1 - e)</em>
+<a id='L136' name='L136'></a> 136 <em class='comment'> *</em>
+<a id='L137' name='L137'></a> 137 <em class='comment'> * a2 = a1 * e + a * (1 - e)</em>
+<a id='L138' name='L138'></a> 138 <em class='comment'> *    = (a0 * e + a * (1 - e)) * e + a * (1 - e)</em>
+<a id='L139' name='L139'></a> 139 <em class='comment'> *    = a0 * e^2 + a * (1 - e) * (1 + e)</em>
+<a id='L140' name='L140'></a> 140 <em class='comment'> *</em>
+<a id='L141' name='L141'></a> 141 <em class='comment'> * a3 = a2 * e + a * (1 - e)</em>
+<a id='L142' name='L142'></a> 142 <em class='comment'> *    = (a0 * e^2 + a * (1 - e) * (1 + e)) * e + a * (1 - e)</em>
+<a id='L143' name='L143'></a> 143 <em class='comment'> *    = a0 * e^3 + a * (1 - e) * (1 + e + e^2)</em>
+<a id='L144' name='L144'></a> 144 <em class='comment'> *</em>
+<a id='L145' name='L145'></a> 145 <em class='comment'> *  ...</em>
+<a id='L146' name='L146'></a> 146 <em class='comment'> *</em>
+<a id='L147' name='L147'></a> 147 <em class='comment'> * an = a0 * e^n + a * (1 - e) * (1 + e + ... + e^n-1) [1]</em>
+<a id='L148' name='L148'></a> 148 <em class='comment'> *    = a0 * e^n + a * (1 - e) * (1 - e^n)/(1 - e)</em>
+<a id='L149' name='L149'></a> 149 <em class='comment'> *    = a0 * e^n + a * (1 - e^n)</em>
+<a id='L150' name='L150'></a> 150 <em class='comment'> *</em>
+<a id='L151' name='L151'></a> 151 <em class='comment'> * [1] application of the geometric series:</em>
+<a id='L152' name='L152'></a> 152 <em class='comment'> *</em>
+<a id='L153' name='L153'></a> 153 <em class='comment'> *              n         1 - x^(n+1)</em>
+<a id='L154' name='L154'></a> 154 <em class='comment'> *     S_n := \Sum x^i = -------------</em>
+<a id='L155' name='L155'></a> 155 <em class='comment'> *             i=0          1 - x</em>
+<a id='L156' name='L156'></a> 156 <em class='comment'> */</em>
+<a id='L157' name='L157'></a> 157 <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>
+<a id='L158' name='L158'></a> 158 <a href='../R/4180.html' title='Multiple referred from 6 places.'>calc_load_n</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> load, <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> exp,
+<a id='L159' name='L159'></a> 159             <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> active, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> n)
+<a id='L160' name='L160'></a> 160 <em class='brace'>{</em>
+<a id='L161' name='L161'></a> 161         <strong class='reserved'>return</strong> calc_load(load, <a href='../S/454.html#L111' title='Defined at 111 in sched/loadavg.c.'>fixed_power_int</a>(exp, FSHIFT, n), active);
+<a id='L162' name='L162'></a> 162 <em class='brace'>}</em>
+<a id='L163' name='L163'></a> 163 
+<a id='L164' name='L164'></a> 164 <em class='sharp'>#ifdef</em> CONFIG_NO_HZ_COMMON
+<a id='L165' name='L165'></a> 165 <em class='comment'>/*</em>
+<a id='L166' name='L166'></a> 166 <em class='comment'> * Handle NO_HZ for the global load-average.</em>
+<a id='L167' name='L167'></a> 167 <em class='comment'> *</em>
+<a id='L168' name='L168'></a> 168 <em class='comment'> * Since the above described distributed algorithm to compute the global</em>
+<a id='L169' name='L169'></a> 169 <em class='comment'> * load-average relies on per-CPU sampling from the tick, it is affected by</em>
+<a id='L170' name='L170'></a> 170 <em class='comment'> * NO_HZ.</em>
+<a id='L171' name='L171'></a> 171 <em class='comment'> *</em>
+<a id='L172' name='L172'></a> 172 <em class='comment'> * The basic idea is to fold the nr_active delta into a global NO_HZ-delta upon</em>
+<a id='L173' name='L173'></a> 173 <em class='comment'> * entering NO_HZ state such that we can include this as an 'extra' CPU delta</em>
+<a id='L174' name='L174'></a> 174 <em class='comment'> * when we read the global state.</em>
+<a id='L175' name='L175'></a> 175 <em class='comment'> *</em>
+<a id='L176' name='L176'></a> 176 <em class='comment'> * Obviously reality has to ruin such a delightfully simple scheme:</em>
+<a id='L177' name='L177'></a> 177 <em class='comment'> *</em>
+<a id='L178' name='L178'></a> 178 <em class='comment'> *  - When we go NO_HZ idle during the window, we can negate our sample</em>
+<a id='L179' name='L179'></a> 179 <em class='comment'> *    contribution, causing under-accounting.</em>
+<a id='L180' name='L180'></a> 180 <em class='comment'> *</em>
+<a id='L181' name='L181'></a> 181 <em class='comment'> *    We avoid this by keeping two NO_HZ-delta counters and flipping them</em>
+<a id='L182' name='L182'></a> 182 <em class='comment'> *    when the window starts, thus separating old and new NO_HZ load.</em>
+<a id='L183' name='L183'></a> 183 <em class='comment'> *</em>
+<a id='L184' name='L184'></a> 184 <em class='comment'> *    The only trick is the slight shift in index flip for read vs write.</em>
+<a id='L185' name='L185'></a> 185 <em class='comment'> *</em>
+<a id='L186' name='L186'></a> 186 <em class='comment'> *        0s            5s            10s           15s</em>
+<a id='L187' name='L187'></a> 187 <em class='comment'> *          +10           +10           +10           +10</em>
+<a id='L188' name='L188'></a> 188 <em class='comment'> *        |-|-----------|-|-----------|-|-----------|-|</em>
+<a id='L189' name='L189'></a> 189 <em class='comment'> *    r:0 0 1           1 0           0 1           1 0</em>
+<a id='L190' name='L190'></a> 190 <em class='comment'> *    w:0 1 1           0 0           1 1           0 0</em>
+<a id='L191' name='L191'></a> 191 <em class='comment'> *</em>
+<a id='L192' name='L192'></a> 192 <em class='comment'> *    This ensures we'll fold the old NO_HZ contribution in this window while</em>
+<a id='L193' name='L193'></a> 193 <em class='comment'> *    accumlating the new one.</em>
+<a id='L194' name='L194'></a> 194 <em class='comment'> *</em>
+<a id='L195' name='L195'></a> 195 <em class='comment'> *  - When we wake up from NO_HZ during the window, we push up our</em>
+<a id='L196' name='L196'></a> 196 <em class='comment'> *    contribution, since we effectively move our sample point to a known</em>
+<a id='L197' name='L197'></a> 197 <em class='comment'> *    busy state.</em>
+<a id='L198' name='L198'></a> 198 <em class='comment'> *</em>
+<a id='L199' name='L199'></a> 199 <em class='comment'> *    This is solved by pushing the window forward, and thus skipping the</em>
+<a id='L200' name='L200'></a> 200 <em class='comment'> *    sample, for this CPU (effectively using the NO_HZ-delta for this CPU which</em>
+<a id='L201' name='L201'></a> 201 <em class='comment'> *    was in effect at the time the window opened). This also solves the issue</em>
+<a id='L202' name='L202'></a> 202 <em class='comment'> *    of having to deal with a CPU having been in NO_HZ for multiple LOAD_FREQ</em>
+<a id='L203' name='L203'></a> 203 <em class='comment'> *    intervals.</em>
+<a id='L204' name='L204'></a> 204 <em class='comment'> *</em>
+<a id='L205' name='L205'></a> 205 <em class='comment'> * When making the ILB scale, we should try to pull this in as well.</em>
+<a id='L206' name='L206'></a> 206 <em class='comment'> */</em>
+<a id='L207' name='L207'></a> 207 <strong class='reserved'>static</strong> atomic_long_t calc_load_nohz[2];
+<a id='L208' name='L208'></a> 208 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> calc_load_idx;
+<a id='L209' name='L209'></a> 209 
+<a id='L210' name='L210'></a> 210 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>int</strong> <a href='../S/454.html#L241' title='Referred from 241 in sched/loadavg.c.'>calc_load_write_idx</a>(<strong class='reserved'>void</strong>)
+<a id='L211' name='L211'></a> 211 <em class='brace'>{</em>
+<a id='L212' name='L212'></a> 212         <strong class='reserved'>int</strong> idx = calc_load_idx;
+<a id='L213' name='L213'></a> 213 
+<a id='L214' name='L214'></a> 214         <em class='comment'>/*</em>
+<a id='L215' name='L215'></a> 215 <em class='comment'>         * See calc_global_nohz(), if we observe the new index, we also</em>
+<a id='L216' name='L216'></a> 216 <em class='comment'>         * need to observe the new update time.</em>
+<a id='L217' name='L217'></a> 217 <em class='comment'>         */</em>
+<a id='L218' name='L218'></a> 218         smp_rmb();
+<a id='L219' name='L219'></a> 219 
+<a id='L220' name='L220'></a> 220         <em class='comment'>/*</em>
+<a id='L221' name='L221'></a> 221 <em class='comment'>         * If the folding window started, make sure we start writing in the</em>
+<a id='L222' name='L222'></a> 222 <em class='comment'>         * next NO_HZ-delta.</em>
+<a id='L223' name='L223'></a> 223 <em class='comment'>         */</em>
+<a id='L224' name='L224'></a> 224         <strong class='reserved'>if</strong> (!time_before(jiffies, READ_ONCE(calc_load_update)))
+<a id='L225' name='L225'></a> 225                 idx++;
+<a id='L226' name='L226'></a> 226 
+<a id='L227' name='L227'></a> 227         <strong class='reserved'>return</strong> idx &amp; 1;
+<a id='L228' name='L228'></a> 228 <em class='brace'>}</em>
+<a id='L229' name='L229'></a> 229 
+<a id='L230' name='L230'></a> 230 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>int</strong> <a href='../S/454.html#L287' title='Referred from 287 in sched/loadavg.c.'>calc_load_read_idx</a>(<strong class='reserved'>void</strong>)
+<a id='L231' name='L231'></a> 231 <em class='brace'>{</em>
+<a id='L232' name='L232'></a> 232         <strong class='reserved'>return</strong> calc_load_idx &amp; 1;
+<a id='L233' name='L233'></a> 233 <em class='brace'>}</em>
+<a id='L234' name='L234'></a> 234 
+<a id='L235' name='L235'></a> 235 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/4181.html' title='Multiple referred from 2 places.'>calc_load_nohz_fold</a>(<strong class='reserved'>struct</strong> <a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a> *<a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a>)
+<a id='L236' name='L236'></a> 236 <em class='brace'>{</em>
+<a id='L237' name='L237'></a> 237         <strong class='reserved'>long</strong> delta;
+<a id='L238' name='L238'></a> 238 
+<a id='L239' name='L239'></a> 239         delta = <a href='../S/454.html#L80' title='Defined at 80 in sched/loadavg.c.'>calc_load_fold_active</a>(<a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a>, 0);
+<a id='L240' name='L240'></a> 240         <strong class='reserved'>if</strong> (delta) <em class='brace'>{</em>
+<a id='L241' name='L241'></a> 241                 <strong class='reserved'>int</strong> idx = <a href='../S/454.html#L210' title='Defined at 210 in sched/loadavg.c.'>calc_load_write_idx</a>();
+<a id='L242' name='L242'></a> 242 
+<a id='L243' name='L243'></a> 243                 atomic_long_add(delta, &amp;calc_load_nohz[idx]);
+<a id='L244' name='L244'></a> 244         <em class='brace'>}</em>
+<a id='L245' name='L245'></a> 245 <em class='brace'>}</em>
+<a id='L246' name='L246'></a> 246 
+<a id='L247' name='L247'></a> 247 <strong class='reserved'>void</strong> <a href='../S/114.html#L818' title='Referred from 818 in time/tick-sched.c.'>calc_load_nohz_start</a>(<strong class='reserved'>void</strong>)
+<a id='L248' name='L248'></a> 248 <em class='brace'>{</em>
+<a id='L249' name='L249'></a> 249         <em class='comment'>/*</em>
+<a id='L250' name='L250'></a> 250 <em class='comment'>         * We're going into NO_HZ mode, if there's any pending delta, fold it</em>
+<a id='L251' name='L251'></a> 251 <em class='comment'>         * into the pending NO_HZ delta.</em>
+<a id='L252' name='L252'></a> 252 <em class='comment'>         */</em>
+<a id='L253' name='L253'></a> 253         <a href='../S/454.html#L235' title='Defined at 235 in sched/loadavg.c.'>calc_load_nohz_fold</a>(<a href='../S/447.html#L1128' title='Defined at 1128 in sched/sched.h.'>this_rq</a>());
+<a id='L254' name='L254'></a> 254 <em class='brace'>}</em>
+<a id='L255' name='L255'></a> 255 
+<a id='L256' name='L256'></a> 256 <em class='comment'>/*</em>
+<a id='L257' name='L257'></a> 257 <em class='comment'> * Keep track of the load for NOHZ_FULL, must be called between</em>
+<a id='L258' name='L258'></a> 258 <em class='comment'> * calc_load_nohz_{start,stop}().</em>
+<a id='L259' name='L259'></a> 259 <em class='comment'> */</em>
+<a id='L260' name='L260'></a> 260 <strong class='reserved'>void</strong> <a href='../S/441.html#L4319' title='Referred from 4319 in sched/core.c.'>calc_load_nohz_remote</a>(<strong class='reserved'>struct</strong> <a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a> *<a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a>)
+<a id='L261' name='L261'></a> 261 <em class='brace'>{</em>
+<a id='L262' name='L262'></a> 262         <a href='../S/454.html#L235' title='Defined at 235 in sched/loadavg.c.'>calc_load_nohz_fold</a>(<a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a>);
+<a id='L263' name='L263'></a> 263 <em class='brace'>}</em>
+<a id='L264' name='L264'></a> 264 
+<a id='L265' name='L265'></a> 265 <strong class='reserved'>void</strong> <a href='../S/114.html#L873' title='Referred from 873 in time/tick-sched.c.'>calc_load_nohz_stop</a>(<strong class='reserved'>void</strong>)
+<a id='L266' name='L266'></a> 266 <em class='brace'>{</em>
+<a id='L267' name='L267'></a> 267         <strong class='reserved'>struct</strong> <a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a> *<a href='../S/447.html#L1128' title='Defined at 1128 in sched/sched.h.'>this_rq</a> = <a href='../S/447.html#L1128' title='Defined at 1128 in sched/sched.h.'>this_rq</a>();
+<a id='L268' name='L268'></a> 268 
+<a id='L269' name='L269'></a> 269         <em class='comment'>/*</em>
+<a id='L270' name='L270'></a> 270 <em class='comment'>         * If we're still before the pending sample window, we're done.</em>
+<a id='L271' name='L271'></a> 271 <em class='comment'>         */</em>
+<a id='L272' name='L272'></a> 272         <a href='../S/447.html#L1128' title='Defined at 1128 in sched/sched.h.'>this_rq</a>-&gt;calc_load_update = READ_ONCE(calc_load_update);
+<a id='L273' name='L273'></a> 273         <strong class='reserved'>if</strong> (time_before(jiffies, <a href='../S/447.html#L1128' title='Defined at 1128 in sched/sched.h.'>this_rq</a>-&gt;calc_load_update))
+<a id='L274' name='L274'></a> 274                 <strong class='reserved'>return</strong>;
+<a id='L275' name='L275'></a> 275 
+<a id='L276' name='L276'></a> 276         <em class='comment'>/*</em>
+<a id='L277' name='L277'></a> 277 <em class='comment'>         * We woke inside or after the sample window, this means we're already</em>
+<a id='L278' name='L278'></a> 278 <em class='comment'>         * accounted through the nohz accounting, so skip the entire deal and</em>
+<a id='L279' name='L279'></a> 279 <em class='comment'>         * sync up for the next window.</em>
+<a id='L280' name='L280'></a> 280 <em class='comment'>         */</em>
+<a id='L281' name='L281'></a> 281         <strong class='reserved'>if</strong> (time_before(jiffies, <a href='../S/447.html#L1128' title='Defined at 1128 in sched/sched.h.'>this_rq</a>-&gt;calc_load_update + 10))
+<a id='L282' name='L282'></a> 282                 <a href='../S/447.html#L1128' title='Defined at 1128 in sched/sched.h.'>this_rq</a>-&gt;calc_load_update += LOAD_FREQ;
+<a id='L283' name='L283'></a> 283 <em class='brace'>}</em>
+<a id='L284' name='L284'></a> 284 
+<a id='L285' name='L285'></a> 285 <strong class='reserved'>static</strong> <strong class='reserved'>long</strong> <a href='../S/454.html#L363' title='Referred from 363 in sched/loadavg.c.'>calc_load_nohz_read</a>(<strong class='reserved'>void</strong>)
+<a id='L286' name='L286'></a> 286 <em class='brace'>{</em>
+<a id='L287' name='L287'></a> 287         <strong class='reserved'>int</strong> idx = <a href='../S/454.html#L230' title='Defined at 230 in sched/loadavg.c.'>calc_load_read_idx</a>();
+<a id='L288' name='L288'></a> 288         <strong class='reserved'>long</strong> delta = 0;
+<a id='L289' name='L289'></a> 289 
+<a id='L290' name='L290'></a> 290         <strong class='reserved'>if</strong> (atomic_long_read(&amp;calc_load_nohz[idx]))
+<a id='L291' name='L291'></a> 291                 delta = atomic_long_xchg(&amp;calc_load_nohz[idx], 0);
+<a id='L292' name='L292'></a> 292 
+<a id='L293' name='L293'></a> 293         <strong class='reserved'>return</strong> delta;
+<a id='L294' name='L294'></a> 294 <em class='brace'>}</em>
+<a id='L295' name='L295'></a> 295 
+<a id='L296' name='L296'></a> 296 <em class='comment'>/*</em>
+<a id='L297' name='L297'></a> 297 <em class='comment'> * NO_HZ can leave us missing all per-CPU ticks calling</em>
+<a id='L298' name='L298'></a> 298 <em class='comment'> * calc_load_fold_active(), but since a NO_HZ CPU folds its delta into</em>
+<a id='L299' name='L299'></a> 299 <em class='comment'> * calc_load_nohz per calc_load_nohz_start(), all we need to do is fold</em>
+<a id='L300' name='L300'></a> 300 <em class='comment'> * in the pending NO_HZ delta if our NO_HZ period crossed a load cycle boundary.</em>
+<a id='L301' name='L301'></a> 301 <em class='comment'> *</em>
+<a id='L302' name='L302'></a> 302 <em class='comment'> * Once we've updated the global active value, we need to apply the exponential</em>
+<a id='L303' name='L303'></a> 303 <em class='comment'> * weights adjusted to the number of cycles missed.</em>
+<a id='L304' name='L304'></a> 304 <em class='comment'> */</em>
+<a id='L305' name='L305'></a> 305 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/454.html#L380' title='Referred from 380 in sched/loadavg.c.'>calc_global_nohz</a>(<strong class='reserved'>void</strong>)
+<a id='L306' name='L306'></a> 306 <em class='brace'>{</em>
+<a id='L307' name='L307'></a> 307         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> sample_window;
+<a id='L308' name='L308'></a> 308         <strong class='reserved'>long</strong> delta, active, n;
+<a id='L309' name='L309'></a> 309 
+<a id='L310' name='L310'></a> 310         sample_window = READ_ONCE(calc_load_update);
+<a id='L311' name='L311'></a> 311         <strong class='reserved'>if</strong> (!time_before(jiffies, sample_window + 10)) <em class='brace'>{</em>
+<a id='L312' name='L312'></a> 312                 <em class='comment'>/*</em>
+<a id='L313' name='L313'></a> 313 <em class='comment'>                 * Catch-up, fold however many we are behind still</em>
+<a id='L314' name='L314'></a> 314 <em class='comment'>                 */</em>
+<a id='L315' name='L315'></a> 315                 delta = jiffies - sample_window - 10;
+<a id='L316' name='L316'></a> 316                 n = 1 + (delta / LOAD_FREQ);
+<a id='L317' name='L317'></a> 317 
+<a id='L318' name='L318'></a> 318                 active = atomic_long_read(&amp;calc_load_tasks);
+<a id='L319' name='L319'></a> 319                 active = active &gt; 0 ? active * FIXED_1 : 0;
+<a id='L320' name='L320'></a> 320 
+<a id='L321' name='L321'></a> 321                 avenrun[0] = <a href='../S/454.html#L158' title='Defined at 158 in sched/loadavg.c.'>calc_load_n</a>(avenrun[0], EXP_1, active, n);
+<a id='L322' name='L322'></a> 322                 avenrun[1] = <a href='../S/454.html#L158' title='Defined at 158 in sched/loadavg.c.'>calc_load_n</a>(avenrun[1], EXP_5, active, n);
+<a id='L323' name='L323'></a> 323                 avenrun[2] = <a href='../S/454.html#L158' title='Defined at 158 in sched/loadavg.c.'>calc_load_n</a>(avenrun[2], EXP_15, active, n);
+<a id='L324' name='L324'></a> 324 
+<a id='L325' name='L325'></a> 325                 WRITE_ONCE(calc_load_update, sample_window + n * LOAD_FREQ);
+<a id='L326' name='L326'></a> 326         <em class='brace'>}</em>
+<a id='L327' name='L327'></a> 327 
+<a id='L328' name='L328'></a> 328         <em class='comment'>/*</em>
+<a id='L329' name='L329'></a> 329 <em class='comment'>         * Flip the NO_HZ index...</em>
+<a id='L330' name='L330'></a> 330 <em class='comment'>         *</em>
+<a id='L331' name='L331'></a> 331 <em class='comment'>         * Make sure we first write the new time then flip the index, so that</em>
+<a id='L332' name='L332'></a> 332 <em class='comment'>         * calc_load_write_idx() will see the new time when it reads the new</em>
+<a id='L333' name='L333'></a> 333 <em class='comment'>         * index, this avoids a double flip messing things up.</em>
+<a id='L334' name='L334'></a> 334 <em class='comment'>         */</em>
+<a id='L335' name='L335'></a> 335         smp_wmb();
+<a id='L336' name='L336'></a> 336         calc_load_idx++;
+<a id='L337' name='L337'></a> 337 <em class='brace'>}</em>
+<a id='L338' name='L338'></a> 338 <em class='sharp'>#else</em> <em class='comment'>/* !CONFIG_NO_HZ_COMMON */</em>
+<a id='L339' name='L339'></a> 339 
+<a id='L340' name='L340'></a> 340 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>long</strong> <a href='../S/454.html#L363' title='Referred from 363 in sched/loadavg.c.'>calc_load_nohz_read</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em> <strong class='reserved'>return</strong> 0; <em class='brace'>}</em>
+<a id='L341' name='L341'></a> 341 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/454.html#L380' title='Referred from 380 in sched/loadavg.c.'>calc_global_nohz</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em> <em class='brace'>}</em>
+<a id='L342' name='L342'></a> 342 
+<a id='L343' name='L343'></a> 343 <em class='sharp'>#endif</em> <em class='comment'>/* CONFIG_NO_HZ_COMMON */</em>
+<a id='L344' name='L344'></a> 344 
+<a id='L345' name='L345'></a> 345 <em class='comment'>/*</em>
+<a id='L346' name='L346'></a> 346 <em class='comment'> * calc_load - update the avenrun load estimates 10 ticks after the</em>
+<a id='L347' name='L347'></a> 347 <em class='comment'> * CPUs have updated calc_load_tasks.</em>
+<a id='L348' name='L348'></a> 348 <em class='comment'> *</em>
+<a id='L349' name='L349'></a> 349 <em class='comment'> * Called from the global timer code.</em>
+<a id='L350' name='L350'></a> 350 <em class='comment'> */</em>
+<a id='L351' name='L351'></a> 351 <strong class='reserved'>void</strong> <a href='../S/82.html#L2270' title='Referred from 2270 in time/timekeeping.c.'>calc_global_load</a>(<strong class='reserved'>void</strong>)
+<a id='L352' name='L352'></a> 352 <em class='brace'>{</em>
+<a id='L353' name='L353'></a> 353         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> sample_window;
+<a id='L354' name='L354'></a> 354         <strong class='reserved'>long</strong> active, delta;
+<a id='L355' name='L355'></a> 355 
+<a id='L356' name='L356'></a> 356         sample_window = READ_ONCE(calc_load_update);
+<a id='L357' name='L357'></a> 357         <strong class='reserved'>if</strong> (time_before(jiffies, sample_window + 10))
+<a id='L358' name='L358'></a> 358                 <strong class='reserved'>return</strong>;
+<a id='L359' name='L359'></a> 359 
+<a id='L360' name='L360'></a> 360         <em class='comment'>/*</em>
+<a id='L361' name='L361'></a> 361 <em class='comment'>         * Fold the 'old' NO_HZ-delta to include all NO_HZ CPUs.</em>
+<a id='L362' name='L362'></a> 362 <em class='comment'>         */</em>
+<a id='L363' name='L363'></a> 363         delta = <a href='../D/4431.html' title='Multiple defined in 2 places.'>calc_load_nohz_read</a>();
+<a id='L364' name='L364'></a> 364         <strong class='reserved'>if</strong> (delta)
+<a id='L365' name='L365'></a> 365                 atomic_long_add(delta, &amp;calc_load_tasks);
+<a id='L366' name='L366'></a> 366 
+<a id='L367' name='L367'></a> 367         active = atomic_long_read(&amp;calc_load_tasks);
+<a id='L368' name='L368'></a> 368         active = active &gt; 0 ? active * FIXED_1 : 0;
+<a id='L369' name='L369'></a> 369 
+<a id='L370' name='L370'></a> 370         avenrun[0] = calc_load(avenrun[0], EXP_1, active);
+<a id='L371' name='L371'></a> 371         avenrun[1] = calc_load(avenrun[1], EXP_5, active);
+<a id='L372' name='L372'></a> 372         avenrun[2] = calc_load(avenrun[2], EXP_15, active);
+<a id='L373' name='L373'></a> 373 
+<a id='L374' name='L374'></a> 374         WRITE_ONCE(calc_load_update, sample_window + LOAD_FREQ);
+<a id='L375' name='L375'></a> 375 
+<a id='L376' name='L376'></a> 376         <em class='comment'>/*</em>
+<a id='L377' name='L377'></a> 377 <em class='comment'>         * In case we went to NO_HZ for multiple LOAD_FREQ intervals</em>
+<a id='L378' name='L378'></a> 378 <em class='comment'>         * catch up in bulk.</em>
+<a id='L379' name='L379'></a> 379 <em class='comment'>         */</em>
+<a id='L380' name='L380'></a> 380         <a href='../D/4424.html' title='Multiple defined in 2 places.'>calc_global_nohz</a>();
+<a id='L381' name='L381'></a> 381 <em class='brace'>}</em>
+<a id='L382' name='L382'></a> 382 
+<a id='L383' name='L383'></a> 383 <em class='comment'>/*</em>
+<a id='L384' name='L384'></a> 384 <em class='comment'> * Called from scheduler_tick() to periodically update this CPU's</em>
+<a id='L385' name='L385'></a> 385 <em class='comment'> * active count.</em>
+<a id='L386' name='L386'></a> 386 <em class='comment'> */</em>
+<a id='L387' name='L387'></a> 387 <strong class='reserved'>void</strong> <a href='../R/4174.html' title='Multiple referred from 2 places.'>calc_global_load_tick</a>(<strong class='reserved'>struct</strong> <a href='../S/447.html#L914' title='Defined at 914 in sched/sched.h.'>rq</a> *<a href='../S/447.html#L1128' title='Defined at 1128 in sched/sched.h.'>this_rq</a>)
+<a id='L388' name='L388'></a> 388 <em class='brace'>{</em>
+<a id='L389' name='L389'></a> 389         <strong class='reserved'>long</strong> delta;
+<a id='L390' name='L390'></a> 390 
+<a id='L391' name='L391'></a> 391         <strong class='reserved'>if</strong> (time_before(jiffies, <a href='../S/447.html#L1128' title='Defined at 1128 in sched/sched.h.'>this_rq</a>-&gt;calc_load_update))
+<a id='L392' name='L392'></a> 392                 <strong class='reserved'>return</strong>;
+<a id='L393' name='L393'></a> 393 
+<a id='L394' name='L394'></a> 394         delta  = <a href='../S/454.html#L80' title='Defined at 80 in sched/loadavg.c.'>calc_load_fold_active</a>(<a href='../S/447.html#L1128' title='Defined at 1128 in sched/sched.h.'>this_rq</a>, 0);
+<a id='L395' name='L395'></a> 395         <strong class='reserved'>if</strong> (delta)
+<a id='L396' name='L396'></a> 396                 atomic_long_add(delta, &amp;calc_load_tasks);
+<a id='L397' name='L397'></a> 397 
+<a id='L398' name='L398'></a> 398         <a href='../S/447.html#L1128' title='Defined at 1128 in sched/sched.h.'>this_rq</a>-&gt;calc_load_update += LOAD_FREQ;
+<a id='L399' name='L399'></a> 399 <em class='brace'>}</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L72'>[^]</a><a href='#L387'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

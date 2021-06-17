@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>BUF_PAGE_SIZE</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/258.html#L381'>BUF_PAGE_SIZE</a>     381 trace/ring_buffer.c #define BUF_MAX_DATA_SIZE (BUF_PAGE_SIZE - (sizeof(u32) * 2))</span>
+<span class='curline'><a href='../S/258.html#L407'>BUF_PAGE_SIZE</a>     407 trace/ring_buffer.c 			 (unsigned int)BUF_PAGE_SIZE,</span>
+<span class='curline'><a href='../S/258.html#L1641'>BUF_PAGE_SIZE</a>    1641 trace/ring_buffer.c 	nr_pages = DIV_ROUND_UP(size, BUF_PAGE_SIZE);</span>
+<span class='curline'><a href='../S/258.html#L1835'>BUF_PAGE_SIZE</a>    1835 trace/ring_buffer.c 			local_sub(BUF_PAGE_SIZE, &amp;cpu_buffer-&gt;entries_bytes);</span>
+<span class='curline'><a href='../S/258.html#L1979'>BUF_PAGE_SIZE</a>    1979 trace/ring_buffer.c 	nr_pages = DIV_ROUND_UP(size, BUF_PAGE_SIZE);</span>
+<span class='curline'><a href='../S/258.html#L1985'>BUF_PAGE_SIZE</a>    1985 trace/ring_buffer.c 	size = nr_pages * BUF_PAGE_SIZE;</span>
+<span class='curline'><a href='../S/258.html#L2325'>BUF_PAGE_SIZE</a>    2325 trace/ring_buffer.c 		local_sub(BUF_PAGE_SIZE, &amp;cpu_buffer-&gt;entries_bytes);</span>
+<span class='curline'><a href='../S/258.html#L2452'>BUF_PAGE_SIZE</a>    2452 trace/ring_buffer.c 	if (tail &gt;= BUF_PAGE_SIZE) {</span>
+<span class='curline'><a href='../S/258.html#L2458'>BUF_PAGE_SIZE</a>    2458 trace/ring_buffer.c 		if (tail == BUF_PAGE_SIZE)</span>
+<span class='curline'><a href='../S/258.html#L2468'>BUF_PAGE_SIZE</a>    2468 trace/ring_buffer.c 	local_add(BUF_PAGE_SIZE - tail, &amp;cpu_buffer-&gt;entries_bytes);</span>
+<span class='curline'><a href='../S/258.html#L2488'>BUF_PAGE_SIZE</a>    2488 trace/ring_buffer.c 	if (tail &gt; (BUF_PAGE_SIZE - RB_EVNT_MIN_SIZE)) {</span>
+<span class='curline'><a href='../S/258.html#L2500'>BUF_PAGE_SIZE</a>    2500 trace/ring_buffer.c 	event-&gt;array[0] = (BUF_PAGE_SIZE - tail) - RB_EVNT_HDR_SIZE;</span>
+<span class='curline'><a href='../S/258.html#L2506'>BUF_PAGE_SIZE</a>    2506 trace/ring_buffer.c 	length = (tail + length) - BUF_PAGE_SIZE;</span>
+<span class='curline'><a href='../S/258.html#L3256'>BUF_PAGE_SIZE</a>    3256 trace/ring_buffer.c 	if (unlikely(write &gt; BUF_PAGE_SIZE)) {</span>
+<span class='curline'><a href='../S/258.html#L4839'>BUF_PAGE_SIZE</a>    4839 trace/ring_buffer.c 	return BUF_PAGE_SIZE * buffer-&gt;buffers[cpu]-&gt;nr_pages;</span>
+<span class='curline'><a href='../S/258.html#L5368'>BUF_PAGE_SIZE</a>    5368 trace/ring_buffer.c 		cpu_buffer-&gt;read_bytes += BUF_PAGE_SIZE;</span>
+<span class='curline'><a href='../S/258.html#L5399'>BUF_PAGE_SIZE</a>    5399 trace/ring_buffer.c 		if (BUF_PAGE_SIZE - commit &gt;= sizeof(missed_events)) {</span>
+<span class='curline'><a href='../S/258.html#L5411'>BUF_PAGE_SIZE</a>    5411 trace/ring_buffer.c 	if (commit &lt; BUF_PAGE_SIZE)</span>
+<span class='curline'><a href='../S/258.html#L5412'>BUF_PAGE_SIZE</a>    5412 trace/ring_buffer.c 		memset(&amp;bpage-&gt;data[commit], 0, BUF_PAGE_SIZE - commit);</span>
+</pre>
+</body>
+</html>

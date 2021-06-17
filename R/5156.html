@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>cpupri</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/449.html#L30'>cpupri</a>             30 sched/cpupri.c 	int cpupri;</span>
+<span class='curline'><a href='../S/449.html#L33'>cpupri</a>             33 sched/cpupri.c 		cpupri = CPUPRI_INVALID;</span>
+<span class='curline'><a href='../S/449.html#L35'>cpupri</a>             35 sched/cpupri.c 		cpupri = CPUPRI_IDLE;</span>
+<span class='curline'><a href='../S/449.html#L37'>cpupri</a>             37 sched/cpupri.c 		cpupri = CPUPRI_NORMAL;</span>
+<span class='curline'><a href='../S/449.html#L39'>cpupri</a>             39 sched/cpupri.c 		cpupri = MAX_RT_PRIO - prio + 1;</span>
+<span class='curline'><a href='../S/449.html#L41'>cpupri</a>             41 sched/cpupri.c 	return cpupri;</span>
+<span class='curline'><a href='../S/449.html#L64'>cpupri</a>             64 sched/cpupri.c static inline int __cpupri_find(struct cpupri *cp, struct task_struct *p,</span>
+<span class='curline'><a href='../S/449.html#L124'>cpupri</a>            124 sched/cpupri.c int cpupri_find(struct cpupri *cp, struct task_struct *p,</span>
+<span class='curline'><a href='../S/449.html#L147'>cpupri</a>            147 sched/cpupri.c int cpupri_find_fitness(struct cpupri *cp, struct task_struct *p,</span>
+<span class='curline'><a href='../S/449.html#L229'>cpupri</a>            229 sched/cpupri.c void cpupri_set(struct cpupri *cp, int cpu, int newpri)</span>
+<span class='curline'><a href='../S/449.html#L297'>cpupri</a>            297 sched/cpupri.c int cpupri_init(struct cpupri *cp)</span>
+<span class='curline'><a href='../S/449.html#L328'>cpupri</a>            328 sched/cpupri.c void cpupri_cleanup(struct cpupri *cp)</span>
+<span class='curline'><a href='../S/449.html#L346'>cpupri</a>            346 sched/cpupri.c 	return cpu_rq(cpu)-&gt;rd-&gt;cpupri.cpu_to_pri[cpu] &gt; CPUPRI_NORMAL;</span>
+<span class='curline'><a href='../S/453.html#L21'>cpupri</a>             21 sched/cpupri.h int  cpupri_find(struct cpupri *cp, struct task_struct *p,</span>
+<span class='curline'><a href='../S/453.html#L23'>cpupri</a>             23 sched/cpupri.h int  cpupri_find_fitness(struct cpupri *cp, struct task_struct *p,</span>
+<span class='curline'><a href='../S/453.html#L26'>cpupri</a>             26 sched/cpupri.h void cpupri_set(struct cpupri *cp, int cpu, int pri);</span>
+<span class='curline'><a href='../S/453.html#L27'>cpupri</a>             27 sched/cpupri.h int  cpupri_init(struct cpupri *cp);</span>
+<span class='curline'><a href='../S/453.html#L28'>cpupri</a>             28 sched/cpupri.h void cpupri_cleanup(struct cpupri *cp);</span>
+<span class='curline'><a href='../S/450.html#L1099'>cpupri</a>           1099 sched/rt.c     		cpupri_set(&amp;rq-&gt;rd-&gt;cpupri, rq-&gt;cpu, prio);</span>
+<span class='curline'><a href='../S/450.html#L1115'>cpupri</a>           1115 sched/rt.c     		cpupri_set(&amp;rq-&gt;rd-&gt;cpupri, rq-&gt;cpu, rt_rq-&gt;highest_prio.curr);</span>
+<span class='curline'><a href='../S/450.html#L1592'>cpupri</a>           1592 sched/rt.c     	    !cpupri_find(&amp;rq-&gt;rd-&gt;cpupri, rq-&gt;curr, NULL))</span>
+<span class='curline'><a href='../S/450.html#L1600'>cpupri</a>           1600 sched/rt.c     	    cpupri_find(&amp;rq-&gt;rd-&gt;cpupri, p, NULL))</span>
+<span class='curline'><a href='../S/450.html#L1798'>cpupri</a>           1798 sched/rt.c     		ret = cpupri_find_fitness(&amp;task_rq(task)-&gt;rd-&gt;cpupri,</span>
+<span class='curline'><a href='../S/450.html#L1803'>cpupri</a>           1803 sched/rt.c     		ret = cpupri_find(&amp;task_rq(task)-&gt;rd-&gt;cpupri,</span>
+<span class='curline'><a href='../S/450.html#L2336'>cpupri</a>           2336 sched/rt.c     	cpupri_set(&amp;rq-&gt;rd-&gt;cpupri, rq-&gt;cpu, rq-&gt;rt.highest_prio.curr);</span>
+<span class='curline'><a href='../S/450.html#L2347'>cpupri</a>           2347 sched/rt.c     	cpupri_set(&amp;rq-&gt;rd-&gt;cpupri, rq-&gt;cpu, CPUPRI_INVALID);</span>
+<span class='curline'><a href='../S/447.html#L833'>cpupri</a>            833 sched/sched.h  	struct cpupri		cpupri;</span>
+<span class='curline'><a href='../S/452.html#L435'>cpupri</a>            435 sched/topology.c 	cpupri_cleanup(&amp;rd-&gt;cpupri);</span>
+<span class='curline'><a href='../S/452.html#L516'>cpupri</a>            516 sched/topology.c 	if (cpupri_init(&amp;rd-&gt;cpupri) != 0)</span>
+</pre>
+</body>
+</html>

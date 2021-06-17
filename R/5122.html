@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>cpuhp_cpu_state</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/327.html#L81'>cpuhp_cpu_state</a>    81 cpu.c          static DEFINE_PER_CPU(struct cpuhp_cpu_state, cpuhp_state) = {</span>
+<span class='curline'><a href='../S/327.html#L158'>cpuhp_cpu_state</a>   158 cpu.c          	struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, cpu);</span>
+<span class='curline'><a href='../S/327.html#L248'>cpuhp_cpu_state</a>   248 cpu.c          static inline void wait_for_ap_thread(struct cpuhp_cpu_state *st, bool bringup)</span>
+<span class='curline'><a href='../S/327.html#L254'>cpuhp_cpu_state</a>   254 cpu.c          static inline void complete_ap_thread(struct cpuhp_cpu_state *st, bool bringup)</span>
+<span class='curline'><a href='../S/327.html#L462'>cpuhp_cpu_state</a>   462 cpu.c          cpuhp_set_state(struct cpuhp_cpu_state *st, enum cpuhp_state target)</span>
+<span class='curline'><a href='../S/327.html#L477'>cpuhp_cpu_state</a>   477 cpu.c          cpuhp_reset_state(struct cpuhp_cpu_state *st, enum cpuhp_state prev_state)</span>
+<span class='curline'><a href='../S/327.html#L497'>cpuhp_cpu_state</a>   497 cpu.c          static void __cpuhp_kick_ap(struct cpuhp_cpu_state *st)</span>
+<span class='curline'><a href='../S/327.html#L513'>cpuhp_cpu_state</a>   513 cpu.c          static int cpuhp_kick_ap(struct cpuhp_cpu_state *st, enum cpuhp_state target)</span>
+<span class='curline'><a href='../S/327.html#L530'>cpuhp_cpu_state</a>   530 cpu.c          	struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, cpu);</span>
+<span class='curline'><a href='../S/327.html#L595'>cpuhp_cpu_state</a>   595 cpu.c          static void undo_cpu_up(unsigned int cpu, struct cpuhp_cpu_state *st)</span>
+<span class='curline'><a href='../S/327.html#L601'>cpuhp_cpu_state</a>   601 cpu.c          static inline bool can_rollback_cpu(struct cpuhp_cpu_state *st)</span>
+<span class='curline'><a href='../S/327.html#L615'>cpuhp_cpu_state</a>   615 cpu.c          static int cpuhp_up_callbacks(unsigned int cpu, struct cpuhp_cpu_state *st,</span>
+<span class='curline'><a href='../S/327.html#L640'>cpuhp_cpu_state</a>   640 cpu.c          	struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, cpu);</span>
+<span class='curline'><a href='../S/327.html#L648'>cpuhp_cpu_state</a>   648 cpu.c          	struct cpuhp_cpu_state *st = this_cpu_ptr(&amp;cpuhp_state);</span>
+<span class='curline'><a href='../S/327.html#L669'>cpuhp_cpu_state</a>   669 cpu.c          	struct cpuhp_cpu_state *st = this_cpu_ptr(&amp;cpuhp_state);</span>
+<span class='curline'><a href='../S/327.html#L744'>cpuhp_cpu_state</a>   744 cpu.c          	struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, cpu);</span>
+<span class='curline'><a href='../S/327.html#L793'>cpuhp_cpu_state</a>   793 cpu.c          	struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, cpu);</span>
+<span class='curline'><a href='../S/327.html#L874'>cpuhp_cpu_state</a>   874 cpu.c          	struct cpuhp_cpu_state *st = this_cpu_ptr(&amp;cpuhp_state);</span>
+<span class='curline'><a href='../S/327.html#L910'>cpuhp_cpu_state</a>   910 cpu.c          	struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, cpu);</span>
+<span class='curline'><a href='../S/327.html#L959'>cpuhp_cpu_state</a>   959 cpu.c          	struct cpuhp_cpu_state *st = arg;</span>
+<span class='curline'><a href='../S/327.html#L966'>cpuhp_cpu_state</a>   966 cpu.c          	struct cpuhp_cpu_state *st = this_cpu_ptr(&amp;cpuhp_state);</span>
+<span class='curline'><a href='../S/327.html#L979'>cpuhp_cpu_state</a>   979 cpu.c          static void undo_cpu_down(unsigned int cpu, struct cpuhp_cpu_state *st)</span>
+<span class='curline'><a href='../S/327.html#L985'>cpuhp_cpu_state</a>   985 cpu.c          static int cpuhp_down_callbacks(unsigned int cpu, struct cpuhp_cpu_state *st,</span>
+<span class='curline'><a href='../S/327.html#L1007'>cpuhp_cpu_state</a>  1007 cpu.c          	struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, cpu);</span>
+<span class='curline'><a href='../S/327.html#L1233'>cpuhp_cpu_state</a>  1233 cpu.c          		struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, cpu);</span>
+<span class='curline'><a href='../S/327.html#L1304'>cpuhp_cpu_state</a>  1304 cpu.c          		struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, cpu);</span>
+<span class='curline'><a href='../S/327.html#L1376'>cpuhp_cpu_state</a>  1376 cpu.c          	struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, cpu);</span>
+<span class='curline'><a href='../S/327.html#L1399'>cpuhp_cpu_state</a>  1399 cpu.c          	struct cpuhp_cpu_state *st = this_cpu_ptr(&amp;cpuhp_state);</span>
+<span class='curline'><a href='../S/327.html#L1437'>cpuhp_cpu_state</a>  1437 cpu.c          	struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, cpu);</span>
+<span class='curline'><a href='../S/327.html#L2068'>cpuhp_cpu_state</a>  2068 cpu.c          		struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, cpu);</span>
+<span class='curline'><a href='../S/327.html#L2104'>cpuhp_cpu_state</a>  2104 cpu.c          		struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, cpu);</span>
+<span class='curline'><a href='../S/327.html#L2187'>cpuhp_cpu_state</a>  2187 cpu.c          		struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, cpu);</span>
+<span class='curline'><a href='../S/327.html#L2251'>cpuhp_cpu_state</a>  2251 cpu.c          		struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, cpu);</span>
+<span class='curline'><a href='../S/327.html#L2303'>cpuhp_cpu_state</a>  2303 cpu.c          		struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, cpu);</span>
+<span class='curline'><a href='../S/327.html#L2399'>cpuhp_cpu_state</a>  2399 cpu.c          	struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, dev-&gt;id);</span>
+<span class='curline'><a href='../S/327.html#L2409'>cpuhp_cpu_state</a>  2409 cpu.c          	struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, dev-&gt;id);</span>
+<span class='curline'><a href='../S/327.html#L2448'>cpuhp_cpu_state</a>  2448 cpu.c          	struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, dev-&gt;id);</span>
+<span class='curline'><a href='../S/327.html#L2459'>cpuhp_cpu_state</a>  2459 cpu.c          	struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, dev-&gt;id);</span>
+<span class='curline'><a href='../S/327.html#L2495'>cpuhp_cpu_state</a>  2495 cpu.c          	struct cpuhp_cpu_state *st = per_cpu_ptr(&amp;cpuhp_state, dev-&gt;id);</span>
+</pre>
+</body>
+</html>

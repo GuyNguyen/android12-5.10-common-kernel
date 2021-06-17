@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>RB_WRITE_MASK</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/258.html#L1340'>RB_WRITE_MASK</a>    1340 trace/ring_buffer.c 		unsigned long val = old_write &amp; ~RB_WRITE_MASK;</span>
+<span class='curline'><a href='../S/258.html#L1341'>RB_WRITE_MASK</a>    1341 trace/ring_buffer.c 		unsigned long eval = old_entries &amp; ~RB_WRITE_MASK;</span>
+<span class='curline'><a href='../S/258.html#L1732'>RB_WRITE_MASK</a>    1732 trace/ring_buffer.c 	return local_read(&amp;bpage-&gt;entries) &amp; RB_WRITE_MASK;</span>
+<span class='curline'><a href='../S/258.html#L1737'>RB_WRITE_MASK</a>    1737 trace/ring_buffer.c 	return local_read(&amp;bpage-&gt;write) &amp; RB_WRITE_MASK;</span>
+<span class='curline'><a href='../S/258.html#L2831'>RB_WRITE_MASK</a>    2831 trace/ring_buffer.c 			local_read(&amp;bpage-&gt;write) &amp; ~RB_WRITE_MASK;</span>
+<span class='curline'><a href='../S/258.html#L2919'>RB_WRITE_MASK</a>    2919 trace/ring_buffer.c 			   ~RB_WRITE_MASK);</span>
+<span class='curline'><a href='../S/258.html#L3219'>RB_WRITE_MASK</a>    3219 trace/ring_buffer.c  /*A*/	w = local_read(&amp;tail_page-&gt;write) &amp; RB_WRITE_MASK;</span>
+<span class='curline'><a href='../S/258.html#L3251'>RB_WRITE_MASK</a>    3251 trace/ring_buffer.c 	write &amp;= RB_WRITE_MASK;</span>
+<span class='curline'><a href='../S/258.html#L3307'>RB_WRITE_MASK</a>    3307 trace/ring_buffer.c  /*E*/		if (write == (local_read(&amp;tail_page-&gt;write) &amp; RB_WRITE_MASK) &amp;&amp;</span>
+</pre>
+</body>
+</html>

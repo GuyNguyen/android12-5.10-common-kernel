@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>audit_comparator</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/120.html#L217'>audit_comparator</a>  217 audit.h        extern int audit_comparator(const u32 left, const u32 op, const u32 right);</span>
+<span class='curline'><a href='../S/219.html#L1337'>audit_comparator</a> 1337 auditfilter.c  				result = audit_comparator(pid, f-&gt;op, f-&gt;val);</span>
+<span class='curline'><a href='../S/219.html#L1350'>audit_comparator</a> 1350 auditfilter.c  				result = audit_comparator(audit_loginuid_set(current),</span>
+<span class='curline'><a href='../S/219.html#L1354'>audit_comparator</a> 1354 auditfilter.c  				result = audit_comparator(msgtype, f-&gt;op, f-&gt;val);</span>
+<span class='curline'><a href='../S/200.html#L490'>audit_comparator</a>  490 auditsc.c      			result = audit_comparator(pid, f-&gt;op, f-&gt;val);</span>
+<span class='curline'><a href='../S/200.html#L496'>audit_comparator</a>  496 auditsc.c      				result = audit_comparator(ctx-&gt;ppid, f-&gt;op, f-&gt;val);</span>
+<span class='curline'><a href='../S/200.html#L544'>audit_comparator</a>  544 auditsc.c      			result = audit_comparator(sessionid, f-&gt;op, f-&gt;val);</span>
+<span class='curline'><a href='../S/200.html#L547'>audit_comparator</a>  547 auditsc.c      			result = audit_comparator(tsk-&gt;personality, f-&gt;op, f-&gt;val);</span>
+<span class='curline'><a href='../S/200.html#L551'>audit_comparator</a>  551 auditsc.c      				result = audit_comparator(ctx-&gt;arch, f-&gt;op, f-&gt;val);</span>
+<span class='curline'><a href='../S/200.html#L556'>audit_comparator</a>  556 auditsc.c      				result = audit_comparator(ctx-&gt;return_code, f-&gt;op, f-&gt;val);</span>
+<span class='curline'><a href='../S/200.html#L561'>audit_comparator</a>  561 auditsc.c      					result = audit_comparator(ctx-&gt;return_valid, f-&gt;op, AUDITSC_SUCCESS);</span>
+<span class='curline'><a href='../S/200.html#L563'>audit_comparator</a>  563 auditsc.c      					result = audit_comparator(ctx-&gt;return_valid, f-&gt;op, AUDITSC_FAILURE);</span>
+<span class='curline'><a href='../S/200.html#L568'>audit_comparator</a>  568 auditsc.c      				if (audit_comparator(MAJOR(name-&gt;dev), f-&gt;op, f-&gt;val) ||</span>
+<span class='curline'><a href='../S/200.html#L569'>audit_comparator</a>  569 auditsc.c      				    audit_comparator(MAJOR(name-&gt;rdev), f-&gt;op, f-&gt;val))</span>
+<span class='curline'><a href='../S/200.html#L573'>audit_comparator</a>  573 auditsc.c      					if (audit_comparator(MAJOR(n-&gt;dev), f-&gt;op, f-&gt;val) ||</span>
+<span class='curline'><a href='../S/200.html#L574'>audit_comparator</a>  574 auditsc.c      					    audit_comparator(MAJOR(n-&gt;rdev), f-&gt;op, f-&gt;val)) {</span>
+<span class='curline'><a href='../S/200.html#L583'>audit_comparator</a>  583 auditsc.c      				if (audit_comparator(MINOR(name-&gt;dev), f-&gt;op, f-&gt;val) ||</span>
+<span class='curline'><a href='../S/200.html#L584'>audit_comparator</a>  584 auditsc.c      				    audit_comparator(MINOR(name-&gt;rdev), f-&gt;op, f-&gt;val))</span>
+<span class='curline'><a href='../S/200.html#L588'>audit_comparator</a>  588 auditsc.c      					if (audit_comparator(MINOR(n-&gt;dev), f-&gt;op, f-&gt;val) ||</span>
+<span class='curline'><a href='../S/200.html#L589'>audit_comparator</a>  589 auditsc.c      					    audit_comparator(MINOR(n-&gt;rdev), f-&gt;op, f-&gt;val)) {</span>
+<span class='curline'><a href='../S/200.html#L598'>audit_comparator</a>  598 auditsc.c      				result = audit_comparator(name-&gt;ino, f-&gt;op, f-&gt;val);</span>
+<span class='curline'><a href='../S/200.html#L601'>audit_comparator</a>  601 auditsc.c      					if (audit_comparator(n-&gt;ino, f-&gt;op, f-&gt;val)) {</span>
+<span class='curline'><a href='../S/200.html#L653'>audit_comparator</a>  653 auditsc.c      			result = audit_comparator(audit_loginuid_set(tsk), f-&gt;op, f-&gt;val);</span>
+<span class='curline'><a href='../S/200.html#L657'>audit_comparator</a>  657 auditsc.c      				result = audit_comparator(ctx-&gt;sockaddr-&gt;ss_family,</span>
+<span class='curline'><a href='../S/200.html#L721'>audit_comparator</a>  721 auditsc.c      				result = audit_comparator(ctx-&gt;argv[f-&gt;type-AUDIT_ARG0], f-&gt;op, f-&gt;val);</span>
+<span class='curline'><a href='../S/200.html#L2006'>audit_comparator</a> 2006 auditsc.c      			    &amp;&amp; audit_comparator(inode-&gt;i_sb-&gt;s_magic,</span>
+<span class='curline'><a href='../S/200.html#L2124'>audit_comparator</a> 2124 auditsc.c      			    &amp;&amp; audit_comparator(parent-&gt;i_sb-&gt;s_magic,</span>
+</pre>
+</body>
+</html>

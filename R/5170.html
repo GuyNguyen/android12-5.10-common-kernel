@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>cpuset</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/238.html#L196'>cpuset</a>            196 cgroup/cpuset.c static inline struct cpuset *css_cs(struct cgroup_subsys_state *css)</span>
+<span class='curline'><a href='../S/238.html#L198'>cpuset</a>            198 cgroup/cpuset.c 	return css ? container_of(css, struct cpuset, css) : NULL;</span>
+<span class='curline'><a href='../S/238.html#L202'>cpuset</a>            202 cgroup/cpuset.c static inline struct cpuset *task_cs(struct task_struct *task)</span>
+<span class='curline'><a href='../S/238.html#L207'>cpuset</a>            207 cgroup/cpuset.c static inline struct cpuset *parent_cs(struct cpuset *cs)</span>
+<span class='curline'><a href='../S/238.html#L225'>cpuset</a>            225 cgroup/cpuset.c static inline bool is_cpuset_online(struct cpuset *cs)</span>
+<span class='curline'><a href='../S/238.html#L230'>cpuset</a>            230 cgroup/cpuset.c static inline int is_cpu_exclusive(const struct cpuset *cs)</span>
+<span class='curline'><a href='../S/238.html#L235'>cpuset</a>            235 cgroup/cpuset.c static inline int is_mem_exclusive(const struct cpuset *cs)</span>
+<span class='curline'><a href='../S/238.html#L240'>cpuset</a>            240 cgroup/cpuset.c static inline int is_mem_hardwall(const struct cpuset *cs)</span>
+<span class='curline'><a href='../S/238.html#L245'>cpuset</a>            245 cgroup/cpuset.c static inline int is_sched_load_balance(const struct cpuset *cs)</span>
+<span class='curline'><a href='../S/238.html#L250'>cpuset</a>            250 cgroup/cpuset.c static inline int is_memory_migrate(const struct cpuset *cs)</span>
+<span class='curline'><a href='../S/238.html#L255'>cpuset</a>            255 cgroup/cpuset.c static inline int is_spread_page(const struct cpuset *cs)</span>
+<span class='curline'><a href='../S/238.html#L260'>cpuset</a>            260 cgroup/cpuset.c static inline int is_spread_slab(const struct cpuset *cs)</span>
+<span class='curline'><a href='../S/238.html#L265'>cpuset</a>            265 cgroup/cpuset.c static inline int is_partition_root(const struct cpuset *cs)</span>
+<span class='curline'><a href='../S/238.html#L270'>cpuset</a>            270 cgroup/cpuset.c static struct cpuset top_cpuset = {</span>
+<span class='curline'><a href='../S/238.html#L382'>cpuset</a>            382 cgroup/cpuset.c 	struct cpuset *cs;</span>
+<span class='curline'><a href='../S/238.html#L420'>cpuset</a>            420 cgroup/cpuset.c static void guarantee_online_mems(struct cpuset *cs, nodemask_t *pmask)</span>
+<span class='curline'><a href='../S/238.html#L432'>cpuset</a>            432 cgroup/cpuset.c static void cpuset_update_task_spread_flag(struct cpuset *cs,</span>
+<span class='curline'><a href='../S/238.html#L454'>cpuset</a>            454 cgroup/cpuset.c static int is_cpuset_subset(const struct cpuset *p, const struct cpuset *q)</span>
+<span class='curline'><a href='../S/238.html#L470'>cpuset</a>            470 cgroup/cpuset.c static inline int alloc_cpumasks(struct cpuset *cs, struct tmpmasks *tmp)</span>
+<span class='curline'><a href='../S/238.html#L512'>cpuset</a>            512 cgroup/cpuset.c static inline void free_cpumasks(struct cpuset *cs, struct tmpmasks *tmp)</span>
+<span class='curline'><a href='../S/238.html#L531'>cpuset</a>            531 cgroup/cpuset.c static struct cpuset *alloc_trial_cpuset(struct cpuset *cs)</span>
+<span class='curline'><a href='../S/238.html#L533'>cpuset</a>            533 cgroup/cpuset.c 	struct cpuset *trial;</span>
+<span class='curline'><a href='../S/238.html#L554'>cpuset</a>            554 cgroup/cpuset.c static inline void free_cpuset(struct cpuset *cs)</span>
+<span class='curline'><a href='../S/238.html#L580'>cpuset</a>            580 cgroup/cpuset.c static int validate_change(struct cpuset *cur, struct cpuset *trial)</span>
+<span class='curline'><a href='../S/238.html#L583'>cpuset</a>            583 cgroup/cpuset.c 	struct cpuset *c, *par;</span>
+<span class='curline'><a href='../S/238.html#L657'>cpuset</a>            657 cgroup/cpuset.c static int cpusets_overlap(struct cpuset *a, struct cpuset *b)</span>
+<span class='curline'><a href='../S/238.html#L663'>cpuset</a>            663 cgroup/cpuset.c update_domain_attr(struct sched_domain_attr *dattr, struct cpuset *c)</span>
+<span class='curline'><a href='../S/238.html#L671'>cpuset</a>            671 cgroup/cpuset.c 				    struct cpuset *root_cs)</span>
+<span class='curline'><a href='../S/238.html#L673'>cpuset</a>            673 cgroup/cpuset.c 	struct cpuset *cp;</span>
+<span class='curline'><a href='../S/238.html#L753'>cpuset</a>            753 cgroup/cpuset.c 	struct cpuset *cp;	/* top-down scan of cpusets */</span>
+<span class='curline'><a href='../S/238.html#L754'>cpuset</a>            754 cgroup/cpuset.c 	struct cpuset **csa;	/* array of all cpuset ptrs */</span>
+<span class='curline'><a href='../S/238.html#L835'>cpuset</a>            835 cgroup/cpuset.c 		struct cpuset *a = csa[i];</span>
+<span class='curline'><a href='../S/238.html#L839'>cpuset</a>            839 cgroup/cpuset.c 			struct cpuset *b = csa[j];</span>
+<span class='curline'><a href='../S/238.html#L844'>cpuset</a>            844 cgroup/cpuset.c 					struct cpuset *c = csa[k];</span>
+<span class='curline'><a href='../S/238.html#L871'>cpuset</a>            871 cgroup/cpuset.c 		struct cpuset *a = csa[i];</span>
+<span class='curline'><a href='../S/238.html#L896'>cpuset</a>            896 cgroup/cpuset.c 			struct cpuset *b = csa[j];</span>
+<span class='curline'><a href='../S/238.html#L927'>cpuset</a>            927 cgroup/cpuset.c static void update_tasks_root_domain(struct cpuset *cs)</span>
+<span class='curline'><a href='../S/238.html#L942'>cpuset</a>            942 cgroup/cpuset.c 	struct cpuset *cs = NULL;</span>
+<span class='curline'><a href='../S/238.html#L1002'>cpuset</a>           1002 cgroup/cpuset.c 	struct cpuset *cs;</span>
+<span class='curline'><a href='../S/238.html#L1062'>cpuset</a>           1062 cgroup/cpuset.c static int update_cpus_allowed(struct cpuset *cs, struct task_struct *p,</span>
+<span class='curline'><a href='../S/238.html#L1082'>cpuset</a>           1082 cgroup/cpuset.c static void update_tasks_cpumask(struct cpuset *cs)</span>
+<span class='curline'><a href='../S/238.html#L1105'>cpuset</a>           1105 cgroup/cpuset.c 				      struct cpuset *cs, struct cpuset *parent)</span>
+<span class='curline'><a href='../S/238.html#L1168'>cpuset</a>           1168 cgroup/cpuset.c static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,</span>
+<span class='curline'><a href='../S/238.html#L1172'>cpuset</a>           1172 cgroup/cpuset.c 	struct cpuset *parent = parent_cs(cpuset);</span>
+<span class='curline'><a href='../S/238.html#L1186'>cpuset</a>           1186 cgroup/cpuset.c 	   (!newmask &amp;&amp; cpumask_empty(cpuset-&gt;cpus_allowed)))</span>
+<span class='curline'><a href='../S/238.html#L1193'>cpuset</a>           1193 cgroup/cpuset.c 	if ((cmd != partcmd_update) &amp;&amp; css_has_online_children(&amp;cpuset-&gt;css))</span>
+<span class='curline'><a href='../S/238.html#L1202'>cpuset</a>           1202 cgroup/cpuset.c 	   (!cpumask_subset(cpuset-&gt;cpus_allowed, parent-&gt;effective_cpus) ||</span>
+<span class='curline'><a href='../S/238.html#L1203'>cpuset</a>           1203 cgroup/cpuset.c 	     cpumask_equal(cpuset-&gt;cpus_allowed, parent-&gt;effective_cpus)))</span>
+<span class='curline'><a href='../S/238.html#L1211'>cpuset</a>           1211 cgroup/cpuset.c 		cpumask_copy(tmp-&gt;addmask, cpuset-&gt;cpus_allowed);</span>
+<span class='curline'><a href='../S/238.html#L1214'>cpuset</a>           1214 cgroup/cpuset.c 		deleting = cpumask_and(tmp-&gt;delmask, cpuset-&gt;cpus_allowed,</span>
+<span class='curline'><a href='../S/238.html#L1224'>cpuset</a>           1224 cgroup/cpuset.c 		cpumask_andnot(tmp-&gt;delmask, cpuset-&gt;cpus_allowed, newmask);</span>
+<span class='curline'><a href='../S/238.html#L1258'>cpuset</a>           1258 cgroup/cpuset.c 		adding = cpumask_and(tmp-&gt;addmask, cpuset-&gt;cpus_allowed,</span>
+<span class='curline'><a href='../S/238.html#L1265'>cpuset</a>           1265 cgroup/cpuset.c 		int prev_prs = cpuset-&gt;partition_root_state;</span>
+<span class='curline'><a href='../S/238.html#L1271'>cpuset</a>           1271 cgroup/cpuset.c 		switch (cpuset-&gt;partition_root_state) {</span>
+<span class='curline'><a href='../S/238.html#L1274'>cpuset</a>           1274 cgroup/cpuset.c 				cpuset-&gt;partition_root_state = PRS_ERROR;</span>
+<span class='curline'><a href='../S/238.html#L1278'>cpuset</a>           1278 cgroup/cpuset.c 				cpuset-&gt;partition_root_state = PRS_ENABLED;</span>
+<span class='curline'><a href='../S/238.html#L1287'>cpuset</a>           1287 cgroup/cpuset.c 	if (!part_error &amp;&amp; (cpuset-&gt;partition_root_state == PRS_ERROR))</span>
+<span class='curline'><a href='../S/238.html#L1290'>cpuset</a>           1290 cgroup/cpuset.c 	if (cpuset-&gt;partition_root_state == PRS_ERROR) {</span>
+<span class='curline'><a href='../S/238.html#L1295'>cpuset</a>           1295 cgroup/cpuset.c 		deleting = cpumask_and(tmp-&gt;delmask, cpuset-&gt;cpus_allowed,</span>
+<span class='curline'><a href='../S/238.html#L1343'>cpuset</a>           1343 cgroup/cpuset.c static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)</span>
+<span class='curline'><a href='../S/238.html#L1345'>cpuset</a>           1345 cgroup/cpuset.c 	struct cpuset *cp;</span>
+<span class='curline'><a href='../S/238.html#L1351'>cpuset</a>           1351 cgroup/cpuset.c 		struct cpuset *parent = parent_cs(cp);</span>
+<span class='curline'><a href='../S/238.html#L1496'>cpuset</a>           1496 cgroup/cpuset.c static void update_sibling_cpumasks(struct cpuset *parent, struct cpuset *cs,</span>
+<span class='curline'><a href='../S/238.html#L1499'>cpuset</a>           1499 cgroup/cpuset.c 	struct cpuset *sibling;</span>
+<span class='curline'><a href='../S/238.html#L1525'>cpuset</a>           1525 cgroup/cpuset.c static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,</span>
+<span class='curline'><a href='../S/238.html#L1598'>cpuset</a>           1598 cgroup/cpuset.c 		struct cpuset *parent = parent_cs(cs);</span>
+<span class='curline'><a href='../S/238.html#L1696'>cpuset</a>           1696 cgroup/cpuset.c static void update_tasks_nodemask(struct cpuset *cs)</span>
+<span class='curline'><a href='../S/238.html#L1759'>cpuset</a>           1759 cgroup/cpuset.c static void update_nodemasks_hier(struct cpuset *cs, nodemask_t *new_mems)</span>
+<span class='curline'><a href='../S/238.html#L1761'>cpuset</a>           1761 cgroup/cpuset.c 	struct cpuset *cp;</span>
+<span class='curline'><a href='../S/238.html#L1766'>cpuset</a>           1766 cgroup/cpuset.c 		struct cpuset *parent = parent_cs(cp);</span>
+<span class='curline'><a href='../S/238.html#L1815'>cpuset</a>           1815 cgroup/cpuset.c static int update_nodemask(struct cpuset *cs, struct cpuset *trialcs,</span>
+<span class='curline'><a href='../S/238.html#L1878'>cpuset</a>           1878 cgroup/cpuset.c static int update_relax_domain_level(struct cpuset *cs, s64 val)</span>
+<span class='curline'><a href='../S/238.html#L1903'>cpuset</a>           1903 cgroup/cpuset.c static void update_tasks_flags(struct cpuset *cs)</span>
+<span class='curline'><a href='../S/238.html#L1923'>cpuset</a>           1923 cgroup/cpuset.c static int update_flag(cpuset_flagbits_t bit, struct cpuset *cs,</span>
+<span class='curline'><a href='../S/238.html#L1926'>cpuset</a>           1926 cgroup/cpuset.c 	struct cpuset *trialcs;</span>
+<span class='curline'><a href='../S/238.html#L1971'>cpuset</a>           1971 cgroup/cpuset.c static int update_prstate(struct cpuset *cs, int val)</span>
+<span class='curline'><a href='../S/238.html#L1974'>cpuset</a>           1974 cgroup/cpuset.c 	struct cpuset *parent = parent_cs(cs);</span>
+<span class='curline'><a href='../S/238.html#L2153'>cpuset</a>           2153 cgroup/cpuset.c static struct cpuset *cpuset_attach_old_cs;</span>
+<span class='curline'><a href='../S/238.html#L2159'>cpuset</a>           2159 cgroup/cpuset.c 	struct cpuset *cs;</span>
+<span class='curline'><a href='../S/238.html#L2220'>cpuset</a>           2220 cgroup/cpuset.c 	struct cpuset *cs;</span>
+<span class='curline'><a href='../S/238.html#L2221'>cpuset</a>           2221 cgroup/cpuset.c 	struct cpuset *oldcs = cpuset_attach_old_cs;</span>
+<span class='curline'><a href='../S/238.html#L2305'>cpuset</a>           2305 cgroup/cpuset.c 	struct cpuset *cs = css_cs(css);</span>
+<span class='curline'><a href='../S/238.html#L2354'>cpuset</a>           2354 cgroup/cpuset.c 	struct cpuset *cs = css_cs(css);</span>
+<span class='curline'><a href='../S/238.html#L2383'>cpuset</a>           2383 cgroup/cpuset.c 	struct cpuset *cs = css_cs(of_css(of));</span>
+<span class='curline'><a href='../S/238.html#L2384'>cpuset</a>           2384 cgroup/cpuset.c 	struct cpuset *trialcs;</span>
+<span class='curline'><a href='../S/238.html#L2455'>cpuset</a>           2455 cgroup/cpuset.c 	struct cpuset *cs = css_cs(seq_css(sf));</span>
+<span class='curline'><a href='../S/238.html#L2487'>cpuset</a>           2487 cgroup/cpuset.c 	struct cpuset *cs = css_cs(css);</span>
+<span class='curline'><a href='../S/238.html#L2518'>cpuset</a>           2518 cgroup/cpuset.c 	struct cpuset *cs = css_cs(css);</span>
+<span class='curline'><a href='../S/238.html#L2533'>cpuset</a>           2533 cgroup/cpuset.c 	struct cpuset *cs = css_cs(seq_css(seq));</span>
+<span class='curline'><a href='../S/238.html#L2552'>cpuset</a>           2552 cgroup/cpuset.c 	struct cpuset *cs = css_cs(of_css(of));</span>
+<span class='curline'><a href='../S/238.html#L2750'>cpuset</a>           2750 cgroup/cpuset.c 	struct cpuset *cs;</span>
+<span class='curline'><a href='../S/238.html#L2775'>cpuset</a>           2775 cgroup/cpuset.c 	struct cpuset *cs = css_cs(css);</span>
+<span class='curline'><a href='../S/238.html#L2776'>cpuset</a>           2776 cgroup/cpuset.c 	struct cpuset *parent = parent_cs(cs);</span>
+<span class='curline'><a href='../S/238.html#L2777'>cpuset</a>           2777 cgroup/cpuset.c 	struct cpuset *tmp_cs;</span>
+<span class='curline'><a href='../S/238.html#L2854'>cpuset</a>           2854 cgroup/cpuset.c 	struct cpuset *cs = css_cs(css);</span>
+<span class='curline'><a href='../S/238.html#L2867'>cpuset</a>           2867 cgroup/cpuset.c 		struct cpuset *parent = parent_cs(cs);</span>
+<span class='curline'><a href='../S/238.html#L2882'>cpuset</a>           2882 cgroup/cpuset.c 	struct cpuset *cs = css_cs(css);</span>
+<span class='curline'><a href='../S/238.html#L2974'>cpuset</a>           2974 cgroup/cpuset.c static void remove_tasks_in_empty_cpuset(struct cpuset *cs)</span>
+<span class='curline'><a href='../S/238.html#L2976'>cpuset</a>           2976 cgroup/cpuset.c 	struct cpuset *parent;</span>
+<span class='curline'><a href='../S/238.html#L2995'>cpuset</a>           2995 cgroup/cpuset.c hotplug_update_tasks_legacy(struct cpuset *cs,</span>
+<span class='curline'><a href='../S/238.html#L3034'>cpuset</a>           3034 cgroup/cpuset.c hotplug_update_tasks(struct cpuset *cs,</span>
+<span class='curline'><a href='../S/238.html#L3070'>cpuset</a>           3070 cgroup/cpuset.c static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)</span>
+<span class='curline'><a href='../S/238.html#L3076'>cpuset</a>           3076 cgroup/cpuset.c 	struct cpuset *parent;</span>
+<span class='curline'><a href='../S/238.html#L3239'>cpuset</a>           3239 cgroup/cpuset.c 		struct cpuset *cs;</span>
+<span class='curline'><a href='../S/238.html#L3432'>cpuset</a>           3432 cgroup/cpuset.c static struct cpuset *nearest_hardwall_ancestor(struct cpuset *cs)</span>
+<span class='curline'><a href='../S/238.html#L3481'>cpuset</a>           3481 cgroup/cpuset.c 	struct cpuset *cs;		/* current cpuset ancestors */</span>
+<span class='curline'><a href='../S/441.html#L2466'>cpuset</a>           2466 sched/core.c   	enum { cpuset, possible, fail } state = cpuset;</span>
+<span class='curline'><a href='../S/441.html#L2501'>cpuset</a>           2501 sched/core.c   		case cpuset:</span>
+<span class='curline'><a href='../S/441.html#L2519'>cpuset</a>           2519 sched/core.c   	if (state != cpuset) {</span>
+</pre>
+</body>
+</html>

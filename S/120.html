@@ -1,0 +1,362 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>audit.h</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/audit.h</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L208'>[^]</a><a href='#L320'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'><a href='../J/4.html' title='Multiple included from 23 places.'>INCLUDED FROM</a></h2>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L208' title='Defined at 208.'>audit_hash_ino</a></li>
+<li><a href='#L320' title='Defined at 320.'>audit_signal_info_syscall</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>/* SPDX-License-Identifier: GPL-2.0-or-later */</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/* audit -- definition of audit_context structure and supporting types </em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> *</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> * Copyright 2003-2004 Red Hat, Inc.</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * Copyright 2005 Hewlett-Packard Development Company, L.P.</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> * Copyright 2005 IBM Corporation</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> */</em>
+<a id='L8' name='L8'></a>   8 
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> &lt;linux/fs.h&gt;
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;<a href='120.html'>linux/audit.h</a>&gt;
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;linux/skbuff.h&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;uapi/linux/mqueue.h&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;linux/tty.h&gt;
+<a id='L14' name='L14'></a>  14 
+<a id='L15' name='L15'></a>  15 <em class='comment'>/* AUDIT_NAMES is the number of slots we reserve in the audit_context</em>
+<a id='L16' name='L16'></a>  16 <em class='comment'> * for saving names from getname().  If we get more names we will allocate</em>
+<a id='L17' name='L17'></a>  17 <em class='comment'> * a name dynamically and also add those to the list anchored by names_list. */</em>
+<a id='L18' name='L18'></a>  18 <em class='sharp'>#define</em> <a href='../R/37.html' title='Multiple referred from 2 places.'>AUDIT_NAMES</a>     5
+<a id='L19' name='L19'></a>  19 
+<a id='L20' name='L20'></a>  20 <em class='comment'>/* At task start time, the audit_state is set in the audit_context using</em>
+<a id='L21' name='L21'></a>  21 <em class='comment'>   a per-task filter.  At syscall entry, the audit_state is augmented by</em>
+<a id='L22' name='L22'></a>  22 <em class='comment'>   the syscall filter. */</em>
+<a id='L23' name='L23'></a>  23 <strong class='reserved'>enum</strong> <a href='../R/3285.html' title='Multiple referred from 10 places.'>audit_state</a> <em class='brace'>{</em>
+<a id='L24' name='L24'></a>  24         <a href='../R/32.html' title='Multiple referred from 7 places.'>AUDIT_DISABLED</a>,         <em class='comment'>/* Do not create per-task audit_context.</em>
+<a id='L25' name='L25'></a>  25 <em class='comment'>                                 * No syscall-specific audit records can</em>
+<a id='L26' name='L26'></a>  26 <em class='comment'>                                 * be generated. */</em>
+<a id='L27' name='L27'></a>  27         <a href='../R/31.html' title='Multiple referred from 3 places.'>AUDIT_BUILD_CONTEXT</a>,    <em class='comment'>/* Create the per-task audit_context,</em>
+<a id='L28' name='L28'></a>  28 <em class='comment'>                                 * and fill it in at syscall</em>
+<a id='L29' name='L29'></a>  29 <em class='comment'>                                 * entry time.  This makes a full</em>
+<a id='L30' name='L30'></a>  30 <em class='comment'>                                 * syscall record available if some</em>
+<a id='L31' name='L31'></a>  31 <em class='comment'>                                 * other part of the kernel decides it</em>
+<a id='L32' name='L32'></a>  32 <em class='comment'>                                 * should be recorded. */</em>
+<a id='L33' name='L33'></a>  33         <a href='../R/39.html' title='Multiple referred from 9 places.'>AUDIT_RECORD_CONTEXT</a>    <em class='comment'>/* Create the per-task audit_context,</em>
+<a id='L34' name='L34'></a>  34 <em class='comment'>                                 * always fill it in at syscall entry</em>
+<a id='L35' name='L35'></a>  35 <em class='comment'>                                 * time, and always write out the audit</em>
+<a id='L36' name='L36'></a>  36 <em class='comment'>                                 * record at syscall exit time.  */</em>
+<a id='L37' name='L37'></a>  37 <em class='brace'>}</em>;
+<a id='L38' name='L38'></a>  38 
+<a id='L39' name='L39'></a>  39 <em class='comment'>/* Rule lists */</em>
+<a id='L40' name='L40'></a>  40 <strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a>;
+<a id='L41' name='L41'></a>  41 <strong class='reserved'>struct</strong> <a href='../S/367.html#L26' title='Defined at 26 in audit_fsnotify.c.'>audit_fsnotify_mark</a>;
+<a id='L42' name='L42'></a>  42 <strong class='reserved'>struct</strong> <a href='../S/72.html#L13' title='Defined at 13 in audit_tree.c.'>audit_tree</a>;
+<a id='L43' name='L43'></a>  43 <strong class='reserved'>struct</strong> <a href='../S/72.html#L25' title='Defined at 25 in audit_tree.c.'>audit_chunk</a>;
+<a id='L44' name='L44'></a>  44 
+<a id='L45' name='L45'></a>  45 <strong class='reserved'>struct</strong> <a href='../R/3145.html' title='Multiple referred from 36 places.'>audit_entry</a> <em class='brace'>{</em>
+<a id='L46' name='L46'></a>  46         <strong class='reserved'>struct</strong> list_head        list;
+<a id='L47' name='L47'></a>  47         <strong class='reserved'>struct</strong> rcu_head         rcu;
+<a id='L48' name='L48'></a>  48         <strong class='reserved'>struct</strong> audit_krule      rule;
+<a id='L49' name='L49'></a>  49 <em class='brace'>}</em>;
+<a id='L50' name='L50'></a>  50 
+<a id='L51' name='L51'></a>  51 <strong class='reserved'>struct</strong> <a href='../R/3124.html' title='Multiple referred from 5 places.'>audit_cap_data</a> <em class='brace'>{</em>
+<a id='L52' name='L52'></a>  52         kernel_cap_t            permitted;
+<a id='L53' name='L53'></a>  53         kernel_cap_t            inheritable;
+<a id='L54' name='L54'></a>  54         <strong class='reserved'>union</strong> <em class='brace'>{</em>
+<a id='L55' name='L55'></a>  55                 <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>    fE;             <em class='comment'>/* effective bit of file cap */</em>
+<a id='L56' name='L56'></a>  56                 kernel_cap_t    effective;      <em class='comment'>/* effective set of process */</em>
+<a id='L57' name='L57'></a>  57         <em class='brace'>}</em>;
+<a id='L58' name='L58'></a>  58         kernel_cap_t            ambient;
+<a id='L59' name='L59'></a>  59         kuid_t                  rootid;
+<a id='L60' name='L60'></a>  60 <em class='brace'>}</em>;
+<a id='L61' name='L61'></a>  61 
+<a id='L62' name='L62'></a>  62 <em class='comment'>/* When fs/namei.c:getname() is called, we store the pointer in name and bump</em>
+<a id='L63' name='L63'></a>  63 <em class='comment'> * the refcnt in the associated filename struct.</em>
+<a id='L64' name='L64'></a>  64 <em class='comment'> *</em>
+<a id='L65' name='L65'></a>  65 <em class='comment'> * Further, in fs/namei.c:path_lookup() we store the inode and device.</em>
+<a id='L66' name='L66'></a>  66 <em class='comment'> */</em>
+<a id='L67' name='L67'></a>  67 <strong class='reserved'>struct</strong> <a href='../R/3238.html' title='Multiple referred from 23 places.'>audit_names</a> <em class='brace'>{</em>
+<a id='L68' name='L68'></a>  68         <strong class='reserved'>struct</strong> list_head        list;           <em class='comment'>/* audit_context-&gt;names_list */</em>
+<a id='L69' name='L69'></a>  69 
+<a id='L70' name='L70'></a>  70         <strong class='reserved'>struct</strong> filename         *name;
+<a id='L71' name='L71'></a>  71         <strong class='reserved'>int</strong>                     name_len;       <em class='comment'>/* number of chars to log */</em>
+<a id='L72' name='L72'></a>  72         bool                    hidden;         <em class='comment'>/* don't log this record */</em>
+<a id='L73' name='L73'></a>  73 
+<a id='L74' name='L74'></a>  74         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>           ino;
+<a id='L75' name='L75'></a>  75         dev_t                   dev;
+<a id='L76' name='L76'></a>  76         umode_t                 mode;
+<a id='L77' name='L77'></a>  77         kuid_t                  uid;
+<a id='L78' name='L78'></a>  78         kgid_t                  gid;
+<a id='L79' name='L79'></a>  79         dev_t                   rdev;
+<a id='L80' name='L80'></a>  80         u32                     osid;
+<a id='L81' name='L81'></a>  81         <strong class='reserved'>struct</strong> <a href='../S/120.html#L51' title='Defined at 51 in audit.h.'>audit_cap_data</a>   fcap;
+<a id='L82' name='L82'></a>  82         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>            fcap_ver;
+<a id='L83' name='L83'></a>  83         <strong class='reserved'>unsigned</strong> <strong class='reserved'>char</strong>           type;           <em class='comment'>/* record type */</em>
+<a id='L84' name='L84'></a>  84         <em class='comment'>/*</em>
+<a id='L85' name='L85'></a>  85 <em class='comment'>         * This was an allocated audit_names and not from the array of</em>
+<a id='L86' name='L86'></a>  86 <em class='comment'>         * names allocated in the task audit context.  Thus this name</em>
+<a id='L87' name='L87'></a>  87 <em class='comment'>         * should be freed on syscall exit.</em>
+<a id='L88' name='L88'></a>  88 <em class='comment'>         */</em>
+<a id='L89' name='L89'></a>  89         bool                    should_free;
+<a id='L90' name='L90'></a>  90 <em class='brace'>}</em>;
+<a id='L91' name='L91'></a>  91 
+<a id='L92' name='L92'></a>  92 <strong class='reserved'>struct</strong> <a href='../S/120.html#L196' title='Referred from 196 in audit.h.'>audit_proctitle</a> <em class='brace'>{</em>
+<a id='L93' name='L93'></a>  93         <strong class='reserved'>int</strong>     len;    <em class='comment'>/* length of the cmdline field. */</em>
+<a id='L94' name='L94'></a>  94         <strong class='reserved'>char</strong>    *value; <em class='comment'>/* the cmdline field */</em>
+<a id='L95' name='L95'></a>  95 <em class='brace'>}</em>;
+<a id='L96' name='L96'></a>  96 
+<a id='L97' name='L97'></a>  97 <em class='comment'>/* The per-task audit context. */</em>
+<a id='L98' name='L98'></a>  98 <strong class='reserved'>struct</strong> <a href='../R/3131.html' title='Multiple referred from 99 places.'>audit_context</a> <em class='brace'>{</em>
+<a id='L99' name='L99'></a>  99         <strong class='reserved'>int</strong>                 dummy;      <em class='comment'>/* must be the first element */</em>
+<a id='L100' name='L100'></a> 100         <strong class='reserved'>int</strong>                 in_syscall; <em class='comment'>/* 1 if task is in a syscall */</em>
+<a id='L101' name='L101'></a> 101         <strong class='reserved'>enum</strong> <a href='../S/120.html#L23' title='Defined at 23 in audit.h.'>audit_state</a>    state, current_state;
+<a id='L102' name='L102'></a> 102         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>        serial;     <em class='comment'>/* serial number for record */</em>
+<a id='L103' name='L103'></a> 103         <strong class='reserved'>int</strong>                 major;      <em class='comment'>/* syscall number */</em>
+<a id='L104' name='L104'></a> 104         <strong class='reserved'>struct</strong> timespec64   ctime;      <em class='comment'>/* time of syscall entry */</em>
+<a id='L105' name='L105'></a> 105         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>       argv[4];    <em class='comment'>/* syscall arguments */</em>
+<a id='L106' name='L106'></a> 106         <strong class='reserved'>long</strong>                return_code;<em class='comment'>/* syscall return code */</em>
+<a id='L107' name='L107'></a> 107         u64                 prio;
+<a id='L108' name='L108'></a> 108         <strong class='reserved'>int</strong>                 return_valid; <em class='comment'>/* return code is valid */</em>
+<a id='L109' name='L109'></a> 109         <em class='comment'>/*</em>
+<a id='L110' name='L110'></a> 110 <em class='comment'>         * The names_list is the list of all audit_names collected during this</em>
+<a id='L111' name='L111'></a> 111 <em class='comment'>         * syscall.  The first AUDIT_NAMES entries in the names_list will</em>
+<a id='L112' name='L112'></a> 112 <em class='comment'>         * actually be from the preallocated_names array for performance</em>
+<a id='L113' name='L113'></a> 113 <em class='comment'>         * reasons.  Except during allocation they should never be referenced</em>
+<a id='L114' name='L114'></a> 114 <em class='comment'>         * through the preallocated_names array and should only be found/used</em>
+<a id='L115' name='L115'></a> 115 <em class='comment'>         * by running the names_list.</em>
+<a id='L116' name='L116'></a> 116 <em class='comment'>         */</em>
+<a id='L117' name='L117'></a> 117         <strong class='reserved'>struct</strong> <a href='../S/120.html#L67' title='Defined at 67 in audit.h.'>audit_names</a>  preallocated_names[<a href='../S/120.html#L18' title='Defined at 18 in audit.h.'>AUDIT_NAMES</a>];
+<a id='L118' name='L118'></a> 118         <strong class='reserved'>int</strong>                 name_count; <em class='comment'>/* total records in names_list */</em>
+<a id='L119' name='L119'></a> 119         <strong class='reserved'>struct</strong> list_head    names_list; <em class='comment'>/* struct audit_names-&gt;list anchor */</em>
+<a id='L120' name='L120'></a> 120         <strong class='reserved'>char</strong>                *filterkey; <em class='comment'>/* key for rule that triggered record */</em>
+<a id='L121' name='L121'></a> 121         <strong class='reserved'>struct</strong> path         pwd;
+<a id='L122' name='L122'></a> 122         <strong class='reserved'>struct</strong> <a href='../S/200.html#L100' title='Defined at 100 in auditsc.c.'>audit_aux_data</a> *aux;
+<a id='L123' name='L123'></a> 123         <strong class='reserved'>struct</strong> <a href='../S/200.html#L100' title='Defined at 100 in auditsc.c.'>audit_aux_data</a> *aux_pids;
+<a id='L124' name='L124'></a> 124         <strong class='reserved'>struct</strong> sockaddr_storage *sockaddr;
+<a id='L125' name='L125'></a> 125         size_t sockaddr_len;
+<a id='L126' name='L126'></a> 126                                 <em class='comment'>/* Save things to print about task_struct */</em>
+<a id='L127' name='L127'></a> 127         pid_t               pid, ppid;
+<a id='L128' name='L128'></a> 128         kuid_t              uid, euid, suid, fsuid;
+<a id='L129' name='L129'></a> 129         kgid_t              gid, egid, sgid, fsgid;
+<a id='L130' name='L130'></a> 130         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>       personality;
+<a id='L131' name='L131'></a> 131         <strong class='reserved'>int</strong>                 arch;
+<a id='L132' name='L132'></a> 132 
+<a id='L133' name='L133'></a> 133         pid_t               target_pid;
+<a id='L134' name='L134'></a> 134         kuid_t              target_auid;
+<a id='L135' name='L135'></a> 135         kuid_t              target_uid;
+<a id='L136' name='L136'></a> 136         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>        target_sessionid;
+<a id='L137' name='L137'></a> 137         u32                 target_sid;
+<a id='L138' name='L138'></a> 138         <strong class='reserved'>char</strong>                target_comm[TASK_COMM_LEN];
+<a id='L139' name='L139'></a> 139 
+<a id='L140' name='L140'></a> 140         <strong class='reserved'>struct</strong> <a href='../S/200.html#L129' title='Defined at 129 in auditsc.c.'>audit_tree_refs</a> *trees, *first_trees;
+<a id='L141' name='L141'></a> 141         <strong class='reserved'>struct</strong> list_head killed_trees;
+<a id='L142' name='L142'></a> 142         <strong class='reserved'>int</strong> tree_count;
+<a id='L143' name='L143'></a> 143 
+<a id='L144' name='L144'></a> 144         <strong class='reserved'>int</strong> type;
+<a id='L145' name='L145'></a> 145         <strong class='reserved'>union</strong> <em class='brace'>{</em>
+<a id='L146' name='L146'></a> 146                 <strong class='reserved'>struct</strong> <em class='brace'>{</em>
+<a id='L147' name='L147'></a> 147                         <strong class='reserved'>int</strong> nargs;
+<a id='L148' name='L148'></a> 148                         <strong class='reserved'>long</strong> args[6];
+<a id='L149' name='L149'></a> 149                 <em class='brace'>}</em> socketcall;
+<a id='L150' name='L150'></a> 150                 <strong class='reserved'>struct</strong> <em class='brace'>{</em>
+<a id='L151' name='L151'></a> 151                         kuid_t                  uid;
+<a id='L152' name='L152'></a> 152                         kgid_t                  gid;
+<a id='L153' name='L153'></a> 153                         umode_t                 mode;
+<a id='L154' name='L154'></a> 154                         u32                     osid;
+<a id='L155' name='L155'></a> 155                         <strong class='reserved'>int</strong>                     has_perm;
+<a id='L156' name='L156'></a> 156                         uid_t                   perm_uid;
+<a id='L157' name='L157'></a> 157                         gid_t                   perm_gid;
+<a id='L158' name='L158'></a> 158                         umode_t                 perm_mode;
+<a id='L159' name='L159'></a> 159                         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>           qbytes;
+<a id='L160' name='L160'></a> 160                 <em class='brace'>}</em> ipc;
+<a id='L161' name='L161'></a> 161                 <strong class='reserved'>struct</strong> <em class='brace'>{</em>
+<a id='L162' name='L162'></a> 162                         mqd_t                   mqdes;
+<a id='L163' name='L163'></a> 163                         <strong class='reserved'>struct</strong> mq_attr          mqstat;
+<a id='L164' name='L164'></a> 164                 <em class='brace'>}</em> mq_getsetattr;
+<a id='L165' name='L165'></a> 165                 <strong class='reserved'>struct</strong> <em class='brace'>{</em>
+<a id='L166' name='L166'></a> 166                         mqd_t                   mqdes;
+<a id='L167' name='L167'></a> 167                         <strong class='reserved'>int</strong>                     sigev_signo;
+<a id='L168' name='L168'></a> 168                 <em class='brace'>}</em> mq_notify;
+<a id='L169' name='L169'></a> 169                 <strong class='reserved'>struct</strong> <em class='brace'>{</em>
+<a id='L170' name='L170'></a> 170                         mqd_t                   mqdes;
+<a id='L171' name='L171'></a> 171                         size_t                  msg_len;
+<a id='L172' name='L172'></a> 172                         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>            msg_prio;
+<a id='L173' name='L173'></a> 173                         <strong class='reserved'>struct</strong> timespec64       abs_timeout;
+<a id='L174' name='L174'></a> 174                 <em class='brace'>}</em> mq_sendrecv;
+<a id='L175' name='L175'></a> 175                 <strong class='reserved'>struct</strong> <em class='brace'>{</em>
+<a id='L176' name='L176'></a> 176                         <strong class='reserved'>int</strong>                     oflag;
+<a id='L177' name='L177'></a> 177                         umode_t                 mode;
+<a id='L178' name='L178'></a> 178                         <strong class='reserved'>struct</strong> mq_attr          attr;
+<a id='L179' name='L179'></a> 179                 <em class='brace'>}</em> mq_open;
+<a id='L180' name='L180'></a> 180                 <strong class='reserved'>struct</strong> <em class='brace'>{</em>
+<a id='L181' name='L181'></a> 181                         pid_t                   pid;
+<a id='L182' name='L182'></a> 182                         <strong class='reserved'>struct</strong> <a href='../S/120.html#L51' title='Defined at 51 in audit.h.'>audit_cap_data</a>   cap;
+<a id='L183' name='L183'></a> 183                 <em class='brace'>}</em> capset;
+<a id='L184' name='L184'></a> 184                 <strong class='reserved'>struct</strong> <em class='brace'>{</em>
+<a id='L185' name='L185'></a> 185                         <strong class='reserved'>int</strong>                     fd;
+<a id='L186' name='L186'></a> 186                         <strong class='reserved'>int</strong>                     flags;
+<a id='L187' name='L187'></a> 187                 <em class='brace'>}</em> mmap;
+<a id='L188' name='L188'></a> 188                 <strong class='reserved'>struct</strong> <em class='brace'>{</em>
+<a id='L189' name='L189'></a> 189                         <strong class='reserved'>int</strong>                     argc;
+<a id='L190' name='L190'></a> 190                 <em class='brace'>}</em> execve;
+<a id='L191' name='L191'></a> 191                 <strong class='reserved'>struct</strong> <em class='brace'>{</em>
+<a id='L192' name='L192'></a> 192                         <strong class='reserved'>char</strong>                    *name;
+<a id='L193' name='L193'></a> 193                 <em class='brace'>}</em> module;
+<a id='L194' name='L194'></a> 194         <em class='brace'>}</em>;
+<a id='L195' name='L195'></a> 195         <strong class='reserved'>int</strong> fds[2];
+<a id='L196' name='L196'></a> 196         <strong class='reserved'>struct</strong> <a href='../S/120.html#L92' title='Defined at 92 in audit.h.'>audit_proctitle</a> proctitle;
+<a id='L197' name='L197'></a> 197 <em class='brace'>}</em>;
+<a id='L198' name='L198'></a> 198 
+<a id='L199' name='L199'></a> 199 <strong class='reserved'>extern</strong> bool audit_ever_enabled;
+<a id='L200' name='L200'></a> 200 
+<a id='L201' name='L201'></a> 201 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/162.html#L2108' title='Defined at 2108 in audit.c.'>audit_log_session_info</a>(<strong class='reserved'>struct</strong> <a href='../S/162.html#L199' title='Defined at 199 in audit.c.'>audit_buffer</a> *ab);
+<a id='L202' name='L202'></a> 202 
+<a id='L203' name='L203'></a> 203 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/162.html#L218' title='Defined at 218 in audit.c.'>auditd_test_task</a>(<strong class='reserved'>struct</strong> task_struct *task);
+<a id='L204' name='L204'></a> 204 
+<a id='L205' name='L205'></a> 205 <em class='sharp'>#define</em> <a href='../R/36.html' title='Multiple referred from 5 places.'>AUDIT_INODE_BUCKETS</a>     32
+<a id='L206' name='L206'></a> 206 <strong class='reserved'>extern</strong> <strong class='reserved'>struct</strong> list_head audit_inode_hash[<a href='../S/120.html#L205' title='Defined at 205 in audit.h.'>AUDIT_INODE_BUCKETS</a>];
+<a id='L207' name='L207'></a> 207 
+<a id='L208' name='L208'></a> 208 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>int</strong> <a href='../R/3179.html' title='Multiple referred from 4 places.'>audit_hash_ino</a>(u32 ino)
+<a id='L209' name='L209'></a> 209 <em class='brace'>{</em>
+<a id='L210' name='L210'></a> 210         <strong class='reserved'>return</strong> (ino &amp; (<a href='../S/120.html#L205' title='Defined at 205 in audit.h.'>AUDIT_INODE_BUCKETS</a>-1));
+<a id='L211' name='L211'></a> 211 <em class='brace'>}</em>
+<a id='L212' name='L212'></a> 212 
+<a id='L213' name='L213'></a> 213 <em class='comment'>/* Indicates that audit should log the full pathname. */</em>
+<a id='L214' name='L214'></a> 214 <em class='sharp'>#define</em> <a href='../R/38.html' title='Multiple referred from 9 places.'>AUDIT_NAME_FULL</a> -1
+<a id='L215' name='L215'></a> 215 
+<a id='L216' name='L216'></a> 216 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/219.html#L186' title='Defined at 186 in auditfilter.c.'>audit_match_class</a>(<strong class='reserved'>int</strong> class, <strong class='reserved'>unsigned</strong> syscall);
+<a id='L217' name='L217'></a> 217 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/219.html#L1195' title='Defined at 1195 in auditfilter.c.'>audit_comparator</a>(<strong class='reserved'>const</strong> u32 left, <strong class='reserved'>const</strong> u32 op, <strong class='reserved'>const</strong> u32 right);
+<a id='L218' name='L218'></a> 218 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/219.html#L1219' title='Defined at 1219 in auditfilter.c.'>audit_uid_comparator</a>(kuid_t left, u32 op, kuid_t right);
+<a id='L219' name='L219'></a> 219 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/219.html#L1241' title='Defined at 1241 in auditfilter.c.'>audit_gid_comparator</a>(kgid_t left, u32 op, kgid_t right);
+<a id='L220' name='L220'></a> 220 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/219.html#L1267' title='Defined at 1267 in auditfilter.c.'>parent_len</a>(<strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *path);
+<a id='L221' name='L221'></a> 221 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/219.html#L1301' title='Defined at 1301 in auditfilter.c.'>audit_compare_dname_path</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> qstr *dname, <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *path, <strong class='reserved'>int</strong> plen);
+<a id='L222' name='L222'></a> 222 <strong class='reserved'>extern</strong> <strong class='reserved'>struct</strong> sk_buff *<a href='../S/162.html#L907' title='Defined at 907 in audit.c.'>audit_make_reply</a>(<strong class='reserved'>int</strong> seq, <strong class='reserved'>int</strong> type, <strong class='reserved'>int</strong> done, <strong class='reserved'>int</strong> multi,
+<a id='L223' name='L223'></a> 223                                         <strong class='reserved'>const</strong> <strong class='reserved'>void</strong> *payload, <strong class='reserved'>int</strong> size);
+<a id='L224' name='L224'></a> 224 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong>                 <a href='../S/162.html#L302' title='Defined at 302 in audit.c.'>audit_panic</a>(<strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *message);
+<a id='L225' name='L225'></a> 225 
+<a id='L226' name='L226'></a> 226 <strong class='reserved'>struct</strong> <a href='../R/3242.html' title='Multiple referred from 2 places.'>audit_netlink_list</a> <em class='brace'>{</em>
+<a id='L227' name='L227'></a> 227         __u32 portid;
+<a id='L228' name='L228'></a> 228         <strong class='reserved'>struct</strong> net *net;
+<a id='L229' name='L229'></a> 229         <strong class='reserved'>struct</strong> sk_buff_head q;
+<a id='L230' name='L230'></a> 230 <em class='brace'>}</em>;
+<a id='L231' name='L231'></a> 231 
+<a id='L232' name='L232'></a> 232 <strong class='reserved'>int</strong> <a href='../S/162.html#L888' title='Defined at 888 in audit.c.'>audit_send_list_thread</a>(<strong class='reserved'>void</strong> *_dest);
+<a id='L233' name='L233'></a> 233 
+<a id='L234' name='L234'></a> 234 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> selinux_audit_rule_update(<strong class='reserved'>void</strong>);
+<a id='L235' name='L235'></a> 235 
+<a id='L236' name='L236'></a> 236 <strong class='reserved'>extern</strong> <strong class='reserved'>struct</strong> mutex audit_filter_mutex;
+<a id='L237' name='L237'></a> 237 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/219.html#L1013' title='Defined at 1013 in auditfilter.c.'>audit_del_rule</a>(<strong class='reserved'>struct</strong> <a href='../S/120.html#L45' title='Defined at 45 in audit.h.'>audit_entry</a> *entry);
+<a id='L238' name='L238'></a> 238 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/219.html#L97' title='Defined at 97 in auditfilter.c.'>audit_free_rule_rcu</a>(<strong class='reserved'>struct</strong> rcu_head *head);
+<a id='L239' name='L239'></a> 239 <strong class='reserved'>extern</strong> <strong class='reserved'>struct</strong> list_head audit_filter_list[];
+<a id='L240' name='L240'></a> 240 
+<a id='L241' name='L241'></a> 241 <strong class='reserved'>extern</strong> <strong class='reserved'>struct</strong> <a href='../S/120.html#L45' title='Defined at 45 in audit.h.'>audit_entry</a> *<a href='../S/219.html#L811' title='Defined at 811 in auditfilter.c.'>audit_dupe_rule</a>(<strong class='reserved'>struct</strong> audit_krule *old);
+<a id='L242' name='L242'></a> 242 
+<a id='L243' name='L243'></a> 243 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/162.html#L2153' title='Defined at 2153 in audit.c.'>audit_log_d_path_exe</a>(<strong class='reserved'>struct</strong> <a href='../S/162.html#L199' title='Defined at 199 in audit.c.'>audit_buffer</a> *ab,
+<a id='L244' name='L244'></a> 244                                  <strong class='reserved'>struct</strong> mm_struct *mm);
+<a id='L245' name='L245'></a> 245 
+<a id='L246' name='L246'></a> 246 <strong class='reserved'>extern</strong> <strong class='reserved'>struct</strong> tty_struct *<a href='../S/162.html#L2172' title='Defined at 2172 in audit.c.'>audit_get_tty</a>(<strong class='reserved'>void</strong>);
+<a id='L247' name='L247'></a> 247 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/162.html#L2184' title='Defined at 2184 in audit.c.'>audit_put_tty</a>(<strong class='reserved'>struct</strong> tty_struct *tty);
+<a id='L248' name='L248'></a> 248 
+<a id='L249' name='L249'></a> 249 <em class='comment'>/* audit watch/mark/tree functions */</em>
+<a id='L250' name='L250'></a> 250 <em class='sharp'>#ifdef</em> CONFIG_AUDITSYSCALL
+<a id='L251' name='L251'></a> 251 <strong class='reserved'>extern</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> <a href='../S/162.html#L1778' title='Defined at 1778 in audit.c.'>audit_serial</a>(<strong class='reserved'>void</strong>);
+<a id='L252' name='L252'></a> 252 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../D/3545.html' title='Multiple defined in 2 places.'>auditsc_get_stamp</a>(<strong class='reserved'>struct</strong> <a href='../S/120.html#L98' title='Defined at 98 in audit.h.'>audit_context</a> *ctx,
+<a id='L253' name='L253'></a> 253                               <strong class='reserved'>struct</strong> timespec64 *t, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> *serial);
+<a id='L254' name='L254'></a> 254 
+<a id='L255' name='L255'></a> 255 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/3475.html' title='Multiple defined in 2 places.'>audit_put_watch</a>(<strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *watch);
+<a id='L256' name='L256'></a> 256 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/3396.html' title='Multiple defined in 2 places.'>audit_get_watch</a>(<strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *watch);
+<a id='L257' name='L257'></a> 257 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../D/3513.html' title='Multiple defined in 2 places.'>audit_to_watch</a>(<strong class='reserved'>struct</strong> audit_krule *krule, <strong class='reserved'>char</strong> *path, <strong class='reserved'>int</strong> len,
+<a id='L258' name='L258'></a> 258                           u32 op);
+<a id='L259' name='L259'></a> 259 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../D/3328.html' title='Multiple defined in 2 places.'>audit_add_watch</a>(<strong class='reserved'>struct</strong> audit_krule *krule, <strong class='reserved'>struct</strong> list_head **list);
+<a id='L260' name='L260'></a> 260 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/3485.html' title='Multiple defined in 2 places.'>audit_remove_watch_rule</a>(<strong class='reserved'>struct</strong> audit_krule *krule);
+<a id='L261' name='L261'></a> 261 <strong class='reserved'>extern</strong> <strong class='reserved'>char</strong> *<a href='../D/3537.html' title='Multiple defined in 2 places.'>audit_watch_path</a>(<strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *watch);
+<a id='L262' name='L262'></a> 262 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../D/3532.html' title='Multiple defined in 2 places.'>audit_watch_compare</a>(<strong class='reserved'>struct</strong> <a href='../S/181.html#L36' title='Defined at 36 in audit_watch.c.'>audit_watch</a> *watch, <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> ino,
+<a id='L263' name='L263'></a> 263                                dev_t dev);
+<a id='L264' name='L264'></a> 264 
+<a id='L265' name='L265'></a> 265 <strong class='reserved'>extern</strong> <strong class='reserved'>struct</strong> <a href='../S/367.html#L26' title='Defined at 26 in audit_fsnotify.c.'>audit_fsnotify_mark</a> *<a href='../D/3331.html' title='Multiple defined in 2 places.'>audit_alloc_mark</a>(<strong class='reserved'>struct</strong> audit_krule *krule,
+<a id='L266' name='L266'></a> 266                                                     <strong class='reserved'>char</strong> *pathname, <strong class='reserved'>int</strong> len);
+<a id='L267' name='L267'></a> 267 <strong class='reserved'>extern</strong> <strong class='reserved'>char</strong> *<a href='../D/3449.html' title='Multiple defined in 2 places.'>audit_mark_path</a>(<strong class='reserved'>struct</strong> <a href='../S/367.html#L26' title='Defined at 26 in audit_fsnotify.c.'>audit_fsnotify_mark</a> *mark);
+<a id='L268' name='L268'></a> 268 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/3480.html' title='Multiple defined in 2 places.'>audit_remove_mark</a>(<strong class='reserved'>struct</strong> <a href='../S/367.html#L26' title='Defined at 26 in audit_fsnotify.c.'>audit_fsnotify_mark</a> *<a href='../S/72.html#L161' title='Defined at 161 in audit_tree.c.'>audit_mark</a>);
+<a id='L269' name='L269'></a> 269 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/3481.html' title='Multiple defined in 2 places.'>audit_remove_mark_rule</a>(<strong class='reserved'>struct</strong> audit_krule *krule);
+<a id='L270' name='L270'></a> 270 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../D/3446.html' title='Multiple defined in 2 places.'>audit_mark_compare</a>(<strong class='reserved'>struct</strong> <a href='../S/367.html#L26' title='Defined at 26 in audit_fsnotify.c.'>audit_fsnotify_mark</a> *mark,
+<a id='L271' name='L271'></a> 271                               <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> ino, dev_t dev);
+<a id='L272' name='L272'></a> 272 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../D/3359.html' title='Multiple defined in 2 places.'>audit_dupe_exe</a>(<strong class='reserved'>struct</strong> audit_krule *new, <strong class='reserved'>struct</strong> audit_krule *old);
+<a id='L273' name='L273'></a> 273 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../D/3365.html' title='Multiple defined in 2 places.'>audit_exe_compare</a>(<strong class='reserved'>struct</strong> task_struct *tsk,
+<a id='L274' name='L274'></a> 274                              <strong class='reserved'>struct</strong> <a href='../S/367.html#L26' title='Defined at 26 in audit_fsnotify.c.'>audit_fsnotify_mark</a> *mark);
+<a id='L275' name='L275'></a> 275 
+<a id='L276' name='L276'></a> 276 <strong class='reserved'>extern</strong> <strong class='reserved'>struct</strong> <a href='../S/72.html#L25' title='Defined at 25 in audit_tree.c.'>audit_chunk</a> *<a href='../S/72.html#L242' title='Defined at 242 in audit_tree.c.'>audit_tree_lookup</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> inode *inode);
+<a id='L277' name='L277'></a> 277 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/72.html#L139' title='Defined at 139 in audit_tree.c.'>audit_put_chunk</a>(<strong class='reserved'>struct</strong> <a href='../S/72.html#L25' title='Defined at 25 in audit_tree.c.'>audit_chunk</a> *chunk);
+<a id='L278' name='L278'></a> 278 <strong class='reserved'>extern</strong> bool <a href='../S/72.html#L261' title='Defined at 261 in audit_tree.c.'>audit_tree_match</a>(<strong class='reserved'>struct</strong> <a href='../S/72.html#L25' title='Defined at 25 in audit_tree.c.'>audit_chunk</a> *chunk,
+<a id='L279' name='L279'></a> 279                              <strong class='reserved'>struct</strong> <a href='../S/72.html#L13' title='Defined at 13 in audit_tree.c.'>audit_tree</a> *tree);
+<a id='L280' name='L280'></a> 280 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../D/3444.html' title='Multiple defined in 2 places.'>audit_make_tree</a>(<strong class='reserved'>struct</strong> audit_krule *rule, <strong class='reserved'>char</strong> *pathname, u32 op);
+<a id='L281' name='L281'></a> 281 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../D/3327.html' title='Multiple defined in 2 places.'>audit_add_tree_rule</a>(<strong class='reserved'>struct</strong> audit_krule *rule);
+<a id='L282' name='L282'></a> 282 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../D/3483.html' title='Multiple defined in 2 places.'>audit_remove_tree_rule</a>(<strong class='reserved'>struct</strong> audit_krule *rule);
+<a id='L283' name='L283'></a> 283 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/3525.html' title='Multiple defined in 2 places.'>audit_trim_trees</a>(<strong class='reserved'>void</strong>);
+<a id='L284' name='L284'></a> 284 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../D/3509.html' title='Multiple defined in 2 places.'>audit_tag_tree</a>(<strong class='reserved'>char</strong> *old, <strong class='reserved'>char</strong> *new);
+<a id='L285' name='L285'></a> 285 <strong class='reserved'>extern</strong> <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *<a href='../D/3523.html' title='Multiple defined in 2 places.'>audit_tree_path</a>(<strong class='reserved'>struct</strong> <a href='../S/72.html#L13' title='Defined at 13 in audit_tree.c.'>audit_tree</a> *tree);
+<a id='L286' name='L286'></a> 286 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/3473.html' title='Multiple defined in 2 places.'>audit_put_tree</a>(<strong class='reserved'>struct</strong> <a href='../S/72.html#L13' title='Defined at 13 in audit_tree.c.'>audit_tree</a> *tree);
+<a id='L287' name='L287'></a> 287 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/3404.html' title='Multiple defined in 2 places.'>audit_kill_trees</a>(<strong class='reserved'>struct</strong> <a href='../S/120.html#L98' title='Defined at 98 in audit.h.'>audit_context</a> *context);
+<a id='L288' name='L288'></a> 288 
+<a id='L289' name='L289'></a> 289 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../D/3506.html' title='Multiple defined in 2 places.'>audit_signal_info_syscall</a>(<strong class='reserved'>struct</strong> task_struct *t);
+<a id='L290' name='L290'></a> 290 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/3371.html' title='Multiple defined in 2 places.'>audit_filter_inodes</a>(<strong class='reserved'>struct</strong> task_struct *tsk,
+<a id='L291' name='L291'></a> 291                                 <strong class='reserved'>struct</strong> <a href='../S/120.html#L98' title='Defined at 98 in audit.h.'>audit_context</a> *ctx);
+<a id='L292' name='L292'></a> 292 <strong class='reserved'>extern</strong> <strong class='reserved'>struct</strong> list_head *<a href='../S/200.html#L2702' title='Defined at 2702 in auditsc.c.'>audit_killed_trees</a>(<strong class='reserved'>void</strong>);
+<a id='L293' name='L293'></a> 293 <em class='sharp'>#else</em> <em class='comment'>/* CONFIG_AUDITSYSCALL */</em>
+<a id='L294' name='L294'></a> 294 <em class='sharp'>#define</em> <a href='../R/3322.html' title='Multiple referred from 2 places.'>auditsc_get_stamp</a>(c, t, s) 0
+<a id='L295' name='L295'></a> 295 <em class='sharp'>#define</em> <a href='../R/3255.html' title='Multiple referred from 7 places.'>audit_put_watch</a>(w) <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L296' name='L296'></a> 296 <em class='sharp'>#define</em> <a href='../R/3177.html' title='Multiple referred from 6 places.'>audit_get_watch</a>(w) <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L297' name='L297'></a> 297 <em class='sharp'>#define</em> <a href='../R/3291.html' title='Multiple referred from 2 places.'>audit_to_watch</a>(k, p, l, o) (-EINVAL)
+<a id='L298' name='L298'></a> 298 <em class='sharp'>#define</em> <a href='../R/3111.html' title='Multiple referred from 2 places.'>audit_add_watch</a>(k, l) (-EINVAL)
+<a id='L299' name='L299'></a> 299 <em class='sharp'>#define</em> <a href='../R/3264.html' title='Multiple referred from 2 places.'>audit_remove_watch_rule</a>(k) BUG()
+<a id='L300' name='L300'></a> 300 <em class='sharp'>#define</em> <a href='../R/3314.html' title='Multiple referred from 4 places.'>audit_watch_path</a>(w) ""
+<a id='L301' name='L301'></a> 301 <em class='sharp'>#define</em> <a href='../R/3309.html' title='Multiple referred from 2 places.'>audit_watch_compare</a>(w, i, d) 0
+<a id='L302' name='L302'></a> 302 
+<a id='L303' name='L303'></a> 303 <em class='sharp'>#define</em> <a href='../R/3114.html' title='Multiple referred from 3 places.'>audit_alloc_mark</a>(k, p, l) (ERR_PTR(-EINVAL))
+<a id='L304' name='L304'></a> 304 <em class='sharp'>#define</em> <a href='../R/3229.html' title='Multiple referred from 5 places.'>audit_mark_path</a>(m) ""
+<a id='L305' name='L305'></a> 305 <em class='sharp'>#define</em> <a href='../R/3259.html' title='Multiple referred from 9 places.'>audit_remove_mark</a>(m)
+<a id='L306' name='L306'></a> 306 <em class='sharp'>#define</em> <a href='../R/3260.html' title='Multiple referred from 2 places.'>audit_remove_mark_rule</a>(k)
+<a id='L307' name='L307'></a> 307 <em class='sharp'>#define</em> <a href='../R/3226.html' title='Multiple referred from 2 places.'>audit_mark_compare</a>(m, i, d) 0
+<a id='L308' name='L308'></a> 308 <em class='sharp'>#define</em> <a href='../R/3146.html' title='Multiple referred from 3 places.'>audit_exe_compare</a>(t, m) (-EINVAL)
+<a id='L309' name='L309'></a> 309 <em class='sharp'>#define</em> <a href='../R/3140.html' title='Multiple referred from 2 places.'>audit_dupe_exe</a>(n, o) (-EINVAL)
+<a id='L310' name='L310'></a> 310 
+<a id='L311' name='L311'></a> 311 <em class='sharp'>#define</em> <a href='../R/3262.html' title='Multiple referred from 2 places.'>audit_remove_tree_rule</a>(rule) BUG()
+<a id='L312' name='L312'></a> 312 <em class='sharp'>#define</em> <a href='../R/3110.html' title='Multiple referred from 2 places.'>audit_add_tree_rule</a>(rule) -EINVAL
+<a id='L313' name='L313'></a> 313 <em class='sharp'>#define</em> <a href='../R/3224.html' title='Multiple referred from 2 places.'>audit_make_tree</a>(rule, str, op) -EINVAL
+<a id='L314' name='L314'></a> 314 <em class='sharp'>#define</em> <a href='../R/3303.html' title='Multiple referred from 2 places.'>audit_trim_trees</a>() (<strong class='reserved'>void</strong>)0
+<a id='L315' name='L315'></a> 315 <em class='sharp'>#define</em> <a href='../R/3253.html' title='Multiple referred from 5 places.'>audit_put_tree</a>(tree) (<strong class='reserved'>void</strong>)0
+<a id='L316' name='L316'></a> 316 <em class='sharp'>#define</em> <a href='../R/3287.html' title='Multiple referred from 2 places.'>audit_tag_tree</a>(old, new) -EINVAL
+<a id='L317' name='L317'></a> 317 <em class='sharp'>#define</em> <a href='../R/3301.html' title='Multiple referred from 4 places.'>audit_tree_path</a>(rule) ""        <em class='comment'>/* never called */</em>
+<a id='L318' name='L318'></a> 318 <em class='sharp'>#define</em> <a href='../R/3185.html' title='Multiple referred from 3 places.'>audit_kill_trees</a>(context) BUG()
+<a id='L319' name='L319'></a> 319 
+<a id='L320' name='L320'></a> 320 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>int</strong> <a href='../R/3284.html' title='Multiple referred from 2 places.'>audit_signal_info_syscall</a>(<strong class='reserved'>struct</strong> task_struct *t)
+<a id='L321' name='L321'></a> 321 <em class='brace'>{</em>
+<a id='L322' name='L322'></a> 322         <strong class='reserved'>return</strong> 0;
+<a id='L323' name='L323'></a> 323 <em class='brace'>}</em>
+<a id='L324' name='L324'></a> 324 
+<a id='L325' name='L325'></a> 325 <em class='sharp'>#define</em> <a href='../R/3152.html' title='Multiple referred from 4 places.'>audit_filter_inodes</a>(t, c) <a href='../D/34.html' title='Multiple defined in 2 places.'>AUDIT_DISABLED</a>
+<a id='L326' name='L326'></a> 326 <em class='sharp'>#endif</em> <em class='comment'>/* CONFIG_AUDITSYSCALL */</em>
+<a id='L327' name='L327'></a> 327 
+<a id='L328' name='L328'></a> 328 <strong class='reserved'>extern</strong> <strong class='reserved'>char</strong> *<a href='../S/219.html#L125' title='Defined at 125 in auditfilter.c.'>audit_unpack_string</a>(<strong class='reserved'>void</strong> **bufp, size_t *remain, size_t len);
+<a id='L329' name='L329'></a> 329 
+<a id='L330' name='L330'></a> 330 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/219.html#L1320' title='Defined at 1320 in auditfilter.c.'>audit_filter</a>(<strong class='reserved'>int</strong> msgtype, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> listtype);
+<a id='L331' name='L331'></a> 331 
+<a id='L332' name='L332'></a> 332 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/162.html#L234' title='Defined at 234 in audit.c.'>audit_ctl_lock</a>(<strong class='reserved'>void</strong>);
+<a id='L333' name='L333'></a> 333 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/162.html#L243' title='Defined at 243 in audit.c.'>audit_ctl_unlock</a>(<strong class='reserved'>void</strong>);
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L208'>[^]</a><a href='#L320'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

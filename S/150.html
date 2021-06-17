@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>dma/debug.h</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/500.html'>dma</a>/debug.h</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L54'>[^]</a><a href='#L116'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'><a href='../J/96.html' title='Multiple included from 27 places.'>INCLUDED FROM</a></h2>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L54' title='Defined at 54.'>debug_dma_map_page</a></li>
+<li><a href='#L60' title='Defined at 60.'>debug_dma_unmap_page</a></li>
+<li><a href='#L65' title='Defined at 65.'>debug_dma_map_sg</a></li>
+<li><a href='#L70' title='Defined at 70.'>debug_dma_unmap_sg</a></li>
+<li><a href='#L76' title='Defined at 76.'>debug_dma_alloc_coherent</a></li>
+<li><a href='#L81' title='Defined at 81.'>debug_dma_free_coherent</a></li>
+<li><a href='#L86' title='Defined at 86.'>debug_dma_map_resource</a></li>
+<li><a href='#L92' title='Defined at 92.'>debug_dma_unmap_resource</a></li>
+<li><a href='#L98' title='Defined at 98.'>debug_dma_sync_single_for_cpu</a></li>
+<li><a href='#L104' title='Defined at 104.'>debug_dma_sync_single_for_device</a></li>
+<li><a href='#L110' title='Defined at 110.'>debug_dma_sync_sg_for_cpu</a></li>
+<li><a href='#L116' title='Defined at 116.'>debug_dma_sync_sg_for_device</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>/* SPDX-License-Identifier: GPL-2.0-only */</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * Copyright (C) 2008 Advanced Micro Devices, Inc.</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> *</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * Author: Joerg Roedel &lt;joerg.roedel@amd.com&gt;</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> */</em>
+<a id='L7' name='L7'></a>   7 
+<a id='L8' name='L8'></a>   8 <em class='sharp'>#ifndef</em> <a href='../S/150.html#L9' title='Defined at 9 in dma/debug.h.'>_KERNEL_DMA_DEBUG_H</a>
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#define</em> <a href='../S/150.html#L8' title='Referred from 8 in dma/debug.h.'>_KERNEL_DMA_DEBUG_H</a>
+<a id='L10' name='L10'></a>  10 
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#ifdef</em> CONFIG_DMA_API_DEBUG
+<a id='L12' name='L12'></a>  12 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/5704.html' title='Multiple defined in 2 places.'>debug_dma_map_page</a>(<strong class='reserved'>struct</strong> device *dev, <strong class='reserved'>struct</strong> page *page,
+<a id='L13' name='L13'></a>  13                                size_t offset, size_t size,
+<a id='L14' name='L14'></a>  14                                <strong class='reserved'>int</strong> direction, dma_addr_t dma_addr);
+<a id='L15' name='L15'></a>  15 
+<a id='L16' name='L16'></a>  16 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/5713.html' title='Multiple defined in 2 places.'>debug_dma_unmap_page</a>(<strong class='reserved'>struct</strong> device *dev, dma_addr_t addr,
+<a id='L17' name='L17'></a>  17                                  size_t size, <strong class='reserved'>int</strong> direction);
+<a id='L18' name='L18'></a>  18 
+<a id='L19' name='L19'></a>  19 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/5706.html' title='Multiple defined in 2 places.'>debug_dma_map_sg</a>(<strong class='reserved'>struct</strong> device *dev, <strong class='reserved'>struct</strong> scatterlist *sg,
+<a id='L20' name='L20'></a>  20                              <strong class='reserved'>int</strong> nents, <strong class='reserved'>int</strong> mapped_ents, <strong class='reserved'>int</strong> direction);
+<a id='L21' name='L21'></a>  21 
+<a id='L22' name='L22'></a>  22 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/5715.html' title='Multiple defined in 2 places.'>debug_dma_unmap_sg</a>(<strong class='reserved'>struct</strong> device *dev, <strong class='reserved'>struct</strong> scatterlist *sglist,
+<a id='L23' name='L23'></a>  23                                <strong class='reserved'>int</strong> nelems, <strong class='reserved'>int</strong> dir);
+<a id='L24' name='L24'></a>  24 
+<a id='L25' name='L25'></a>  25 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/5701.html' title='Multiple defined in 2 places.'>debug_dma_alloc_coherent</a>(<strong class='reserved'>struct</strong> device *dev, size_t size,
+<a id='L26' name='L26'></a>  26                                      dma_addr_t dma_addr, <strong class='reserved'>void</strong> *virt);
+<a id='L27' name='L27'></a>  27 
+<a id='L28' name='L28'></a>  28 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/5703.html' title='Multiple defined in 2 places.'>debug_dma_free_coherent</a>(<strong class='reserved'>struct</strong> device *dev, size_t size,
+<a id='L29' name='L29'></a>  29                                     <strong class='reserved'>void</strong> *virt, dma_addr_t addr);
+<a id='L30' name='L30'></a>  30 
+<a id='L31' name='L31'></a>  31 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/5705.html' title='Multiple defined in 2 places.'>debug_dma_map_resource</a>(<strong class='reserved'>struct</strong> device *dev, phys_addr_t addr,
+<a id='L32' name='L32'></a>  32                                    size_t size, <strong class='reserved'>int</strong> direction,
+<a id='L33' name='L33'></a>  33                                    dma_addr_t dma_addr);
+<a id='L34' name='L34'></a>  34 
+<a id='L35' name='L35'></a>  35 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/5714.html' title='Multiple defined in 2 places.'>debug_dma_unmap_resource</a>(<strong class='reserved'>struct</strong> device *dev, dma_addr_t dma_addr,
+<a id='L36' name='L36'></a>  36                                      size_t size, <strong class='reserved'>int</strong> direction);
+<a id='L37' name='L37'></a>  37 
+<a id='L38' name='L38'></a>  38 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/5711.html' title='Multiple defined in 2 places.'>debug_dma_sync_single_for_cpu</a>(<strong class='reserved'>struct</strong> device *dev,
+<a id='L39' name='L39'></a>  39                                           dma_addr_t dma_handle, size_t size,
+<a id='L40' name='L40'></a>  40                                           <strong class='reserved'>int</strong> direction);
+<a id='L41' name='L41'></a>  41 
+<a id='L42' name='L42'></a>  42 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/5712.html' title='Multiple defined in 2 places.'>debug_dma_sync_single_for_device</a>(<strong class='reserved'>struct</strong> device *dev,
+<a id='L43' name='L43'></a>  43                                              dma_addr_t dma_handle,
+<a id='L44' name='L44'></a>  44                                              size_t size, <strong class='reserved'>int</strong> direction);
+<a id='L45' name='L45'></a>  45 
+<a id='L46' name='L46'></a>  46 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/5709.html' title='Multiple defined in 2 places.'>debug_dma_sync_sg_for_cpu</a>(<strong class='reserved'>struct</strong> device *dev,
+<a id='L47' name='L47'></a>  47                                       <strong class='reserved'>struct</strong> scatterlist *sg,
+<a id='L48' name='L48'></a>  48                                       <strong class='reserved'>int</strong> nelems, <strong class='reserved'>int</strong> direction);
+<a id='L49' name='L49'></a>  49 
+<a id='L50' name='L50'></a>  50 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../D/5710.html' title='Multiple defined in 2 places.'>debug_dma_sync_sg_for_device</a>(<strong class='reserved'>struct</strong> device *dev,
+<a id='L51' name='L51'></a>  51                                          <strong class='reserved'>struct</strong> scatterlist *sg,
+<a id='L52' name='L52'></a>  52                                          <strong class='reserved'>int</strong> nelems, <strong class='reserved'>int</strong> direction);
+<a id='L53' name='L53'></a>  53 <em class='sharp'>#else</em> <em class='comment'>/* CONFIG_DMA_API_DEBUG */</em>
+<a id='L54' name='L54'></a>  54 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/5383.html' title='Multiple referred from 4 places.'>debug_dma_map_page</a>(<strong class='reserved'>struct</strong> device *dev, <strong class='reserved'>struct</strong> page *page,
+<a id='L55' name='L55'></a>  55                                       size_t offset, size_t size,
+<a id='L56' name='L56'></a>  56                                       <strong class='reserved'>int</strong> direction, dma_addr_t dma_addr)
+<a id='L57' name='L57'></a>  57 <em class='brace'>{</em>
+<a id='L58' name='L58'></a>  58 <em class='brace'>}</em>
+<a id='L59' name='L59'></a>  59 
+<a id='L60' name='L60'></a>  60 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/5392.html' title='Multiple referred from 4 places.'>debug_dma_unmap_page</a>(<strong class='reserved'>struct</strong> device *dev, dma_addr_t addr,
+<a id='L61' name='L61'></a>  61                                         size_t size, <strong class='reserved'>int</strong> direction)
+<a id='L62' name='L62'></a>  62 <em class='brace'>{</em>
+<a id='L63' name='L63'></a>  63 <em class='brace'>}</em>
+<a id='L64' name='L64'></a>  64 
+<a id='L65' name='L65'></a>  65 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/5385.html' title='Multiple referred from 2 places.'>debug_dma_map_sg</a>(<strong class='reserved'>struct</strong> device *dev, <strong class='reserved'>struct</strong> scatterlist *sg,
+<a id='L66' name='L66'></a>  66                                     <strong class='reserved'>int</strong> nents, <strong class='reserved'>int</strong> mapped_ents, <strong class='reserved'>int</strong> direction)
+<a id='L67' name='L67'></a>  67 <em class='brace'>{</em>
+<a id='L68' name='L68'></a>  68 <em class='brace'>}</em>
+<a id='L69' name='L69'></a>  69 
+<a id='L70' name='L70'></a>  70 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/5394.html' title='Multiple referred from 2 places.'>debug_dma_unmap_sg</a>(<strong class='reserved'>struct</strong> device *dev,
+<a id='L71' name='L71'></a>  71                                       <strong class='reserved'>struct</strong> scatterlist *sglist,
+<a id='L72' name='L72'></a>  72                                       <strong class='reserved'>int</strong> nelems, <strong class='reserved'>int</strong> dir)
+<a id='L73' name='L73'></a>  73 <em class='brace'>{</em>
+<a id='L74' name='L74'></a>  74 <em class='brace'>}</em>
+<a id='L75' name='L75'></a>  75 
+<a id='L76' name='L76'></a>  76 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/5381.html' title='Multiple referred from 2 places.'>debug_dma_alloc_coherent</a>(<strong class='reserved'>struct</strong> device *dev, size_t size,
+<a id='L77' name='L77'></a>  77                                             dma_addr_t dma_addr, <strong class='reserved'>void</strong> *virt)
+<a id='L78' name='L78'></a>  78 <em class='brace'>{</em>
+<a id='L79' name='L79'></a>  79 <em class='brace'>}</em>
+<a id='L80' name='L80'></a>  80 
+<a id='L81' name='L81'></a>  81 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/5382.html' title='Multiple referred from 2 places.'>debug_dma_free_coherent</a>(<strong class='reserved'>struct</strong> device *dev, size_t size,
+<a id='L82' name='L82'></a>  82                                            <strong class='reserved'>void</strong> *virt, dma_addr_t addr)
+<a id='L83' name='L83'></a>  83 <em class='brace'>{</em>
+<a id='L84' name='L84'></a>  84 <em class='brace'>}</em>
+<a id='L85' name='L85'></a>  85 
+<a id='L86' name='L86'></a>  86 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/5384.html' title='Multiple referred from 2 places.'>debug_dma_map_resource</a>(<strong class='reserved'>struct</strong> device *dev, phys_addr_t addr,
+<a id='L87' name='L87'></a>  87                                           size_t size, <strong class='reserved'>int</strong> direction,
+<a id='L88' name='L88'></a>  88                                           dma_addr_t dma_addr)
+<a id='L89' name='L89'></a>  89 <em class='brace'>{</em>
+<a id='L90' name='L90'></a>  90 <em class='brace'>}</em>
+<a id='L91' name='L91'></a>  91 
+<a id='L92' name='L92'></a>  92 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/5393.html' title='Multiple referred from 2 places.'>debug_dma_unmap_resource</a>(<strong class='reserved'>struct</strong> device *dev,
+<a id='L93' name='L93'></a>  93                                             dma_addr_t dma_addr, size_t size,
+<a id='L94' name='L94'></a>  94                                             <strong class='reserved'>int</strong> direction)
+<a id='L95' name='L95'></a>  95 <em class='brace'>{</em>
+<a id='L96' name='L96'></a>  96 <em class='brace'>}</em>
+<a id='L97' name='L97'></a>  97 
+<a id='L98' name='L98'></a>  98 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/5390.html' title='Multiple referred from 2 places.'>debug_dma_sync_single_for_cpu</a>(<strong class='reserved'>struct</strong> device *dev,
+<a id='L99' name='L99'></a>  99                                                  dma_addr_t dma_handle,
+<a id='L100' name='L100'></a> 100                                                  size_t size, <strong class='reserved'>int</strong> direction)
+<a id='L101' name='L101'></a> 101 <em class='brace'>{</em>
+<a id='L102' name='L102'></a> 102 <em class='brace'>}</em>
+<a id='L103' name='L103'></a> 103 
+<a id='L104' name='L104'></a> 104 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/5391.html' title='Multiple referred from 2 places.'>debug_dma_sync_single_for_device</a>(<strong class='reserved'>struct</strong> device *dev,
+<a id='L105' name='L105'></a> 105                                                     dma_addr_t dma_handle,
+<a id='L106' name='L106'></a> 106                                                     size_t size, <strong class='reserved'>int</strong> direction)
+<a id='L107' name='L107'></a> 107 <em class='brace'>{</em>
+<a id='L108' name='L108'></a> 108 <em class='brace'>}</em>
+<a id='L109' name='L109'></a> 109 
+<a id='L110' name='L110'></a> 110 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/5388.html' title='Multiple referred from 2 places.'>debug_dma_sync_sg_for_cpu</a>(<strong class='reserved'>struct</strong> device *dev,
+<a id='L111' name='L111'></a> 111                                              <strong class='reserved'>struct</strong> scatterlist *sg,
+<a id='L112' name='L112'></a> 112                                              <strong class='reserved'>int</strong> nelems, <strong class='reserved'>int</strong> direction)
+<a id='L113' name='L113'></a> 113 <em class='brace'>{</em>
+<a id='L114' name='L114'></a> 114 <em class='brace'>}</em>
+<a id='L115' name='L115'></a> 115 
+<a id='L116' name='L116'></a> 116 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/5389.html' title='Multiple referred from 2 places.'>debug_dma_sync_sg_for_device</a>(<strong class='reserved'>struct</strong> device *dev,
+<a id='L117' name='L117'></a> 117                                                 <strong class='reserved'>struct</strong> scatterlist *sg,
+<a id='L118' name='L118'></a> 118                                                 <strong class='reserved'>int</strong> nelems, <strong class='reserved'>int</strong> direction)
+<a id='L119' name='L119'></a> 119 <em class='brace'>{</em>
+<a id='L120' name='L120'></a> 120 <em class='brace'>}</em>
+<a id='L121' name='L121'></a> 121 <em class='sharp'>#endif</em> <em class='comment'>/* CONFIG_DMA_API_DEBUG */</em>
+<a id='L122' name='L122'></a> 122 <em class='sharp'>#endif</em> <em class='comment'>/* _KERNEL_DMA_DEBUG_H */</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L54'>[^]</a><a href='#L116'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

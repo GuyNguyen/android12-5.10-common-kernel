@@ -1,0 +1,254 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>trace/kprobe_event_gen_test.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/513.html'>trace</a>/kprobe_event_gen_test.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L42'>[^]</a><a href='#L195'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L42' title='Defined at 42.'>test_gen_kprobe_cmd</a></li>
+<li><a href='#L113' title='Defined at 113.'>test_gen_kretprobe_cmd</a></li>
+<li><a href='#L175' title='Defined at 175.'>kprobe_event_gen_test_init</a></li>
+<li><a href='#L195' title='Defined at 195.'>kprobe_event_gen_test_exit</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * Test module for in-kernel kprobe event creation and generation.</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> *</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * Copyright (C) 2019 Tom Zanussi &lt;zanussi@kernel.org&gt;</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> */</em>
+<a id='L7' name='L7'></a>   7 
+<a id='L8' name='L8'></a>   8 <em class='sharp'>#include</em> &lt;linux/module.h&gt;
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> &lt;linux/trace_events.h&gt;
+<a id='L10' name='L10'></a>  10 
+<a id='L11' name='L11'></a>  11 <em class='comment'>/*</em>
+<a id='L12' name='L12'></a>  12 <em class='comment'> * This module is a simple test of basic functionality for in-kernel</em>
+<a id='L13' name='L13'></a>  13 <em class='comment'> * kprobe/kretprobe event creation.  The first test uses</em>
+<a id='L14' name='L14'></a>  14 <em class='comment'> * kprobe_event_gen_cmd_start(), kprobe_event_add_fields() and</em>
+<a id='L15' name='L15'></a>  15 <em class='comment'> * kprobe_event_gen_cmd_end() to create a kprobe event, which is then</em>
+<a id='L16' name='L16'></a>  16 <em class='comment'> * enabled in order to generate trace output.  The second creates a</em>
+<a id='L17' name='L17'></a>  17 <em class='comment'> * kretprobe event using kretprobe_event_gen_cmd_start() and</em>
+<a id='L18' name='L18'></a>  18 <em class='comment'> * kretprobe_event_gen_cmd_end(), and is also then enabled.</em>
+<a id='L19' name='L19'></a>  19 <em class='comment'> *</em>
+<a id='L20' name='L20'></a>  20 <em class='comment'> * To test, select CONFIG_KPROBE_EVENT_GEN_TEST and build the module.</em>
+<a id='L21' name='L21'></a>  21 <em class='comment'> * Then:</em>
+<a id='L22' name='L22'></a>  22 <em class='comment'> *</em>
+<a id='L23' name='L23'></a>  23 <em class='comment'> * # insmod kernel/trace/kprobe_event_gen_test.ko</em>
+<a id='L24' name='L24'></a>  24 <em class='comment'> * # cat /sys/kernel/debug/tracing/trace</em>
+<a id='L25' name='L25'></a>  25 <em class='comment'> *</em>
+<a id='L26' name='L26'></a>  26 <em class='comment'> * You should see many instances of the "gen_kprobe_test" and</em>
+<a id='L27' name='L27'></a>  27 <em class='comment'> * "gen_kretprobe_test" events in the trace buffer.</em>
+<a id='L28' name='L28'></a>  28 <em class='comment'> *</em>
+<a id='L29' name='L29'></a>  29 <em class='comment'> * To remove the events, remove the module:</em>
+<a id='L30' name='L30'></a>  30 <em class='comment'> *</em>
+<a id='L31' name='L31'></a>  31 <em class='comment'> * # rmmod kprobe_event_gen_test</em>
+<a id='L32' name='L32'></a>  32 <em class='comment'> *</em>
+<a id='L33' name='L33'></a>  33 <em class='comment'> */</em>
+<a id='L34' name='L34'></a>  34 
+<a id='L35' name='L35'></a>  35 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> trace_event_file *gen_kprobe_test;
+<a id='L36' name='L36'></a>  36 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> trace_event_file *gen_kretprobe_test;
+<a id='L37' name='L37'></a>  37 
+<a id='L38' name='L38'></a>  38 <em class='comment'>/*</em>
+<a id='L39' name='L39'></a>  39 <em class='comment'> * Test to make sure we can create a kprobe event, then add more</em>
+<a id='L40' name='L40'></a>  40 <em class='comment'> * fields.</em>
+<a id='L41' name='L41'></a>  41 <em class='comment'> */</em>
+<a id='L42' name='L42'></a>  42 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __init <a href='../S/289.html#L179' title='Referred from 179 in trace/kprobe_event_gen_test.c.'>test_gen_kprobe_cmd</a>(<strong class='reserved'>void</strong>)
+<a id='L43' name='L43'></a>  43 <em class='brace'>{</em>
+<a id='L44' name='L44'></a>  44         <strong class='reserved'>struct</strong> dynevent_cmd cmd;
+<a id='L45' name='L45'></a>  45         <strong class='reserved'>char</strong> *buf;
+<a id='L46' name='L46'></a>  46         <strong class='reserved'>int</strong> ret;
+<a id='L47' name='L47'></a>  47 
+<a id='L48' name='L48'></a>  48         <em class='comment'>/* Create a buffer to hold the generated command */</em>
+<a id='L49' name='L49'></a>  49         buf = kzalloc(MAX_DYNEVENT_CMD_LEN, GFP_KERNEL);
+<a id='L50' name='L50'></a>  50         <strong class='reserved'>if</strong> (!buf)
+<a id='L51' name='L51'></a>  51                 <strong class='reserved'>return</strong> -ENOMEM;
+<a id='L52' name='L52'></a>  52 
+<a id='L53' name='L53'></a>  53         <em class='comment'>/* Before generating the command, initialize the cmd object */</em>
+<a id='L54' name='L54'></a>  54         <a href='../S/317.html#L938' title='Defined at 938 in trace/trace_kprobe.c.'>kprobe_event_cmd_init</a>(&amp;cmd, buf, MAX_DYNEVENT_CMD_LEN);
+<a id='L55' name='L55'></a>  55 
+<a id='L56' name='L56'></a>  56         <em class='comment'>/*</em>
+<a id='L57' name='L57'></a>  57 <em class='comment'>         * Define the gen_kprobe_test event with the first 2 kprobe</em>
+<a id='L58' name='L58'></a>  58 <em class='comment'>         * fields.</em>
+<a id='L59' name='L59'></a>  59 <em class='comment'>         */</em>
+<a id='L60' name='L60'></a>  60         ret = kprobe_event_gen_cmd_start(&amp;cmd, "gen_kprobe_test",
+<a id='L61' name='L61'></a>  61                                          "do_sys_open",
+<a id='L62' name='L62'></a>  62                                          "dfd=%ax", "filename=%dx");
+<a id='L63' name='L63'></a>  63         <strong class='reserved'>if</strong> (ret)
+<a id='L64' name='L64'></a>  64                 <strong class='reserved'>goto</strong> free;
+<a id='L65' name='L65'></a>  65 
+<a id='L66' name='L66'></a>  66         <em class='comment'>/* Use kprobe_event_add_fields to add the rest of the fields */</em>
+<a id='L67' name='L67'></a>  67 
+<a id='L68' name='L68'></a>  68         ret = kprobe_event_add_fields(&amp;cmd, "flags=%cx", "mode=+4($stack)");
+<a id='L69' name='L69'></a>  69         <strong class='reserved'>if</strong> (ret)
+<a id='L70' name='L70'></a>  70                 <strong class='reserved'>goto</strong> free;
+<a id='L71' name='L71'></a>  71 
+<a id='L72' name='L72'></a>  72         <em class='comment'>/*</em>
+<a id='L73' name='L73'></a>  73 <em class='comment'>         * This actually creates the event.</em>
+<a id='L74' name='L74'></a>  74 <em class='comment'>         */</em>
+<a id='L75' name='L75'></a>  75         ret = kprobe_event_gen_cmd_end(&amp;cmd);
+<a id='L76' name='L76'></a>  76         <strong class='reserved'>if</strong> (ret)
+<a id='L77' name='L77'></a>  77                 <strong class='reserved'>goto</strong> free;
+<a id='L78' name='L78'></a>  78 
+<a id='L79' name='L79'></a>  79         <em class='comment'>/*</em>
+<a id='L80' name='L80'></a>  80 <em class='comment'>         * Now get the gen_kprobe_test event file.  We need to prevent</em>
+<a id='L81' name='L81'></a>  81 <em class='comment'>         * the instance and event from disappearing from underneath</em>
+<a id='L82' name='L82'></a>  82 <em class='comment'>         * us, which trace_get_event_file() does (though in this case</em>
+<a id='L83' name='L83'></a>  83 <em class='comment'>         * we're using the top-level instance which never goes away).</em>
+<a id='L84' name='L84'></a>  84 <em class='comment'>         */</em>
+<a id='L85' name='L85'></a>  85         gen_kprobe_test = <a href='../S/267.html#L2746' title='Defined at 2746 in trace/trace_events.c.'>trace_get_event_file</a>(NULL, "kprobes",
+<a id='L86' name='L86'></a>  86                                                "gen_kprobe_test");
+<a id='L87' name='L87'></a>  87         <strong class='reserved'>if</strong> (IS_ERR(gen_kprobe_test)) <em class='brace'>{</em>
+<a id='L88' name='L88'></a>  88                 ret = PTR_ERR(gen_kprobe_test);
+<a id='L89' name='L89'></a>  89                 <strong class='reserved'>goto</strong> delete;
+<a id='L90' name='L90'></a>  90         <em class='brace'>}</em>
+<a id='L91' name='L91'></a>  91 
+<a id='L92' name='L92'></a>  92         <em class='comment'>/* Enable the event or you won't see anything */</em>
+<a id='L93' name='L93'></a>  93         ret = <a href='../S/267.html#L915' title='Defined at 915 in trace/trace_events.c.'>trace_array_set_clr_event</a>(gen_kprobe_test-&gt;tr,
+<a id='L94' name='L94'></a>  94                                         "kprobes", "gen_kprobe_test", true);
+<a id='L95' name='L95'></a>  95         <strong class='reserved'>if</strong> (ret) <em class='brace'>{</em>
+<a id='L96' name='L96'></a>  96                 <a href='../S/267.html#L2801' title='Defined at 2801 in trace/trace_events.c.'>trace_put_event_file</a>(gen_kprobe_test);
+<a id='L97' name='L97'></a>  97                 <strong class='reserved'>goto</strong> delete;
+<a id='L98' name='L98'></a>  98         <em class='brace'>}</em>
+<a id='L99' name='L99'></a>  99  out:
+<a id='L100' name='L100'></a> 100         <strong class='reserved'>return</strong> ret;
+<a id='L101' name='L101'></a> 101  delete:
+<a id='L102' name='L102'></a> 102         <em class='comment'>/* We got an error after creating the event, delete it */</em>
+<a id='L103' name='L103'></a> 103         ret = <a href='../S/317.html#L1081' title='Defined at 1081 in trace/trace_kprobe.c.'>kprobe_event_delete</a>("gen_kprobe_test");
+<a id='L104' name='L104'></a> 104  free:
+<a id='L105' name='L105'></a> 105         kfree(buf);
+<a id='L106' name='L106'></a> 106 
+<a id='L107' name='L107'></a> 107         <strong class='reserved'>goto</strong> out;
+<a id='L108' name='L108'></a> 108 <em class='brace'>}</em>
+<a id='L109' name='L109'></a> 109 
+<a id='L110' name='L110'></a> 110 <em class='comment'>/*</em>
+<a id='L111' name='L111'></a> 111 <em class='comment'> * Test to make sure we can create a kretprobe event.</em>
+<a id='L112' name='L112'></a> 112 <em class='comment'> */</em>
+<a id='L113' name='L113'></a> 113 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __init <a href='../S/289.html#L183' title='Referred from 183 in trace/kprobe_event_gen_test.c.'>test_gen_kretprobe_cmd</a>(<strong class='reserved'>void</strong>)
+<a id='L114' name='L114'></a> 114 <em class='brace'>{</em>
+<a id='L115' name='L115'></a> 115         <strong class='reserved'>struct</strong> dynevent_cmd cmd;
+<a id='L116' name='L116'></a> 116         <strong class='reserved'>char</strong> *buf;
+<a id='L117' name='L117'></a> 117         <strong class='reserved'>int</strong> ret;
+<a id='L118' name='L118'></a> 118 
+<a id='L119' name='L119'></a> 119         <em class='comment'>/* Create a buffer to hold the generated command */</em>
+<a id='L120' name='L120'></a> 120         buf = kzalloc(MAX_DYNEVENT_CMD_LEN, GFP_KERNEL);
+<a id='L121' name='L121'></a> 121         <strong class='reserved'>if</strong> (!buf)
+<a id='L122' name='L122'></a> 122                 <strong class='reserved'>return</strong> -ENOMEM;
+<a id='L123' name='L123'></a> 123 
+<a id='L124' name='L124'></a> 124         <em class='comment'>/* Before generating the command, initialize the cmd object */</em>
+<a id='L125' name='L125'></a> 125         <a href='../S/317.html#L938' title='Defined at 938 in trace/trace_kprobe.c.'>kprobe_event_cmd_init</a>(&amp;cmd, buf, MAX_DYNEVENT_CMD_LEN);
+<a id='L126' name='L126'></a> 126 
+<a id='L127' name='L127'></a> 127         <em class='comment'>/*</em>
+<a id='L128' name='L128'></a> 128 <em class='comment'>         * Define the kretprobe event.</em>
+<a id='L129' name='L129'></a> 129 <em class='comment'>         */</em>
+<a id='L130' name='L130'></a> 130         ret = kretprobe_event_gen_cmd_start(&amp;cmd, "gen_kretprobe_test",
+<a id='L131' name='L131'></a> 131                                             "do_sys_open",
+<a id='L132' name='L132'></a> 132                                             "$retval");
+<a id='L133' name='L133'></a> 133         <strong class='reserved'>if</strong> (ret)
+<a id='L134' name='L134'></a> 134                 <strong class='reserved'>goto</strong> free;
+<a id='L135' name='L135'></a> 135 
+<a id='L136' name='L136'></a> 136         <em class='comment'>/*</em>
+<a id='L137' name='L137'></a> 137 <em class='comment'>         * This actually creates the event.</em>
+<a id='L138' name='L138'></a> 138 <em class='comment'>         */</em>
+<a id='L139' name='L139'></a> 139         ret = kretprobe_event_gen_cmd_end(&amp;cmd);
+<a id='L140' name='L140'></a> 140         <strong class='reserved'>if</strong> (ret)
+<a id='L141' name='L141'></a> 141                 <strong class='reserved'>goto</strong> free;
+<a id='L142' name='L142'></a> 142 
+<a id='L143' name='L143'></a> 143         <em class='comment'>/*</em>
+<a id='L144' name='L144'></a> 144 <em class='comment'>         * Now get the gen_kretprobe_test event file.  We need to</em>
+<a id='L145' name='L145'></a> 145 <em class='comment'>         * prevent the instance and event from disappearing from</em>
+<a id='L146' name='L146'></a> 146 <em class='comment'>         * underneath us, which trace_get_event_file() does (though in</em>
+<a id='L147' name='L147'></a> 147 <em class='comment'>         * this case we're using the top-level instance which never</em>
+<a id='L148' name='L148'></a> 148 <em class='comment'>         * goes away).</em>
+<a id='L149' name='L149'></a> 149 <em class='comment'>         */</em>
+<a id='L150' name='L150'></a> 150         gen_kretprobe_test = <a href='../S/267.html#L2746' title='Defined at 2746 in trace/trace_events.c.'>trace_get_event_file</a>(NULL, "kprobes",
+<a id='L151' name='L151'></a> 151                                                   "gen_kretprobe_test");
+<a id='L152' name='L152'></a> 152         <strong class='reserved'>if</strong> (IS_ERR(gen_kretprobe_test)) <em class='brace'>{</em>
+<a id='L153' name='L153'></a> 153                 ret = PTR_ERR(gen_kretprobe_test);
+<a id='L154' name='L154'></a> 154                 <strong class='reserved'>goto</strong> delete;
+<a id='L155' name='L155'></a> 155         <em class='brace'>}</em>
+<a id='L156' name='L156'></a> 156 
+<a id='L157' name='L157'></a> 157         <em class='comment'>/* Enable the event or you won't see anything */</em>
+<a id='L158' name='L158'></a> 158         ret = <a href='../S/267.html#L915' title='Defined at 915 in trace/trace_events.c.'>trace_array_set_clr_event</a>(gen_kretprobe_test-&gt;tr,
+<a id='L159' name='L159'></a> 159                                         "kprobes", "gen_kretprobe_test", true);
+<a id='L160' name='L160'></a> 160         <strong class='reserved'>if</strong> (ret) <em class='brace'>{</em>
+<a id='L161' name='L161'></a> 161                 <a href='../S/267.html#L2801' title='Defined at 2801 in trace/trace_events.c.'>trace_put_event_file</a>(gen_kretprobe_test);
+<a id='L162' name='L162'></a> 162                 <strong class='reserved'>goto</strong> delete;
+<a id='L163' name='L163'></a> 163         <em class='brace'>}</em>
+<a id='L164' name='L164'></a> 164  out:
+<a id='L165' name='L165'></a> 165         <strong class='reserved'>return</strong> ret;
+<a id='L166' name='L166'></a> 166  delete:
+<a id='L167' name='L167'></a> 167         <em class='comment'>/* We got an error after creating the event, delete it */</em>
+<a id='L168' name='L168'></a> 168         ret = <a href='../S/317.html#L1081' title='Defined at 1081 in trace/trace_kprobe.c.'>kprobe_event_delete</a>("gen_kretprobe_test");
+<a id='L169' name='L169'></a> 169  free:
+<a id='L170' name='L170'></a> 170         kfree(buf);
+<a id='L171' name='L171'></a> 171 
+<a id='L172' name='L172'></a> 172         <strong class='reserved'>goto</strong> out;
+<a id='L173' name='L173'></a> 173 <em class='brace'>}</em>
+<a id='L174' name='L174'></a> 174 
+<a id='L175' name='L175'></a> 175 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __init <a href='../S/289.html#L220' title='Referred from 220 in trace/kprobe_event_gen_test.c.'>kprobe_event_gen_test_init</a>(<strong class='reserved'>void</strong>)
+<a id='L176' name='L176'></a> 176 <em class='brace'>{</em>
+<a id='L177' name='L177'></a> 177         <strong class='reserved'>int</strong> ret;
+<a id='L178' name='L178'></a> 178 
+<a id='L179' name='L179'></a> 179         ret = <a href='../S/289.html#L42' title='Defined at 42 in trace/kprobe_event_gen_test.c.'>test_gen_kprobe_cmd</a>();
+<a id='L180' name='L180'></a> 180         <strong class='reserved'>if</strong> (ret)
+<a id='L181' name='L181'></a> 181                 <strong class='reserved'>return</strong> ret;
+<a id='L182' name='L182'></a> 182 
+<a id='L183' name='L183'></a> 183         ret = <a href='../S/289.html#L113' title='Defined at 113 in trace/kprobe_event_gen_test.c.'>test_gen_kretprobe_cmd</a>();
+<a id='L184' name='L184'></a> 184         <strong class='reserved'>if</strong> (ret) <em class='brace'>{</em>
+<a id='L185' name='L185'></a> 185                 WARN_ON(<a href='../S/267.html#L915' title='Defined at 915 in trace/trace_events.c.'>trace_array_set_clr_event</a>(gen_kretprobe_test-&gt;tr,
+<a id='L186' name='L186'></a> 186                                                   "kprobes",
+<a id='L187' name='L187'></a> 187                                                   "gen_kretprobe_test", false));
+<a id='L188' name='L188'></a> 188                 <a href='../S/267.html#L2801' title='Defined at 2801 in trace/trace_events.c.'>trace_put_event_file</a>(gen_kretprobe_test);
+<a id='L189' name='L189'></a> 189                 WARN_ON(<a href='../S/317.html#L1081' title='Defined at 1081 in trace/trace_kprobe.c.'>kprobe_event_delete</a>("gen_kretprobe_test"));
+<a id='L190' name='L190'></a> 190         <em class='brace'>}</em>
+<a id='L191' name='L191'></a> 191 
+<a id='L192' name='L192'></a> 192         <strong class='reserved'>return</strong> ret;
+<a id='L193' name='L193'></a> 193 <em class='brace'>}</em>
+<a id='L194' name='L194'></a> 194 
+<a id='L195' name='L195'></a> 195 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> __exit <a href='../S/289.html#L221' title='Referred from 221 in trace/kprobe_event_gen_test.c.'>kprobe_event_gen_test_exit</a>(<strong class='reserved'>void</strong>)
+<a id='L196' name='L196'></a> 196 <em class='brace'>{</em>
+<a id='L197' name='L197'></a> 197         <em class='comment'>/* Disable the event or you can't remove it */</em>
+<a id='L198' name='L198'></a> 198         WARN_ON(<a href='../S/267.html#L915' title='Defined at 915 in trace/trace_events.c.'>trace_array_set_clr_event</a>(gen_kprobe_test-&gt;tr,
+<a id='L199' name='L199'></a> 199                                           "kprobes",
+<a id='L200' name='L200'></a> 200                                           "gen_kprobe_test", false));
+<a id='L201' name='L201'></a> 201 
+<a id='L202' name='L202'></a> 202         <em class='comment'>/* Now give the file and instance back */</em>
+<a id='L203' name='L203'></a> 203         <a href='../S/267.html#L2801' title='Defined at 2801 in trace/trace_events.c.'>trace_put_event_file</a>(gen_kprobe_test);
+<a id='L204' name='L204'></a> 204 
+<a id='L205' name='L205'></a> 205         <em class='comment'>/* Now unregister and free the event */</em>
+<a id='L206' name='L206'></a> 206         WARN_ON(<a href='../S/317.html#L1081' title='Defined at 1081 in trace/trace_kprobe.c.'>kprobe_event_delete</a>("gen_kprobe_test"));
+<a id='L207' name='L207'></a> 207 
+<a id='L208' name='L208'></a> 208         <em class='comment'>/* Disable the event or you can't remove it */</em>
+<a id='L209' name='L209'></a> 209         WARN_ON(<a href='../S/267.html#L915' title='Defined at 915 in trace/trace_events.c.'>trace_array_set_clr_event</a>(gen_kprobe_test-&gt;tr,
+<a id='L210' name='L210'></a> 210                                           "kprobes",
+<a id='L211' name='L211'></a> 211                                           "gen_kretprobe_test", false));
+<a id='L212' name='L212'></a> 212 
+<a id='L213' name='L213'></a> 213         <em class='comment'>/* Now give the file and instance back */</em>
+<a id='L214' name='L214'></a> 214         <a href='../S/267.html#L2801' title='Defined at 2801 in trace/trace_events.c.'>trace_put_event_file</a>(gen_kretprobe_test);
+<a id='L215' name='L215'></a> 215 
+<a id='L216' name='L216'></a> 216         <em class='comment'>/* Now unregister and free the event */</em>
+<a id='L217' name='L217'></a> 217         WARN_ON(<a href='../S/317.html#L1081' title='Defined at 1081 in trace/trace_kprobe.c.'>kprobe_event_delete</a>("gen_kretprobe_test"));
+<a id='L218' name='L218'></a> 218 <em class='brace'>}</em>
+<a id='L219' name='L219'></a> 219 
+<a id='L220' name='L220'></a> 220 module_init(<a href='../S/289.html#L175' title='Defined at 175 in trace/kprobe_event_gen_test.c.'>kprobe_event_gen_test_init</a>)
+<a id='L221' name='L221'></a> 221 module_exit(<a href='../S/289.html#L195' title='Defined at 195 in trace/kprobe_event_gen_test.c.'>kprobe_event_gen_test_exit</a>)
+<a id='L222' name='L222'></a> 222 
+<a id='L223' name='L223'></a> 223 MODULE_AUTHOR("Tom Zanussi");
+<a id='L224' name='L224'></a> 224 MODULE_DESCRIPTION("kprobe event generation test");
+<a id='L225' name='L225'></a> 225 MODULE_LICENSE("GPL v2");
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L42'>[^]</a><a href='#L195'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

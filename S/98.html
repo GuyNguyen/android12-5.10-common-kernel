@@ -1,0 +1,429 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>time/timer_list.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/512.html'>time</a>/timer_list.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L30'>[^]</a><a href='#L377'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L30' title='Defined at 30.'>__printf</a></li>
+<li><a href='#L45' title='Defined at 45.'>print_name_offset</a></li>
+<li><a href='#L56' title='Defined at 56.'>print_timer</a></li>
+<li><a href='#L73' title='Defined at 73.'>print_active_timers</a></li>
+<li><a href='#L112' title='Defined at 112.'>print_base</a></li>
+<li><a href='#L130' title='Defined at 130.'>print_cpu</a></li>
+<li><a href='#L193' title='Defined at 193.'>print_tickdevice</a></li>
+<li><a href='#L270' title='Defined at 270.'>timer_list_show_tickdevices_header</a></li>
+<li><a href='#L285' title='Defined at 285.'>timer_list_header</a></li>
+<li><a href='#L293' title='Defined at 293.'>sysrq_timer_list_show</a></li>
+<li><a href='#L312' title='Defined at 312.'>timer_list_show</a></li>
+<li><a href='#L329' title='Defined at 329.'>move_iter</a></li>
+<li><a href='#L348' title='Defined at 348.'>timer_list_start</a></li>
+<li><a href='#L359' title='Defined at 359.'>timer_list_next</a></li>
+<li><a href='#L366' title='Defined at 366.'>timer_list_stop</a></li>
+<li><a href='#L377' title='Defined at 377.'>init_timer_list_procfs</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * List pending timers</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> *</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * Copyright(C) 2006, Red Hat, Inc., Ingo Molnar</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> */</em>
+<a id='L7' name='L7'></a>   7 
+<a id='L8' name='L8'></a>   8 <em class='sharp'>#include</em> &lt;linux/proc_fs.h&gt;
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> &lt;linux/module.h&gt;
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;linux/spinlock.h&gt;
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;<a href='447.html'>linux/sched.h</a>&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;linux/seq_file.h&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;linux/kallsyms.h&gt;
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> &lt;linux/nmi.h&gt;
+<a id='L15' name='L15'></a>  15 
+<a id='L16' name='L16'></a>  16 <em class='sharp'>#include</em> &lt;linux/uaccess.h&gt;
+<a id='L17' name='L17'></a>  17 
+<a id='L18' name='L18'></a>  18 <em class='sharp'>#include</em> "<a href='116.html'>tick-internal.h</a>"
+<a id='L19' name='L19'></a>  19 
+<a id='L20' name='L20'></a>  20 <strong class='reserved'>struct</strong> <a href='../R/13431.html' title='Multiple referred from 5 places.'>timer_list_iter</a> <em class='brace'>{</em>
+<a id='L21' name='L21'></a>  21         <strong class='reserved'>int</strong> cpu;
+<a id='L22' name='L22'></a>  22         bool second_pass;
+<a id='L23' name='L23'></a>  23         u64 now;
+<a id='L24' name='L24'></a>  24 <em class='brace'>}</em>;
+<a id='L25' name='L25'></a>  25 
+<a id='L26' name='L26'></a>  26 <em class='comment'>/*</em>
+<a id='L27' name='L27'></a>  27 <em class='comment'> * This allows printing both to /proc/timer_list and</em>
+<a id='L28' name='L28'></a>  28 <em class='comment'> * to the console (on SysRq-Q):</em>
+<a id='L29' name='L29'></a>  29 <em class='comment'> */</em>
+<a id='L30' name='L30'></a>  30 <a href='../R/2307.html' title='Multiple referred from 5 places.'>__printf</a>(2, 3)
+<a id='L31' name='L31'></a>  31 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(<strong class='reserved'>struct</strong> seq_file *m, <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *fmt, ...)
+<a id='L32' name='L32'></a>  32 <em class='brace'>{</em>
+<a id='L33' name='L33'></a>  33         va_list args;
+<a id='L34' name='L34'></a>  34 
+<a id='L35' name='L35'></a>  35         va_start(args, fmt);
+<a id='L36' name='L36'></a>  36 
+<a id='L37' name='L37'></a>  37         <strong class='reserved'>if</strong> (m)
+<a id='L38' name='L38'></a>  38                 seq_vprintf(m, fmt, args);
+<a id='L39' name='L39'></a>  39         <strong class='reserved'>else</strong>
+<a id='L40' name='L40'></a>  40                 <a href='../S/6.html#L2068' title='Defined at 2068 in printk/printk.c.'>vprintk</a>(fmt, args);
+<a id='L41' name='L41'></a>  41 
+<a id='L42' name='L42'></a>  42         va_end(args);
+<a id='L43' name='L43'></a>  43 <em class='brace'>}</em>
+<a id='L44' name='L44'></a>  44 
+<a id='L45' name='L45'></a>  45 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/10325.html' title='Multiple referred from 10 places.'>print_name_offset</a>(<strong class='reserved'>struct</strong> seq_file *m, <strong class='reserved'>void</strong> *sym)
+<a id='L46' name='L46'></a>  46 <em class='brace'>{</em>
+<a id='L47' name='L47'></a>  47         <strong class='reserved'>char</strong> symname[KSYM_NAME_LEN];
+<a id='L48' name='L48'></a>  48 
+<a id='L49' name='L49'></a>  49         <strong class='reserved'>if</strong> (<a href='../S/192.html#L344' title='Defined at 344 in kallsyms.c.'>lookup_symbol_name</a>((<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)sym, symname) &lt; 0)
+<a id='L50' name='L50'></a>  50                 <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "&lt;%pK&gt;", sym);
+<a id='L51' name='L51'></a>  51         <strong class='reserved'>else</strong>
+<a id='L52' name='L52'></a>  52                 <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "%s", symname);
+<a id='L53' name='L53'></a>  53 <em class='brace'>}</em>
+<a id='L54' name='L54'></a>  54 
+<a id='L55' name='L55'></a>  55 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong>
+<a id='L56' name='L56'></a>  56 <a href='../S/98.html#L104' title='Referred from 104 in time/timer_list.c.'>print_timer</a>(<strong class='reserved'>struct</strong> seq_file *m, <strong class='reserved'>struct</strong> hrtimer *taddr, <strong class='reserved'>struct</strong> hrtimer *timer,
+<a id='L57' name='L57'></a>  57             <strong class='reserved'>int</strong> idx, u64 now)
+<a id='L58' name='L58'></a>  58 <em class='brace'>{</em>
+<a id='L59' name='L59'></a>  59         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, " #%d: ", idx);
+<a id='L60' name='L60'></a>  60         <a href='../S/98.html#L45' title='Defined at 45 in time/timer_list.c.'>print_name_offset</a>(m, taddr);
+<a id='L61' name='L61'></a>  61         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, ", ");
+<a id='L62' name='L62'></a>  62         <a href='../S/98.html#L45' title='Defined at 45 in time/timer_list.c.'>print_name_offset</a>(m, timer-&gt;function);
+<a id='L63' name='L63'></a>  63         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, ", S:%02x", timer-&gt;state);
+<a id='L64' name='L64'></a>  64         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "\n");
+<a id='L65' name='L65'></a>  65         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, " # expires at %Lu-%Lu nsecs [in %Ld to %Ld nsecs]\n",
+<a id='L66' name='L66'></a>  66                 (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <strong class='reserved'>long</strong>)ktime_to_ns(hrtimer_get_softexpires(timer)),
+<a id='L67' name='L67'></a>  67                 (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <strong class='reserved'>long</strong>)ktime_to_ns(hrtimer_get_expires(timer)),
+<a id='L68' name='L68'></a>  68                 (<strong class='reserved'>long</strong> <strong class='reserved'>long</strong>)(ktime_to_ns(hrtimer_get_softexpires(timer)) - now),
+<a id='L69' name='L69'></a>  69                 (<strong class='reserved'>long</strong> <strong class='reserved'>long</strong>)(ktime_to_ns(hrtimer_get_expires(timer)) - now));
+<a id='L70' name='L70'></a>  70 <em class='brace'>}</em>
+<a id='L71' name='L71'></a>  71 
+<a id='L72' name='L72'></a>  72 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong>
+<a id='L73' name='L73'></a>  73 <a href='../S/98.html#L127' title='Referred from 127 in time/timer_list.c.'>print_active_timers</a>(<strong class='reserved'>struct</strong> seq_file *m, <strong class='reserved'>struct</strong> hrtimer_clock_base *base,
+<a id='L74' name='L74'></a>  74                     u64 now)
+<a id='L75' name='L75'></a>  75 <em class='brace'>{</em>
+<a id='L76' name='L76'></a>  76         <strong class='reserved'>struct</strong> hrtimer *timer, tmp;
+<a id='L77' name='L77'></a>  77         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> next = 0, i;
+<a id='L78' name='L78'></a>  78         <strong class='reserved'>struct</strong> timerqueue_node *curr;
+<a id='L79' name='L79'></a>  79         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> flags;
+<a id='L80' name='L80'></a>  80 
+<a id='L81' name='L81'></a>  81 next_one:
+<a id='L82' name='L82'></a>  82         i = 0;
+<a id='L83' name='L83'></a>  83 
+<a id='L84' name='L84'></a>  84         touch_nmi_watchdog();
+<a id='L85' name='L85'></a>  85 
+<a id='L86' name='L86'></a>  86         raw_spin_lock_irqsave(&amp;base-&gt;cpu_base-&gt;lock, flags);
+<a id='L87' name='L87'></a>  87 
+<a id='L88' name='L88'></a>  88         curr = timerqueue_getnext(&amp;base-&gt;active);
+<a id='L89' name='L89'></a>  89         <em class='comment'>/*</em>
+<a id='L90' name='L90'></a>  90 <em class='comment'>         * Crude but we have to do this O(N*N) thing, because</em>
+<a id='L91' name='L91'></a>  91 <em class='comment'>         * we have to unlock the base when printing:</em>
+<a id='L92' name='L92'></a>  92 <em class='comment'>         */</em>
+<a id='L93' name='L93'></a>  93         <strong class='reserved'>while</strong> (curr &amp;&amp; i &lt; next) <em class='brace'>{</em>
+<a id='L94' name='L94'></a>  94                 curr = timerqueue_iterate_next(curr);
+<a id='L95' name='L95'></a>  95                 i++;
+<a id='L96' name='L96'></a>  96         <em class='brace'>}</em>
+<a id='L97' name='L97'></a>  97 
+<a id='L98' name='L98'></a>  98         <strong class='reserved'>if</strong> (curr) <em class='brace'>{</em>
+<a id='L99' name='L99'></a>  99 
+<a id='L100' name='L100'></a> 100                 timer = container_of(curr, <strong class='reserved'>struct</strong> hrtimer, <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>);
+<a id='L101' name='L101'></a> 101                 tmp = *timer;
+<a id='L102' name='L102'></a> 102                 raw_spin_unlock_irqrestore(&amp;base-&gt;cpu_base-&gt;lock, flags);
+<a id='L103' name='L103'></a> 103 
+<a id='L104' name='L104'></a> 104                 <a href='../S/98.html#L56' title='Defined at 56 in time/timer_list.c.'>print_timer</a>(m, timer, &amp;tmp, i, now);
+<a id='L105' name='L105'></a> 105                 next++;
+<a id='L106' name='L106'></a> 106                 <strong class='reserved'>goto</strong> next_one;
+<a id='L107' name='L107'></a> 107         <em class='brace'>}</em>
+<a id='L108' name='L108'></a> 108         raw_spin_unlock_irqrestore(&amp;base-&gt;cpu_base-&gt;lock, flags);
+<a id='L109' name='L109'></a> 109 <em class='brace'>}</em>
+<a id='L110' name='L110'></a> 110 
+<a id='L111' name='L111'></a> 111 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong>
+<a id='L112' name='L112'></a> 112 <a href='../S/98.html#L138' title='Referred from 138 in time/timer_list.c.'>print_base</a>(<strong class='reserved'>struct</strong> seq_file *m, <strong class='reserved'>struct</strong> hrtimer_clock_base *base, u64 now)
+<a id='L113' name='L113'></a> 113 <em class='brace'>{</em>
+<a id='L114' name='L114'></a> 114         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "  .base:       %pK\n", base);
+<a id='L115' name='L115'></a> 115         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "  .index:      %d\n", base-&gt;index);
+<a id='L116' name='L116'></a> 116 
+<a id='L117' name='L117'></a> 117         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "  .resolution: %u nsecs\n", hrtimer_resolution);
+<a id='L118' name='L118'></a> 118 
+<a id='L119' name='L119'></a> 119         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m,   "  .get_time:   ");
+<a id='L120' name='L120'></a> 120         <a href='../S/98.html#L45' title='Defined at 45 in time/timer_list.c.'>print_name_offset</a>(m, base-&gt;get_time);
+<a id='L121' name='L121'></a> 121         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m,   "\n");
+<a id='L122' name='L122'></a> 122 <em class='sharp'>#ifdef</em> CONFIG_HIGH_RES_TIMERS
+<a id='L123' name='L123'></a> 123         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "  .offset:     %Lu nsecs\n",
+<a id='L124' name='L124'></a> 124                    (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <strong class='reserved'>long</strong>) ktime_to_ns(base-&gt;offset));
+<a id='L125' name='L125'></a> 125 <em class='sharp'>#endif</em>
+<a id='L126' name='L126'></a> 126         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m,   "active timers:\n");
+<a id='L127' name='L127'></a> 127         <a href='../S/98.html#L73' title='Defined at 73 in time/timer_list.c.'>print_active_timers</a>(m, base, now + ktime_to_ns(base-&gt;offset));
+<a id='L128' name='L128'></a> 128 <em class='brace'>}</em>
+<a id='L129' name='L129'></a> 129 
+<a id='L130' name='L130'></a> 130 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/10265.html' title='Multiple referred from 4 places.'>print_cpu</a>(<strong class='reserved'>struct</strong> seq_file *m, <strong class='reserved'>int</strong> cpu, u64 now)
+<a id='L131' name='L131'></a> 131 <em class='brace'>{</em>
+<a id='L132' name='L132'></a> 132         <strong class='reserved'>struct</strong> hrtimer_cpu_base *cpu_base = &amp;per_cpu(hrtimer_bases, cpu);
+<a id='L133' name='L133'></a> 133         <strong class='reserved'>int</strong> i;
+<a id='L134' name='L134'></a> 134 
+<a id='L135' name='L135'></a> 135         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "cpu: %d\n", cpu);
+<a id='L136' name='L136'></a> 136         <strong class='reserved'>for</strong> (i = 0; i &lt; HRTIMER_MAX_CLOCK_BASES; i++) <em class='brace'>{</em>
+<a id='L137' name='L137'></a> 137                 <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, " clock %d:\n", i);
+<a id='L138' name='L138'></a> 138                 <a href='../S/98.html#L112' title='Defined at 112 in time/timer_list.c.'>print_base</a>(m, cpu_base-&gt;clock_base + i, now);
+<a id='L139' name='L139'></a> 139         <em class='brace'>}</em>
+<a id='L140' name='L140'></a> 140 <em class='sharp'>#define</em> <a href='../R/976.html' title='Multiple referred from 48 places.'>P</a>(x) \
+<a id='L141' name='L141'></a> 141         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "  .%-15s: %Lu\n", #x, \
+<a id='L142' name='L142'></a> 142                    (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <strong class='reserved'>long</strong>)(cpu_base-&gt;x))
+<a id='L143' name='L143'></a> 143 <em class='sharp'>#define</em> <a href='../R/1069.html' title='Multiple referred from 8 places.'>P_ns</a>(x) \
+<a id='L144' name='L144'></a> 144         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "  .%-15s: %Lu nsecs\n", #x, \
+<a id='L145' name='L145'></a> 145                    (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <strong class='reserved'>long</strong>)(ktime_to_ns(cpu_base-&gt;x)))
+<a id='L146' name='L146'></a> 146 
+<a id='L147' name='L147'></a> 147 <em class='sharp'>#ifdef</em> CONFIG_HIGH_RES_TIMERS
+<a id='L148' name='L148'></a> 148         <a href='../D/1172.html' title='Multiple defined in 4 places.'>P_ns</a>(expires_next);
+<a id='L149' name='L149'></a> 149         <a href='../D/1077.html' title='Multiple defined in 17 places.'>P</a>(hres_active);
+<a id='L150' name='L150'></a> 150         <a href='../D/1077.html' title='Multiple defined in 17 places.'>P</a>(nr_events);
+<a id='L151' name='L151'></a> 151         <a href='../D/1077.html' title='Multiple defined in 17 places.'>P</a>(nr_retries);
+<a id='L152' name='L152'></a> 152         <a href='../D/1077.html' title='Multiple defined in 17 places.'>P</a>(nr_hangs);
+<a id='L153' name='L153'></a> 153         <a href='../D/1077.html' title='Multiple defined in 17 places.'>P</a>(max_hang_time);
+<a id='L154' name='L154'></a> 154 <em class='sharp'>#endif</em>
+<a id='L155' name='L155'></a> 155 <em class='sharp'>#undef</em> <a href='../R/976.html' title='Multiple referred from 48 places.'>P</a>
+<a id='L156' name='L156'></a> 156 <em class='sharp'>#undef</em> <a href='../R/1069.html' title='Multiple referred from 8 places.'>P_ns</a>
+<a id='L157' name='L157'></a> 157 
+<a id='L158' name='L158'></a> 158 <em class='sharp'>#ifdef</em> CONFIG_TICK_ONESHOT
+<a id='L159' name='L159'></a> 159 <em class='sharp'># define</em> <a href='../R/976.html' title='Multiple referred from 48 places.'>P</a>(x) \
+<a id='L160' name='L160'></a> 160         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "  .%-15s: %Lu\n", #x, \
+<a id='L161' name='L161'></a> 161                    (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <strong class='reserved'>long</strong>)(ts-&gt;x))
+<a id='L162' name='L162'></a> 162 <em class='sharp'># define</em> <a href='../R/1069.html' title='Multiple referred from 8 places.'>P_ns</a>(x) \
+<a id='L163' name='L163'></a> 163         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "  .%-15s: %Lu nsecs\n", #x, \
+<a id='L164' name='L164'></a> 164                    (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <strong class='reserved'>long</strong>)(ktime_to_ns(ts-&gt;x)))
+<a id='L165' name='L165'></a> 165         <em class='brace'>{</em>
+<a id='L166' name='L166'></a> 166                 <strong class='reserved'>struct</strong> <a href='../S/107.html#L53' title='Defined at 53 in time/tick-sched.h.'>tick_sched</a> *ts = <a href='../S/114.html#L41' title='Defined at 41 in time/tick-sched.c.'>tick_get_tick_sched</a>(cpu);
+<a id='L167' name='L167'></a> 167                 <a href='../D/1077.html' title='Multiple defined in 17 places.'>P</a>(nohz_mode);
+<a id='L168' name='L168'></a> 168                 <a href='../D/1172.html' title='Multiple defined in 4 places.'>P_ns</a>(last_tick);
+<a id='L169' name='L169'></a> 169                 <a href='../D/1077.html' title='Multiple defined in 17 places.'>P</a>(tick_stopped);
+<a id='L170' name='L170'></a> 170                 <a href='../D/1077.html' title='Multiple defined in 17 places.'>P</a>(idle_jiffies);
+<a id='L171' name='L171'></a> 171                 <a href='../D/1077.html' title='Multiple defined in 17 places.'>P</a>(idle_calls);
+<a id='L172' name='L172'></a> 172                 <a href='../D/1077.html' title='Multiple defined in 17 places.'>P</a>(idle_sleeps);
+<a id='L173' name='L173'></a> 173                 <a href='../D/1172.html' title='Multiple defined in 4 places.'>P_ns</a>(idle_entrytime);
+<a id='L174' name='L174'></a> 174                 <a href='../D/1172.html' title='Multiple defined in 4 places.'>P_ns</a>(idle_waketime);
+<a id='L175' name='L175'></a> 175                 <a href='../D/1172.html' title='Multiple defined in 4 places.'>P_ns</a>(idle_exittime);
+<a id='L176' name='L176'></a> 176                 <a href='../D/1172.html' title='Multiple defined in 4 places.'>P_ns</a>(idle_sleeptime);
+<a id='L177' name='L177'></a> 177                 <a href='../D/1172.html' title='Multiple defined in 4 places.'>P_ns</a>(iowait_sleeptime);
+<a id='L178' name='L178'></a> 178                 <a href='../D/1077.html' title='Multiple defined in 17 places.'>P</a>(last_jiffies);
+<a id='L179' name='L179'></a> 179                 <a href='../D/1077.html' title='Multiple defined in 17 places.'>P</a>(next_timer);
+<a id='L180' name='L180'></a> 180                 <a href='../D/1172.html' title='Multiple defined in 4 places.'>P_ns</a>(idle_expires);
+<a id='L181' name='L181'></a> 181                 <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "jiffies: %Lu\n",
+<a id='L182' name='L182'></a> 182                            (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <strong class='reserved'>long</strong>)jiffies);
+<a id='L183' name='L183'></a> 183         <em class='brace'>}</em>
+<a id='L184' name='L184'></a> 184 <em class='sharp'>#endif</em>
+<a id='L185' name='L185'></a> 185 
+<a id='L186' name='L186'></a> 186 <em class='sharp'>#undef</em> <a href='../R/976.html' title='Multiple referred from 48 places.'>P</a>
+<a id='L187' name='L187'></a> 187 <em class='sharp'>#undef</em> <a href='../R/1069.html' title='Multiple referred from 8 places.'>P_ns</a>
+<a id='L188' name='L188'></a> 188         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "\n");
+<a id='L189' name='L189'></a> 189 <em class='brace'>}</em>
+<a id='L190' name='L190'></a> 190 
+<a id='L191' name='L191'></a> 191 <em class='sharp'>#ifdef</em> CONFIG_GENERIC_CLOCKEVENTS
+<a id='L192' name='L192'></a> 192 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong>
+<a id='L193' name='L193'></a> 193 <a href='../R/10348.html' title='Multiple referred from 3 places.'>print_tickdevice</a>(<strong class='reserved'>struct</strong> seq_file *m, <strong class='reserved'>struct</strong> <a href='../S/107.html#L12' title='Defined at 12 in time/tick-sched.h.'>tick_device</a> *td, <strong class='reserved'>int</strong> cpu)
+<a id='L194' name='L194'></a> 194 <em class='brace'>{</em>
+<a id='L195' name='L195'></a> 195         <strong class='reserved'>struct</strong> clock_event_device *dev = td-&gt;evtdev;
+<a id='L196' name='L196'></a> 196 
+<a id='L197' name='L197'></a> 197         touch_nmi_watchdog();
+<a id='L198' name='L198'></a> 198 
+<a id='L199' name='L199'></a> 199         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "Tick Device: mode:     %d\n", td-&gt;mode);
+<a id='L200' name='L200'></a> 200         <strong class='reserved'>if</strong> (cpu &lt; 0)
+<a id='L201' name='L201'></a> 201                 <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "Broadcast device\n");
+<a id='L202' name='L202'></a> 202         <strong class='reserved'>else</strong>
+<a id='L203' name='L203'></a> 203                 <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "Per CPU device: %d\n", cpu);
+<a id='L204' name='L204'></a> 204 
+<a id='L205' name='L205'></a> 205         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "Clock Event Device: ");
+<a id='L206' name='L206'></a> 206         <strong class='reserved'>if</strong> (!dev) <em class='brace'>{</em>
+<a id='L207' name='L207'></a> 207                 <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "&lt;NULL&gt;\n");
+<a id='L208' name='L208'></a> 208                 <strong class='reserved'>return</strong>;
+<a id='L209' name='L209'></a> 209         <em class='brace'>}</em>
+<a id='L210' name='L210'></a> 210         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "%s\n", dev-&gt;name);
+<a id='L211' name='L211'></a> 211         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, " max_delta_ns:   %llu\n",
+<a id='L212' name='L212'></a> 212                    (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <strong class='reserved'>long</strong>) dev-&gt;max_delta_ns);
+<a id='L213' name='L213'></a> 213         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, " min_delta_ns:   %llu\n",
+<a id='L214' name='L214'></a> 214                    (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <strong class='reserved'>long</strong>) dev-&gt;min_delta_ns);
+<a id='L215' name='L215'></a> 215         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, " mult:           %u\n", dev-&gt;mult);
+<a id='L216' name='L216'></a> 216         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, " shift:          %u\n", dev-&gt;shift);
+<a id='L217' name='L217'></a> 217         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, " mode:           %d\n", <a href='../S/116.html#L40' title='Defined at 40 in time/tick-internal.h.'>clockevent_get_state</a>(dev));
+<a id='L218' name='L218'></a> 218         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, " next_event:     %Ld nsecs\n",
+<a id='L219' name='L219'></a> 219                    (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <strong class='reserved'>long</strong>) ktime_to_ns(dev-&gt;next_event));
+<a id='L220' name='L220'></a> 220 
+<a id='L221' name='L221'></a> 221         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, " set_next_event: ");
+<a id='L222' name='L222'></a> 222         <a href='../S/98.html#L45' title='Defined at 45 in time/timer_list.c.'>print_name_offset</a>(m, dev-&gt;set_next_event);
+<a id='L223' name='L223'></a> 223         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "\n");
+<a id='L224' name='L224'></a> 224 
+<a id='L225' name='L225'></a> 225         <strong class='reserved'>if</strong> (dev-&gt;set_state_shutdown) <em class='brace'>{</em>
+<a id='L226' name='L226'></a> 226                 <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, " shutdown: ");
+<a id='L227' name='L227'></a> 227                 <a href='../S/98.html#L45' title='Defined at 45 in time/timer_list.c.'>print_name_offset</a>(m, dev-&gt;set_state_shutdown);
+<a id='L228' name='L228'></a> 228                 <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "\n");
+<a id='L229' name='L229'></a> 229         <em class='brace'>}</em>
+<a id='L230' name='L230'></a> 230 
+<a id='L231' name='L231'></a> 231         <strong class='reserved'>if</strong> (dev-&gt;set_state_periodic) <em class='brace'>{</em>
+<a id='L232' name='L232'></a> 232                 <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, " periodic: ");
+<a id='L233' name='L233'></a> 233                 <a href='../S/98.html#L45' title='Defined at 45 in time/timer_list.c.'>print_name_offset</a>(m, dev-&gt;set_state_periodic);
+<a id='L234' name='L234'></a> 234                 <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "\n");
+<a id='L235' name='L235'></a> 235         <em class='brace'>}</em>
+<a id='L236' name='L236'></a> 236 
+<a id='L237' name='L237'></a> 237         <strong class='reserved'>if</strong> (dev-&gt;set_state_oneshot) <em class='brace'>{</em>
+<a id='L238' name='L238'></a> 238                 <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, " oneshot:  ");
+<a id='L239' name='L239'></a> 239                 <a href='../S/98.html#L45' title='Defined at 45 in time/timer_list.c.'>print_name_offset</a>(m, dev-&gt;set_state_oneshot);
+<a id='L240' name='L240'></a> 240                 <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "\n");
+<a id='L241' name='L241'></a> 241         <em class='brace'>}</em>
+<a id='L242' name='L242'></a> 242 
+<a id='L243' name='L243'></a> 243         <strong class='reserved'>if</strong> (dev-&gt;set_state_oneshot_stopped) <em class='brace'>{</em>
+<a id='L244' name='L244'></a> 244                 <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, " oneshot stopped: ");
+<a id='L245' name='L245'></a> 245                 <a href='../S/98.html#L45' title='Defined at 45 in time/timer_list.c.'>print_name_offset</a>(m, dev-&gt;set_state_oneshot_stopped);
+<a id='L246' name='L246'></a> 246                 <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "\n");
+<a id='L247' name='L247'></a> 247         <em class='brace'>}</em>
+<a id='L248' name='L248'></a> 248 
+<a id='L249' name='L249'></a> 249         <strong class='reserved'>if</strong> (dev-&gt;<a href='../D/14082.html' title='Multiple defined in 2 places.'>tick_resume</a>) <em class='brace'>{</em>
+<a id='L250' name='L250'></a> 250                 <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, " resume:   ");
+<a id='L251' name='L251'></a> 251                 <a href='../S/98.html#L45' title='Defined at 45 in time/timer_list.c.'>print_name_offset</a>(m, dev-&gt;<a href='../D/14082.html' title='Multiple defined in 2 places.'>tick_resume</a>);
+<a id='L252' name='L252'></a> 252                 <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "\n");
+<a id='L253' name='L253'></a> 253         <em class='brace'>}</em>
+<a id='L254' name='L254'></a> 254 
+<a id='L255' name='L255'></a> 255         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, " event_handler:  ");
+<a id='L256' name='L256'></a> 256         <a href='../S/98.html#L45' title='Defined at 45 in time/timer_list.c.'>print_name_offset</a>(m, dev-&gt;event_handler);
+<a id='L257' name='L257'></a> 257         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "\n");
+<a id='L258' name='L258'></a> 258         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, " retries:        %lu\n", dev-&gt;retries);
+<a id='L259' name='L259'></a> 259 
+<a id='L260' name='L260'></a> 260 <em class='sharp'>#ifdef</em> CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
+<a id='L261' name='L261'></a> 261         <strong class='reserved'>if</strong> (cpu &gt;= 0) <em class='brace'>{</em>
+<a id='L262' name='L262'></a> 262                 <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> clock_event_device *wd = <a href='../S/94.html#L68' title='Defined at 68 in time/tick-broadcast.c.'>tick_get_wakeup_device</a>(cpu);
+<a id='L263' name='L263'></a> 263 
+<a id='L264' name='L264'></a> 264                 <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "Wakeup Device: %s\n", wd ? wd-&gt;name : "&lt;NULL&gt;");
+<a id='L265' name='L265'></a> 265         <em class='brace'>}</em>
+<a id='L266' name='L266'></a> 266 <em class='sharp'>#endif</em>
+<a id='L267' name='L267'></a> 267         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "\n");
+<a id='L268' name='L268'></a> 268 <em class='brace'>}</em>
+<a id='L269' name='L269'></a> 269 
+<a id='L270' name='L270'></a> 270 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/13434.html' title='Multiple referred from 2 places.'>timer_list_show_tickdevices_header</a>(<strong class='reserved'>struct</strong> seq_file *m)
+<a id='L271' name='L271'></a> 271 <em class='brace'>{</em>
+<a id='L272' name='L272'></a> 272 <em class='sharp'>#ifdef</em> CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
+<a id='L273' name='L273'></a> 273         <a href='../S/98.html#L193' title='Defined at 193 in time/timer_list.c.'>print_tickdevice</a>(m, <a href='../S/94.html#L56' title='Defined at 56 in time/tick-broadcast.c.'>tick_get_broadcast_device</a>(), -1);
+<a id='L274' name='L274'></a> 274         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "tick_broadcast_mask: %*pb\n",
+<a id='L275' name='L275'></a> 275                    cpumask_pr_args(<a href='../S/94.html#L61' title='Defined at 61 in time/tick-broadcast.c.'>tick_get_broadcast_mask</a>()));
+<a id='L276' name='L276'></a> 276 <em class='sharp'>#ifdef</em> CONFIG_TICK_ONESHOT
+<a id='L277' name='L277'></a> 277         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "tick_broadcast_oneshot_mask: %*pb\n",
+<a id='L278' name='L278'></a> 278                    cpumask_pr_args(<a href='../S/94.html#L613' title='Defined at 613 in time/tick-broadcast.c.'>tick_get_broadcast_oneshot_mask</a>()));
+<a id='L279' name='L279'></a> 279 <em class='sharp'>#endif</em>
+<a id='L280' name='L280'></a> 280         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "\n");
+<a id='L281' name='L281'></a> 281 <em class='sharp'>#endif</em>
+<a id='L282' name='L282'></a> 282 <em class='brace'>}</em>
+<a id='L283' name='L283'></a> 283 <em class='sharp'>#endif</em>
+<a id='L284' name='L284'></a> 284 
+<a id='L285' name='L285'></a> 285 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/13430.html' title='Multiple referred from 2 places.'>timer_list_header</a>(<strong class='reserved'>struct</strong> seq_file *m, u64 now)
+<a id='L286' name='L286'></a> 286 <em class='brace'>{</em>
+<a id='L287' name='L287'></a> 287         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "Timer List Version: v0.9\n");
+<a id='L288' name='L288'></a> 288         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "HRTIMER_MAX_CLOCK_BASES: %d\n", HRTIMER_MAX_CLOCK_BASES);
+<a id='L289' name='L289'></a> 289         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "now at %Ld nsecs\n", (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <strong class='reserved'>long</strong>)now);
+<a id='L290' name='L290'></a> 290         <a href='../S/460.html#L15' title='Defined at 15 in sched/debug.c.'>SEQ_printf</a>(m, "\n");
+<a id='L291' name='L291'></a> 291 <em class='brace'>}</em>
+<a id='L292' name='L292'></a> 292 
+<a id='L293' name='L293'></a> 293 <strong class='reserved'>void</strong> <a href='../S/250.html#L160' title='Referred from 160 in panic.c.'>sysrq_timer_list_show</a>(<strong class='reserved'>void</strong>)
+<a id='L294' name='L294'></a> 294 <em class='brace'>{</em>
+<a id='L295' name='L295'></a> 295         u64 now = ktime_to_ns(<a href='../S/82.html#L821' title='Defined at 821 in time/timekeeping.c.'>ktime_get</a>());
+<a id='L296' name='L296'></a> 296         <strong class='reserved'>int</strong> cpu;
+<a id='L297' name='L297'></a> 297 
+<a id='L298' name='L298'></a> 298         <a href='../S/98.html#L285' title='Defined at 285 in time/timer_list.c.'>timer_list_header</a>(NULL, now);
+<a id='L299' name='L299'></a> 299 
+<a id='L300' name='L300'></a> 300         for_each_online_cpu(cpu)
+<a id='L301' name='L301'></a> 301                 <a href='../D/10867.html' title='Multiple defined in 2 places.'>print_cpu</a>(NULL, cpu, now);
+<a id='L302' name='L302'></a> 302 
+<a id='L303' name='L303'></a> 303 <em class='sharp'>#ifdef</em> CONFIG_GENERIC_CLOCKEVENTS
+<a id='L304' name='L304'></a> 304         <a href='../S/98.html#L270' title='Defined at 270 in time/timer_list.c.'>timer_list_show_tickdevices_header</a>(NULL);
+<a id='L305' name='L305'></a> 305         for_each_online_cpu(cpu)
+<a id='L306' name='L306'></a> 306                 <a href='../S/98.html#L193' title='Defined at 193 in time/timer_list.c.'>print_tickdevice</a>(NULL, <a href='../S/95.html#L63' title='Defined at 63 in time/tick-common.c.'>tick_get_device</a>(cpu), cpu);
+<a id='L307' name='L307'></a> 307 <em class='sharp'>#endif</em>
+<a id='L308' name='L308'></a> 308         <strong class='reserved'>return</strong>;
+<a id='L309' name='L309'></a> 309 <em class='brace'>}</em>
+<a id='L310' name='L310'></a> 310 
+<a id='L311' name='L311'></a> 311 <em class='sharp'>#ifdef</em> CONFIG_PROC_FS
+<a id='L312' name='L312'></a> 312 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/98.html#L374' title='Referred from 374 in time/timer_list.c.'>timer_list_show</a>(<strong class='reserved'>struct</strong> seq_file *m, <strong class='reserved'>void</strong> *v)
+<a id='L313' name='L313'></a> 313 <em class='brace'>{</em>
+<a id='L314' name='L314'></a> 314         <strong class='reserved'>struct</strong> <a href='../S/98.html#L20' title='Defined at 20 in time/timer_list.c.'>timer_list_iter</a> *iter = v;
+<a id='L315' name='L315'></a> 315 
+<a id='L316' name='L316'></a> 316         <strong class='reserved'>if</strong> (iter-&gt;cpu == -1 &amp;&amp; !iter-&gt;second_pass)
+<a id='L317' name='L317'></a> 317                 <a href='../S/98.html#L285' title='Defined at 285 in time/timer_list.c.'>timer_list_header</a>(m, iter-&gt;now);
+<a id='L318' name='L318'></a> 318         <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (!iter-&gt;second_pass)
+<a id='L319' name='L319'></a> 319                 <a href='../D/10867.html' title='Multiple defined in 2 places.'>print_cpu</a>(m, iter-&gt;cpu, iter-&gt;now);
+<a id='L320' name='L320'></a> 320 <em class='sharp'>#ifdef</em> CONFIG_GENERIC_CLOCKEVENTS
+<a id='L321' name='L321'></a> 321         <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (iter-&gt;cpu == -1 &amp;&amp; iter-&gt;second_pass)
+<a id='L322' name='L322'></a> 322                 <a href='../S/98.html#L270' title='Defined at 270 in time/timer_list.c.'>timer_list_show_tickdevices_header</a>(m);
+<a id='L323' name='L323'></a> 323         <strong class='reserved'>else</strong>
+<a id='L324' name='L324'></a> 324                 <a href='../S/98.html#L193' title='Defined at 193 in time/timer_list.c.'>print_tickdevice</a>(m, <a href='../S/95.html#L63' title='Defined at 63 in time/tick-common.c.'>tick_get_device</a>(iter-&gt;cpu), iter-&gt;cpu);
+<a id='L325' name='L325'></a> 325 <em class='sharp'>#endif</em>
+<a id='L326' name='L326'></a> 326         <strong class='reserved'>return</strong> 0;
+<a id='L327' name='L327'></a> 327 <em class='brace'>}</em>
+<a id='L328' name='L328'></a> 328 
+<a id='L329' name='L329'></a> 329 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> *<a href='../R/9232.html' title='Multiple referred from 2 places.'>move_iter</a>(<strong class='reserved'>struct</strong> <a href='../S/98.html#L20' title='Defined at 20 in time/timer_list.c.'>timer_list_iter</a> *iter, loff_t offset)
+<a id='L330' name='L330'></a> 330 <em class='brace'>{</em>
+<a id='L331' name='L331'></a> 331         <strong class='reserved'>for</strong> (; offset; offset--) <em class='brace'>{</em>
+<a id='L332' name='L332'></a> 332                 iter-&gt;cpu = cpumask_next(iter-&gt;cpu, cpu_online_mask);
+<a id='L333' name='L333'></a> 333                 <strong class='reserved'>if</strong> (iter-&gt;cpu &gt;= nr_cpu_ids) <em class='brace'>{</em>
+<a id='L334' name='L334'></a> 334 <em class='sharp'>#ifdef</em> CONFIG_GENERIC_CLOCKEVENTS
+<a id='L335' name='L335'></a> 335                         <strong class='reserved'>if</strong> (!iter-&gt;second_pass) <em class='brace'>{</em>
+<a id='L336' name='L336'></a> 336                                 iter-&gt;cpu = -1;
+<a id='L337' name='L337'></a> 337                                 iter-&gt;second_pass = true;
+<a id='L338' name='L338'></a> 338                         <em class='brace'>}</em> <strong class='reserved'>else</strong>
+<a id='L339' name='L339'></a> 339                                 <strong class='reserved'>return</strong> NULL;
+<a id='L340' name='L340'></a> 340 <em class='sharp'>#else</em>
+<a id='L341' name='L341'></a> 341                         <strong class='reserved'>return</strong> NULL;
+<a id='L342' name='L342'></a> 342 <em class='sharp'>#endif</em>
+<a id='L343' name='L343'></a> 343                 <em class='brace'>}</em>
+<a id='L344' name='L344'></a> 344         <em class='brace'>}</em>
+<a id='L345' name='L345'></a> 345         <strong class='reserved'>return</strong> iter;
+<a id='L346' name='L346'></a> 346 <em class='brace'>}</em>
+<a id='L347' name='L347'></a> 347 
+<a id='L348' name='L348'></a> 348 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> *<a href='../S/98.html#L371' title='Referred from 371 in time/timer_list.c.'>timer_list_start</a>(<strong class='reserved'>struct</strong> seq_file *file, loff_t *offset)
+<a id='L349' name='L349'></a> 349 <em class='brace'>{</em>
+<a id='L350' name='L350'></a> 350         <strong class='reserved'>struct</strong> <a href='../S/98.html#L20' title='Defined at 20 in time/timer_list.c.'>timer_list_iter</a> *iter = file-&gt;private;
+<a id='L351' name='L351'></a> 351 
+<a id='L352' name='L352'></a> 352         <strong class='reserved'>if</strong> (!*offset)
+<a id='L353' name='L353'></a> 353                 iter-&gt;now = ktime_to_ns(<a href='../S/82.html#L821' title='Defined at 821 in time/timekeeping.c.'>ktime_get</a>());
+<a id='L354' name='L354'></a> 354         iter-&gt;cpu = -1;
+<a id='L355' name='L355'></a> 355         iter-&gt;second_pass = false;
+<a id='L356' name='L356'></a> 356         <strong class='reserved'>return</strong> <a href='../S/98.html#L329' title='Defined at 329 in time/timer_list.c.'>move_iter</a>(iter, *offset);
+<a id='L357' name='L357'></a> 357 <em class='brace'>}</em>
+<a id='L358' name='L358'></a> 358 
+<a id='L359' name='L359'></a> 359 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> *<a href='../S/98.html#L372' title='Referred from 372 in time/timer_list.c.'>timer_list_next</a>(<strong class='reserved'>struct</strong> seq_file *file, <strong class='reserved'>void</strong> *v, loff_t *offset)
+<a id='L360' name='L360'></a> 360 <em class='brace'>{</em>
+<a id='L361' name='L361'></a> 361         <strong class='reserved'>struct</strong> <a href='../S/98.html#L20' title='Defined at 20 in time/timer_list.c.'>timer_list_iter</a> *iter = file-&gt;private;
+<a id='L362' name='L362'></a> 362         ++*offset;
+<a id='L363' name='L363'></a> 363         <strong class='reserved'>return</strong> <a href='../S/98.html#L329' title='Defined at 329 in time/timer_list.c.'>move_iter</a>(iter, 1);
+<a id='L364' name='L364'></a> 364 <em class='brace'>}</em>
+<a id='L365' name='L365'></a> 365 
+<a id='L366' name='L366'></a> 366 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/98.html#L373' title='Referred from 373 in time/timer_list.c.'>timer_list_stop</a>(<strong class='reserved'>struct</strong> seq_file *seq, <strong class='reserved'>void</strong> *v)
+<a id='L367' name='L367'></a> 367 <em class='brace'>{</em>
+<a id='L368' name='L368'></a> 368 <em class='brace'>}</em>
+<a id='L369' name='L369'></a> 369 
+<a id='L370' name='L370'></a> 370 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> seq_operations timer_list_sops = <em class='brace'>{</em>
+<a id='L371' name='L371'></a> 371         .start = <a href='../S/98.html#L348' title='Defined at 348 in time/timer_list.c.'>timer_list_start</a>,
+<a id='L372' name='L372'></a> 372         .next = <a href='../S/98.html#L359' title='Defined at 359 in time/timer_list.c.'>timer_list_next</a>,
+<a id='L373' name='L373'></a> 373         .stop = <a href='../S/98.html#L366' title='Defined at 366 in time/timer_list.c.'>timer_list_stop</a>,
+<a id='L374' name='L374'></a> 374         .show = <a href='../S/98.html#L312' title='Defined at 312 in time/timer_list.c.'>timer_list_show</a>,
+<a id='L375' name='L375'></a> 375 <em class='brace'>}</em>;
+<a id='L376' name='L376'></a> 376 
+<a id='L377' name='L377'></a> 377 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __init <a href='../S/98.html#L387' title='Referred from 387 in time/timer_list.c.'>init_timer_list_procfs</a>(<strong class='reserved'>void</strong>)
+<a id='L378' name='L378'></a> 378 <em class='brace'>{</em>
+<a id='L379' name='L379'></a> 379         <strong class='reserved'>struct</strong> proc_dir_entry *pe;
+<a id='L380' name='L380'></a> 380 
+<a id='L381' name='L381'></a> 381         pe = proc_create_seq_private("timer_list", 0400, NULL, &amp;timer_list_sops,
+<a id='L382' name='L382'></a> 382                         <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> <a href='../S/98.html#L20' title='Defined at 20 in time/timer_list.c.'>timer_list_iter</a>), NULL);
+<a id='L383' name='L383'></a> 383         <strong class='reserved'>if</strong> (!pe)
+<a id='L384' name='L384'></a> 384                 <strong class='reserved'>return</strong> -ENOMEM;
+<a id='L385' name='L385'></a> 385         <strong class='reserved'>return</strong> 0;
+<a id='L386' name='L386'></a> 386 <em class='brace'>}</em>
+<a id='L387' name='L387'></a> 387 __initcall(<a href='../S/98.html#L377' title='Defined at 377 in time/timer_list.c.'>init_timer_list_procfs</a>);
+<a id='L388' name='L388'></a> 388 <em class='sharp'>#endif</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L30'>[^]</a><a href='#L377'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

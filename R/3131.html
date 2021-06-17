@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>audit_context</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/162.html#L201'>audit_context</a>     201 audit.c        	struct audit_context *ctx;	/* NULL or associated context */</span>
+<span class='curline'><a href='../S/162.html#L392'>audit_context</a>     392 audit.c        	ab = audit_log_start(audit_context(), GFP_KERNEL, AUDIT_CONFIG_CHANGE);</span>
+<span class='curline'><a href='../S/162.html#L1056'>audit_context</a>    1056 audit.c        static void audit_log_common_recv_msg(struct audit_context *context,</span>
+<span class='curline'><a href='../S/162.html#L1106'>audit_context</a>    1106 audit.c        	ab = audit_log_start(audit_context(), GFP_KERNEL, AUDIT_FEATURE_CHANGE);</span>
+<span class='curline'><a href='../S/162.html#L1383'>audit_context</a>    1383 audit.c        			audit_log_common_recv_msg(audit_context(), &amp;ab,</span>
+<span class='curline'><a href='../S/162.html#L1399'>audit_context</a>    1399 audit.c        		audit_log_common_recv_msg(audit_context(), &amp;ab,</span>
+<span class='curline'><a href='../S/162.html#L1430'>audit_context</a>    1430 audit.c        		audit_log_common_recv_msg(audit_context(), &amp;ab,</span>
+<span class='curline'><a href='../S/162.html#L1498'>audit_context</a>    1498 audit.c        		audit_log_common_recv_msg(audit_context(), &amp;ab,</span>
+<span class='curline'><a href='../S/162.html#L1558'>audit_context</a>    1558 audit.c        	ab = audit_log_start(audit_context(), GFP_KERNEL, AUDIT_EVENT_LISTENER);</span>
+<span class='curline'><a href='../S/162.html#L1736'>audit_context</a>    1736 audit.c        static struct audit_buffer *audit_buffer_alloc(struct audit_context *ctx,</span>
+<span class='curline'><a href='../S/162.html#L1785'>audit_context</a>    1785 audit.c        static inline void audit_get_stamp(struct audit_context *ctx,</span>
+<span class='curline'><a href='../S/162.html#L1809'>audit_context</a>    1809 audit.c        struct audit_buffer *audit_log_start(struct audit_context *ctx, gfp_t gfp_mask,</span>
+<span class='curline'><a href='../S/162.html#L2238'>audit_context</a>    2238 audit.c        	ab = audit_log_start(audit_context(), GFP_KERNEL, type);</span>
+<span class='curline'><a href='../S/162.html#L2279'>audit_context</a>    2279 audit.c        	ab = audit_log_start(audit_context(), GFP_KERNEL, AUDIT_LOGIN);</span>
+<span class='curline'><a href='../S/162.html#L2406'>audit_context</a>    2406 audit.c        void audit_log(struct audit_context *ctx, gfp_t gfp_mask, int type,</span>
+<span class='curline'><a href='../S/120.html#L252'>audit_context</a>     252 audit.h        extern int auditsc_get_stamp(struct audit_context *ctx,</span>
+<span class='curline'><a href='../S/120.html#L287'>audit_context</a>     287 audit.h        extern void audit_kill_trees(struct audit_context *context);</span>
+<span class='curline'><a href='../S/120.html#L291'>audit_context</a>     291 audit.h        				struct audit_context *ctx);</span>
+<span class='curline'><a href='../S/367.html#L121'>audit_context</a>     121 audit_fsnotify.c 	ab = audit_log_start(audit_context(), GFP_NOFS, AUDIT_CONFIG_CHANGE);</span>
+<span class='curline'><a href='../S/72.html#L525'>audit_context</a>     525 audit_tree.c   static void audit_tree_log_remove_rule(struct audit_context *context,</span>
+<span class='curline'><a href='../S/72.html#L542'>audit_context</a>     542 audit_tree.c   static void kill_rules(struct audit_context *context, struct audit_tree *tree)</span>
+<span class='curline'><a href='../S/72.html#L635'>audit_context</a>     635 audit_tree.c   		kill_rules(audit_context(), tree);</span>
+<span class='curline'><a href='../S/72.html#L975'>audit_context</a>     975 audit_tree.c   void audit_kill_trees(struct audit_context *context)</span>
+<span class='curline'><a href='../S/72.html#L1021'>audit_context</a>    1021 audit_tree.c   			kill_rules(audit_context(), owner);</span>
+<span class='curline'><a href='../S/181.html#L232'>audit_context</a>     232 audit_watch.c  	ab = audit_log_start(audit_context(), GFP_NOFS, AUDIT_CONFIG_CHANGE);</span>
+<span class='curline'><a href='../S/181.html#L263'>audit_context</a>     263 audit_watch.c  			audit_filter_inodes(current, audit_context());</span>
+<span class='curline'><a href='../S/219.html#L1105'>audit_context</a>    1105 auditfilter.c  	ab = audit_log_start(audit_context(), GFP_KERNEL, AUDIT_CONFIG_CHANGE);</span>
+<span class='curline'><a href='../S/200.html#L162'>audit_context</a>     162 auditsc.c      static int audit_match_perm(struct audit_context *ctx, int mask)</span>
+<span class='curline'><a href='../S/200.html#L205'>audit_context</a>     205 auditsc.c      static int audit_match_filetype(struct audit_context *ctx, int val)</span>
+<span class='curline'><a href='../S/200.html#L232'>audit_context</a>     232 auditsc.c      static void audit_set_auditable(struct audit_context *ctx)</span>
+<span class='curline'><a href='../S/200.html#L240'>audit_context</a>     240 auditsc.c      static int put_tree_ref(struct audit_context *ctx, struct audit_chunk *chunk)</span>
+<span class='curline'><a href='../S/200.html#L261'>audit_context</a>     261 auditsc.c      static int grow_tree_refs(struct audit_context *ctx)</span>
+<span class='curline'><a href='../S/200.html#L277'>audit_context</a>     277 auditsc.c      static void unroll_tree_refs(struct audit_context *ctx,</span>
+<span class='curline'><a href='../S/200.html#L305'>audit_context</a>     305 auditsc.c      static void free_tree_refs(struct audit_context *ctx)</span>
+<span class='curline'><a href='../S/200.html#L314'>audit_context</a>     314 auditsc.c      static int match_tree_refs(struct audit_context *ctx, struct audit_tree *tree)</span>
+<span class='curline'><a href='../S/200.html#L338'>audit_context</a>     338 auditsc.c      			     struct audit_context *ctx)</span>
+<span class='curline'><a href='../S/200.html#L362'>audit_context</a>     362 auditsc.c      			     struct audit_context *ctx)</span>
+<span class='curline'><a href='../S/200.html#L386'>audit_context</a>     386 auditsc.c      			       struct audit_context *ctx,</span>
+<span class='curline'><a href='../S/200.html#L469'>audit_context</a>     469 auditsc.c      			      struct audit_context *ctx,</span>
+<span class='curline'><a href='../S/200.html#L810'>audit_context</a>     810 auditsc.c      					     struct audit_context *ctx,</span>
+<span class='curline'><a href='../S/200.html#L839'>audit_context</a>     839 auditsc.c      				   struct audit_context *ctx) {</span>
+<span class='curline'><a href='../S/200.html#L860'>audit_context</a>     860 auditsc.c      void audit_filter_inodes(struct task_struct *tsk, struct audit_context *ctx)</span>
+<span class='curline'><a href='../S/200.html#L876'>audit_context</a>     876 auditsc.c      static inline void audit_proctitle_free(struct audit_context *context)</span>
+<span class='curline'><a href='../S/200.html#L883'>audit_context</a>     883 auditsc.c      static inline void audit_free_module(struct audit_context *context)</span>
+<span class='curline'><a href='../S/200.html#L890'>audit_context</a>     890 auditsc.c      static inline void audit_free_names(struct audit_context *context)</span>
+<span class='curline'><a href='../S/200.html#L907'>audit_context</a>     907 auditsc.c      static inline void audit_free_aux(struct audit_context *context)</span>
+<span class='curline'><a href='../S/200.html#L921'>audit_context</a>     921 auditsc.c      static inline struct audit_context *audit_alloc_context(enum audit_state state)</span>
+<span class='curline'><a href='../S/200.html#L923'>audit_context</a>     923 auditsc.c      	struct audit_context *context;</span>
+<span class='curline'><a href='../S/200.html#L946'>audit_context</a>     946 auditsc.c      	struct audit_context *context;</span>
+<span class='curline'><a href='../S/200.html#L971'>audit_context</a>     971 auditsc.c      static inline void audit_free_context(struct audit_context *context)</span>
+<span class='curline'><a href='../S/200.html#L984'>audit_context</a>     984 auditsc.c      static int audit_log_pid_context(struct audit_context *context, pid_t pid,</span>
+<span class='curline'><a href='../S/200.html#L1016'>audit_context</a>    1016 auditsc.c      static void audit_log_execve_info(struct audit_context *context,</span>
+<span class='curline'><a href='../S/200.html#L1217'>audit_context</a>    1217 auditsc.c      static void show_special(struct audit_context *context, int *call_panic)</span>
+<span class='curline'><a href='../S/200.html#L1346'>audit_context</a>    1346 auditsc.c      static void audit_log_name(struct audit_context *context, struct audit_names *n,</span>
+<span class='curline'><a href='../S/200.html#L1435'>audit_context</a>    1435 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L1476'>audit_context</a>    1476 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L1613'>audit_context</a>    1613 auditsc.c      	struct audit_context *context = tsk-&gt;audit_context;</span>
+<span class='curline'><a href='../S/200.html#L1660'>audit_context</a>    1660 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L1705'>audit_context</a>    1705 auditsc.c      	struct audit_context *context;</span>
+<span class='curline'><a href='../S/200.html#L1707'>audit_context</a>    1707 auditsc.c      	context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L1767'>audit_context</a>    1767 auditsc.c      	struct audit_context *context;</span>
+<span class='curline'><a href='../S/200.html#L1773'>audit_context</a>    1773 auditsc.c      	context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L1795'>audit_context</a>    1795 auditsc.c      	struct audit_context *context;</span>
+<span class='curline'><a href='../S/200.html#L1802'>audit_context</a>    1802 auditsc.c      	context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L1849'>audit_context</a>    1849 auditsc.c      static struct audit_names *audit_alloc_name(struct audit_context *context,</span>
+<span class='curline'><a href='../S/200.html#L1883'>audit_context</a>    1883 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L1897'>audit_context</a>    1897 auditsc.c      inline void _audit_getcwd(struct audit_context *context)</span>
+<span class='curline'><a href='../S/200.html#L1905'>audit_context</a>    1905 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L1920'>audit_context</a>    1920 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L1989'>audit_context</a>    1989 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L2107'>audit_context</a>    2107 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L2211'>audit_context</a>    2211 auditsc.c      int auditsc_get_stamp(struct audit_context *ctx,</span>
+<span class='curline'><a href='../S/200.html#L2237'>audit_context</a>    2237 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L2261'>audit_context</a>    2261 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L2285'>audit_context</a>    2285 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L2304'>audit_context</a>    2304 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L2317'>audit_context</a>    2317 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L2337'>audit_context</a>    2337 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L2348'>audit_context</a>    2348 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L2363'>audit_context</a>    2363 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L2381'>audit_context</a>    2381 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L2395'>audit_context</a>    2395 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L2411'>audit_context</a>    2411 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L2431'>audit_context</a>    2431 auditsc.c      	struct audit_context *ctx = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L2487'>audit_context</a>    2487 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L2528'>audit_context</a>    2528 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L2539'>audit_context</a>    2539 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L2547'>audit_context</a>    2547 auditsc.c      	struct audit_context *context = audit_context();</span>
+<span class='curline'><a href='../S/200.html#L2557'>audit_context</a>    2557 auditsc.c      	audit_log(audit_context(), GFP_KERNEL,</span>
+<span class='curline'><a href='../S/200.html#L2563'>audit_context</a>    2563 auditsc.c      	audit_log(audit_context(), GFP_KERNEL, AUDIT_TIME_INJOFFSET,</span>
+<span class='curline'><a href='../S/200.html#L2576'>audit_context</a>    2576 auditsc.c      	audit_log(audit_context(), GFP_KERNEL, AUDIT_TIME_ADJNTPVAL,</span>
+<span class='curline'><a href='../S/200.html#L2596'>audit_context</a>    2596 auditsc.c      	ab = audit_log_start(audit_context(), gfp, AUDIT_NETFILTER_CFG);</span>
+<span class='curline'><a href='../S/200.html#L2649'>audit_context</a>    2649 auditsc.c      	ab = audit_log_start(audit_context(), GFP_KERNEL, AUDIT_ANOM_ABEND);</span>
+<span class='curline'><a href='../S/200.html#L2673'>audit_context</a>    2673 auditsc.c      	ab = audit_log_start(audit_context(), GFP_KERNEL, AUDIT_SECCOMP);</span>
+<span class='curline'><a href='../S/200.html#L2691'>audit_context</a>    2691 auditsc.c      	ab = audit_log_start(audit_context(), GFP_KERNEL,</span>
+<span class='curline'><a href='../S/200.html#L2704'>audit_context</a>    2704 auditsc.c      	struct audit_context *ctx = audit_context();</span>
+<span class='curline'><a href='../S/418.html#L1614'>audit_context</a>    1614 bpf/syscall.c  	struct audit_context *ctx = NULL;</span>
+<span class='curline'><a href='../S/418.html#L1622'>audit_context</a>    1622 bpf/syscall.c  		ctx = audit_context();</span>
+<span class='curline'><a href='../S/323.html#L36'>audit_context</a>      36 entry/common.c 	if (unlikely(audit_context())) {</span>
+</pre>
+</body>
+</html>

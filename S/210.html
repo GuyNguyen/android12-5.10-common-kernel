@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>livepatch/patch.h</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/506.html'>livepatch</a>/patch.h</h2>
+<em class='comment'>/* [&lt;][&gt;][^][v][top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'><a href='../J/182.html' title='Multiple included from 3 places.'>INCLUDED FROM</a></h2>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>/* SPDX-License-Identifier: GPL-2.0 */</em>
+<a id='L2' name='L2'></a>   2 <em class='sharp'>#ifndef</em> <a href='../S/210.html#L3' title='Defined at 3 in livepatch/patch.h.'>_LIVEPATCH_PATCH_H</a>
+<a id='L3' name='L3'></a>   3 <em class='sharp'>#define</em> <a href='../S/210.html#L2' title='Referred from 2 in livepatch/patch.h.'>_LIVEPATCH_PATCH_H</a>
+<a id='L4' name='L4'></a>   4 
+<a id='L5' name='L5'></a>   5 <em class='sharp'>#include</em> &lt;linux/livepatch.h&gt;
+<a id='L6' name='L6'></a>   6 <em class='sharp'>#include</em> &lt;linux/list.h&gt;
+<a id='L7' name='L7'></a>   7 <em class='sharp'>#include</em> &lt;linux/ftrace.h&gt;
+<a id='L8' name='L8'></a>   8 
+<a id='L9' name='L9'></a>   9 <em class='comment'>/**</em>
+<a id='L10' name='L10'></a>  10 <em class='comment'> * struct klp_ops - structure for tracking registered ftrace ops structs</em>
+<a id='L11' name='L11'></a>  11 <em class='comment'> *</em>
+<a id='L12' name='L12'></a>  12 <em class='comment'> * A single ftrace_ops is shared between all enabled replacement functions</em>
+<a id='L13' name='L13'></a>  13 <em class='comment'> * (klp_func structs) which have the same old_func.  This allows the switch</em>
+<a id='L14' name='L14'></a>  14 <em class='comment'> * between function versions to happen instantaneously by updating the klp_ops</em>
+<a id='L15' name='L15'></a>  15 <em class='comment'> * struct's func_stack list.  The winner is the klp_func at the top of the</em>
+<a id='L16' name='L16'></a>  16 <em class='comment'> * func_stack (front of the list).</em>
+<a id='L17' name='L17'></a>  17 <em class='comment'> *</em>
+<a id='L18' name='L18'></a>  18 <em class='comment'> * @node:       node for the global klp_ops list</em>
+<a id='L19' name='L19'></a>  19 <em class='comment'> * @func_stack: list head for the stack of klp_func's (active func is on top)</em>
+<a id='L20' name='L20'></a>  20 <em class='comment'> * @fops:       registered ftrace ops struct</em>
+<a id='L21' name='L21'></a>  21 <em class='comment'> */</em>
+<a id='L22' name='L22'></a>  22 <strong class='reserved'>struct</strong> <a href='../R/8598.html' title='Multiple referred from 11 places.'>klp_ops</a> <em class='brace'>{</em>
+<a id='L23' name='L23'></a>  23         <strong class='reserved'>struct</strong> list_head <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>;
+<a id='L24' name='L24'></a>  24         <strong class='reserved'>struct</strong> list_head func_stack;
+<a id='L25' name='L25'></a>  25         <strong class='reserved'>struct</strong> ftrace_ops fops;
+<a id='L26' name='L26'></a>  26 <em class='brace'>}</em>;
+<a id='L27' name='L27'></a>  27 
+<a id='L28' name='L28'></a>  28 <strong class='reserved'>struct</strong> <a href='../S/210.html#L22' title='Defined at 22 in livepatch/patch.h.'>klp_ops</a> *<a href='../S/205.html#L25' title='Defined at 25 in livepatch/patch.c.'>klp_find_ops</a>(<strong class='reserved'>void</strong> *old_func);
+<a id='L29' name='L29'></a>  29 
+<a id='L30' name='L30'></a>  30 <strong class='reserved'>int</strong> <a href='../S/205.html#L260' title='Defined at 260 in livepatch/patch.c.'>klp_patch_object</a>(<strong class='reserved'>struct</strong> klp_object *obj);
+<a id='L31' name='L31'></a>  31 <strong class='reserved'>void</strong> <a href='../S/205.html#L255' title='Defined at 255 in livepatch/patch.c.'>klp_unpatch_object</a>(<strong class='reserved'>struct</strong> klp_object *obj);
+<a id='L32' name='L32'></a>  32 <strong class='reserved'>void</strong> <a href='../S/205.html#L289' title='Defined at 289 in livepatch/patch.c.'>klp_unpatch_objects</a>(<strong class='reserved'>struct</strong> klp_patch *patch);
+<a id='L33' name='L33'></a>  33 <strong class='reserved'>void</strong> <a href='../S/205.html#L294' title='Defined at 294 in livepatch/patch.c.'>klp_unpatch_objects_dynamic</a>(<strong class='reserved'>struct</strong> klp_patch *patch);
+<a id='L34' name='L34'></a>  34 
+<a id='L35' name='L35'></a>  35 <em class='sharp'>#endif</em> <em class='comment'>/* _LIVEPATCH_PATCH_H */</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;][^][v]<a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

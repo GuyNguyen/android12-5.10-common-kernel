@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>RWSEM_READER_BIAS</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/27.html#L163'>RWSEM_READER_BIAS</a>  163 locking/rwsem.c #define RWSEM_READER_MASK	(~(RWSEM_READER_BIAS - 1))</span>
+<span class='curline'><a href='../S/27.html#L277'>RWSEM_READER_BIAS</a>  277 locking/rwsem.c 	long cnt = atomic_long_add_return_acquire(RWSEM_READER_BIAS, &amp;sem-&gt;count);</span>
+<span class='curline'><a href='../S/27.html#L437'>RWSEM_READER_BIAS</a>  437 locking/rwsem.c 		adjustment = RWSEM_READER_BIAS;</span>
+<span class='curline'><a href='../S/27.html#L506'>RWSEM_READER_BIAS</a>  506 locking/rwsem.c 	adjustment = woken * RWSEM_READER_BIAS - adjustment;</span>
+<span class='curline'><a href='../S/27.html#L607'>RWSEM_READER_BIAS</a>  607 locking/rwsem.c 	count = atomic_long_fetch_add_acquire(RWSEM_READER_BIAS, &amp;sem-&gt;count);</span>
+<span class='curline'><a href='../S/27.html#L615'>RWSEM_READER_BIAS</a>  615 locking/rwsem.c 	atomic_long_add(-RWSEM_READER_BIAS, &amp;sem-&gt;count);</span>
+<span class='curline'><a href='../S/27.html#L985'>RWSEM_READER_BIAS</a>  985 locking/rwsem.c 	long count, adjustment = -RWSEM_READER_BIAS;</span>
+<span class='curline'><a href='../S/27.html#L1005'>RWSEM_READER_BIAS</a> 1005 locking/rwsem.c 	atomic_long_add(-RWSEM_READER_BIAS, &amp;sem-&gt;count);</span>
+<span class='curline'><a href='../S/27.html#L1394'>RWSEM_READER_BIAS</a> 1394 locking/rwsem.c 					tmp + RWSEM_READER_BIAS)) {</span>
+<span class='curline'><a href='../S/27.html#L1456'>RWSEM_READER_BIAS</a> 1456 locking/rwsem.c 	tmp = atomic_long_add_return_release(-RWSEM_READER_BIAS, &amp;sem-&gt;count);</span>
+<span class='curline'><a href='../S/27.html#L1502'>RWSEM_READER_BIAS</a> 1502 locking/rwsem.c 		-RWSEM_WRITER_LOCKED+RWSEM_READER_BIAS, &amp;sem-&gt;count);</span>
+</pre>
+</body>
+</html>

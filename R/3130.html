@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>audit_compare_uid</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/200.html#L392'>audit_compare_uid</a>  392 auditsc.c      		return audit_compare_uid(cred-&gt;uid, name, f, ctx);</span>
+<span class='curline'><a href='../S/200.html#L396'>audit_compare_uid</a>  396 auditsc.c      		return audit_compare_uid(cred-&gt;euid, name, f, ctx);</span>
+<span class='curline'><a href='../S/200.html#L400'>audit_compare_uid</a>  400 auditsc.c      		return audit_compare_uid(audit_get_loginuid(tsk), name, f, ctx);</span>
+<span class='curline'><a href='../S/200.html#L402'>audit_compare_uid</a>  402 auditsc.c      		return audit_compare_uid(cred-&gt;suid, name, f, ctx);</span>
+<span class='curline'><a href='../S/200.html#L406'>audit_compare_uid</a>  406 auditsc.c      		return audit_compare_uid(cred-&gt;fsuid, name, f, ctx);</span>
+</pre>
+</body>
+</html>

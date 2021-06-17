@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>futex_queues</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/76.html#L368'>futex_queues</a>      368 futex.c        	return &amp;futex_queues[hash &amp; (futex_hashsize - 1)];</span>
+<span class='curline'><a href='../S/76.html#L4028'>futex_queues</a>     4028 futex.c        	futex_queues = alloc_large_system_hash("futex", sizeof(*futex_queues),</span>
+<span class='curline'><a href='../S/76.html#L4038'>futex_queues</a>     4038 futex.c        		atomic_set(&amp;futex_queues[i].waiters, 0);</span>
+<span class='curline'><a href='../S/76.html#L4039'>futex_queues</a>     4039 futex.c        		plist_head_init(&amp;futex_queues[i].chain);</span>
+<span class='curline'><a href='../S/76.html#L4040'>futex_queues</a>     4040 futex.c        		spin_lock_init(&amp;futex_queues[i].lock);</span>
+</pre>
+</body>
+</html>

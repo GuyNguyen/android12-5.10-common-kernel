@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>bpf_map_area_alloc</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/416.html#L151'>bpf_map_area_alloc</a>  151 bpf/arraymap.c 		array = bpf_map_area_alloc(array_size, numa_node);</span>
+<span class='curline'><a href='../S/399.html#L590'>bpf_map_area_alloc</a>  590 bpf/bpf_struct_ops.c 	st_map = bpf_map_area_alloc(st_map_size, NUMA_NO_NODE);</span>
+<span class='curline'><a href='../S/399.html#L598'>bpf_map_area_alloc</a>  598 bpf/bpf_struct_ops.c 	st_map-&gt;uvalue = bpf_map_area_alloc(vt-&gt;size, NUMA_NO_NODE);</span>
+<span class='curline'><a href='../S/399.html#L600'>bpf_map_area_alloc</a>  600 bpf/bpf_struct_ops.c 		bpf_map_area_alloc(btf_type_vlen(t) * sizeof(struct bpf_prog *),</span>
+<span class='curline'><a href='../S/407.html#L123'>bpf_map_area_alloc</a>  123 bpf/cpumap.c   	cmap-&gt;cpu_map = bpf_map_area_alloc(cmap-&gt;map.max_entries *</span>
+<span class='curline'><a href='../S/413.html#L95'>bpf_map_area_alloc</a>   95 bpf/devmap.c   	hash = bpf_map_area_alloc(entries * sizeof(*hash), numa_node);</span>
+<span class='curline'><a href='../S/413.html#L156'>bpf_map_area_alloc</a>  156 bpf/devmap.c   		dtab-&gt;netdev_map = bpf_map_area_alloc(dtab-&gt;map.max_entries *</span>
+<span class='curline'><a href='../S/383.html#L258'>bpf_map_area_alloc</a>  258 bpf/hashtab.c  	htab-&gt;elems = bpf_map_area_alloc(htab-&gt;elem_size * num_entries,</span>
+<span class='curline'><a href='../S/383.html#L477'>bpf_map_area_alloc</a>  477 bpf/hashtab.c  	htab-&gt;buckets = bpf_map_area_alloc(htab-&gt;n_buckets *</span>
+<span class='curline'><a href='../S/410.html#L81'>bpf_map_area_alloc</a>   81 bpf/queue_stack_maps.c 	qs = bpf_map_area_alloc(queue_size, numa_node);</span>
+<span class='curline'><a href='../S/408.html#L169'>bpf_map_area_alloc</a>  169 bpf/reuseport_array.c 	array = bpf_map_area_alloc(array_size, numa_node);</span>
+<span class='curline'><a href='../S/406.html#L70'>bpf_map_area_alloc</a>   70 bpf/stackmap.c 	smap-&gt;elems = bpf_map_area_alloc(elem_size * smap-&gt;map.max_entries,</span>
+<span class='curline'><a href='../S/406.html#L128'>bpf_map_area_alloc</a>  128 bpf/stackmap.c 	smap = bpf_map_area_alloc(cost, bpf_map_attr_numa_node(attr));</span>
+</pre>
+</body>
+</html>

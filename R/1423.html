@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>TICK_SCHED_REMOTE_RUNNING</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/441.html#L4330'>TICK_SCHED_REMOTE_RUNNING</a> 4330 sched/core.c   	os = atomic_fetch_add_unless(&amp;twork-&gt;state, -1, TICK_SCHED_REMOTE_RUNNING);</span>
+<span class='curline'><a href='../S/441.html#L4332'>TICK_SCHED_REMOTE_RUNNING</a> 4332 sched/core.c   	if (os == TICK_SCHED_REMOTE_RUNNING)</span>
+<span class='curline'><a href='../S/441.html#L4347'>TICK_SCHED_REMOTE_RUNNING</a> 4347 sched/core.c   	os = atomic_xchg(&amp;twork-&gt;state, TICK_SCHED_REMOTE_RUNNING);</span>
+<span class='curline'><a href='../S/441.html#L4348'>TICK_SCHED_REMOTE_RUNNING</a> 4348 sched/core.c   	WARN_ON_ONCE(os == TICK_SCHED_REMOTE_RUNNING);</span>
+<span class='curline'><a href='../S/441.html#L4370'>TICK_SCHED_REMOTE_RUNNING</a> 4370 sched/core.c   	WARN_ON_ONCE(os != TICK_SCHED_REMOTE_RUNNING);</span>
+</pre>
+</body>
+</html>

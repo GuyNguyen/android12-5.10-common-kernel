@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>slots_per_page</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/182.html#L149'>slots_per_page</a>    149 kprobes.c      		if (kip-&gt;nused &lt; slots_per_page(c)) {</span>
+<span class='curline'><a href='../S/182.html#L151'>slots_per_page</a>    151 kprobes.c      			for (i = 0; i &lt; slots_per_page(c); i++) {</span>
+<span class='curline'><a href='../S/182.html#L161'>slots_per_page</a>    161 kprobes.c      			kip-&gt;nused = slots_per_page(c);</span>
+<span class='curline'><a href='../S/182.html#L172'>slots_per_page</a>    172 kprobes.c      	kip = kmalloc(KPROBE_INSN_PAGE_SIZE(slots_per_page(c)), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/182.html#L187'>slots_per_page</a>    187 kprobes.c      	memset(kip-&gt;slot_used, SLOT_CLEAN, slots_per_page(c));</span>
+<span class='curline'><a href='../S/182.html#L245'>slots_per_page</a>    245 kprobes.c      		for (i = 0; i &lt; slots_per_page(c); i++) {</span>
+<span class='curline'><a href='../S/182.html#L265'>slots_per_page</a>    265 kprobes.c      		if (idx &gt;= 0 &amp;&amp; idx &lt; slots_per_page(c))</span>
+<span class='curline'><a href='../S/182.html#L280'>slots_per_page</a>    280 kprobes.c      			if (++c-&gt;nr_garbage &gt; slots_per_page(c))</span>
+</pre>
+</body>
+</html>

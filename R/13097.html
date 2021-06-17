@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>task_util</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/464.html#L3924'>task_util</a>        3924 sched/fair.c   	return max(task_util(p), _task_util_est(p));</span>
+<span class='curline'><a href='../S/464.html#L4024'>task_util</a>        4024 sched/fair.c   	ue.enqueued = (task_util(p) | UTIL_AVG_UNCHANGED);</span>
+<span class='curline'><a href='../S/464.html#L4049'>task_util</a>        4049 sched/fair.c   	if (task_util(p) &gt; capacity_orig_of(cpu_of(rq_of(cfs_rq))))</span>
+<span class='curline'><a href='../S/464.html#L6252'>task_util</a>        6252 sched/fair.c   	unsigned long task_util, best_cap = 0;</span>
+<span class='curline'><a href='../S/464.html#L6259'>task_util</a>        6259 sched/fair.c   	task_util = uclamp_task_util(p);</span>
+<span class='curline'><a href='../S/464.html#L6266'>task_util</a>        6266 sched/fair.c   		if (fits_capacity(task_util, cpu_cap))</span>
+<span class='curline'><a href='../S/464.html#L6278'>task_util</a>        6278 sched/fair.c   static inline bool asym_fits_capacity(int task_util, int cpu)</span>
+<span class='curline'><a href='../S/464.html#L6281'>task_util</a>        6281 sched/fair.c   		return fits_capacity(task_util, capacity_of(cpu));</span>
+<span class='curline'><a href='../S/464.html#L6292'>task_util</a>        6292 sched/fair.c   	unsigned long task_util;</span>
+<span class='curline'><a href='../S/464.html#L6301'>task_util</a>        6301 sched/fair.c   		task_util = uclamp_task_util(p);</span>
+<span class='curline'><a href='../S/464.html#L6305'>task_util</a>        6305 sched/fair.c   	    asym_fits_capacity(task_util, target))</span>
+<span class='curline'><a href='../S/464.html#L6313'>task_util</a>        6313 sched/fair.c   	    asym_fits_capacity(task_util, prev))</span>
+<span class='curline'><a href='../S/464.html#L6337'>task_util</a>        6337 sched/fair.c   	    asym_fits_capacity(task_util, recent_used_cpu)) {</span>
+<span class='curline'><a href='../S/464.html#L6463'>task_util</a>        6463 sched/fair.c   	lsub_positive(&amp;util, task_util(p));</span>
+<span class='curline'><a href='../S/464.html#L6542'>task_util</a>        6542 sched/fair.c   		sub_positive(&amp;util, task_util(p));</span>
+<span class='curline'><a href='../S/464.html#L6544'>task_util</a>        6544 sched/fair.c   		util += task_util(p);</span>
+</pre>
+</body>
+</html>

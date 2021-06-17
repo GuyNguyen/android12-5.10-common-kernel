@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>idle_timer</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/455.html#L349'>idle_timer</a>        349 sched/idle.c   	struct idle_timer *it = container_of(timer, struct idle_timer, timer);</span>
+<span class='curline'><a href='../S/455.html#L359'>idle_timer</a>        359 sched/idle.c   	struct idle_timer it;</span>
+<span class='curline'><a href='../S/365.html#L167'>idle_timer</a>        167 workqueue.c    	struct timer_list	idle_timer;	/* L: worker idle timeout */</span>
+<span class='curline'><a href='../S/365.html#L1803'>idle_timer</a>       1803 workqueue.c    	if (too_many_workers(pool) &amp;&amp; !timer_pending(&amp;pool-&gt;idle_timer))</span>
+<span class='curline'><a href='../S/365.html#L1804'>idle_timer</a>       1804 workqueue.c    		mod_timer(&amp;pool-&gt;idle_timer, jiffies + IDLE_WORKER_TIMEOUT);</span>
+<span class='curline'><a href='../S/365.html#L2007'>idle_timer</a>       2007 workqueue.c    	struct worker_pool *pool = from_timer(pool, t, idle_timer);</span>
+<span class='curline'><a href='../S/365.html#L2020'>idle_timer</a>       2020 workqueue.c    			mod_timer(&amp;pool-&gt;idle_timer, expires);</span>
+<span class='curline'><a href='../S/365.html#L3447'>idle_timer</a>       3447 workqueue.c    	timer_setup(&amp;pool-&gt;idle_timer, idle_worker_timeout, TIMER_DEFERRABLE);</span>
+<span class='curline'><a href='../S/365.html#L3594'>idle_timer</a>       3594 workqueue.c    	del_timer_sync(&amp;pool-&gt;idle_timer);</span>
+</pre>
+</body>
+</html>

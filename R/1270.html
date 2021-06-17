@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>RWSEM_WR_NONSPINNABLE</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/27.html#L103'>RWSEM_WR_NONSPINNABLE</a>  103 locking/rwsem.c #define RWSEM_NONSPINNABLE	(RWSEM_RD_NONSPINNABLE | RWSEM_WR_NONSPINNABLE)</span>
+<span class='curline'><a href='../S/27.html#L782'>RWSEM_WR_NONSPINNABLE</a>  782 locking/rwsem.c 	unsigned long nonspinnable = wlock ? RWSEM_WR_NONSPINNABLE</span>
+<span class='curline'><a href='../S/27.html#L912'>RWSEM_WR_NONSPINNABLE</a>  912 locking/rwsem.c 	if (rwsem_test_oflags(sem, RWSEM_WR_NONSPINNABLE))</span>
+<span class='curline'><a href='../S/27.html#L913'>RWSEM_WR_NONSPINNABLE</a>  913 locking/rwsem.c 		atomic_long_andnot(RWSEM_WR_NONSPINNABLE, &amp;sem-&gt;owner);</span>
+<span class='curline'><a href='../S/27.html#L1147'>RWSEM_WR_NONSPINNABLE</a> 1147 locking/rwsem.c 	if (rwsem_can_spin_on_owner(sem, RWSEM_WR_NONSPINNABLE) &amp;&amp;</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>btf_show</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/411.html#L343'>btf_show</a>          343 bpf/btf.c      	void (*showfn)(struct btf_show *show, const char *fmt, va_list args);</span>
+<span class='curline'><a href='../S/411.html#L385'>btf_show</a>          385 bpf/btf.c      			 struct btf_show *show);</span>
+<span class='curline'><a href='../S/411.html#L767'>btf_show</a>          767 bpf/btf.c      static const char *btf_show_name(struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L925'>btf_show</a>          925 bpf/btf.c      static const char *__btf_show_indent(struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L935'>btf_show</a>          935 bpf/btf.c      static const char *btf_show_indent(struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L940'>btf_show</a>          940 bpf/btf.c      static const char *btf_show_newline(struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L945'>btf_show</a>          945 bpf/btf.c      static const char *btf_show_delim(struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L957'>btf_show</a>          957 bpf/btf.c      __printf(2, 3) static void btf_show(struct btf_show *show, const char *fmt, ...)</span>
+<span class='curline'><a href='../S/411.html#L977'>btf_show</a>          977 bpf/btf.c      			btf_show(show, "%s%s" fmt "%s%s",		       \</span>
+<span class='curline'><a href='../S/411.html#L989'>btf_show</a>          989 bpf/btf.c      		btf_show(show, "%s%s" fmt "%s%s", btf_show_indent(show),       \</span>
+<span class='curline'><a href='../S/411.html#L998'>btf_show</a>          998 bpf/btf.c      static int btf_show_obj_size_left(struct btf_show *show, void *data)</span>
+<span class='curline'><a href='../S/411.html#L1004'>btf_show</a>         1004 bpf/btf.c      static bool btf_show_obj_is_safe(struct btf_show *show, void *data, int size)</span>
+<span class='curline'><a href='../S/411.html#L1016'>btf_show</a>         1016 bpf/btf.c      static void *__btf_show_obj_safe(struct btf_show *show, void *data, int size)</span>
+<span class='curline'><a href='../S/411.html#L1051'>btf_show</a>         1051 bpf/btf.c      static void *btf_show_obj_safe(struct btf_show *show,</span>
+<span class='curline'><a href='../S/411.html#L1127'>btf_show</a>         1127 bpf/btf.c      static void *btf_show_start_type(struct btf_show *show,</span>
+<span class='curline'><a href='../S/411.html#L1138'>btf_show</a>         1138 bpf/btf.c      static void btf_show_end_type(struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L1145'>btf_show</a>         1145 bpf/btf.c      static void *btf_show_start_aggr_type(struct btf_show *show,</span>
+<span class='curline'><a href='../S/411.html#L1154'>btf_show</a>         1154 bpf/btf.c      	btf_show(show, "%s%s%s", btf_show_indent(show),</span>
+<span class='curline'><a href='../S/411.html#L1161'>btf_show</a>         1161 bpf/btf.c      static void btf_show_end_aggr_type(struct btf_show *show,</span>
+<span class='curline'><a href='../S/411.html#L1165'>btf_show</a>         1165 bpf/btf.c      	btf_show(show, "%s%s%s%s", btf_show_indent(show), suffix,</span>
+<span class='curline'><a href='../S/411.html#L1170'>btf_show</a>         1170 bpf/btf.c      static void btf_show_start_member(struct btf_show *show,</span>
+<span class='curline'><a href='../S/411.html#L1176'>btf_show</a>         1176 bpf/btf.c      static void btf_show_start_array_member(struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L1182'>btf_show</a>         1182 bpf/btf.c      static void btf_show_end_member(struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L1187'>btf_show</a>         1187 bpf/btf.c      static void btf_show_end_array_member(struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L1193'>btf_show</a>         1193 bpf/btf.c      static void *btf_show_start_array_type(struct btf_show *show,</span>
+<span class='curline'><a href='../S/411.html#L1204'>btf_show</a>         1204 bpf/btf.c      static void btf_show_end_array_type(struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L1211'>btf_show</a>         1211 bpf/btf.c      static void *btf_show_start_struct_type(struct btf_show *show,</span>
+<span class='curline'><a href='../S/411.html#L1219'>btf_show</a>         1219 bpf/btf.c      static void btf_show_end_struct_type(struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L1815'>btf_show</a>         1815 bpf/btf.c      			struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L1817'>btf_show</a>         1817 bpf/btf.c      	btf_show(show, "&lt;unsupported kind:%u&gt;", BTF_INFO_KIND(t-&gt;info));</span>
+<span class='curline'><a href='../S/411.html#L1990'>btf_show</a>         1990 bpf/btf.c      static void btf_int128_print(struct btf_show *show, void *data)</span>
+<span class='curline'><a href='../S/411.html#L2057'>btf_show</a>         2057 bpf/btf.c      			      u8 nr_bits, struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L2084'>btf_show</a>         2084 bpf/btf.c      			      struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L2102'>btf_show</a>         2102 bpf/btf.c      			 struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L2443'>btf_show</a>         2443 bpf/btf.c      			      u8 bits_offset, struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L2455'>btf_show</a>         2455 bpf/btf.c      			 struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L2464'>btf_show</a>         2464 bpf/btf.c      			 struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L2703'>btf_show</a>         2703 bpf/btf.c      			     struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L2756'>btf_show</a>         2756 bpf/btf.c      			   struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L3018'>btf_show</a>         3018 bpf/btf.c      			      struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L3065'>btf_show</a>         3065 bpf/btf.c      			    struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L3236'>btf_show</a>         3236 bpf/btf.c      			  struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L3585'>btf_show</a>         3585 bpf/btf.c      			     struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L3599'>btf_show</a>         3599 bpf/btf.c      			btf_show(show, ",");</span>
+<span class='curline'><a href='../S/411.html#L5314'>btf_show</a>         5314 bpf/btf.c      			  struct btf_show *show)</span>
+<span class='curline'><a href='../S/411.html#L5325'>btf_show</a>         5325 bpf/btf.c      static void btf_seq_show(struct btf_show *show, const char *fmt,</span>
+<span class='curline'><a href='../S/411.html#L5334'>btf_show</a>         5334 bpf/btf.c      	struct btf_show sseq;</span>
+<span class='curline'><a href='../S/411.html#L5354'>btf_show</a>         5354 bpf/btf.c      	struct btf_show show;</span>
+<span class='curline'><a href='../S/411.html#L5359'>btf_show</a>         5359 bpf/btf.c      static void btf_snprintf_show(struct btf_show *show, const char *fmt,</span>
+<span class='curline'><a href='../S/411.html#L5392'>btf_show</a>         5392 bpf/btf.c      	btf_type_show(btf, type_id, obj, (struct btf_show *)&amp;ssnprintf);</span>
+</pre>
+</body>
+</html>

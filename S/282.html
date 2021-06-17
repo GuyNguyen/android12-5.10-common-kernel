@@ -1,0 +1,700 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>trace/fgraph.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/513.html'>trace</a>/fgraph.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L39'>[^]</a><a href='#L635'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L39' title='Defined at 39.'>ftrace_graph_is_dead</a></li>
+<li><a href='#L52' title='Defined at 52.'>ftrace_graph_stop</a></li>
+<li><a href='#L59' title='Defined at 59.'>ftrace_push_return_trace</a></li>
+<li><a href='#L113' title='Defined at 113.'>function_graph_enter</a></li>
+<li><a href='#L147' title='Defined at 147.'>ftrace_pop_return_trace</a></li>
+<li><a href='#L209' title='Defined at 209.'>ftrace_suspend_notifier_call</a></li>
+<li><a href='#L232' title='Defined at 232.'>ftrace_return_to_handler</a></li>
+<li><a href='#L270' title='Defined at 270.'>ftrace_graph_get_ret_stack</a></li>
+<li><a href='#L296' title='Defined at 296.'>ftrace_graph_ret_addr</a></li>
+<li><a href='#L315' title='Defined at 315.'>ftrace_graph_ret_addr</a></li>
+<li><a href='#L348' title='Defined at 348.'>ftrace_graph_sleep_time_control</a></li>
+<li><a href='#L353' title='Defined at 353.'>ftrace_graph_entry_stub</a></li>
+<li><a href='#L370' title='Defined at 370.'>alloc_retstack_tasklist</a></li>
+<li><a href='#L416' title='Defined at 416.'>ftrace_graph_probe_sched_switch</a></li>
+<li><a href='#L447' title='Defined at 447.'>ftrace_graph_entry_test</a></li>
+<li><a href='#L461' title='Defined at 461.'>update_function_graph_func</a></li>
+<li><a href='#L490' title='Defined at 490.'>graph_init_task</a></li>
+<li><a href='#L503' title='Defined at 503.'>ftrace_graph_init_idle_task</a></li>
+<li><a href='#L532' title='Defined at 532.'>ftrace_graph_init_task</a></li>
+<li><a href='#L551' title='Defined at 551.'>ftrace_graph_exit_task</a></li>
+<li><a href='#L563' title='Defined at 563.'>start_graph_tracing</a></li>
+<li><a href='#L596' title='Defined at 596.'>register_ftrace_graph</a></li>
+<li><a href='#L635' title='Defined at 635.'>unregister_ftrace_graph</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * Infrastructure to took into function calls and returns.</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> * Copyright (c) 2008-2009 Frederic Weisbecker &lt;fweisbec@gmail.com&gt;</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * Mostly borrowed from function tracer which</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> * is Copyright (c) Steven Rostedt &lt;srostedt@redhat.com&gt;</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> *</em>
+<a id='L8' name='L8'></a>   8 <em class='comment'> * Highly modified by Steven Rostedt (VMware).</em>
+<a id='L9' name='L9'></a>   9 <em class='comment'> */</em>
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;linux/suspend.h&gt;
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;linux/ftrace.h&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;linux/slab.h&gt;
+<a id='L13' name='L13'></a>  13 
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> &lt;<a href='447.html'>trace/events/sched.h</a>&gt;
+<a id='L15' name='L15'></a>  15 
+<a id='L16' name='L16'></a>  16 <em class='sharp'>#include</em> "<a href='294.html'>ftrace_internal.h</a>"
+<a id='L17' name='L17'></a>  17 
+<a id='L18' name='L18'></a>  18 <em class='sharp'>#ifdef</em> CONFIG_DYNAMIC_FTRACE
+<a id='L19' name='L19'></a>  19 <em class='sharp'>#define</em> <a href='../S/282.html#L345' title='Referred from 345 in trace/fgraph.c.'>ASSIGN_OPS_HASH</a>(opsname, val) \
+<a id='L20' name='L20'></a>  20         .func_hash              = val, \
+<a id='L21' name='L21'></a>  21         .local_hash.regex_lock  = __MUTEX_INITIALIZER(opsname.local_hash.regex_lock),
+<a id='L22' name='L22'></a>  22 <em class='sharp'>#else</em>
+<a id='L23' name='L23'></a>  23 <em class='sharp'>#define</em> <a href='../S/282.html#L345' title='Referred from 345 in trace/fgraph.c.'>ASSIGN_OPS_HASH</a>(opsname, val)
+<a id='L24' name='L24'></a>  24 <em class='sharp'>#endif</em>
+<a id='L25' name='L25'></a>  25 
+<a id='L26' name='L26'></a>  26 <strong class='reserved'>static</strong> bool kill_ftrace_graph;
+<a id='L27' name='L27'></a>  27 <strong class='reserved'>int</strong> <a href='../S/294.html#L46' title='Defined at 46 in trace/ftrace_internal.h.'>ftrace_graph_active</a>;
+<a id='L28' name='L28'></a>  28 
+<a id='L29' name='L29'></a>  29 <em class='comment'>/* Both enabled by default (can be cleared by function_graph tracer flags */</em>
+<a id='L30' name='L30'></a>  30 <strong class='reserved'>static</strong> bool fgraph_sleep_time = true;
+<a id='L31' name='L31'></a>  31 
+<a id='L32' name='L32'></a>  32 <em class='comment'>/**</em>
+<a id='L33' name='L33'></a>  33 <em class='comment'> * ftrace_graph_is_dead - returns true if ftrace_graph_stop() was called</em>
+<a id='L34' name='L34'></a>  34 <em class='comment'> *</em>
+<a id='L35' name='L35'></a>  35 <em class='comment'> * ftrace_graph_stop() is called when a severe error is detected in</em>
+<a id='L36' name='L36'></a>  36 <em class='comment'> * the function graph tracing. This function is called by the critical</em>
+<a id='L37' name='L37'></a>  37 <em class='comment'> * paths of function graph to keep those paths from doing any more harm.</em>
+<a id='L38' name='L38'></a>  38 <em class='comment'> */</em>
+<a id='L39' name='L39'></a>  39 bool <a href='../S/282.html#L65' title='Referred from 65 in trace/fgraph.c.'>ftrace_graph_is_dead</a>(<strong class='reserved'>void</strong>)
+<a id='L40' name='L40'></a>  40 <em class='brace'>{</em>
+<a id='L41' name='L41'></a>  41         <strong class='reserved'>return</strong> kill_ftrace_graph;
+<a id='L42' name='L42'></a>  42 <em class='brace'>}</em>
+<a id='L43' name='L43'></a>  43 
+<a id='L44' name='L44'></a>  44 <em class='comment'>/**</em>
+<a id='L45' name='L45'></a>  45 <em class='comment'> * ftrace_graph_stop - set to permanently disable function graph tracincg</em>
+<a id='L46' name='L46'></a>  46 <em class='comment'> *</em>
+<a id='L47' name='L47'></a>  47 <em class='comment'> * In case of an error int function graph tracing, this is called</em>
+<a id='L48' name='L48'></a>  48 <em class='comment'> * to try to keep function graph tracing from causing any more harm.</em>
+<a id='L49' name='L49'></a>  49 <em class='comment'> * Usually this is pretty severe and this is called to try to at least</em>
+<a id='L50' name='L50'></a>  50 <em class='comment'> * get a warning out to the user.</em>
+<a id='L51' name='L51'></a>  51 <em class='comment'> */</em>
+<a id='L52' name='L52'></a>  52 <strong class='reserved'>void</strong> <a href='../R/6728.html' title='Multiple referred from 5 places.'>ftrace_graph_stop</a>(<strong class='reserved'>void</strong>)
+<a id='L53' name='L53'></a>  53 <em class='brace'>{</em>
+<a id='L54' name='L54'></a>  54         kill_ftrace_graph = true;
+<a id='L55' name='L55'></a>  55 <em class='brace'>}</em>
+<a id='L56' name='L56'></a>  56 
+<a id='L57' name='L57'></a>  57 <em class='comment'>/* Add a function return address to the trace stack on thread info.*/</em>
+<a id='L58' name='L58'></a>  58 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong>
+<a id='L59' name='L59'></a>  59 <a href='../S/282.html#L130' title='Referred from 130 in trace/fgraph.c.'>ftrace_push_return_trace</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> ret, <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>,
+<a id='L60' name='L60'></a>  60                          <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> frame_pointer, <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> *retp)
+<a id='L61' name='L61'></a>  61 <em class='brace'>{</em>
+<a id='L62' name='L62'></a>  62         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <strong class='reserved'>long</strong> calltime;
+<a id='L63' name='L63'></a>  63         <strong class='reserved'>int</strong> index;
+<a id='L64' name='L64'></a>  64 
+<a id='L65' name='L65'></a>  65         <strong class='reserved'>if</strong> (unlikely(<a href='../S/282.html#L39' title='Defined at 39 in trace/fgraph.c.'>ftrace_graph_is_dead</a>()))
+<a id='L66' name='L66'></a>  66                 <strong class='reserved'>return</strong> -EBUSY;
+<a id='L67' name='L67'></a>  67 
+<a id='L68' name='L68'></a>  68         <strong class='reserved'>if</strong> (!current-&gt;ret_stack)
+<a id='L69' name='L69'></a>  69                 <strong class='reserved'>return</strong> -EBUSY;
+<a id='L70' name='L70'></a>  70 
+<a id='L71' name='L71'></a>  71         <em class='comment'>/*</em>
+<a id='L72' name='L72'></a>  72 <em class='comment'>         * We must make sure the ret_stack is tested before we read</em>
+<a id='L73' name='L73'></a>  73 <em class='comment'>         * anything else.</em>
+<a id='L74' name='L74'></a>  74 <em class='comment'>         */</em>
+<a id='L75' name='L75'></a>  75         smp_rmb();
+<a id='L76' name='L76'></a>  76 
+<a id='L77' name='L77'></a>  77         <em class='comment'>/* The return trace stack is full */</em>
+<a id='L78' name='L78'></a>  78         <strong class='reserved'>if</strong> (current-&gt;curr_ret_stack == FTRACE_RETFUNC_DEPTH - 1) <em class='brace'>{</em>
+<a id='L79' name='L79'></a>  79                 atomic_inc(&amp;current-&gt;trace_overrun);
+<a id='L80' name='L80'></a>  80                 <strong class='reserved'>return</strong> -EBUSY;
+<a id='L81' name='L81'></a>  81         <em class='brace'>}</em>
+<a id='L82' name='L82'></a>  82 
+<a id='L83' name='L83'></a>  83         calltime = <a href='../S/283.html#L32' title='Defined at 32 in trace/trace_clock.c.'>trace_clock_local</a>();
+<a id='L84' name='L84'></a>  84 
+<a id='L85' name='L85'></a>  85         index = ++current-&gt;curr_ret_stack;
+<a id='L86' name='L86'></a>  86         barrier();
+<a id='L87' name='L87'></a>  87         current-&gt;ret_stack[index].ret = ret;
+<a id='L88' name='L88'></a>  88         current-&gt;ret_stack[index].<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a> = <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>;
+<a id='L89' name='L89'></a>  89         current-&gt;ret_stack[index].calltime = calltime;
+<a id='L90' name='L90'></a>  90 <em class='sharp'>#ifdef</em> HAVE_FUNCTION_GRAPH_FP_TEST
+<a id='L91' name='L91'></a>  91         current-&gt;ret_stack[index].fp = frame_pointer;
+<a id='L92' name='L92'></a>  92 <em class='sharp'>#endif</em>
+<a id='L93' name='L93'></a>  93 <em class='sharp'>#ifdef</em> HAVE_FUNCTION_GRAPH_RET_ADDR_PTR
+<a id='L94' name='L94'></a>  94         current-&gt;ret_stack[index].retp = retp;
+<a id='L95' name='L95'></a>  95 <em class='sharp'>#endif</em>
+<a id='L96' name='L96'></a>  96         <strong class='reserved'>return</strong> 0;
+<a id='L97' name='L97'></a>  97 <em class='brace'>}</em>
+<a id='L98' name='L98'></a>  98 
+<a id='L99' name='L99'></a>  99 <em class='comment'>/*</em>
+<a id='L100' name='L100'></a> 100 <em class='comment'> * Not all archs define MCOUNT_INSN_SIZE which is used to look for direct</em>
+<a id='L101' name='L101'></a> 101 <em class='comment'> * functions. But those archs currently don't support direct functions</em>
+<a id='L102' name='L102'></a> 102 <em class='comment'> * anyway, and ftrace_find_rec_direct() is just a stub for them.</em>
+<a id='L103' name='L103'></a> 103 <em class='comment'> * Define MCOUNT_INSN_SIZE to keep those archs compiling.</em>
+<a id='L104' name='L104'></a> 104 <em class='comment'> */</em>
+<a id='L105' name='L105'></a> 105 <em class='sharp'>#ifndef</em> <a href='../D/973.html' title='Multiple defined in 2 places.'>MCOUNT_INSN_SIZE</a>
+<a id='L106' name='L106'></a> 106 <em class='comment'>/* Make sure this only works without direct calls */</em>
+<a id='L107' name='L107'></a> 107 <em class='sharp'># ifdef</em> CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+<a id='L108' name='L108'></a> 108 <em class='sharp'>#  error</em> MCOUNT_INSN_SIZE not defined with direct calls enabled
+<a id='L109' name='L109'></a> 109 <em class='sharp'># endif</em>
+<a id='L110' name='L110'></a> 110 <em class='sharp'># define</em> <a href='../R/873.html' title='Multiple referred from 8 places.'>MCOUNT_INSN_SIZE</a> 0
+<a id='L111' name='L111'></a> 111 <em class='sharp'>#endif</em>
+<a id='L112' name='L112'></a> 112 
+<a id='L113' name='L113'></a> 113 <strong class='reserved'>int</strong> function_graph_enter(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> ret, <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>,
+<a id='L114' name='L114'></a> 114                          <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> frame_pointer, <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> *retp)
+<a id='L115' name='L115'></a> 115 <em class='brace'>{</em>
+<a id='L116' name='L116'></a> 116         <strong class='reserved'>struct</strong> ftrace_graph_ent trace;
+<a id='L117' name='L117'></a> 117 
+<a id='L118' name='L118'></a> 118         <em class='comment'>/*</em>
+<a id='L119' name='L119'></a> 119 <em class='comment'>         * Skip graph tracing if the return location is served by direct trampoline,</em>
+<a id='L120' name='L120'></a> 120 <em class='comment'>         * since call sequence and return addresses is unpredicatable anymore.</em>
+<a id='L121' name='L121'></a> 121 <em class='comment'>         * Ex: BPF trampoline may call original function and may skip frame</em>
+<a id='L122' name='L122'></a> 122 <em class='comment'>         * depending on type of BPF programs attached.</em>
+<a id='L123' name='L123'></a> 123 <em class='comment'>         */</em>
+<a id='L124' name='L124'></a> 124         <strong class='reserved'>if</strong> (ftrace_direct_func_count &amp;&amp;
+<a id='L125' name='L125'></a> 125             <a href='../S/270.html#L2380' title='Defined at 2380 in trace/ftrace.c.'>ftrace_find_rec_direct</a>(ret - <a href='../D/973.html' title='Multiple defined in 2 places.'>MCOUNT_INSN_SIZE</a>))
+<a id='L126' name='L126'></a> 126                 <strong class='reserved'>return</strong> -EBUSY;
+<a id='L127' name='L127'></a> 127         trace.<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a> = <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>;
+<a id='L128' name='L128'></a> 128         trace.depth = ++current-&gt;curr_ret_depth;
+<a id='L129' name='L129'></a> 129 
+<a id='L130' name='L130'></a> 130         <strong class='reserved'>if</strong> (<a href='../S/282.html#L59' title='Defined at 59 in trace/fgraph.c.'>ftrace_push_return_trace</a>(ret, <a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>, frame_pointer, retp))
+<a id='L131' name='L131'></a> 131                 <strong class='reserved'>goto</strong> out;
+<a id='L132' name='L132'></a> 132 
+<a id='L133' name='L133'></a> 133         <em class='comment'>/* Only trace if the calling function expects to */</em>
+<a id='L134' name='L134'></a> 134         <strong class='reserved'>if</strong> (!ftrace_graph_entry(&amp;trace))
+<a id='L135' name='L135'></a> 135                 <strong class='reserved'>goto</strong> out_ret;
+<a id='L136' name='L136'></a> 136 
+<a id='L137' name='L137'></a> 137         <strong class='reserved'>return</strong> 0;
+<a id='L138' name='L138'></a> 138  out_ret:
+<a id='L139' name='L139'></a> 139         current-&gt;curr_ret_stack--;
+<a id='L140' name='L140'></a> 140  out:
+<a id='L141' name='L141'></a> 141         current-&gt;curr_ret_depth--;
+<a id='L142' name='L142'></a> 142         <strong class='reserved'>return</strong> -EBUSY;
+<a id='L143' name='L143'></a> 143 <em class='brace'>}</em>
+<a id='L144' name='L144'></a> 144 
+<a id='L145' name='L145'></a> 145 <em class='comment'>/* Retrieve a function return address to the trace stack on thread info.*/</em>
+<a id='L146' name='L146'></a> 146 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong>
+<a id='L147' name='L147'></a> 147 <a href='../S/282.html#L237' title='Referred from 237 in trace/fgraph.c.'>ftrace_pop_return_trace</a>(<strong class='reserved'>struct</strong> ftrace_graph_ret *trace, <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> *ret,
+<a id='L148' name='L148'></a> 148                         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> frame_pointer)
+<a id='L149' name='L149'></a> 149 <em class='brace'>{</em>
+<a id='L150' name='L150'></a> 150         <strong class='reserved'>int</strong> index;
+<a id='L151' name='L151'></a> 151 
+<a id='L152' name='L152'></a> 152         index = current-&gt;curr_ret_stack;
+<a id='L153' name='L153'></a> 153 
+<a id='L154' name='L154'></a> 154         <strong class='reserved'>if</strong> (unlikely(index &lt; 0 || index &gt;= FTRACE_RETFUNC_DEPTH)) <em class='brace'>{</em>
+<a id='L155' name='L155'></a> 155                 <a href='../S/282.html#L52' title='Defined at 52 in trace/fgraph.c.'>ftrace_graph_stop</a>();
+<a id='L156' name='L156'></a> 156                 WARN_ON(1);
+<a id='L157' name='L157'></a> 157                 <em class='comment'>/* Might as well panic, otherwise we have no where to go */</em>
+<a id='L158' name='L158'></a> 158                 *ret = (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)<a href='../S/250.html#L177' title='Defined at 177 in panic.c.'>panic</a>;
+<a id='L159' name='L159'></a> 159                 <strong class='reserved'>return</strong>;
+<a id='L160' name='L160'></a> 160         <em class='brace'>}</em>
+<a id='L161' name='L161'></a> 161 
+<a id='L162' name='L162'></a> 162 <em class='sharp'>#ifdef</em> HAVE_FUNCTION_GRAPH_FP_TEST
+<a id='L163' name='L163'></a> 163         <em class='comment'>/*</em>
+<a id='L164' name='L164'></a> 164 <em class='comment'>         * The arch may choose to record the frame pointer used</em>
+<a id='L165' name='L165'></a> 165 <em class='comment'>         * and check it here to make sure that it is what we expect it</em>
+<a id='L166' name='L166'></a> 166 <em class='comment'>         * to be. If gcc does not set the place holder of the return</em>
+<a id='L167' name='L167'></a> 167 <em class='comment'>         * address in the frame pointer, and does a copy instead, then</em>
+<a id='L168' name='L168'></a> 168 <em class='comment'>         * the function graph trace will fail. This test detects this</em>
+<a id='L169' name='L169'></a> 169 <em class='comment'>         * case.</em>
+<a id='L170' name='L170'></a> 170 <em class='comment'>         *</em>
+<a id='L171' name='L171'></a> 171 <em class='comment'>         * Currently, x86_32 with optimize for size (-Os) makes the latest</em>
+<a id='L172' name='L172'></a> 172 <em class='comment'>         * gcc do the above.</em>
+<a id='L173' name='L173'></a> 173 <em class='comment'>         *</em>
+<a id='L174' name='L174'></a> 174 <em class='comment'>         * Note, -mfentry does not use frame pointers, and this test</em>
+<a id='L175' name='L175'></a> 175 <em class='comment'>         *  is not needed if CC_USING_FENTRY is set.</em>
+<a id='L176' name='L176'></a> 176 <em class='comment'>         */</em>
+<a id='L177' name='L177'></a> 177         <strong class='reserved'>if</strong> (unlikely(current-&gt;ret_stack[index].fp != frame_pointer)) <em class='brace'>{</em>
+<a id='L178' name='L178'></a> 178                 <a href='../S/282.html#L52' title='Defined at 52 in trace/fgraph.c.'>ftrace_graph_stop</a>();
+<a id='L179' name='L179'></a> 179                 WARN(1, "Bad frame pointer: expected %lx, received %lx\n"
+<a id='L180' name='L180'></a> 180                      "  from func %ps return to %lx\n",
+<a id='L181' name='L181'></a> 181                      current-&gt;ret_stack[index].fp,
+<a id='L182' name='L182'></a> 182                      frame_pointer,
+<a id='L183' name='L183'></a> 183                      (<strong class='reserved'>void</strong> *)current-&gt;ret_stack[index].<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>,
+<a id='L184' name='L184'></a> 184                      current-&gt;ret_stack[index].ret);
+<a id='L185' name='L185'></a> 185                 *ret = (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)<a href='../S/250.html#L177' title='Defined at 177 in panic.c.'>panic</a>;
+<a id='L186' name='L186'></a> 186                 <strong class='reserved'>return</strong>;
+<a id='L187' name='L187'></a> 187         <em class='brace'>}</em>
+<a id='L188' name='L188'></a> 188 <em class='sharp'>#endif</em>
+<a id='L189' name='L189'></a> 189 
+<a id='L190' name='L190'></a> 190         *ret = current-&gt;ret_stack[index].ret;
+<a id='L191' name='L191'></a> 191         trace-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a> = current-&gt;ret_stack[index].<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>;
+<a id='L192' name='L192'></a> 192         trace-&gt;calltime = current-&gt;ret_stack[index].calltime;
+<a id='L193' name='L193'></a> 193         trace-&gt;overrun = atomic_read(&amp;current-&gt;trace_overrun);
+<a id='L194' name='L194'></a> 194         trace-&gt;depth = current-&gt;curr_ret_depth--;
+<a id='L195' name='L195'></a> 195         <em class='comment'>/*</em>
+<a id='L196' name='L196'></a> 196 <em class='comment'>         * We still want to trace interrupts coming in if</em>
+<a id='L197' name='L197'></a> 197 <em class='comment'>         * max_depth is set to 1. Make sure the decrement is</em>
+<a id='L198' name='L198'></a> 198 <em class='comment'>         * seen before ftrace_graph_return.</em>
+<a id='L199' name='L199'></a> 199 <em class='comment'>         */</em>
+<a id='L200' name='L200'></a> 200         barrier();
+<a id='L201' name='L201'></a> 201 <em class='brace'>}</em>
+<a id='L202' name='L202'></a> 202 
+<a id='L203' name='L203'></a> 203 <em class='comment'>/*</em>
+<a id='L204' name='L204'></a> 204 <em class='comment'> * Hibernation protection.</em>
+<a id='L205' name='L205'></a> 205 <em class='comment'> * The state of the current task is too much unstable during</em>
+<a id='L206' name='L206'></a> 206 <em class='comment'> * suspend/restore to disk. We want to protect against that.</em>
+<a id='L207' name='L207'></a> 207 <em class='comment'> */</em>
+<a id='L208' name='L208'></a> 208 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong>
+<a id='L209' name='L209'></a> 209 <a href='../S/282.html#L225' title='Referred from 225 in trace/fgraph.c.'>ftrace_suspend_notifier_call</a>(<strong class='reserved'>struct</strong> notifier_block *bl, <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> state,
+<a id='L210' name='L210'></a> 210                                                         <strong class='reserved'>void</strong> *unused)
+<a id='L211' name='L211'></a> 211 <em class='brace'>{</em>
+<a id='L212' name='L212'></a> 212         <strong class='reserved'>switch</strong> (state) <em class='brace'>{</em>
+<a id='L213' name='L213'></a> 213         <strong class='reserved'>case</strong> PM_HIBERNATION_PREPARE:
+<a id='L214' name='L214'></a> 214                 pause_graph_tracing();
+<a id='L215' name='L215'></a> 215                 <strong class='reserved'>break</strong>;
+<a id='L216' name='L216'></a> 216 
+<a id='L217' name='L217'></a> 217         <strong class='reserved'>case</strong> PM_POST_HIBERNATION:
+<a id='L218' name='L218'></a> 218                 unpause_graph_tracing();
+<a id='L219' name='L219'></a> 219                 <strong class='reserved'>break</strong>;
+<a id='L220' name='L220'></a> 220         <em class='brace'>}</em>
+<a id='L221' name='L221'></a> 221         <strong class='reserved'>return</strong> NOTIFY_DONE;
+<a id='L222' name='L222'></a> 222 <em class='brace'>}</em>
+<a id='L223' name='L223'></a> 223 
+<a id='L224' name='L224'></a> 224 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> notifier_block ftrace_suspend_notifier = <em class='brace'>{</em>
+<a id='L225' name='L225'></a> 225         .notifier_call = <a href='../S/282.html#L209' title='Defined at 209 in trace/fgraph.c.'>ftrace_suspend_notifier_call</a>,
+<a id='L226' name='L226'></a> 226 <em class='brace'>}</em>;
+<a id='L227' name='L227'></a> 227 
+<a id='L228' name='L228'></a> 228 <em class='comment'>/*</em>
+<a id='L229' name='L229'></a> 229 <em class='comment'> * Send the trace to the ring-buffer.</em>
+<a id='L230' name='L230'></a> 230 <em class='comment'> * @return the original return address.</em>
+<a id='L231' name='L231'></a> 231 <em class='comment'> */</em>
+<a id='L232' name='L232'></a> 232 <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> ftrace_return_to_handler(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> frame_pointer)
+<a id='L233' name='L233'></a> 233 <em class='brace'>{</em>
+<a id='L234' name='L234'></a> 234         <strong class='reserved'>struct</strong> ftrace_graph_ret trace;
+<a id='L235' name='L235'></a> 235         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> ret;
+<a id='L236' name='L236'></a> 236 
+<a id='L237' name='L237'></a> 237         <a href='../S/282.html#L147' title='Defined at 147 in trace/fgraph.c.'>ftrace_pop_return_trace</a>(&amp;trace, &amp;ret, frame_pointer);
+<a id='L238' name='L238'></a> 238         trace.rettime = <a href='../S/283.html#L32' title='Defined at 32 in trace/trace_clock.c.'>trace_clock_local</a>();
+<a id='L239' name='L239'></a> 239         ftrace_graph_return(&amp;trace);
+<a id='L240' name='L240'></a> 240         <em class='comment'>/*</em>
+<a id='L241' name='L241'></a> 241 <em class='comment'>         * The ftrace_graph_return() may still access the current</em>
+<a id='L242' name='L242'></a> 242 <em class='comment'>         * ret_stack structure, we need to make sure the update of</em>
+<a id='L243' name='L243'></a> 243 <em class='comment'>         * curr_ret_stack is after that.</em>
+<a id='L244' name='L244'></a> 244 <em class='comment'>         */</em>
+<a id='L245' name='L245'></a> 245         barrier();
+<a id='L246' name='L246'></a> 246         current-&gt;curr_ret_stack--;
+<a id='L247' name='L247'></a> 247 
+<a id='L248' name='L248'></a> 248         <strong class='reserved'>if</strong> (unlikely(!ret)) <em class='brace'>{</em>
+<a id='L249' name='L249'></a> 249                 <a href='../S/282.html#L52' title='Defined at 52 in trace/fgraph.c.'>ftrace_graph_stop</a>();
+<a id='L250' name='L250'></a> 250                 WARN_ON(1);
+<a id='L251' name='L251'></a> 251                 <em class='comment'>/* Might as well panic. What else to do? */</em>
+<a id='L252' name='L252'></a> 252                 ret = (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)<a href='../S/250.html#L177' title='Defined at 177 in panic.c.'>panic</a>;
+<a id='L253' name='L253'></a> 253         <em class='brace'>}</em>
+<a id='L254' name='L254'></a> 254 
+<a id='L255' name='L255'></a> 255         <strong class='reserved'>return</strong> ret;
+<a id='L256' name='L256'></a> 256 <em class='brace'>}</em>
+<a id='L257' name='L257'></a> 257 
+<a id='L258' name='L258'></a> 258 <em class='comment'>/**</em>
+<a id='L259' name='L259'></a> 259 <em class='comment'> * ftrace_graph_get_ret_stack - return the entry of the shadow stack</em>
+<a id='L260' name='L260'></a> 260 <em class='comment'> * @task: The task to read the shadow stack from</em>
+<a id='L261' name='L261'></a> 261 <em class='comment'> * @idx: Index down the shadow stack</em>
+<a id='L262' name='L262'></a> 262 <em class='comment'> *</em>
+<a id='L263' name='L263'></a> 263 <em class='comment'> * Return the ret_struct on the shadow stack of the @task at the</em>
+<a id='L264' name='L264'></a> 264 <em class='comment'> * call graph at @idx starting with zero. If @idx is zero, it</em>
+<a id='L265' name='L265'></a> 265 <em class='comment'> * will return the last saved ret_stack entry. If it is greater than</em>
+<a id='L266' name='L266'></a> 266 <em class='comment'> * zero, it will return the corresponding ret_stack for the depth</em>
+<a id='L267' name='L267'></a> 267 <em class='comment'> * of saved return addresses.</em>
+<a id='L268' name='L268'></a> 268 <em class='comment'> */</em>
+<a id='L269' name='L269'></a> 269 <strong class='reserved'>struct</strong> ftrace_ret_stack *
+<a id='L270' name='L270'></a> 270 <a href='../R/6714.html' title='Multiple referred from 3 places.'>ftrace_graph_get_ret_stack</a>(<strong class='reserved'>struct</strong> task_struct *task, <strong class='reserved'>int</strong> idx)
+<a id='L271' name='L271'></a> 271 <em class='brace'>{</em>
+<a id='L272' name='L272'></a> 272         idx = task-&gt;curr_ret_stack - idx;
+<a id='L273' name='L273'></a> 273 
+<a id='L274' name='L274'></a> 274         <strong class='reserved'>if</strong> (idx &gt;= 0 &amp;&amp; idx &lt;= task-&gt;curr_ret_stack)
+<a id='L275' name='L275'></a> 275                 <strong class='reserved'>return</strong> &amp;task-&gt;ret_stack[idx];
+<a id='L276' name='L276'></a> 276 
+<a id='L277' name='L277'></a> 277         <strong class='reserved'>return</strong> NULL;
+<a id='L278' name='L278'></a> 278 <em class='brace'>}</em>
+<a id='L279' name='L279'></a> 279 
+<a id='L280' name='L280'></a> 280 <em class='comment'>/**</em>
+<a id='L281' name='L281'></a> 281 <em class='comment'> * ftrace_graph_ret_addr - convert a potentially modified stack return address</em>
+<a id='L282' name='L282'></a> 282 <em class='comment'> *                         to its original value</em>
+<a id='L283' name='L283'></a> 283 <em class='comment'> *</em>
+<a id='L284' name='L284'></a> 284 <em class='comment'> * This function can be called by stack unwinding code to convert a found stack</em>
+<a id='L285' name='L285'></a> 285 <em class='comment'> * return address ('ret') to its original value, in case the function graph</em>
+<a id='L286' name='L286'></a> 286 <em class='comment'> * tracer has modified it to be 'return_to_handler'.  If the address hasn't</em>
+<a id='L287' name='L287'></a> 287 <em class='comment'> * been modified, the unchanged value of 'ret' is returned.</em>
+<a id='L288' name='L288'></a> 288 <em class='comment'> *</em>
+<a id='L289' name='L289'></a> 289 <em class='comment'> * 'idx' is a state variable which should be initialized by the caller to zero</em>
+<a id='L290' name='L290'></a> 290 <em class='comment'> * before the first call.</em>
+<a id='L291' name='L291'></a> 291 <em class='comment'> *</em>
+<a id='L292' name='L292'></a> 292 <em class='comment'> * 'retp' is a pointer to the return address on the stack.  It's ignored if</em>
+<a id='L293' name='L293'></a> 293 <em class='comment'> * the arch doesn't have HAVE_FUNCTION_GRAPH_RET_ADDR_PTR defined.</em>
+<a id='L294' name='L294'></a> 294 <em class='comment'> */</em>
+<a id='L295' name='L295'></a> 295 <em class='sharp'>#ifdef</em> HAVE_FUNCTION_GRAPH_RET_ADDR_PTR
+<a id='L296' name='L296'></a> 296 <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> ftrace_graph_ret_addr(<strong class='reserved'>struct</strong> task_struct *task, <strong class='reserved'>int</strong> *idx,
+<a id='L297' name='L297'></a> 297                                     <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> ret, <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> *retp)
+<a id='L298' name='L298'></a> 298 <em class='brace'>{</em>
+<a id='L299' name='L299'></a> 299         <strong class='reserved'>int</strong> index = task-&gt;curr_ret_stack;
+<a id='L300' name='L300'></a> 300         <strong class='reserved'>int</strong> i;
+<a id='L301' name='L301'></a> 301 
+<a id='L302' name='L302'></a> 302         <strong class='reserved'>if</strong> (ret != (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)dereference_kernel_function_descriptor(return_to_handler))
+<a id='L303' name='L303'></a> 303                 <strong class='reserved'>return</strong> ret;
+<a id='L304' name='L304'></a> 304 
+<a id='L305' name='L305'></a> 305         <strong class='reserved'>if</strong> (index &lt; 0)
+<a id='L306' name='L306'></a> 306                 <strong class='reserved'>return</strong> ret;
+<a id='L307' name='L307'></a> 307 
+<a id='L308' name='L308'></a> 308         <strong class='reserved'>for</strong> (i = 0; i &lt;= index; i++)
+<a id='L309' name='L309'></a> 309                 <strong class='reserved'>if</strong> (task-&gt;ret_stack[i].retp == retp)
+<a id='L310' name='L310'></a> 310                         <strong class='reserved'>return</strong> task-&gt;ret_stack[i].ret;
+<a id='L311' name='L311'></a> 311 
+<a id='L312' name='L312'></a> 312         <strong class='reserved'>return</strong> ret;
+<a id='L313' name='L313'></a> 313 <em class='brace'>}</em>
+<a id='L314' name='L314'></a> 314 <em class='sharp'>#else</em> <em class='comment'>/* !HAVE_FUNCTION_GRAPH_RET_ADDR_PTR */</em>
+<a id='L315' name='L315'></a> 315 <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> ftrace_graph_ret_addr(<strong class='reserved'>struct</strong> task_struct *task, <strong class='reserved'>int</strong> *idx,
+<a id='L316' name='L316'></a> 316                                     <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> ret, <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> *retp)
+<a id='L317' name='L317'></a> 317 <em class='brace'>{</em>
+<a id='L318' name='L318'></a> 318         <strong class='reserved'>int</strong> task_idx;
+<a id='L319' name='L319'></a> 319 
+<a id='L320' name='L320'></a> 320         <strong class='reserved'>if</strong> (ret != (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong>)dereference_kernel_function_descriptor(return_to_handler))
+<a id='L321' name='L321'></a> 321                 <strong class='reserved'>return</strong> ret;
+<a id='L322' name='L322'></a> 322 
+<a id='L323' name='L323'></a> 323         task_idx = task-&gt;curr_ret_stack;
+<a id='L324' name='L324'></a> 324 
+<a id='L325' name='L325'></a> 325         <strong class='reserved'>if</strong> (!task-&gt;ret_stack || task_idx &lt; *idx)
+<a id='L326' name='L326'></a> 326                 <strong class='reserved'>return</strong> ret;
+<a id='L327' name='L327'></a> 327 
+<a id='L328' name='L328'></a> 328         task_idx -= *idx;
+<a id='L329' name='L329'></a> 329         (*idx)++;
+<a id='L330' name='L330'></a> 330 
+<a id='L331' name='L331'></a> 331         <strong class='reserved'>return</strong> task-&gt;ret_stack[task_idx].ret;
+<a id='L332' name='L332'></a> 332 <em class='brace'>}</em>
+<a id='L333' name='L333'></a> 333 <em class='sharp'>#endif</em> <em class='comment'>/* HAVE_FUNCTION_GRAPH_RET_ADDR_PTR */</em>
+<a id='L334' name='L334'></a> 334 
+<a id='L335' name='L335'></a> 335 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> ftrace_ops graph_ops = <em class='brace'>{</em>
+<a id='L336' name='L336'></a> 336         .<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>                   = ftrace_stub,
+<a id='L337' name='L337'></a> 337         .flags                  = FTRACE_OPS_FL_RECURSION_SAFE |
+<a id='L338' name='L338'></a> 338                                    FTRACE_OPS_FL_INITIALIZED |
+<a id='L339' name='L339'></a> 339                                    FTRACE_OPS_FL_PID |
+<a id='L340' name='L340'></a> 340                                    FTRACE_OPS_FL_STUB,
+<a id='L341' name='L341'></a> 341 <em class='sharp'>#ifdef</em> FTRACE_GRAPH_TRAMP_ADDR
+<a id='L342' name='L342'></a> 342         .trampoline             = FTRACE_GRAPH_TRAMP_ADDR,
+<a id='L343' name='L343'></a> 343         <em class='comment'>/* trampoline_size is only needed for dynamically allocated tramps */</em>
+<a id='L344' name='L344'></a> 344 <em class='sharp'>#endif</em>
+<a id='L345' name='L345'></a> 345         <a href='../D/24.html' title='Multiple defined in 2 places.'>ASSIGN_OPS_HASH</a>(graph_ops, &amp;global_ops.local_hash)
+<a id='L346' name='L346'></a> 346 <em class='brace'>}</em>;
+<a id='L347' name='L347'></a> 347 
+<a id='L348' name='L348'></a> 348 <strong class='reserved'>void</strong> <a href='../R/6727.html' title='Multiple referred from 2 places.'>ftrace_graph_sleep_time_control</a>(bool enable)
+<a id='L349' name='L349'></a> 349 <em class='brace'>{</em>
+<a id='L350' name='L350'></a> 350         fgraph_sleep_time = enable;
+<a id='L351' name='L351'></a> 351 <em class='brace'>}</em>
+<a id='L352' name='L352'></a> 352 
+<a id='L353' name='L353'></a> 353 <strong class='reserved'>int</strong> <a href='../R/6711.html' title='Multiple referred from 4 places.'>ftrace_graph_entry_stub</a>(<strong class='reserved'>struct</strong> ftrace_graph_ent *trace)
+<a id='L354' name='L354'></a> 354 <em class='brace'>{</em>
+<a id='L355' name='L355'></a> 355         <strong class='reserved'>return</strong> 0;
+<a id='L356' name='L356'></a> 356 <em class='brace'>}</em>
+<a id='L357' name='L357'></a> 357 
+<a id='L358' name='L358'></a> 358 <em class='comment'>/*</em>
+<a id='L359' name='L359'></a> 359 <em class='comment'> * Simply points to ftrace_stub, but with the proper protocol.</em>
+<a id='L360' name='L360'></a> 360 <em class='comment'> * Defined by the linker script in linux/vmlinux.lds.h</em>
+<a id='L361' name='L361'></a> 361 <em class='comment'> */</em>
+<a id='L362' name='L362'></a> 362 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> ftrace_stub_graph(<strong class='reserved'>struct</strong> ftrace_graph_ret *);
+<a id='L363' name='L363'></a> 363 
+<a id='L364' name='L364'></a> 364 <em class='comment'>/* The callbacks that hook a function */</em>
+<a id='L365' name='L365'></a> 365 trace_func_graph_ret_t ftrace_graph_return = ftrace_stub_graph;
+<a id='L366' name='L366'></a> 366 trace_func_graph_ent_t ftrace_graph_entry = <a href='../S/282.html#L353' title='Defined at 353 in trace/fgraph.c.'>ftrace_graph_entry_stub</a>;
+<a id='L367' name='L367'></a> 367 <strong class='reserved'>static</strong> trace_func_graph_ent_t __ftrace_graph_entry = <a href='../S/282.html#L353' title='Defined at 353 in trace/fgraph.c.'>ftrace_graph_entry_stub</a>;
+<a id='L368' name='L368'></a> 368 
+<a id='L369' name='L369'></a> 369 <em class='comment'>/* Try to assign a return stack array on FTRACE_RETSTACK_ALLOC_SIZE tasks. */</em>
+<a id='L370' name='L370'></a> 370 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/282.html#L582' title='Referred from 582 in trace/fgraph.c.'>alloc_retstack_tasklist</a>(<strong class='reserved'>struct</strong> ftrace_ret_stack **ret_stack_list)
+<a id='L371' name='L371'></a> 371 <em class='brace'>{</em>
+<a id='L372' name='L372'></a> 372         <strong class='reserved'>int</strong> i;
+<a id='L373' name='L373'></a> 373         <strong class='reserved'>int</strong> ret = 0;
+<a id='L374' name='L374'></a> 374         <strong class='reserved'>int</strong> start = 0, end = FTRACE_RETSTACK_ALLOC_SIZE;
+<a id='L375' name='L375'></a> 375         <strong class='reserved'>struct</strong> task_struct *g, *t;
+<a id='L376' name='L376'></a> 376 
+<a id='L377' name='L377'></a> 377         <strong class='reserved'>for</strong> (i = 0; i &lt; FTRACE_RETSTACK_ALLOC_SIZE; i++) <em class='brace'>{</em>
+<a id='L378' name='L378'></a> 378                 ret_stack_list[i] =
+<a id='L379' name='L379'></a> 379                         kmalloc_array(FTRACE_RETFUNC_DEPTH,
+<a id='L380' name='L380'></a> 380                                       <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> ftrace_ret_stack),
+<a id='L381' name='L381'></a> 381                                       GFP_KERNEL);
+<a id='L382' name='L382'></a> 382                 <strong class='reserved'>if</strong> (!ret_stack_list[i]) <em class='brace'>{</em>
+<a id='L383' name='L383'></a> 383                         start = 0;
+<a id='L384' name='L384'></a> 384                         end = i;
+<a id='L385' name='L385'></a> 385                         ret = -ENOMEM;
+<a id='L386' name='L386'></a> 386                         <strong class='reserved'>goto</strong> free;
+<a id='L387' name='L387'></a> 387                 <em class='brace'>}</em>
+<a id='L388' name='L388'></a> 388         <em class='brace'>}</em>
+<a id='L389' name='L389'></a> 389 
+<a id='L390' name='L390'></a> 390         rcu_read_lock();
+<a id='L391' name='L391'></a> 391         for_each_process_thread(g, t) <em class='brace'>{</em>
+<a id='L392' name='L392'></a> 392                 <strong class='reserved'>if</strong> (start == end) <em class='brace'>{</em>
+<a id='L393' name='L393'></a> 393                         ret = -EAGAIN;
+<a id='L394' name='L394'></a> 394                         <strong class='reserved'>goto</strong> unlock;
+<a id='L395' name='L395'></a> 395                 <em class='brace'>}</em>
+<a id='L396' name='L396'></a> 396 
+<a id='L397' name='L397'></a> 397                 <strong class='reserved'>if</strong> (t-&gt;ret_stack == NULL) <em class='brace'>{</em>
+<a id='L398' name='L398'></a> 398                         atomic_set(&amp;t-&gt;trace_overrun, 0);
+<a id='L399' name='L399'></a> 399                         t-&gt;curr_ret_stack = -1;
+<a id='L400' name='L400'></a> 400                         t-&gt;curr_ret_depth = -1;
+<a id='L401' name='L401'></a> 401                         <em class='comment'>/* Make sure the tasks see the -1 first: */</em>
+<a id='L402' name='L402'></a> 402                         smp_wmb();
+<a id='L403' name='L403'></a> 403                         t-&gt;ret_stack = ret_stack_list[start++];
+<a id='L404' name='L404'></a> 404                 <em class='brace'>}</em>
+<a id='L405' name='L405'></a> 405         <em class='brace'>}</em>
+<a id='L406' name='L406'></a> 406 
+<a id='L407' name='L407'></a> 407 unlock:
+<a id='L408' name='L408'></a> 408         rcu_read_unlock();
+<a id='L409' name='L409'></a> 409 free:
+<a id='L410' name='L410'></a> 410         <strong class='reserved'>for</strong> (i = start; i &lt; end; i++)
+<a id='L411' name='L411'></a> 411                 kfree(ret_stack_list[i]);
+<a id='L412' name='L412'></a> 412         <strong class='reserved'>return</strong> ret;
+<a id='L413' name='L413'></a> 413 <em class='brace'>}</em>
+<a id='L414' name='L414'></a> 414 
+<a id='L415' name='L415'></a> 415 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong>
+<a id='L416' name='L416'></a> 416 <a href='../R/6724.html' title='Multiple referred from 2 places.'>ftrace_graph_probe_sched_switch</a>(<strong class='reserved'>void</strong> *ignore, bool preempt,
+<a id='L417' name='L417'></a> 417                         <strong class='reserved'>struct</strong> task_struct *prev, <strong class='reserved'>struct</strong> task_struct *next)
+<a id='L418' name='L418'></a> 418 <em class='brace'>{</em>
+<a id='L419' name='L419'></a> 419         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <strong class='reserved'>long</strong> timestamp;
+<a id='L420' name='L420'></a> 420         <strong class='reserved'>int</strong> index;
+<a id='L421' name='L421'></a> 421 
+<a id='L422' name='L422'></a> 422         <em class='comment'>/*</em>
+<a id='L423' name='L423'></a> 423 <em class='comment'>         * Does the user want to count the time a function was asleep.</em>
+<a id='L424' name='L424'></a> 424 <em class='comment'>         * If so, do not update the time stamps.</em>
+<a id='L425' name='L425'></a> 425 <em class='comment'>         */</em>
+<a id='L426' name='L426'></a> 426         <strong class='reserved'>if</strong> (fgraph_sleep_time)
+<a id='L427' name='L427'></a> 427                 <strong class='reserved'>return</strong>;
+<a id='L428' name='L428'></a> 428 
+<a id='L429' name='L429'></a> 429         timestamp = <a href='../S/283.html#L32' title='Defined at 32 in trace/trace_clock.c.'>trace_clock_local</a>();
+<a id='L430' name='L430'></a> 430 
+<a id='L431' name='L431'></a> 431         prev-&gt;ftrace_timestamp = timestamp;
+<a id='L432' name='L432'></a> 432 
+<a id='L433' name='L433'></a> 433         <em class='comment'>/* only process tasks that we timestamped */</em>
+<a id='L434' name='L434'></a> 434         <strong class='reserved'>if</strong> (!next-&gt;ftrace_timestamp)
+<a id='L435' name='L435'></a> 435                 <strong class='reserved'>return</strong>;
+<a id='L436' name='L436'></a> 436 
+<a id='L437' name='L437'></a> 437         <em class='comment'>/*</em>
+<a id='L438' name='L438'></a> 438 <em class='comment'>         * Update all the counters in next to make up for the</em>
+<a id='L439' name='L439'></a> 439 <em class='comment'>         * time next was sleeping.</em>
+<a id='L440' name='L440'></a> 440 <em class='comment'>         */</em>
+<a id='L441' name='L441'></a> 441         timestamp -= next-&gt;ftrace_timestamp;
+<a id='L442' name='L442'></a> 442 
+<a id='L443' name='L443'></a> 443         <strong class='reserved'>for</strong> (index = next-&gt;curr_ret_stack; index &gt;= 0; index--)
+<a id='L444' name='L444'></a> 444                 next-&gt;ret_stack[index].calltime += timestamp;
+<a id='L445' name='L445'></a> 445 <em class='brace'>}</em>
+<a id='L446' name='L446'></a> 446 
+<a id='L447' name='L447'></a> 447 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../R/6712.html' title='Multiple referred from 2 places.'>ftrace_graph_entry_test</a>(<strong class='reserved'>struct</strong> ftrace_graph_ent *trace)
+<a id='L448' name='L448'></a> 448 <em class='brace'>{</em>
+<a id='L449' name='L449'></a> 449         <strong class='reserved'>if</strong> (!<a href='../D/7181.html' title='Multiple defined in 2 places.'>ftrace_ops_test</a>(&amp;global_ops, trace-&gt;<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>, NULL))
+<a id='L450' name='L450'></a> 450                 <strong class='reserved'>return</strong> 0;
+<a id='L451' name='L451'></a> 451         <strong class='reserved'>return</strong> __ftrace_graph_entry(trace);
+<a id='L452' name='L452'></a> 452 <em class='brace'>}</em>
+<a id='L453' name='L453'></a> 453 
+<a id='L454' name='L454'></a> 454 <em class='comment'>/*</em>
+<a id='L455' name='L455'></a> 455 <em class='comment'> * The function graph tracer should only trace the functions defined</em>
+<a id='L456' name='L456'></a> 456 <em class='comment'> * by set_ftrace_filter and set_ftrace_notrace. If another function</em>
+<a id='L457' name='L457'></a> 457 <em class='comment'> * tracer ops is registered, the graph tracer requires testing the</em>
+<a id='L458' name='L458'></a> 458 <em class='comment'> * function against the global ops, and not just trace any function</em>
+<a id='L459' name='L459'></a> 459 <em class='comment'> * that any ftrace_ops registered.</em>
+<a id='L460' name='L460'></a> 460 <em class='comment'> */</em>
+<a id='L461' name='L461'></a> 461 <strong class='reserved'>void</strong> <a href='../R/14391.html' title='Multiple referred from 3 places.'>update_function_graph_func</a>(<strong class='reserved'>void</strong>)
+<a id='L462' name='L462'></a> 462 <em class='brace'>{</em>
+<a id='L463' name='L463'></a> 463         <strong class='reserved'>struct</strong> ftrace_ops *op;
+<a id='L464' name='L464'></a> 464         bool do_test = false;
+<a id='L465' name='L465'></a> 465 
+<a id='L466' name='L466'></a> 466         <em class='comment'>/*</em>
+<a id='L467' name='L467'></a> 467 <em class='comment'>         * The graph and global ops share the same set of functions</em>
+<a id='L468' name='L468'></a> 468 <em class='comment'>         * to test. If any other ops is on the list, then</em>
+<a id='L469' name='L469'></a> 469 <em class='comment'>         * the graph tracing needs to test if its the function</em>
+<a id='L470' name='L470'></a> 470 <em class='comment'>         * it should call.</em>
+<a id='L471' name='L471'></a> 471 <em class='comment'>         */</em>
+<a id='L472' name='L472'></a> 472         do_for_each_ftrace_op(op, ftrace_ops_list) <em class='brace'>{</em>
+<a id='L473' name='L473'></a> 473                 <strong class='reserved'>if</strong> (op != &amp;global_ops &amp;&amp; op != &amp;graph_ops &amp;&amp;
+<a id='L474' name='L474'></a> 474                     op != &amp;ftrace_list_end) <em class='brace'>{</em>
+<a id='L475' name='L475'></a> 475                         do_test = true;
+<a id='L476' name='L476'></a> 476                         <em class='comment'>/* in double loop, break out with goto */</em>
+<a id='L477' name='L477'></a> 477                         <strong class='reserved'>goto</strong> out;
+<a id='L478' name='L478'></a> 478                 <em class='brace'>}</em>
+<a id='L479' name='L479'></a> 479         <em class='brace'>}</em> while_for_each_ftrace_op(op);
+<a id='L480' name='L480'></a> 480  out:
+<a id='L481' name='L481'></a> 481         <strong class='reserved'>if</strong> (do_test)
+<a id='L482' name='L482'></a> 482                 ftrace_graph_entry = <a href='../S/282.html#L447' title='Defined at 447 in trace/fgraph.c.'>ftrace_graph_entry_test</a>;
+<a id='L483' name='L483'></a> 483         <strong class='reserved'>else</strong>
+<a id='L484' name='L484'></a> 484                 ftrace_graph_entry = __ftrace_graph_entry;
+<a id='L485' name='L485'></a> 485 <em class='brace'>}</em>
+<a id='L486' name='L486'></a> 486 
+<a id='L487' name='L487'></a> 487 <strong class='reserved'>static</strong> DEFINE_PER_CPU(<strong class='reserved'>struct</strong> ftrace_ret_stack *, idle_ret_stack);
+<a id='L488' name='L488'></a> 488 
+<a id='L489' name='L489'></a> 489 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong>
+<a id='L490' name='L490'></a> 490 <a href='../R/7188.html' title='Multiple referred from 2 places.'>graph_init_task</a>(<strong class='reserved'>struct</strong> task_struct *t, <strong class='reserved'>struct</strong> ftrace_ret_stack *ret_stack)
+<a id='L491' name='L491'></a> 491 <em class='brace'>{</em>
+<a id='L492' name='L492'></a> 492         atomic_set(&amp;t-&gt;trace_overrun, 0);
+<a id='L493' name='L493'></a> 493         t-&gt;ftrace_timestamp = 0;
+<a id='L494' name='L494'></a> 494         <em class='comment'>/* make curr_ret_stack visible before we add the ret_stack */</em>
+<a id='L495' name='L495'></a> 495         smp_wmb();
+<a id='L496' name='L496'></a> 496         t-&gt;ret_stack = ret_stack;
+<a id='L497' name='L497'></a> 497 <em class='brace'>}</em>
+<a id='L498' name='L498'></a> 498 
+<a id='L499' name='L499'></a> 499 <em class='comment'>/*</em>
+<a id='L500' name='L500'></a> 500 <em class='comment'> * Allocate a return stack for the idle task. May be the first</em>
+<a id='L501' name='L501'></a> 501 <em class='comment'> * time through, or it may be done by CPU hotplug online.</em>
+<a id='L502' name='L502'></a> 502 <em class='comment'> */</em>
+<a id='L503' name='L503'></a> 503 <strong class='reserved'>void</strong> <a href='../R/6718.html' title='Multiple referred from 2 places.'>ftrace_graph_init_idle_task</a>(<strong class='reserved'>struct</strong> task_struct *t, <strong class='reserved'>int</strong> cpu)
+<a id='L504' name='L504'></a> 504 <em class='brace'>{</em>
+<a id='L505' name='L505'></a> 505         t-&gt;curr_ret_stack = -1;
+<a id='L506' name='L506'></a> 506         t-&gt;curr_ret_depth = -1;
+<a id='L507' name='L507'></a> 507         <em class='comment'>/*</em>
+<a id='L508' name='L508'></a> 508 <em class='comment'>         * The idle task has no parent, it either has its own</em>
+<a id='L509' name='L509'></a> 509 <em class='comment'>         * stack or no stack at all.</em>
+<a id='L510' name='L510'></a> 510 <em class='comment'>         */</em>
+<a id='L511' name='L511'></a> 511         <strong class='reserved'>if</strong> (t-&gt;ret_stack)
+<a id='L512' name='L512'></a> 512                 WARN_ON(t-&gt;ret_stack != per_cpu(idle_ret_stack, cpu));
+<a id='L513' name='L513'></a> 513 
+<a id='L514' name='L514'></a> 514         <strong class='reserved'>if</strong> (<a href='../S/294.html#L46' title='Defined at 46 in trace/ftrace_internal.h.'>ftrace_graph_active</a>) <em class='brace'>{</em>
+<a id='L515' name='L515'></a> 515                 <strong class='reserved'>struct</strong> ftrace_ret_stack *ret_stack;
+<a id='L516' name='L516'></a> 516 
+<a id='L517' name='L517'></a> 517                 ret_stack = per_cpu(idle_ret_stack, cpu);
+<a id='L518' name='L518'></a> 518                 <strong class='reserved'>if</strong> (!ret_stack) <em class='brace'>{</em>
+<a id='L519' name='L519'></a> 519                         ret_stack =
+<a id='L520' name='L520'></a> 520                                 kmalloc_array(FTRACE_RETFUNC_DEPTH,
+<a id='L521' name='L521'></a> 521                                               <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> ftrace_ret_stack),
+<a id='L522' name='L522'></a> 522                                               GFP_KERNEL);
+<a id='L523' name='L523'></a> 523                         <strong class='reserved'>if</strong> (!ret_stack)
+<a id='L524' name='L524'></a> 524                                 <strong class='reserved'>return</strong>;
+<a id='L525' name='L525'></a> 525                         per_cpu(idle_ret_stack, cpu) = ret_stack;
+<a id='L526' name='L526'></a> 526                 <em class='brace'>}</em>
+<a id='L527' name='L527'></a> 527                 <a href='../S/282.html#L490' title='Defined at 490 in trace/fgraph.c.'>graph_init_task</a>(t, ret_stack);
+<a id='L528' name='L528'></a> 528         <em class='brace'>}</em>
+<a id='L529' name='L529'></a> 529 <em class='brace'>}</em>
+<a id='L530' name='L530'></a> 530 
+<a id='L531' name='L531'></a> 531 <em class='comment'>/* Allocate a return stack for newly created task */</em>
+<a id='L532' name='L532'></a> 532 <strong class='reserved'>void</strong> <a href='../S/48.html#L2001' title='Referred from 2001 in fork.c.'>ftrace_graph_init_task</a>(<strong class='reserved'>struct</strong> task_struct *t)
+<a id='L533' name='L533'></a> 533 <em class='brace'>{</em>
+<a id='L534' name='L534'></a> 534         <em class='comment'>/* Make sure we do not use the parent ret_stack */</em>
+<a id='L535' name='L535'></a> 535         t-&gt;ret_stack = NULL;
+<a id='L536' name='L536'></a> 536         t-&gt;curr_ret_stack = -1;
+<a id='L537' name='L537'></a> 537         t-&gt;curr_ret_depth = -1;
+<a id='L538' name='L538'></a> 538 
+<a id='L539' name='L539'></a> 539         <strong class='reserved'>if</strong> (<a href='../S/294.html#L46' title='Defined at 46 in trace/ftrace_internal.h.'>ftrace_graph_active</a>) <em class='brace'>{</em>
+<a id='L540' name='L540'></a> 540                 <strong class='reserved'>struct</strong> ftrace_ret_stack *ret_stack;
+<a id='L541' name='L541'></a> 541 
+<a id='L542' name='L542'></a> 542                 ret_stack = kmalloc_array(FTRACE_RETFUNC_DEPTH,
+<a id='L543' name='L543'></a> 543                                           <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> ftrace_ret_stack),
+<a id='L544' name='L544'></a> 544                                           GFP_KERNEL);
+<a id='L545' name='L545'></a> 545                 <strong class='reserved'>if</strong> (!ret_stack)
+<a id='L546' name='L546'></a> 546                         <strong class='reserved'>return</strong>;
+<a id='L547' name='L547'></a> 547                 <a href='../S/282.html#L490' title='Defined at 490 in trace/fgraph.c.'>graph_init_task</a>(t, ret_stack);
+<a id='L548' name='L548'></a> 548         <em class='brace'>}</em>
+<a id='L549' name='L549'></a> 549 <em class='brace'>}</em>
+<a id='L550' name='L550'></a> 550 
+<a id='L551' name='L551'></a> 551 <strong class='reserved'>void</strong> <a href='../S/48.html#L466' title='Referred from 466 in fork.c.'>ftrace_graph_exit_task</a>(<strong class='reserved'>struct</strong> task_struct *t)
+<a id='L552' name='L552'></a> 552 <em class='brace'>{</em>
+<a id='L553' name='L553'></a> 553         <strong class='reserved'>struct</strong> ftrace_ret_stack *ret_stack = t-&gt;ret_stack;
+<a id='L554' name='L554'></a> 554 
+<a id='L555' name='L555'></a> 555         t-&gt;ret_stack = NULL;
+<a id='L556' name='L556'></a> 556         <em class='comment'>/* NULL must become visible to IRQs before we free it: */</em>
+<a id='L557' name='L557'></a> 557         barrier();
+<a id='L558' name='L558'></a> 558 
+<a id='L559' name='L559'></a> 559         kfree(ret_stack);
+<a id='L560' name='L560'></a> 560 <em class='brace'>}</em>
+<a id='L561' name='L561'></a> 561 
+<a id='L562' name='L562'></a> 562 <em class='comment'>/* Allocate a return stack for each task */</em>
+<a id='L563' name='L563'></a> 563 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/282.html#L611' title='Referred from 611 in trace/fgraph.c.'>start_graph_tracing</a>(<strong class='reserved'>void</strong>)
+<a id='L564' name='L564'></a> 564 <em class='brace'>{</em>
+<a id='L565' name='L565'></a> 565         <strong class='reserved'>struct</strong> ftrace_ret_stack **ret_stack_list;
+<a id='L566' name='L566'></a> 566         <strong class='reserved'>int</strong> ret, cpu;
+<a id='L567' name='L567'></a> 567 
+<a id='L568' name='L568'></a> 568         ret_stack_list = kmalloc_array(FTRACE_RETSTACK_ALLOC_SIZE,
+<a id='L569' name='L569'></a> 569                                        <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> ftrace_ret_stack *),
+<a id='L570' name='L570'></a> 570                                        GFP_KERNEL);
+<a id='L571' name='L571'></a> 571 
+<a id='L572' name='L572'></a> 572         <strong class='reserved'>if</strong> (!ret_stack_list)
+<a id='L573' name='L573'></a> 573                 <strong class='reserved'>return</strong> -ENOMEM;
+<a id='L574' name='L574'></a> 574 
+<a id='L575' name='L575'></a> 575         <em class='comment'>/* The cpu_boot init_task-&gt;ret_stack will never be freed */</em>
+<a id='L576' name='L576'></a> 576         for_each_online_cpu(cpu) <em class='brace'>{</em>
+<a id='L577' name='L577'></a> 577                 <strong class='reserved'>if</strong> (!<a href='../S/441.html#L5357' title='Defined at 5357 in sched/core.c.'>idle_task</a>(cpu)-&gt;ret_stack)
+<a id='L578' name='L578'></a> 578                         <a href='../S/282.html#L503' title='Defined at 503 in trace/fgraph.c.'>ftrace_graph_init_idle_task</a>(<a href='../S/441.html#L5357' title='Defined at 5357 in sched/core.c.'>idle_task</a>(cpu), cpu);
+<a id='L579' name='L579'></a> 579         <em class='brace'>}</em>
+<a id='L580' name='L580'></a> 580 
+<a id='L581' name='L581'></a> 581         <strong class='reserved'>do</strong> <em class='brace'>{</em>
+<a id='L582' name='L582'></a> 582                 ret = <a href='../S/282.html#L370' title='Defined at 370 in trace/fgraph.c.'>alloc_retstack_tasklist</a>(ret_stack_list);
+<a id='L583' name='L583'></a> 583         <em class='brace'>}</em> <strong class='reserved'>while</strong> (ret == -EAGAIN);
+<a id='L584' name='L584'></a> 584 
+<a id='L585' name='L585'></a> 585         <strong class='reserved'>if</strong> (!ret) <em class='brace'>{</em>
+<a id='L586' name='L586'></a> 586                 ret = register_trace_sched_switch(<a href='../S/282.html#L416' title='Defined at 416 in trace/fgraph.c.'>ftrace_graph_probe_sched_switch</a>, NULL);
+<a id='L587' name='L587'></a> 587                 <strong class='reserved'>if</strong> (ret)
+<a id='L588' name='L588'></a> 588                         pr_info("ftrace_graph: Couldn't activate tracepoint"
+<a id='L589' name='L589'></a> 589                                 " probe to kernel_sched_switch\n");
+<a id='L590' name='L590'></a> 590         <em class='brace'>}</em>
+<a id='L591' name='L591'></a> 591 
+<a id='L592' name='L592'></a> 592         kfree(ret_stack_list);
+<a id='L593' name='L593'></a> 593         <strong class='reserved'>return</strong> ret;
+<a id='L594' name='L594'></a> 594 <em class='brace'>}</em>
+<a id='L595' name='L595'></a> 595 
+<a id='L596' name='L596'></a> 596 <strong class='reserved'>int</strong> <a href='../R/11356.html' title='Multiple referred from 6 places.'>register_ftrace_graph</a>(<strong class='reserved'>struct</strong> fgraph_ops *gops)
+<a id='L597' name='L597'></a> 597 <em class='brace'>{</em>
+<a id='L598' name='L598'></a> 598         <strong class='reserved'>int</strong> ret = 0;
+<a id='L599' name='L599'></a> 599 
+<a id='L600' name='L600'></a> 600         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;ftrace_lock);
+<a id='L601' name='L601'></a> 601 
+<a id='L602' name='L602'></a> 602         <em class='comment'>/* we currently allow only one tracer registered at a time */</em>
+<a id='L603' name='L603'></a> 603         <strong class='reserved'>if</strong> (<a href='../S/294.html#L46' title='Defined at 46 in trace/ftrace_internal.h.'>ftrace_graph_active</a>) <em class='brace'>{</em>
+<a id='L604' name='L604'></a> 604                 ret = -EBUSY;
+<a id='L605' name='L605'></a> 605                 <strong class='reserved'>goto</strong> out;
+<a id='L606' name='L606'></a> 606         <em class='brace'>}</em>
+<a id='L607' name='L607'></a> 607 
+<a id='L608' name='L608'></a> 608         <a href='../S/164.html#L71' title='Defined at 71 in power/main.c.'>register_pm_notifier</a>(&amp;ftrace_suspend_notifier);
+<a id='L609' name='L609'></a> 609 
+<a id='L610' name='L610'></a> 610         <a href='../S/294.html#L46' title='Defined at 46 in trace/ftrace_internal.h.'>ftrace_graph_active</a>++;
+<a id='L611' name='L611'></a> 611         ret = <a href='../S/282.html#L563' title='Defined at 563 in trace/fgraph.c.'>start_graph_tracing</a>();
+<a id='L612' name='L612'></a> 612         <strong class='reserved'>if</strong> (ret) <em class='brace'>{</em>
+<a id='L613' name='L613'></a> 613                 <a href='../S/294.html#L46' title='Defined at 46 in trace/ftrace_internal.h.'>ftrace_graph_active</a>--;
+<a id='L614' name='L614'></a> 614                 <strong class='reserved'>goto</strong> out;
+<a id='L615' name='L615'></a> 615         <em class='brace'>}</em>
+<a id='L616' name='L616'></a> 616 
+<a id='L617' name='L617'></a> 617         ftrace_graph_return = gops-&gt;retfunc;
+<a id='L618' name='L618'></a> 618 
+<a id='L619' name='L619'></a> 619         <em class='comment'>/*</em>
+<a id='L620' name='L620'></a> 620 <em class='comment'>         * Update the indirect function to the entryfunc, and the</em>
+<a id='L621' name='L621'></a> 621 <em class='comment'>         * function that gets called to the entry_test first. Then</em>
+<a id='L622' name='L622'></a> 622 <em class='comment'>         * call the update fgraph entry function to determine if</em>
+<a id='L623' name='L623'></a> 623 <em class='comment'>         * the entryfunc should be called directly or not.</em>
+<a id='L624' name='L624'></a> 624 <em class='comment'>         */</em>
+<a id='L625' name='L625'></a> 625         __ftrace_graph_entry = gops-&gt;entryfunc;
+<a id='L626' name='L626'></a> 626         ftrace_graph_entry = <a href='../S/282.html#L447' title='Defined at 447 in trace/fgraph.c.'>ftrace_graph_entry_test</a>;
+<a id='L627' name='L627'></a> 627         <a href='../D/15145.html' title='Multiple defined in 2 places.'>update_function_graph_func</a>();
+<a id='L628' name='L628'></a> 628 
+<a id='L629' name='L629'></a> 629         ret = <a href='../D/7250.html' title='Multiple defined in 2 places.'>ftrace_startup</a>(&amp;graph_ops, FTRACE_START_FUNC_RET);
+<a id='L630' name='L630'></a> 630 out:
+<a id='L631' name='L631'></a> 631         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;ftrace_lock);
+<a id='L632' name='L632'></a> 632         <strong class='reserved'>return</strong> ret;
+<a id='L633' name='L633'></a> 633 <em class='brace'>}</em>
+<a id='L634' name='L634'></a> 634 
+<a id='L635' name='L635'></a> 635 <strong class='reserved'>void</strong> <a href='../R/14307.html' title='Multiple referred from 6 places.'>unregister_ftrace_graph</a>(<strong class='reserved'>struct</strong> fgraph_ops *gops)
+<a id='L636' name='L636'></a> 636 <em class='brace'>{</em>
+<a id='L637' name='L637'></a> 637         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;ftrace_lock);
+<a id='L638' name='L638'></a> 638 
+<a id='L639' name='L639'></a> 639         <strong class='reserved'>if</strong> (unlikely(!<a href='../S/294.html#L46' title='Defined at 46 in trace/ftrace_internal.h.'>ftrace_graph_active</a>))
+<a id='L640' name='L640'></a> 640                 <strong class='reserved'>goto</strong> out;
+<a id='L641' name='L641'></a> 641 
+<a id='L642' name='L642'></a> 642         <a href='../S/294.html#L46' title='Defined at 46 in trace/ftrace_internal.h.'>ftrace_graph_active</a>--;
+<a id='L643' name='L643'></a> 643         ftrace_graph_return = ftrace_stub_graph;
+<a id='L644' name='L644'></a> 644         ftrace_graph_entry = <a href='../S/282.html#L353' title='Defined at 353 in trace/fgraph.c.'>ftrace_graph_entry_stub</a>;
+<a id='L645' name='L645'></a> 645         __ftrace_graph_entry = <a href='../S/282.html#L353' title='Defined at 353 in trace/fgraph.c.'>ftrace_graph_entry_stub</a>;
+<a id='L646' name='L646'></a> 646         <a href='../D/7238.html' title='Multiple defined in 2 places.'>ftrace_shutdown</a>(&amp;graph_ops, FTRACE_STOP_FUNC_RET);
+<a id='L647' name='L647'></a> 647         <a href='../S/164.html#L77' title='Defined at 77 in power/main.c.'>unregister_pm_notifier</a>(&amp;ftrace_suspend_notifier);
+<a id='L648' name='L648'></a> 648         unregister_trace_sched_switch(<a href='../S/282.html#L416' title='Defined at 416 in trace/fgraph.c.'>ftrace_graph_probe_sched_switch</a>, NULL);
+<a id='L649' name='L649'></a> 649 
+<a id='L650' name='L650'></a> 650  out:
+<a id='L651' name='L651'></a> 651         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;ftrace_lock);
+<a id='L652' name='L652'></a> 652 <em class='brace'>}</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L39'>[^]</a><a href='#L635'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

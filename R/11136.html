@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rcu_tasks</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/125.html#L14'>rcu_tasks</a>          14 rcu/tasks.h    struct rcu_tasks;</span>
+<span class='curline'><a href='../S/125.html#L15'>rcu_tasks</a>          15 rcu/tasks.h    typedef void (*rcu_tasks_gp_func_t)(struct rcu_tasks *rtp);</span>
+<span class='curline'><a href='../S/125.html#L20'>rcu_tasks</a>          20 rcu/tasks.h    typedef void (*postgp_func_t)(struct rcu_tasks *rtp);</span>
+<span class='curline'><a href='../S/125.html#L73'>rcu_tasks</a>          73 rcu/tasks.h    static struct rcu_tasks rt_name =					\</span>
+<span class='curline'><a href='../S/125.html#L132'>rcu_tasks</a>         132 rcu/tasks.h    static void set_tasks_gp_state(struct rcu_tasks *rtp, int newstate)</span>
+<span class='curline'><a href='../S/125.html#L140'>rcu_tasks</a>         140 rcu/tasks.h    static const char *tasks_gp_state_getname(struct rcu_tasks *rtp)</span>
+<span class='curline'><a href='../S/125.html#L153'>rcu_tasks</a>         153 rcu/tasks.h    				   struct rcu_tasks *rtp)</span>
+<span class='curline'><a href='../S/125.html#L171'>rcu_tasks</a>         171 rcu/tasks.h    static void synchronize_rcu_tasks_generic(struct rcu_tasks *rtp)</span>
+<span class='curline'><a href='../S/125.html#L187'>rcu_tasks</a>         187 rcu/tasks.h    	struct rcu_tasks *rtp = arg;</span>
+<span class='curline'><a href='../S/125.html#L245'>rcu_tasks</a>         245 rcu/tasks.h    static void __init rcu_spawn_tasks_kthread_generic(struct rcu_tasks *rtp)</span>
+<span class='curline'><a href='../S/125.html#L281'>rcu_tasks</a>         281 rcu/tasks.h    static void show_rcu_tasks_generic_gp_kthread(struct rcu_tasks *rtp, char *s)</span>
+<span class='curline'><a href='../S/125.html#L304'>rcu_tasks</a>         304 rcu/tasks.h    static void rcu_tasks_wait_gp(struct rcu_tasks *rtp)</span>
+<span class='curline'><a href='../S/125.html#L474'>rcu_tasks</a>         474 rcu/tasks.h    static void rcu_tasks_postgp(struct rcu_tasks *rtp)</span>
+<span class='curline'><a href='../S/125.html#L497'>rcu_tasks</a>         497 rcu/tasks.h    DEFINE_RCU_TASKS(rcu_tasks, rcu_tasks_wait_gp, call_rcu_tasks, "RCU Tasks");</span>
+<span class='curline'><a href='../S/125.html#L519'>rcu_tasks</a>         519 rcu/tasks.h    	call_rcu_tasks_generic(rhp, func, &amp;rcu_tasks);</span>
+<span class='curline'><a href='../S/125.html#L543'>rcu_tasks</a>         543 rcu/tasks.h    	synchronize_rcu_tasks_generic(&amp;rcu_tasks);</span>
+<span class='curline'><a href='../S/125.html#L562'>rcu_tasks</a>         562 rcu/tasks.h    	rcu_tasks.gp_sleep = HZ / 10;</span>
+<span class='curline'><a href='../S/125.html#L563'>rcu_tasks</a>         563 rcu/tasks.h    	rcu_tasks.init_fract = 10;</span>
+<span class='curline'><a href='../S/125.html#L564'>rcu_tasks</a>         564 rcu/tasks.h    	rcu_tasks.pregp_func = rcu_tasks_pregp_step;</span>
+<span class='curline'><a href='../S/125.html#L565'>rcu_tasks</a>         565 rcu/tasks.h    	rcu_tasks.pertask_func = rcu_tasks_pertask;</span>
+<span class='curline'><a href='../S/125.html#L566'>rcu_tasks</a>         566 rcu/tasks.h    	rcu_tasks.postscan_func = rcu_tasks_postscan;</span>
+<span class='curline'><a href='../S/125.html#L567'>rcu_tasks</a>         567 rcu/tasks.h    	rcu_tasks.holdouts_func = check_all_holdout_tasks;</span>
+<span class='curline'><a href='../S/125.html#L568'>rcu_tasks</a>         568 rcu/tasks.h    	rcu_tasks.postgp_func = rcu_tasks_postgp;</span>
+<span class='curline'><a href='../S/125.html#L569'>rcu_tasks</a>         569 rcu/tasks.h    	rcu_spawn_tasks_kthread_generic(&amp;rcu_tasks);</span>
+<span class='curline'><a href='../S/125.html#L576'>rcu_tasks</a>         576 rcu/tasks.h    	show_rcu_tasks_generic_gp_kthread(&amp;rcu_tasks, "");</span>
+<span class='curline'><a href='../S/125.html#L622'>rcu_tasks</a>         622 rcu/tasks.h    static void rcu_tasks_rude_wait_gp(struct rcu_tasks *rtp)</span>
+<span class='curline'><a href='../S/125.html#L1072'>rcu_tasks</a>        1072 rcu/tasks.h    static void rcu_tasks_trace_postgp(struct rcu_tasks *rtp)</span>
+</pre>
+</body>
+</html>

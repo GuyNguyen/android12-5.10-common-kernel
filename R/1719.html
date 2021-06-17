@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>__STATE</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/35.html#L615'>__STATE</a>           615 locking/lockdep.c #define __USAGE(__STATE)						\</span>
+<span class='curline'><a href='../S/35.html#L616'>__STATE</a>           616 locking/lockdep.c 	[LOCK_USED_IN_##__STATE] = "IN-"__stringify(__STATE)"-W",	\</span>
+<span class='curline'><a href='../S/35.html#L617'>__STATE</a>           617 locking/lockdep.c 	[LOCK_ENABLED_##__STATE] = __stringify(__STATE)"-ON-W",		\</span>
+<span class='curline'><a href='../S/35.html#L618'>__STATE</a>           618 locking/lockdep.c 	[LOCK_USED_IN_##__STATE##_READ] = "IN-"__stringify(__STATE)"-R",\</span>
+<span class='curline'><a href='../S/35.html#L619'>__STATE</a>           619 locking/lockdep.c 	[LOCK_ENABLED_##__STATE##_READ] = __stringify(__STATE)"-ON-R",</span>
+<span class='curline'><a href='../S/35.html#L623'>__STATE</a>           623 locking/lockdep.c #define LOCKDEP_STATE(__STATE) __USAGE(__STATE)</span>
+<span class='curline'><a href='../S/35.html#L673'>__STATE</a>           673 locking/lockdep.c #define LOCKDEP_STATE(__STATE) 						\</span>
+<span class='curline'><a href='../S/35.html#L674'>__STATE</a>           674 locking/lockdep.c 	usage[i++] = get_usage_char(class, LOCK_USED_IN_##__STATE);	\</span>
+<span class='curline'><a href='../S/35.html#L675'>__STATE</a>           675 locking/lockdep.c 	usage[i++] = get_usage_char(class, LOCK_USED_IN_##__STATE##_READ);</span>
+<span class='curline'><a href='../S/35.html#L2457'>__STATE</a>          2457 locking/lockdep.c #define LOCKDEP_STATE(__STATE) \</span>
+<span class='curline'><a href='../S/35.html#L2458'>__STATE</a>          2458 locking/lockdep.c 	__stringify(__STATE),</span>
+<span class='curline'><a href='../S/35.html#L2464'>__STATE</a>          2464 locking/lockdep.c #define LOCKDEP_STATE(__STATE) \</span>
+<span class='curline'><a href='../S/35.html#L2465'>__STATE</a>          2465 locking/lockdep.c 	__stringify(__STATE)"-READ",</span>
+<span class='curline'><a href='../S/35.html#L3929'>__STATE</a>          3929 locking/lockdep.c #define LOCKDEP_STATE(__STATE) \</span>
+<span class='curline'><a href='../S/35.html#L3930'>__STATE</a>          3930 locking/lockdep.c 	__STATE##_verbose,</span>
+<span class='curline'><a href='../S/46.html#L36'>__STATE</a>            36 locking/lockdep_internals.h #define __LOCKF(__STATE)	LOCKF_##__STATE = (1 &lt;&lt; LOCK_##__STATE),</span>
+<span class='curline'><a href='../S/46.html#L50'>__STATE</a>            50 locking/lockdep_internals.h #define LOCKDEP_STATE(__STATE)	LOCKF_ENABLED_##__STATE |</span>
+<span class='curline'><a href='../S/46.html#L56'>__STATE</a>            56 locking/lockdep_internals.h #define LOCKDEP_STATE(__STATE)	LOCKF_USED_IN_##__STATE |</span>
+<span class='curline'><a href='../S/46.html#L62'>__STATE</a>            62 locking/lockdep_internals.h #define LOCKDEP_STATE(__STATE)	LOCKF_ENABLED_##__STATE##_READ |</span>
+<span class='curline'><a href='../S/46.html#L68'>__STATE</a>            68 locking/lockdep_internals.h #define LOCKDEP_STATE(__STATE)	LOCKF_USED_IN_##__STATE##_READ |</span>
+</pre>
+</body>
+</html>

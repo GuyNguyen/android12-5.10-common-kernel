@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>tick_sched</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/114.html#L39'>tick_sched</a>         39 time/tick-sched.c static DEFINE_PER_CPU(struct tick_sched, tick_cpu_sched);</span>
+<span class='curline'><a href='../S/114.html#L41'>tick_sched</a>         41 time/tick-sched.c struct tick_sched *tick_get_tick_sched(int cpu)</span>
+<span class='curline'><a href='../S/114.html#L123'>tick_sched</a>        123 time/tick-sched.c static void tick_sched_do_timer(struct tick_sched *ts, ktime_t now)</span>
+<span class='curline'><a href='../S/114.html#L156'>tick_sched</a>        156 time/tick-sched.c static void tick_sched_handle(struct tick_sched *ts, struct pt_regs *regs)</span>
+<span class='curline'><a href='../S/114.html#L222'>tick_sched</a>        222 time/tick-sched.c static bool can_stop_full_tick(int cpu, struct tick_sched *ts)</span>
+<span class='curline'><a href='../S/114.html#L328'>tick_sched</a>        328 time/tick-sched.c 	struct tick_sched *ts;</span>
+<span class='curline'><a href='../S/114.html#L350'>tick_sched</a>        350 time/tick-sched.c 	struct tick_sched *ts = per_cpu_ptr(&amp;tick_cpu_sched, cpu);</span>
+<span class='curline'><a href='../S/114.html#L406'>tick_sched</a>        406 time/tick-sched.c 	struct tick_sched *ts;</span>
+<span class='curline'><a href='../S/114.html#L508'>tick_sched</a>        508 time/tick-sched.c 	struct tick_sched *ts = this_cpu_ptr(&amp;tick_cpu_sched);</span>
+<span class='curline'><a href='../S/114.html#L515'>tick_sched</a>        515 time/tick-sched.c 	struct tick_sched *ts = per_cpu_ptr(&amp;tick_cpu_sched, cpu);</span>
+<span class='curline'><a href='../S/114.html#L547'>tick_sched</a>        547 time/tick-sched.c update_ts_time_stats(int cpu, struct tick_sched *ts, ktime_t now, u64 *last_update_time)</span>
+<span class='curline'><a href='../S/114.html#L565'>tick_sched</a>        565 time/tick-sched.c static void tick_nohz_stop_idle(struct tick_sched *ts, ktime_t now)</span>
+<span class='curline'><a href='../S/114.html#L573'>tick_sched</a>        573 time/tick-sched.c static void tick_nohz_start_idle(struct tick_sched *ts)</span>
+<span class='curline'><a href='../S/114.html#L596'>tick_sched</a>        596 time/tick-sched.c 	struct tick_sched *ts = &amp;per_cpu(tick_cpu_sched, cpu);</span>
+<span class='curline'><a href='../S/114.html#L637'>tick_sched</a>        637 time/tick-sched.c 	struct tick_sched *ts = &amp;per_cpu(tick_cpu_sched, cpu);</span>
+<span class='curline'><a href='../S/114.html#L661'>tick_sched</a>        661 time/tick-sched.c static void tick_nohz_restart(struct tick_sched *ts, ktime_t now)</span>
+<span class='curline'><a href='../S/114.html#L688'>tick_sched</a>        688 time/tick-sched.c static ktime_t tick_nohz_next_event(struct tick_sched *ts, int cpu)</span>
+<span class='curline'><a href='../S/114.html#L773'>tick_sched</a>        773 time/tick-sched.c static void tick_nohz_stop_tick(struct tick_sched *ts, int cpu)</span>
+<span class='curline'><a href='../S/114.html#L847'>tick_sched</a>        847 time/tick-sched.c static void tick_nohz_retain_tick(struct tick_sched *ts)</span>
+<span class='curline'><a href='../S/114.html#L853'>tick_sched</a>        853 time/tick-sched.c static void tick_nohz_stop_sched_tick(struct tick_sched *ts, int cpu)</span>
+<span class='curline'><a href='../S/114.html#L862'>tick_sched</a>        862 time/tick-sched.c static void tick_nohz_restart_sched_tick(struct tick_sched *ts, ktime_t now)</span>
+<span class='curline'><a href='../S/114.html#L884'>tick_sched</a>        884 time/tick-sched.c static void tick_nohz_full_update_tick(struct tick_sched *ts)</span>
+<span class='curline'><a href='../S/114.html#L902'>tick_sched</a>        902 time/tick-sched.c static bool can_stop_idle_tick(int cpu, struct tick_sched *ts)</span>
+<span class='curline'><a href='../S/114.html#L956'>tick_sched</a>        956 time/tick-sched.c static void __tick_nohz_idle_stop_tick(struct tick_sched *ts)</span>
+<span class='curline'><a href='../S/114.html#L1018'>tick_sched</a>       1018 time/tick-sched.c 	struct tick_sched *ts;</span>
+<span class='curline'><a href='../S/114.html#L1044'>tick_sched</a>       1044 time/tick-sched.c 	struct tick_sched *ts = this_cpu_ptr(&amp;tick_cpu_sched);</span>
+<span class='curline'><a href='../S/114.html#L1057'>tick_sched</a>       1057 time/tick-sched.c 	struct tick_sched *ts = this_cpu_ptr(&amp;tick_cpu_sched);</span>
+<span class='curline'><a href='../S/114.html#L1087'>tick_sched</a>       1087 time/tick-sched.c 	struct tick_sched *ts = this_cpu_ptr(&amp;tick_cpu_sched);</span>
+<span class='curline'><a href='../S/114.html#L1126'>tick_sched</a>       1126 time/tick-sched.c 	struct tick_sched *ts = tick_get_tick_sched(cpu);</span>
+<span class='curline'><a href='../S/114.html#L1139'>tick_sched</a>       1139 time/tick-sched.c 	struct tick_sched *ts = this_cpu_ptr(&amp;tick_cpu_sched);</span>
+<span class='curline'><a href='../S/114.html#L1144'>tick_sched</a>       1144 time/tick-sched.c static void tick_nohz_account_idle_ticks(struct tick_sched *ts)</span>
+<span class='curline'><a href='../S/114.html#L1165'>tick_sched</a>       1165 time/tick-sched.c static void __tick_nohz_idle_restart_tick(struct tick_sched *ts, ktime_t now)</span>
+<span class='curline'><a href='../S/114.html#L1173'>tick_sched</a>       1173 time/tick-sched.c 	struct tick_sched *ts = this_cpu_ptr(&amp;tick_cpu_sched);</span>
+<span class='curline'><a href='../S/114.html#L1188'>tick_sched</a>       1188 time/tick-sched.c 	struct tick_sched *ts = this_cpu_ptr(&amp;tick_cpu_sched);</span>
+<span class='curline'><a href='../S/114.html#L1218'>tick_sched</a>       1218 time/tick-sched.c 	struct tick_sched *ts = this_cpu_ptr(&amp;tick_cpu_sched);</span>
+<span class='curline'><a href='../S/114.html#L1235'>tick_sched</a>       1235 time/tick-sched.c static inline void tick_nohz_activate(struct tick_sched *ts, int mode)</span>
+<span class='curline'><a href='../S/114.html#L1250'>tick_sched</a>       1250 time/tick-sched.c 	struct tick_sched *ts = this_cpu_ptr(&amp;tick_cpu_sched);</span>
+<span class='curline'><a href='../S/114.html#L1275'>tick_sched</a>       1275 time/tick-sched.c 	struct tick_sched *ts = this_cpu_ptr(&amp;tick_cpu_sched);</span>
+<span class='curline'><a href='../S/114.html#L1291'>tick_sched</a>       1291 time/tick-sched.c static inline void tick_nohz_activate(struct tick_sched *ts, int mode) { }</span>
+<span class='curline'><a href='../S/114.html#L1314'>tick_sched</a>       1314 time/tick-sched.c 	struct tick_sched *ts =</span>
+<span class='curline'><a href='../S/114.html#L1315'>tick_sched</a>       1315 time/tick-sched.c 		container_of(timer, struct tick_sched, sched_timer);</span>
+<span class='curline'><a href='../S/114.html#L1354'>tick_sched</a>       1354 time/tick-sched.c 	struct tick_sched *ts = this_cpu_ptr(&amp;tick_cpu_sched);</span>
+<span class='curline'><a href='../S/114.html#L1383'>tick_sched</a>       1383 time/tick-sched.c 	struct tick_sched *ts = &amp;per_cpu(tick_cpu_sched, cpu);</span>
+<span class='curline'><a href='../S/114.html#L1410'>tick_sched</a>       1410 time/tick-sched.c 	struct tick_sched *ts = this_cpu_ptr(&amp;tick_cpu_sched);</span>
+<span class='curline'><a href='../S/114.html#L1425'>tick_sched</a>       1425 time/tick-sched.c 	struct tick_sched *ts = this_cpu_ptr(&amp;tick_cpu_sched);</span>
+<span class='curline'><a href='../S/107.html#L82'>tick_sched</a>         82 time/tick-sched.h extern struct tick_sched *tick_get_tick_sched(int cpu);</span>
+<span class='curline'><a href='../S/98.html#L166'>tick_sched</a>        166 time/timer_list.c 		struct tick_sched *ts = tick_get_tick_sched(cpu);</span>
+</pre>
+</body>
+</html>

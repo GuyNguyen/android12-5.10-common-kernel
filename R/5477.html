@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>defcmd_set</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/60.html#L672'>defcmd_set</a>        672 debug/kdb/kdb_main.c static struct defcmd_set *defcmd_set;</span>
+<span class='curline'><a href='../S/60.html#L681'>defcmd_set</a>        681 debug/kdb/kdb_main.c 	struct defcmd_set *s = defcmd_set + defcmd_set_count - 1;</span>
+<span class='curline'><a href='../S/60.html#L714'>defcmd_set</a>        714 debug/kdb/kdb_main.c 	struct defcmd_set *save_defcmd_set = defcmd_set, *s;</span>
+<span class='curline'><a href='../S/60.html#L722'>defcmd_set</a>        722 debug/kdb/kdb_main.c 		for (s = defcmd_set; s &lt; defcmd_set + defcmd_set_count; ++s) {</span>
+<span class='curline'><a href='../S/60.html#L737'>defcmd_set</a>        737 debug/kdb/kdb_main.c 	defcmd_set = kmalloc_array(defcmd_set_count + 1, sizeof(*defcmd_set),</span>
+<span class='curline'><a href='../S/60.html#L739'>defcmd_set</a>        739 debug/kdb/kdb_main.c 	if (!defcmd_set)</span>
+<span class='curline'><a href='../S/60.html#L741'>defcmd_set</a>        741 debug/kdb/kdb_main.c 	memcpy(defcmd_set, save_defcmd_set,</span>
+<span class='curline'><a href='../S/60.html#L742'>defcmd_set</a>        742 debug/kdb/kdb_main.c 	       defcmd_set_count * sizeof(*defcmd_set));</span>
+<span class='curline'><a href='../S/60.html#L743'>defcmd_set</a>        743 debug/kdb/kdb_main.c 	s = defcmd_set + defcmd_set_count;</span>
+<span class='curline'><a href='../S/60.html#L772'>defcmd_set</a>        772 debug/kdb/kdb_main.c 	kfree(defcmd_set);</span>
+<span class='curline'><a href='../S/60.html#L775'>defcmd_set</a>        775 debug/kdb/kdb_main.c 	defcmd_set = save_defcmd_set;</span>
+<span class='curline'><a href='../S/60.html#L791'>defcmd_set</a>        791 debug/kdb/kdb_main.c 	struct defcmd_set *s;</span>
+<span class='curline'><a href='../S/60.html#L794'>defcmd_set</a>        794 debug/kdb/kdb_main.c 	for (s = defcmd_set, i = 0; i &lt; defcmd_set_count; ++i, ++s) {</span>
+</pre>
+</body>
+</html>

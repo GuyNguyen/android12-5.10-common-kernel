@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>TPS</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/327.html#L1645'>TPS</a>              1645 cpu.c          		trace_suspend_resume(TPS("CPU_OFF"), cpu, true);</span>
+<span class='curline'><a href='../S/327.html#L1647'>TPS</a>              1647 cpu.c          		trace_suspend_resume(TPS("CPU_OFF"), cpu, false);</span>
+<span class='curline'><a href='../S/327.html#L1696'>TPS</a>              1696 cpu.c          		trace_suspend_resume(TPS("CPU_ON"), cpu, true);</span>
+<span class='curline'><a href='../S/327.html#L1698'>TPS</a>              1698 cpu.c          		trace_suspend_resume(TPS("CPU_ON"), cpu, false);</span>
+<span class='curline'><a href='../S/170.html#L319'>TPS</a>               319 power/hibernate.c 	trace_suspend_resume(TPS("machine_suspend"), PM_EVENT_HIBERNATE, true);</span>
+<span class='curline'><a href='../S/170.html#L323'>TPS</a>               323 power/hibernate.c 	trace_suspend_resume(TPS("machine_suspend"), PM_EVENT_HIBERNATE, false);</span>
+<span class='curline'><a href='../S/163.html#L203'>TPS</a>               203 power/process.c 	trace_suspend_resume(TPS("thaw_processes"), 0, true);</span>
+<span class='curline'><a href='../S/163.html#L233'>TPS</a>               233 power/process.c 	trace_suspend_resume(TPS("thaw_processes"), 0, false);</span>
+<span class='curline'><a href='../S/169.html#L91'>TPS</a>                91 power/suspend.c 	trace_suspend_resume(TPS("machine_suspend"), PM_SUSPEND_TO_IDLE, true);</span>
+<span class='curline'><a href='../S/169.html#L118'>TPS</a>               118 power/suspend.c 	trace_suspend_resume(TPS("machine_suspend"), PM_SUSPEND_TO_IDLE, false);</span>
+<span class='curline'><a href='../S/169.html#L358'>TPS</a>               358 power/suspend.c 	trace_suspend_resume(TPS("freeze_processes"), 0, true);</span>
+<span class='curline'><a href='../S/169.html#L360'>TPS</a>               360 power/suspend.c 	trace_suspend_resume(TPS("freeze_processes"), 0, false);</span>
+<span class='curline'><a href='../S/169.html#L449'>TPS</a>               449 power/suspend.c 			trace_suspend_resume(TPS("machine_suspend"),</span>
+<span class='curline'><a href='../S/169.html#L452'>TPS</a>               452 power/suspend.c 			trace_suspend_resume(TPS("machine_suspend"),</span>
+<span class='curline'><a href='../S/169.html#L525'>TPS</a>               525 power/suspend.c 	trace_suspend_resume(TPS("resume_console"), state, true);</span>
+<span class='curline'><a href='../S/169.html#L527'>TPS</a>               527 power/suspend.c 	trace_suspend_resume(TPS("resume_console"), state, false);</span>
+<span class='curline'><a href='../S/169.html#L564'>TPS</a>               564 power/suspend.c 	trace_suspend_resume(TPS("suspend_enter"), state, true);</span>
+<span class='curline'><a href='../S/169.html#L582'>TPS</a>               582 power/suspend.c 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);</span>
+<span class='curline'><a href='../S/169.html#L584'>TPS</a>               584 power/suspend.c 		trace_suspend_resume(TPS("sync_filesystems"), 0, false);</span>
+<span class='curline'><a href='../S/169.html#L596'>TPS</a>               596 power/suspend.c 	trace_suspend_resume(TPS("suspend_enter"), state, false);</span>
+<span class='curline'><a href='../S/144.html#L636'>TPS</a>               636 rcu/tree.c     	trace_rcu_dyntick(TPS("Start"), rdp-&gt;dynticks_nesting, 0, atomic_read(&amp;rdp-&gt;dynticks));</span>
+<span class='curline'><a href='../S/144.html#L726'>TPS</a>               726 rcu/tree.c     		trace_rcu_dyntick(TPS("--="), rdp-&gt;dynticks_nmi_nesting, rdp-&gt;dynticks_nmi_nesting - 2,</span>
+<span class='curline'><a href='../S/144.html#L735'>TPS</a>               735 rcu/tree.c     	trace_rcu_dyntick(TPS("Startirq"), rdp-&gt;dynticks_nmi_nesting, 0, atomic_read(&amp;rdp-&gt;dynticks));</span>
+<span class='curline'><a href='../S/144.html#L865'>TPS</a>               865 rcu/tree.c     	trace_rcu_dyntick(TPS("End"), rdp-&gt;dynticks_nesting, 1, atomic_read(&amp;rdp-&gt;dynticks));</span>
+<span class='curline'><a href='../S/144.html#L1026'>TPS</a>              1026 rcu/tree.c     	trace_rcu_dyntick(incby == 1 ? TPS("Endirq") : TPS("++="),</span>
+<span class='curline'><a href='../S/144.html#L1195'>TPS</a>              1195 rcu/tree.c     		trace_rcu_fqs(rcu_state.name, rdp-&gt;gp_seq, rdp-&gt;cpu, TPS("dti"));</span>
+<span class='curline'><a href='../S/144.html#L1224'>TPS</a>              1224 rcu/tree.c     		trace_rcu_fqs(rcu_state.name, rdp-&gt;gp_seq, rdp-&gt;cpu, TPS("dti"));</span>
+<span class='curline'><a href='../S/144.html#L1374'>TPS</a>              1374 rcu/tree.c     	trace_rcu_this_gp(rnp_start, rdp, gp_seq_req, TPS("Startleaf"));</span>
+<span class='curline'><a href='../S/144.html#L1383'>TPS</a>              1383 rcu/tree.c     					  TPS("Prestarted"));</span>
+<span class='curline'><a href='../S/144.html#L1395'>TPS</a>              1395 rcu/tree.c     					  TPS("Startedleaf"));</span>
+<span class='curline'><a href='../S/144.html#L1406'>TPS</a>              1406 rcu/tree.c     		trace_rcu_this_gp(rnp, rdp, gp_seq_req, TPS("Startedleafroot"));</span>
+<span class='curline'><a href='../S/144.html#L1409'>TPS</a>              1409 rcu/tree.c     	trace_rcu_this_gp(rnp, rdp, gp_seq_req, TPS("Startedroot"));</span>
+<span class='curline'><a href='../S/144.html#L1413'>TPS</a>              1413 rcu/tree.c     		trace_rcu_this_gp(rnp, rdp, gp_seq_req, TPS("NoGPkthread"));</span>
+<span class='curline'><a href='../S/144.html#L1416'>TPS</a>              1416 rcu/tree.c     	trace_rcu_grace_period(rcu_state.name, data_race(rcu_state.gp_seq), TPS("newreq"));</span>
+<span class='curline'><a href='../S/144.html#L1442'>TPS</a>              1442 rcu/tree.c     			  needmore ? TPS("CleanupMore") : TPS("Cleanup"));</span>
+<span class='curline'><a href='../S/144.html#L1513'>TPS</a>              1513 rcu/tree.c     		trace_rcu_grace_period(rcu_state.name, gp_seq_req, TPS("AccWaitCB"));</span>
+<span class='curline'><a href='../S/144.html#L1515'>TPS</a>              1515 rcu/tree.c     		trace_rcu_grace_period(rcu_state.name, gp_seq_req, TPS("AccReadyCB"));</span>
+<span class='curline'><a href='../S/144.html#L1628'>TPS</a>              1628 rcu/tree.c     		trace_rcu_grace_period(rcu_state.name, rdp-&gt;gp_seq, TPS("cpuend"));</span>
+<span class='curline'><a href='../S/144.html#L1644'>TPS</a>              1644 rcu/tree.c     		trace_rcu_grace_period(rcu_state.name, rnp-&gt;gp_seq, TPS("cpustart"));</span>
+<span class='curline'><a href='../S/144.html#L1755'>TPS</a>              1755 rcu/tree.c     	trace_rcu_grace_period(rcu_state.name, rcu_state.gp_seq, TPS("start"));</span>
+<span class='curline'><a href='../S/144.html#L1931'>TPS</a>              1931 rcu/tree.c     				       TPS("fqswait"));</span>
+<span class='curline'><a href='../S/144.html#L1946'>TPS</a>              1946 rcu/tree.c     					       TPS("fqsstart"));</span>
+<span class='curline'><a href='../S/144.html#L1954'>TPS</a>              1954 rcu/tree.c     					       TPS("fqsend"));</span>
+<span class='curline'><a href='../S/144.html#L1965'>TPS</a>              1965 rcu/tree.c     					       TPS("fqswaitsig"));</span>
+<span class='curline'><a href='../S/144.html#L2047'>TPS</a>              2047 rcu/tree.c     	trace_rcu_grace_period(rcu_state.name, rcu_state.gp_seq, TPS("end"));</span>
+<span class='curline'><a href='../S/144.html#L2055'>TPS</a>              2055 rcu/tree.c     				  TPS("CleanupMore"));</span>
+<span class='curline'><a href='../S/144.html#L2066'>TPS</a>              2066 rcu/tree.c     				       TPS("newreq"));</span>
+<span class='curline'><a href='../S/144.html#L2089'>TPS</a>              2089 rcu/tree.c     					       TPS("reqwait"));</span>
+<span class='curline'><a href='../S/144.html#L2103'>TPS</a>              2103 rcu/tree.c     					       TPS("reqwaitsig"));</span>
+<span class='curline'><a href='../S/144.html#L2347'>TPS</a>              2347 rcu/tree.c     			       blkd ? TPS("cpuofl") : TPS("cpuofl-bgp"));</span>
+<span class='curline'><a href='../S/144.html#L2563'>TPS</a>              2563 rcu/tree.c     	trace_rcu_utilization(TPS("Start scheduler-tick"));</span>
+<span class='curline'><a href='../S/144.html#L2578'>TPS</a>              2578 rcu/tree.c     	trace_rcu_utilization(TPS("End scheduler-tick"));</span>
+<span class='curline'><a href='../S/144.html#L2691'>TPS</a>              2691 rcu/tree.c     	trace_rcu_utilization(TPS("Start RCU core"));</span>
+<span class='curline'><a href='../S/144.html#L2723'>TPS</a>              2723 rcu/tree.c     	trace_rcu_utilization(TPS("End RCU core"));</span>
+<span class='curline'><a href='../S/144.html#L2792'>TPS</a>              2792 rcu/tree.c     	trace_rcu_utilization(TPS("Start CPU kthread@rcu_run"));</span>
+<span class='curline'><a href='../S/144.html#L2804'>TPS</a>              2804 rcu/tree.c     			trace_rcu_utilization(TPS("End CPU kthread@rcu_wait"));</span>
+<span class='curline'><a href='../S/144.html#L2810'>TPS</a>              2810 rcu/tree.c     	trace_rcu_utilization(TPS("Start CPU kthread@rcu_yield"));</span>
+<span class='curline'><a href='../S/144.html#L2812'>TPS</a>              2812 rcu/tree.c     	trace_rcu_utilization(TPS("End CPU kthread@rcu_yield"));</span>
+<span class='curline'><a href='../S/144.html#L3795'>TPS</a>              3795 rcu/tree.c     		rcu_barrier_trace(TPS("LastCB"), -1, s);</span>
+<span class='curline'><a href='../S/144.html#L3798'>TPS</a>              3798 rcu/tree.c     		rcu_barrier_trace(TPS("CB"), -1, s);</span>
+<span class='curline'><a href='../S/144.html#L3810'>TPS</a>              3810 rcu/tree.c     	rcu_barrier_trace(TPS("IRQ"), -1, rcu_state.barrier_sequence);</span>
+<span class='curline'><a href='../S/144.html#L3819'>TPS</a>              3819 rcu/tree.c     		rcu_barrier_trace(TPS("IRQNQ"), -1,</span>
+<span class='curline'><a href='../S/144.html#L3839'>TPS</a>              3839 rcu/tree.c     	rcu_barrier_trace(TPS("Begin"), -1, s);</span>
+<span class='curline'><a href='../S/144.html#L3846'>TPS</a>              3846 rcu/tree.c     		rcu_barrier_trace(TPS("EarlyExit"), -1,</span>
+<span class='curline'><a href='../S/144.html#L3855'>TPS</a>              3855 rcu/tree.c     	rcu_barrier_trace(TPS("Inc1"), -1, rcu_state.barrier_sequence);</span>
+<span class='curline'><a href='../S/144.html#L3879'>TPS</a>              3879 rcu/tree.c     			rcu_barrier_trace(TPS("OnlineQ"), cpu,</span>
+<span class='curline'><a href='../S/144.html#L3884'>TPS</a>              3884 rcu/tree.c     			rcu_barrier_trace(TPS("OfflineNoCBQ"), cpu,</span>
+<span class='curline'><a href='../S/144.html#L3890'>TPS</a>              3890 rcu/tree.c     			rcu_barrier_trace(TPS("OfflineNoCBNoQ"), cpu,</span>
+<span class='curline'><a href='../S/144.html#L3893'>TPS</a>              3893 rcu/tree.c     			rcu_barrier_trace(TPS("OnlineNQ"), cpu,</span>
+<span class='curline'><a href='../S/144.html#L3910'>TPS</a>              3910 rcu/tree.c     	rcu_barrier_trace(TPS("Inc2"), -1, rcu_state.barrier_sequence);</span>
+<span class='curline'><a href='../S/144.html#L4009'>TPS</a>              4009 rcu/tree.c     	trace_rcu_grace_period(rcu_state.name, rdp-&gt;gp_seq, TPS("cpuonl"));</span>
+<span class='curline'><a href='../S/131.html#L52'>TPS</a>                52 rcu/tree_exp.h 	trace_rcu_exp_grace_period(rcu_state.name, s, TPS("snap"));</span>
+<span class='curline'><a href='../S/131.html#L266'>TPS</a>               266 rcu/tree_exp.h 		trace_rcu_exp_grace_period(rcu_state.name, s, TPS("done"));</span>
+<span class='curline'><a href='../S/131.html#L312'>TPS</a>               312 rcu/tree_exp.h 						  TPS("wait"));</span>
+<span class='curline'><a href='../S/131.html#L320'>TPS</a>               320 rcu/tree_exp.h 					  rnp-&gt;grplo, rnp-&gt;grphi, TPS("nxtlvl"));</span>
+<span class='curline'><a href='../S/131.html#L329'>TPS</a>               329 rcu/tree_exp.h 	trace_rcu_exp_grace_period(rcu_state.name, s, TPS("start"));</span>
+<span class='curline'><a href='../S/131.html#L405'>TPS</a>               405 rcu/tree_exp.h 			trace_rcu_exp_grace_period(rcu_state.name, rcu_exp_gp_seq_endval(), TPS("selectofl"));</span>
+<span class='curline'><a href='../S/131.html#L428'>TPS</a>               428 rcu/tree_exp.h 	trace_rcu_exp_grace_period(rcu_state.name, rcu_exp_gp_seq_endval(), TPS("reset"));</span>
+<span class='curline'><a href='../S/131.html#L430'>TPS</a>               430 rcu/tree_exp.h 	trace_rcu_exp_grace_period(rcu_state.name, rcu_exp_gp_seq_endval(), TPS("select"));</span>
+<span class='curline'><a href='../S/131.html#L497'>TPS</a>               497 rcu/tree_exp.h 	trace_rcu_exp_grace_period(rcu_state.name, rcu_exp_gp_seq_endval(), TPS("startwait"));</span>
+<span class='curline'><a href='../S/131.html#L524'>TPS</a>               524 rcu/tree_exp.h 		trace_rcu_stall_warning(rcu_state.name, TPS("ExpeditedStall"));</span>
+<span class='curline'><a href='../S/131.html#L591'>TPS</a>               591 rcu/tree_exp.h 	trace_rcu_exp_grace_period(rcu_state.name, s, TPS("end"));</span>
+<span class='curline'><a href='../S/131.html#L604'>TPS</a>               604 rcu/tree_exp.h 	trace_rcu_exp_grace_period(rcu_state.name, s, TPS("endwake"));</span>
+<span class='curline'><a href='../S/126.html#L267'>TPS</a>               267 rcu/tree_plugin.h 		trace_rcu_grace_period(TPS("rcu_preempt"),</span>
+<span class='curline'><a href='../S/126.html#L269'>TPS</a>               269 rcu/tree_plugin.h 				       TPS("cpuqs"));</span>
+<span class='curline'><a href='../S/126.html#L295'>TPS</a>               295 rcu/tree_plugin.h 	trace_rcu_utilization(TPS("Start context switch"));</span>
+<span class='curline'><a href='../S/126.html#L337'>TPS</a>               337 rcu/tree_plugin.h 	trace_rcu_utilization(TPS("End context switch"));</span>
+<span class='curline'><a href='../S/126.html#L501'>TPS</a>               501 rcu/tree_plugin.h 		trace_rcu_unlock_preempted_task(TPS("rcu_preempt"),</span>
+<span class='curline'><a href='../S/126.html#L522'>TPS</a>               522 rcu/tree_plugin.h 			trace_rcu_quiescent_state_report(TPS("preempt_rcu"),</span>
+<span class='curline'><a href='../S/126.html#L668'>TPS</a>               668 rcu/tree_plugin.h 		trace_rcu_unlock_preempted_task(TPS("rcu_preempt-GPS"),</span>
+<span class='curline'><a href='../S/126.html#L819'>TPS</a>               819 rcu/tree_plugin.h 	trace_rcu_grace_period(TPS("rcu_sched"),</span>
+<span class='curline'><a href='../S/126.html#L820'>TPS</a>               820 rcu/tree_plugin.h 			       __this_cpu_read(rcu_data.gp_seq), TPS("cpuqs"));</span>
+<span class='curline'><a href='../S/126.html#L863'>TPS</a>               863 rcu/tree_plugin.h 	trace_rcu_utilization(TPS("Start context switch"));</span>
+<span class='curline'><a href='../S/126.html#L873'>TPS</a>               873 rcu/tree_plugin.h 	trace_rcu_utilization(TPS("End context switch"));</span>
+<span class='curline'><a href='../S/126.html#L1048'>TPS</a>              1048 rcu/tree_plugin.h 	trace_rcu_utilization(TPS("Start boost kthread@init"));</span>
+<span class='curline'><a href='../S/126.html#L1051'>TPS</a>              1051 rcu/tree_plugin.h 		trace_rcu_utilization(TPS("End boost kthread@rcu_wait"));</span>
+<span class='curline'><a href='../S/126.html#L1054'>TPS</a>              1054 rcu/tree_plugin.h 		trace_rcu_utilization(TPS("Start boost kthread@rcu_wait"));</span>
+<span class='curline'><a href='../S/126.html#L1063'>TPS</a>              1063 rcu/tree_plugin.h 			trace_rcu_utilization(TPS("End boost kthread@rcu_yield"));</span>
+<span class='curline'><a href='../S/126.html#L1065'>TPS</a>              1065 rcu/tree_plugin.h 			trace_rcu_utilization(TPS("Start boost kthread@rcu_yield"));</span>
+<span class='curline'><a href='../S/126.html#L1070'>TPS</a>              1070 rcu/tree_plugin.h 	trace_rcu_utilization(TPS("End boost kthread@notreached"));</span>
+<span class='curline'><a href='../S/126.html#L1644'>TPS</a>              1644 rcu/tree_plugin.h 				    TPS("AlreadyAwake"));</span>
+<span class='curline'><a href='../S/126.html#L1654'>TPS</a>              1654 rcu/tree_plugin.h 		trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu, TPS("DoWake"));</span>
+<span class='curline'><a href='../S/126.html#L1799'>TPS</a>              1799 rcu/tree_plugin.h 					    TPS("FirstQ"));</span>
+<span class='curline'><a href='../S/126.html#L1814'>TPS</a>              1814 rcu/tree_plugin.h 						    TPS("FirstQ"));</span>
+<span class='curline'><a href='../S/126.html#L1836'>TPS</a>              1836 rcu/tree_plugin.h 		trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu, TPS("FirstBQ"));</span>
+<span class='curline'><a href='../S/126.html#L1847'>TPS</a>              1847 rcu/tree_plugin.h 					    TPS("FirstBQwake"));</span>
+<span class='curline'><a href='../S/126.html#L1851'>TPS</a>              1851 rcu/tree_plugin.h 					    TPS("FirstBQnoWake"));</span>
+<span class='curline'><a href='../S/126.html#L1877'>TPS</a>              1877 rcu/tree_plugin.h 				    TPS("WakeNotPoll"));</span>
+<span class='curline'><a href='../S/126.html#L1889'>TPS</a>              1889 rcu/tree_plugin.h 					    TPS("WakeEmpty"));</span>
+<span class='curline'><a href='../S/126.html#L1892'>TPS</a>              1892 rcu/tree_plugin.h 					   TPS("WakeEmptyIsDeferred"));</span>
+<span class='curline'><a href='../S/126.html#L1910'>TPS</a>              1910 rcu/tree_plugin.h 					   TPS("WakeOvfIsDeferred"));</span>
+<span class='curline'><a href='../S/126.html#L1913'>TPS</a>              1913 rcu/tree_plugin.h 		trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu, TPS("WakeNot"));</span>
+<span class='curline'><a href='../S/126.html#L1925'>TPS</a>              1925 rcu/tree_plugin.h 	trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu, TPS("Timer"));</span>
+<span class='curline'><a href='../S/126.html#L1959'>TPS</a>              1959 rcu/tree_plugin.h 		trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu, TPS("Check"));</span>
+<span class='curline'><a href='../S/126.html#L1974'>TPS</a>              1974 rcu/tree_plugin.h 					    TPS("Bypass"));</span>
+<span class='curline'><a href='../S/126.html#L2005'>TPS</a>              2005 rcu/tree_plugin.h 					    TPS("NeedWaitGP"));</span>
+<span class='curline'><a href='../S/126.html#L2036'>TPS</a>              2036 rcu/tree_plugin.h 			trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Poll"));</span>
+<span class='curline'><a href='../S/126.html#L2040'>TPS</a>              2040 rcu/tree_plugin.h 		trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Sleep"));</span>
+<span class='curline'><a href='../S/126.html#L2043'>TPS</a>              2043 rcu/tree_plugin.h 		trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("EndSleep"));</span>
+<span class='curline'><a href='../S/126.html#L2046'>TPS</a>              2046 rcu/tree_plugin.h 		trace_rcu_this_gp(rnp, my_rdp, wait_gp_seq, TPS("StartWait"));</span>
+<span class='curline'><a href='../S/126.html#L2051'>TPS</a>              2051 rcu/tree_plugin.h 		trace_rcu_this_gp(rnp, my_rdp, wait_gp_seq, TPS("EndWait"));</span>
+<span class='curline'><a href='../S/126.html#L2116'>TPS</a>              2116 rcu/tree_plugin.h 	trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu, TPS("CBSleep"));</span>
+<span class='curline'><a href='../S/126.html#L2128'>TPS</a>              2128 rcu/tree_plugin.h 	trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu, TPS("WokeEmpty"));</span>
+<span class='curline'><a href='../S/126.html#L2168'>TPS</a>              2168 rcu/tree_plugin.h 	trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu, TPS("DeferredWake"));</span>
+<span class='curline'><a href='../S/130.html#L485'>TPS</a>               485 rcu/tree_stall.h 	trace_rcu_stall_warning(rcu_state.name, TPS("StallDetected"));</span>
+<span class='curline'><a href='../S/130.html#L552'>TPS</a>               552 rcu/tree_stall.h 	trace_rcu_stall_warning(rcu_state.name, TPS("SelfDetected"));</span>
+<span class='curline'><a href='../S/95.html#L534'>TPS</a>               534 time/tick-common.c 		trace_suspend_resume(TPS("timekeeping_freeze"),</span>
+<span class='curline'><a href='../S/95.html#L563'>TPS</a>               563 time/tick-common.c 		trace_suspend_resume(TPS("timekeeping_freeze"),</span>
+</pre>
+</body>
+</html>

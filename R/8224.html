@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>kcov</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/188.html#L81'>kcov</a>               81 kcov.c         	struct kcov		*kcov;</span>
+<span class='curline'><a href='../S/188.html#L95'>kcov</a>               95 kcov.c         	struct kcov		*saved_kcov;</span>
+<span class='curline'><a href='../S/188.html#L114'>kcov</a>              114 kcov.c         static struct kcov_remote *kcov_remote_add(struct kcov *kcov, u64 handle)</span>
+<span class='curline'><a href='../S/188.html#L124'>kcov</a>              124 kcov.c         	remote-&gt;kcov = kcov;</span>
+<span class='curline'><a href='../S/188.html#L325'>kcov</a>              325 kcov.c         static void kcov_start(struct task_struct *t, struct kcov *kcov,</span>
+<span class='curline'><a href='../S/188.html#L330'>kcov</a>              330 kcov.c         	t-&gt;kcov = kcov;</span>
+<span class='curline'><a href='../S/188.html#L344'>kcov</a>              344 kcov.c         	t-&gt;kcov = NULL;</span>
+<span class='curline'><a href='../S/188.html#L362'>kcov</a>              362 kcov.c         static void kcov_reset(struct kcov *kcov)</span>
+<span class='curline'><a href='../S/188.html#L364'>kcov</a>              364 kcov.c         	kcov-&gt;t = NULL;</span>
+<span class='curline'><a href='../S/188.html#L365'>kcov</a>              365 kcov.c         	kcov-&gt;mode = KCOV_MODE_INIT;</span>
+<span class='curline'><a href='../S/188.html#L366'>kcov</a>              366 kcov.c         	kcov-&gt;remote = false;</span>
+<span class='curline'><a href='../S/188.html#L367'>kcov</a>              367 kcov.c         	kcov-&gt;remote_size = 0;</span>
+<span class='curline'><a href='../S/188.html#L368'>kcov</a>              368 kcov.c         	kcov-&gt;sequence++;</span>
+<span class='curline'><a href='../S/188.html#L371'>kcov</a>              371 kcov.c         static void kcov_remote_reset(struct kcov *kcov)</span>
+<span class='curline'><a href='../S/188.html#L380'>kcov</a>              380 kcov.c         		if (remote-&gt;kcov != kcov)</span>
+<span class='curline'><a href='../S/188.html#L386'>kcov</a>              386 kcov.c         	kcov_reset(kcov);</span>
+<span class='curline'><a href='../S/188.html#L390'>kcov</a>              390 kcov.c         static void kcov_disable(struct task_struct *t, struct kcov *kcov)</span>
+<span class='curline'><a href='../S/188.html#L393'>kcov</a>              393 kcov.c         	if (kcov-&gt;remote)</span>
+<span class='curline'><a href='../S/188.html#L394'>kcov</a>              394 kcov.c         		kcov_remote_reset(kcov);</span>
+<span class='curline'><a href='../S/188.html#L396'>kcov</a>              396 kcov.c         		kcov_reset(kcov);</span>
+<span class='curline'><a href='../S/188.html#L399'>kcov</a>              399 kcov.c         static void kcov_get(struct kcov *kcov)</span>
+<span class='curline'><a href='../S/188.html#L401'>kcov</a>              401 kcov.c         	refcount_inc(&amp;kcov-&gt;refcount);</span>
+<span class='curline'><a href='../S/188.html#L404'>kcov</a>              404 kcov.c         static void kcov_put(struct kcov *kcov)</span>
+<span class='curline'><a href='../S/188.html#L406'>kcov</a>              406 kcov.c         	if (refcount_dec_and_test(&amp;kcov-&gt;refcount)) {</span>
+<span class='curline'><a href='../S/188.html#L407'>kcov</a>              407 kcov.c         		kcov_remote_reset(kcov);</span>
+<span class='curline'><a href='../S/188.html#L408'>kcov</a>              408 kcov.c         		vfree(kcov-&gt;area);</span>
+<span class='curline'><a href='../S/188.html#L409'>kcov</a>              409 kcov.c         		kfree(kcov);</span>
+<span class='curline'><a href='../S/188.html#L415'>kcov</a>              415 kcov.c         	struct kcov *kcov;</span>
+<span class='curline'><a href='../S/188.html#L418'>kcov</a>              418 kcov.c         	kcov = t-&gt;kcov;</span>
+<span class='curline'><a href='../S/188.html#L419'>kcov</a>              419 kcov.c         	if (kcov == NULL)</span>
+<span class='curline'><a href='../S/188.html#L422'>kcov</a>              422 kcov.c         	spin_lock_irqsave(&amp;kcov-&gt;lock, flags);</span>
+<span class='curline'><a href='../S/188.html#L423'>kcov</a>              423 kcov.c         	kcov_debug("t = %px, kcov-&gt;t = %px\n", t, kcov-&gt;t);</span>
+<span class='curline'><a href='../S/188.html#L446'>kcov</a>              446 kcov.c         	if (WARN_ON(kcov-&gt;t != t)) {</span>
+<span class='curline'><a href='../S/188.html#L447'>kcov</a>              447 kcov.c         		spin_unlock_irqrestore(&amp;kcov-&gt;lock, flags);</span>
+<span class='curline'><a href='../S/188.html#L451'>kcov</a>              451 kcov.c         	kcov_disable(t, kcov);</span>
+<span class='curline'><a href='../S/188.html#L452'>kcov</a>              452 kcov.c         	spin_unlock_irqrestore(&amp;kcov-&gt;lock, flags);</span>
+<span class='curline'><a href='../S/188.html#L453'>kcov</a>              453 kcov.c         	kcov_put(kcov);</span>
+<span class='curline'><a href='../S/188.html#L460'>kcov</a>              460 kcov.c         	struct kcov *kcov = vma-&gt;vm_file-&gt;private_data;</span>
+<span class='curline'><a href='../S/188.html#L469'>kcov</a>              469 kcov.c         	spin_lock_irqsave(&amp;kcov-&gt;lock, flags);</span>
+<span class='curline'><a href='../S/188.html#L470'>kcov</a>              470 kcov.c         	size = kcov-&gt;size * sizeof(unsigned long);</span>
+<span class='curline'><a href='../S/188.html#L471'>kcov</a>              471 kcov.c         	if (kcov-&gt;mode != KCOV_MODE_INIT || vma-&gt;vm_pgoff != 0 ||</span>
+<span class='curline'><a href='../S/188.html#L476'>kcov</a>              476 kcov.c         	if (!kcov-&gt;area) {</span>
+<span class='curline'><a href='../S/188.html#L477'>kcov</a>              477 kcov.c         		kcov-&gt;area = area;</span>
+<span class='curline'><a href='../S/188.html#L479'>kcov</a>              479 kcov.c         		spin_unlock_irqrestore(&amp;kcov-&gt;lock, flags);</span>
+<span class='curline'><a href='../S/188.html#L481'>kcov</a>              481 kcov.c         			page = vmalloc_to_page(kcov-&gt;area + off);</span>
+<span class='curline'><a href='../S/188.html#L488'>kcov</a>              488 kcov.c         	spin_unlock_irqrestore(&amp;kcov-&gt;lock, flags);</span>
+<span class='curline'><a href='../S/188.html#L495'>kcov</a>              495 kcov.c         	struct kcov *kcov;</span>
+<span class='curline'><a href='../S/188.html#L497'>kcov</a>              497 kcov.c         	kcov = kzalloc(sizeof(*kcov), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/188.html#L498'>kcov</a>              498 kcov.c         	if (!kcov)</span>
+<span class='curline'><a href='../S/188.html#L500'>kcov</a>              500 kcov.c         	kcov-&gt;mode = KCOV_MODE_DISABLED;</span>
+<span class='curline'><a href='../S/188.html#L501'>kcov</a>              501 kcov.c         	kcov-&gt;sequence = 1;</span>
+<span class='curline'><a href='../S/188.html#L502'>kcov</a>              502 kcov.c         	refcount_set(&amp;kcov-&gt;refcount, 1);</span>
+<span class='curline'><a href='../S/188.html#L503'>kcov</a>              503 kcov.c         	spin_lock_init(&amp;kcov-&gt;lock);</span>
+<span class='curline'><a href='../S/188.html#L504'>kcov</a>              504 kcov.c         	filep-&gt;private_data = kcov;</span>
+<span class='curline'><a href='../S/188.html#L533'>kcov</a>              533 kcov.c         static void kcov_fault_in_area(struct kcov *kcov)</span>
+<span class='curline'><a href='../S/188.html#L536'>kcov</a>              536 kcov.c         	unsigned long *area = kcov-&gt;area;</span>
+<span class='curline'><a href='../S/188.html#L539'>kcov</a>              539 kcov.c         	for (offset = 0; offset &lt; kcov-&gt;size; offset += stride)</span>
+<span class='curline'><a href='../S/188.html#L560'>kcov</a>              560 kcov.c         static int kcov_ioctl_locked(struct kcov *kcov, unsigned int cmd,</span>
+<span class='curline'><a href='../S/188.html#L576'>kcov</a>              576 kcov.c         		if (kcov-&gt;mode != KCOV_MODE_DISABLED)</span>
+<span class='curline'><a href='../S/188.html#L586'>kcov</a>              586 kcov.c         		kcov-&gt;size = size;</span>
+<span class='curline'><a href='../S/188.html#L587'>kcov</a>              587 kcov.c         		kcov-&gt;mode = KCOV_MODE_INIT;</span>
+<span class='curline'><a href='../S/188.html#L597'>kcov</a>              597 kcov.c         		if (kcov-&gt;mode != KCOV_MODE_INIT || !kcov-&gt;area)</span>
+<span class='curline'><a href='../S/188.html#L600'>kcov</a>              600 kcov.c         		if (kcov-&gt;t != NULL || t-&gt;kcov != NULL)</span>
+<span class='curline'><a href='../S/188.html#L605'>kcov</a>              605 kcov.c         		kcov_fault_in_area(kcov);</span>
+<span class='curline'><a href='../S/188.html#L606'>kcov</a>              606 kcov.c         		kcov-&gt;mode = mode;</span>
+<span class='curline'><a href='../S/188.html#L607'>kcov</a>              607 kcov.c         		kcov_start(t, kcov, kcov-&gt;size, kcov-&gt;area, kcov-&gt;mode,</span>
+<span class='curline'><a href='../S/188.html#L608'>kcov</a>              608 kcov.c         				kcov-&gt;sequence);</span>
+<span class='curline'><a href='../S/188.html#L609'>kcov</a>              609 kcov.c         		kcov-&gt;t = t;</span>
+<span class='curline'><a href='../S/188.html#L611'>kcov</a>              611 kcov.c         		kcov_get(kcov);</span>
+<span class='curline'><a href='../S/188.html#L616'>kcov</a>              616 kcov.c         		if (unused != 0 || current-&gt;kcov != kcov)</span>
+<span class='curline'><a href='../S/188.html#L619'>kcov</a>              619 kcov.c         		if (WARN_ON(kcov-&gt;t != t))</span>
+<span class='curline'><a href='../S/188.html#L621'>kcov</a>              621 kcov.c         		kcov_disable(t, kcov);</span>
+<span class='curline'><a href='../S/188.html#L622'>kcov</a>              622 kcov.c         		kcov_put(kcov);</span>
+<span class='curline'><a href='../S/188.html#L625'>kcov</a>              625 kcov.c         		if (kcov-&gt;mode != KCOV_MODE_INIT || !kcov-&gt;area)</span>
+<span class='curline'><a href='../S/188.html#L628'>kcov</a>              628 kcov.c         		if (kcov-&gt;t != NULL || t-&gt;kcov != NULL)</span>
+<span class='curline'><a href='../S/188.html#L636'>kcov</a>              636 kcov.c         		kcov-&gt;mode = mode;</span>
+<span class='curline'><a href='../S/188.html#L637'>kcov</a>              637 kcov.c         		t-&gt;kcov = kcov;</span>
+<span class='curline'><a href='../S/188.html#L638'>kcov</a>              638 kcov.c         		kcov-&gt;t = t;</span>
+<span class='curline'><a href='../S/188.html#L639'>kcov</a>              639 kcov.c         		kcov-&gt;remote = true;</span>
+<span class='curline'><a href='../S/188.html#L640'>kcov</a>              640 kcov.c         		kcov-&gt;remote_size = remote_arg-&gt;area_size;</span>
+<span class='curline'><a href='../S/188.html#L647'>kcov</a>              647 kcov.c         				kcov_disable(t, kcov);</span>
+<span class='curline'><a href='../S/188.html#L650'>kcov</a>              650 kcov.c         			remote = kcov_remote_add(kcov, remote_arg-&gt;handles[i]);</span>
+<span class='curline'><a href='../S/188.html#L654'>kcov</a>              654 kcov.c         				kcov_disable(t, kcov);</span>
+<span class='curline'><a href='../S/188.html#L663'>kcov</a>              663 kcov.c         				kcov_disable(t, kcov);</span>
+<span class='curline'><a href='../S/188.html#L666'>kcov</a>              666 kcov.c         			remote = kcov_remote_add(kcov,</span>
+<span class='curline'><a href='../S/188.html#L671'>kcov</a>              671 kcov.c         				kcov_disable(t, kcov);</span>
+<span class='curline'><a href='../S/188.html#L678'>kcov</a>              678 kcov.c         		kcov_get(kcov);</span>
+<span class='curline'><a href='../S/188.html#L687'>kcov</a>              687 kcov.c         	struct kcov *kcov;</span>
+<span class='curline'><a href='../S/188.html#L712'>kcov</a>              712 kcov.c         	kcov = filep-&gt;private_data;</span>
+<span class='curline'><a href='../S/188.html#L713'>kcov</a>              713 kcov.c         	spin_lock_irqsave(&amp;kcov-&gt;lock, flags);</span>
+<span class='curline'><a href='../S/188.html#L714'>kcov</a>              714 kcov.c         	res = kcov_ioctl_locked(kcov, cmd, arg);</span>
+<span class='curline'><a href='../S/188.html#L715'>kcov</a>              715 kcov.c         	spin_unlock_irqrestore(&amp;kcov-&gt;lock, flags);</span>
+<span class='curline'><a href='../S/188.html#L790'>kcov</a>              790 kcov.c         		data-&gt;saved_kcov = t-&gt;kcov;</span>
+<span class='curline'><a href='../S/188.html#L815'>kcov</a>              815 kcov.c         	struct kcov *kcov;</span>
+<span class='curline'><a href='../S/188.html#L856'>kcov</a>              856 kcov.c         	kcov = remote-&gt;kcov;</span>
+<span class='curline'><a href='../S/188.html#L858'>kcov</a>              858 kcov.c         	kcov_get(kcov);</span>
+<span class='curline'><a href='../S/188.html#L863'>kcov</a>              863 kcov.c         	mode = kcov-&gt;mode;</span>
+<span class='curline'><a href='../S/188.html#L864'>kcov</a>              864 kcov.c         	sequence = kcov-&gt;sequence;</span>
+<span class='curline'><a href='../S/188.html#L866'>kcov</a>              866 kcov.c         		size = kcov-&gt;remote_size;</span>
+<span class='curline'><a href='../S/188.html#L878'>kcov</a>              878 kcov.c         			kcov_put(kcov);</span>
+<span class='curline'><a href='../S/188.html#L892'>kcov</a>              892 kcov.c         	kcov_start(t, kcov, size, area, mode, sequence);</span>
+<span class='curline'><a href='../S/188.html#L958'>kcov</a>              958 kcov.c         	struct kcov *kcov;</span>
+<span class='curline'><a href='../S/188.html#L990'>kcov</a>              990 kcov.c         	kcov = t-&gt;kcov;</span>
+<span class='curline'><a href='../S/188.html#L1001'>kcov</a>             1001 kcov.c         	spin_lock(&amp;kcov-&gt;lock);</span>
+<span class='curline'><a href='../S/188.html#L1006'>kcov</a>             1006 kcov.c         	if (sequence == kcov-&gt;sequence &amp;&amp; kcov-&gt;remote)</span>
+<span class='curline'><a href='../S/188.html#L1007'>kcov</a>             1007 kcov.c         		kcov_move_area(kcov-&gt;mode, kcov-&gt;area, kcov-&gt;size, area);</span>
+<span class='curline'><a href='../S/188.html#L1008'>kcov</a>             1008 kcov.c         	spin_unlock(&amp;kcov-&gt;lock);</span>
+<span class='curline'><a href='../S/188.html#L1019'>kcov</a>             1019 kcov.c         	kcov_put(kcov);</span>
+</pre>
+</body>
+</html>

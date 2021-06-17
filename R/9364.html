@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>nr_running</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/234.html#L721'>nr_running</a>        721 cgroup/cgroup-v1.c 			stats-&gt;nr_running++;</span>
+<span class='curline'><a href='../S/441.html#L830'>nr_running</a>        830 sched/core.c   	if (rq-&gt;nr_running &gt; 1)</span>
+<span class='curline'><a href='../S/441.html#L2853'>nr_running</a>       2853 sched/core.c   	if ((wake_flags &amp; WF_ON_CPU) &amp;&amp; cpu_rq(cpu)-&gt;nr_running &lt;= 1)</span>
+<span class='curline'><a href='../S/441.html#L4018'>nr_running</a>       4018 sched/core.c   		sum += cpu_rq(i)-&gt;nr_running;</span>
+<span class='curline'><a href='../S/441.html#L4038'>nr_running</a>       4038 sched/core.c   	return raw_rq()-&gt;nr_running == 1;</span>
+<span class='curline'><a href='../S/441.html#L4575'>nr_running</a>       4575 sched/core.c   		   rq-&gt;nr_running == rq-&gt;cfs.h_nr_running)) {</span>
+<span class='curline'><a href='../S/441.html#L5322'>nr_running</a>       5322 sched/core.c   	if (rq-&gt;nr_running)</span>
+<span class='curline'><a href='../S/441.html#L6452'>nr_running</a>       6452 sched/core.c   	if (rq-&gt;nr_running == 1 &amp;&amp; p_rq-&gt;nr_running == 1) {</span>
+<span class='curline'><a href='../S/441.html#L7008'>nr_running</a>       7008 sched/core.c   		if (rq-&gt;nr_running == 1)</span>
+<span class='curline'><a href='../S/441.html#L7345'>nr_running</a>       7345 sched/core.c   	BUG_ON(rq-&gt;nr_running != 1);</span>
+<span class='curline'><a href='../S/441.html#L7498'>nr_running</a>       7498 sched/core.c   		rq-&gt;nr_running = 0;</span>
+<span class='curline'><a href='../S/460.html#L598'>nr_running</a>        598 sched/debug.c  	SEQ_printf(m, "  .%-30s: %d\n", "nr_running", cfs_rq-&gt;nr_running);</span>
+<span class='curline'><a href='../S/460.html#L713'>nr_running</a>        713 sched/debug.c  	P(nr_running);</span>
+<span class='curline'><a href='../S/464.html#L693'>nr_running</a>        693 sched/fair.c   static u64 __sched_period(unsigned long nr_running)</span>
+<span class='curline'><a href='../S/464.html#L695'>nr_running</a>        695 sched/fair.c   	if (unlikely(nr_running &gt; sched_nr_latency))</span>
+<span class='curline'><a href='../S/464.html#L696'>nr_running</a>        696 sched/fair.c   		return nr_running * sysctl_sched_min_granularity;</span>
+<span class='curline'><a href='../S/464.html#L709'>nr_running</a>        709 sched/fair.c   	unsigned int nr_running = cfs_rq-&gt;nr_running;</span>
+<span class='curline'><a href='../S/464.html#L713'>nr_running</a>        713 sched/fair.c   		nr_running = rq_of(cfs_rq)-&gt;cfs.h_nr_running;</span>
+<span class='curline'><a href='../S/464.html#L715'>nr_running</a>        715 sched/fair.c   	slice = __sched_period(nr_running + !se-&gt;on_rq);</span>
+<span class='curline'><a href='../S/464.html#L1530'>nr_running</a>       1530 sched/fair.c   	unsigned int nr_running;</span>
+<span class='curline'><a href='../S/464.html#L1572'>nr_running</a>       1572 sched/fair.c   static inline long adjust_numa_imbalance(int imbalance, int nr_running);</span>
+<span class='curline'><a href='../S/464.html#L1578'>nr_running</a>       1578 sched/fair.c   	if ((ns-&gt;nr_running &gt; ns-&gt;weight) &amp;&amp;</span>
+<span class='curline'><a href='../S/464.html#L1583'>nr_running</a>       1583 sched/fair.c   	if ((ns-&gt;nr_running &lt; ns-&gt;weight) ||</span>
+<span class='curline'><a href='../S/464.html#L1638'>nr_running</a>       1638 sched/fair.c   		ns-&gt;nr_running += rq-&gt;cfs.h_nr_running;</span>
+<span class='curline'><a href='../S/464.html#L1641'>nr_running</a>       1641 sched/fair.c   		if (find_idle &amp;&amp; !rq-&gt;nr_running &amp;&amp; idle_cpu(cpu)) {</span>
+<span class='curline'><a href='../S/464.html#L1949'>nr_running</a>       1949 sched/fair.c   		src_running = env-&gt;src_stats.nr_running - 1;</span>
+<span class='curline'><a href='../S/464.html#L1950'>nr_running</a>       1950 sched/fair.c   		dst_running = env-&gt;dst_stats.nr_running + 1;</span>
+<span class='curline'><a href='../S/464.html#L3019'>nr_running</a>       3019 sched/fair.c   	cfs_rq-&gt;nr_running++;</span>
+<span class='curline'><a href='../S/464.html#L3032'>nr_running</a>       3032 sched/fair.c   	cfs_rq-&gt;nr_running--;</span>
+<span class='curline'><a href='../S/464.html#L4296'>nr_running</a>       4296 sched/fair.c   	if (cfs_rq-&gt;nr_running == 1 || cfs_bandwidth_used())</span>
+<span class='curline'><a href='../S/464.html#L4299'>nr_running</a>       4299 sched/fair.c   	if (cfs_rq-&gt;nr_running == 1)</span>
+<span class='curline'><a href='../S/464.html#L4604'>nr_running</a>       4604 sched/fair.c   	if (cfs_rq-&gt;nr_running &gt; 1)</span>
+<span class='curline'><a href='../S/464.html#L4782'>nr_running</a>       4782 sched/fair.c   		if (cfs_rq-&gt;nr_running &gt;= 1)</span>
+<span class='curline'><a href='../S/464.html#L4954'>nr_running</a>       4954 sched/fair.c   	if (rq-&gt;curr == rq-&gt;idle &amp;&amp; rq-&gt;cfs.nr_running)</span>
+<span class='curline'><a href='../S/464.html#L5138'>nr_running</a>       5138 sched/fair.c   	if (!cfs_rq-&gt;runtime_enabled || cfs_rq-&gt;nr_running)</span>
+<span class='curline'><a href='../S/464.html#L5485'>nr_running</a>       5485 sched/fair.c   	if (cfs_rq_of(&amp;curr-&gt;se)-&gt;nr_running &lt; sched_nr_latency)</span>
+<span class='curline'><a href='../S/464.html#L5527'>nr_running</a>       5527 sched/fair.c   	return unlikely(rq-&gt;nr_running == rq-&gt;cfs.idle_h_nr_running &amp;&amp;</span>
+<span class='curline'><a href='../S/464.html#L5528'>nr_running</a>       5528 sched/fair.c   			rq-&gt;nr_running);</span>
+<span class='curline'><a href='../S/464.html#L5881'>nr_running</a>       5881 sched/fair.c   	if (sync &amp;&amp; cpu_rq(this_cpu)-&gt;nr_running == 1)</span>
+<span class='curline'><a href='../S/464.html#L6326'>nr_running</a>       6326 sched/fair.c   	    this_rq()-&gt;nr_running &lt;= 1) {</span>
+<span class='curline'><a href='../S/464.html#L6686'>nr_running</a>       6686 sched/fair.c   	if (sync &amp;&amp; cpu_rq(cpu)-&gt;nr_running == 1 &amp;&amp;</span>
+<span class='curline'><a href='../S/464.html#L6966'>nr_running</a>       6966 sched/fair.c   	if (rq-&gt;nr_running)</span>
+<span class='curline'><a href='../S/464.html#L7060'>nr_running</a>       7060 sched/fair.c   	int scale = cfs_rq-&gt;nr_running &gt;= sched_nr_latency;</span>
+<span class='curline'><a href='../S/464.html#L7198'>nr_running</a>       7198 sched/fair.c   				if (!cfs_rq-&gt;nr_running)</span>
+<span class='curline'><a href='../S/464.html#L7334'>nr_running</a>       7334 sched/fair.c   	if (unlikely(rq-&gt;nr_running == 1))</span>
+<span class='curline'><a href='../S/464.html#L7598'>nr_running</a>       7598 sched/fair.c   	if (sched_feat(CACHE_HOT_BUDDY) &amp;&amp; env-&gt;dst_rq-&gt;nr_running &amp;&amp;</span>
+<span class='curline'><a href='../S/464.html#L7639'>nr_running</a>       7639 sched/fair.c   		if (env-&gt;src_rq-&gt;nr_running &gt; env-&gt;src_rq-&gt;nr_preferred_running)</span>
+<span class='curline'><a href='../S/464.html#L7842'>nr_running</a>       7842 sched/fair.c   		if (env-&gt;idle != CPU_NOT_IDLE &amp;&amp; env-&gt;src_rq-&gt;nr_running &lt;= 1)</span>
+<span class='curline'><a href='../S/464.html#L8563'>nr_running</a>       8563 sched/fair.c   	int i, nr_running, local_group;</span>
+<span class='curline'><a href='../S/464.html#L8580'>nr_running</a>       8580 sched/fair.c   		nr_running = rq-&gt;nr_running;</span>
+<span class='curline'><a href='../S/464.html#L8581'>nr_running</a>       8581 sched/fair.c   		sgs-&gt;sum_nr_running += nr_running;</span>
+<span class='curline'><a href='../S/464.html#L8583'>nr_running</a>       8583 sched/fair.c   		if (nr_running &gt; 1)</span>
+<span class='curline'><a href='../S/464.html#L8596'>nr_running</a>       8596 sched/fair.c   		if (!nr_running &amp;&amp; idle_cpu(i)) {</span>
+<span class='curline'><a href='../S/464.html#L8766'>nr_running</a>       8766 sched/fair.c   	if (rq-&gt;nr_running &gt; rq-&gt;nr_numa_running)</span>
+<span class='curline'><a href='../S/464.html#L8768'>nr_running</a>       8768 sched/fair.c   	if (rq-&gt;nr_running &gt; rq-&gt;nr_preferred_running)</span>
+<span class='curline'><a href='../S/464.html#L8843'>nr_running</a>       8843 sched/fair.c   	int i, nr_running;</span>
+<span class='curline'><a href='../S/464.html#L8857'>nr_running</a>       8857 sched/fair.c   		nr_running = rq-&gt;nr_running - local;</span>
+<span class='curline'><a href='../S/464.html#L8858'>nr_running</a>       8858 sched/fair.c   		sgs-&gt;sum_nr_running += nr_running;</span>
+<span class='curline'><a href='../S/464.html#L8863'>nr_running</a>       8863 sched/fair.c   		if (!nr_running &amp;&amp; idle_cpu_without(i, p))</span>
+<span class='curline'><a href='../S/464.html#L9173'>nr_running</a>       9173 sched/fair.c   static inline long adjust_numa_imbalance(int imbalance, int nr_running)</span>
+<span class='curline'><a href='../S/464.html#L9182'>nr_running</a>       9182 sched/fair.c   	if (nr_running &lt;= imbalance_min)</span>
+<span class='curline'><a href='../S/464.html#L9513'>nr_running</a>       9513 sched/fair.c   		unsigned int nr_running;</span>
+<span class='curline'><a href='../S/464.html#L9542'>nr_running</a>       9542 sched/fair.c   		nr_running = rq-&gt;cfs.h_nr_running;</span>
+<span class='curline'><a href='../S/464.html#L9552'>nr_running</a>       9552 sched/fair.c   		    nr_running == 1)</span>
+<span class='curline'><a href='../S/464.html#L9563'>nr_running</a>       9563 sched/fair.c   			if (nr_running == 1 &amp;&amp; load &gt; env-&gt;imbalance &amp;&amp;</span>
+<span class='curline'><a href='../S/464.html#L9595'>nr_running</a>       9595 sched/fair.c   			if (nr_running &lt;= 1)</span>
+<span class='curline'><a href='../S/464.html#L9605'>nr_running</a>       9605 sched/fair.c   			if (busiest_nr &lt; nr_running) {</span>
+<span class='curline'><a href='../S/464.html#L9606'>nr_running</a>       9606 sched/fair.c   				busiest_nr = nr_running;</span>
+<span class='curline'><a href='../S/464.html#L9775'>nr_running</a>       9775 sched/fair.c   	if (busiest-&gt;nr_running &gt; 1) {</span>
+<span class='curline'><a href='../S/464.html#L9783'>nr_running</a>       9783 sched/fair.c   		env.loop_max  = min(sysctl_sched_nr_migrate, busiest-&gt;nr_running);</span>
+<span class='curline'><a href='../S/464.html#L10065'>nr_running</a>       10065 sched/fair.c   	if (busiest_rq-&gt;nr_running &lt;= 1)</span>
+<span class='curline'><a href='../S/464.html#L10354'>nr_running</a>       10354 sched/fair.c   	if (rq-&gt;nr_running &gt;= 2) {</span>
+<span class='curline'><a href='../S/464.html#L10813'>nr_running</a>       10813 sched/fair.c   		if (pulled_task || this_rq-&gt;nr_running &gt; 0)</span>
+<span class='curline'><a href='../S/464.html#L10837'>nr_running</a>       10837 sched/fair.c   	if (this_rq-&gt;nr_running != this_rq-&gt;cfs.h_nr_running)</span>
+<span class='curline'><a href='../S/464.html#L10977'>nr_running</a>       10977 sched/fair.c   	if (rq-&gt;cfs.nr_running == 1)</span>
+<span class='curline'><a href='../S/464.html#L11598'>nr_running</a>       11598 sched/fair.c           return rq ? rq-&gt;nr_running : -1;</span>
+<span class='curline'><a href='../S/454.html#L84'>nr_running</a>         84 sched/loadavg.c 	nr_active = this_rq-&gt;nr_running - adjust;</span>
+<span class='curline'><a href='../S/450.html#L1055'>nr_running</a>       1055 sched/rt.c     	BUG_ON(!rq-&gt;nr_running);</span>
+<span class='curline'><a href='../S/447.html#L532'>nr_running</a>        532 sched/sched.h  	unsigned int		nr_running;</span>
+<span class='curline'><a href='../S/447.html#L922'>nr_running</a>        922 sched/sched.h  	unsigned int		nr_running;</span>
+<span class='curline'><a href='../S/447.html#L1924'>nr_running</a>       1924 sched/sched.h  	return rq-&gt;cfs.nr_running &gt; 0;</span>
+<span class='curline'><a href='../S/447.html#L2027'>nr_running</a>       2027 sched/sched.h  	unsigned prev_nr = rq-&gt;nr_running;</span>
+<span class='curline'><a href='../S/447.html#L2029'>nr_running</a>       2029 sched/sched.h  	rq-&gt;nr_running = prev_nr + count;</span>
+<span class='curline'><a href='../S/447.html#L2035'>nr_running</a>       2035 sched/sched.h  	if (prev_nr &lt; 2 &amp;&amp; rq-&gt;nr_running &gt;= 2) {</span>
+<span class='curline'><a href='../S/447.html#L2046'>nr_running</a>       2046 sched/sched.h  	rq-&gt;nr_running -= count;</span>
+<span class='curline'><a href='../S/365.html#L189'>nr_running</a>        189 workqueue.c    	atomic_t		nr_running ____cacheline_aligned_in_smp;</span>
+<span class='curline'><a href='../S/365.html#L773'>nr_running</a>        773 workqueue.c    	return !atomic_read(&amp;pool-&gt;nr_running);</span>
+<span class='curline'><a href='../S/365.html#L799'>nr_running</a>        799 workqueue.c    		atomic_read(&amp;pool-&gt;nr_running) &lt;= 1;</span>
+<span class='curline'><a href='../S/365.html#L861'>nr_running</a>        861 workqueue.c    		atomic_inc(&amp;worker-&gt;pool-&gt;nr_running);</span>
+<span class='curline'><a href='../S/365.html#L906'>nr_running</a>        906 workqueue.c    	if (atomic_dec_and_test(&amp;pool-&gt;nr_running) &amp;&amp;</span>
+<span class='curline'><a href='../S/365.html#L965'>nr_running</a>        965 workqueue.c    		atomic_dec(&amp;pool-&gt;nr_running);</span>
+<span class='curline'><a href='../S/365.html#L997'>nr_running</a>        997 workqueue.c    			atomic_inc(&amp;pool-&gt;nr_running);</span>
+<span class='curline'><a href='../S/365.html#L1814'>nr_running</a>       1814 workqueue.c    		     atomic_read(&amp;pool-&gt;nr_running));</span>
+<span class='curline'><a href='../S/365.html#L4952'>nr_running</a>       4952 workqueue.c    		atomic_set(&amp;pool-&gt;nr_running, 0);</span>
+</pre>
+</body>
+</html>

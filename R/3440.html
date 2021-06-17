@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>bp_cpuinfo</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/336.html#L49'>bp_cpuinfo</a>         49 events/hw_breakpoint.c static DEFINE_PER_CPU(struct bp_cpuinfo, bp_cpuinfo[TYPE_MAX]);</span>
+<span class='curline'><a href='../S/336.html#L52'>bp_cpuinfo</a>         52 events/hw_breakpoint.c static struct bp_cpuinfo *get_bp_info(int cpu, enum bp_type_idx type)</span>
+<span class='curline'><a href='../S/336.html#L54'>bp_cpuinfo</a>         54 events/hw_breakpoint.c 	return per_cpu_ptr(bp_cpuinfo + type, cpu);</span>
+<span class='curline'><a href='../S/336.html#L140'>bp_cpuinfo</a>        140 events/hw_breakpoint.c 		struct bp_cpuinfo *info = get_bp_info(cpu, type);</span>
+<span class='curline'><a href='../S/336.html#L687'>bp_cpuinfo</a>        687 events/hw_breakpoint.c 			struct bp_cpuinfo *info = get_bp_info(cpu, i);</span>
+</pre>
+</body>
+</html>

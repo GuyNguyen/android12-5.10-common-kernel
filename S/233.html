@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>cgroup/namespace.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/497.html'>cgroup</a>/namespace.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L12'>[^]</a><a href='#L153'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L12' title='Defined at 12.'>inc_cgroup_namespaces</a></li>
+<li><a href='#L17' title='Defined at 17.'>dec_cgroup_namespaces</a></li>
+<li><a href='#L22' title='Defined at 22.'>alloc_cgroup_ns</a></li>
+<li><a href='#L40' title='Defined at 40.'>free_cgroup_ns</a></li>
+<li><a href='#L50' title='Defined at 50.'>copy_cgroup_ns</a></li>
+<li><a href='#L93' title='Defined at 93.'>to_cg_ns</a></li>
+<li><a href='#L98' title='Defined at 98.'>cgroupns_install</a></li>
+<li><a href='#L118' title='Defined at 118.'>cgroupns_get</a></li>
+<li><a href='#L134' title='Defined at 134.'>cgroupns_put</a></li>
+<li><a href='#L139' title='Defined at 139.'>cgroupns_owner</a></li>
+<li><a href='#L153' title='Defined at 153.'>cgroup_namespaces_init</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='sharp'>#include</em> "<a href='236.html'>cgroup-internal.h</a>"
+<a id='L3' name='L3'></a>   3 
+<a id='L4' name='L4'></a>   4 <em class='sharp'>#include</em> &lt;linux/sched/task.h&gt;
+<a id='L5' name='L5'></a>   5 <em class='sharp'>#include</em> &lt;linux/slab.h&gt;
+<a id='L6' name='L6'></a>   6 <em class='sharp'>#include</em> &lt;linux/nsproxy.h&gt;
+<a id='L7' name='L7'></a>   7 <em class='sharp'>#include</em> &lt;linux/proc_ns.h&gt;
+<a id='L8' name='L8'></a>   8 
+<a id='L9' name='L9'></a>   9 
+<a id='L10' name='L10'></a>  10 <em class='comment'>/* cgroup namespaces */</em>
+<a id='L11' name='L11'></a>  11 
+<a id='L12' name='L12'></a>  12 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> ucounts *<a href='../S/233.html#L69' title='Referred from 69 in cgroup/namespace.c.'>inc_cgroup_namespaces</a>(<strong class='reserved'>struct</strong> user_namespace *ns)
+<a id='L13' name='L13'></a>  13 <em class='brace'>{</em>
+<a id='L14' name='L14'></a>  14         <strong class='reserved'>return</strong> <a href='../S/252.html#L192' title='Defined at 192 in ucount.c.'>inc_ucount</a>(ns, current_euid(), UCOUNT_CGROUP_NAMESPACES);
+<a id='L15' name='L15'></a>  15 <em class='brace'>}</em>
+<a id='L16' name='L16'></a>  16 
+<a id='L17' name='L17'></a>  17 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/5446.html' title='Multiple referred from 2 places.'>dec_cgroup_namespaces</a>(<strong class='reserved'>struct</strong> ucounts *ucounts)
+<a id='L18' name='L18'></a>  18 <em class='brace'>{</em>
+<a id='L19' name='L19'></a>  19         <a href='../S/252.html#L215' title='Defined at 215 in ucount.c.'>dec_ucount</a>(ucounts, UCOUNT_CGROUP_NAMESPACES);
+<a id='L20' name='L20'></a>  20 <em class='brace'>}</em>
+<a id='L21' name='L21'></a>  21 
+<a id='L22' name='L22'></a>  22 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> cgroup_namespace *<a href='../S/233.html#L79' title='Referred from 79 in cgroup/namespace.c.'>alloc_cgroup_ns</a>(<strong class='reserved'>void</strong>)
+<a id='L23' name='L23'></a>  23 <em class='brace'>{</em>
+<a id='L24' name='L24'></a>  24         <strong class='reserved'>struct</strong> cgroup_namespace *new_ns;
+<a id='L25' name='L25'></a>  25         <strong class='reserved'>int</strong> ret;
+<a id='L26' name='L26'></a>  26 
+<a id='L27' name='L27'></a>  27         new_ns = kzalloc(<strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> cgroup_namespace), GFP_KERNEL);
+<a id='L28' name='L28'></a>  28         <strong class='reserved'>if</strong> (!new_ns)
+<a id='L29' name='L29'></a>  29                 <strong class='reserved'>return</strong> ERR_PTR(-ENOMEM);
+<a id='L30' name='L30'></a>  30         ret = ns_alloc_inum(&amp;new_ns-&gt;ns);
+<a id='L31' name='L31'></a>  31         <strong class='reserved'>if</strong> (ret) <em class='brace'>{</em>
+<a id='L32' name='L32'></a>  32                 kfree(new_ns);
+<a id='L33' name='L33'></a>  33                 <strong class='reserved'>return</strong> ERR_PTR(ret);
+<a id='L34' name='L34'></a>  34         <em class='brace'>}</em>
+<a id='L35' name='L35'></a>  35         refcount_set(&amp;new_ns-&gt;count, 1);
+<a id='L36' name='L36'></a>  36         new_ns-&gt;ns.ops = &amp;cgroupns_operations;
+<a id='L37' name='L37'></a>  37         <strong class='reserved'>return</strong> new_ns;
+<a id='L38' name='L38'></a>  38 <em class='brace'>}</em>
+<a id='L39' name='L39'></a>  39 
+<a id='L40' name='L40'></a>  40 <strong class='reserved'>void</strong> <a href='../S/233.html#L48' title='Referred from 48 in cgroup/namespace.c.'>free_cgroup_ns</a>(<strong class='reserved'>struct</strong> cgroup_namespace *ns)
+<a id='L41' name='L41'></a>  41 <em class='brace'>{</em>
+<a id='L42' name='L42'></a>  42         <a href='../S/236.html#L180' title='Defined at 180 in cgroup/cgroup-internal.h.'>put_css_set</a>(ns-&gt;root_cset);
+<a id='L43' name='L43'></a>  43         <a href='../S/233.html#L17' title='Defined at 17 in cgroup/namespace.c.'>dec_cgroup_namespaces</a>(ns-&gt;ucounts);
+<a id='L44' name='L44'></a>  44         put_user_ns(ns-&gt;user_ns);
+<a id='L45' name='L45'></a>  45         ns_free_inum(&amp;ns-&gt;ns);
+<a id='L46' name='L46'></a>  46         kfree(ns);
+<a id='L47' name='L47'></a>  47 <em class='brace'>}</em>
+<a id='L48' name='L48'></a>  48 EXPORT_SYMBOL(<a href='../S/233.html#L40' title='Defined at 40 in cgroup/namespace.c.'>free_cgroup_ns</a>);
+<a id='L49' name='L49'></a>  49 
+<a id='L50' name='L50'></a>  50 <strong class='reserved'>struct</strong> cgroup_namespace *<a href='../S/80.html#L103' title='Referred from 103 in nsproxy.c.'>copy_cgroup_ns</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> flags,
+<a id='L51' name='L51'></a>  51                                         <strong class='reserved'>struct</strong> user_namespace *user_ns,
+<a id='L52' name='L52'></a>  52                                         <strong class='reserved'>struct</strong> cgroup_namespace *old_ns)
+<a id='L53' name='L53'></a>  53 <em class='brace'>{</em>
+<a id='L54' name='L54'></a>  54         <strong class='reserved'>struct</strong> cgroup_namespace *new_ns;
+<a id='L55' name='L55'></a>  55         <strong class='reserved'>struct</strong> ucounts *ucounts;
+<a id='L56' name='L56'></a>  56         <strong class='reserved'>struct</strong> css_set *cset;
+<a id='L57' name='L57'></a>  57 
+<a id='L58' name='L58'></a>  58         BUG_ON(!old_ns);
+<a id='L59' name='L59'></a>  59 
+<a id='L60' name='L60'></a>  60         <strong class='reserved'>if</strong> (!(flags &amp; CLONE_NEWCGROUP)) <em class='brace'>{</em>
+<a id='L61' name='L61'></a>  61                 get_cgroup_ns(old_ns);
+<a id='L62' name='L62'></a>  62                 <strong class='reserved'>return</strong> old_ns;
+<a id='L63' name='L63'></a>  63         <em class='brace'>}</em>
+<a id='L64' name='L64'></a>  64 
+<a id='L65' name='L65'></a>  65         <em class='comment'>/* Allow only sysadmin to create cgroup namespace. */</em>
+<a id='L66' name='L66'></a>  66         <strong class='reserved'>if</strong> (!<a href='../S/321.html#L394' title='Defined at 394 in capability.c.'>ns_capable</a>(user_ns, CAP_SYS_ADMIN))
+<a id='L67' name='L67'></a>  67                 <strong class='reserved'>return</strong> ERR_PTR(-EPERM);
+<a id='L68' name='L68'></a>  68 
+<a id='L69' name='L69'></a>  69         ucounts = <a href='../S/233.html#L12' title='Defined at 12 in cgroup/namespace.c.'>inc_cgroup_namespaces</a>(user_ns);
+<a id='L70' name='L70'></a>  70         <strong class='reserved'>if</strong> (!ucounts)
+<a id='L71' name='L71'></a>  71                 <strong class='reserved'>return</strong> ERR_PTR(-ENOSPC);
+<a id='L72' name='L72'></a>  72 
+<a id='L73' name='L73'></a>  73         <em class='comment'>/* It is not safe to take cgroup_mutex here */</em>
+<a id='L74' name='L74'></a>  74         spin_lock_irq(&amp;css_set_lock);
+<a id='L75' name='L75'></a>  75         cset = task_css_set(current);
+<a id='L76' name='L76'></a>  76         <a href='../S/236.html#L200' title='Defined at 200 in cgroup/cgroup-internal.h.'>get_css_set</a>(cset);
+<a id='L77' name='L77'></a>  77         spin_unlock_irq(&amp;css_set_lock);
+<a id='L78' name='L78'></a>  78 
+<a id='L79' name='L79'></a>  79         new_ns = <a href='../S/233.html#L22' title='Defined at 22 in cgroup/namespace.c.'>alloc_cgroup_ns</a>();
+<a id='L80' name='L80'></a>  80         <strong class='reserved'>if</strong> (IS_ERR(new_ns)) <em class='brace'>{</em>
+<a id='L81' name='L81'></a>  81                 <a href='../S/236.html#L180' title='Defined at 180 in cgroup/cgroup-internal.h.'>put_css_set</a>(cset);
+<a id='L82' name='L82'></a>  82                 <a href='../S/233.html#L17' title='Defined at 17 in cgroup/namespace.c.'>dec_cgroup_namespaces</a>(ucounts);
+<a id='L83' name='L83'></a>  83                 <strong class='reserved'>return</strong> new_ns;
+<a id='L84' name='L84'></a>  84         <em class='brace'>}</em>
+<a id='L85' name='L85'></a>  85 
+<a id='L86' name='L86'></a>  86         new_ns-&gt;user_ns = get_user_ns(user_ns);
+<a id='L87' name='L87'></a>  87         new_ns-&gt;ucounts = ucounts;
+<a id='L88' name='L88'></a>  88         new_ns-&gt;root_cset = cset;
+<a id='L89' name='L89'></a>  89 
+<a id='L90' name='L90'></a>  90         <strong class='reserved'>return</strong> new_ns;
+<a id='L91' name='L91'></a>  91 <em class='brace'>}</em>
+<a id='L92' name='L92'></a>  92 
+<a id='L93' name='L93'></a>  93 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>struct</strong> cgroup_namespace *<a href='../R/13488.html' title='Multiple referred from 3 places.'>to_cg_ns</a>(<strong class='reserved'>struct</strong> ns_common *ns)
+<a id='L94' name='L94'></a>  94 <em class='brace'>{</em>
+<a id='L95' name='L95'></a>  95         <strong class='reserved'>return</strong> container_of(ns, <strong class='reserved'>struct</strong> cgroup_namespace, ns);
+<a id='L96' name='L96'></a>  96 <em class='brace'>}</em>
+<a id='L97' name='L97'></a>  97 
+<a id='L98' name='L98'></a>  98 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/233.html#L149' title='Referred from 149 in cgroup/namespace.c.'>cgroupns_install</a>(<strong class='reserved'>struct</strong> nsset *nsset, <strong class='reserved'>struct</strong> ns_common *ns)
+<a id='L99' name='L99'></a>  99 <em class='brace'>{</em>
+<a id='L100' name='L100'></a> 100         <strong class='reserved'>struct</strong> nsproxy *nsproxy = nsset-&gt;nsproxy;
+<a id='L101' name='L101'></a> 101         <strong class='reserved'>struct</strong> cgroup_namespace *cgroup_ns = <a href='../S/233.html#L93' title='Defined at 93 in cgroup/namespace.c.'>to_cg_ns</a>(ns);
+<a id='L102' name='L102'></a> 102 
+<a id='L103' name='L103'></a> 103         <strong class='reserved'>if</strong> (!<a href='../S/321.html#L394' title='Defined at 394 in capability.c.'>ns_capable</a>(nsset-&gt;cred-&gt;user_ns, CAP_SYS_ADMIN) ||
+<a id='L104' name='L104'></a> 104             !<a href='../S/321.html#L394' title='Defined at 394 in capability.c.'>ns_capable</a>(cgroup_ns-&gt;user_ns, CAP_SYS_ADMIN))
+<a id='L105' name='L105'></a> 105                 <strong class='reserved'>return</strong> -EPERM;
+<a id='L106' name='L106'></a> 106 
+<a id='L107' name='L107'></a> 107         <em class='comment'>/* Don't need to do anything if we are attaching to our own cgroupns. */</em>
+<a id='L108' name='L108'></a> 108         <strong class='reserved'>if</strong> (cgroup_ns == nsproxy-&gt;cgroup_ns)
+<a id='L109' name='L109'></a> 109                 <strong class='reserved'>return</strong> 0;
+<a id='L110' name='L110'></a> 110 
+<a id='L111' name='L111'></a> 111         get_cgroup_ns(cgroup_ns);
+<a id='L112' name='L112'></a> 112         put_cgroup_ns(nsproxy-&gt;cgroup_ns);
+<a id='L113' name='L113'></a> 113         nsproxy-&gt;cgroup_ns = cgroup_ns;
+<a id='L114' name='L114'></a> 114 
+<a id='L115' name='L115'></a> 115         <strong class='reserved'>return</strong> 0;
+<a id='L116' name='L116'></a> 116 <em class='brace'>}</em>
+<a id='L117' name='L117'></a> 117 
+<a id='L118' name='L118'></a> 118 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> ns_common *<a href='../S/233.html#L147' title='Referred from 147 in cgroup/namespace.c.'>cgroupns_get</a>(<strong class='reserved'>struct</strong> task_struct *task)
+<a id='L119' name='L119'></a> 119 <em class='brace'>{</em>
+<a id='L120' name='L120'></a> 120         <strong class='reserved'>struct</strong> cgroup_namespace *ns = NULL;
+<a id='L121' name='L121'></a> 121         <strong class='reserved'>struct</strong> nsproxy *nsproxy;
+<a id='L122' name='L122'></a> 122 
+<a id='L123' name='L123'></a> 123         task_lock(task);
+<a id='L124' name='L124'></a> 124         nsproxy = task-&gt;nsproxy;
+<a id='L125' name='L125'></a> 125         <strong class='reserved'>if</strong> (nsproxy) <em class='brace'>{</em>
+<a id='L126' name='L126'></a> 126                 ns = nsproxy-&gt;cgroup_ns;
+<a id='L127' name='L127'></a> 127                 get_cgroup_ns(ns);
+<a id='L128' name='L128'></a> 128         <em class='brace'>}</em>
+<a id='L129' name='L129'></a> 129         task_unlock(task);
+<a id='L130' name='L130'></a> 130 
+<a id='L131' name='L131'></a> 131         <strong class='reserved'>return</strong> ns ? &amp;ns-&gt;ns : NULL;
+<a id='L132' name='L132'></a> 132 <em class='brace'>}</em>
+<a id='L133' name='L133'></a> 133 
+<a id='L134' name='L134'></a> 134 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/233.html#L148' title='Referred from 148 in cgroup/namespace.c.'>cgroupns_put</a>(<strong class='reserved'>struct</strong> ns_common *ns)
+<a id='L135' name='L135'></a> 135 <em class='brace'>{</em>
+<a id='L136' name='L136'></a> 136         put_cgroup_ns(<a href='../S/233.html#L93' title='Defined at 93 in cgroup/namespace.c.'>to_cg_ns</a>(ns));
+<a id='L137' name='L137'></a> 137 <em class='brace'>}</em>
+<a id='L138' name='L138'></a> 138 
+<a id='L139' name='L139'></a> 139 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> user_namespace *<a href='../S/233.html#L150' title='Referred from 150 in cgroup/namespace.c.'>cgroupns_owner</a>(<strong class='reserved'>struct</strong> ns_common *ns)
+<a id='L140' name='L140'></a> 140 <em class='brace'>{</em>
+<a id='L141' name='L141'></a> 141         <strong class='reserved'>return</strong> <a href='../S/233.html#L93' title='Defined at 93 in cgroup/namespace.c.'>to_cg_ns</a>(ns)-&gt;user_ns;
+<a id='L142' name='L142'></a> 142 <em class='brace'>}</em>
+<a id='L143' name='L143'></a> 143 
+<a id='L144' name='L144'></a> 144 <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> proc_ns_operations cgroupns_operations = <em class='brace'>{</em>
+<a id='L145' name='L145'></a> 145         .name           = "cgroup",
+<a id='L146' name='L146'></a> 146         .type           = CLONE_NEWCGROUP,
+<a id='L147' name='L147'></a> 147         .get            = <a href='../S/233.html#L118' title='Defined at 118 in cgroup/namespace.c.'>cgroupns_get</a>,
+<a id='L148' name='L148'></a> 148         .put            = <a href='../S/233.html#L134' title='Defined at 134 in cgroup/namespace.c.'>cgroupns_put</a>,
+<a id='L149' name='L149'></a> 149         .install        = <a href='../S/233.html#L98' title='Defined at 98 in cgroup/namespace.c.'>cgroupns_install</a>,
+<a id='L150' name='L150'></a> 150         .owner          = <a href='../S/233.html#L139' title='Defined at 139 in cgroup/namespace.c.'>cgroupns_owner</a>,
+<a id='L151' name='L151'></a> 151 <em class='brace'>}</em>;
+<a id='L152' name='L152'></a> 152 
+<a id='L153' name='L153'></a> 153 <strong class='reserved'>static</strong> __init <strong class='reserved'>int</strong> <a href='../S/233.html#L157' title='Referred from 157 in cgroup/namespace.c.'>cgroup_namespaces_init</a>(<strong class='reserved'>void</strong>)
+<a id='L154' name='L154'></a> 154 <em class='brace'>{</em>
+<a id='L155' name='L155'></a> 155         <strong class='reserved'>return</strong> 0;
+<a id='L156' name='L156'></a> 156 <em class='brace'>}</em>
+<a id='L157' name='L157'></a> 157 subsys_initcall(<a href='../S/233.html#L153' title='Defined at 153 in cgroup/namespace.c.'>cgroup_namespaces_init</a>);
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L12'>[^]</a><a href='#L153'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

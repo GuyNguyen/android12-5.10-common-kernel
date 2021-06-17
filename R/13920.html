@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>trace_uprobe</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/301.html#L72'>trace_uprobe</a>       72 trace/trace_uprobe.c static struct trace_uprobe *to_trace_uprobe(struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/301.html#L74'>trace_uprobe</a>       74 trace/trace_uprobe.c 	return container_of(ev, struct trace_uprobe, devent);</span>
+<span class='curline'><a href='../S/301.html#L87'>trace_uprobe</a>       87 trace/trace_uprobe.c 	(offsetof(struct trace_uprobe, tp.args) +	\</span>
+<span class='curline'><a href='../S/301.html#L90'>trace_uprobe</a>       90 trace/trace_uprobe.c static int register_uprobe_event(struct trace_uprobe *tu);</span>
+<span class='curline'><a href='../S/301.html#L91'>trace_uprobe</a>       91 trace/trace_uprobe.c static int unregister_uprobe_event(struct trace_uprobe *tu);</span>
+<span class='curline'><a href='../S/301.html#L94'>trace_uprobe</a>       94 trace/trace_uprobe.c 	struct trace_uprobe	*tu;</span>
+<span class='curline'><a href='../S/301.html#L272'>trace_uprobe</a>      272 trace/trace_uprobe.c static inline bool is_ret_probe(struct trace_uprobe *tu)</span>
+<span class='curline'><a href='../S/301.html#L279'>trace_uprobe</a>      279 trace/trace_uprobe.c 	struct trace_uprobe *tu = to_trace_uprobe(ev);</span>
+<span class='curline'><a href='../S/301.html#L284'>trace_uprobe</a>      284 trace/trace_uprobe.c static bool trace_uprobe_match_command_head(struct trace_uprobe *tu,</span>
+<span class='curline'><a href='../S/301.html#L315'>trace_uprobe</a>      315 trace/trace_uprobe.c 	struct trace_uprobe *tu = to_trace_uprobe(ev);</span>
+<span class='curline'><a href='../S/301.html#L322'>trace_uprobe</a>      322 trace/trace_uprobe.c static nokprobe_inline struct trace_uprobe *</span>
+<span class='curline'><a href='../S/301.html#L331'>trace_uprobe</a>      331 trace/trace_uprobe.c 	return container_of(tp, struct trace_uprobe, tp);</span>
+<span class='curline'><a href='../S/301.html#L337'>trace_uprobe</a>      337 trace/trace_uprobe.c static struct trace_uprobe *</span>
+<span class='curline'><a href='../S/301.html#L340'>trace_uprobe</a>      340 trace/trace_uprobe.c 	struct trace_uprobe *tu;</span>
+<span class='curline'><a href='../S/301.html#L364'>trace_uprobe</a>      364 trace/trace_uprobe.c static void free_trace_uprobe(struct trace_uprobe *tu)</span>
+<span class='curline'><a href='../S/301.html#L375'>trace_uprobe</a>      375 trace/trace_uprobe.c static struct trace_uprobe *find_probe_event(const char *event, const char *group)</span>
+<span class='curline'><a href='../S/301.html#L378'>trace_uprobe</a>      378 trace/trace_uprobe.c 	struct trace_uprobe *tu;</span>
+<span class='curline'><a href='../S/301.html#L389'>trace_uprobe</a>      389 trace/trace_uprobe.c static int unregister_trace_uprobe(struct trace_uprobe *tu)</span>
+<span class='curline'><a href='../S/301.html#L407'>trace_uprobe</a>      407 trace/trace_uprobe.c static bool trace_uprobe_has_same_uprobe(struct trace_uprobe *orig,</span>
+<span class='curline'><a href='../S/301.html#L408'>trace_uprobe</a>      408 trace/trace_uprobe.c 					 struct trace_uprobe *comp)</span>
+<span class='curline'><a href='../S/301.html#L416'>trace_uprobe</a>      416 trace/trace_uprobe.c 		orig = container_of(pos, struct trace_uprobe, tp);</span>
+<span class='curline'><a href='../S/301.html#L438'>trace_uprobe</a>      438 trace/trace_uprobe.c static int append_trace_uprobe(struct trace_uprobe *tu, struct trace_uprobe *to)</span>
+<span class='curline'><a href='../S/301.html#L472'>trace_uprobe</a>      472 trace/trace_uprobe.c static int validate_ref_ctr_offset(struct trace_uprobe *new)</span>
+<span class='curline'><a href='../S/301.html#L475'>trace_uprobe</a>      475 trace/trace_uprobe.c 	struct trace_uprobe *tmp;</span>
+<span class='curline'><a href='../S/301.html#L490'>trace_uprobe</a>      490 trace/trace_uprobe.c static int register_trace_uprobe(struct trace_uprobe *tu)</span>
+<span class='curline'><a href='../S/301.html#L492'>trace_uprobe</a>      492 trace/trace_uprobe.c 	struct trace_uprobe *old_tu;</span>
+<span class='curline'><a href='../S/301.html#L535'>trace_uprobe</a>      535 trace/trace_uprobe.c 	struct trace_uprobe *tu;</span>
+<span class='curline'><a href='../S/301.html#L732'>trace_uprobe</a>      732 trace/trace_uprobe.c 	struct trace_uprobe *tu = to_trace_uprobe(ev);</span>
+<span class='curline'><a href='../S/301.html#L740'>trace_uprobe</a>      740 trace/trace_uprobe.c 	struct trace_uprobe *tu = to_trace_uprobe(ev);</span>
+<span class='curline'><a href='../S/301.html#L812'>trace_uprobe</a>      812 trace/trace_uprobe.c 	struct trace_uprobe *tu;</span>
+<span class='curline'><a href='../S/301.html#L941'>trace_uprobe</a>      941 trace/trace_uprobe.c static void __uprobe_trace_func(struct trace_uprobe *tu,</span>
+<span class='curline'><a href='../S/301.html#L984'>trace_uprobe</a>      984 trace/trace_uprobe.c static int uprobe_trace_func(struct trace_uprobe *tu, struct pt_regs *regs,</span>
+<span class='curline'><a href='../S/301.html#L1000'>trace_uprobe</a>     1000 trace/trace_uprobe.c static void uretprobe_trace_func(struct trace_uprobe *tu, unsigned long func,</span>
+<span class='curline'><a href='../S/301.html#L1018'>trace_uprobe</a>     1018 trace/trace_uprobe.c 	struct trace_uprobe *tu;</span>
+<span class='curline'><a href='../S/301.html#L1052'>trace_uprobe</a>     1052 trace/trace_uprobe.c static int trace_uprobe_enable(struct trace_uprobe *tu, filter_func_t filter)</span>
+<span class='curline'><a href='../S/301.html#L1074'>trace_uprobe</a>     1074 trace/trace_uprobe.c 	struct trace_uprobe *tu;</span>
+<span class='curline'><a href='../S/301.html#L1076'>trace_uprobe</a>     1076 trace/trace_uprobe.c 	tu = container_of(tp, struct trace_uprobe, tp);</span>
+<span class='curline'><a href='../S/301.html#L1080'>trace_uprobe</a>     1080 trace/trace_uprobe.c 		tu = container_of(pos, struct trace_uprobe, tp);</span>
+<span class='curline'><a href='../S/301.html#L1093'>trace_uprobe</a>     1093 trace/trace_uprobe.c 	struct trace_uprobe *tu;</span>
+<span class='curline'><a href='../S/301.html#L1117'>trace_uprobe</a>     1117 trace/trace_uprobe.c 	tu = container_of(tp, struct trace_uprobe, tp);</span>
+<span class='curline'><a href='../S/301.html#L1128'>trace_uprobe</a>     1128 trace/trace_uprobe.c 		tu = container_of(pos, struct trace_uprobe, tp);</span>
+<span class='curline'><a href='../S/301.html#L1179'>trace_uprobe</a>     1179 trace/trace_uprobe.c 	struct trace_uprobe *tu;</span>
+<span class='curline'><a href='../S/301.html#L1274'>trace_uprobe</a>     1274 trace/trace_uprobe.c 	struct trace_uprobe *tu;</span>
+<span class='curline'><a href='../S/301.html#L1281'>trace_uprobe</a>     1281 trace/trace_uprobe.c 	tu = container_of(tp, struct trace_uprobe, tp);</span>
+<span class='curline'><a href='../S/301.html#L1286'>trace_uprobe</a>     1286 trace/trace_uprobe.c 		tu = container_of(pos, struct trace_uprobe, tp);</span>
+<span class='curline'><a href='../S/301.html#L1299'>trace_uprobe</a>     1299 trace/trace_uprobe.c 	struct trace_uprobe *tu;</span>
+<span class='curline'><a href='../S/301.html#L1306'>trace_uprobe</a>     1306 trace/trace_uprobe.c 	tu = container_of(tp, struct trace_uprobe, tp);</span>
+<span class='curline'><a href='../S/301.html#L1325'>trace_uprobe</a>     1325 trace/trace_uprobe.c 	struct trace_uprobe *tu;</span>
+<span class='curline'><a href='../S/301.html#L1328'>trace_uprobe</a>     1328 trace/trace_uprobe.c 	tu = container_of(uc, struct trace_uprobe, consumer);</span>
+<span class='curline'><a href='../S/301.html#L1338'>trace_uprobe</a>     1338 trace/trace_uprobe.c static void __uprobe_perf_func(struct trace_uprobe *tu,</span>
+<span class='curline'><a href='../S/301.html#L1399'>trace_uprobe</a>     1399 trace/trace_uprobe.c static int uprobe_perf_func(struct trace_uprobe *tu, struct pt_regs *regs,</span>
+<span class='curline'><a href='../S/301.html#L1410'>trace_uprobe</a>     1410 trace/trace_uprobe.c static void uretprobe_perf_func(struct trace_uprobe *tu, unsigned long func,</span>
+<span class='curline'><a href='../S/301.html#L1423'>trace_uprobe</a>     1423 trace/trace_uprobe.c 	struct trace_uprobe *tu;</span>
+<span class='curline'><a href='../S/301.html#L1476'>trace_uprobe</a>     1476 trace/trace_uprobe.c 	struct trace_uprobe *tu;</span>
+<span class='curline'><a href='../S/301.html#L1483'>trace_uprobe</a>     1483 trace/trace_uprobe.c 	tu = container_of(con, struct trace_uprobe, consumer);</span>
+<span class='curline'><a href='../S/301.html#L1514'>trace_uprobe</a>     1514 trace/trace_uprobe.c 	struct trace_uprobe *tu;</span>
+<span class='curline'><a href='../S/301.html#L1519'>trace_uprobe</a>     1519 trace/trace_uprobe.c 	tu = container_of(con, struct trace_uprobe, consumer);</span>
+<span class='curline'><a href='../S/301.html#L1556'>trace_uprobe</a>     1556 trace/trace_uprobe.c static inline void init_trace_event_call(struct trace_uprobe *tu)</span>
+<span class='curline'><a href='../S/301.html#L1566'>trace_uprobe</a>     1566 trace/trace_uprobe.c static int register_uprobe_event(struct trace_uprobe *tu)</span>
+<span class='curline'><a href='../S/301.html#L1573'>trace_uprobe</a>     1573 trace/trace_uprobe.c static int unregister_uprobe_event(struct trace_uprobe *tu)</span>
+<span class='curline'><a href='../S/301.html#L1583'>trace_uprobe</a>     1583 trace/trace_uprobe.c 	struct trace_uprobe *tu;</span>
+<span class='curline'><a href='../S/301.html#L1630'>trace_uprobe</a>     1630 trace/trace_uprobe.c 	struct trace_uprobe *tu;</span>
+</pre>
+</body>
+</html>

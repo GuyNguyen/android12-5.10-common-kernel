@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>irqtime</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/473.html#L22'>irqtime</a>            22 sched/cputime.c DEFINE_PER_CPU(struct irqtime, cpu_irqtime);</span>
+<span class='curline'><a href='../S/473.html#L37'>irqtime</a>            37 sched/cputime.c static void irqtime_account_delta(struct irqtime *irqtime, u64 delta,</span>
+<span class='curline'><a href='../S/473.html#L42'>irqtime</a>            42 sched/cputime.c 	u64_stats_update_begin(&amp;irqtime-&gt;sync);</span>
+<span class='curline'><a href='../S/473.html#L44'>irqtime</a>            44 sched/cputime.c 	irqtime-&gt;total += delta;</span>
+<span class='curline'><a href='../S/473.html#L45'>irqtime</a>            45 sched/cputime.c 	irqtime-&gt;tick_delta += delta;</span>
+<span class='curline'><a href='../S/473.html#L46'>irqtime</a>            46 sched/cputime.c 	u64_stats_update_end(&amp;irqtime-&gt;sync);</span>
+<span class='curline'><a href='../S/473.html#L55'>irqtime</a>            55 sched/cputime.c 	struct irqtime *irqtime = this_cpu_ptr(&amp;cpu_irqtime);</span>
+<span class='curline'><a href='../S/473.html#L63'>irqtime</a>            63 sched/cputime.c 	delta = sched_clock_cpu(cpu) - irqtime-&gt;irq_start_time;</span>
+<span class='curline'><a href='../S/473.html#L64'>irqtime</a>            64 sched/cputime.c 	irqtime-&gt;irq_start_time += delta;</span>
+<span class='curline'><a href='../S/473.html#L73'>irqtime</a>            73 sched/cputime.c 		irqtime_account_delta(irqtime, delta, CPUTIME_IRQ);</span>
+<span class='curline'><a href='../S/473.html#L75'>irqtime</a>            75 sched/cputime.c 		irqtime_account_delta(irqtime, delta, CPUTIME_SOFTIRQ);</span>
+<span class='curline'><a href='../S/473.html#L83'>irqtime</a>            83 sched/cputime.c 	struct irqtime *irqtime = this_cpu_ptr(&amp;cpu_irqtime);</span>
+<span class='curline'><a href='../S/473.html#L86'>irqtime</a>            86 sched/cputime.c 	delta = min(irqtime-&gt;tick_delta, maxtime);</span>
+<span class='curline'><a href='../S/473.html#L87'>irqtime</a>            87 sched/cputime.c 	irqtime-&gt;tick_delta -= delta;</span>
+<span class='curline'><a href='../S/447.html#L2378'>irqtime</a>          2378 sched/sched.h  DECLARE_PER_CPU(struct irqtime, cpu_irqtime);</span>
+<span class='curline'><a href='../S/447.html#L2387'>irqtime</a>          2387 sched/sched.h  	struct irqtime *irqtime = &amp;per_cpu(cpu_irqtime, cpu);</span>
+<span class='curline'><a href='../S/447.html#L2392'>irqtime</a>          2392 sched/sched.h  		seq = __u64_stats_fetch_begin(&amp;irqtime-&gt;sync);</span>
+<span class='curline'><a href='../S/447.html#L2393'>irqtime</a>          2393 sched/sched.h  		total = irqtime-&gt;total;</span>
+<span class='curline'><a href='../S/447.html#L2394'>irqtime</a>          2394 sched/sched.h  	} while (__u64_stats_fetch_retry(&amp;irqtime-&gt;sync, seq));</span>
+<span class='curline'><a href='../S/96.html#L48'>irqtime</a>            48 time/sched_clock.c static int irqtime = -1;</span>
+<span class='curline'><a href='../S/96.html#L50'>irqtime</a>            50 time/sched_clock.c core_param(irqtime, irqtime, int, 0400);</span>
+<span class='curline'><a href='../S/96.html#L221'>irqtime</a>           221 time/sched_clock.c 	if (irqtime &gt; 0 || (irqtime == -1 &amp;&amp; rate &gt;= 1000000))</span>
+</pre>
+</body>
+</html>

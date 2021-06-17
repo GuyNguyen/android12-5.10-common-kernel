@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>ns_capable</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/321.html#L398'>ns_capable</a>        398 capability.c   EXPORT_SYMBOL(ns_capable);</span>
+<span class='curline'><a href='../S/321.html#L449'>ns_capable</a>        449 capability.c   	return ns_capable(&amp;init_user_ns, cap);</span>
+<span class='curline'><a href='../S/321.html#L506'>ns_capable</a>        506 capability.c   	return ns_capable(ns, cap) &amp;&amp; privileged_wrt_inode_uidgid(ns, inode);</span>
+<span class='curline'><a href='../S/234.html#L515'>ns_capable</a>        515 cgroup/cgroup-v1.c 	    !ns_capable(tcred-&gt;user_ns, CAP_SYS_NICE))</span>
+<span class='curline'><a href='../S/234.html#L1210'>ns_capable</a>       1210 cgroup/cgroup-v1.c 	if (!ns_capable(ctx-&gt;ns-&gt;user_ns, CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/233.html#L66'>ns_capable</a>         66 cgroup/namespace.c 	if (!ns_capable(user_ns, CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/233.html#L103'>ns_capable</a>        103 cgroup/namespace.c 	if (!ns_capable(nsset-&gt;cred-&gt;user_ns, CAP_SYS_ADMIN) ||</span>
+<span class='curline'><a href='../S/233.html#L104'>ns_capable</a>        104 cgroup/namespace.c 	    !ns_capable(cgroup_ns-&gt;user_ns, CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/80.html#L165'>ns_capable</a>        165 nsproxy.c      	} else if (!ns_capable(user_ns, CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/80.html#L228'>ns_capable</a>        228 nsproxy.c      	if (!ns_capable(user_ns, CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/195.html#L387'>ns_capable</a>        387 pid_namespace.c 	if (!ns_capable(new-&gt;user_ns, CAP_SYS_ADMIN) ||</span>
+<span class='curline'><a href='../S/195.html#L388'>ns_capable</a>        388 pid_namespace.c 	    !ns_capable(nsset-&gt;cred-&gt;user_ns, CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/251.html#L287'>ns_capable</a>        287 ptrace.c       	return ns_capable(ns, CAP_SYS_PTRACE);</span>
+<span class='curline'><a href='../S/214.html#L320'>ns_capable</a>        320 reboot.c       	if (!ns_capable(pid_ns-&gt;user_ns, CAP_SYS_BOOT))</span>
+<span class='curline'><a href='../S/441.html#L6159'>ns_capable</a>       6159 sched/core.c   		if (!ns_capable(__task_cred(p)-&gt;user_ns, CAP_SYS_NICE)) {</span>
+<span class='curline'><a href='../S/246.html#L824'>ns_capable</a>        824 signal.c       	       ns_capable(tcred-&gt;user_ns, CAP_KILL);</span>
+<span class='curline'><a href='../S/492.html#L168'>ns_capable</a>        168 sys.c          	if (ns_capable(pcred-&gt;user_ns, CAP_SYS_NICE))</span>
+<span class='curline'><a href='../S/492.html#L1330'>ns_capable</a>       1330 sys.c          	if (!ns_capable(current-&gt;nsproxy-&gt;uts_ns-&gt;user_ns, CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/492.html#L1383'>ns_capable</a>       1383 sys.c          	if (!ns_capable(current-&gt;nsproxy-&gt;uts_ns-&gt;user_ns, CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/492.html#L1620'>ns_capable</a>       1620 sys.c          	if (!id_match &amp;&amp; !ns_capable(tcred-&gt;user_ns, CAP_SYS_RESOURCE))</span>
+<span class='curline'><a href='../S/89.html#L297'>ns_capable</a>        297 time/namespace.c 	if (!ns_capable(ns-&gt;user_ns, CAP_SYS_ADMIN) ||</span>
+<span class='curline'><a href='../S/89.html#L298'>ns_capable</a>        298 time/namespace.c 	    !ns_capable(nsset-&gt;cred-&gt;user_ns, CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/252.html#L42'>ns_capable</a>         42 ucount.c       	if (ns_capable(user_ns, CAP_SYS_RESOURCE))</span>
+<span class='curline'><a href='../S/117.html#L1174'>ns_capable</a>       1174 user_namespace.c 	if (ns_capable(ns-&gt;parent, cap_setid) &amp;&amp;</span>
+<span class='curline'><a href='../S/117.html#L1333'>ns_capable</a>       1333 user_namespace.c 	if (!ns_capable(user_ns, CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/247.html#L148'>ns_capable</a>        148 utsname.c      	if (!ns_capable(ns-&gt;user_ns, CAP_SYS_ADMIN) ||</span>
+<span class='curline'><a href='../S/247.html#L149'>ns_capable</a>        149 utsname.c      	    !ns_capable(nsset-&gt;cred-&gt;user_ns, CAP_SYS_ADMIN))</span>
+</pre>
+</body>
+</html>

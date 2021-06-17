@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>audit_buffer</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/162.html#L389'>audit_buffer</a>      389 audit.c        	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/162.html#L1057'>audit_buffer</a>     1057 audit.c        					struct audit_buffer **ab, u16 msg_type)</span>
+<span class='curline'><a href='../S/162.html#L1075'>audit_buffer</a>     1075 audit.c        static inline void audit_log_user_recv_msg(struct audit_buffer **ab,</span>
+<span class='curline'><a href='../S/162.html#L1101'>audit_buffer</a>     1101 audit.c        	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/162.html#L1190'>audit_buffer</a>     1190 audit.c        	struct audit_buffer	*ab;</span>
+<span class='curline'><a href='../S/162.html#L1478'>audit_buffer</a>     1478 audit.c        		struct audit_buffer	*ab;</span>
+<span class='curline'><a href='../S/162.html#L1553'>audit_buffer</a>     1553 audit.c        	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/162.html#L1646'>audit_buffer</a>     1646 audit.c        					       sizeof(struct audit_buffer),</span>
+<span class='curline'><a href='../S/162.html#L1727'>audit_buffer</a>     1727 audit.c        static void audit_buffer_free(struct audit_buffer *ab)</span>
+<span class='curline'><a href='../S/162.html#L1736'>audit_buffer</a>     1736 audit.c        static struct audit_buffer *audit_buffer_alloc(struct audit_context *ctx,</span>
+<span class='curline'><a href='../S/162.html#L1739'>audit_buffer</a>     1739 audit.c        	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/162.html#L1809'>audit_buffer</a>     1809 audit.c        struct audit_buffer *audit_log_start(struct audit_context *ctx, gfp_t gfp_mask,</span>
+<span class='curline'><a href='../S/162.html#L1812'>audit_buffer</a>     1812 audit.c        	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/162.html#L1882'>audit_buffer</a>     1882 audit.c        static inline int audit_expand(struct audit_buffer *ab, int extra)</span>
+<span class='curline'><a href='../S/162.html#L1904'>audit_buffer</a>     1904 audit.c        static void audit_log_vformat(struct audit_buffer *ab, const char *fmt,</span>
+<span class='curline'><a href='../S/162.html#L1950'>audit_buffer</a>     1950 audit.c        void audit_log_format(struct audit_buffer *ab, const char *fmt, ...)</span>
+<span class='curline'><a href='../S/162.html#L1972'>audit_buffer</a>     1972 audit.c        void audit_log_n_hex(struct audit_buffer *ab, const unsigned char *buf,</span>
+<span class='curline'><a href='../S/162.html#L2005'>audit_buffer</a>     2005 audit.c        void audit_log_n_string(struct audit_buffer *ab, const char *string,</span>
+<span class='curline'><a href='../S/162.html#L2062'>audit_buffer</a>     2062 audit.c        void audit_log_n_untrustedstring(struct audit_buffer *ab, const char *string,</span>
+<span class='curline'><a href='../S/162.html#L2079'>audit_buffer</a>     2079 audit.c        void audit_log_untrustedstring(struct audit_buffer *ab, const char *string)</span>
+<span class='curline'><a href='../S/162.html#L2085'>audit_buffer</a>     2085 audit.c        void audit_log_d_path(struct audit_buffer *ab, const char *prefix,</span>
+<span class='curline'><a href='../S/162.html#L2108'>audit_buffer</a>     2108 audit.c        void audit_log_session_info(struct audit_buffer *ab)</span>
+<span class='curline'><a href='../S/162.html#L2116'>audit_buffer</a>     2116 audit.c        void audit_log_key(struct audit_buffer *ab, char *key)</span>
+<span class='curline'><a href='../S/162.html#L2125'>audit_buffer</a>     2125 audit.c        int audit_log_task_context(struct audit_buffer *ab)</span>
+<span class='curline'><a href='../S/162.html#L2153'>audit_buffer</a>     2153 audit.c        void audit_log_d_path_exe(struct audit_buffer *ab,</span>
+<span class='curline'><a href='../S/162.html#L2189'>audit_buffer</a>     2189 audit.c        void audit_log_task_info(struct audit_buffer *ab)</span>
+<span class='curline'><a href='../S/162.html#L2232'>audit_buffer</a>     2232 audit.c        	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/162.html#L2272'>audit_buffer</a>     2272 audit.c        	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/162.html#L2368'>audit_buffer</a>     2368 audit.c        void audit_log_end(struct audit_buffer *ab)</span>
+<span class='curline'><a href='../S/162.html#L2409'>audit_buffer</a>     2409 audit.c        	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/120.html#L201'>audit_buffer</a>      201 audit.h        extern void audit_log_session_info(struct audit_buffer *ab);</span>
+<span class='curline'><a href='../S/120.html#L243'>audit_buffer</a>      243 audit.h        extern void audit_log_d_path_exe(struct audit_buffer *ab,</span>
+<span class='curline'><a href='../S/367.html#L116'>audit_buffer</a>      116 audit_fsnotify.c 	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/72.html#L528'>audit_buffer</a>      528 audit_tree.c   	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/181.html#L228'>audit_buffer</a>      228 audit_watch.c  	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/219.html#L1100'>audit_buffer</a>     1100 auditfilter.c  	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/200.html#L988'>audit_buffer</a>      988 auditsc.c      	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/200.html#L1017'>audit_buffer</a>     1017 auditsc.c      				  struct audit_buffer **ab)</span>
+<span class='curline'><a href='../S/200.html#L1190'>audit_buffer</a>     1190 auditsc.c      static void audit_log_cap(struct audit_buffer *ab, char *prefix,</span>
+<span class='curline'><a href='../S/200.html#L1204'>audit_buffer</a>     1204 auditsc.c      static void audit_log_fcaps(struct audit_buffer *ab, struct audit_names *name)</span>
+<span class='curline'><a href='../S/200.html#L1219'>audit_buffer</a>     1219 auditsc.c      	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/200.html#L1349'>audit_buffer</a>     1349 auditsc.c      	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/200.html#L1436'>audit_buffer</a>     1436 auditsc.c      	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/200.html#L1477'>audit_buffer</a>     1477 auditsc.c      	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/200.html#L2593'>audit_buffer</a>     2593 auditsc.c      	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/200.html#L2610'>audit_buffer</a>     2610 auditsc.c      static void audit_log_task(struct audit_buffer *ab)</span>
+<span class='curline'><a href='../S/200.html#L2641'>audit_buffer</a>     2641 auditsc.c      	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/200.html#L2671'>audit_buffer</a>     2671 auditsc.c      	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/200.html#L2686'>audit_buffer</a>     2686 auditsc.c      	struct audit_buffer *ab;</span>
+<span class='curline'><a href='../S/418.html#L1615'>audit_buffer</a>     1615 bpf/syscall.c  	struct audit_buffer *ab;</span>
+</pre>
+</body>
+</html>

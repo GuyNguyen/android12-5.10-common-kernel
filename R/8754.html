@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>ktime_get</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/12.html#L121'>ktime_get</a>         121 async.c        		calltime = ktime_get();</span>
+<span class='curline'><a href='../S/12.html#L125'>ktime_get</a>         125 async.c        		rettime = ktime_get();</span>
+<span class='curline'><a href='../S/12.html#L294'>ktime_get</a>         294 async.c        		starttime = ktime_get();</span>
+<span class='curline'><a href='../S/12.html#L300'>ktime_get</a>         300 async.c        		endtime = ktime_get();</span>
+<span class='curline'><a href='../S/76.html#L3790'>ktime_get</a>        3790 futex.c        			t = ktime_add_safe(ktime_get(), t);</span>
+<span class='curline'><a href='../S/76.html#L3984'>ktime_get</a>        3984 futex.c        			t = ktime_add_safe(ktime_get(), t);</span>
+<span class='curline'><a href='../S/164.html#L59'>ktime_get</a>          59 power/main.c   	start = ktime_get();</span>
+<span class='curline'><a href='../S/164.html#L61'>ktime_get</a>          61 power/main.c   	elapsed_msecs = ktime_to_ms(ktime_sub(ktime_get(), start));</span>
+<span class='curline'><a href='../S/177.html#L1714'>ktime_get</a>        1714 power/snapshot.c 	start = ktime_get();</span>
+<span class='curline'><a href='../S/177.html#L1847'>ktime_get</a>        1847 power/snapshot.c 	stop = ktime_get();</span>
+<span class='curline'><a href='../S/165.html#L558'>ktime_get</a>         558 power/swap.c   	start = ktime_get();</span>
+<span class='curline'><a href='../S/165.html#L573'>ktime_get</a>         573 power/swap.c   	stop = ktime_get();</span>
+<span class='curline'><a href='../S/165.html#L777'>ktime_get</a>         777 power/swap.c   	start = ktime_get();</span>
+<span class='curline'><a href='../S/165.html#L859'>ktime_get</a>         859 power/swap.c   	stop = ktime_get();</span>
+<span class='curline'><a href='../S/165.html#L1079'>ktime_get</a>        1079 power/swap.c   	start = ktime_get();</span>
+<span class='curline'><a href='../S/165.html#L1098'>ktime_get</a>        1098 power/swap.c   	stop = ktime_get();</span>
+<span class='curline'><a href='../S/165.html#L1296'>ktime_get</a>        1296 power/swap.c   	start = ktime_get();</span>
+<span class='curline'><a href='../S/165.html#L1444'>ktime_get</a>        1444 power/swap.c   	stop = ktime_get();</span>
+<span class='curline'><a href='../S/172.html#L110'>ktime_get</a>         110 power/wakelock.c 	now = ktime_get();</span>
+<span class='curline'><a href='../S/172.html#L197'>ktime_get</a>         197 power/wakelock.c 	wl-&gt;ws-&gt;last_time = ktime_get();</span>
+<span class='curline'><a href='../S/179.html#L380'>ktime_get</a>         380 power/wakeup_reason.c 		last_monotime = ktime_get();</span>
+<span class='curline'><a href='../S/179.html#L387'>ktime_get</a>         387 power/wakeup_reason.c 		curr_monotime = ktime_get();</span>
+<span class='curline'><a href='../S/460.html#L760'>ktime_get</a>         760 sched/debug.c  	ktime = ktime_to_ns(ktime_get());</span>
+<span class='curline'><a href='../S/87.html#L241'>ktime_get</a>         241 time/clockevents.c 		dev-&gt;next_event = ktime_add_ns(ktime_get(), delta);</span>
+<span class='curline'><a href='../S/87.html#L280'>ktime_get</a>         280 time/clockevents.c 		dev-&gt;next_event = ktime_add_ns(ktime_get(), delta);</span>
+<span class='curline'><a href='../S/87.html#L326'>ktime_get</a>         326 time/clockevents.c 	delta = ktime_to_ns(ktime_sub(expires, ktime_get()));</span>
+<span class='curline'><a href='../S/88.html#L76'>ktime_get</a>          76 time/hrtimer.c 			.get_time = &amp;ktime_get,</span>
+<span class='curline'><a href='../S/88.html#L96'>ktime_get</a>          96 time/hrtimer.c 			.get_time = &amp;ktime_get,</span>
+<span class='curline'><a href='../S/103.html#L206'>ktime_get</a>         206 time/posix-timers.c 	return ktime_get();</span>
+<span class='curline'><a href='../S/94.html#L696'>ktime_get</a>         696 time/tick-broadcast.c 	now = ktime_get();</span>
+<span class='curline'><a href='../S/94.html#L912'>ktime_get</a>         912 time/tick-broadcast.c 			now = ktime_get();</span>
+<span class='curline'><a href='../S/95.html#L224'>ktime_get</a>         224 time/tick-common.c 			tick_next_period = ktime_get();</span>
+<span class='curline'><a href='../S/110.html#L55'>ktime_get</a>          55 time/tick-oneshot.c 	clockevents_program_event(dev, ktime_get(), true);</span>
+<span class='curline'><a href='../S/114.html#L575'>ktime_get</a>         575 time/tick-sched.c 	ts-&gt;idle_entrytime = ktime_get();</span>
+<span class='curline'><a href='../S/114.html#L602'>ktime_get</a>         602 time/tick-sched.c 	now = ktime_get();</span>
+<span class='curline'><a href='../S/114.html#L643'>ktime_get</a>         643 time/tick-sched.c 	now = ktime_get();</span>
+<span class='curline'><a href='../S/114.html#L898'>ktime_get</a>         898 time/tick-sched.c 		tick_nohz_restart_sched_tick(ts, ktime_get());</span>
+<span class='curline'><a href='../S/114.html#L1176'>ktime_get</a>        1176 time/tick-sched.c 		__tick_nohz_idle_restart_tick(ts, ktime_get());</span>
+<span class='curline'><a href='../S/114.html#L1202'>ktime_get</a>        1202 time/tick-sched.c 		now = ktime_get();</span>
+<span class='curline'><a href='../S/114.html#L1220'>ktime_get</a>        1220 time/tick-sched.c 	ktime_t now = ktime_get();</span>
+<span class='curline'><a href='../S/114.html#L1280'>ktime_get</a>        1280 time/tick-sched.c 	now = ktime_get();</span>
+<span class='curline'><a href='../S/114.html#L1317'>ktime_get</a>        1317 time/tick-sched.c 	ktime_t now = ktime_get();</span>
+<span class='curline'><a href='../S/114.html#L1355'>ktime_get</a>        1355 time/tick-sched.c 	ktime_t now = ktime_get();</span>
+<span class='curline'><a href='../S/82.html#L839'>ktime_get</a>         839 time/timekeeping.c EXPORT_SYMBOL_GPL(ktime_get);</span>
+<span class='curline'><a href='../S/115.html#L2064'>ktime_get</a>        2064 time/timer.c   	ktime_t exp = ktime_add_us(ktime_get(), min);</span>
+<span class='curline'><a href='../S/98.html#L295'>ktime_get</a>         295 time/timer_list.c 	u64 now = ktime_to_ns(ktime_get());</span>
+<span class='curline'><a href='../S/98.html#L353'>ktime_get</a>         353 time/timer_list.c 		iter-&gt;now = ktime_to_ns(ktime_get());</span>
+<span class='curline'><a href='../S/16.html#L508'>ktime_get</a>         508 torture.c      	ktime_snap = ktime_get();</span>
+<span class='curline'><a href='../S/16.html#L518'>ktime_get</a>         518 torture.c      		ktime_snap = ktime_get();</span>
+<span class='curline'><a href='../S/16.html#L546'>ktime_get</a>         546 torture.c      		shutdown_time = ktime_add(ktime_get(), ktime_set(ssecs, 0));</span>
+<span class='curline'><a href='../S/290.html#L98'>ktime_get</a>          98 trace/blktrace.c 		t-&gt;time = ktime_to_ns(ktime_get());</span>
+<span class='curline'><a href='../S/290.html#L280'>ktime_get</a>         280 trace/blktrace.c 		t-&gt;time = ktime_to_ns(ktime_get());</span>
+<span class='curline'><a href='../S/278.html#L246'>ktime_get</a>         246 trace/ring_buffer_benchmark.c 	start_time = ktime_get();</span>
+<span class='curline'><a href='../S/278.html#L264'>ktime_get</a>         264 trace/ring_buffer_benchmark.c 		end_time = ktime_get();</span>
+</pre>
+</body>
+</html>

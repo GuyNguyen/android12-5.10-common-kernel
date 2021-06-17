@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>se_weight</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/464.html#L3088'>se_weight</a>        3088 sched/fair.c   	cfs_rq-&gt;avg.load_sum += se_weight(se) * se-&gt;avg.load_sum;</span>
+<span class='curline'><a href='../S/464.html#L3095'>se_weight</a>        3095 sched/fair.c   	sub_positive(&amp;cfs_rq-&gt;avg.load_sum, se_weight(se) * se-&gt;avg.load_sum);</span>
+<span class='curline'><a href='../S/464.html#L3121'>se_weight</a>        3121 sched/fair.c   		se-&gt;avg.load_avg = div_u64(se_weight(se) * se-&gt;avg.load_sum, divider);</span>
+<span class='curline'><a href='../S/464.html#L3560'>se_weight</a>        3560 sched/fair.c   	load_sum = (s64)se_weight(se) * runnable_sum;</span>
+<span class='curline'><a href='../S/464.html#L3563'>se_weight</a>        3563 sched/fair.c   	delta_sum = load_sum - (s64)se_weight(se) * se-&gt;avg.load_sum;</span>
+<span class='curline'><a href='../S/464.html#L3752'>se_weight</a>        3752 sched/fair.c   	if (se_weight(se)) {</span>
+<span class='curline'><a href='../S/464.html#L3754'>se_weight</a>        3754 sched/fair.c   			div_u64(se-&gt;avg.load_avg * se-&gt;avg.load_sum, se_weight(se));</span>
+<span class='curline'><a href='../S/463.html#L338'>se_weight</a>         338 sched/pelt.c   		___update_load_avg(&amp;se-&gt;avg, se_weight(se));</span>
+<span class='curline'><a href='../S/463.html#L352'>se_weight</a>         352 sched/pelt.c   		___update_load_avg(&amp;se-&gt;avg, se_weight(se));</span>
+</pre>
+</body>
+</html>

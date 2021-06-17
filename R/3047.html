@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>array_buffer</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/290.html#L81'>array_buffer</a>       81 trace/blktrace.c 		buffer = blk_tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/290.html#L254'>array_buffer</a>      254 trace/blktrace.c 		buffer = blk_tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/270.html#L149'>array_buffer</a>      149 trace/ftrace.c 		pid = this_cpu_read(tr-&gt;array_buffer.data-&gt;ftrace_ignore_pid);</span>
+<span class='curline'><a href='../S/270.html#L7107'>array_buffer</a>     7107 trace/ftrace.c 		this_cpu_write(tr-&gt;array_buffer.data-&gt;ftrace_ignore_pid,</span>
+<span class='curline'><a href='../S/270.html#L7110'>array_buffer</a>     7110 trace/ftrace.c 		this_cpu_write(tr-&gt;array_buffer.data-&gt;ftrace_ignore_pid,</span>
+<span class='curline'><a href='../S/270.html#L7176'>array_buffer</a>     7176 trace/ftrace.c 			per_cpu_ptr(tr-&gt;array_buffer.data, cpu)-&gt;ftrace_ignore_pid = FTRACE_PID_TRACE;</span>
+<span class='curline'><a href='../S/270.html#L7375'>array_buffer</a>     7375 trace/ftrace.c 		this_cpu_write(tr-&gt;array_buffer.data-&gt;ftrace_ignore_pid,</span>
+<span class='curline'><a href='../S/270.html#L7378'>array_buffer</a>     7378 trace/ftrace.c 		this_cpu_write(tr-&gt;array_buffer.data-&gt;ftrace_ignore_pid,</span>
+<span class='curline'><a href='../S/271.html#L764'>array_buffer</a>      764 trace/trace.c  static u64 buffer_ftrace_now(struct array_buffer *buf, int cpu)</span>
+<span class='curline'><a href='../S/271.html#L780'>array_buffer</a>      780 trace/trace.c  	return buffer_ftrace_now(&amp;global_trace.array_buffer, cpu);</span>
+<span class='curline'><a href='../S/271.html#L957'>array_buffer</a>      957 trace/trace.c  	if (tr-&gt;array_buffer.buffer)</span>
+<span class='curline'><a href='../S/271.html#L958'>array_buffer</a>      958 trace/trace.c  		ring_buffer_record_on(tr-&gt;array_buffer.buffer);</span>
+<span class='curline'><a href='../S/271.html#L1026'>array_buffer</a>     1026 trace/trace.c  	buffer = global_trace.array_buffer.buffer;</span>
+<span class='curline'><a href='../S/271.html#L1079'>array_buffer</a>     1079 trace/trace.c  	buffer = global_trace.array_buffer.buffer;</span>
+<span class='curline'><a href='../S/271.html#L1208'>array_buffer</a>     1208 trace/trace.c  static int resize_buffer_duplicate_size(struct array_buffer *trace_buf,</span>
+<span class='curline'><a href='../S/271.html#L1209'>array_buffer</a>     1209 trace/trace.c  					struct array_buffer *size_buf, int cpu_id);</span>
+<span class='curline'><a href='../S/271.html#L1210'>array_buffer</a>     1210 trace/trace.c  static void set_buffer_entries(struct array_buffer *buf, unsigned long val);</span>
+<span class='curline'><a href='../S/271.html#L1220'>array_buffer</a>     1220 trace/trace.c  				   &amp;tr-&gt;array_buffer, RING_BUFFER_ALL_CPUS);</span>
+<span class='curline'><a href='../S/271.html#L1423'>array_buffer</a>     1423 trace/trace.c  	if (tr-&gt;array_buffer.buffer)</span>
+<span class='curline'><a href='../S/271.html#L1424'>array_buffer</a>     1424 trace/trace.c  		ring_buffer_record_off(tr-&gt;array_buffer.buffer);</span>
+<span class='curline'><a href='../S/271.html#L1455'>array_buffer</a>     1455 trace/trace.c  		trace_array_printk_buf(global_trace.array_buffer.buffer, _THIS_IP_,</span>
+<span class='curline'><a href='../S/271.html#L1469'>array_buffer</a>     1469 trace/trace.c  	if (tr-&gt;array_buffer.buffer)</span>
+<span class='curline'><a href='../S/271.html#L1470'>array_buffer</a>     1470 trace/trace.c  		return ring_buffer_record_is_on(tr-&gt;array_buffer.buffer);</span>
+<span class='curline'><a href='../S/271.html#L1764'>array_buffer</a>     1764 trace/trace.c  	struct array_buffer *trace_buf = &amp;tr-&gt;array_buffer;</span>
+<span class='curline'><a href='../S/271.html#L1765'>array_buffer</a>     1765 trace/trace.c  	struct array_buffer *max_buf = &amp;tr-&gt;max_buffer;</span>
+<span class='curline'><a href='../S/271.html#L1824'>array_buffer</a>     1824 trace/trace.c  	if (ring_buffer_record_is_set_on(tr-&gt;array_buffer.buffer))</span>
+<span class='curline'><a href='../S/271.html#L1833'>array_buffer</a>     1833 trace/trace.c  	swap(tr-&gt;array_buffer.buffer, tr-&gt;max_buffer.buffer);</span>
+<span class='curline'><a href='../S/271.html#L1866'>array_buffer</a>     1866 trace/trace.c  	ret = ring_buffer_swap_cpu(tr-&gt;max_buffer.buffer, tr-&gt;array_buffer.buffer, cpu);</span>
+<span class='curline'><a href='../S/271.html#L1892'>array_buffer</a>     1892 trace/trace.c  	return ring_buffer_wait(iter-&gt;array_buffer-&gt;buffer, iter-&gt;cpu_file,</span>
+<span class='curline'><a href='../S/271.html#L1943'>array_buffer</a>     1943 trace/trace.c  	tracing_reset_online_cpus(&amp;tr-&gt;array_buffer);</span>
+<span class='curline'><a href='../S/271.html#L1969'>array_buffer</a>     1969 trace/trace.c  	tracing_reset_online_cpus(&amp;tr-&gt;array_buffer);</span>
+<span class='curline'><a href='../S/271.html#L2134'>array_buffer</a>     2134 trace/trace.c  static void tracing_reset_cpu(struct array_buffer *buf, int cpu)</span>
+<span class='curline'><a href='../S/271.html#L2150'>array_buffer</a>     2150 trace/trace.c  void tracing_reset_online_cpus(struct array_buffer *buf)</span>
+<span class='curline'><a href='../S/271.html#L2178'>array_buffer</a>     2178 trace/trace.c  		tracing_reset_online_cpus(&amp;tr-&gt;array_buffer);</span>
+<span class='curline'><a href='../S/271.html#L2287'>array_buffer</a>     2287 trace/trace.c  	buffer = global_trace.array_buffer.buffer;</span>
+<span class='curline'><a href='../S/271.html#L2326'>array_buffer</a>     2326 trace/trace.c  	buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/271.html#L2352'>array_buffer</a>     2352 trace/trace.c  	buffer = global_trace.array_buffer.buffer;</span>
+<span class='curline'><a href='../S/271.html#L2381'>array_buffer</a>     2381 trace/trace.c  	buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/271.html#L2731'>array_buffer</a>     2731 trace/trace.c  	*current_rb = trace_file-&gt;tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/271.html#L2890'>array_buffer</a>     2890 trace/trace.c  	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/271.html#L3011'>array_buffer</a>     3011 trace/trace.c  	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/271.html#L3049'>array_buffer</a>     3049 trace/trace.c  	__ftrace_trace_stack(global_trace.array_buffer.buffer,</span>
+<span class='curline'><a href='../S/271.html#L3199'>array_buffer</a>     3199 trace/trace.c  	if (global_trace.array_buffer.buffer)</span>
+<span class='curline'><a href='../S/271.html#L3262'>array_buffer</a>     3262 trace/trace.c  	buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/271.html#L3352'>array_buffer</a>     3352 trace/trace.c  	return __trace_array_vprintk(tr-&gt;array_buffer.buffer, ip, fmt, args);</span>
+<span class='curline'><a href='../S/271.html#L3465'>array_buffer</a>     3465 trace/trace.c  		event = ring_buffer_peek(iter-&gt;array_buffer-&gt;buffer, cpu, ts,</span>
+<span class='curline'><a href='../S/271.html#L3481'>array_buffer</a>     3481 trace/trace.c  	struct trace_buffer *buffer = iter-&gt;array_buffer-&gt;buffer;</span>
+<span class='curline'><a href='../S/271.html#L3600'>array_buffer</a>     3600 trace/trace.c  	ring_buffer_consume(iter-&gt;array_buffer-&gt;buffer, iter-&gt;cpu, &amp;iter-&gt;ts,</span>
+<span class='curline'><a href='../S/271.html#L3637'>array_buffer</a>     3637 trace/trace.c  	per_cpu_ptr(iter-&gt;array_buffer-&gt;data, cpu)-&gt;skipped_entries = 0;</span>
+<span class='curline'><a href='../S/271.html#L3651'>array_buffer</a>     3651 trace/trace.c  		if (ts &gt;= iter-&gt;array_buffer-&gt;time_start)</span>
+<span class='curline'><a href='../S/271.html#L3657'>array_buffer</a>     3657 trace/trace.c  	per_cpu_ptr(iter-&gt;array_buffer-&gt;data, cpu)-&gt;skipped_entries = entries;</span>
+<span class='curline'><a href='../S/271.html#L3742'>array_buffer</a>     3742 trace/trace.c  get_total_entries_cpu(struct array_buffer *buf, unsigned long *total,</span>
+<span class='curline'><a href='../S/271.html#L3764'>array_buffer</a>     3764 trace/trace.c  get_total_entries(struct array_buffer *buf,</span>
+<span class='curline'><a href='../S/271.html#L3787'>array_buffer</a>     3787 trace/trace.c  	get_total_entries_cpu(&amp;tr-&gt;array_buffer, &amp;total, &amp;entries, cpu);</span>
+<span class='curline'><a href='../S/271.html#L3799'>array_buffer</a>     3799 trace/trace.c  	get_total_entries(&amp;tr-&gt;array_buffer, &amp;total, &amp;entries);</span>
+<span class='curline'><a href='../S/271.html#L3816'>array_buffer</a>     3816 trace/trace.c  static void print_event_info(struct array_buffer *buf, struct seq_file *m)</span>
+<span class='curline'><a href='../S/271.html#L3827'>array_buffer</a>     3827 trace/trace.c  static void print_func_help_header(struct array_buffer *buf, struct seq_file *m,</span>
+<span class='curline'><a href='../S/271.html#L3838'>array_buffer</a>     3838 trace/trace.c  static void print_func_help_header_irq(struct array_buffer *buf, struct seq_file *m,</span>
+<span class='curline'><a href='../S/271.html#L3860'>array_buffer</a>     3860 trace/trace.c  	struct array_buffer *buf = iter-&gt;array_buffer;</span>
+<span class='curline'><a href='../S/271.html#L3935'>array_buffer</a>     3935 trace/trace.c  	if (per_cpu_ptr(iter-&gt;array_buffer-&gt;data, iter-&gt;cpu)-&gt;skipped_entries)</span>
+<span class='curline'><a href='../S/271.html#L4069'>array_buffer</a>     4069 trace/trace.c  			if (!ring_buffer_empty_cpu(iter-&gt;array_buffer-&gt;buffer, cpu))</span>
+<span class='curline'><a href='../S/271.html#L4081'>array_buffer</a>     4081 trace/trace.c  			if (!ring_buffer_empty_cpu(iter-&gt;array_buffer-&gt;buffer, cpu))</span>
+<span class='curline'><a href='../S/271.html#L4175'>array_buffer</a>     4175 trace/trace.c  				print_func_help_header_irq(iter-&gt;array_buffer,</span>
+<span class='curline'><a href='../S/271.html#L4178'>array_buffer</a>     4178 trace/trace.c  				print_func_help_header(iter-&gt;array_buffer, m,</span>
+<span class='curline'><a href='../S/271.html#L4348'>array_buffer</a>     4348 trace/trace.c  		iter-&gt;array_buffer = &amp;tr-&gt;max_buffer;</span>
+<span class='curline'><a href='../S/271.html#L4351'>array_buffer</a>     4351 trace/trace.c  		iter-&gt;array_buffer = &amp;tr-&gt;array_buffer;</span>
+<span class='curline'><a href='../S/271.html#L4362'>array_buffer</a>     4362 trace/trace.c  	if (ring_buffer_overruns(iter-&gt;array_buffer-&gt;buffer))</span>
+<span class='curline'><a href='../S/271.html#L4379'>array_buffer</a>     4379 trace/trace.c  				ring_buffer_read_prepare(iter-&gt;array_buffer-&gt;buffer,</span>
+<span class='curline'><a href='../S/271.html#L4390'>array_buffer</a>     4390 trace/trace.c  			ring_buffer_read_prepare(iter-&gt;array_buffer-&gt;buffer,</span>
+<span class='curline'><a href='../S/271.html#L4518'>array_buffer</a>     4518 trace/trace.c  		struct array_buffer *trace_buf = &amp;tr-&gt;array_buffer;</span>
+<span class='curline'><a href='../S/271.html#L4732'>array_buffer</a>     4732 trace/trace.c  			atomic_inc(&amp;per_cpu_ptr(tr-&gt;array_buffer.data, cpu)-&gt;disabled);</span>
+<span class='curline'><a href='../S/271.html#L4733'>array_buffer</a>     4733 trace/trace.c  			ring_buffer_record_disable_cpu(tr-&gt;array_buffer.buffer, cpu);</span>
+<span class='curline'><a href='../S/271.html#L4737'>array_buffer</a>     4737 trace/trace.c  			atomic_dec(&amp;per_cpu_ptr(tr-&gt;array_buffer.data, cpu)-&gt;disabled);</span>
+<span class='curline'><a href='../S/271.html#L4738'>array_buffer</a>     4738 trace/trace.c  			ring_buffer_record_enable_cpu(tr-&gt;array_buffer.buffer, cpu);</span>
+<span class='curline'><a href='../S/271.html#L4903'>array_buffer</a>     4903 trace/trace.c  		ring_buffer_change_overwrite(tr-&gt;array_buffer.buffer, enabled);</span>
+<span class='curline'><a href='../S/271.html#L5716'>array_buffer</a>     5716 trace/trace.c  	tracing_reset_online_cpus(&amp;tr-&gt;array_buffer);</span>
+<span class='curline'><a href='../S/271.html#L5720'>array_buffer</a>     5720 trace/trace.c  static void set_buffer_entries(struct array_buffer *buf, unsigned long val)</span>
+<span class='curline'><a href='../S/271.html#L5730'>array_buffer</a>     5730 trace/trace.c  static int resize_buffer_duplicate_size(struct array_buffer *trace_buf,</span>
+<span class='curline'><a href='../S/271.html#L5731'>array_buffer</a>     5731 trace/trace.c  					struct array_buffer *size_buf, int cpu_id)</span>
+<span class='curline'><a href='../S/271.html#L5769'>array_buffer</a>     5769 trace/trace.c  	if (!tr-&gt;array_buffer.buffer)</span>
+<span class='curline'><a href='../S/271.html#L5772'>array_buffer</a>     5772 trace/trace.c  	ret = ring_buffer_resize(tr-&gt;array_buffer.buffer, size, cpu);</span>
+<span class='curline'><a href='../S/271.html#L5783'>array_buffer</a>     5783 trace/trace.c  		int r = resize_buffer_duplicate_size(&amp;tr-&gt;array_buffer,</span>
+<span class='curline'><a href='../S/271.html#L5784'>array_buffer</a>     5784 trace/trace.c  						     &amp;tr-&gt;array_buffer, cpu);</span>
+<span class='curline'><a href='../S/271.html#L5815'>array_buffer</a>     5815 trace/trace.c  		set_buffer_entries(&amp;tr-&gt;array_buffer, size);</span>
+<span class='curline'><a href='../S/271.html#L5817'>array_buffer</a>     5817 trace/trace.c  		per_cpu_ptr(tr-&gt;array_buffer.data, cpu)-&gt;entries = size;</span>
+<span class='curline'><a href='../S/271.html#L6161'>array_buffer</a>     6161 trace/trace.c  	iter-&gt;array_buffer = &amp;tr-&gt;array_buffer;</span>
+<span class='curline'><a href='../S/271.html#L6221'>array_buffer</a>     6221 trace/trace.c  		return ring_buffer_poll_wait(iter-&gt;array_buffer-&gt;buffer, iter-&gt;cpu_file,</span>
+<span class='curline'><a href='../S/271.html#L6531'>array_buffer</a>     6531 trace/trace.c  				size = per_cpu_ptr(tr-&gt;array_buffer.data, cpu)-&gt;entries;</span>
+<span class='curline'><a href='../S/271.html#L6532'>array_buffer</a>     6532 trace/trace.c  			if (size != per_cpu_ptr(tr-&gt;array_buffer.data, cpu)-&gt;entries) {</span>
+<span class='curline'><a href='../S/271.html#L6548'>array_buffer</a>     6548 trace/trace.c  		r = sprintf(buf, "%lu\n", per_cpu_ptr(tr-&gt;array_buffer.data, cpu)-&gt;entries &gt;&gt; 10);</span>
+<span class='curline'><a href='../S/271.html#L6595'>array_buffer</a>     6595 trace/trace.c  		size += per_cpu_ptr(tr-&gt;array_buffer.data, cpu)-&gt;entries &gt;&gt; 10;</span>
+<span class='curline'><a href='../S/271.html#L6674'>array_buffer</a>     6674 trace/trace.c  	buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/271.html#L6755'>array_buffer</a>     6755 trace/trace.c  	buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/271.html#L6810'>array_buffer</a>     6810 trace/trace.c  	ring_buffer_set_clock(tr-&gt;array_buffer.buffer, trace_clocks[i].func);</span>
+<span class='curline'><a href='../S/271.html#L6816'>array_buffer</a>     6816 trace/trace.c  	tracing_reset_online_cpus(&amp;tr-&gt;array_buffer);</span>
+<span class='curline'><a href='../S/271.html#L6879'>array_buffer</a>     6879 trace/trace.c  	if (ring_buffer_time_stamp_abs(tr-&gt;array_buffer.buffer))</span>
+<span class='curline'><a href='../S/271.html#L6924'>array_buffer</a>     6924 trace/trace.c  	ring_buffer_set_time_stamp_abs(tr-&gt;array_buffer.buffer, abs);</span>
+<span class='curline'><a href='../S/271.html#L6973'>array_buffer</a>     6973 trace/trace.c  		iter-&gt;array_buffer = &amp;tr-&gt;max_buffer;</span>
+<span class='curline'><a href='../S/271.html#L7036'>array_buffer</a>     7036 trace/trace.c  					&amp;tr-&gt;array_buffer, iter-&gt;cpu_file);</span>
+<span class='curline'><a href='../S/271.html#L7111'>array_buffer</a>     7111 trace/trace.c  	info-&gt;iter.array_buffer = &amp;info-&gt;iter.tr-&gt;max_buffer;</span>
+<span class='curline'><a href='../S/271.html#L7486'>array_buffer</a>     7486 trace/trace.c  	info-&gt;iter.array_buffer = &amp;tr-&gt;array_buffer;</span>
+<span class='curline'><a href='../S/271.html#L7531'>array_buffer</a>     7531 trace/trace.c  		info-&gt;spare = ring_buffer_alloc_read_page(iter-&gt;array_buffer-&gt;buffer,</span>
+<span class='curline'><a href='../S/271.html#L7549'>array_buffer</a>     7549 trace/trace.c  	ret = ring_buffer_read_page(iter-&gt;array_buffer-&gt;buffer,</span>
+<span class='curline'><a href='../S/271.html#L7599'>array_buffer</a>     7599 trace/trace.c  		ring_buffer_free_read_page(iter-&gt;array_buffer-&gt;buffer,</span>
+<span class='curline'><a href='../S/271.html#L7702'>array_buffer</a>     7702 trace/trace.c  	entries = ring_buffer_entries_cpu(iter-&gt;array_buffer-&gt;buffer, iter-&gt;cpu_file);</span>
+<span class='curline'><a href='../S/271.html#L7715'>array_buffer</a>     7715 trace/trace.c  		ref-&gt;buffer = iter-&gt;array_buffer-&gt;buffer;</span>
+<span class='curline'><a href='../S/271.html#L7743'>array_buffer</a>     7743 trace/trace.c  		entries = ring_buffer_entries_cpu(iter-&gt;array_buffer-&gt;buffer, iter-&gt;cpu_file);</span>
+<span class='curline'><a href='../S/271.html#L7787'>array_buffer</a>     7787 trace/trace.c  	struct array_buffer *trace_buf = &amp;tr-&gt;array_buffer;</span>
+<span class='curline'><a href='../S/271.html#L8446'>array_buffer</a>     8446 trace/trace.c  	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/271.html#L8536'>array_buffer</a>     8536 trace/trace.c  allocate_trace_buffer(struct trace_array *tr, struct array_buffer *buf, int size)</span>
+<span class='curline'><a href='../S/271.html#L8556'>array_buffer</a>     8556 trace/trace.c  	set_buffer_entries(&amp;tr-&gt;array_buffer,</span>
+<span class='curline'><a href='../S/271.html#L8557'>array_buffer</a>     8557 trace/trace.c  			   ring_buffer_size(tr-&gt;array_buffer.buffer, 0));</span>
+<span class='curline'><a href='../S/271.html#L8566'>array_buffer</a>     8566 trace/trace.c  	ret = allocate_trace_buffer(tr, &amp;tr-&gt;array_buffer, size);</span>
+<span class='curline'><a href='../S/271.html#L8574'>array_buffer</a>     8574 trace/trace.c  		ring_buffer_free(tr-&gt;array_buffer.buffer);</span>
+<span class='curline'><a href='../S/271.html#L8575'>array_buffer</a>     8575 trace/trace.c  		tr-&gt;array_buffer.buffer = NULL;</span>
+<span class='curline'><a href='../S/271.html#L8576'>array_buffer</a>     8576 trace/trace.c  		free_percpu(tr-&gt;array_buffer.data);</span>
+<span class='curline'><a href='../S/271.html#L8577'>array_buffer</a>     8577 trace/trace.c  		tr-&gt;array_buffer.data = NULL;</span>
+<span class='curline'><a href='../S/271.html#L8592'>array_buffer</a>     8592 trace/trace.c  static void free_trace_buffer(struct array_buffer *buf)</span>
+<span class='curline'><a href='../S/271.html#L8607'>array_buffer</a>     8607 trace/trace.c  	free_trace_buffer(&amp;tr-&gt;array_buffer);</span>
+<span class='curline'><a href='../S/271.html#L9295'>array_buffer</a>     9295 trace/trace.c  	iter-&gt;array_buffer = &amp;global_trace.array_buffer;</span>
+<span class='curline'><a href='../S/271.html#L9301'>array_buffer</a>     9301 trace/trace.c  	if (ring_buffer_overruns(iter-&gt;array_buffer-&gt;buffer))</span>
+<span class='curline'><a href='../S/271.html#L9347'>array_buffer</a>     9347 trace/trace.c  		atomic_inc(&amp;per_cpu_ptr(iter.array_buffer-&gt;data, cpu)-&gt;disabled);</span>
+<span class='curline'><a href='../S/271.html#L9348'>array_buffer</a>     9348 trace/trace.c  		size = ring_buffer_size(iter.array_buffer-&gt;buffer, cpu);</span>
+<span class='curline'><a href='../S/271.html#L9423'>array_buffer</a>     9423 trace/trace.c  		atomic_dec(&amp;per_cpu_ptr(iter.array_buffer-&gt;data, cpu)-&gt;disabled);</span>
+<span class='curline'><a href='../S/256.html#L291'>array_buffer</a>      291 trace/trace.h  	struct array_buffer	array_buffer;</span>
+<span class='curline'><a href='../S/256.html#L304'>array_buffer</a>      304 trace/trace.h  	struct array_buffer	max_buffer;</span>
+<span class='curline'><a href='../S/256.html#L746'>array_buffer</a>      746 trace/trace.h  void tracing_reset_online_cpus(struct array_buffer *buf);</span>
+<span class='curline'><a href='../S/256.html#L1147'>array_buffer</a>     1147 trace/trace.h  	return this_cpu_read(tr-&gt;array_buffer.data-&gt;ftrace_ignore_pid) !=</span>
+<span class='curline'><a href='../S/309.html#L58'>array_buffer</a>       58 trace/trace_branch.c 	data = this_cpu_ptr(tr-&gt;array_buffer.data);</span>
+<span class='curline'><a href='../S/309.html#L63'>array_buffer</a>       63 trace/trace_branch.c 	buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/267.html#L245'>array_buffer</a>      245 trace/trace_events.c 	data = this_cpu_ptr(tr-&gt;array_buffer.data);</span>
+<span class='curline'><a href='../S/267.html#L571'>array_buffer</a>      571 trace/trace_events.c 	this_cpu_write(tr-&gt;array_buffer.data-&gt;ignore_pid, ret ||</span>
+<span class='curline'><a href='../S/267.html#L587'>array_buffer</a>      587 trace/trace_events.c 	this_cpu_write(tr-&gt;array_buffer.data-&gt;ignore_pid,</span>
+<span class='curline'><a href='../S/267.html#L599'>array_buffer</a>      599 trace/trace_events.c 	if (!this_cpu_read(tr-&gt;array_buffer.data-&gt;ignore_pid))</span>
+<span class='curline'><a href='../S/267.html#L605'>array_buffer</a>      605 trace/trace_events.c 	this_cpu_write(tr-&gt;array_buffer.data-&gt;ignore_pid,</span>
+<span class='curline'><a href='../S/267.html#L617'>array_buffer</a>      617 trace/trace_events.c 	if (this_cpu_read(tr-&gt;array_buffer.data-&gt;ignore_pid))</span>
+<span class='curline'><a href='../S/267.html#L624'>array_buffer</a>      624 trace/trace_events.c 	this_cpu_write(tr-&gt;array_buffer.data-&gt;ignore_pid,</span>
+<span class='curline'><a href='../S/267.html#L667'>array_buffer</a>      667 trace/trace_events.c 			per_cpu_ptr(tr-&gt;array_buffer.data, cpu)-&gt;ignore_pid = false;</span>
+<span class='curline'><a href='../S/267.html#L1681'>array_buffer</a>     1681 trace/trace_events.c 	this_cpu_write(tr-&gt;array_buffer.data-&gt;ignore_pid,</span>
+<span class='curline'><a href='../S/255.html#L465'>array_buffer</a>      465 trace/trace_events_synth.c 	buffer = trace_file-&gt;tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/255.html#L1479'>array_buffer</a>     1479 trace/trace_events_synth.c 	trace_state-&gt;buffer = file-&gt;tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/307.html#L110'>array_buffer</a>      110 trace/trace_functions.c 	tr-&gt;array_buffer.cpu = get_cpu();</span>
+<span class='curline'><a href='../S/307.html#L127'>array_buffer</a>      127 trace/trace_functions.c 	tracing_reset_online_cpus(&amp;tr-&gt;array_buffer);</span>
+<span class='curline'><a href='../S/307.html#L152'>array_buffer</a>      152 trace/trace_functions.c 	data = per_cpu_ptr(tr-&gt;array_buffer.data, cpu);</span>
+<span class='curline'><a href='../S/307.html#L201'>array_buffer</a>      201 trace/trace_functions.c 	data = per_cpu_ptr(tr-&gt;array_buffer.data, cpu);</span>
+<span class='curline'><a href='../S/287.html#L104'>array_buffer</a>      104 trace/trace_functions_graph.c 	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/287.html#L174'>array_buffer</a>      174 trace/trace_functions_graph.c 	data = per_cpu_ptr(tr-&gt;array_buffer.data, cpu);</span>
+<span class='curline'><a href='../S/287.html#L224'>array_buffer</a>      224 trace/trace_functions_graph.c 	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/287.html#L255'>array_buffer</a>      255 trace/trace_functions_graph.c 	data = per_cpu_ptr(tr-&gt;array_buffer.data, cpu);</span>
+<span class='curline'><a href='../S/287.html#L447'>array_buffer</a>      447 trace/trace_functions_graph.c 			ring_buffer_consume(iter-&gt;array_buffer-&gt;buffer, iter-&gt;cpu,</span>
+<span class='curline'><a href='../S/287.html#L449'>array_buffer</a>      449 trace/trace_functions_graph.c 			event = ring_buffer_peek(iter-&gt;array_buffer-&gt;buffer, iter-&gt;cpu,</span>
+<span class='curline'><a href='../S/287.html#L506'>array_buffer</a>      506 trace/trace_functions_graph.c 	usecs = iter-&gt;ts - iter-&gt;array_buffer-&gt;time_start;</span>
+<span class='curline'><a href='../S/297.html#L108'>array_buffer</a>      108 trace/trace_hwlat.c 	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/314.html#L125'>array_buffer</a>      125 trace/trace_irqsoff.c 	*data = per_cpu_ptr(tr-&gt;array_buffer.data, cpu);</span>
+<span class='curline'><a href='../S/314.html#L170'>array_buffer</a>      170 trace/trace_irqsoff.c 	tracing_reset_online_cpus(&amp;irqsoff_trace-&gt;array_buffer);</span>
+<span class='curline'><a href='../S/314.html#L385'>array_buffer</a>      385 trace/trace_irqsoff.c 	data = per_cpu_ptr(tr-&gt;array_buffer.data, cpu);</span>
+<span class='curline'><a href='../S/314.html#L423'>array_buffer</a>      423 trace/trace_irqsoff.c 	data = per_cpu_ptr(tr-&gt;array_buffer.data, cpu);</span>
+<span class='curline'><a href='../S/280.html#L46'>array_buffer</a>       46 trace/trace_kdb.c 			ring_buffer_read_prepare(iter.array_buffer-&gt;buffer,</span>
+<span class='curline'><a href='../S/280.html#L54'>array_buffer</a>       54 trace/trace_kdb.c 			ring_buffer_read_prepare(iter.array_buffer-&gt;buffer,</span>
+<span class='curline'><a href='../S/280.html#L127'>array_buffer</a>      127 trace/trace_kdb.c 		atomic_inc(&amp;per_cpu_ptr(iter.array_buffer-&gt;data, cpu)-&gt;disabled);</span>
+<span class='curline'><a href='../S/280.html#L142'>array_buffer</a>      142 trace/trace_kdb.c 		atomic_dec(&amp;per_cpu_ptr(iter.array_buffer-&gt;data, cpu)-&gt;disabled);</span>
+<span class='curline'><a href='../S/286.html#L35'>array_buffer</a>       35 trace/trace_mmiotrace.c 	tracing_reset_online_cpus(&amp;tr-&gt;array_buffer);</span>
+<span class='curline'><a href='../S/286.html#L125'>array_buffer</a>      125 trace/trace_mmiotrace.c 	unsigned long over = ring_buffer_overruns(iter-&gt;array_buffer-&gt;buffer);</span>
+<span class='curline'><a href='../S/286.html#L300'>array_buffer</a>      300 trace/trace_mmiotrace.c 	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/286.html#L321'>array_buffer</a>      321 trace/trace_mmiotrace.c 	struct trace_array_cpu *data = per_cpu_ptr(tr-&gt;array_buffer.data, smp_processor_id());</span>
+<span class='curline'><a href='../S/286.html#L330'>array_buffer</a>      330 trace/trace_mmiotrace.c 	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/286.html#L354'>array_buffer</a>      354 trace/trace_mmiotrace.c 	data = per_cpu_ptr(tr-&gt;array_buffer.data, smp_processor_id());</span>
+<span class='curline'><a href='../S/279.html#L541'>array_buffer</a>      541 trace/trace_output.c 	unsigned long long abs_ts = iter-&gt;ts - iter-&gt;array_buffer-&gt;time_start;</span>
+<span class='curline'><a href='../S/295.html#L85'>array_buffer</a>       85 trace/trace_sched_wakeup.c 	*data = per_cpu_ptr(tr-&gt;array_buffer.data, cpu);</span>
+<span class='curline'><a href='../S/295.html#L381'>array_buffer</a>      381 trace/trace_sched_wakeup.c 	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/295.html#L411'>array_buffer</a>      411 trace/trace_sched_wakeup.c 	struct trace_buffer *buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/295.html#L462'>array_buffer</a>      462 trace/trace_sched_wakeup.c 	disabled = atomic_inc_return(&amp;per_cpu_ptr(wakeup_trace-&gt;array_buffer.data, cpu)-&gt;disabled);</span>
+<span class='curline'><a href='../S/295.html#L474'>array_buffer</a>      474 trace/trace_sched_wakeup.c 	data = per_cpu_ptr(wakeup_trace-&gt;array_buffer.data, wakeup_cpu);</span>
+<span class='curline'><a href='../S/295.html#L497'>array_buffer</a>      497 trace/trace_sched_wakeup.c 	atomic_dec(&amp;per_cpu_ptr(wakeup_trace-&gt;array_buffer.data, cpu)-&gt;disabled);</span>
+<span class='curline'><a href='../S/295.html#L516'>array_buffer</a>      516 trace/trace_sched_wakeup.c 	tracing_reset_online_cpus(&amp;tr-&gt;array_buffer);</span>
+<span class='curline'><a href='../S/295.html#L554'>array_buffer</a>      554 trace/trace_sched_wakeup.c 	disabled = atomic_inc_return(&amp;per_cpu_ptr(wakeup_trace-&gt;array_buffer.data, cpu)-&gt;disabled);</span>
+<span class='curline'><a href='../S/295.html#L586'>array_buffer</a>      586 trace/trace_sched_wakeup.c 	data = per_cpu_ptr(wakeup_trace-&gt;array_buffer.data, wakeup_cpu);</span>
+<span class='curline'><a href='../S/295.html#L601'>array_buffer</a>      601 trace/trace_sched_wakeup.c 	atomic_dec(&amp;per_cpu_ptr(wakeup_trace-&gt;array_buffer.data, cpu)-&gt;disabled);</span>
+<span class='curline'><a href='../S/319.html#L26'>array_buffer</a>       26 trace/trace_selftest.c static int trace_test_buffer_cpu(struct array_buffer *buf, int cpu)</span>
+<span class='curline'><a href='../S/319.html#L63'>array_buffer</a>       63 trace/trace_selftest.c static int __maybe_unused trace_test_buffer(struct array_buffer *buf, unsigned long *count)</span>
+<span class='curline'><a href='../S/319.html#L365'>array_buffer</a>      365 trace/trace_selftest.c 	ret = trace_test_buffer(&amp;tr-&gt;array_buffer, &amp;count);</span>
+<span class='curline'><a href='../S/319.html#L386'>array_buffer</a>      386 trace/trace_selftest.c 	ret = trace_test_buffer(&amp;tr-&gt;array_buffer, &amp;count);</span>
+<span class='curline'><a href='../S/319.html#L690'>array_buffer</a>      690 trace/trace_selftest.c 	ret = trace_test_buffer(&amp;tr-&gt;array_buffer, &amp;count);</span>
+<span class='curline'><a href='../S/319.html#L776'>array_buffer</a>      776 trace/trace_selftest.c 	tracing_reset_online_cpus(&amp;tr-&gt;array_buffer);</span>
+<span class='curline'><a href='../S/319.html#L798'>array_buffer</a>      798 trace/trace_selftest.c 	ret = trace_test_buffer(&amp;tr-&gt;array_buffer, &amp;count);</span>
+<span class='curline'><a href='../S/319.html#L856'>array_buffer</a>      856 trace/trace_selftest.c 	ret = trace_test_buffer(&amp;tr-&gt;array_buffer, NULL);</span>
+<span class='curline'><a href='../S/319.html#L918'>array_buffer</a>      918 trace/trace_selftest.c 	ret = trace_test_buffer(&amp;tr-&gt;array_buffer, NULL);</span>
+<span class='curline'><a href='../S/319.html#L984'>array_buffer</a>      984 trace/trace_selftest.c 	ret = trace_test_buffer(&amp;tr-&gt;array_buffer, NULL);</span>
+<span class='curline'><a href='../S/319.html#L1014'>array_buffer</a>     1014 trace/trace_selftest.c 	ret = trace_test_buffer(&amp;tr-&gt;array_buffer, NULL);</span>
+<span class='curline'><a href='../S/319.html#L1144'>array_buffer</a>     1144 trace/trace_selftest.c 	ret = trace_test_buffer(&amp;tr-&gt;array_buffer, NULL);</span>
+<span class='curline'><a href='../S/319.html#L1185'>array_buffer</a>     1185 trace/trace_selftest.c 	ret = trace_test_buffer(&amp;tr-&gt;array_buffer, &amp;count);</span>
+<span class='curline'><a href='../S/264.html#L328'>array_buffer</a>      328 trace/trace_syscalls.c 	buffer = tr-&gt;array_buffer.buffer;</span>
+<span class='curline'><a href='../S/264.html#L374'>array_buffer</a>      374 trace/trace_syscalls.c 	buffer = tr-&gt;array_buffer.buffer;</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rt_se_prio</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/450.html#L1234'>rt_se_prio</a>       1234 sched/rt.c     	int prio = rt_se_prio(rt_se);</span>
+<span class='curline'><a href='../S/450.html#L1248'>rt_se_prio</a>       1248 sched/rt.c     	WARN_ON(!rt_prio(rt_se_prio(rt_se)));</span>
+<span class='curline'><a href='../S/450.html#L1253'>rt_se_prio</a>       1253 sched/rt.c     	dec_rt_prio(rt_rq, rt_se_prio(rt_se));</span>
+<span class='curline'><a href='../S/450.html#L1275'>rt_se_prio</a>       1275 sched/rt.c     	if (list_empty(array-&gt;queue + rt_se_prio(rt_se)))</span>
+<span class='curline'><a href='../S/450.html#L1276'>rt_se_prio</a>       1276 sched/rt.c     		__clear_bit(rt_se_prio(rt_se), array-&gt;bitmap);</span>
+<span class='curline'><a href='../S/450.html#L1286'>rt_se_prio</a>       1286 sched/rt.c     	struct list_head *queue = array-&gt;queue + rt_se_prio(rt_se);</span>
+<span class='curline'><a href='../S/450.html#L1307'>rt_se_prio</a>       1307 sched/rt.c     		__set_bit(rt_se_prio(rt_se), array-&gt;bitmap);</span>
+<span class='curline'><a href='../S/450.html#L1434'>rt_se_prio</a>       1434 sched/rt.c     		struct list_head *queue = array-&gt;queue + rt_se_prio(rt_se);</span>
+</pre>
+</body>
+</html>

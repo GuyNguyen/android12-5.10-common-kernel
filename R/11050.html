@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rcu_rnp_online_cpus</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/144.html#L1160'>rcu_rnp_online_cpus</a> 1160 rcu/tree.c     	if (rdp-&gt;grpmask &amp; rcu_rnp_online_cpus(rnp))</span>
+<span class='curline'><a href='../S/144.html#L1247'>rcu_rnp_online_cpus</a> 1247 rcu/tree.c     	if (WARN_ON_ONCE(!(rdp-&gt;grpmask &amp; rcu_rnp_online_cpus(rnp)))) {</span>
+<span class='curline'><a href='../S/144.html#L1257'>rcu_rnp_online_cpus</a> 1257 rcu/tree.c     		onl = !!(rdp-&gt;grpmask &amp; rcu_rnp_online_cpus(rnp));</span>
+<span class='curline'><a href='../S/126.html#L312'>rcu_rnp_online_cpus</a>  312 rcu/tree_plugin.h 		WARN_ON_ONCE((rdp-&gt;grpmask &amp; rcu_rnp_online_cpus(rnp)) == 0);</span>
+<span class='curline'><a href='../S/126.html#L771'>rcu_rnp_online_cpus</a>  771 rcu/tree_plugin.h 		onl = !!(rdp-&gt;grpmask &amp; rcu_rnp_online_cpus(rnp));</span>
+<span class='curline'><a href='../S/126.html#L1141'>rcu_rnp_online_cpus</a> 1141 rcu/tree_plugin.h 	if (!rcu_scheduler_fully_active || rcu_rnp_online_cpus(rnp) == 0)</span>
+<span class='curline'><a href='../S/126.html#L1174'>rcu_rnp_online_cpus</a> 1174 rcu/tree_plugin.h 	unsigned long mask = rcu_rnp_online_cpus(rnp);</span>
+</pre>
+</body>
+</html>

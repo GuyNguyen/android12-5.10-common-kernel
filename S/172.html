@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>power/wakelock.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/508.html'>power</a>/wakelock.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L38'>[^]</a><a href='#L254'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L38' title='Defined at 38.'>pm_show_wakelocks</a></li>
+<li><a href='#L64' title='Defined at 64.'>wakelocks_limit_exceeded</a></li>
+<li><a href='#L69' title='Defined at 69.'>increment_wakelocks_number</a></li>
+<li><a href='#L74' title='Defined at 74.'>decrement_wakelocks_number</a></li>
+<li><a href='#L79' title='Defined at 79.'>wakelocks_limit_exceeded</a></li>
+<li><a href='#L80' title='Defined at 80.'>increment_wakelocks_number</a></li>
+<li><a href='#L81' title='Defined at 81.'>decrement_wakelocks_number</a></li>
+<li><a href='#L93' title='Defined at 93.'>wakelocks_lru_add</a></li>
+<li><a href='#L98' title='Defined at 98.'>wakelocks_lru_most_recent</a></li>
+<li><a href='#L103' title='Defined at 103.'>__wakelocks_gc</a></li>
+<li><a href='#L137' title='Defined at 137.'>wakelocks_gc</a></li>
+<li><a href='#L145' title='Defined at 145.'>wakelocks_lru_add</a></li>
+<li><a href='#L146' title='Defined at 146.'>wakelocks_lru_most_recent</a></li>
+<li><a href='#L147' title='Defined at 147.'>wakelocks_gc</a></li>
+<li><a href='#L150' title='Defined at 150.'>wakelock_lookup_add</a></li>
+<li><a href='#L206' title='Defined at 206.'>pm_wake_lock</a></li>
+<li><a href='#L254' title='Defined at 254.'>pm_wake_unlock</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * kernel/power/wakelock.c</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> *</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * User space wakeup sources support.</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> *</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> * Copyright (C) 2012 Rafael J. Wysocki &lt;rjw@sisk.pl&gt;</em>
+<a id='L8' name='L8'></a>   8 <em class='comment'> *</em>
+<a id='L9' name='L9'></a>   9 <em class='comment'> * This code is based on the analogous interface allowing user space to</em>
+<a id='L10' name='L10'></a>  10 <em class='comment'> * manipulate wakelocks on Android.</em>
+<a id='L11' name='L11'></a>  11 <em class='comment'> */</em>
+<a id='L12' name='L12'></a>  12 
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;linux/capability.h&gt;
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> &lt;linux/ctype.h&gt;
+<a id='L15' name='L15'></a>  15 <em class='sharp'>#include</em> &lt;linux/device.h&gt;
+<a id='L16' name='L16'></a>  16 <em class='sharp'>#include</em> &lt;linux/err.h&gt;
+<a id='L17' name='L17'></a>  17 <em class='sharp'>#include</em> &lt;linux/hrtimer.h&gt;
+<a id='L18' name='L18'></a>  18 <em class='sharp'>#include</em> &lt;linux/list.h&gt;
+<a id='L19' name='L19'></a>  19 <em class='sharp'>#include</em> &lt;linux/rbtree.h&gt;
+<a id='L20' name='L20'></a>  20 <em class='sharp'>#include</em> &lt;linux/slab.h&gt;
+<a id='L21' name='L21'></a>  21 <em class='sharp'>#include</em> &lt;linux/workqueue.h&gt;
+<a id='L22' name='L22'></a>  22 
+<a id='L23' name='L23'></a>  23 <em class='sharp'>#include</em> "<a href='174.html'>power.h</a>"
+<a id='L24' name='L24'></a>  24 
+<a id='L25' name='L25'></a>  25 <strong class='reserved'>static</strong> DEFINE_MUTEX(wakelocks_lock);
+<a id='L26' name='L26'></a>  26 
+<a id='L27' name='L27'></a>  27 <strong class='reserved'>struct</strong> <a href='../R/14644.html' title='Multiple referred from 12 places.'>wakelock</a> <em class='brace'>{</em>
+<a id='L28' name='L28'></a>  28         <strong class='reserved'>char</strong>                    *name;
+<a id='L29' name='L29'></a>  29         <strong class='reserved'>struct</strong> rb_node          <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>;
+<a id='L30' name='L30'></a>  30         <strong class='reserved'>struct</strong> wakeup_source    *ws;
+<a id='L31' name='L31'></a>  31 <em class='sharp'>#ifdef</em> CONFIG_PM_WAKELOCKS_GC
+<a id='L32' name='L32'></a>  32         <strong class='reserved'>struct</strong> list_head        lru;
+<a id='L33' name='L33'></a>  33 <em class='sharp'>#endif</em>
+<a id='L34' name='L34'></a>  34 <em class='brace'>}</em>;
+<a id='L35' name='L35'></a>  35 
+<a id='L36' name='L36'></a>  36 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> rb_root wakelocks_tree = RB_ROOT;
+<a id='L37' name='L37'></a>  37 
+<a id='L38' name='L38'></a>  38 ssize_t <a href='../R/10050.html' title='Multiple referred from 3 places.'>pm_show_wakelocks</a>(<strong class='reserved'>char</strong> *buf, bool show_active)
+<a id='L39' name='L39'></a>  39 <em class='brace'>{</em>
+<a id='L40' name='L40'></a>  40         <strong class='reserved'>struct</strong> rb_node *<a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>;
+<a id='L41' name='L41'></a>  41         <strong class='reserved'>struct</strong> <a href='../S/172.html#L27' title='Defined at 27 in power/wakelock.c.'>wakelock</a> *wl;
+<a id='L42' name='L42'></a>  42         <strong class='reserved'>char</strong> *str = buf;
+<a id='L43' name='L43'></a>  43         <strong class='reserved'>char</strong> *end = buf + PAGE_SIZE;
+<a id='L44' name='L44'></a>  44 
+<a id='L45' name='L45'></a>  45         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;wakelocks_lock);
+<a id='L46' name='L46'></a>  46 
+<a id='L47' name='L47'></a>  47         <strong class='reserved'>for</strong> (<a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a> = rb_first(&amp;wakelocks_tree); <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>; <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a> = rb_next(<a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>)) <em class='brace'>{</em>
+<a id='L48' name='L48'></a>  48                 wl = rb_entry(<a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>, <strong class='reserved'>struct</strong> <a href='../S/172.html#L27' title='Defined at 27 in power/wakelock.c.'>wakelock</a>, <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>);
+<a id='L49' name='L49'></a>  49                 <strong class='reserved'>if</strong> (wl-&gt;ws-&gt;active == show_active)
+<a id='L50' name='L50'></a>  50                         str += scnprintf(str, end - str, "%s ", wl-&gt;name);
+<a id='L51' name='L51'></a>  51         <em class='brace'>}</em>
+<a id='L52' name='L52'></a>  52         <strong class='reserved'>if</strong> (str &gt; buf)
+<a id='L53' name='L53'></a>  53                 str--;
+<a id='L54' name='L54'></a>  54 
+<a id='L55' name='L55'></a>  55         str += scnprintf(str, end - str, "\n");
+<a id='L56' name='L56'></a>  56 
+<a id='L57' name='L57'></a>  57         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;wakelocks_lock);
+<a id='L58' name='L58'></a>  58         <strong class='reserved'>return</strong> (str - buf);
+<a id='L59' name='L59'></a>  59 <em class='brace'>}</em>
+<a id='L60' name='L60'></a>  60 
+<a id='L61' name='L61'></a>  61 <em class='sharp'>#if</em> CONFIG_PM_WAKELOCKS_LIMIT &gt; 0
+<a id='L62' name='L62'></a>  62 <strong class='reserved'>static</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> number_of_wakelocks;
+<a id='L63' name='L63'></a>  63 
+<a id='L64' name='L64'></a>  64 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> bool <a href='../S/172.html#L177' title='Referred from 177 in power/wakelock.c.'>wakelocks_limit_exceeded</a>(<strong class='reserved'>void</strong>)
+<a id='L65' name='L65'></a>  65 <em class='brace'>{</em>
+<a id='L66' name='L66'></a>  66         <strong class='reserved'>return</strong> number_of_wakelocks &gt; CONFIG_PM_WAKELOCKS_LIMIT;
+<a id='L67' name='L67'></a>  67 <em class='brace'>}</em>
+<a id='L68' name='L68'></a>  68 
+<a id='L69' name='L69'></a>  69 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/172.html#L202' title='Referred from 202 in power/wakelock.c.'>increment_wakelocks_number</a>(<strong class='reserved'>void</strong>)
+<a id='L70' name='L70'></a>  70 <em class='brace'>{</em>
+<a id='L71' name='L71'></a>  71         number_of_wakelocks++;
+<a id='L72' name='L72'></a>  72 <em class='brace'>}</em>
+<a id='L73' name='L73'></a>  73 
+<a id='L74' name='L74'></a>  74 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/172.html#L129' title='Referred from 129 in power/wakelock.c.'>decrement_wakelocks_number</a>(<strong class='reserved'>void</strong>)
+<a id='L75' name='L75'></a>  75 <em class='brace'>{</em>
+<a id='L76' name='L76'></a>  76         number_of_wakelocks--;
+<a id='L77' name='L77'></a>  77 <em class='brace'>}</em>
+<a id='L78' name='L78'></a>  78 <em class='sharp'>#else</em> <em class='comment'>/* CONFIG_PM_WAKELOCKS_LIMIT = 0 */</em>
+<a id='L79' name='L79'></a>  79 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> bool <a href='../S/172.html#L177' title='Referred from 177 in power/wakelock.c.'>wakelocks_limit_exceeded</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em> <strong class='reserved'>return</strong> false; <em class='brace'>}</em>
+<a id='L80' name='L80'></a>  80 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/172.html#L202' title='Referred from 202 in power/wakelock.c.'>increment_wakelocks_number</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L81' name='L81'></a>  81 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/172.html#L129' title='Referred from 129 in power/wakelock.c.'>decrement_wakelocks_number</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L82' name='L82'></a>  82 <em class='sharp'>#endif</em> <em class='comment'>/* CONFIG_PM_WAKELOCKS_LIMIT */</em>
+<a id='L83' name='L83'></a>  83 
+<a id='L84' name='L84'></a>  84 <em class='sharp'>#ifdef</em> CONFIG_PM_WAKELOCKS_GC
+<a id='L85' name='L85'></a>  85 <em class='sharp'>#define</em> <a href='../S/172.html#L139' title='Referred from 139 in power/wakelock.c.'>WL_GC_COUNT_MAX</a> 100
+<a id='L86' name='L86'></a>  86 <em class='sharp'>#define</em> <a href='../S/172.html#L120' title='Referred from 120 in power/wakelock.c.'>WL_GC_TIME_SEC</a>  300
+<a id='L87' name='L87'></a>  87 
+<a id='L88' name='L88'></a>  88 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/172.html#L103' title='Defined at 103 in power/wakelock.c.'>__wakelocks_gc</a>(<strong class='reserved'>struct</strong> work_struct *work);
+<a id='L89' name='L89'></a>  89 <strong class='reserved'>static</strong> LIST_HEAD(wakelocks_lru_list);
+<a id='L90' name='L90'></a>  90 <strong class='reserved'>static</strong> DECLARE_WORK(wakelock_work, <a href='../S/172.html#L103' title='Defined at 103 in power/wakelock.c.'>__wakelocks_gc</a>);
+<a id='L91' name='L91'></a>  91 <strong class='reserved'>static</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> wakelocks_gc_count;
+<a id='L92' name='L92'></a>  92 
+<a id='L93' name='L93'></a>  93 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/172.html#L201' title='Referred from 201 in power/wakelock.c.'>wakelocks_lru_add</a>(<strong class='reserved'>struct</strong> <a href='../S/172.html#L27' title='Defined at 27 in power/wakelock.c.'>wakelock</a> *wl)
+<a id='L94' name='L94'></a>  94 <em class='brace'>{</em>
+<a id='L95' name='L95'></a>  95         list_add(&amp;wl-&gt;lru, &amp;wakelocks_lru_list);
+<a id='L96' name='L96'></a>  96 <em class='brace'>}</em>
+<a id='L97' name='L97'></a>  97 
+<a id='L98' name='L98'></a>  98 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/14649.html' title='Multiple referred from 2 places.'>wakelocks_lru_most_recent</a>(<strong class='reserved'>struct</strong> <a href='../S/172.html#L27' title='Defined at 27 in power/wakelock.c.'>wakelock</a> *wl)
+<a id='L99' name='L99'></a>  99 <em class='brace'>{</em>
+<a id='L100' name='L100'></a> 100         list_move(&amp;wl-&gt;lru, &amp;wakelocks_lru_list);
+<a id='L101' name='L101'></a> 101 <em class='brace'>}</em>
+<a id='L102' name='L102'></a> 102 
+<a id='L103' name='L103'></a> 103 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/2610.html' title='Multiple referred from 2 places.'>__wakelocks_gc</a>(<strong class='reserved'>struct</strong> work_struct *work)
+<a id='L104' name='L104'></a> 104 <em class='brace'>{</em>
+<a id='L105' name='L105'></a> 105         <strong class='reserved'>struct</strong> <a href='../S/172.html#L27' title='Defined at 27 in power/wakelock.c.'>wakelock</a> *wl, *aux;
+<a id='L106' name='L106'></a> 106         ktime_t now;
+<a id='L107' name='L107'></a> 107 
+<a id='L108' name='L108'></a> 108         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;wakelocks_lock);
+<a id='L109' name='L109'></a> 109 
+<a id='L110' name='L110'></a> 110         now = <a href='../S/82.html#L821' title='Defined at 821 in time/timekeeping.c.'>ktime_get</a>();
+<a id='L111' name='L111'></a> 111         list_for_each_entry_safe_reverse(wl, aux, &amp;wakelocks_lru_list, lru) <em class='brace'>{</em>
+<a id='L112' name='L112'></a> 112                 u64 idle_time_ns;
+<a id='L113' name='L113'></a> 113                 bool active;
+<a id='L114' name='L114'></a> 114 
+<a id='L115' name='L115'></a> 115                 spin_lock_irq(&amp;wl-&gt;ws-&gt;lock);
+<a id='L116' name='L116'></a> 116                 idle_time_ns = ktime_to_ns(ktime_sub(now, wl-&gt;ws-&gt;last_time));
+<a id='L117' name='L117'></a> 117                 active = wl-&gt;ws-&gt;active;
+<a id='L118' name='L118'></a> 118                 spin_unlock_irq(&amp;wl-&gt;ws-&gt;lock);
+<a id='L119' name='L119'></a> 119 
+<a id='L120' name='L120'></a> 120                 <strong class='reserved'>if</strong> (idle_time_ns &lt; ((u64)<a href='../S/172.html#L86' title='Defined at 86 in power/wakelock.c.'>WL_GC_TIME_SEC</a> * NSEC_PER_SEC))
+<a id='L121' name='L121'></a> 121                         <strong class='reserved'>break</strong>;
+<a id='L122' name='L122'></a> 122 
+<a id='L123' name='L123'></a> 123                 <strong class='reserved'>if</strong> (!active) <em class='brace'>{</em>
+<a id='L124' name='L124'></a> 124                         wakeup_source_unregister(wl-&gt;ws);
+<a id='L125' name='L125'></a> 125                         rb_erase(&amp;wl-&gt;<a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>, &amp;wakelocks_tree);
+<a id='L126' name='L126'></a> 126                         list_del(&amp;wl-&gt;lru);
+<a id='L127' name='L127'></a> 127                         kfree(wl-&gt;name);
+<a id='L128' name='L128'></a> 128                         kfree(wl);
+<a id='L129' name='L129'></a> 129                         <a href='../D/5790.html' title='Multiple defined in 2 places.'>decrement_wakelocks_number</a>();
+<a id='L130' name='L130'></a> 130                 <em class='brace'>}</em>
+<a id='L131' name='L131'></a> 131         <em class='brace'>}</em>
+<a id='L132' name='L132'></a> 132         wakelocks_gc_count = 0;
+<a id='L133' name='L133'></a> 133 
+<a id='L134' name='L134'></a> 134         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;wakelocks_lock);
+<a id='L135' name='L135'></a> 135 <em class='brace'>}</em>
+<a id='L136' name='L136'></a> 136 
+<a id='L137' name='L137'></a> 137 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/172.html#L283' title='Referred from 283 in power/wakelock.c.'>wakelocks_gc</a>(<strong class='reserved'>void</strong>)
+<a id='L138' name='L138'></a> 138 <em class='brace'>{</em>
+<a id='L139' name='L139'></a> 139         <strong class='reserved'>if</strong> (++wakelocks_gc_count &lt;= <a href='../S/172.html#L85' title='Defined at 85 in power/wakelock.c.'>WL_GC_COUNT_MAX</a>)
+<a id='L140' name='L140'></a> 140                 <strong class='reserved'>return</strong>;
+<a id='L141' name='L141'></a> 141 
+<a id='L142' name='L142'></a> 142         schedule_work(&amp;wakelock_work);
+<a id='L143' name='L143'></a> 143 <em class='brace'>}</em>
+<a id='L144' name='L144'></a> 144 <em class='sharp'>#else</em> <em class='comment'>/* !CONFIG_PM_WAKELOCKS_GC */</em>
+<a id='L145' name='L145'></a> 145 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/172.html#L201' title='Referred from 201 in power/wakelock.c.'>wakelocks_lru_add</a>(<strong class='reserved'>struct</strong> <a href='../S/172.html#L27' title='Defined at 27 in power/wakelock.c.'>wakelock</a> *wl) <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L146' name='L146'></a> 146 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../R/14649.html' title='Multiple referred from 2 places.'>wakelocks_lru_most_recent</a>(<strong class='reserved'>struct</strong> <a href='../S/172.html#L27' title='Defined at 27 in power/wakelock.c.'>wakelock</a> *wl) <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L147' name='L147'></a> 147 <strong class='reserved'>static</strong> <strong class='reserved'>inline</strong> <strong class='reserved'>void</strong> <a href='../S/172.html#L283' title='Referred from 283 in power/wakelock.c.'>wakelocks_gc</a>(<strong class='reserved'>void</strong>) <em class='brace'>{</em><em class='brace'>}</em>
+<a id='L148' name='L148'></a> 148 <em class='sharp'>#endif</em> <em class='comment'>/* !CONFIG_PM_WAKELOCKS_GC */</em>
+<a id='L149' name='L149'></a> 149 
+<a id='L150' name='L150'></a> 150 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> <a href='../S/172.html#L27' title='Defined at 27 in power/wakelock.c.'>wakelock</a> *<a href='../R/14645.html' title='Multiple referred from 2 places.'>wakelock_lookup_add</a>(<strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *name, size_t len,
+<a id='L151' name='L151'></a> 151                                             bool add_if_not_found)
+<a id='L152' name='L152'></a> 152 <em class='brace'>{</em>
+<a id='L153' name='L153'></a> 153         <strong class='reserved'>struct</strong> rb_node **<a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a> = &amp;wakelocks_tree.rb_node;
+<a id='L154' name='L154'></a> 154         <strong class='reserved'>struct</strong> rb_node *<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a> = *<a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>;
+<a id='L155' name='L155'></a> 155         <strong class='reserved'>struct</strong> <a href='../S/172.html#L27' title='Defined at 27 in power/wakelock.c.'>wakelock</a> *wl;
+<a id='L156' name='L156'></a> 156 
+<a id='L157' name='L157'></a> 157         <strong class='reserved'>while</strong> (*<a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>) <em class='brace'>{</em>
+<a id='L158' name='L158'></a> 158                 <strong class='reserved'>int</strong> diff;
+<a id='L159' name='L159'></a> 159 
+<a id='L160' name='L160'></a> 160                 <a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a> = *<a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>;
+<a id='L161' name='L161'></a> 161                 wl = rb_entry(*<a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>, <strong class='reserved'>struct</strong> <a href='../S/172.html#L27' title='Defined at 27 in power/wakelock.c.'>wakelock</a>, <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>);
+<a id='L162' name='L162'></a> 162                 diff = strncmp(name, wl-&gt;name, len);
+<a id='L163' name='L163'></a> 163                 <strong class='reserved'>if</strong> (diff == 0) <em class='brace'>{</em>
+<a id='L164' name='L164'></a> 164                         <strong class='reserved'>if</strong> (wl-&gt;name[len])
+<a id='L165' name='L165'></a> 165                                 diff = -1;
+<a id='L166' name='L166'></a> 166                         <strong class='reserved'>else</strong>
+<a id='L167' name='L167'></a> 167                                 <strong class='reserved'>return</strong> wl;
+<a id='L168' name='L168'></a> 168                 <em class='brace'>}</em>
+<a id='L169' name='L169'></a> 169                 <strong class='reserved'>if</strong> (diff &lt; 0)
+<a id='L170' name='L170'></a> 170                         <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a> = &amp;(*<a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>)-&gt;rb_left;
+<a id='L171' name='L171'></a> 171                 <strong class='reserved'>else</strong>
+<a id='L172' name='L172'></a> 172                         <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a> = &amp;(*<a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>)-&gt;rb_right;
+<a id='L173' name='L173'></a> 173         <em class='brace'>}</em>
+<a id='L174' name='L174'></a> 174         <strong class='reserved'>if</strong> (!add_if_not_found)
+<a id='L175' name='L175'></a> 175                 <strong class='reserved'>return</strong> ERR_PTR(-EINVAL);
+<a id='L176' name='L176'></a> 176 
+<a id='L177' name='L177'></a> 177         <strong class='reserved'>if</strong> (<a href='../D/15418.html' title='Multiple defined in 2 places.'>wakelocks_limit_exceeded</a>())
+<a id='L178' name='L178'></a> 178                 <strong class='reserved'>return</strong> ERR_PTR(-ENOSPC);
+<a id='L179' name='L179'></a> 179 
+<a id='L180' name='L180'></a> 180         <em class='comment'>/* Not found, we have to add a new one. */</em>
+<a id='L181' name='L181'></a> 181         wl = kzalloc(<strong class='reserved'>sizeof</strong>(*wl), GFP_KERNEL);
+<a id='L182' name='L182'></a> 182         <strong class='reserved'>if</strong> (!wl)
+<a id='L183' name='L183'></a> 183                 <strong class='reserved'>return</strong> ERR_PTR(-ENOMEM);
+<a id='L184' name='L184'></a> 184 
+<a id='L185' name='L185'></a> 185         wl-&gt;name = kstrndup(name, len, GFP_KERNEL);
+<a id='L186' name='L186'></a> 186         <strong class='reserved'>if</strong> (!wl-&gt;name) <em class='brace'>{</em>
+<a id='L187' name='L187'></a> 187                 kfree(wl);
+<a id='L188' name='L188'></a> 188                 <strong class='reserved'>return</strong> ERR_PTR(-ENOMEM);
+<a id='L189' name='L189'></a> 189         <em class='brace'>}</em>
+<a id='L190' name='L190'></a> 190 
+<a id='L191' name='L191'></a> 191         wl-&gt;ws = wakeup_source_register(NULL, wl-&gt;name);
+<a id='L192' name='L192'></a> 192         <strong class='reserved'>if</strong> (!wl-&gt;ws) <em class='brace'>{</em>
+<a id='L193' name='L193'></a> 193                 kfree(wl-&gt;name);
+<a id='L194' name='L194'></a> 194                 kfree(wl);
+<a id='L195' name='L195'></a> 195                 <strong class='reserved'>return</strong> ERR_PTR(-ENOMEM);
+<a id='L196' name='L196'></a> 196         <em class='brace'>}</em>
+<a id='L197' name='L197'></a> 197         wl-&gt;ws-&gt;last_time = <a href='../S/82.html#L821' title='Defined at 821 in time/timekeeping.c.'>ktime_get</a>();
+<a id='L198' name='L198'></a> 198 
+<a id='L199' name='L199'></a> 199         rb_link_node(&amp;wl-&gt;<a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>, <a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>, <a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>);
+<a id='L200' name='L200'></a> 200         rb_insert_color(&amp;wl-&gt;<a href='../S/72.html#L33' title='Defined at 33 in audit_tree.c.'>node</a>, &amp;wakelocks_tree);
+<a id='L201' name='L201'></a> 201         <a href='../D/15419.html' title='Multiple defined in 2 places.'>wakelocks_lru_add</a>(wl);
+<a id='L202' name='L202'></a> 202         <a href='../D/7989.html' title='Multiple defined in 2 places.'>increment_wakelocks_number</a>();
+<a id='L203' name='L203'></a> 203         <strong class='reserved'>return</strong> wl;
+<a id='L204' name='L204'></a> 204 <em class='brace'>}</em>
+<a id='L205' name='L205'></a> 205 
+<a id='L206' name='L206'></a> 206 <strong class='reserved'>int</strong> <a href='../R/10060.html' title='Multiple referred from 2 places.'>pm_wake_lock</a>(<strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *buf)
+<a id='L207' name='L207'></a> 207 <em class='brace'>{</em>
+<a id='L208' name='L208'></a> 208         <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *str = buf;
+<a id='L209' name='L209'></a> 209         <strong class='reserved'>struct</strong> <a href='../S/172.html#L27' title='Defined at 27 in power/wakelock.c.'>wakelock</a> *wl;
+<a id='L210' name='L210'></a> 210         u64 timeout_ns = 0;
+<a id='L211' name='L211'></a> 211         size_t len;
+<a id='L212' name='L212'></a> 212         <strong class='reserved'>int</strong> ret = 0;
+<a id='L213' name='L213'></a> 213 
+<a id='L214' name='L214'></a> 214         <strong class='reserved'>if</strong> (!<a href='../S/321.html#L447' title='Defined at 447 in capability.c.'>capable</a>(CAP_BLOCK_SUSPEND))
+<a id='L215' name='L215'></a> 215                 <strong class='reserved'>return</strong> -EPERM;
+<a id='L216' name='L216'></a> 216 
+<a id='L217' name='L217'></a> 217         <strong class='reserved'>while</strong> (*str &amp;&amp; !isspace(*str))
+<a id='L218' name='L218'></a> 218                 str++;
+<a id='L219' name='L219'></a> 219 
+<a id='L220' name='L220'></a> 220         len = str - buf;
+<a id='L221' name='L221'></a> 221         <strong class='reserved'>if</strong> (!len)
+<a id='L222' name='L222'></a> 222                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L223' name='L223'></a> 223 
+<a id='L224' name='L224'></a> 224         <strong class='reserved'>if</strong> (*str &amp;&amp; *str != '\n') <em class='brace'>{</em>
+<a id='L225' name='L225'></a> 225                 <em class='comment'>/* Find out if there's a valid timeout string appended. */</em>
+<a id='L226' name='L226'></a> 226                 ret = kstrtou64(skip_spaces(str), 10, &amp;timeout_ns);
+<a id='L227' name='L227'></a> 227                 <strong class='reserved'>if</strong> (ret)
+<a id='L228' name='L228'></a> 228                         <strong class='reserved'>return</strong> -EINVAL;
+<a id='L229' name='L229'></a> 229         <em class='brace'>}</em>
+<a id='L230' name='L230'></a> 230 
+<a id='L231' name='L231'></a> 231         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;wakelocks_lock);
+<a id='L232' name='L232'></a> 232 
+<a id='L233' name='L233'></a> 233         wl = <a href='../S/172.html#L150' title='Defined at 150 in power/wakelock.c.'>wakelock_lookup_add</a>(buf, len, true);
+<a id='L234' name='L234'></a> 234         <strong class='reserved'>if</strong> (IS_ERR(wl)) <em class='brace'>{</em>
+<a id='L235' name='L235'></a> 235                 ret = PTR_ERR(wl);
+<a id='L236' name='L236'></a> 236                 <strong class='reserved'>goto</strong> out;
+<a id='L237' name='L237'></a> 237         <em class='brace'>}</em>
+<a id='L238' name='L238'></a> 238         <strong class='reserved'>if</strong> (timeout_ns) <em class='brace'>{</em>
+<a id='L239' name='L239'></a> 239                 u64 timeout_ms = timeout_ns + NSEC_PER_MSEC - 1;
+<a id='L240' name='L240'></a> 240 
+<a id='L241' name='L241'></a> 241                 do_div(timeout_ms, NSEC_PER_MSEC);
+<a id='L242' name='L242'></a> 242                 __pm_wakeup_event(wl-&gt;ws, timeout_ms);
+<a id='L243' name='L243'></a> 243         <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L244' name='L244'></a> 244                 __pm_stay_awake(wl-&gt;ws);
+<a id='L245' name='L245'></a> 245         <em class='brace'>}</em>
+<a id='L246' name='L246'></a> 246 
+<a id='L247' name='L247'></a> 247         <a href='../D/15420.html' title='Multiple defined in 2 places.'>wakelocks_lru_most_recent</a>(wl);
+<a id='L248' name='L248'></a> 248 
+<a id='L249' name='L249'></a> 249  out:
+<a id='L250' name='L250'></a> 250         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;wakelocks_lock);
+<a id='L251' name='L251'></a> 251         <strong class='reserved'>return</strong> ret;
+<a id='L252' name='L252'></a> 252 <em class='brace'>}</em>
+<a id='L253' name='L253'></a> 253 
+<a id='L254' name='L254'></a> 254 <strong class='reserved'>int</strong> <a href='../R/10061.html' title='Multiple referred from 2 places.'>pm_wake_unlock</a>(<strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *buf)
+<a id='L255' name='L255'></a> 255 <em class='brace'>{</em>
+<a id='L256' name='L256'></a> 256         <strong class='reserved'>struct</strong> <a href='../S/172.html#L27' title='Defined at 27 in power/wakelock.c.'>wakelock</a> *wl;
+<a id='L257' name='L257'></a> 257         size_t len;
+<a id='L258' name='L258'></a> 258         <strong class='reserved'>int</strong> ret = 0;
+<a id='L259' name='L259'></a> 259 
+<a id='L260' name='L260'></a> 260         <strong class='reserved'>if</strong> (!<a href='../S/321.html#L447' title='Defined at 447 in capability.c.'>capable</a>(CAP_BLOCK_SUSPEND))
+<a id='L261' name='L261'></a> 261                 <strong class='reserved'>return</strong> -EPERM;
+<a id='L262' name='L262'></a> 262 
+<a id='L263' name='L263'></a> 263         len = strlen(buf);
+<a id='L264' name='L264'></a> 264         <strong class='reserved'>if</strong> (!len)
+<a id='L265' name='L265'></a> 265                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L266' name='L266'></a> 266 
+<a id='L267' name='L267'></a> 267         <strong class='reserved'>if</strong> (buf[len-1] == '\n')
+<a id='L268' name='L268'></a> 268                 len--;
+<a id='L269' name='L269'></a> 269 
+<a id='L270' name='L270'></a> 270         <strong class='reserved'>if</strong> (!len)
+<a id='L271' name='L271'></a> 271                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L272' name='L272'></a> 272 
+<a id='L273' name='L273'></a> 273         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;wakelocks_lock);
+<a id='L274' name='L274'></a> 274 
+<a id='L275' name='L275'></a> 275         wl = <a href='../S/172.html#L150' title='Defined at 150 in power/wakelock.c.'>wakelock_lookup_add</a>(buf, len, false);
+<a id='L276' name='L276'></a> 276         <strong class='reserved'>if</strong> (IS_ERR(wl)) <em class='brace'>{</em>
+<a id='L277' name='L277'></a> 277                 ret = PTR_ERR(wl);
+<a id='L278' name='L278'></a> 278                 <strong class='reserved'>goto</strong> out;
+<a id='L279' name='L279'></a> 279         <em class='brace'>}</em>
+<a id='L280' name='L280'></a> 280         __pm_relax(wl-&gt;ws);
+<a id='L281' name='L281'></a> 281 
+<a id='L282' name='L282'></a> 282         <a href='../D/15420.html' title='Multiple defined in 2 places.'>wakelocks_lru_most_recent</a>(wl);
+<a id='L283' name='L283'></a> 283         <a href='../D/15417.html' title='Multiple defined in 2 places.'>wakelocks_gc</a>();
+<a id='L284' name='L284'></a> 284 
+<a id='L285' name='L285'></a> 285  out:
+<a id='L286' name='L286'></a> 286         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;wakelocks_lock);
+<a id='L287' name='L287'></a> 287         <strong class='reserved'>return</strong> ret;
+<a id='L288' name='L288'></a> 288 <em class='brace'>}</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L38'>[^]</a><a href='#L254'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

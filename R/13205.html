@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>test_taint</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/227.html#L188'>test_taint</a>        188 hung_task.c    	if (test_taint(TAINT_DIE) || did_panic)</span>
+<span class='curline'><a href='../S/476.html#L1291'>test_taint</a>       1291 module.c       	if (!test_taint(TAINT_FORCED_MODULE))</span>
+<span class='curline'><a href='../S/476.html#L2573'>test_taint</a>       2573 module.c       		if (!test_taint(TAINT_PROPRIETARY_MODULE))</span>
+<span class='curline'><a href='../S/476.html#L3281'>test_taint</a>       3281 module.c       		if (!test_taint(TAINT_OOT_MODULE))</span>
+<span class='curline'><a href='../S/476.html#L3485'>test_taint</a>       3485 module.c       	int prev_taint = test_taint(TAINT_PROPRIETARY_MODULE);</span>
+<span class='curline'><a href='../S/476.html#L3505'>test_taint</a>       3505 module.c       	if (!prev_taint &amp;&amp; test_taint(TAINT_PROPRIETARY_MODULE))</span>
+<span class='curline'><a href='../S/250.html#L230'>test_taint</a>        230 panic.c        	if (!test_taint(TAINT_DIE) &amp;&amp; oops_in_progress &lt;= 1)</span>
+<span class='curline'><a href='../S/250.html#L426'>test_taint</a>        426 panic.c        EXPORT_SYMBOL(test_taint);</span>
+</pre>
+</body>
+</html>

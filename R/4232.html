@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>capable</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/15.html#L277'>capable</a>           277 acct.c         	if (!capable(CAP_SYS_PACCT))</span>
+<span class='curline'><a href='../S/162.html#L1584'>capable</a>          1584 audit.c        	if (!capable(CAP_AUDIT_READ))</span>
+<span class='curline'><a href='../S/162.html#L2259'>capable</a>          2259 audit.c        	if (!capable(CAP_AUDIT_CONTROL))</span>
+<span class='curline'><a href='../S/371.html#L834'>capable</a>           834 bpf/core.c     		if (!capable(CAP_SYS_ADMIN)) {</span>
+<span class='curline'><a href='../S/413.html#L175'>capable</a>           175 bpf/devmap.c   	if (!capable(CAP_NET_ADMIN))</span>
+<span class='curline'><a href='../S/383.html#L369'>capable</a>           369 bpf/hashtab.c  	if (zero_seed &amp;&amp; !capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/377.html#L369'>capable</a>           369 bpf/offload.c  	if (!capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/418.html#L2139'>capable</a>          2139 bpf/syscall.c  	if (is_net_admin_prog_type(type) &amp;&amp; !capable(CAP_NET_ADMIN) &amp;&amp; !capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/418.html#L2898'>capable</a>          2898 bpf/syscall.c  		if (!capable(CAP_NET_ADMIN))</span>
+<span class='curline'><a href='../S/418.html#L3061'>capable</a>          3061 bpf/syscall.c  	if (!capable(CAP_NET_ADMIN))</span>
+<span class='curline'><a href='../S/418.html#L3146'>capable</a>          3146 bpf/syscall.c  	if (!capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/418.html#L3227'>capable</a>          3227 bpf/syscall.c  	if (!capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/418.html#L3254'>capable</a>          3254 bpf/syscall.c  	if (!capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/418.html#L3822'>capable</a>          3822 bpf/syscall.c  	if (!capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/418.html#L3891'>capable</a>          3891 bpf/syscall.c  	if (!capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/418.html#L4206'>capable</a>          4206 bpf/syscall.c  	if (!capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/418.html#L4262'>capable</a>          4262 bpf/syscall.c  	if (!capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/321.html#L368'>capable</a>           368 capability.c   	int capable;</span>
+<span class='curline'><a href='../S/321.html#L375'>capable</a>           375 capability.c   	capable = security_capable(current_cred(), ns, cap, opts);</span>
+<span class='curline'><a href='../S/321.html#L376'>capable</a>           376 capability.c   	if (capable == 0) {</span>
+<span class='curline'><a href='../S/321.html#L451'>capable</a>           451 capability.c   EXPORT_SYMBOL(capable);</span>
+<span class='curline'><a href='../S/331.html#L6215'>capable</a>          6215 events/core.c  		!capable(CAP_IPC_LOCK)) {</span>
+<span class='curline'><a href='../S/336.html#L423'>capable</a>           423 events/hw_breakpoint.c 		if (!capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/48.html#L2013'>capable</a>          2013 fork.c         		    !capable(CAP_SYS_RESOURCE) &amp;&amp; !capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/423.html#L204'>capable</a>           204 kexec.c        	if (!capable(CAP_SYS_BOOT) || kexec_load_disabled)</span>
+<span class='curline'><a href='../S/119.html#L362'>capable</a>           362 kexec_file.c   	if (!capable(CAP_SYS_BOOT) || kexec_load_disabled)</span>
+<span class='curline'><a href='../S/476.html#L987'>capable</a>           987 module.c       	if (!capable(CAP_SYS_MODULE) || modules_disabled)</span>
+<span class='curline'><a href='../S/476.html#L3849'>capable</a>          3849 module.c       	if (!capable(CAP_SYS_MODULE) || modules_disabled)</span>
+<span class='curline'><a href='../S/171.html#L251'>capable</a>           251 power/user.c   	if (!capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/172.html#L214'>capable</a>           214 power/wakelock.c 	if (!capable(CAP_BLOCK_SUSPEND))</span>
+<span class='curline'><a href='../S/172.html#L260'>capable</a>           260 power/wakelock.c 	if (!capable(CAP_BLOCK_SUSPEND))</span>
+<span class='curline'><a href='../S/6.html#L571'>capable</a>           571 printk/printk.c 		if (capable(CAP_SYSLOG))</span>
+<span class='curline'><a href='../S/6.html#L577'>capable</a>           577 printk/printk.c 		if (capable(CAP_SYS_ADMIN)) {</span>
+<span class='curline'><a href='../S/251.html#L667'>capable</a>           667 ptrace.c       		if (!capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/448.html#L226'>capable</a>           226 sched/autogroup.c 	if (!capable(CAP_SYS_ADMIN) &amp;&amp; time_before(jiffies, next))</span>
+<span class='curline'><a href='../S/441.html#L3343'>capable</a>          3343 sched/core.c   	if (write &amp;&amp; !capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/441.html#L3418'>capable</a>          3418 sched/core.c   	if (write &amp;&amp; !capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/441.html#L5258'>capable</a>          5258 sched/core.c   		capable(CAP_SYS_NICE));</span>
+<span class='curline'><a href='../S/441.html#L5497'>capable</a>          5497 sched/core.c   	if (user &amp;&amp; !capable(CAP_SYS_NICE)) {</span>
+<span class='curline'><a href='../S/452.html#L225'>capable</a>           225 sched/topology.c 	if (write &amp;&amp; !capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/11.html#L2033'>capable</a>          2033 seccomp.c      	if (!capable(CAP_SYS_ADMIN) ||</span>
+<span class='curline'><a href='../S/11.html#L2071'>capable</a>          2071 seccomp.c      	if (!capable(CAP_SYS_ADMIN) ||</span>
+<span class='curline'><a href='../S/11.html#L2230'>capable</a>          2230 seccomp.c      	if (!capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/492.html#L1576'>capable</a>          1576 sys.c          				!capable(CAP_SYS_RESOURCE))</span>
+<span class='curline'><a href='../S/492.html#L2129'>capable</a>          2129 sys.c          	if (!capable(CAP_SYS_RESOURCE))</span>
+<span class='curline'><a href='../S/492.html#L2665'>capable</a>          2665 sys.c          		if (!capable(CAP_SYS_RESOURCE))</span>
+<span class='curline'><a href='../S/492.html#L2679'>capable</a>          2679 sys.c          		if (!capable(CAP_SYS_RESOURCE))</span>
+<span class='curline'><a href='../S/326.html#L223'>capable</a>           223 sysctl.c       	if (write &amp;&amp; !capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/326.html#L861'>capable</a>           861 sysctl.c       	if (write &amp;&amp; !capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/326.html#L897'>capable</a>           897 sysctl.c       	if (write &amp;&amp; !capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/326.html#L1641'>capable</a>          1641 sysctl.c       	if (write &amp;&amp; !capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/84.html#L707'>capable</a>           707 time/alarmtimer.c 	if (!capable(CAP_WAKE_ALARM))</span>
+<span class='curline'><a href='../S/84.html#L828'>capable</a>           828 time/alarmtimer.c 	if (!capable(CAP_WAKE_ALARM))</span>
+<span class='curline'><a href='../S/82.html#L2327'>capable</a>          2327 time/timekeeping.c 		    !capable(CAP_SYS_TIME))</span>
+<span class='curline'><a href='../S/82.html#L2331'>capable</a>          2331 time/timekeeping.c 		if (txc-&gt;modes &amp;&amp; !capable(CAP_SYS_TIME))</span>
+<span class='curline'><a href='../S/82.html#L2345'>capable</a>          2345 time/timekeeping.c 		if (!capable(CAP_SYS_TIME))</span>
+<span class='curline'><a href='../S/284.html#L351'>capable</a>           351 trace/bpf_trace.c 	if (!capable(CAP_SYS_ADMIN))</span>
+<span class='curline'><a href='../S/477.html#L494'>capable</a>           494 umh.c          	if (write &amp;&amp; (!capable(CAP_SETPCAP) ||</span>
+<span class='curline'><a href='../S/477.html#L495'>capable</a>           495 umh.c          		      !capable(CAP_SYS_MODULE)))</span>
+</pre>
+</body>
+</html>

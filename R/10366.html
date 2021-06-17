@@ -1,0 +1,331 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>printk</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/241.html#L5742'>printk</a>           5742 cgroup/cgroup.c 			printk(KERN_INFO "Disabling %s control group subsystem\n",</span>
+<span class='curline'><a href='../S/241.html#L5748'>printk</a>           5748 cgroup/cgroup.c 			printk(KERN_INFO "Disabling %s control group subsystem in v1 mounts\n",</span>
+<span class='curline'><a href='../S/199.html#L24'>printk</a>             24 cred.c         	printk("[%-5.5s%5u] " FMT "\n",					\</span>
+<span class='curline'><a href='../S/199.html#L811'>printk</a>            811 cred.c         	printk(KERN_ERR "CRED: %s credentials: %p %s%s%s\n",</span>
+<span class='curline'><a href='../S/199.html#L816'>printk</a>            816 cred.c         	printk(KERN_ERR "CRED: -&gt;magic=%x, put_addr=%p\n",</span>
+<span class='curline'><a href='../S/199.html#L818'>printk</a>            818 cred.c         	printk(KERN_ERR "CRED: -&gt;usage=%d, subscr=%d\n",</span>
+<span class='curline'><a href='../S/199.html#L821'>printk</a>            821 cred.c         	printk(KERN_ERR "CRED: -&gt;*uid = { %d,%d,%d,%d }\n",</span>
+<span class='curline'><a href='../S/199.html#L826'>printk</a>            826 cred.c         	printk(KERN_ERR "CRED: -&gt;*gid = { %d,%d,%d,%d }\n",</span>
+<span class='curline'><a href='../S/199.html#L832'>printk</a>            832 cred.c         	printk(KERN_ERR "CRED: -&gt;security is %p\n", cred-&gt;security);</span>
+<span class='curline'><a href='../S/199.html#L836'>printk</a>            836 cred.c         		printk(KERN_ERR "CRED: -&gt;security {%x, %x}\n",</span>
+<span class='curline'><a href='../S/199.html#L847'>printk</a>            847 cred.c         	printk(KERN_ERR "CRED: Invalid credentials\n");</span>
+<span class='curline'><a href='../S/199.html#L848'>printk</a>            848 cred.c         	printk(KERN_ERR "CRED: At %s:%u\n", file, line);</span>
+<span class='curline'><a href='../S/199.html#L874'>printk</a>            874 cred.c         	printk(KERN_ERR "CRED: Invalid process credentials\n");</span>
+<span class='curline'><a href='../S/199.html#L875'>printk</a>            875 cred.c         	printk(KERN_ERR "CRED: At %s:%u\n", file, line);</span>
+<span class='curline'><a href='../S/199.html#L881'>printk</a>            881 cred.c         		printk(KERN_ERR "CRED: Effective creds == Real creds\n");</span>
+<span class='curline'><a href='../S/49.html#L447'>printk</a>            447 debug/gdbstub.c 		printk(KERN_ERR "KGDB: Internal thread select error\n");</span>
+<span class='curline'><a href='../S/49.html#L681'>printk</a>            681 debug/gdbstub.c 		printk(KERN_CRIT "Executing emergency reboot\n");</span>
+<span class='curline'><a href='../S/57.html#L740'>printk</a>            740 debug/kdb/kdb_io.c 			printk("%s", kdb_buffer);</span>
+<span class='curline'><a href='../S/57.html#L787'>printk</a>            787 debug/kdb/kdb_io.c 			printk("%s", moreprompt);</span>
+<span class='curline'><a href='../S/478.html#L91'>printk</a>             91 dma.c          		printk(KERN_WARNING "Trying to free DMA%d\n", dmanr);</span>
+<span class='curline'><a href='../S/478.html#L96'>printk</a>             96 dma.c          		printk(KERN_WARNING "Trying to free free DMA%d\n", dmanr);</span>
+<span class='curline'><a href='../S/331.html#L480'>printk</a>            480 events/core.c  		printk(KERN_WARNING</span>
+<span class='curline'><a href='../S/348.html#L6'>printk</a>              6 irq/debug.h    #define ___P(f) if (desc-&gt;status_use_accessors &amp; f) printk("%14s set\n", #f)</span>
+<span class='curline'><a href='../S/348.html#L7'>printk</a>              7 irq/debug.h    #define ___PS(f) if (desc-&gt;istate &amp; f) printk("%14s set\n", #f)</span>
+<span class='curline'><a href='../S/348.html#L18'>printk</a>             18 irq/debug.h    	printk("irq %d, desc: %p, depth: %d, count: %d, unhandled: %d\n",</span>
+<span class='curline'><a href='../S/348.html#L20'>printk</a>             20 irq/debug.h    	printk("-&gt;handle_irq():  %p, %pS\n",</span>
+<span class='curline'><a href='../S/348.html#L22'>printk</a>             22 irq/debug.h    	printk("-&gt;irq_data.chip(): %p, %pS\n",</span>
+<span class='curline'><a href='../S/348.html#L24'>printk</a>             24 irq/debug.h    	printk("-&gt;action(): %p\n", desc-&gt;action);</span>
+<span class='curline'><a href='../S/348.html#L26'>printk</a>             26 irq/debug.h    		printk("-&gt;action-&gt;handler(): %p, %pS\n",</span>
+<span class='curline'><a href='../S/347.html#L55'>printk</a>             55 irq/handle.c   	printk(KERN_WARNING "IRQ %d device %s returned IRQ_WAKE_THREAD "</span>
+<span class='curline'><a href='../S/343.html#L528'>printk</a>            528 irq/irqdesc.c  	printk(KERN_INFO "NR_IRQS: %d, nr_irqs: %d, preallocated irqs: %d\n",</span>
+<span class='curline'><a href='../S/343.html#L565'>printk</a>            565 irq/irqdesc.c  	printk(KERN_INFO "NR_IRQS: %d\n", NR_IRQS);</span>
+<span class='curline'><a href='../S/344.html#L199'>printk</a>            199 irq/spurious.c 		printk(KERN_ERR "irq event %d: bogus return value %x\n",</span>
+<span class='curline'><a href='../S/344.html#L202'>printk</a>            202 irq/spurious.c 		printk(KERN_ERR "irq %d: nobody cared (try booting with "</span>
+<span class='curline'><a href='../S/344.html#L206'>printk</a>            206 irq/spurious.c 	printk(KERN_ERR "handlers:\n");</span>
+<span class='curline'><a href='../S/344.html#L216'>printk</a>            216 irq/spurious.c 		printk(KERN_ERR "[&lt;%p&gt;] %ps", action-&gt;handler, action-&gt;handler);</span>
+<span class='curline'><a href='../S/344.html#L218'>printk</a>            218 irq/spurious.c 			printk(KERN_CONT " threaded [&lt;%p&gt;] %ps",</span>
+<span class='curline'><a href='../S/344.html#L220'>printk</a>            220 irq/spurious.c 		printk(KERN_CONT "\n");</span>
+<span class='curline'><a href='../S/344.html#L419'>printk</a>            419 irq/spurious.c 		printk(KERN_EMERG "Disabling IRQ #%d\n", irq);</span>
+<span class='curline'><a href='../S/344.html#L435'>printk</a>            435 irq/spurious.c 	printk(KERN_INFO "IRQ lockup detection disabled\n");</span>
+<span class='curline'><a href='../S/344.html#L447'>printk</a>            447 irq/spurious.c 	printk(KERN_WARNING "Misrouted IRQ fixup support enabled.\n");</span>
+<span class='curline'><a href='../S/344.html#L448'>printk</a>            448 irq/spurious.c 	printk(KERN_WARNING "This may impact system performance.\n");</span>
+<span class='curline'><a href='../S/344.html#L459'>printk</a>            459 irq/spurious.c 	printk(KERN_WARNING "Misrouted IRQ fixup and polling support "</span>
+<span class='curline'><a href='../S/344.html#L461'>printk</a>            461 irq/spurious.c 	printk(KERN_WARNING "This may significantly impact system "</span>
+<span class='curline'><a href='../S/182.html#L894'>printk</a>            894 kprobes.c      	printk(KERN_INFO "Kprobes globally optimized\n");</span>
+<span class='curline'><a href='../S/182.html#L927'>printk</a>            927 kprobes.c      	printk(KERN_INFO "Kprobes globally unoptimized\n");</span>
+<span class='curline'><a href='../S/182.html#L1005'>printk</a>           1005 kprobes.c      	printk(KERN_ERR "Error: There should be no unused kprobe here.\n");</span>
+<span class='curline'><a href='../S/182.html#L2625'>printk</a>           2625 kprobes.c      				printk("kretprobe: lookup failed: %s\n",</span>
+<span class='curline'><a href='../S/35.html#L491'>printk</a>            491 locking/lockdep.c 	printk(KERN_DEBUG "%s\n", bug_msg);</span>
+<span class='curline'><a href='../S/35.html#L492'>printk</a>            492 locking/lockdep.c 	printk(KERN_DEBUG "turning off the locking correctness validator.\n");</span>
+<span class='curline'><a href='../S/35.html#L494'>printk</a>            494 locking/lockdep.c 	printk(KERN_DEBUG "Please attach the output of /proc/lock_stat to the bug report\n");</span>
+<span class='curline'><a href='../S/35.html#L690'>printk</a>            690 locking/lockdep.c 		printk(KERN_CONT "%s", name);</span>
+<span class='curline'><a href='../S/35.html#L692'>printk</a>            692 locking/lockdep.c 		printk(KERN_CONT "%s", name);</span>
+<span class='curline'><a href='../S/35.html#L694'>printk</a>            694 locking/lockdep.c 			printk(KERN_CONT "#%d", class-&gt;name_version);</span>
+<span class='curline'><a href='../S/35.html#L696'>printk</a>            696 locking/lockdep.c 			printk(KERN_CONT "/%d", class-&gt;subclass);</span>
+<span class='curline'><a href='../S/35.html#L706'>printk</a>            706 locking/lockdep.c 	printk(KERN_CONT " (");</span>
+<span class='curline'><a href='../S/35.html#L708'>printk</a>            708 locking/lockdep.c 	printk(KERN_CONT "){%s}-{%d:%d}", usage,</span>
+<span class='curline'><a href='../S/35.html#L722'>printk</a>            722 locking/lockdep.c 	printk(KERN_CONT "%s", name);</span>
+<span class='curline'><a href='../S/35.html#L740'>printk</a>            740 locking/lockdep.c 		printk(KERN_CONT "&lt;RELEASED&gt;\n");</span>
+<span class='curline'><a href='../S/35.html#L744'>printk</a>            744 locking/lockdep.c 	printk(KERN_CONT "%px", hlock-&gt;instance);</span>
+<span class='curline'><a href='../S/35.html#L746'>printk</a>            746 locking/lockdep.c 	printk(KERN_CONT ", at: %pS\n", (void *)hlock-&gt;acquire_ip);</span>
+<span class='curline'><a href='../S/35.html#L754'>printk</a>            754 locking/lockdep.c 		printk("no locks held by %s/%d.\n", p-&gt;comm, task_pid_nr(p));</span>
+<span class='curline'><a href='../S/35.html#L756'>printk</a>            756 locking/lockdep.c 		printk("%d lock%s held by %s/%d:\n", depth,</span>
+<span class='curline'><a href='../S/35.html#L765'>printk</a>            765 locking/lockdep.c 		printk(" #%d: ", i);</span>
+<span class='curline'><a href='../S/35.html#L772'>printk</a>            772 locking/lockdep.c 	printk("%s %.*s %s\n", init_utsname()-&gt;release,</span>
+<span class='curline'><a href='../S/35.html#L854'>printk</a>            854 locking/lockdep.c 		printk(KERN_ERR</span>
+<span class='curline'><a href='../S/35.html#L856'>printk</a>            856 locking/lockdep.c 		printk(KERN_ERR</span>
+<span class='curline'><a href='../S/35.html#L982'>printk</a>            982 locking/lockdep.c 			printk(KERN_INFO "class %s: mismatch for lock entry %ld; class %s &lt;&gt; %s",</span>
+<span class='curline'><a href='../S/35.html#L1012'>printk</a>           1012 locking/lockdep.c 		printk(KERN_INFO "chain %lld: key %#llx &lt;&gt; %#llx\n",</span>
+<span class='curline'><a href='../S/35.html#L1049'>printk</a>           1049 locking/lockdep.c 			printk(KERN_INFO "class %px/%s is not in any class list\n",</span>
+<span class='curline'><a href='../S/35.html#L1080'>printk</a>           1080 locking/lockdep.c 			printk(KERN_INFO "list entry %d is not in any class list; class %s &lt;&gt; %s\n",</span>
+<span class='curline'><a href='../S/35.html#L1095'>printk</a>           1095 locking/lockdep.c 			printk(KERN_INFO "list entry %d occurs in a class list; class %s &lt;&gt; %s\n",</span>
+<span class='curline'><a href='../S/35.html#L1308'>printk</a>           1308 locking/lockdep.c 		printk("\nnew class %px: %s", class-&gt;key, class-&gt;name);</span>
+<span class='curline'><a href='../S/35.html#L1310'>printk</a>           1310 locking/lockdep.c 			printk(KERN_CONT "#%d", class-&gt;name_version);</span>
+<span class='curline'><a href='../S/35.html#L1311'>printk</a>           1311 locking/lockdep.c 		printk(KERN_CONT "\n");</span>
+<span class='curline'><a href='../S/35.html#L1811'>printk</a>           1811 locking/lockdep.c 	printk("\n-&gt; #%u", depth);</span>
+<span class='curline'><a href='../S/35.html#L1813'>printk</a>           1813 locking/lockdep.c 	printk(KERN_CONT ":\n");</span>
+<span class='curline'><a href='../S/35.html#L1840'>printk</a>           1840 locking/lockdep.c 		printk("Chain exists of:\n  ");</span>
+<span class='curline'><a href='../S/35.html#L1842'>printk</a>           1842 locking/lockdep.c 		printk(KERN_CONT " --&gt; ");</span>
+<span class='curline'><a href='../S/35.html#L1844'>printk</a>           1844 locking/lockdep.c 		printk(KERN_CONT " --&gt; ");</span>
+<span class='curline'><a href='../S/35.html#L1846'>printk</a>           1846 locking/lockdep.c 		printk(KERN_CONT "\n\n");</span>
+<span class='curline'><a href='../S/35.html#L1849'>printk</a>           1849 locking/lockdep.c 	printk(" Possible unsafe locking scenario:\n\n");</span>
+<span class='curline'><a href='../S/35.html#L1850'>printk</a>           1850 locking/lockdep.c 	printk("       CPU0                    CPU1\n");</span>
+<span class='curline'><a href='../S/35.html#L1851'>printk</a>           1851 locking/lockdep.c 	printk("       ----                    ----\n");</span>
+<span class='curline'><a href='../S/35.html#L1852'>printk</a>           1852 locking/lockdep.c 	printk("  lock(");</span>
+<span class='curline'><a href='../S/35.html#L1854'>printk</a>           1854 locking/lockdep.c 	printk(KERN_CONT ");\n");</span>
+<span class='curline'><a href='../S/35.html#L1855'>printk</a>           1855 locking/lockdep.c 	printk("                               lock(");</span>
+<span class='curline'><a href='../S/35.html#L1857'>printk</a>           1857 locking/lockdep.c 	printk(KERN_CONT ");\n");</span>
+<span class='curline'><a href='../S/35.html#L1858'>printk</a>           1858 locking/lockdep.c 	printk("                               lock(");</span>
+<span class='curline'><a href='../S/35.html#L1860'>printk</a>           1860 locking/lockdep.c 	printk(KERN_CONT ");\n");</span>
+<span class='curline'><a href='../S/35.html#L1861'>printk</a>           1861 locking/lockdep.c 	printk("  lock(");</span>
+<span class='curline'><a href='../S/35.html#L1863'>printk</a>           1863 locking/lockdep.c 	printk(KERN_CONT ");\n");</span>
+<span class='curline'><a href='../S/35.html#L1864'>printk</a>           1864 locking/lockdep.c 	printk("\n *** DEADLOCK ***\n\n");</span>
+<span class='curline'><a href='../S/35.html#L1990'>printk</a>           1990 locking/lockdep.c 	printk("\nother info that might help us debug this:\n\n");</span>
+<span class='curline'><a href='../S/35.html#L1996'>printk</a>           1996 locking/lockdep.c 	printk("\nstack backtrace:\n");</span>
+<span class='curline'><a href='../S/35.html#L2275'>printk</a>           2275 locking/lockdep.c 	printk("%*s-&gt;", depth, "");</span>
+<span class='curline'><a href='../S/35.html#L2278'>printk</a>           2278 locking/lockdep.c 	printk(KERN_CONT " ops: %lu", debug_class_ops_read(class));</span>
+<span class='curline'><a href='../S/35.html#L2280'>printk</a>           2280 locking/lockdep.c 	printk(KERN_CONT " {\n");</span>
+<span class='curline'><a href='../S/35.html#L2286'>printk</a>           2286 locking/lockdep.c 			len += printk("%*s   %s", depth, "", usage_str[bit]);</span>
+<span class='curline'><a href='../S/35.html#L2287'>printk</a>           2287 locking/lockdep.c 			len += printk(KERN_CONT " at:\n");</span>
+<span class='curline'><a href='../S/35.html#L2291'>printk</a>           2291 locking/lockdep.c 	printk("%*s }\n", depth, "");</span>
+<span class='curline'><a href='../S/35.html#L2293'>printk</a>           2293 locking/lockdep.c 	printk("%*s ... key      at: [&lt;%px&gt;] %pS\n",</span>
+<span class='curline'><a href='../S/35.html#L2312'>printk</a>           2312 locking/lockdep.c 		printk("%*s ... acquired at:\n", depth, "");</span>
+<span class='curline'><a href='../S/35.html#L2314'>printk</a>           2314 locking/lockdep.c 		printk("\n");</span>
+<span class='curline'><a href='../S/35.html#L2317'>printk</a>           2317 locking/lockdep.c 			printk("lockdep:%s bad path found in chain graph\n", __func__);</span>
+<span class='curline'><a href='../S/35.html#L2353'>printk</a>           2353 locking/lockdep.c 		printk("Chain exists of:\n  ");</span>
+<span class='curline'><a href='../S/35.html#L2355'>printk</a>           2355 locking/lockdep.c 		printk(KERN_CONT " --&gt; ");</span>
+<span class='curline'><a href='../S/35.html#L2357'>printk</a>           2357 locking/lockdep.c 		printk(KERN_CONT " --&gt; ");</span>
+<span class='curline'><a href='../S/35.html#L2359'>printk</a>           2359 locking/lockdep.c 		printk(KERN_CONT "\n\n");</span>
+<span class='curline'><a href='../S/35.html#L2362'>printk</a>           2362 locking/lockdep.c 	printk(" Possible interrupt unsafe locking scenario:\n\n");</span>
+<span class='curline'><a href='../S/35.html#L2363'>printk</a>           2363 locking/lockdep.c 	printk("       CPU0                    CPU1\n");</span>
+<span class='curline'><a href='../S/35.html#L2364'>printk</a>           2364 locking/lockdep.c 	printk("       ----                    ----\n");</span>
+<span class='curline'><a href='../S/35.html#L2365'>printk</a>           2365 locking/lockdep.c 	printk("  lock(");</span>
+<span class='curline'><a href='../S/35.html#L2367'>printk</a>           2367 locking/lockdep.c 	printk(KERN_CONT ");\n");</span>
+<span class='curline'><a href='../S/35.html#L2368'>printk</a>           2368 locking/lockdep.c 	printk("                               local_irq_disable();\n");</span>
+<span class='curline'><a href='../S/35.html#L2369'>printk</a>           2369 locking/lockdep.c 	printk("                               lock(");</span>
+<span class='curline'><a href='../S/35.html#L2371'>printk</a>           2371 locking/lockdep.c 	printk(KERN_CONT ");\n");</span>
+<span class='curline'><a href='../S/35.html#L2372'>printk</a>           2372 locking/lockdep.c 	printk("                               lock(");</span>
+<span class='curline'><a href='../S/35.html#L2374'>printk</a>           2374 locking/lockdep.c 	printk(KERN_CONT ");\n");</span>
+<span class='curline'><a href='../S/35.html#L2375'>printk</a>           2375 locking/lockdep.c 	printk("  &lt;Interrupt&gt;\n");</span>
+<span class='curline'><a href='../S/35.html#L2376'>printk</a>           2376 locking/lockdep.c 	printk("    lock(");</span>
+<span class='curline'><a href='../S/35.html#L2378'>printk</a>           2378 locking/lockdep.c 	printk(KERN_CONT ");\n");</span>
+<span class='curline'><a href='../S/35.html#L2379'>printk</a>           2379 locking/lockdep.c 	printk("\n *** DEADLOCK ***\n\n");</span>
+<span class='curline'><a href='../S/35.html#L2726'>printk</a>           2726 locking/lockdep.c 	printk(" Possible unsafe locking scenario:\n\n");</span>
+<span class='curline'><a href='../S/35.html#L2727'>printk</a>           2727 locking/lockdep.c 	printk("       CPU0\n");</span>
+<span class='curline'><a href='../S/35.html#L2728'>printk</a>           2728 locking/lockdep.c 	printk("       ----\n");</span>
+<span class='curline'><a href='../S/35.html#L2729'>printk</a>           2729 locking/lockdep.c 	printk("  lock(");</span>
+<span class='curline'><a href='../S/35.html#L2731'>printk</a>           2731 locking/lockdep.c 	printk(KERN_CONT ");\n");</span>
+<span class='curline'><a href='../S/35.html#L2732'>printk</a>           2732 locking/lockdep.c 	printk("  lock(");</span>
+<span class='curline'><a href='../S/35.html#L2734'>printk</a>           2734 locking/lockdep.c 	printk(KERN_CONT ");\n");</span>
+<span class='curline'><a href='../S/35.html#L2735'>printk</a>           2735 locking/lockdep.c 	printk("\n *** DEADLOCK ***\n\n");</span>
+<span class='curline'><a href='../S/35.html#L2736'>printk</a>           2736 locking/lockdep.c 	printk(" May be due to missing lock nesting notation\n\n");</span>
+<span class='curline'><a href='../S/35.html#L3303'>printk</a>           3303 locking/lockdep.c 	printk(" hlock_id:%d -&gt; chain_key:%016Lx",</span>
+<span class='curline'><a href='../S/35.html#L3317'>printk</a>           3317 locking/lockdep.c 	printk("depth: %u (irq_context %u)\n", depth - i + 1,</span>
+<span class='curline'><a href='../S/35.html#L3336'>printk</a>           3336 locking/lockdep.c 	printk("depth: %u\n", chain-&gt;depth);</span>
+<span class='curline'><a href='../S/35.html#L3342'>printk</a>           3342 locking/lockdep.c 		printk("\n");</span>
+<span class='curline'><a href='../S/35.html#L3530'>printk</a>           3530 locking/lockdep.c 			printk("\nhash chain already cached, key: "</span>
+<span class='curline'><a href='../S/35.html#L3540'>printk</a>           3540 locking/lockdep.c 		printk("\nnew hash chain, key: %016Lx tail class: [%px] %s\n",</span>
+<span class='curline'><a href='../S/35.html#L3694'>printk</a>           3694 locking/lockdep.c 	printk(" Possible unsafe locking scenario:\n\n");</span>
+<span class='curline'><a href='../S/35.html#L3695'>printk</a>           3695 locking/lockdep.c 	printk("       CPU0\n");</span>
+<span class='curline'><a href='../S/35.html#L3696'>printk</a>           3696 locking/lockdep.c 	printk("       ----\n");</span>
+<span class='curline'><a href='../S/35.html#L3697'>printk</a>           3697 locking/lockdep.c 	printk("  lock(");</span>
+<span class='curline'><a href='../S/35.html#L3699'>printk</a>           3699 locking/lockdep.c 	printk(KERN_CONT ");\n");</span>
+<span class='curline'><a href='../S/35.html#L3700'>printk</a>           3700 locking/lockdep.c 	printk("  &lt;Interrupt&gt;\n");</span>
+<span class='curline'><a href='../S/35.html#L3701'>printk</a>           3701 locking/lockdep.c 	printk("    lock(");</span>
+<span class='curline'><a href='../S/35.html#L3703'>printk</a>           3703 locking/lockdep.c 	printk(KERN_CONT ");\n");</span>
+<span class='curline'><a href='../S/35.html#L3704'>printk</a>           3704 locking/lockdep.c 	printk("\n *** DEADLOCK ***\n\n");</span>
+<span class='curline'><a href='../S/35.html#L3897'>printk</a>           3897 locking/lockdep.c 	printk("irq event stamp: %u\n", trace-&gt;irq_events);</span>
+<span class='curline'><a href='../S/35.html#L3898'>printk</a>           3898 locking/lockdep.c 	printk("hardirqs last  enabled at (%u): [&lt;%px&gt;] %pS\n",</span>
+<span class='curline'><a href='../S/35.html#L3901'>printk</a>           3901 locking/lockdep.c 	printk("hardirqs last disabled at (%u): [&lt;%px&gt;] %pS\n",</span>
+<span class='curline'><a href='../S/35.html#L3904'>printk</a>           3904 locking/lockdep.c 	printk("softirqs last  enabled at (%u): [&lt;%px&gt;] %pS\n",</span>
+<span class='curline'><a href='../S/35.html#L3907'>printk</a>           3907 locking/lockdep.c 	printk("softirqs last disabled at (%u): [&lt;%px&gt;] %pS\n",</span>
+<span class='curline'><a href='../S/35.html#L4425'>printk</a>           4425 locking/lockdep.c 		printk("\nmarked lock as {%s}:\n", usage_str[new_bit]);</span>
+<span class='curline'><a href='../S/35.html#L4619'>printk</a>           4619 locking/lockdep.c 			printk(KERN_ERR "BUG: key %px has not been registered!\n", key);</span>
+<span class='curline'><a href='../S/35.html#L4721'>printk</a>           4721 locking/lockdep.c 		printk("\nacquire class [%px] %s", class-&gt;key, class-&gt;name);</span>
+<span class='curline'><a href='../S/35.html#L4723'>printk</a>           4723 locking/lockdep.c 			printk(KERN_CONT "#%d", class-&gt;name_version);</span>
+<span class='curline'><a href='../S/35.html#L4724'>printk</a>           4724 locking/lockdep.c 		printk(KERN_CONT "\n");</span>
+<span class='curline'><a href='../S/35.html#L4847'>printk</a>           4847 locking/lockdep.c 		printk(KERN_DEBUG "depth: %i  max: %lu!\n",</span>
+<span class='curline'><a href='../S/35.html#L5287'>printk</a>           5287 locking/lockdep.c 			printk("possible reason: unannotated irqs-off.\n");</span>
+<span class='curline'><a href='../S/35.html#L5291'>printk</a>           5291 locking/lockdep.c 			printk("possible reason: unannotated irqs-on.\n");</span>
+<span class='curline'><a href='../S/35.html#L6134'>printk</a>           6134 locking/lockdep.c 	printk("Lock dependency validator: Copyright (c) 2006 Red Hat, Inc., Ingo Molnar\n");</span>
+<span class='curline'><a href='../S/35.html#L6136'>printk</a>           6136 locking/lockdep.c 	printk("... MAX_LOCKDEP_SUBCLASSES:  %lu\n", MAX_LOCKDEP_SUBCLASSES);</span>
+<span class='curline'><a href='../S/35.html#L6137'>printk</a>           6137 locking/lockdep.c 	printk("... MAX_LOCK_DEPTH:          %lu\n", MAX_LOCK_DEPTH);</span>
+<span class='curline'><a href='../S/35.html#L6138'>printk</a>           6138 locking/lockdep.c 	printk("... MAX_LOCKDEP_KEYS:        %lu\n", MAX_LOCKDEP_KEYS);</span>
+<span class='curline'><a href='../S/35.html#L6139'>printk</a>           6139 locking/lockdep.c 	printk("... CLASSHASH_SIZE:          %lu\n", CLASSHASH_SIZE);</span>
+<span class='curline'><a href='../S/35.html#L6140'>printk</a>           6140 locking/lockdep.c 	printk("... MAX_LOCKDEP_ENTRIES:     %lu\n", MAX_LOCKDEP_ENTRIES);</span>
+<span class='curline'><a href='../S/35.html#L6141'>printk</a>           6141 locking/lockdep.c 	printk("... MAX_LOCKDEP_CHAINS:      %lu\n", MAX_LOCKDEP_CHAINS);</span>
+<span class='curline'><a href='../S/35.html#L6142'>printk</a>           6142 locking/lockdep.c 	printk("... CHAINHASH_SIZE:          %lu\n", CHAINHASH_SIZE);</span>
+<span class='curline'><a href='../S/35.html#L6144'>printk</a>           6144 locking/lockdep.c 	printk(" memory used by lock dependency info: %zu kB\n",</span>
+<span class='curline'><a href='../S/35.html#L6162'>printk</a>           6162 locking/lockdep.c 	printk(" memory used for stack traces: %zu kB\n",</span>
+<span class='curline'><a href='../S/35.html#L6167'>printk</a>           6167 locking/lockdep.c 	printk(" per task-struct memory footprint: %zu bytes\n",</span>
+<span class='curline'><a href='../S/35.html#L6290'>printk</a>           6290 locking/lockdep.c 		printk("INFO: lockdep is turned off.\n");</span>
+<span class='curline'><a href='../S/41.html#L38'>printk</a>             38 locking/rtmutex-debug.c 		printk("%16s:%5d [%p, %3d]", p-&gt;comm, task_pid_nr(p), p, p-&gt;prio);</span>
+<span class='curline'><a href='../S/41.html#L40'>printk</a>             40 locking/rtmutex-debug.c 		printk("&lt;none&gt;");</span>
+<span class='curline'><a href='../S/41.html#L46'>printk</a>             46 locking/rtmutex-debug.c 		printk(" [%p] {%s}\n",</span>
+<span class='curline'><a href='../S/41.html#L49'>printk</a>             49 locking/rtmutex-debug.c 		printk(" [%p] {%s:%d}\n",</span>
+<span class='curline'><a href='../S/41.html#L53'>printk</a>             53 locking/rtmutex-debug.c 		printk(".. -&gt;owner: %p\n", lock-&gt;owner);</span>
+<span class='curline'><a href='../S/41.html#L54'>printk</a>             54 locking/rtmutex-debug.c 		printk(".. held by:  ");</span>
+<span class='curline'><a href='../S/41.html#L56'>printk</a>             56 locking/rtmutex-debug.c 		printk("\n");</span>
+<span class='curline'><a href='../S/41.html#L111'>printk</a>            111 locking/rtmutex-debug.c 	printk("%s/%d is deadlocking current task %s/%d\n\n",</span>
+<span class='curline'><a href='../S/41.html#L115'>printk</a>            115 locking/rtmutex-debug.c 	printk("\n1) %s/%d is trying to acquire this lock:\n",</span>
+<span class='curline'><a href='../S/41.html#L119'>printk</a>            119 locking/rtmutex-debug.c 	printk("\n2) %s/%d is blocked on this lock:\n",</span>
+<span class='curline'><a href='../S/41.html#L126'>printk</a>            126 locking/rtmutex-debug.c 	printk("\n%s/%d's [blocked] stackdump:\n\n",</span>
+<span class='curline'><a href='../S/41.html#L129'>printk</a>            129 locking/rtmutex-debug.c 	printk("\n%s/%d's [current] stackdump:\n\n",</span>
+<span class='curline'><a href='../S/41.html#L135'>printk</a>            135 locking/rtmutex-debug.c 	printk("[ turning off deadlock detection."</span>
+<span class='curline'><a href='../S/40.html#L483'>printk</a>            483 locking/rtmutex.c 			printk(KERN_WARNING "Maximum lock depth %d reached "</span>
+<span class='curline'><a href='../S/22.html#L58'>printk</a>             58 locking/spinlock_debug.c 	printk(KERN_EMERG "BUG: spinlock %s on CPU#%d, %s/%d\n",</span>
+<span class='curline'><a href='../S/22.html#L61'>printk</a>             61 locking/spinlock_debug.c 	printk(KERN_EMERG " lock: %pS, .magic: %08x, .owner: %s/%d, "</span>
+<span class='curline'><a href='../S/22.html#L147'>printk</a>            147 locking/spinlock_debug.c 	printk(KERN_EMERG "BUG: rwlock %s on CPU#%d, %s/%d, %p\n",</span>
+<span class='curline'><a href='../S/476.html#L4777'>printk</a>           4777 module.c       	printk(KERN_DEFAULT "Modules linked in:");</span>
+<span class='curline'><a href='../S/216.html#L947'>printk</a>            947 params.c       		printk(KERN_WARNING "%s (%d): error creating kset\n",</span>
+<span class='curline'><a href='../S/164.html#L569'>printk</a>            569 power/main.c   		printk(KERN_DEBUG "PM: %pV", &amp;vaf);</span>
+<span class='curline'><a href='../S/167.html#L81'>printk</a>             81 power/suspend_test.c 		printk(err_readtime, dev_name(&amp;rtc-&gt;dev), status);</span>
+<span class='curline'><a href='../S/167.html#L92'>printk</a>             92 power/suspend_test.c 		printk(err_wakealarm, dev_name(&amp;rtc-&gt;dev), status);</span>
+<span class='curline'><a href='../S/167.html#L97'>printk</a>             97 power/suspend_test.c 		printk(info_test, pm_states[state]);</span>
+<span class='curline'><a href='../S/167.html#L103'>printk</a>            103 power/suspend_test.c 		printk(info_test, pm_states[state]);</span>
+<span class='curline'><a href='../S/167.html#L109'>printk</a>            109 power/suspend_test.c 		printk(info_test, pm_states[state]);</span>
+<span class='curline'><a href='../S/167.html#L114'>printk</a>            114 power/suspend_test.c 		printk(err_suspend, status);</span>
+<span class='curline'><a href='../S/167.html#L174'>printk</a>            174 power/suspend_test.c 	printk(warn_bad_state, suspend_type);</span>
+<span class='curline'><a href='../S/167.html#L199'>printk</a>            199 power/suspend_test.c 		printk(warn_bad_state, test_state_label);</span>
+<span class='curline'><a href='../S/167.html#L210'>printk</a>            210 power/suspend_test.c 		printk(warn_no_rtc);</span>
+<span class='curline'><a href='../S/6.html#L2112'>printk</a>           2112 printk/printk.c EXPORT_SYMBOL(printk);</span>
+<span class='curline'><a href='../S/215.html#L857'>printk</a>            857 relay.c        		printk(KERN_WARNING "relay: one or more items not logged "</span>
+<span class='curline'><a href='../S/426.html#L257'>printk</a>            257 resource.c     		printk(KERN_DEBUG "release child resource %pR\n", tmp);</span>
+<span class='curline'><a href='../S/426.html#L907'>printk</a>            907 resource.c     		printk("Expanded resource %s due to conflict with %s\n", new-&gt;name, conflict-&gt;name);</span>
+<span class='curline'><a href='../S/426.html#L1234'>printk</a>           1234 resource.c     	printk(KERN_WARNING "Trying to free nonexistent resource "</span>
+<span class='curline'><a href='../S/426.html#L1634'>printk</a>           1634 resource.c     		printk(KERN_WARNING "resource sanity check: requesting [mem %#010llx-%#010llx], which spans more than %s %pR\n",</span>
+<span class='curline'><a href='../S/448.html#L100'>printk</a>            100 sched/autogroup.c 		printk(KERN_WARNING "autogroup_create: %s failure.\n",</span>
+<span class='curline'><a href='../S/474.html#L135'>printk</a>            135 sched/clock.c  	printk(KERN_INFO "sched_clock: Marking stable (%lld, %lld)-&gt;(%lld, %lld)\n",</span>
+<span class='curline'><a href='../S/474.html#L170'>printk</a>            170 sched/clock.c  	printk(KERN_WARNING "TSC found unstable after boot, most likely due to broken BIOS. Use 'tsc=unstable'.\n");</span>
+<span class='curline'><a href='../S/474.html#L171'>printk</a>            171 sched/clock.c  	printk(KERN_INFO "sched_clock: Marking unstable (%lld, %lld)&lt;-(%lld, %lld)\n",</span>
+<span class='curline'><a href='../S/441.html#L4483'>printk</a>           4483 sched/core.c   	printk(KERN_ERR "BUG: scheduling while atomic: %s/%d/0x%08x\n",</span>
+<span class='curline'><a href='../S/441.html#L4519'>printk</a>           4519 sched/core.c   		printk(KERN_ERR "BUG: scheduling in a non-blocking section: %s/%d/%i\n",</span>
+<span class='curline'><a href='../S/441.html#L7642'>printk</a>           7642 sched/core.c   	printk(KERN_ERR</span>
+<span class='curline'><a href='../S/441.html#L7645'>printk</a>           7645 sched/core.c   	printk(KERN_ERR</span>
+<span class='curline'><a href='../S/441.html#L7651'>printk</a>           7651 sched/core.c   		printk(KERN_EMERG "Thread overran stack, or stack corrupted\n");</span>
+<span class='curline'><a href='../S/441.html#L7686'>printk</a>           7686 sched/core.c   	printk(KERN_ERR "BUG: assuming atomic context at %s:%d\n", file, line);</span>
+<span class='curline'><a href='../S/441.html#L7687'>printk</a>           7687 sched/core.c   	printk(KERN_ERR "in_atomic(): %d, irqs_disabled(): %d, pid: %d, name: %s\n",</span>
+<span class='curline'><a href='../S/455.html#L454'>printk</a>            454 sched/idle.c   	printk(KERN_ERR "bad: scheduling from the idle thread!\n");</span>
+<span class='curline'><a href='../S/452.html#L48'>printk</a>             48 sched/topology.c 	printk(KERN_DEBUG "%*s domain-%d: ", level, "", level);</span>
+<span class='curline'><a href='../S/452.html#L49'>printk</a>             49 sched/topology.c 	printk(KERN_CONT "span=%*pbl level=%s\n",</span>
+<span class='curline'><a href='../S/452.html#L53'>printk</a>             53 sched/topology.c 		printk(KERN_ERR "ERROR: domain-&gt;span does not contain CPU%d\n", cpu);</span>
+<span class='curline'><a href='../S/452.html#L56'>printk</a>             56 sched/topology.c 		printk(KERN_ERR "ERROR: domain-&gt;groups does not contain CPU%d\n", cpu);</span>
+<span class='curline'><a href='../S/452.html#L65'>printk</a>             65 sched/topology.c 			printk(KERN_ERR "ERROR: flag %s set here but not in child\n",</span>
+<span class='curline'><a href='../S/452.html#L70'>printk</a>             70 sched/topology.c 			printk(KERN_ERR "ERROR: flag %s set here but not in parent\n",</span>
+<span class='curline'><a href='../S/452.html#L74'>printk</a>             74 sched/topology.c 	printk(KERN_DEBUG "%*s groups:", level + 1, "");</span>
+<span class='curline'><a href='../S/452.html#L77'>printk</a>             77 sched/topology.c 			printk("\n");</span>
+<span class='curline'><a href='../S/452.html#L78'>printk</a>             78 sched/topology.c 			printk(KERN_ERR "ERROR: group is NULL\n");</span>
+<span class='curline'><a href='../S/452.html#L83'>printk</a>             83 sched/topology.c 			printk(KERN_CONT "\n");</span>
+<span class='curline'><a href='../S/452.html#L84'>printk</a>             84 sched/topology.c 			printk(KERN_ERR "ERROR: empty group\n");</span>
+<span class='curline'><a href='../S/452.html#L90'>printk</a>             90 sched/topology.c 			printk(KERN_CONT "\n");</span>
+<span class='curline'><a href='../S/452.html#L91'>printk</a>             91 sched/topology.c 			printk(KERN_ERR "ERROR: repeated CPUs\n");</span>
+<span class='curline'><a href='../S/452.html#L97'>printk</a>             97 sched/topology.c 		printk(KERN_CONT " %d:{ span=%*pbl",</span>
+<span class='curline'><a href='../S/452.html#L103'>printk</a>            103 sched/topology.c 			printk(KERN_CONT " mask=%*pbl",</span>
+<span class='curline'><a href='../S/452.html#L108'>printk</a>            108 sched/topology.c 			printk(KERN_CONT " cap=%lu", group-&gt;sgc-&gt;capacity);</span>
+<span class='curline'><a href='../S/452.html#L113'>printk</a>            113 sched/topology.c 			printk(KERN_ERR "ERROR: domain-&gt;groups does not match domain-&gt;child\n");</span>
+<span class='curline'><a href='../S/452.html#L116'>printk</a>            116 sched/topology.c 		printk(KERN_CONT " }");</span>
+<span class='curline'><a href='../S/452.html#L121'>printk</a>            121 sched/topology.c 			printk(KERN_CONT ",");</span>
+<span class='curline'><a href='../S/452.html#L124'>printk</a>            124 sched/topology.c 	printk(KERN_CONT "\n");</span>
+<span class='curline'><a href='../S/452.html#L127'>printk</a>            127 sched/topology.c 		printk(KERN_ERR "ERROR: groups don't span domain-&gt;span\n");</span>
+<span class='curline'><a href='../S/452.html#L131'>printk</a>            131 sched/topology.c 		printk(KERN_ERR "ERROR: parent span is not a superset of domain-&gt;span\n");</span>
+<span class='curline'><a href='../S/452.html#L143'>printk</a>            143 sched/topology.c 		printk(KERN_DEBUG "CPU%d attaching NULL sched-domain.\n", cpu);</span>
+<span class='curline'><a href='../S/452.html#L147'>printk</a>            147 sched/topology.c 	printk(KERN_DEBUG "CPU%d attaching sched-domain(s):\n", cpu);</span>
+<span class='curline'><a href='../S/452.html#L291'>printk</a>            291 sched/topology.c 	printk(KERN_DEBUG "root_domain %*pbl:", cpumask_pr_args(cpu_map));</span>
+<span class='curline'><a href='../S/452.html#L294'>printk</a>            294 sched/topology.c 		printk(KERN_CONT " pd%d:{ cpus=%*pbl nr_pstate=%d }",</span>
+<span class='curline'><a href='../S/452.html#L301'>printk</a>            301 sched/topology.c 	printk(KERN_CONT "\n");</span>
+<span class='curline'><a href='../S/452.html#L1467'>printk</a>           1467 sched/topology.c 	printk(KERN_WARNING "ERROR: %s\n\n", str);</span>
+<span class='curline'><a href='../S/452.html#L1470'>printk</a>           1470 sched/topology.c 		printk(KERN_WARNING "  ");</span>
+<span class='curline'><a href='../S/452.html#L1472'>printk</a>           1472 sched/topology.c 			printk(KERN_CONT "%02d ", node_distance(i,j));</span>
+<span class='curline'><a href='../S/452.html#L1473'>printk</a>           1473 sched/topology.c 		printk(KERN_CONT "\n");</span>
+<span class='curline'><a href='../S/452.html#L1475'>printk</a>           1475 sched/topology.c 	printk(KERN_WARNING "\n");</span>
+<span class='curline'><a href='../S/424.html#L32'>printk</a>             32 stacktrace.c   		printk("%*c%pS\n", 1 + spaces, ' ', (void *)entries[i]);</span>
+<span class='curline'><a href='../S/326.html#L1072'>printk</a>           1072 sysctl.c       		printk(KERN_WARNING</span>
+<span class='curline'><a href='../S/86.html#L430'>printk</a>            430 time/ntp.c     			printk(KERN_NOTICE</span>
+<span class='curline'><a href='../S/86.html#L442'>printk</a>            442 time/ntp.c     			printk(KERN_NOTICE</span>
+<span class='curline'><a href='../S/115.html#L1864'>printk</a>           1864 time/timer.c   			printk(KERN_ERR "schedule_timeout: wrong timeout "</span>
+<span class='curline'><a href='../S/270.html#L1973'>printk</a>           1973 trace/ftrace.c 	printk(KERN_CONT "%s", fmt);</span>
+<span class='curline'><a href='../S/270.html#L1976'>printk</a>           1976 trace/ftrace.c 		printk(KERN_CONT "%s%02x", i ? ":" : "", p[i]);</span>
+<span class='curline'><a href='../S/270.html#L5580'>printk</a>           5580 trace/ftrace.c 			printk(KERN_DEBUG "ftrace: function %s not "</span>
+<span class='curline'><a href='../S/270.html#L6963'>printk</a>           6963 trace/ftrace.c 			printk("ftrace ops had %pS for function\n",</span>
+<span class='curline'><a href='../S/271.html#L1963'>printk</a>           1963 trace/trace.c  		printk(KERN_CONT "FAILED!\n");</span>
+<span class='curline'><a href='../S/271.html#L1982'>printk</a>           1982 trace/trace.c  	printk(KERN_CONT "PASSED\n");</span>
+<span class='curline'><a href='../S/271.html#L2120'>printk</a>           2120 trace/trace.c  	printk(KERN_INFO "Starting tracer '%s'\n", type-&gt;name);</span>
+<span class='curline'><a href='../S/271.html#L2796'>printk</a>           2796 trace/trace.c  	printk("%s", iter-&gt;seq.buffer);</span>
+<span class='curline'><a href='../S/271.html#L9285'>printk</a>           9285 trace/trace.c  		printk(KERN_TRACE "%s", s-&gt;buffer);</span>
+<span class='curline'><a href='../S/271.html#L9370'>printk</a>           9370 trace/trace.c  		printk(KERN_TRACE "Bad dumping mode, switching to all CPUs dump\n");</span>
+<span class='curline'><a href='../S/271.html#L9374'>printk</a>           9374 trace/trace.c  	printk(KERN_TRACE "Dumping ftrace buffer:\n");</span>
+<span class='curline'><a href='../S/271.html#L9378'>printk</a>           9378 trace/trace.c  		printk("# WARNING: FUNCTION TRACING IS CORRUPTED\n");</span>
+<span class='curline'><a href='../S/271.html#L9379'>printk</a>           9379 trace/trace.c  		printk("#          MAY BE MISSING FUNCTION EVENTS\n");</span>
+<span class='curline'><a href='../S/271.html#L9393'>printk</a>           9393 trace/trace.c  			printk(KERN_TRACE "---------------------------------\n");</span>
+<span class='curline'><a href='../S/271.html#L9415'>printk</a>           9415 trace/trace.c  		printk(KERN_TRACE "   (ftrace buffer empty)\n");</span>
+<span class='curline'><a href='../S/271.html#L9417'>printk</a>           9417 trace/trace.c  		printk(KERN_TRACE "---------------------------------\n");</span>
+<span class='curline'><a href='../S/271.html#L9677'>printk</a>           9677 trace/trace.c  	printk(KERN_INFO "ftrace bootup tracer '%s' not registered.\n",</span>
+<span class='curline'><a href='../S/271.html#L9697'>printk</a>           9697 trace/trace.c  		printk(KERN_WARNING</span>
+<span class='curline'><a href='../S/256.html#L88'>printk</a>             88 trace/trace.h  #define FTRACE_ENTRY_DUP(name, name_struct, id, tstruct, printk)</span>
+<span class='curline'><a href='../S/309.html#L190'>printk</a>            190 trace/trace_branch.c 		printk(KERN_WARNING "Warning: could not register "</span>
+<span class='curline'><a href='../S/309.html#L383'>printk</a>            383 trace/trace_branch.c 		printk(KERN_WARNING "Warning: could not register "</span>
+<span class='curline'><a href='../S/309.html#L448'>printk</a>            448 trace/trace_branch.c 		printk(KERN_WARNING "Warning: could not register "</span>
+<span class='curline'><a href='../S/304.html#L2185'>printk</a>           2185 trace/trace_events_filter.c 	printk(KERN_INFO "\npred visited %s\n", field-&gt;name);</span>
+<span class='curline'><a href='../S/304.html#L2217'>printk</a>           2217 trace/trace_events_filter.c 	printk(KERN_INFO "Testing ftrace filter: ");</span>
+<span class='curline'><a href='../S/304.html#L2227'>printk</a>           2227 trace/trace_events_filter.c 			printk(KERN_INFO</span>
+<span class='curline'><a href='../S/304.html#L2253'>printk</a>           2253 trace/trace_events_filter.c 			printk(KERN_INFO</span>
+<span class='curline'><a href='../S/304.html#L2260'>printk</a>           2260 trace/trace_events_filter.c 			printk(KERN_INFO</span>
+<span class='curline'><a href='../S/304.html#L2268'>printk</a>           2268 trace/trace_events_filter.c 		printk(KERN_CONT "OK\n");</span>
+<span class='curline'><a href='../S/276.html#L76'>printk</a>             76 trace/trace_export.c 	printk(print);							\</span>
+<span class='curline'><a href='../S/314.html#L578'>printk</a>            578 trace/trace_irqsoff.c 		printk(KERN_ERR "failed to start irqsoff tracer\n");</span>
+<span class='curline'><a href='../S/266.html#L71'>printk</a>             71 trace/trace_nop.c 		printk(KERN_DEBUG "nop_test_accept flag set to %d: we accept."</span>
+<span class='curline'><a href='../S/266.html#L78'>printk</a>             78 trace/trace_nop.c 		printk(KERN_DEBUG "nop_test_refuse flag set to %d: we refuse."</span>
+<span class='curline'><a href='../S/279.html#L764'>printk</a>            764 trace/trace_output.c 		printk(KERN_WARNING "Need to add type to trace.h\n");</span>
+<span class='curline'><a href='../S/279.html#L1391'>printk</a>           1391 trace/trace_output.c 			printk(KERN_WARNING "event %d failed to register\n",</span>
+<span class='curline'><a href='../S/295.html#L648'>printk</a>            648 trace/trace_sched_wakeup.c 		printk(KERN_ERR "failed to start wakeup tracer\n");</span>
+<span class='curline'><a href='../S/319.html#L41'>printk</a>             41 trace/trace_selftest.c 			printk(KERN_CONT ".. bad ring buffer ");</span>
+<span class='curline'><a href='../S/319.html#L45'>printk</a>             45 trace/trace_selftest.c 			printk(KERN_CONT ".. invalid entry %d ",</span>
+<span class='curline'><a href='../S/319.html#L55'>printk</a>             55 trace/trace_selftest.c 	printk(KERN_CONT ".. corrupted trace buffer .. ");</span>
+<span class='curline'><a href='../S/319.html#L99'>printk</a>             99 trace/trace_selftest.c 	printk(KERN_WARNING "Failed to init %s tracer, init returned %d\n",</span>
+<span class='curline'><a href='../S/319.html#L168'>printk</a>            168 trace/trace_selftest.c 	printk("(%d %d %d %d %d) ",</span>
+<span class='curline'><a href='../S/319.html#L195'>printk</a>            195 trace/trace_selftest.c 	printk(KERN_CONT "PASSED\n");</span>
+<span class='curline'><a href='../S/319.html#L255'>printk</a>            255 trace/trace_selftest.c 		printk("MEMORY ERROR ");</span>
+<span class='curline'><a href='../S/319.html#L335'>printk</a>            335 trace/trace_selftest.c 	printk(KERN_CONT "PASSED\n");</span>
+<span class='curline'><a href='../S/319.html#L371'>printk</a>            371 trace/trace_selftest.c 		printk(KERN_CONT ".. filter did not filter .. ");</span>
+<span class='curline'><a href='../S/319.html#L394'>printk</a>            394 trace/trace_selftest.c 		printk(KERN_CONT ".. filter failed count=%ld ..", count);</span>
+<span class='curline'><a href='../S/319.html#L666'>printk</a>            666 trace/trace_selftest.c 		printk(KERN_CONT " ... kernel command line filter set: force PASS ... ");</span>
+<span class='curline'><a href='../S/319.html#L697'>printk</a>            697 trace/trace_selftest.c 		printk(KERN_CONT ".. no entries found ..");</span>
+<span class='curline'><a href='../S/319.html#L737'>printk</a>            737 trace/trace_selftest.c 		printk(KERN_WARNING "BUG: Function graph tracer hang!\n");</span>
+<span class='curline'><a href='../S/319.html#L767'>printk</a>            767 trace/trace_selftest.c 		printk(KERN_CONT " ... kernel command line filter set: force PASS ... ");</span>
+<span class='curline'><a href='../S/319.html#L807'>printk</a>            807 trace/trace_selftest.c 		printk(KERN_CONT ".. no entries found ..");</span>
+<span class='curline'><a href='../S/319.html#L863'>printk</a>            863 trace/trace_selftest.c 		printk(KERN_CONT ".. no entries found ..");</span>
+<span class='curline'><a href='../S/319.html#L890'>printk</a>            890 trace/trace_selftest.c 		printk(KERN_CONT "can not test ... force ");</span>
+<span class='curline'><a href='../S/319.html#L925'>printk</a>            925 trace/trace_selftest.c 		printk(KERN_CONT ".. no entries found ..");</span>
+<span class='curline'><a href='../S/319.html#L952'>printk</a>            952 trace/trace_selftest.c 		printk(KERN_CONT "can not test ... force ");</span>
+<span class='curline'><a href='../S/319.html#L993'>printk</a>            993 trace/trace_selftest.c 		printk(KERN_CONT ".. no entries found ..");</span>
+<span class='curline'><a href='../S/319.html#L1021'>printk</a>           1021 trace/trace_selftest.c 		printk(KERN_CONT ".. no entries found ..");</span>
+<span class='curline'><a href='../S/319.html#L1105'>printk</a>           1105 trace/trace_selftest.c 		printk(KERN_CONT "Failed to create ftrace wakeup test thread ");</span>
+<span class='curline'><a href='../S/319.html#L1158'>printk</a>           1158 trace/trace_selftest.c 		printk(KERN_CONT ".. no entries found ..");</span>
+<span class='curline'><a href='../S/319.html#L1190'>printk</a>           1190 trace/trace_selftest.c 		printk(KERN_CONT ".. no entries found ..");</span>
+<span class='curline'><a href='../S/479.html#L131'>printk</a>            131 tracepoint.c   		printk(KERN_DEBUG "Probe %d : %p\n", i, funcs[i].func);</span>
+<span class='curline'><a href='../S/365.html#L4674'>printk</a>           4674 workqueue.c    		printk("%sWorkqueue: %s %ps", log_lvl, name, fn);</span>
+</pre>
+</body>
+</html>

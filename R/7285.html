@@ -1,0 +1,369 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>hash</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/72.html#L26'>hash</a>               26 audit_tree.c   	struct list_head hash;</span>
+<span class='curline'><a href='../S/72.html#L197'>hash</a>              197 audit_tree.c   	INIT_LIST_HEAD(&amp;chunk-&gt;hash);</span>
+<span class='curline'><a href='../S/72.html#L238'>hash</a>              238 audit_tree.c   	list_add_rcu(&amp;chunk-&gt;hash, list);</span>
+<span class='curline'><a href='../S/72.html#L248'>hash</a>              248 audit_tree.c   	list_for_each_entry_rcu(p, list, hash) {</span>
+<span class='curline'><a href='../S/72.html#L322'>hash</a>              322 audit_tree.c   	list_replace_rcu(&amp;old-&gt;hash, &amp;new-&gt;hash);</span>
+<span class='curline'><a href='../S/72.html#L367'>hash</a>              367 audit_tree.c   		list_del_rcu(&amp;chunk-&gt;hash);</span>
+<span class='curline'><a href='../S/72.html#L1029'>hash</a>             1029 audit_tree.c   	list_del_rcu(&amp;chunk-&gt;hash);</span>
+<span class='curline'><a href='../S/404.html#L351'>hash</a>              351 bpf/bpf_lru_list.c 				     u32 hash)</span>
+<span class='curline'><a href='../S/404.html#L353'>hash</a>              353 bpf/bpf_lru_list.c 	*(u32 *)((void *)node + lru-&gt;hash_offset) = hash;</span>
+<span class='curline'><a href='../S/404.html#L400'>hash</a>              400 bpf/bpf_lru_list.c 						    u32 hash)</span>
+<span class='curline'><a href='../S/404.html#L421'>hash</a>              421 bpf/bpf_lru_list.c 		*(u32 *)((void *)node + lru-&gt;hash_offset) = hash;</span>
+<span class='curline'><a href='../S/404.html#L432'>hash</a>              432 bpf/bpf_lru_list.c 						    u32 hash)</span>
+<span class='curline'><a href='../S/404.html#L452'>hash</a>              452 bpf/bpf_lru_list.c 		__local_list_add_pending(lru, loc_l, cpu, node, hash);</span>
+<span class='curline'><a href='../S/404.html#L487'>hash</a>              487 bpf/bpf_lru_list.c 		__local_list_add_pending(lru, loc_l, cpu, node, hash);</span>
+<span class='curline'><a href='../S/404.html#L494'>hash</a>              494 bpf/bpf_lru_list.c struct bpf_lru_node *bpf_lru_pop_free(struct bpf_lru *lru, u32 hash)</span>
+<span class='curline'><a href='../S/404.html#L497'>hash</a>              497 bpf/bpf_lru_list.c 		return bpf_percpu_lru_pop_free(lru, hash);</span>
+<span class='curline'><a href='../S/404.html#L499'>hash</a>              499 bpf/bpf_lru_list.c 		return bpf_common_lru_pop_free(lru, hash);</span>
+<span class='curline'><a href='../S/381.html#L78'>hash</a>               78 bpf/bpf_lru_list.h struct bpf_lru_node *bpf_lru_pop_free(struct bpf_lru *lru, u32 hash);</span>
+<span class='curline'><a href='../S/413.html#L93'>hash</a>               93 bpf/devmap.c   	struct hlist_head *hash;</span>
+<span class='curline'><a href='../S/413.html#L95'>hash</a>               95 bpf/devmap.c   	hash = bpf_map_area_alloc(entries * sizeof(*hash), numa_node);</span>
+<span class='curline'><a href='../S/413.html#L96'>hash</a>               96 bpf/devmap.c   	if (hash != NULL)</span>
+<span class='curline'><a href='../S/413.html#L98'>hash</a>               98 bpf/devmap.c   			INIT_HLIST_HEAD(&amp;hash[i]);</span>
+<span class='curline'><a href='../S/413.html#L100'>hash</a>              100 bpf/devmap.c   	return hash;</span>
+<span class='curline'><a href='../S/383.html#L121'>hash</a>              121 bpf/hashtab.c  	u32 hash;</span>
+<span class='curline'><a href='../S/383.html#L236'>hash</a>              236 bpf/hashtab.c  					  u32 hash)</span>
+<span class='curline'><a href='../S/383.html#L238'>hash</a>              238 bpf/hashtab.c  	struct bpf_lru_node *node = bpf_lru_pop_free(&amp;htab-&gt;lru, hash);</span>
+<span class='curline'><a href='../S/383.html#L282'>hash</a>              282 bpf/hashtab.c  				   offsetof(struct htab_elem, hash) -</span>
+<span class='curline'><a href='../S/383.html#L523'>hash</a>              523 bpf/hashtab.c  static inline struct bucket *__select_bucket(struct bpf_htab *htab, u32 hash)</span>
+<span class='curline'><a href='../S/383.html#L525'>hash</a>              525 bpf/hashtab.c  	return &amp;htab-&gt;buckets[hash &amp; (htab-&gt;n_buckets - 1)];</span>
+<span class='curline'><a href='../S/383.html#L528'>hash</a>              528 bpf/hashtab.c  static inline struct hlist_nulls_head *select_bucket(struct bpf_htab *htab, u32 hash)</span>
+<span class='curline'><a href='../S/383.html#L530'>hash</a>              530 bpf/hashtab.c  	return &amp;__select_bucket(htab, hash)-&gt;head;</span>
+<span class='curline'><a href='../S/383.html#L534'>hash</a>              534 bpf/hashtab.c  static struct htab_elem *lookup_elem_raw(struct hlist_nulls_head *head, u32 hash,</span>
+<span class='curline'><a href='../S/383.html#L541'>hash</a>              541 bpf/hashtab.c  		if (l-&gt;hash == hash &amp;&amp; !memcmp(&amp;l-&gt;key, key, key_size))</span>
+<span class='curline'><a href='../S/383.html#L552'>hash</a>              552 bpf/hashtab.c  					       u32 hash, void *key,</span>
+<span class='curline'><a href='../S/383.html#L560'>hash</a>              560 bpf/hashtab.c  		if (l-&gt;hash == hash &amp;&amp; !memcmp(&amp;l-&gt;key, key, key_size))</span>
+<span class='curline'><a href='../S/383.html#L563'>hash</a>              563 bpf/hashtab.c  	if (unlikely(get_nulls_value(n) != (hash &amp; (n_buckets - 1))))</span>
+<span class='curline'><a href='../S/383.html#L579'>hash</a>              579 bpf/hashtab.c  	u32 hash, key_size;</span>
+<span class='curline'><a href='../S/383.html#L585'>hash</a>              585 bpf/hashtab.c  	hash = htab_map_hash(key, key_size, htab-&gt;hashrnd);</span>
+<span class='curline'><a href='../S/383.html#L587'>hash</a>              587 bpf/hashtab.c  	head = select_bucket(htab, hash);</span>
+<span class='curline'><a href='../S/383.html#L589'>hash</a>              589 bpf/hashtab.c  	l = lookup_nulls_elem_raw(head, hash, key, key_size, htab-&gt;n_buckets);</span>
+<span class='curline'><a href='../S/383.html#L692'>hash</a>              692 bpf/hashtab.c  	b = __select_bucket(htab, tgt_l-&gt;hash);</span>
+<span class='curline'><a href='../S/383.html#L714'>hash</a>              714 bpf/hashtab.c  	u32 hash, key_size;</span>
+<span class='curline'><a href='../S/383.html#L724'>hash</a>              724 bpf/hashtab.c  	hash = htab_map_hash(key, key_size, htab-&gt;hashrnd);</span>
+<span class='curline'><a href='../S/383.html#L726'>hash</a>              726 bpf/hashtab.c  	head = select_bucket(htab, hash);</span>
+<span class='curline'><a href='../S/383.html#L729'>hash</a>              729 bpf/hashtab.c  	l = lookup_nulls_elem_raw(head, hash, key, key_size, htab-&gt;n_buckets);</span>
+<span class='curline'><a href='../S/383.html#L745'>hash</a>              745 bpf/hashtab.c  	i = hash &amp; (htab-&gt;n_buckets - 1);</span>
+<span class='curline'><a href='../S/383.html#L857'>hash</a>              857 bpf/hashtab.c  					 void *value, u32 key_size, u32 hash,</span>
+<span class='curline'><a href='../S/383.html#L933'>hash</a>              933 bpf/hashtab.c  	l_new-&gt;hash = hash;</span>
+<span class='curline'><a href='../S/383.html#L963'>hash</a>              963 bpf/hashtab.c  	u32 key_size, hash;</span>
+<span class='curline'><a href='../S/383.html#L974'>hash</a>              974 bpf/hashtab.c  	hash = htab_map_hash(key, key_size, htab-&gt;hashrnd);</span>
+<span class='curline'><a href='../S/383.html#L976'>hash</a>              976 bpf/hashtab.c  	b = __select_bucket(htab, hash);</span>
+<span class='curline'><a href='../S/383.html#L983'>hash</a>              983 bpf/hashtab.c  		l_old = lookup_nulls_elem_raw(head, hash, key, key_size,</span>
+<span class='curline'><a href='../S/383.html#L1003'>hash</a>             1003 bpf/hashtab.c  	l_old = lookup_elem_raw(head, hash, key, key_size);</span>
+<span class='curline'><a href='../S/383.html#L1023'>hash</a>             1023 bpf/hashtab.c  	l_new = alloc_htab_elem(htab, key, value, key_size, hash, false, false,</span>
+<span class='curline'><a href='../S/383.html#L1054'>hash</a>             1054 bpf/hashtab.c  	u32 key_size, hash;</span>
+<span class='curline'><a href='../S/383.html#L1065'>hash</a>             1065 bpf/hashtab.c  	hash = htab_map_hash(key, key_size, htab-&gt;hashrnd);</span>
+<span class='curline'><a href='../S/383.html#L1067'>hash</a>             1067 bpf/hashtab.c  	b = __select_bucket(htab, hash);</span>
+<span class='curline'><a href='../S/383.html#L1075'>hash</a>             1075 bpf/hashtab.c  	l_new = prealloc_lru_pop(htab, key, hash);</span>
+<span class='curline'><a href='../S/383.html#L1082'>hash</a>             1082 bpf/hashtab.c  	l_old = lookup_elem_raw(head, hash, key, key_size);</span>
+<span class='curline'><a href='../S/383.html#L1118'>hash</a>             1118 bpf/hashtab.c  	u32 key_size, hash;</span>
+<span class='curline'><a href='../S/383.html#L1129'>hash</a>             1129 bpf/hashtab.c  	hash = htab_map_hash(key, key_size, htab-&gt;hashrnd);</span>
+<span class='curline'><a href='../S/383.html#L1131'>hash</a>             1131 bpf/hashtab.c  	b = __select_bucket(htab, hash);</span>
+<span class='curline'><a href='../S/383.html#L1136'>hash</a>             1136 bpf/hashtab.c  	l_old = lookup_elem_raw(head, hash, key, key_size);</span>
+<span class='curline'><a href='../S/383.html#L1148'>hash</a>             1148 bpf/hashtab.c  					hash, true, onallcpus, NULL);</span>
+<span class='curline'><a href='../S/383.html#L1170'>hash</a>             1170 bpf/hashtab.c  	u32 key_size, hash;</span>
+<span class='curline'><a href='../S/383.html#L1181'>hash</a>             1181 bpf/hashtab.c  	hash = htab_map_hash(key, key_size, htab-&gt;hashrnd);</span>
+<span class='curline'><a href='../S/383.html#L1183'>hash</a>             1183 bpf/hashtab.c  	b = __select_bucket(htab, hash);</span>
+<span class='curline'><a href='../S/383.html#L1192'>hash</a>             1192 bpf/hashtab.c  		l_new = prealloc_lru_pop(htab, key, hash);</span>
+<span class='curline'><a href='../S/383.html#L1199'>hash</a>             1199 bpf/hashtab.c  	l_old = lookup_elem_raw(head, hash, key, key_size);</span>
+<span class='curline'><a href='../S/383.html#L1246'>hash</a>             1246 bpf/hashtab.c  	u32 hash, key_size;</span>
+<span class='curline'><a href='../S/383.html#L1253'>hash</a>             1253 bpf/hashtab.c  	hash = htab_map_hash(key, key_size, htab-&gt;hashrnd);</span>
+<span class='curline'><a href='../S/383.html#L1254'>hash</a>             1254 bpf/hashtab.c  	b = __select_bucket(htab, hash);</span>
+<span class='curline'><a href='../S/383.html#L1259'>hash</a>             1259 bpf/hashtab.c  	l = lookup_elem_raw(head, hash, key, key_size);</span>
+<span class='curline'><a href='../S/383.html#L1278'>hash</a>             1278 bpf/hashtab.c  	u32 hash, key_size;</span>
+<span class='curline'><a href='../S/383.html#L1285'>hash</a>             1285 bpf/hashtab.c  	hash = htab_map_hash(key, key_size, htab-&gt;hashrnd);</span>
+<span class='curline'><a href='../S/383.html#L1286'>hash</a>             1286 bpf/hashtab.c  	b = __select_bucket(htab, hash);</span>
+<span class='curline'><a href='../S/383.html#L1291'>hash</a>             1291 bpf/hashtab.c  	l = lookup_elem_raw(head, hash, key, key_size);</span>
+<span class='curline'><a href='../S/406.html#L22'>hash</a>               22 bpf/stackmap.c 	u32 hash;</span>
+<span class='curline'><a href='../S/406.html#L406'>hash</a>              406 bpf/stackmap.c 	u32 hash, id, trace_nr, trace_len;</span>
+<span class='curline'><a href='../S/406.html#L423'>hash</a>              423 bpf/stackmap.c 	hash = jhash2((u32 *)ips, trace_len / sizeof(u32), 0);</span>
+<span class='curline'><a href='../S/406.html#L424'>hash</a>              424 bpf/stackmap.c 	id = hash &amp; (smap-&gt;n_buckets - 1);</span>
+<span class='curline'><a href='../S/406.html#L427'>hash</a>              427 bpf/stackmap.c 	hash_matches = bucket &amp;&amp; bucket-&gt;hash == hash;</span>
+<span class='curline'><a href='../S/406.html#L466'>hash</a>              466 bpf/stackmap.c 	new_bucket-&gt;hash = hash;</span>
+<span class='curline'><a href='../S/331.html#L9082'>hash</a>             9082 events/core.c  	u64 hash = swevent_hash(type, event_id);</span>
+<span class='curline'><a href='../S/331.html#L9084'>hash</a>             9084 events/core.c  	return &amp;hlist-&gt;heads[hash];</span>
+<span class='curline'><a href='../S/76.html#L365'>hash</a>              365 futex.c        	u32 hash = jhash2((u32 *)key, offsetof(typeof(*key), both.offset) / 4,</span>
+<span class='curline'><a href='../S/76.html#L368'>hash</a>              368 futex.c        	return &amp;futex_queues[hash &amp; (futex_hashsize - 1)];</span>
+<span class='curline'><a href='../S/182.html#L75'>hash</a>               75 kprobes.c      static raw_spinlock_t *kretprobe_table_lock_ptr(unsigned long hash)</span>
+<span class='curline'><a href='../S/182.html#L77'>hash</a>               77 kprobes.c      	return &amp;(kretprobe_table_locks[hash].lock);</span>
+<span class='curline'><a href='../S/182.html#L1247'>hash</a>             1247 kprobes.c      	unsigned long hash = hash_ptr(tsk, KPROBE_HASH_BITS);</span>
+<span class='curline'><a href='../S/182.html#L1250'>hash</a>             1250 kprobes.c      	*head = &amp;kretprobe_inst_table[hash];</span>
+<span class='curline'><a href='../S/182.html#L1251'>hash</a>             1251 kprobes.c      	hlist_lock = kretprobe_table_lock_ptr(hash);</span>
+<span class='curline'><a href='../S/182.html#L1262'>hash</a>             1262 kprobes.c      static void kretprobe_table_lock(unsigned long hash,</span>
+<span class='curline'><a href='../S/182.html#L1266'>hash</a>             1266 kprobes.c      	raw_spinlock_t *hlist_lock = kretprobe_table_lock_ptr(hash);</span>
+<span class='curline'><a href='../S/182.html#L1281'>hash</a>             1281 kprobes.c      	unsigned long hash = hash_ptr(tsk, KPROBE_HASH_BITS);</span>
+<span class='curline'><a href='../S/182.html#L1284'>hash</a>             1284 kprobes.c      	hlist_lock = kretprobe_table_lock_ptr(hash);</span>
+<span class='curline'><a href='../S/182.html#L1289'>hash</a>             1289 kprobes.c      static void kretprobe_table_unlock(unsigned long hash,</span>
+<span class='curline'><a href='../S/182.html#L1293'>hash</a>             1293 kprobes.c      	raw_spinlock_t *hlist_lock = kretprobe_table_lock_ptr(hash);</span>
+<span class='curline'><a href='../S/182.html#L1329'>hash</a>             1329 kprobes.c      	unsigned long hash, flags = 0;</span>
+<span class='curline'><a href='../S/182.html#L1337'>hash</a>             1337 kprobes.c      	hash = hash_ptr(tk, KPROBE_HASH_BITS);</span>
+<span class='curline'><a href='../S/182.html#L1338'>hash</a>             1338 kprobes.c      	head = &amp;kretprobe_inst_table[hash];</span>
+<span class='curline'><a href='../S/182.html#L1339'>hash</a>             1339 kprobes.c      	kretprobe_table_lock(hash, &amp;flags);</span>
+<span class='curline'><a href='../S/182.html#L1344'>hash</a>             1344 kprobes.c      	kretprobe_table_unlock(hash, &amp;flags);</span>
+<span class='curline'><a href='../S/182.html#L1363'>hash</a>             1363 kprobes.c      	unsigned long flags, hash;</span>
+<span class='curline'><a href='../S/182.html#L1370'>hash</a>             1370 kprobes.c      	for (hash = 0; hash &lt; KPROBE_TABLE_SIZE; hash++) {</span>
+<span class='curline'><a href='../S/182.html#L1371'>hash</a>             1371 kprobes.c      		kretprobe_table_lock(hash, &amp;flags);</span>
+<span class='curline'><a href='../S/182.html#L1372'>hash</a>             1372 kprobes.c      		head = &amp;kretprobe_inst_table[hash];</span>
+<span class='curline'><a href='../S/182.html#L1377'>hash</a>             1377 kprobes.c      		kretprobe_table_unlock(hash, &amp;flags);</span>
+<span class='curline'><a href='../S/182.html#L2038'>hash</a>             2038 kprobes.c      	unsigned long hash, flags = 0;</span>
+<span class='curline'><a href='../S/182.html#L2042'>hash</a>             2042 kprobes.c      	hash = hash_ptr(current, KPROBE_HASH_BITS);</span>
+<span class='curline'><a href='../S/182.html#L2069'>hash</a>             2069 kprobes.c      		kretprobe_table_lock(hash, &amp;flags);</span>
+<span class='curline'><a href='../S/182.html#L2070'>hash</a>             2070 kprobes.c      		hlist_add_head(&amp;ri-&gt;hlist, &amp;kretprobe_inst_table[hash]);</span>
+<span class='curline'><a href='../S/182.html#L2071'>hash</a>             2071 kprobes.c      		kretprobe_table_unlock(hash, &amp;flags);</span>
+<span class='curline'><a href='../S/35.html#L510'>hash</a>              510 locking/lockdep.c 	u32			hash;</span>
+<span class='curline'><a href='../S/35.html#L524'>hash</a>              524 locking/lockdep.c 	return t1-&gt;hash == t2-&gt;hash &amp;&amp; t1-&gt;nr_entries == t2-&gt;nr_entries &amp;&amp;</span>
+<span class='curline'><a href='../S/35.html#L533'>hash</a>              533 locking/lockdep.c 	u32 hash;</span>
+<span class='curline'><a href='../S/35.html#L554'>hash</a>              554 locking/lockdep.c 	hash = jhash(trace-&gt;entries, trace-&gt;nr_entries *</span>
+<span class='curline'><a href='../S/35.html#L556'>hash</a>              556 locking/lockdep.c 	trace-&gt;hash = hash;</span>
+<span class='curline'><a href='../S/35.html#L557'>hash</a>              557 locking/lockdep.c 	hash_head = stack_trace_hash + (hash &amp; (STACK_TRACE_HASH_SIZE - 1));</span>
+<span class='curline'><a href='../S/35.html#L1166'>hash</a>             1166 locking/lockdep.c 	unsigned long hash = hash_long((uintptr_t)key, KEYHASH_BITS);</span>
+<span class='curline'><a href='../S/35.html#L1168'>hash</a>             1168 locking/lockdep.c 	return lock_keys_hash + hash;</span>
+<span class='curline'><a href='../S/20.html#L207'>hash</a>              207 locking/qspinlock_paravirt.h #define for_each_hash_entry(he, offset, hash)						\</span>
+<span class='curline'><a href='../S/20.html#L208'>hash</a>              208 locking/qspinlock_paravirt.h 	for (hash &amp;= ~(PV_HE_PER_LINE - 1), he = &amp;pv_lock_hash[hash], offset = 0;	\</span>
+<span class='curline'><a href='../S/20.html#L210'>hash</a>              210 locking/qspinlock_paravirt.h 	     offset++, he = &amp;pv_lock_hash[(hash + offset) &amp; ((1 &lt;&lt; pv_lock_hash_bits) - 1)])</span>
+<span class='curline'><a href='../S/20.html#L214'>hash</a>              214 locking/qspinlock_paravirt.h 	unsigned long offset, hash = hash_ptr(lock, pv_lock_hash_bits);</span>
+<span class='curline'><a href='../S/20.html#L218'>hash</a>              218 locking/qspinlock_paravirt.h 	for_each_hash_entry(he, offset, hash) {</span>
+<span class='curline'><a href='../S/20.html#L241'>hash</a>              241 locking/qspinlock_paravirt.h 	unsigned long offset, hash = hash_ptr(lock, pv_lock_hash_bits);</span>
+<span class='curline'><a href='../S/20.html#L245'>hash</a>              245 locking/qspinlock_paravirt.h 	for_each_hash_entry(he, offset, hash) {</span>
+<span class='curline'><a href='../S/491.html#L34'>hash</a>               34 module_signature.c 	    ms-&gt;hash != 0 ||</span>
+<span class='curline'><a href='../S/103.html#L135'>hash</a>              135 time/posix-timers.c 	struct hlist_head *head = &amp;posix_timers_hashtable[hash(sig, id)];</span>
+<span class='curline'><a href='../S/103.html#L149'>hash</a>              149 time/posix-timers.c 		head = &amp;posix_timers_hashtable[hash(sig, sig-&gt;posix_timer_id)];</span>
+<span class='curline'><a href='../S/270.html#L403'>hash</a>              403 trace/ftrace.c 	struct hlist_head		*hash;</span>
+<span class='curline'><a href='../S/270.html#L580'>hash</a>              580 trace/ftrace.c 	memset(stat-&gt;hash, 0,</span>
+<span class='curline'><a href='../S/270.html#L647'>hash</a>              647 trace/ftrace.c 	if (stat-&gt;hash) {</span>
+<span class='curline'><a href='../S/270.html#L659'>hash</a>              659 trace/ftrace.c 	stat-&gt;hash = kcalloc(size, sizeof(struct hlist_head), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/270.html#L661'>hash</a>              661 trace/ftrace.c 	if (!stat-&gt;hash)</span>
+<span class='curline'><a href='../S/270.html#L666'>hash</a>              666 trace/ftrace.c 		kfree(stat-&gt;hash);</span>
+<span class='curline'><a href='../S/270.html#L667'>hash</a>              667 trace/ftrace.c 		stat-&gt;hash = NULL;</span>
+<span class='curline'><a href='../S/270.html#L697'>hash</a>              697 trace/ftrace.c 	hhd = &amp;stat-&gt;hash[key];</span>
+<span class='curline'><a href='../S/270.html#L716'>hash</a>              716 trace/ftrace.c 	hlist_add_head_rcu(&amp;rec-&gt;node, &amp;stat-&gt;hash[key]);</span>
+<span class='curline'><a href='../S/270.html#L769'>hash</a>              769 trace/ftrace.c 	if (!stat-&gt;hash || !ftrace_profile_enabled)</span>
+<span class='curline'><a href='../S/270.html#L819'>hash</a>              819 trace/ftrace.c 	if (!stat-&gt;hash || !ftrace_profile_enabled)</span>
+<span class='curline'><a href='../S/270.html#L1104'>hash</a>             1104 trace/ftrace.c ftrace_hash_key(struct ftrace_hash *hash, unsigned long ip)</span>
+<span class='curline'><a href='../S/270.html#L1106'>hash</a>             1106 trace/ftrace.c 	if (hash-&gt;size_bits &gt; 0)</span>
+<span class='curline'><a href='../S/270.html#L1107'>hash</a>             1107 trace/ftrace.c 		return hash_long(ip, hash-&gt;size_bits);</span>
+<span class='curline'><a href='../S/270.html#L1114'>hash</a>             1114 trace/ftrace.c __ftrace_lookup_ip(struct ftrace_hash *hash, unsigned long ip)</span>
+<span class='curline'><a href='../S/270.html#L1120'>hash</a>             1120 trace/ftrace.c 	key = ftrace_hash_key(hash, ip);</span>
+<span class='curline'><a href='../S/270.html#L1121'>hash</a>             1121 trace/ftrace.c 	hhd = &amp;hash-&gt;buckets[key];</span>
+<span class='curline'><a href='../S/270.html#L1141'>hash</a>             1141 trace/ftrace.c ftrace_lookup_ip(struct ftrace_hash *hash, unsigned long ip)</span>
+<span class='curline'><a href='../S/270.html#L1143'>hash</a>             1143 trace/ftrace.c 	if (ftrace_hash_empty(hash))</span>
+<span class='curline'><a href='../S/270.html#L1146'>hash</a>             1146 trace/ftrace.c 	return __ftrace_lookup_ip(hash, ip);</span>
+<span class='curline'><a href='../S/270.html#L1149'>hash</a>             1149 trace/ftrace.c static void __add_hash_entry(struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/270.html#L1155'>hash</a>             1155 trace/ftrace.c 	key = ftrace_hash_key(hash, entry-&gt;ip);</span>
+<span class='curline'><a href='../S/270.html#L1156'>hash</a>             1156 trace/ftrace.c 	hhd = &amp;hash-&gt;buckets[key];</span>
+<span class='curline'><a href='../S/270.html#L1158'>hash</a>             1158 trace/ftrace.c 	hash-&gt;count++;</span>
+<span class='curline'><a href='../S/270.html#L1161'>hash</a>             1161 trace/ftrace.c static int add_hash_entry(struct ftrace_hash *hash, unsigned long ip)</span>
+<span class='curline'><a href='../S/270.html#L1170'>hash</a>             1170 trace/ftrace.c 	__add_hash_entry(hash, entry);</span>
+<span class='curline'><a href='../S/270.html#L1176'>hash</a>             1176 trace/ftrace.c free_hash_entry(struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/270.html#L1181'>hash</a>             1181 trace/ftrace.c 	hash-&gt;count--;</span>
+<span class='curline'><a href='../S/270.html#L1185'>hash</a>             1185 trace/ftrace.c remove_hash_entry(struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/270.html#L1189'>hash</a>             1189 trace/ftrace.c 	hash-&gt;count--;</span>
+<span class='curline'><a href='../S/270.html#L1192'>hash</a>             1192 trace/ftrace.c static void ftrace_hash_clear(struct ftrace_hash *hash)</span>
+<span class='curline'><a href='../S/270.html#L1197'>hash</a>             1197 trace/ftrace.c 	int size = 1 &lt;&lt; hash-&gt;size_bits;</span>
+<span class='curline'><a href='../S/270.html#L1200'>hash</a>             1200 trace/ftrace.c 	if (!hash-&gt;count)</span>
+<span class='curline'><a href='../S/270.html#L1204'>hash</a>             1204 trace/ftrace.c 		hhd = &amp;hash-&gt;buckets[i];</span>
+<span class='curline'><a href='../S/270.html#L1206'>hash</a>             1206 trace/ftrace.c 			free_hash_entry(hash, entry);</span>
+<span class='curline'><a href='../S/270.html#L1208'>hash</a>             1208 trace/ftrace.c 	FTRACE_WARN_ON(hash-&gt;count);</span>
+<span class='curline'><a href='../S/270.html#L1233'>hash</a>             1233 trace/ftrace.c static void free_ftrace_hash(struct ftrace_hash *hash)</span>
+<span class='curline'><a href='../S/270.html#L1235'>hash</a>             1235 trace/ftrace.c 	if (!hash || hash == EMPTY_HASH)</span>
+<span class='curline'><a href='../S/270.html#L1237'>hash</a>             1237 trace/ftrace.c 	ftrace_hash_clear(hash);</span>
+<span class='curline'><a href='../S/270.html#L1238'>hash</a>             1238 trace/ftrace.c 	kfree(hash-&gt;buckets);</span>
+<span class='curline'><a href='../S/270.html#L1239'>hash</a>             1239 trace/ftrace.c 	kfree(hash);</span>
+<span class='curline'><a href='../S/270.html#L1244'>hash</a>             1244 trace/ftrace.c 	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/270.html#L1246'>hash</a>             1246 trace/ftrace.c 	hash = container_of(rcu, struct ftrace_hash, rcu);</span>
+<span class='curline'><a href='../S/270.html#L1247'>hash</a>             1247 trace/ftrace.c 	free_ftrace_hash(hash);</span>
+<span class='curline'><a href='../S/270.html#L1250'>hash</a>             1250 trace/ftrace.c static void free_ftrace_hash_rcu(struct ftrace_hash *hash)</span>
+<span class='curline'><a href='../S/270.html#L1252'>hash</a>             1252 trace/ftrace.c 	if (!hash || hash == EMPTY_HASH)</span>
+<span class='curline'><a href='../S/270.html#L1254'>hash</a>             1254 trace/ftrace.c 	call_rcu(&amp;hash-&gt;rcu, __free_ftrace_hash_rcu);</span>
+<span class='curline'><a href='../S/270.html#L1266'>hash</a>             1266 trace/ftrace.c 	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/270.html#L1269'>hash</a>             1269 trace/ftrace.c 	hash = kzalloc(sizeof(*hash), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/270.html#L1270'>hash</a>             1270 trace/ftrace.c 	if (!hash)</span>
+<span class='curline'><a href='../S/270.html#L1274'>hash</a>             1274 trace/ftrace.c 	hash-&gt;buckets = kcalloc(size, sizeof(*hash-&gt;buckets), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/270.html#L1276'>hash</a>             1276 trace/ftrace.c 	if (!hash-&gt;buckets) {</span>
+<span class='curline'><a href='../S/270.html#L1277'>hash</a>             1277 trace/ftrace.c 		kfree(hash);</span>
+<span class='curline'><a href='../S/270.html#L1281'>hash</a>             1281 trace/ftrace.c 	hash-&gt;size_bits = size_bits;</span>
+<span class='curline'><a href='../S/270.html#L1283'>hash</a>             1283 trace/ftrace.c 	return hash;</span>
+<span class='curline'><a href='../S/270.html#L1316'>hash</a>             1316 trace/ftrace.c alloc_and_copy_ftrace_hash(int size_bits, struct ftrace_hash *hash)</span>
+<span class='curline'><a href='../S/270.html#L1328'>hash</a>             1328 trace/ftrace.c 	if (hash)</span>
+<span class='curline'><a href='../S/270.html#L1329'>hash</a>             1329 trace/ftrace.c 		new_hash-&gt;flags = hash-&gt;flags;</span>
+<span class='curline'><a href='../S/270.html#L1332'>hash</a>             1332 trace/ftrace.c 	if (ftrace_hash_empty(hash))</span>
+<span class='curline'><a href='../S/270.html#L1335'>hash</a>             1335 trace/ftrace.c 	size = 1 &lt;&lt; hash-&gt;size_bits;</span>
+<span class='curline'><a href='../S/270.html#L1337'>hash</a>             1337 trace/ftrace.c 		hlist_for_each_entry(entry, &amp;hash-&gt;buckets[i], hlist) {</span>
+<span class='curline'><a href='../S/270.html#L1344'>hash</a>             1344 trace/ftrace.c 	FTRACE_WARN_ON(new_hash-&gt;count != hash-&gt;count);</span>
+<span class='curline'><a href='../S/270.html#L1450'>hash</a>             1450 trace/ftrace.c 			     struct ftrace_ops_hash *hash)</span>
+<span class='curline'><a href='../S/270.html#L1458'>hash</a>             1458 trace/ftrace.c 	return (ftrace_hash_empty(hash-&gt;filter_hash) ||</span>
+<span class='curline'><a href='../S/270.html#L1459'>hash</a>             1459 trace/ftrace.c 		__ftrace_lookup_ip(hash-&gt;filter_hash, ip)) &amp;&amp;</span>
+<span class='curline'><a href='../S/270.html#L1460'>hash</a>             1460 trace/ftrace.c 		(ftrace_hash_empty(hash-&gt;notrace_hash) ||</span>
+<span class='curline'><a href='../S/270.html#L1461'>hash</a>             1461 trace/ftrace.c 		 !__ftrace_lookup_ip(hash-&gt;notrace_hash, ip));</span>
+<span class='curline'><a href='../S/270.html#L1479'>hash</a>             1479 trace/ftrace.c 	struct ftrace_ops_hash hash;</span>
+<span class='curline'><a href='../S/270.html#L1492'>hash</a>             1492 trace/ftrace.c 	rcu_assign_pointer(hash.filter_hash, ops-&gt;func_hash-&gt;filter_hash);</span>
+<span class='curline'><a href='../S/270.html#L1493'>hash</a>             1493 trace/ftrace.c 	rcu_assign_pointer(hash.notrace_hash, ops-&gt;func_hash-&gt;notrace_hash);</span>
+<span class='curline'><a href='../S/270.html#L1495'>hash</a>             1495 trace/ftrace.c 	if (hash_contains_ip(ip, &amp;hash))</span>
+<span class='curline'><a href='../S/270.html#L1640'>hash</a>             1640 trace/ftrace.c 	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/270.html#L1664'>hash</a>             1664 trace/ftrace.c 		hash = ops-&gt;func_hash-&gt;filter_hash;</span>
+<span class='curline'><a href='../S/270.html#L1666'>hash</a>             1666 trace/ftrace.c 		if (ftrace_hash_empty(hash))</span>
+<span class='curline'><a href='../S/270.html#L1670'>hash</a>             1670 trace/ftrace.c 		hash = ops-&gt;func_hash-&gt;notrace_hash;</span>
+<span class='curline'><a href='../S/270.html#L1676'>hash</a>             1676 trace/ftrace.c 		if (ftrace_hash_empty(hash))</span>
+<span class='curline'><a href='../S/270.html#L1696'>hash</a>             1696 trace/ftrace.c 			in_hash = !!ftrace_lookup_ip(hash, rec-&gt;ip);</span>
+<span class='curline'><a href='../S/270.html#L1799'>hash</a>             1799 trace/ftrace.c 		if (!all &amp;&amp; count == hash-&gt;count)</span>
+<span class='curline'><a href='../S/270.html#L1936'>hash</a>             1936 trace/ftrace.c 	struct ftrace_hash *hash = ops-&gt;func_hash-&gt;filter_hash;</span>
+<span class='curline'><a href='../S/270.html#L1938'>hash</a>             1938 trace/ftrace.c 	if (ftrace_hash_empty(hash))</span>
+<span class='curline'><a href='../S/270.html#L1939'>hash</a>             1939 trace/ftrace.c 		hash = NULL;</span>
+<span class='curline'><a href='../S/270.html#L1941'>hash</a>             1941 trace/ftrace.c 	return __ftrace_hash_update_ipmodify(ops, EMPTY_HASH, hash);</span>
+<span class='curline'><a href='../S/270.html#L1947'>hash</a>             1947 trace/ftrace.c 	struct ftrace_hash *hash = ops-&gt;func_hash-&gt;filter_hash;</span>
+<span class='curline'><a href='../S/270.html#L1949'>hash</a>             1949 trace/ftrace.c 	if (ftrace_hash_empty(hash))</span>
+<span class='curline'><a href='../S/270.html#L1950'>hash</a>             1950 trace/ftrace.c 		hash = NULL;</span>
+<span class='curline'><a href='../S/270.html#L1952'>hash</a>             1952 trace/ftrace.c 	__ftrace_hash_update_ipmodify(ops, hash, EMPTY_HASH);</span>
+<span class='curline'><a href='../S/270.html#L3256'>hash</a>             3256 trace/ftrace.c 	struct ftrace_hash		*hash;</span>
+<span class='curline'><a href='../S/270.html#L3271'>hash</a>             3271 trace/ftrace.c 	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/270.html#L3295'>hash</a>             3295 trace/ftrace.c 	hash = iter-&gt;probe-&gt;ops.func_hash-&gt;filter_hash;</span>
+<span class='curline'><a href='../S/270.html#L3301'>hash</a>             3301 trace/ftrace.c 	if (!hash || hash == EMPTY_HASH)</span>
+<span class='curline'><a href='../S/270.html#L3304'>hash</a>             3304 trace/ftrace.c 	size = 1 &lt;&lt; hash-&gt;size_bits;</span>
+<span class='curline'><a href='../S/270.html#L3312'>hash</a>             3312 trace/ftrace.c 		hash = iter-&gt;probe-&gt;ops.func_hash-&gt;filter_hash;</span>
+<span class='curline'><a href='../S/270.html#L3313'>hash</a>             3313 trace/ftrace.c 		size = 1 &lt;&lt; hash-&gt;size_bits;</span>
+<span class='curline'><a href='../S/270.html#L3317'>hash</a>             3317 trace/ftrace.c 	hhd = &amp;hash-&gt;buckets[iter-&gt;pidx];</span>
+<span class='curline'><a href='../S/270.html#L3490'>hash</a>             3490 trace/ftrace.c 		     !ftrace_lookup_ip(iter-&gt;hash, rec-&gt;ip)) ||</span>
+<span class='curline'><a href='../S/270.html#L3569'>hash</a>             3569 trace/ftrace.c 	    ftrace_hash_empty(iter-&gt;hash)) {</span>
+<span class='curline'><a href='../S/270.html#L3760'>hash</a>             3760 trace/ftrace.c 	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/270.html#L3787'>hash</a>             3787 trace/ftrace.c 		hash = ops-&gt;func_hash-&gt;notrace_hash;</span>
+<span class='curline'><a href='../S/270.html#L3790'>hash</a>             3790 trace/ftrace.c 		hash = ops-&gt;func_hash-&gt;filter_hash;</span>
+<span class='curline'><a href='../S/270.html#L3800'>hash</a>             3800 trace/ftrace.c 			iter-&gt;hash = alloc_ftrace_hash(size_bits);</span>
+<span class='curline'><a href='../S/270.html#L3803'>hash</a>             3803 trace/ftrace.c 			iter-&gt;hash = alloc_and_copy_ftrace_hash(size_bits, hash);</span>
+<span class='curline'><a href='../S/270.html#L3806'>hash</a>             3806 trace/ftrace.c 		if (!iter-&gt;hash) {</span>
+<span class='curline'><a href='../S/270.html#L3811'>hash</a>             3811 trace/ftrace.c 		iter-&gt;hash = hash;</span>
+<span class='curline'><a href='../S/270.html#L3824'>hash</a>             3824 trace/ftrace.c 			free_ftrace_hash(iter-&gt;hash);</span>
+<span class='curline'><a href='../S/270.html#L3917'>hash</a>             3917 trace/ftrace.c enter_record(struct ftrace_hash *hash, struct dyn_ftrace *rec, int clear_filter)</span>
+<span class='curline'><a href='../S/270.html#L3922'>hash</a>             3922 trace/ftrace.c 	entry = ftrace_lookup_ip(hash, rec-&gt;ip);</span>
+<span class='curline'><a href='../S/270.html#L3928'>hash</a>             3928 trace/ftrace.c 		free_hash_entry(hash, entry);</span>
+<span class='curline'><a href='../S/270.html#L3934'>hash</a>             3934 trace/ftrace.c 		ret = add_hash_entry(hash, rec-&gt;ip);</span>
+<span class='curline'><a href='../S/270.html#L3940'>hash</a>             3940 trace/ftrace.c add_rec_by_index(struct ftrace_hash *hash, struct ftrace_glob *func_g,</span>
+<span class='curline'><a href='../S/270.html#L3958'>hash</a>             3958 trace/ftrace.c 		enter_record(hash, rec, clear_filter);</span>
+<span class='curline'><a href='../S/270.html#L4003'>hash</a>             4003 trace/ftrace.c match_records(struct ftrace_hash *hash, char *func, int len, char *mod)</span>
+<span class='curline'><a href='../S/270.html#L4033'>hash</a>             4033 trace/ftrace.c 		found = add_rec_by_index(hash, &amp;func_g, clear_filter);</span>
+<span class='curline'><a href='../S/270.html#L4043'>hash</a>             4043 trace/ftrace.c 			ret = enter_record(hash, rec, clear_filter);</span>
+<span class='curline'><a href='../S/270.html#L4058'>hash</a>             4058 trace/ftrace.c ftrace_match_records(struct ftrace_hash *hash, char *buff, int len)</span>
+<span class='curline'><a href='../S/270.html#L4060'>hash</a>             4060 trace/ftrace.c 	return match_records(hash, buff, len, NULL);</span>
+<span class='curline'><a href='../S/270.html#L4096'>hash</a>             4096 trace/ftrace.c 					   struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/270.html#L4106'>hash</a>             4106 trace/ftrace.c 	ret = ftrace_hash_move(ops, enable, orig_hash, hash);</span>
+<span class='curline'><a href='../S/270.html#L4278'>hash</a>             4278 trace/ftrace.c ftrace_mod_callback(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/270.html#L4296'>hash</a>             4296 trace/ftrace.c 	ret = match_records(hash, func, strlen(func), module);</span>
+<span class='curline'><a href='../S/270.html#L4342'>hash</a>             4342 trace/ftrace.c 	struct ftrace_hash		hash;</span>
+<span class='curline'><a href='../S/270.html#L4352'>hash</a>             4352 trace/ftrace.c 	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/270.html#L4359'>hash</a>             4359 trace/ftrace.c 	hash = alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);</span>
+<span class='curline'><a href='../S/270.html#L4360'>hash</a>             4360 trace/ftrace.c 	return (struct ftrace_func_mapper *)hash;</span>
+<span class='curline'><a href='../S/270.html#L4380'>hash</a>             4380 trace/ftrace.c 	entry = ftrace_lookup_ip(&amp;mapper-&gt;hash, ip);</span>
+<span class='curline'><a href='../S/270.html#L4402'>hash</a>             4402 trace/ftrace.c 	entry = ftrace_lookup_ip(&amp;mapper-&gt;hash, ip);</span>
+<span class='curline'><a href='../S/270.html#L4413'>hash</a>             4413 trace/ftrace.c 	__add_hash_entry(&amp;mapper-&gt;hash, &amp;map-&gt;entry);</span>
+<span class='curline'><a href='../S/270.html#L4435'>hash</a>             4435 trace/ftrace.c 	entry = ftrace_lookup_ip(&amp;mapper-&gt;hash, ip);</span>
+<span class='curline'><a href='../S/270.html#L4442'>hash</a>             4442 trace/ftrace.c 	remove_hash_entry(&amp;mapper-&gt;hash, entry);</span>
+<span class='curline'><a href='../S/270.html#L4467'>hash</a>             4467 trace/ftrace.c 	if (free_func &amp;&amp; mapper-&gt;hash.count) {</span>
+<span class='curline'><a href='../S/270.html#L4468'>hash</a>             4468 trace/ftrace.c 		size = 1 &lt;&lt; mapper-&gt;hash.size_bits;</span>
+<span class='curline'><a href='../S/270.html#L4470'>hash</a>             4470 trace/ftrace.c 			hhd = &amp;mapper-&gt;hash.buckets[i];</span>
+<span class='curline'><a href='../S/270.html#L4477'>hash</a>             4477 trace/ftrace.c 	free_ftrace_hash(&amp;mapper-&gt;hash);</span>
+<span class='curline'><a href='../S/270.html#L4523'>hash</a>             4523 trace/ftrace.c 	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/270.html#L4568'>hash</a>             4568 trace/ftrace.c 	hash = alloc_and_copy_ftrace_hash(FTRACE_HASH_DEFAULT_BITS, old_hash);</span>
+<span class='curline'><a href='../S/270.html#L4570'>hash</a>             4570 trace/ftrace.c 	if (!hash) {</span>
+<span class='curline'><a href='../S/270.html#L4575'>hash</a>             4575 trace/ftrace.c 	ret = ftrace_match_records(hash, glob, strlen(glob));</span>
+<span class='curline'><a href='../S/270.html#L4584'>hash</a>             4584 trace/ftrace.c 	size = 1 &lt;&lt; hash-&gt;size_bits;</span>
+<span class='curline'><a href='../S/270.html#L4586'>hash</a>             4586 trace/ftrace.c 		hlist_for_each_entry(entry, &amp;hash-&gt;buckets[i], hlist) {</span>
+<span class='curline'><a href='../S/270.html#L4619'>hash</a>             4619 trace/ftrace.c 					      hash, 1);</span>
+<span class='curline'><a href='../S/270.html#L4636'>hash</a>             4636 trace/ftrace.c 	free_ftrace_hash(hash);</span>
+<span class='curline'><a href='../S/270.html#L4648'>hash</a>             4648 trace/ftrace.c 		hlist_for_each_entry(entry, &amp;hash-&gt;buckets[i], hlist) {</span>
+<span class='curline'><a href='../S/270.html#L4667'>hash</a>             4667 trace/ftrace.c 	struct ftrace_hash *hash = NULL;</span>
+<span class='curline'><a href='../S/270.html#L4719'>hash</a>             4719 trace/ftrace.c 	hash = alloc_and_copy_ftrace_hash(FTRACE_HASH_DEFAULT_BITS, old_hash);</span>
+<span class='curline'><a href='../S/270.html#L4720'>hash</a>             4720 trace/ftrace.c 	if (!hash)</span>
+<span class='curline'><a href='../S/270.html#L4725'>hash</a>             4725 trace/ftrace.c 	size = 1 &lt;&lt; hash-&gt;size_bits;</span>
+<span class='curline'><a href='../S/270.html#L4727'>hash</a>             4727 trace/ftrace.c 		hlist_for_each_entry_safe(entry, tmp, &amp;hash-&gt;buckets[i], hlist) {</span>
+<span class='curline'><a href='../S/270.html#L4736'>hash</a>             4736 trace/ftrace.c 			remove_hash_entry(hash, entry);</span>
+<span class='curline'><a href='../S/270.html#L4753'>hash</a>             4753 trace/ftrace.c 	if (ftrace_hash_empty(hash))</span>
+<span class='curline'><a href='../S/270.html#L4757'>hash</a>             4757 trace/ftrace.c 					      hash, 1);</span>
+<span class='curline'><a href='../S/270.html#L4760'>hash</a>             4760 trace/ftrace.c 	if (ftrace_enabled &amp;&amp; !ftrace_hash_empty(hash))</span>
+<span class='curline'><a href='../S/270.html#L4775'>hash</a>             4775 trace/ftrace.c 	free_ftrace_hash(hash);</span>
+<span class='curline'><a href='../S/270.html#L4846'>hash</a>             4846 trace/ftrace.c 	struct ftrace_hash *hash = iter-&gt;hash;</span>
+<span class='curline'><a href='../S/270.html#L4855'>hash</a>             4855 trace/ftrace.c 		ret = ftrace_match_records(hash, func, len);</span>
+<span class='curline'><a href='../S/270.html#L4870'>hash</a>             4870 trace/ftrace.c 			ret = p-&gt;func(tr, hash, func, command, next, enable);</span>
+<span class='curline'><a href='../S/270.html#L4934'>hash</a>             4934 trace/ftrace.c ftrace_match_addr(struct ftrace_hash *hash, unsigned long ip, int remove)</span>
+<span class='curline'><a href='../S/270.html#L4942'>hash</a>             4942 trace/ftrace.c 		entry = ftrace_lookup_ip(hash, ip);</span>
+<span class='curline'><a href='../S/270.html#L4945'>hash</a>             4945 trace/ftrace.c 		free_hash_entry(hash, entry);</span>
+<span class='curline'><a href='../S/270.html#L4949'>hash</a>             4949 trace/ftrace.c 	return add_hash_entry(hash, ip);</span>
+<span class='curline'><a href='../S/270.html#L4957'>hash</a>             4957 trace/ftrace.c 	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/270.html#L4971'>hash</a>             4971 trace/ftrace.c 		hash = alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);</span>
+<span class='curline'><a href='../S/270.html#L4973'>hash</a>             4973 trace/ftrace.c 		hash = alloc_and_copy_ftrace_hash(FTRACE_HASH_DEFAULT_BITS, *orig_hash);</span>
+<span class='curline'><a href='../S/270.html#L4975'>hash</a>             4975 trace/ftrace.c 	if (!hash) {</span>
+<span class='curline'><a href='../S/270.html#L4980'>hash</a>             4980 trace/ftrace.c 	if (buf &amp;&amp; !ftrace_match_records(hash, buf, len)) {</span>
+<span class='curline'><a href='../S/270.html#L4985'>hash</a>             4985 trace/ftrace.c 		ret = ftrace_match_addr(hash, ip, remove);</span>
+<span class='curline'><a href='../S/270.html#L4991'>hash</a>             4991 trace/ftrace.c 	ret = ftrace_hash_move_and_update_ops(ops, orig_hash, hash, enable);</span>
+<span class='curline'><a href='../S/270.html#L4997'>hash</a>             4997 trace/ftrace.c 	free_ftrace_hash(hash);</span>
+<span class='curline'><a href='../S/270.html#L5540'>hash</a>             5540 trace/ftrace.c static int ftrace_graph_set_hash(struct ftrace_hash *hash, char *buffer);</span>
+<span class='curline'><a href='../S/270.html#L5569'>hash</a>             5569 trace/ftrace.c 	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/270.html#L5571'>hash</a>             5571 trace/ftrace.c 	hash = alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);</span>
+<span class='curline'><a href='../S/270.html#L5572'>hash</a>             5572 trace/ftrace.c 	if (MEM_FAIL(!hash, "Failed to allocate hash\n"))</span>
+<span class='curline'><a href='../S/270.html#L5578'>hash</a>             5578 trace/ftrace.c 		ret = ftrace_graph_set_hash(hash, func);</span>
+<span class='curline'><a href='../S/270.html#L5585'>hash</a>             5585 trace/ftrace.c 		ftrace_graph_hash = hash;</span>
+<span class='curline'><a href='../S/270.html#L5587'>hash</a>             5587 trace/ftrace.c 		ftrace_graph_notrace_hash = hash;</span>
+<span class='curline'><a href='../S/270.html#L5651'>hash</a>             5651 trace/ftrace.c 				iter-&gt;hash-&gt;flags |= FTRACE_HASH_FL_MOD;</span>
+<span class='curline'><a href='../S/270.html#L5657'>hash</a>             5657 trace/ftrace.c 						      iter-&gt;hash, filter_hash);</span>
+<span class='curline'><a href='../S/270.html#L5661'>hash</a>             5661 trace/ftrace.c 		iter-&gt;hash = NULL;</span>
+<span class='curline'><a href='../S/270.html#L5665'>hash</a>             5665 trace/ftrace.c 	free_ftrace_hash(iter-&gt;hash);</span>
+<span class='curline'><a href='../S/270.html#L5718'>hash</a>             5718 trace/ftrace.c 	struct ftrace_hash		*hash;</span>
+<span class='curline'><a href='../S/270.html#L5735'>hash</a>             5735 trace/ftrace.c 	if (*pos &gt;= fgd-&gt;hash-&gt;count)</span>
+<span class='curline'><a href='../S/270.html#L5747'>hash</a>             5747 trace/ftrace.c 	for (i = idx; i &lt; 1 &lt;&lt; fgd-&gt;hash-&gt;size_bits; i++) {</span>
+<span class='curline'><a href='../S/270.html#L5748'>hash</a>             5748 trace/ftrace.c 		head = &amp;fgd-&gt;hash-&gt;buckets[i];</span>
+<span class='curline'><a href='../S/270.html#L5772'>hash</a>             5772 trace/ftrace.c 		fgd-&gt;hash = rcu_dereference_protected(ftrace_graph_hash,</span>
+<span class='curline'><a href='../S/270.html#L5775'>hash</a>             5775 trace/ftrace.c 		fgd-&gt;hash = rcu_dereference_protected(ftrace_graph_notrace_hash,</span>
+<span class='curline'><a href='../S/270.html#L5779'>hash</a>             5779 trace/ftrace.c 	if (ftrace_hash_empty(fgd-&gt;hash) &amp;&amp; !*pos)</span>
+<span class='curline'><a href='../S/270.html#L5842'>hash</a>             5842 trace/ftrace.c 							      fgd-&gt;hash);</span>
+<span class='curline'><a href='../S/270.html#L5873'>hash</a>             5873 trace/ftrace.c 	fgd-&gt;hash = NULL;</span>
+<span class='curline'><a href='../S/270.html#L5893'>hash</a>             5893 trace/ftrace.c 	fgd-&gt;hash = rcu_dereference_protected(ftrace_graph_hash,</span>
+<span class='curline'><a href='../S/270.html#L5921'>hash</a>             5921 trace/ftrace.c 	fgd-&gt;hash = rcu_dereference_protected(ftrace_graph_notrace_hash,</span>
+<span class='curline'><a href='../S/270.html#L6004'>hash</a>             6004 trace/ftrace.c ftrace_graph_set_hash(struct ftrace_hash *hash, char *buffer)</span>
+<span class='curline'><a href='../S/270.html#L6032'>hash</a>             6032 trace/ftrace.c 			entry = ftrace_lookup_ip(hash, rec-&gt;ip);</span>
+<span class='curline'><a href='../S/270.html#L6039'>hash</a>             6039 trace/ftrace.c 				if (add_hash_entry(hash, rec-&gt;ip) &lt; 0)</span>
+<span class='curline'><a href='../S/270.html#L6043'>hash</a>             6043 trace/ftrace.c 					free_hash_entry(hash, entry);</span>
+<span class='curline'><a href='../S/270.html#L6344'>hash</a>             6344 trace/ftrace.c clear_mod_from_hash(struct ftrace_page *pg, struct ftrace_hash *hash)</span>
+<span class='curline'><a href='../S/270.html#L6350'>hash</a>             6350 trace/ftrace.c 	if (ftrace_hash_empty(hash))</span>
+<span class='curline'><a href='../S/270.html#L6355'>hash</a>             6355 trace/ftrace.c 		entry = __ftrace_lookup_ip(hash, rec-&gt;ip);</span>
+<span class='curline'><a href='../S/270.html#L6724'>hash</a>             6724 trace/ftrace.c clear_func_from_hash(struct ftrace_init_func *func, struct ftrace_hash *hash)</span>
+<span class='curline'><a href='../S/270.html#L6728'>hash</a>             6728 trace/ftrace.c 	entry = ftrace_lookup_ip(hash, func-&gt;ip);</span>
+<span class='curline'><a href='../S/271.html#L7982'>hash</a>             7982 trace/trace.c  ftrace_trace_snapshot_callback(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/256.html#L969'>hash</a>              969 trace/trace.h  ftrace_lookup_ip(struct ftrace_hash *hash, unsigned long ip);</span>
+<span class='curline'><a href='../S/256.html#L971'>hash</a>              971 trace/trace.h  static __always_inline bool ftrace_hash_empty(struct ftrace_hash *hash)</span>
+<span class='curline'><a href='../S/256.html#L973'>hash</a>              973 trace/trace.h  	return !hash || !(hash-&gt;count || (hash-&gt;flags &amp; FTRACE_HASH_FL_MOD));</span>
+<span class='curline'><a href='../S/256.html#L1024'>hash</a>             1024 trace/trace.h  	struct ftrace_hash *hash;</span>
+<span class='curline'><a href='../S/256.html#L1034'>hash</a>             1034 trace/trace.h  	hash = rcu_dereference_protected(ftrace_graph_hash, !preemptible());</span>
+<span class='curline'><a href='../S/256.html#L1036'>hash</a>             1036 trace/trace.h  	if (ftrace_hash_empty(hash)) {</span>
+<span class='curline'><a href='../S/256.html#L1041'>hash</a>             1041 trace/trace.h  	if (ftrace_lookup_ip(hash, addr)) {</span>
+<span class='curline'><a href='../S/256.html#L1140'>hash</a>             1140 trace/trace.h  					struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/267.html#L2999'>hash</a>             2999 trace/trace_events.c event_enable_func(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/307.html#L645'>hash</a>              645 trace/trace_functions.c 			    struct ftrace_hash *hash, char *glob,</span>
+<span class='curline'><a href='../S/307.html#L682'>hash</a>              682 trace/trace_functions.c ftrace_trace_onoff_callback(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/307.html#L696'>hash</a>              696 trace/trace_functions.c 	return ftrace_trace_probe_callback(tr, ops, hash, glob, cmd,</span>
+<span class='curline'><a href='../S/307.html#L701'>hash</a>              701 trace/trace_functions.c ftrace_stacktrace_callback(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/307.html#L711'>hash</a>              711 trace/trace_functions.c 	return ftrace_trace_probe_callback(tr, ops, hash, glob, cmd,</span>
+<span class='curline'><a href='../S/307.html#L716'>hash</a>              716 trace/trace_functions.c ftrace_dump_callback(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/307.html#L727'>hash</a>              727 trace/trace_functions.c 	return ftrace_trace_probe_callback(tr, ops, hash, glob, cmd,</span>
+<span class='curline'><a href='../S/307.html#L732'>hash</a>              732 trace/trace_functions.c ftrace_cpudump_callback(struct trace_array *tr, struct ftrace_hash *hash,</span>
+<span class='curline'><a href='../S/307.html#L743'>hash</a>              743 trace/trace_functions.c 	return ftrace_trace_probe_callback(tr, ops, hash, glob, cmd,</span>
+<span class='curline'><a href='../S/365.html#L3406'>hash</a>             3406 workqueue.c    	u32 hash = 0;</span>
+<span class='curline'><a href='../S/365.html#L3408'>hash</a>             3408 workqueue.c    	hash = jhash_1word(attrs-&gt;nice, hash);</span>
+<span class='curline'><a href='../S/365.html#L3409'>hash</a>             3409 workqueue.c    	hash = jhash(cpumask_bits(attrs-&gt;cpumask),</span>
+<span class='curline'><a href='../S/365.html#L3410'>hash</a>             3410 workqueue.c    		     BITS_TO_LONGS(nr_cpumask_bits) * sizeof(long), hash);</span>
+<span class='curline'><a href='../S/365.html#L3411'>hash</a>             3411 workqueue.c    	return hash;</span>
+<span class='curline'><a href='../S/365.html#L3617'>hash</a>             3617 workqueue.c    	u32 hash = wqattrs_hash(attrs);</span>
+<span class='curline'><a href='../S/365.html#L3625'>hash</a>             3625 workqueue.c    	hash_for_each_possible(unbound_pool_hash, pool, hash_node, hash) {</span>
+<span class='curline'><a href='../S/365.html#L3666'>hash</a>             3666 workqueue.c    	hash_add(unbound_pool_hash, &amp;pool-&gt;hash_node, hash);</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rcu_state</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/133.html#L312'>rcu_state</a>         312 rcu/rcu.h      #define rcu_first_leaf_node() (rcu_state.level[rcu_num_lvls - 1])</span>
+<span class='curline'><a href='../S/133.html#L318'>rcu_state</a>         318 rcu/rcu.h      #define rcu_is_last_leaf_node(rnp) ((rnp) == &amp;rcu_state.node[rcu_num_nodes - 1])</span>
+<span class='curline'><a href='../S/133.html#L329'>rcu_state</a>         329 rcu/rcu.h      	srcu_for_each_node_breadth_first(&amp;rcu_state, rnp)</span>
+<span class='curline'><a href='../S/133.html#L339'>rcu_state</a>         339 rcu/rcu.h      	     (rnp) &lt; &amp;rcu_state.node[rcu_num_nodes]; (rnp)++)</span>
+<span class='curline'><a href='../S/144.html#L87'>rcu_state</a>          87 rcu/tree.c     static struct rcu_state rcu_state = {</span>
+<span class='curline'><a href='../S/144.html#L88'>rcu_state</a>          88 rcu/tree.c     	.level = { &amp;rcu_state.node[0] },</span>
+<span class='curline'><a href='../S/144.html#L91'>rcu_state</a>          91 rcu/tree.c     	.barrier_mutex = __MUTEX_INITIALIZER(rcu_state.barrier_mutex),</span>
+<span class='curline'><a href='../S/144.html#L94'>rcu_state</a>          94 rcu/tree.c     	.exp_mutex = __MUTEX_INITIALIZER(rcu_state.exp_mutex),</span>
+<span class='curline'><a href='../S/144.html#L95'>rcu_state</a>          95 rcu/tree.c     	.exp_wake_mutex = __MUTEX_INITIALIZER(rcu_state.exp_wake_mutex),</span>
+<span class='curline'><a href='../S/144.html#L96'>rcu_state</a>          96 rcu/tree.c     	.ofl_lock = __RAW_SPIN_LOCK_UNLOCKED(rcu_state.ofl_lock),</span>
+<span class='curline'><a href='../S/144.html#L219'>rcu_state</a>         219 rcu/tree.c     	return rcu_seq_state(rcu_seq_current(&amp;rcu_state.gp_seq));</span>
+<span class='curline'><a href='../S/144.html#L571'>rcu_state</a>         571 rcu/tree.c     	return READ_ONCE(rcu_state.gp_seq);</span>
+<span class='curline'><a href='../S/144.html#L583'>rcu_state</a>         583 rcu/tree.c     	return rcu_state.expedited_sequence;</span>
+<span class='curline'><a href='../S/144.html#L592'>rcu_state</a>         592 rcu/tree.c     	return &amp;rcu_state.node[0];</span>
+<span class='curline'><a href='../S/144.html#L603'>rcu_state</a>         603 rcu/tree.c     		*flags = READ_ONCE(rcu_state.gp_flags);</span>
+<span class='curline'><a href='../S/144.html#L604'>rcu_state</a>         604 rcu/tree.c     		*gp_seq = rcu_seq_current(&amp;rcu_state.gp_seq);</span>
+<span class='curline'><a href='../S/144.html#L1195'>rcu_state</a>        1195 rcu/tree.c     		trace_rcu_fqs(rcu_state.name, rdp-&gt;gp_seq, rdp-&gt;cpu, TPS("dti"));</span>
+<span class='curline'><a href='../S/144.html#L1224'>rcu_state</a>        1224 rcu/tree.c     		trace_rcu_fqs(rcu_state.name, rdp-&gt;gp_seq, rdp-&gt;cpu, TPS("dti"));</span>
+<span class='curline'><a href='../S/144.html#L1280'>rcu_state</a>        1280 rcu/tree.c     	    (time_after(jiffies, rcu_state.gp_start + jtsq * 2) ||</span>
+<span class='curline'><a href='../S/144.html#L1281'>rcu_state</a>        1281 rcu/tree.c     	     time_after(jiffies, rcu_state.jiffies_resched) ||</span>
+<span class='curline'><a href='../S/144.html#L1282'>rcu_state</a>        1282 rcu/tree.c     	     rcu_state.cbovld)) {</span>
+<span class='curline'><a href='../S/144.html#L1286'>rcu_state</a>        1286 rcu/tree.c     	} else if (time_after(jiffies, rcu_state.gp_start + jtsq)) {</span>
+<span class='curline'><a href='../S/144.html#L1300'>rcu_state</a>        1300 rcu/tree.c     	     rcu_state.cbovld)) {</span>
+<span class='curline'><a href='../S/144.html#L1313'>rcu_state</a>        1313 rcu/tree.c     	if (time_after(jiffies, rcu_state.jiffies_resched)) {</span>
+<span class='curline'><a href='../S/144.html#L1337'>rcu_state</a>        1337 rcu/tree.c     	trace_rcu_future_grace_period(rcu_state.name, READ_ONCE(rnp-&gt;gp_seq),</span>
+<span class='curline'><a href='../S/144.html#L1410'>rcu_state</a>        1410 rcu/tree.c     	WRITE_ONCE(rcu_state.gp_flags, rcu_state.gp_flags | RCU_GP_FLAG_INIT);</span>
+<span class='curline'><a href='../S/144.html#L1411'>rcu_state</a>        1411 rcu/tree.c     	WRITE_ONCE(rcu_state.gp_req_activity, jiffies);</span>
+<span class='curline'><a href='../S/144.html#L1412'>rcu_state</a>        1412 rcu/tree.c     	if (!READ_ONCE(rcu_state.gp_kthread)) {</span>
+<span class='curline'><a href='../S/144.html#L1416'>rcu_state</a>        1416 rcu/tree.c     	trace_rcu_grace_period(rcu_state.name, data_race(rcu_state.gp_seq), TPS("newreq"));</span>
+<span class='curline'><a href='../S/144.html#L1463'>rcu_state</a>        1463 rcu/tree.c     	struct task_struct *t = READ_ONCE(rcu_state.gp_kthread);</span>
+<span class='curline'><a href='../S/144.html#L1466'>rcu_state</a>        1466 rcu/tree.c     	    !READ_ONCE(rcu_state.gp_flags) || !t)</span>
+<span class='curline'><a href='../S/144.html#L1468'>rcu_state</a>        1468 rcu/tree.c     	WRITE_ONCE(rcu_state.gp_wake_time, jiffies);</span>
+<span class='curline'><a href='../S/144.html#L1469'>rcu_state</a>        1469 rcu/tree.c     	WRITE_ONCE(rcu_state.gp_wake_seq, READ_ONCE(rcu_state.gp_seq));</span>
+<span class='curline'><a href='../S/144.html#L1470'>rcu_state</a>        1470 rcu/tree.c     	swake_up_one(&amp;rcu_state.gp_wq);</span>
+<span class='curline'><a href='../S/144.html#L1507'>rcu_state</a>        1507 rcu/tree.c     	gp_seq_req = rcu_seq_snap(&amp;rcu_state.gp_seq);</span>
+<span class='curline'><a href='../S/144.html#L1513'>rcu_state</a>        1513 rcu/tree.c     		trace_rcu_grace_period(rcu_state.name, gp_seq_req, TPS("AccWaitCB"));</span>
+<span class='curline'><a href='../S/144.html#L1515'>rcu_state</a>        1515 rcu/tree.c     		trace_rcu_grace_period(rcu_state.name, gp_seq_req, TPS("AccReadyCB"));</span>
+<span class='curline'><a href='../S/144.html#L1534'>rcu_state</a>        1534 rcu/tree.c     	c = rcu_seq_snap(&amp;rcu_state.gp_seq);</span>
+<span class='curline'><a href='../S/144.html#L1628'>rcu_state</a>        1628 rcu/tree.c     		trace_rcu_grace_period(rcu_state.name, rdp-&gt;gp_seq, TPS("cpuend"));</span>
+<span class='curline'><a href='../S/144.html#L1644'>rcu_state</a>        1644 rcu/tree.c     		trace_rcu_grace_period(rcu_state.name, rnp-&gt;gp_seq, TPS("cpustart"));</span>
+<span class='curline'><a href='../S/144.html#L1682'>rcu_state</a>        1682 rcu/tree.c     	    !(rcu_seq_ctr(rcu_state.gp_seq) %</span>
+<span class='curline'><a href='../S/144.html#L1732'>rcu_state</a>        1732 rcu/tree.c     	WRITE_ONCE(rcu_state.gp_activity, jiffies);</span>
+<span class='curline'><a href='../S/144.html#L1734'>rcu_state</a>        1734 rcu/tree.c     	if (!READ_ONCE(rcu_state.gp_flags)) {</span>
+<span class='curline'><a href='../S/144.html#L1739'>rcu_state</a>        1739 rcu/tree.c     	WRITE_ONCE(rcu_state.gp_flags, 0); /* Clear all flags: New GP. */</span>
+<span class='curline'><a href='../S/144.html#L1753'>rcu_state</a>        1753 rcu/tree.c     	rcu_seq_start(&amp;rcu_state.gp_seq);</span>
+<span class='curline'><a href='../S/144.html#L1754'>rcu_state</a>        1754 rcu/tree.c     	ASSERT_EXCLUSIVE_WRITER(rcu_state.gp_seq);</span>
+<span class='curline'><a href='../S/144.html#L1755'>rcu_state</a>        1755 rcu/tree.c     	trace_rcu_grace_period(rcu_state.name, rcu_state.gp_seq, TPS("start"));</span>
+<span class='curline'><a href='../S/144.html#L1767'>rcu_state</a>        1767 rcu/tree.c     	rcu_state.gp_state = RCU_GP_ONOFF;</span>
+<span class='curline'><a href='../S/144.html#L1769'>rcu_state</a>        1769 rcu/tree.c     		raw_spin_lock(&amp;rcu_state.ofl_lock);</span>
+<span class='curline'><a href='../S/144.html#L1775'>rcu_state</a>        1775 rcu/tree.c     			raw_spin_unlock(&amp;rcu_state.ofl_lock);</span>
+<span class='curline'><a href='../S/144.html#L1811'>rcu_state</a>        1811 rcu/tree.c     		raw_spin_unlock(&amp;rcu_state.ofl_lock);</span>
+<span class='curline'><a href='../S/144.html#L1827'>rcu_state</a>        1827 rcu/tree.c     	rcu_state.gp_state = RCU_GP_INIT;</span>
+<span class='curline'><a href='../S/144.html#L1834'>rcu_state</a>        1834 rcu/tree.c     		WRITE_ONCE(rnp-&gt;gp_seq, rcu_state.gp_seq);</span>
+<span class='curline'><a href='../S/144.html#L1838'>rcu_state</a>        1838 rcu/tree.c     		trace_rcu_grace_period_init(rcu_state.name, rnp-&gt;gp_seq,</span>
+<span class='curline'><a href='../S/144.html#L1849'>rcu_state</a>        1849 rcu/tree.c     		WRITE_ONCE(rcu_state.gp_activity, jiffies);</span>
+<span class='curline'><a href='../S/144.html#L1872'>rcu_state</a>        1872 rcu/tree.c     	*gfp = READ_ONCE(rcu_state.gp_flags);</span>
+<span class='curline'><a href='../S/144.html#L1890'>rcu_state</a>        1890 rcu/tree.c     	WRITE_ONCE(rcu_state.gp_activity, jiffies);</span>
+<span class='curline'><a href='../S/144.html#L1891'>rcu_state</a>        1891 rcu/tree.c     	rcu_state.n_force_qs++;</span>
+<span class='curline'><a href='../S/144.html#L1900'>rcu_state</a>        1900 rcu/tree.c     	if (READ_ONCE(rcu_state.gp_flags) &amp; RCU_GP_FLAG_FQS) {</span>
+<span class='curline'><a href='../S/144.html#L1902'>rcu_state</a>        1902 rcu/tree.c     		WRITE_ONCE(rcu_state.gp_flags,</span>
+<span class='curline'><a href='../S/144.html#L1903'>rcu_state</a>        1903 rcu/tree.c     			   READ_ONCE(rcu_state.gp_flags) &amp; ~RCU_GP_FLAG_FQS);</span>
+<span class='curline'><a href='../S/144.html#L1921'>rcu_state</a>        1921 rcu/tree.c     	if (rcu_state.cbovld)</span>
+<span class='curline'><a href='../S/144.html#L1926'>rcu_state</a>        1926 rcu/tree.c     			rcu_state.jiffies_force_qs = jiffies + j;</span>
+<span class='curline'><a href='../S/144.html#L1927'>rcu_state</a>        1927 rcu/tree.c     			WRITE_ONCE(rcu_state.jiffies_kick_kthreads,</span>
+<span class='curline'><a href='../S/144.html#L1930'>rcu_state</a>        1930 rcu/tree.c     		trace_rcu_grace_period(rcu_state.name, rcu_state.gp_seq,</span>
+<span class='curline'><a href='../S/144.html#L1932'>rcu_state</a>        1932 rcu/tree.c     		rcu_state.gp_state = RCU_GP_WAIT_FQS;</span>
+<span class='curline'><a href='../S/144.html#L1934'>rcu_state</a>        1934 rcu/tree.c     				rcu_state.gp_wq, rcu_gp_fqs_check_wake(&amp;gf), j);</span>
+<span class='curline'><a href='../S/144.html#L1936'>rcu_state</a>        1936 rcu/tree.c     		rcu_state.gp_state = RCU_GP_DOING_FQS;</span>
+<span class='curline'><a href='../S/144.html#L1943'>rcu_state</a>        1943 rcu/tree.c     		if (!time_after(rcu_state.jiffies_force_qs, jiffies) ||</span>
+<span class='curline'><a href='../S/144.html#L1945'>rcu_state</a>        1945 rcu/tree.c     			trace_rcu_grace_period(rcu_state.name, rcu_state.gp_seq,</span>
+<span class='curline'><a href='../S/144.html#L1951'>rcu_state</a>        1951 rcu/tree.c     				gf = rcu_state.cbovld ? RCU_GP_FLAG_OVLD : 0;</span>
+<span class='curline'><a href='../S/144.html#L1953'>rcu_state</a>        1953 rcu/tree.c     			trace_rcu_grace_period(rcu_state.name, rcu_state.gp_seq,</span>
+<span class='curline'><a href='../S/144.html#L1956'>rcu_state</a>        1956 rcu/tree.c     			WRITE_ONCE(rcu_state.gp_activity, jiffies);</span>
+<span class='curline'><a href='../S/144.html#L1962'>rcu_state</a>        1962 rcu/tree.c     			WRITE_ONCE(rcu_state.gp_activity, jiffies);</span>
+<span class='curline'><a href='../S/144.html#L1964'>rcu_state</a>        1964 rcu/tree.c     			trace_rcu_grace_period(rcu_state.name, rcu_state.gp_seq,</span>
+<span class='curline'><a href='../S/144.html#L1968'>rcu_state</a>        1968 rcu/tree.c     			if (time_after(jiffies, rcu_state.jiffies_force_qs))</span>
+<span class='curline'><a href='../S/144.html#L1971'>rcu_state</a>        1971 rcu/tree.c     				j = rcu_state.jiffies_force_qs - j;</span>
+<span class='curline'><a href='../S/144.html#L1991'>rcu_state</a>        1991 rcu/tree.c     	WRITE_ONCE(rcu_state.gp_activity, jiffies);</span>
+<span class='curline'><a href='../S/144.html#L1993'>rcu_state</a>        1993 rcu/tree.c     	rcu_state.gp_end = jiffies;</span>
+<span class='curline'><a href='../S/144.html#L1994'>rcu_state</a>        1994 rcu/tree.c     	gp_duration = rcu_state.gp_end - rcu_state.gp_start;</span>
+<span class='curline'><a href='../S/144.html#L1995'>rcu_state</a>        1995 rcu/tree.c     	if (gp_duration &gt; rcu_state.gp_max)</span>
+<span class='curline'><a href='../S/144.html#L1996'>rcu_state</a>        1996 rcu/tree.c     		rcu_state.gp_max = gp_duration;</span>
+<span class='curline'><a href='../S/144.html#L2017'>rcu_state</a>        2017 rcu/tree.c     	new_gp_seq = rcu_state.gp_seq;</span>
+<span class='curline'><a href='../S/144.html#L2040'>rcu_state</a>        2040 rcu/tree.c     		WRITE_ONCE(rcu_state.gp_activity, jiffies);</span>
+<span class='curline'><a href='../S/144.html#L2047'>rcu_state</a>        2047 rcu/tree.c     	trace_rcu_grace_period(rcu_state.name, rcu_state.gp_seq, TPS("end"));</span>
+<span class='curline'><a href='../S/144.html#L2048'>rcu_state</a>        2048 rcu/tree.c     	rcu_seq_end(&amp;rcu_state.gp_seq);</span>
+<span class='curline'><a href='../S/144.html#L2049'>rcu_state</a>        2049 rcu/tree.c     	ASSERT_EXCLUSIVE_WRITER(rcu_state.gp_seq);</span>
+<span class='curline'><a href='../S/144.html#L2050'>rcu_state</a>        2050 rcu/tree.c     	rcu_state.gp_state = RCU_GP_IDLE;</span>
+<span class='curline'><a href='../S/144.html#L2062'>rcu_state</a>        2062 rcu/tree.c     		WRITE_ONCE(rcu_state.gp_flags, RCU_GP_FLAG_INIT);</span>
+<span class='curline'><a href='../S/144.html#L2063'>rcu_state</a>        2063 rcu/tree.c     		WRITE_ONCE(rcu_state.gp_req_activity, jiffies);</span>
+<span class='curline'><a href='../S/144.html#L2064'>rcu_state</a>        2064 rcu/tree.c     		trace_rcu_grace_period(rcu_state.name,</span>
+<span class='curline'><a href='../S/144.html#L2065'>rcu_state</a>        2065 rcu/tree.c     				       rcu_state.gp_seq,</span>
+<span class='curline'><a href='../S/144.html#L2068'>rcu_state</a>        2068 rcu/tree.c     		WRITE_ONCE(rcu_state.gp_flags,</span>
+<span class='curline'><a href='../S/144.html#L2069'>rcu_state</a>        2069 rcu/tree.c     			   rcu_state.gp_flags &amp; RCU_GP_FLAG_INIT);</span>
+<span class='curline'><a href='../S/144.html#L2088'>rcu_state</a>        2088 rcu/tree.c     			trace_rcu_grace_period(rcu_state.name, rcu_state.gp_seq,</span>
+<span class='curline'><a href='../S/144.html#L2090'>rcu_state</a>        2090 rcu/tree.c     			rcu_state.gp_state = RCU_GP_WAIT_GPS;</span>
+<span class='curline'><a href='../S/144.html#L2091'>rcu_state</a>        2091 rcu/tree.c     			swait_event_idle_exclusive(rcu_state.gp_wq,</span>
+<span class='curline'><a href='../S/144.html#L2092'>rcu_state</a>        2092 rcu/tree.c     					 READ_ONCE(rcu_state.gp_flags) &amp;</span>
+<span class='curline'><a href='../S/144.html#L2095'>rcu_state</a>        2095 rcu/tree.c     			rcu_state.gp_state = RCU_GP_DONE_GPS;</span>
+<span class='curline'><a href='../S/144.html#L2100'>rcu_state</a>        2100 rcu/tree.c     			WRITE_ONCE(rcu_state.gp_activity, jiffies);</span>
+<span class='curline'><a href='../S/144.html#L2102'>rcu_state</a>        2102 rcu/tree.c     			trace_rcu_grace_period(rcu_state.name, rcu_state.gp_seq,</span>
+<span class='curline'><a href='../S/144.html#L2110'>rcu_state</a>        2110 rcu/tree.c     		rcu_state.gp_state = RCU_GP_CLEANUP;</span>
+<span class='curline'><a href='../S/144.html#L2112'>rcu_state</a>        2112 rcu/tree.c     		rcu_state.gp_state = RCU_GP_CLEANED;</span>
+<span class='curline'><a href='../S/144.html#L2130'>rcu_state</a>        2130 rcu/tree.c     	WRITE_ONCE(rcu_state.gp_flags,</span>
+<span class='curline'><a href='../S/144.html#L2131'>rcu_state</a>        2131 rcu/tree.c     		   READ_ONCE(rcu_state.gp_flags) | RCU_GP_FLAG_FQS);</span>
+<span class='curline'><a href='../S/144.html#L2174'>rcu_state</a>        2174 rcu/tree.c     		trace_rcu_quiescent_state_report(rcu_state.name, rnp-&gt;gp_seq,</span>
+<span class='curline'><a href='../S/144.html#L2346'>rcu_state</a>        2346 rcu/tree.c     	trace_rcu_grace_period(rcu_state.name, READ_ONCE(rnp-&gt;gp_seq),</span>
+<span class='curline'><a href='../S/144.html#L2437'>rcu_state</a>        2437 rcu/tree.c     		trace_rcu_batch_start(rcu_state.name,</span>
+<span class='curline'><a href='../S/144.html#L2439'>rcu_state</a>        2439 rcu/tree.c     		trace_rcu_batch_end(rcu_state.name, 0,</span>
+<span class='curline'><a href='../S/144.html#L2464'>rcu_state</a>        2464 rcu/tree.c     	trace_rcu_batch_start(rcu_state.name,</span>
+<span class='curline'><a href='../S/144.html#L2480'>rcu_state</a>        2480 rcu/tree.c     		trace_rcu_invoke_callback(rcu_state.name, rhp);</span>
+<span class='curline'><a href='../S/144.html#L2517'>rcu_state</a>        2517 rcu/tree.c     	trace_rcu_batch_end(rcu_state.name, count, !!rcl.head, need_resched(),</span>
+<span class='curline'><a href='../S/144.html#L2533'>rcu_state</a>        2533 rcu/tree.c     		rdp-&gt;n_force_qs_snap = rcu_state.n_force_qs;</span>
+<span class='curline'><a href='../S/144.html#L2596'>rcu_state</a>        2596 rcu/tree.c     	rcu_state.cbovld = rcu_state.cbovldnext;</span>
+<span class='curline'><a href='../S/144.html#L2597'>rcu_state</a>        2597 rcu/tree.c     	rcu_state.cbovldnext = false;</span>
+<span class='curline'><a href='../S/144.html#L2602'>rcu_state</a>        2602 rcu/tree.c     		rcu_state.cbovldnext |= !!rnp-&gt;cbovldmask;</span>
+<span class='curline'><a href='../S/144.html#L2648'>rcu_state</a>        2648 rcu/tree.c     		ret = (READ_ONCE(rcu_state.gp_flags) &amp; RCU_GP_FLAG_FQS) ||</span>
+<span class='curline'><a href='../S/144.html#L2661'>rcu_state</a>        2661 rcu/tree.c     	if (READ_ONCE(rcu_state.gp_flags) &amp; RCU_GP_FLAG_FQS) {</span>
+<span class='curline'><a href='../S/144.html#L2665'>rcu_state</a>        2665 rcu/tree.c     	WRITE_ONCE(rcu_state.gp_flags,</span>
+<span class='curline'><a href='../S/144.html#L2666'>rcu_state</a>        2666 rcu/tree.c     		   READ_ONCE(rcu_state.gp_flags) | RCU_GP_FLAG_FQS);</span>
+<span class='curline'><a href='../S/144.html#L2878'>rcu_state</a>        2878 rcu/tree.c     			if (rcu_state.n_force_qs == rdp-&gt;n_force_qs_snap &amp;&amp;</span>
+<span class='curline'><a href='../S/144.html#L2881'>rcu_state</a>        2881 rcu/tree.c     			rdp-&gt;n_force_qs_snap = rcu_state.n_force_qs;</span>
+<span class='curline'><a href='../S/144.html#L2981'>rcu_state</a>        2981 rcu/tree.c     		trace_rcu_kvfree_callback(rcu_state.name, head,</span>
+<span class='curline'><a href='../S/144.html#L2985'>rcu_state</a>        2985 rcu/tree.c     		trace_rcu_callback(rcu_state.name, head,</span>
+<span class='curline'><a href='../S/144.html#L3220'>rcu_state</a>        3220 rcu/tree.c     					rcu_state.name, bkvhead[i]-&gt;nr_records,</span>
+<span class='curline'><a href='../S/144.html#L3228'>rcu_state</a>        3228 rcu/tree.c     						rcu_state.name,</span>
+<span class='curline'><a href='../S/144.html#L3260'>rcu_state</a>        3260 rcu/tree.c     		trace_rcu_invoke_kvfree_callback(rcu_state.name, head, offset);</span>
+<span class='curline'><a href='../S/144.html#L3694'>rcu_state</a>        3694 rcu/tree.c     	return rcu_seq_snap(&amp;rcu_state.gp_seq);</span>
+<span class='curline'><a href='../S/144.html#L3714'>rcu_state</a>        3714 rcu/tree.c     	if (!rcu_seq_done(&amp;rcu_state.gp_seq, oldstate))</span>
+<span class='curline'><a href='../S/144.html#L3776'>rcu_state</a>        3776 rcu/tree.c     	trace_rcu_barrier(rcu_state.name, s, cpu,</span>
+<span class='curline'><a href='../S/144.html#L3777'>rcu_state</a>        3777 rcu/tree.c     			  atomic_read(&amp;rcu_state.barrier_cpu_count), done);</span>
+<span class='curline'><a href='../S/144.html#L3792'>rcu_state</a>        3792 rcu/tree.c     	unsigned long __maybe_unused s = rcu_state.barrier_sequence;</span>
+<span class='curline'><a href='../S/144.html#L3794'>rcu_state</a>        3794 rcu/tree.c     	if (atomic_dec_and_test(&amp;rcu_state.barrier_cpu_count)) {</span>
+<span class='curline'><a href='../S/144.html#L3796'>rcu_state</a>        3796 rcu/tree.c     		complete(&amp;rcu_state.barrier_completion);</span>
+<span class='curline'><a href='../S/144.html#L3810'>rcu_state</a>        3810 rcu/tree.c     	rcu_barrier_trace(TPS("IRQ"), -1, rcu_state.barrier_sequence);</span>
+<span class='curline'><a href='../S/144.html#L3816'>rcu_state</a>        3816 rcu/tree.c     		atomic_inc(&amp;rcu_state.barrier_cpu_count);</span>
+<span class='curline'><a href='../S/144.html#L3820'>rcu_state</a>        3820 rcu/tree.c     				  rcu_state.barrier_sequence);</span>
+<span class='curline'><a href='../S/144.html#L3837'>rcu_state</a>        3837 rcu/tree.c     	unsigned long s = rcu_seq_snap(&amp;rcu_state.barrier_sequence);</span>
+<span class='curline'><a href='../S/144.html#L3842'>rcu_state</a>        3842 rcu/tree.c     	mutex_lock(&amp;rcu_state.barrier_mutex);</span>
+<span class='curline'><a href='../S/144.html#L3845'>rcu_state</a>        3845 rcu/tree.c     	if (rcu_seq_done(&amp;rcu_state.barrier_sequence, s)) {</span>
+<span class='curline'><a href='../S/144.html#L3847'>rcu_state</a>        3847 rcu/tree.c     				  rcu_state.barrier_sequence);</span>
+<span class='curline'><a href='../S/144.html#L3849'>rcu_state</a>        3849 rcu/tree.c     		mutex_unlock(&amp;rcu_state.barrier_mutex);</span>
+<span class='curline'><a href='../S/144.html#L3854'>rcu_state</a>        3854 rcu/tree.c     	rcu_seq_start(&amp;rcu_state.barrier_sequence);</span>
+<span class='curline'><a href='../S/144.html#L3855'>rcu_state</a>        3855 rcu/tree.c     	rcu_barrier_trace(TPS("Inc1"), -1, rcu_state.barrier_sequence);</span>
+<span class='curline'><a href='../S/144.html#L3864'>rcu_state</a>        3864 rcu/tree.c     	init_completion(&amp;rcu_state.barrier_completion);</span>
+<span class='curline'><a href='../S/144.html#L3865'>rcu_state</a>        3865 rcu/tree.c     	atomic_set(&amp;rcu_state.barrier_cpu_count, 2);</span>
+<span class='curline'><a href='../S/144.html#L3880'>rcu_state</a>        3880 rcu/tree.c     					  rcu_state.barrier_sequence);</span>
+<span class='curline'><a href='../S/144.html#L3885'>rcu_state</a>        3885 rcu/tree.c     					  rcu_state.barrier_sequence);</span>
+<span class='curline'><a href='../S/144.html#L3891'>rcu_state</a>        3891 rcu/tree.c     					  rcu_state.barrier_sequence);</span>
+<span class='curline'><a href='../S/144.html#L3894'>rcu_state</a>        3894 rcu/tree.c     					  rcu_state.barrier_sequence);</span>
+<span class='curline'><a href='../S/144.html#L3903'>rcu_state</a>        3903 rcu/tree.c     	if (atomic_sub_and_test(2, &amp;rcu_state.barrier_cpu_count))</span>
+<span class='curline'><a href='../S/144.html#L3904'>rcu_state</a>        3904 rcu/tree.c     		complete(&amp;rcu_state.barrier_completion);</span>
+<span class='curline'><a href='../S/144.html#L3907'>rcu_state</a>        3907 rcu/tree.c     	wait_for_completion(&amp;rcu_state.barrier_completion);</span>
+<span class='curline'><a href='../S/144.html#L3910'>rcu_state</a>        3910 rcu/tree.c     	rcu_barrier_trace(TPS("Inc2"), -1, rcu_state.barrier_sequence);</span>
+<span class='curline'><a href='../S/144.html#L3911'>rcu_state</a>        3911 rcu/tree.c     	rcu_seq_end(&amp;rcu_state.barrier_sequence);</span>
+<span class='curline'><a href='../S/144.html#L3914'>rcu_state</a>        3914 rcu/tree.c     	mutex_unlock(&amp;rcu_state.barrier_mutex);</span>
+<span class='curline'><a href='../S/144.html#L3959'>rcu_state</a>        3959 rcu/tree.c     	rdp-&gt;rcu_ofl_gp_seq = rcu_state.gp_seq;</span>
+<span class='curline'><a href='../S/144.html#L3961'>rcu_state</a>        3961 rcu/tree.c     	rdp-&gt;rcu_onl_gp_seq = rcu_state.gp_seq;</span>
+<span class='curline'><a href='../S/144.html#L3986'>rcu_state</a>        3986 rcu/tree.c     	rdp-&gt;n_force_qs_snap = rcu_state.n_force_qs;</span>
+<span class='curline'><a href='../S/144.html#L4009'>rcu_state</a>        4009 rcu/tree.c     	trace_rcu_grace_period(rcu_state.name, rdp-&gt;gp_seq, TPS("cpuonl"));</span>
+<span class='curline'><a href='../S/144.html#L4106'>rcu_state</a>        4106 rcu/tree.c     	smp_store_release(&amp;rcu_state.ncpus, rcu_state.ncpus + newcpu); /* ^^^ */</span>
+<span class='curline'><a href='../S/144.html#L4107'>rcu_state</a>        4107 rcu/tree.c     	ASSERT_EXCLUSIVE_WRITER(rcu_state.ncpus);</span>
+<span class='curline'><a href='../S/144.html#L4109'>rcu_state</a>        4109 rcu/tree.c     	rdp-&gt;rcu_onl_gp_seq = READ_ONCE(rcu_state.gp_seq);</span>
+<span class='curline'><a href='../S/144.html#L4110'>rcu_state</a>        4110 rcu/tree.c     	rdp-&gt;rcu_onl_gp_flags = READ_ONCE(rcu_state.gp_flags);</span>
+<span class='curline'><a href='../S/144.html#L4144'>rcu_state</a>        4144 rcu/tree.c     	raw_spin_lock(&amp;rcu_state.ofl_lock);</span>
+<span class='curline'><a href='../S/144.html#L4146'>rcu_state</a>        4146 rcu/tree.c     	rdp-&gt;rcu_ofl_gp_seq = READ_ONCE(rcu_state.gp_seq);</span>
+<span class='curline'><a href='../S/144.html#L4147'>rcu_state</a>        4147 rcu/tree.c     	rdp-&gt;rcu_ofl_gp_flags = READ_ONCE(rcu_state.gp_flags);</span>
+<span class='curline'><a href='../S/144.html#L4155'>rcu_state</a>        4155 rcu/tree.c     	raw_spin_unlock(&amp;rcu_state.ofl_lock);</span>
+<span class='curline'><a href='../S/144.html#L4259'>rcu_state</a>        4259 rcu/tree.c     	t = kthread_create(rcu_gp_kthread, NULL, "%s", rcu_state.name);</span>
+<span class='curline'><a href='../S/144.html#L4268'>rcu_state</a>        4268 rcu/tree.c     	WRITE_ONCE(rcu_state.gp_activity, jiffies);</span>
+<span class='curline'><a href='../S/144.html#L4269'>rcu_state</a>        4269 rcu/tree.c     	WRITE_ONCE(rcu_state.gp_req_activity, jiffies);</span>
+<span class='curline'><a href='../S/144.html#L4271'>rcu_state</a>        4271 rcu/tree.c     	smp_store_release(&amp;rcu_state.gp_kthread, t);  /* ^^^ */</span>
+<span class='curline'><a href='../S/144.html#L4324'>rcu_state</a>        4324 rcu/tree.c     		rcu_state.level[i] =</span>
+<span class='curline'><a href='../S/144.html#L4325'>rcu_state</a>        4325 rcu/tree.c     			rcu_state.level[i - 1] + num_rcu_lvl[i - 1];</span>
+<span class='curline'><a href='../S/144.html#L4332'>rcu_state</a>        4332 rcu/tree.c     		rnp = rcu_state.level[i];</span>
+<span class='curline'><a href='../S/144.html#L4340'>rcu_state</a>        4340 rcu/tree.c     			rnp-&gt;gp_seq = rcu_state.gp_seq;</span>
+<span class='curline'><a href='../S/144.html#L4341'>rcu_state</a>        4341 rcu/tree.c     			rnp-&gt;gp_seq_needed = rcu_state.gp_seq;</span>
+<span class='curline'><a href='../S/144.html#L4342'>rcu_state</a>        4342 rcu/tree.c     			rnp-&gt;completedqs = rcu_state.gp_seq;</span>
+<span class='curline'><a href='../S/144.html#L4356'>rcu_state</a>        4356 rcu/tree.c     				rnp-&gt;parent = rcu_state.level[i - 1] +</span>
+<span class='curline'><a href='../S/144.html#L4370'>rcu_state</a>        4370 rcu/tree.c     	init_swait_queue_head(&amp;rcu_state.gp_wq);</span>
+<span class='curline'><a href='../S/144.html#L4371'>rcu_state</a>        4371 rcu/tree.c     	init_swait_queue_head(&amp;rcu_state.expedited_wq);</span>
+<span class='curline'><a href='../S/131.html#L20'>rcu_state</a>          20 rcu/tree_exp.h 	rcu_seq_start(&amp;rcu_state.expedited_sequence);</span>
+<span class='curline'><a href='../S/131.html#L29'>rcu_state</a>          29 rcu/tree_exp.h 	return rcu_seq_endval(&amp;rcu_state.expedited_sequence);</span>
+<span class='curline'><a href='../S/131.html#L37'>rcu_state</a>          37 rcu/tree_exp.h 	rcu_seq_end(&amp;rcu_state.expedited_sequence);</span>
+<span class='curline'><a href='../S/131.html#L51'>rcu_state</a>          51 rcu/tree_exp.h 	s = rcu_seq_snap(&amp;rcu_state.expedited_sequence);</span>
+<span class='curline'><a href='../S/131.html#L52'>rcu_state</a>          52 rcu/tree_exp.h 	trace_rcu_exp_grace_period(rcu_state.name, s, TPS("snap"));</span>
+<span class='curline'><a href='../S/131.html#L63'>rcu_state</a>          63 rcu/tree_exp.h 	return rcu_seq_done(&amp;rcu_state.expedited_sequence, s);</span>
+<span class='curline'><a href='../S/131.html#L79'>rcu_state</a>          79 rcu/tree_exp.h 	int ncpus = smp_load_acquire(&amp;rcu_state.ncpus); /* Order vs. locking. */</span>
+<span class='curline'><a href='../S/131.html#L84'>rcu_state</a>          84 rcu/tree_exp.h 	if (likely(ncpus == rcu_state.ncpus_snap))</span>
+<span class='curline'><a href='../S/131.html#L86'>rcu_state</a>          86 rcu/tree_exp.h 	rcu_state.ncpus_snap = ncpus;</span>
+<span class='curline'><a href='../S/131.html#L201'>rcu_state</a>         201 rcu/tree_exp.h 				swake_up_one(&amp;rcu_state.expedited_wq);</span>
+<span class='curline'><a href='../S/131.html#L266'>rcu_state</a>         266 rcu/tree_exp.h 		trace_rcu_exp_grace_period(rcu_state.name, s, TPS("done"));</span>
+<span class='curline'><a href='../S/131.html#L290'>rcu_state</a>         290 rcu/tree_exp.h 	    mutex_trylock(&amp;rcu_state.exp_mutex))</span>
+<span class='curline'><a href='../S/131.html#L310'>rcu_state</a>         310 rcu/tree_exp.h 			trace_rcu_exp_funnel_lock(rcu_state.name, rnp-&gt;level,</span>
+<span class='curline'><a href='../S/131.html#L319'>rcu_state</a>         319 rcu/tree_exp.h 		trace_rcu_exp_funnel_lock(rcu_state.name, rnp-&gt;level,</span>
+<span class='curline'><a href='../S/131.html#L322'>rcu_state</a>         322 rcu/tree_exp.h 	mutex_lock(&amp;rcu_state.exp_mutex);</span>
+<span class='curline'><a href='../S/131.html#L325'>rcu_state</a>         325 rcu/tree_exp.h 		mutex_unlock(&amp;rcu_state.exp_mutex);</span>
+<span class='curline'><a href='../S/131.html#L329'>rcu_state</a>         329 rcu/tree_exp.h 	trace_rcu_exp_grace_period(rcu_state.name, s, TPS("start"));</span>
+<span class='curline'><a href='../S/131.html#L405'>rcu_state</a>         405 rcu/tree_exp.h 			trace_rcu_exp_grace_period(rcu_state.name, rcu_exp_gp_seq_endval(), TPS("selectofl"));</span>
+<span class='curline'><a href='../S/131.html#L428'>rcu_state</a>         428 rcu/tree_exp.h 	trace_rcu_exp_grace_period(rcu_state.name, rcu_exp_gp_seq_endval(), TPS("reset"));</span>
+<span class='curline'><a href='../S/131.html#L430'>rcu_state</a>         430 rcu/tree_exp.h 	trace_rcu_exp_grace_period(rcu_state.name, rcu_exp_gp_seq_endval(), TPS("select"));</span>
+<span class='curline'><a href='../S/131.html#L471'>rcu_state</a>         471 rcu/tree_exp.h 	t = swait_event_timeout_exclusive(rcu_state.expedited_wq,</span>
+<span class='curline'><a href='../S/131.html#L497'>rcu_state</a>         497 rcu/tree_exp.h 	trace_rcu_exp_grace_period(rcu_state.name, rcu_exp_gp_seq_endval(), TPS("startwait"));</span>
+<span class='curline'><a href='../S/131.html#L524'>rcu_state</a>         524 rcu/tree_exp.h 		trace_rcu_stall_warning(rcu_state.name, TPS("ExpeditedStall"));</span>
+<span class='curline'><a href='../S/131.html#L526'>rcu_state</a>         526 rcu/tree_exp.h 		       rcu_state.name);</span>
+<span class='curline'><a href='../S/131.html#L545'>rcu_state</a>         545 rcu/tree_exp.h 			jiffies - jiffies_start, rcu_state.expedited_sequence,</span>
+<span class='curline'><a href='../S/131.html#L589'>rcu_state</a>         589 rcu/tree_exp.h 	mutex_lock(&amp;rcu_state.exp_wake_mutex);</span>
+<span class='curline'><a href='../S/131.html#L591'>rcu_state</a>         591 rcu/tree_exp.h 	trace_rcu_exp_grace_period(rcu_state.name, s, TPS("end"));</span>
+<span class='curline'><a href='../S/131.html#L604'>rcu_state</a>         604 rcu/tree_exp.h 	trace_rcu_exp_grace_period(rcu_state.name, s, TPS("endwake"));</span>
+<span class='curline'><a href='../S/131.html#L605'>rcu_state</a>         605 rcu/tree_exp.h 	mutex_unlock(&amp;rcu_state.exp_wake_mutex);</span>
+<span class='curline'><a href='../S/131.html#L858'>rcu_state</a>         858 rcu/tree_exp.h 	mutex_unlock(&amp;rcu_state.exp_mutex);</span>
+<span class='curline'><a href='../S/126.html#L314'>rcu_state</a>         314 rcu/tree_plugin.h 		trace_rcu_preempt_task(rcu_state.name,</span>
+<span class='curline'><a href='../S/126.html#L379'>rcu_state</a>         379 rcu/tree_plugin.h 	if (IS_ENABLED(CONFIG_RCU_STRICT_GRACE_PERIOD) &amp;&amp; rcu_state.gp_kthread)</span>
+<span class='curline'><a href='../S/126.html#L708'>rcu_state</a>         708 rcu/tree_plugin.h 	    time_after(jiffies, rcu_state.gp_start + HZ))</span>
+<span class='curline'><a href='../S/126.html#L791'>rcu_state</a>         791 rcu/tree_plugin.h 	   irqs_disabled() || preempt_count() || !rcu_state.gp_kthread)</span>
+<span class='curline'><a href='../S/126.html#L1096'>rcu_state</a>        1096 rcu/tree_plugin.h 	     (!time_after(rnp-&gt;boost_time, jiffies) || rcu_state.cbovld))) {</span>
+<span class='curline'><a href='../S/126.html#L1144'>rcu_state</a>        1144 rcu/tree_plugin.h 	rcu_state.boost = 1;</span>
+<span class='curline'><a href='../S/126.html#L1643'>rcu_state</a>        1643 rcu/tree_plugin.h 		trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu,</span>
+<span class='curline'><a href='../S/126.html#L1654'>rcu_state</a>        1654 rcu/tree_plugin.h 		trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu, TPS("DoWake"));</span>
+<span class='curline'><a href='../S/126.html#L1672'>rcu_state</a>        1672 rcu/tree_plugin.h 	trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu, reason);</span>
+<span class='curline'><a href='../S/126.html#L1798'>rcu_state</a>        1798 rcu/tree_plugin.h 			trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu,</span>
+<span class='curline'><a href='../S/126.html#L1813'>rcu_state</a>        1813 rcu/tree_plugin.h 				trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu,</span>
+<span class='curline'><a href='../S/126.html#L1836'>rcu_state</a>        1836 rcu/tree_plugin.h 		trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu, TPS("FirstBQ"));</span>
+<span class='curline'><a href='../S/126.html#L1846'>rcu_state</a>        1846 rcu/tree_plugin.h 			trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu,</span>
+<span class='curline'><a href='../S/126.html#L1850'>rcu_state</a>        1850 rcu/tree_plugin.h 			trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu,</span>
+<span class='curline'><a href='../S/126.html#L1876'>rcu_state</a>        1876 rcu/tree_plugin.h 		trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu,</span>
+<span class='curline'><a href='../S/126.html#L1888'>rcu_state</a>        1888 rcu/tree_plugin.h 			trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu,</span>
+<span class='curline'><a href='../S/126.html#L1913'>rcu_state</a>        1913 rcu/tree_plugin.h 		trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu, TPS("WakeNot"));</span>
+<span class='curline'><a href='../S/126.html#L1925'>rcu_state</a>        1925 rcu/tree_plugin.h 	trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu, TPS("Timer"));</span>
+<span class='curline'><a href='../S/126.html#L1959'>rcu_state</a>        1959 rcu/tree_plugin.h 		trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu, TPS("Check"));</span>
+<span class='curline'><a href='../S/126.html#L1973'>rcu_state</a>        1973 rcu/tree_plugin.h 			trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu,</span>
+<span class='curline'><a href='../S/126.html#L2004'>rcu_state</a>        2004 rcu/tree_plugin.h 			trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu,</span>
+<span class='curline'><a href='../S/126.html#L2036'>rcu_state</a>        2036 rcu/tree_plugin.h 			trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Poll"));</span>
+<span class='curline'><a href='../S/126.html#L2040'>rcu_state</a>        2040 rcu/tree_plugin.h 		trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Sleep"));</span>
+<span class='curline'><a href='../S/126.html#L2043'>rcu_state</a>        2043 rcu/tree_plugin.h 		trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("EndSleep"));</span>
+<span class='curline'><a href='../S/126.html#L2116'>rcu_state</a>        2116 rcu/tree_plugin.h 	trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu, TPS("CBSleep"));</span>
+<span class='curline'><a href='../S/126.html#L2128'>rcu_state</a>        2128 rcu/tree_plugin.h 	trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu, TPS("WokeEmpty"));</span>
+<span class='curline'><a href='../S/126.html#L2168'>rcu_state</a>        2168 rcu/tree_plugin.h 	trace_rcu_nocb_wake(rcu_state.name, rdp-&gt;cpu, TPS("DeferredWake"));</span>
+<span class='curline'><a href='../S/126.html#L2285'>rcu_state</a>        2285 rcu/tree_plugin.h 			"rcuo%c/%d", rcu_state.abbr, cpu);</span>
+<span class='curline'><a href='../S/126.html#L2558'>rcu_state</a>        2558 rcu/tree_plugin.h 	     time_before(jiffies, READ_ONCE(rcu_state.gp_start) + HZ)))</span>
+<span class='curline'><a href='../S/130.html#L72'>rcu_state</a>          72 rcu/tree_stall.h 	return !time_before(j, READ_ONCE(rcu_state.gp_start) + d);</span>
+<span class='curline'><a href='../S/130.html#L124'>rcu_state</a>         124 rcu/tree_stall.h 	WRITE_ONCE(rcu_state.jiffies_stall, jiffies + ULONG_MAX / 2);</span>
+<span class='curline'><a href='../S/130.html#L137'>rcu_state</a>         137 rcu/tree_stall.h 	WRITE_ONCE(rcu_state.gp_start, j);</span>
+<span class='curline'><a href='../S/130.html#L140'>rcu_state</a>         140 rcu/tree_stall.h 	WRITE_ONCE(rcu_state.jiffies_stall, j + j1);</span>
+<span class='curline'><a href='../S/130.html#L141'>rcu_state</a>         141 rcu/tree_stall.h 	rcu_state.jiffies_resched = j + j1 / 2;</span>
+<span class='curline'><a href='../S/130.html#L142'>rcu_state</a>         142 rcu/tree_stall.h 	rcu_state.n_force_qs_gpstart = READ_ONCE(rcu_state.n_force_qs);</span>
+<span class='curline'><a href='../S/130.html#L163'>rcu_state</a>         163 rcu/tree_stall.h 	j = READ_ONCE(rcu_state.jiffies_kick_kthreads);</span>
+<span class='curline'><a href='../S/130.html#L164'>rcu_state</a>         164 rcu/tree_stall.h 	if (time_after(jiffies, j) &amp;&amp; rcu_state.gp_kthread &amp;&amp;</span>
+<span class='curline'><a href='../S/130.html#L165'>rcu_state</a>         165 rcu/tree_stall.h 	    (rcu_gp_in_progress() || READ_ONCE(rcu_state.gp_flags))) {</span>
+<span class='curline'><a href='../S/130.html#L167'>rcu_state</a>         167 rcu/tree_stall.h 			  rcu_state.name);</span>
+<span class='curline'><a href='../S/130.html#L169'>rcu_state</a>         169 rcu/tree_stall.h 		wake_up_process(rcu_state.gp_kthread);</span>
+<span class='curline'><a href='../S/130.html#L170'>rcu_state</a>         170 rcu/tree_stall.h 		WRITE_ONCE(rcu_state.jiffies_kick_kthreads, j + HZ);</span>
+<span class='curline'><a href='../S/130.html#L382'>rcu_state</a>         382 rcu/tree_stall.h 	unsigned long j = jiffies - READ_ONCE(rcu_state.gp_activity);</span>
+<span class='curline'><a href='../S/130.html#L415'>rcu_state</a>         415 rcu/tree_stall.h 	ticks_value = rcu_seq_ctr(rcu_state.gp_seq - rdp-&gt;gp_seq);</span>
+<span class='curline'><a href='../S/130.html#L438'>rcu_state</a>         438 rcu/tree_stall.h 	       data_race(rcu_state.n_force_qs) - rcu_state.n_force_qs_gpstart,</span>
+<span class='curline'><a href='../S/130.html#L446'>rcu_state</a>         446 rcu/tree_stall.h 	struct task_struct *gpk = rcu_state.gp_kthread;</span>
+<span class='curline'><a href='../S/130.html#L451'>rcu_state</a>         451 rcu/tree_stall.h 		       rcu_state.name, j,</span>
+<span class='curline'><a href='../S/130.html#L452'>rcu_state</a>         452 rcu/tree_stall.h 		       (long)rcu_seq_current(&amp;rcu_state.gp_seq),</span>
+<span class='curline'><a href='../S/130.html#L453'>rcu_state</a>         453 rcu/tree_stall.h 		       data_race(rcu_state.gp_flags),</span>
+<span class='curline'><a href='../S/130.html#L454'>rcu_state</a>         454 rcu/tree_stall.h 		       gp_state_getname(rcu_state.gp_state), rcu_state.gp_state,</span>
+<span class='curline'><a href='../S/130.html#L457'>rcu_state</a>         457 rcu/tree_stall.h 			pr_err("\tUnless %s kthread gets sufficient CPU time, OOM is now expected behavior.\n", rcu_state.name);</span>
+<span class='curline'><a href='../S/130.html#L485'>rcu_state</a>         485 rcu/tree_stall.h 	trace_rcu_stall_warning(rcu_state.name, TPS("StallDetected"));</span>
+<span class='curline'><a href='../S/130.html#L486'>rcu_state</a>         486 rcu/tree_stall.h 	pr_err("INFO: %s detected stalls on CPUs/tasks:\n", rcu_state.name);</span>
+<span class='curline'><a href='../S/130.html#L503'>rcu_state</a>         503 rcu/tree_stall.h 	       (long)rcu_seq_current(&amp;rcu_state.gp_seq), totqlen);</span>
+<span class='curline'><a href='../S/130.html#L511'>rcu_state</a>         511 rcu/tree_stall.h 		if (rcu_seq_current(&amp;rcu_state.gp_seq) != gp_seq) {</span>
+<span class='curline'><a href='../S/130.html#L515'>rcu_state</a>         515 rcu/tree_stall.h 			gpa = data_race(rcu_state.gp_activity);</span>
+<span class='curline'><a href='../S/130.html#L517'>rcu_state</a>         517 rcu/tree_stall.h 			       rcu_state.name, j - gpa, j, gpa,</span>
+<span class='curline'><a href='../S/130.html#L523'>rcu_state</a>         523 rcu/tree_stall.h 	if (ULONG_CMP_GE(jiffies, READ_ONCE(rcu_state.jiffies_stall)))</span>
+<span class='curline'><a href='../S/130.html#L524'>rcu_state</a>         524 rcu/tree_stall.h 		WRITE_ONCE(rcu_state.jiffies_stall,</span>
+<span class='curline'><a href='../S/130.html#L552'>rcu_state</a>         552 rcu/tree_stall.h 	trace_rcu_stall_warning(rcu_state.name, TPS("SelfDetected"));</span>
+<span class='curline'><a href='../S/130.html#L553'>rcu_state</a>         553 rcu/tree_stall.h 	pr_err("INFO: %s self-detected stall on CPU\n", rcu_state.name);</span>
+<span class='curline'><a href='../S/130.html#L561'>rcu_state</a>         561 rcu/tree_stall.h 		(long)rcu_seq_current(&amp;rcu_state.gp_seq), totqlen);</span>
+<span class='curline'><a href='../S/130.html#L569'>rcu_state</a>         569 rcu/tree_stall.h 	if (ULONG_CMP_GE(jiffies, READ_ONCE(rcu_state.jiffies_stall)))</span>
+<span class='curline'><a href='../S/130.html#L570'>rcu_state</a>         570 rcu/tree_stall.h 		WRITE_ONCE(rcu_state.jiffies_stall,</span>
+<span class='curline'><a href='../S/130.html#L621'>rcu_state</a>         621 rcu/tree_stall.h 	gs1 = READ_ONCE(rcu_state.gp_seq);</span>
+<span class='curline'><a href='../S/130.html#L623'>rcu_state</a>         623 rcu/tree_stall.h 	js = READ_ONCE(rcu_state.jiffies_stall);</span>
+<span class='curline'><a href='../S/130.html#L625'>rcu_state</a>         625 rcu/tree_stall.h 	gps = READ_ONCE(rcu_state.gp_start);</span>
+<span class='curline'><a href='../S/130.html#L627'>rcu_state</a>         627 rcu/tree_stall.h 	gs2 = READ_ONCE(rcu_state.gp_seq);</span>
+<span class='curline'><a href='../S/130.html#L636'>rcu_state</a>         636 rcu/tree_stall.h 	    cmpxchg(&amp;rcu_state.jiffies_stall, js, jn) == js) {</span>
+<span class='curline'><a href='../S/130.html#L645'>rcu_state</a>         645 rcu/tree_stall.h 		   cmpxchg(&amp;rcu_state.jiffies_stall, js, jn) == js) {</span>
+<span class='curline'><a href='../S/130.html#L672'>rcu_state</a>         672 rcu/tree_stall.h 	struct task_struct *t = READ_ONCE(rcu_state.gp_kthread);</span>
+<span class='curline'><a href='../S/130.html#L675'>rcu_state</a>         675 rcu/tree_stall.h 	ja = j - data_race(rcu_state.gp_activity);</span>
+<span class='curline'><a href='../S/130.html#L676'>rcu_state</a>         676 rcu/tree_stall.h 	jr = j - data_race(rcu_state.gp_req_activity);</span>
+<span class='curline'><a href='../S/130.html#L677'>rcu_state</a>         677 rcu/tree_stall.h 	jw = j - data_race(rcu_state.gp_wake_time);</span>
+<span class='curline'><a href='../S/130.html#L679'>rcu_state</a>         679 rcu/tree_stall.h 		rcu_state.name, gp_state_getname(rcu_state.gp_state),</span>
+<span class='curline'><a href='../S/130.html#L680'>rcu_state</a>         680 rcu/tree_stall.h 		rcu_state.gp_state, t ? t-&gt;state : 0x1ffffL,</span>
+<span class='curline'><a href='../S/130.html#L681'>rcu_state</a>         681 rcu/tree_stall.h 		ja, jr, jw, (long)data_race(rcu_state.gp_wake_seq),</span>
+<span class='curline'><a href='../S/130.html#L682'>rcu_state</a>         682 rcu/tree_stall.h 		(long)data_race(rcu_state.gp_seq),</span>
+<span class='curline'><a href='../S/130.html#L684'>rcu_state</a>         684 rcu/tree_stall.h 		data_race(rcu_state.gp_flags));</span>
+<span class='curline'><a href='../S/130.html#L686'>rcu_state</a>         686 rcu/tree_stall.h 		if (ULONG_CMP_GE(READ_ONCE(rcu_state.gp_seq),</span>
+<span class='curline'><a href='../S/130.html#L697'>rcu_state</a>         697 rcu/tree_stall.h 			    ULONG_CMP_GE(READ_ONCE(rcu_state.gp_seq),</span>
+<span class='curline'><a href='../S/130.html#L730'>rcu_state</a>         730 rcu/tree_stall.h 	    !smp_load_acquire(&amp;rcu_state.gp_kthread)) // Get stable kthread.</span>
+<span class='curline'><a href='../S/130.html#L733'>rcu_state</a>         733 rcu/tree_stall.h 	if (time_before(j, READ_ONCE(rcu_state.gp_req_activity) + gpssdelay) ||</span>
+<span class='curline'><a href='../S/130.html#L734'>rcu_state</a>         734 rcu/tree_stall.h 	    time_before(j, READ_ONCE(rcu_state.gp_activity) + gpssdelay) ||</span>
+<span class='curline'><a href='../S/130.html#L743'>rcu_state</a>         743 rcu/tree_stall.h 	    time_before(j, READ_ONCE(rcu_state.gp_req_activity) + gpssdelay) ||</span>
+<span class='curline'><a href='../S/130.html#L744'>rcu_state</a>         744 rcu/tree_stall.h 	    time_before(j, READ_ONCE(rcu_state.gp_activity) + gpssdelay) ||</span>
+<span class='curline'><a href='../S/130.html#L757'>rcu_state</a>         757 rcu/tree_stall.h 	    time_before(j, READ_ONCE(rcu_state.gp_req_activity) + gpssdelay) ||</span>
+<span class='curline'><a href='../S/130.html#L758'>rcu_state</a>         758 rcu/tree_stall.h 	    time_before(j, READ_ONCE(rcu_state.gp_activity) + gpssdelay) ||</span>
+<span class='curline'><a href='../S/130.html#L788'>rcu_state</a>         788 rcu/tree_stall.h 			__func__, jiffies - rcu_state.gp_start);</span>
+<span class='curline'><a href='../S/130.html#L792'>rcu_state</a>         792 rcu/tree_stall.h 			__func__, jiffies - rcu_state.gp_end);</span>
+</pre>
+</body>
+</html>

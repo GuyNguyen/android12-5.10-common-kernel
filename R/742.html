@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>LOCK_EVENT</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/17.html#L16'>LOCK_EVENT</a>         16 locking/lock_events_list.h #ifndef LOCK_EVENT</span>
+<span class='curline'><a href='../S/17.html#L25'>LOCK_EVENT</a>         25 locking/lock_events_list.h LOCK_EVENT(pv_hash_hops)	/* Average # of hops per hashing operation */</span>
+<span class='curline'><a href='../S/17.html#L26'>LOCK_EVENT</a>         26 locking/lock_events_list.h LOCK_EVENT(pv_kick_unlock)	/* # of vCPU kicks issued at unlock time   */</span>
+<span class='curline'><a href='../S/17.html#L27'>LOCK_EVENT</a>         27 locking/lock_events_list.h LOCK_EVENT(pv_kick_wake)	/* # of vCPU kicks for pv_latency_wake	   */</span>
+<span class='curline'><a href='../S/17.html#L28'>LOCK_EVENT</a>         28 locking/lock_events_list.h LOCK_EVENT(pv_latency_kick)	/* Average latency (ns) of vCPU kick	   */</span>
+<span class='curline'><a href='../S/17.html#L29'>LOCK_EVENT</a>         29 locking/lock_events_list.h LOCK_EVENT(pv_latency_wake)	/* Average latency (ns) of kick-to-wakeup  */</span>
+<span class='curline'><a href='../S/17.html#L30'>LOCK_EVENT</a>         30 locking/lock_events_list.h LOCK_EVENT(pv_lock_stealing)	/* # of lock stealing operations	   */</span>
+<span class='curline'><a href='../S/17.html#L31'>LOCK_EVENT</a>         31 locking/lock_events_list.h LOCK_EVENT(pv_spurious_wakeup)	/* # of spurious wakeups in non-head vCPUs */</span>
+<span class='curline'><a href='../S/17.html#L32'>LOCK_EVENT</a>         32 locking/lock_events_list.h LOCK_EVENT(pv_wait_again)	/* # of wait's after queue head vCPU kick  */</span>
+<span class='curline'><a href='../S/17.html#L33'>LOCK_EVENT</a>         33 locking/lock_events_list.h LOCK_EVENT(pv_wait_early)	/* # of early vCPU wait's		   */</span>
+<span class='curline'><a href='../S/17.html#L34'>LOCK_EVENT</a>         34 locking/lock_events_list.h LOCK_EVENT(pv_wait_head)	/* # of vCPU wait's at the queue head	   */</span>
+<span class='curline'><a href='../S/17.html#L35'>LOCK_EVENT</a>         35 locking/lock_events_list.h LOCK_EVENT(pv_wait_node)	/* # of vCPU wait's at non-head queue node */</span>
+<span class='curline'><a href='../S/17.html#L44'>LOCK_EVENT</a>         44 locking/lock_events_list.h LOCK_EVENT(lock_pending)	/* # of locking ops via pending code	     */</span>
+<span class='curline'><a href='../S/17.html#L45'>LOCK_EVENT</a>         45 locking/lock_events_list.h LOCK_EVENT(lock_slowpath)	/* # of locking ops via MCS lock queue	     */</span>
+<span class='curline'><a href='../S/17.html#L46'>LOCK_EVENT</a>         46 locking/lock_events_list.h LOCK_EVENT(lock_use_node2)	/* # of locking ops that use 2nd percpu node */</span>
+<span class='curline'><a href='../S/17.html#L47'>LOCK_EVENT</a>         47 locking/lock_events_list.h LOCK_EVENT(lock_use_node3)	/* # of locking ops that use 3rd percpu node */</span>
+<span class='curline'><a href='../S/17.html#L48'>LOCK_EVENT</a>         48 locking/lock_events_list.h LOCK_EVENT(lock_use_node4)	/* # of locking ops that use 4th percpu node */</span>
+<span class='curline'><a href='../S/17.html#L49'>LOCK_EVENT</a>         49 locking/lock_events_list.h LOCK_EVENT(lock_no_node)	/* # of locking ops w/o using percpu node    */</span>
+<span class='curline'><a href='../S/17.html#L55'>LOCK_EVENT</a>         55 locking/lock_events_list.h LOCK_EVENT(rwsem_sleep_reader)	/* # of reader sleeps			*/</span>
+<span class='curline'><a href='../S/17.html#L56'>LOCK_EVENT</a>         56 locking/lock_events_list.h LOCK_EVENT(rwsem_sleep_writer)	/* # of writer sleeps			*/</span>
+<span class='curline'><a href='../S/17.html#L57'>LOCK_EVENT</a>         57 locking/lock_events_list.h LOCK_EVENT(rwsem_wake_reader)	/* # of reader wakeups			*/</span>
+<span class='curline'><a href='../S/17.html#L58'>LOCK_EVENT</a>         58 locking/lock_events_list.h LOCK_EVENT(rwsem_wake_writer)	/* # of writer wakeups			*/</span>
+<span class='curline'><a href='../S/17.html#L59'>LOCK_EVENT</a>         59 locking/lock_events_list.h LOCK_EVENT(rwsem_opt_rlock)	/* # of opt-acquired read locks		*/</span>
+<span class='curline'><a href='../S/17.html#L60'>LOCK_EVENT</a>         60 locking/lock_events_list.h LOCK_EVENT(rwsem_opt_wlock)	/* # of opt-acquired write locks	*/</span>
+<span class='curline'><a href='../S/17.html#L61'>LOCK_EVENT</a>         61 locking/lock_events_list.h LOCK_EVENT(rwsem_opt_fail)	/* # of failed optspins			*/</span>
+<span class='curline'><a href='../S/17.html#L62'>LOCK_EVENT</a>         62 locking/lock_events_list.h LOCK_EVENT(rwsem_opt_nospin)	/* # of disabled optspins		*/</span>
+<span class='curline'><a href='../S/17.html#L63'>LOCK_EVENT</a>         63 locking/lock_events_list.h LOCK_EVENT(rwsem_opt_norspin)	/* # of disabled reader-only optspins	*/</span>
+<span class='curline'><a href='../S/17.html#L64'>LOCK_EVENT</a>         64 locking/lock_events_list.h LOCK_EVENT(rwsem_opt_rlock2)	/* # of opt-acquired 2ndary read locks	*/</span>
+<span class='curline'><a href='../S/17.html#L65'>LOCK_EVENT</a>         65 locking/lock_events_list.h LOCK_EVENT(rwsem_rlock)		/* # of read locks acquired		*/</span>
+<span class='curline'><a href='../S/17.html#L66'>LOCK_EVENT</a>         66 locking/lock_events_list.h LOCK_EVENT(rwsem_rlock_fast)	/* # of fast read locks acquired	*/</span>
+<span class='curline'><a href='../S/17.html#L67'>LOCK_EVENT</a>         67 locking/lock_events_list.h LOCK_EVENT(rwsem_rlock_fail)	/* # of failed read lock acquisitions	*/</span>
+<span class='curline'><a href='../S/17.html#L68'>LOCK_EVENT</a>         68 locking/lock_events_list.h LOCK_EVENT(rwsem_rlock_handoff)	/* # of read lock handoffs		*/</span>
+<span class='curline'><a href='../S/17.html#L69'>LOCK_EVENT</a>         69 locking/lock_events_list.h LOCK_EVENT(rwsem_wlock)		/* # of write locks acquired		*/</span>
+<span class='curline'><a href='../S/17.html#L70'>LOCK_EVENT</a>         70 locking/lock_events_list.h LOCK_EVENT(rwsem_wlock_fail)	/* # of failed write lock acquisitions	*/</span>
+<span class='curline'><a href='../S/17.html#L71'>LOCK_EVENT</a>         71 locking/lock_events_list.h LOCK_EVENT(rwsem_wlock_handoff)	/* # of write lock handoffs		*/</span>
+</pre>
+</body>
+</html>

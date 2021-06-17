@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>sink_value</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/489.html#L265'>sink_value</a>        265 kcsan/kcsan-test.c static noinline void test_kernel_read(void) { sink_value(test_var); }</span>
+<span class='curline'><a href='../S/489.html#L279'>sink_value</a>        279 kcsan/kcsan-test.c 	sink_value(READ_ONCE(test_var));</span>
+<span class='curline'><a href='../S/489.html#L384'>sink_value</a>        384 kcsan/kcsan-test.c 	sink_value((long)jiffies);</span>
+<span class='curline'><a href='../S/489.html#L393'>sink_value</a>        393 kcsan/kcsan-test.c 		sink_value(test_var);</span>
+<span class='curline'><a href='../S/489.html#L557'>sink_value</a>        557 kcsan/kcsan-test.c 		sink_value(READ_ONCE(test_var)); /* induce value-change */</span>
+</pre>
+</body>
+</html>

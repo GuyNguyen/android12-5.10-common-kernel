@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>numa_group</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/464.html#L1120'>numa_group</a>       1120 sched/fair.c   static struct numa_group *deref_task_numa_group(struct task_struct *p)</span>
+<span class='curline'><a href='../S/464.html#L1122'>numa_group</a>       1122 sched/fair.c   	return rcu_dereference_check(p-&gt;numa_group, p == current ||</span>
+<span class='curline'><a href='../S/464.html#L1126'>numa_group</a>       1126 sched/fair.c   static struct numa_group *deref_curr_numa_group(struct task_struct *p)</span>
+<span class='curline'><a href='../S/464.html#L1128'>numa_group</a>       1128 sched/fair.c   	return rcu_dereference_protected(p-&gt;numa_group, p == current);</span>
+<span class='curline'><a href='../S/464.html#L1131'>numa_group</a>       1131 sched/fair.c   static inline unsigned long group_faults_priv(struct numa_group *ng);</span>
+<span class='curline'><a href='../S/464.html#L1132'>numa_group</a>       1132 sched/fair.c   static inline unsigned long group_faults_shared(struct numa_group *ng);</span>
+<span class='curline'><a href='../S/464.html#L1174'>numa_group</a>       1174 sched/fair.c   	struct numa_group *ng;</span>
+<span class='curline'><a href='../S/464.html#L1178'>numa_group</a>       1178 sched/fair.c   	ng = rcu_dereference(p-&gt;numa_group);</span>
+<span class='curline'><a href='../S/464.html#L1196'>numa_group</a>       1196 sched/fair.c   	struct numa_group *ng;</span>
+<span class='curline'><a href='../S/464.html#L1241'>numa_group</a>       1241 sched/fair.c   	struct numa_group *ng;</span>
+<span class='curline'><a href='../S/464.html#L1245'>numa_group</a>       1245 sched/fair.c   	ng = rcu_dereference(p-&gt;numa_group);</span>
+<span class='curline'><a href='../S/464.html#L1275'>numa_group</a>       1275 sched/fair.c   	struct numa_group *ng = deref_task_numa_group(p);</span>
+<span class='curline'><a href='../S/464.html#L1284'>numa_group</a>       1284 sched/fair.c   static inline unsigned long group_faults_cpu(struct numa_group *group, int nid)</span>
+<span class='curline'><a href='../S/464.html#L1290'>numa_group</a>       1290 sched/fair.c   static inline unsigned long group_faults_priv(struct numa_group *ng)</span>
+<span class='curline'><a href='../S/464.html#L1302'>numa_group</a>       1302 sched/fair.c   static inline unsigned long group_faults_shared(struct numa_group *ng)</span>
+<span class='curline'><a href='../S/464.html#L1321'>numa_group</a>       1321 sched/fair.c   static bool numa_is_active_node(int nid, struct numa_group *ng)</span>
+<span class='curline'><a href='../S/464.html#L1419'>numa_group</a>       1419 sched/fair.c   	struct numa_group *ng = deref_task_numa_group(p);</span>
+<span class='curline'><a href='../S/464.html#L1439'>numa_group</a>       1439 sched/fair.c   	struct numa_group *ng = deref_curr_numa_group(p);</span>
+<span class='curline'><a href='../S/464.html#L1753'>numa_group</a>       1753 sched/fair.c   	struct numa_group *cur_ng, *p_ng = deref_curr_numa_group(env-&gt;p);</span>
+<span class='curline'><a href='../S/464.html#L1811'>numa_group</a>       1811 sched/fair.c   	cur_ng = rcu_dereference(cur-&gt;numa_group);</span>
+<span class='curline'><a href='../S/464.html#L2003'>numa_group</a>       2003 sched/fair.c   	struct numa_group *ng;</span>
+<span class='curline'><a href='../S/464.html#L2146'>numa_group</a>       2146 sched/fair.c   static void numa_group_count_active_nodes(struct numa_group *numa_group)</span>
+<span class='curline'><a href='../S/464.html#L2152'>numa_group</a>       2152 sched/fair.c   		faults = group_faults_cpu(numa_group, nid);</span>
+<span class='curline'><a href='../S/464.html#L2158'>numa_group</a>       2158 sched/fair.c   		faults = group_faults_cpu(numa_group, nid);</span>
+<span class='curline'><a href='../S/464.html#L2163'>numa_group</a>       2163 sched/fair.c   	numa_group-&gt;max_faults_cpu = max_faults;</span>
+<span class='curline'><a href='../S/464.html#L2164'>numa_group</a>       2164 sched/fair.c   	numa_group-&gt;active_nodes = active_nodes;</span>
+<span class='curline'><a href='../S/464.html#L2382'>numa_group</a>       2382 sched/fair.c   	struct numa_group *ng;</span>
+<span class='curline'><a href='../S/464.html#L2484'>numa_group</a>       2484 sched/fair.c   static inline int get_numa_group(struct numa_group *grp)</span>
+<span class='curline'><a href='../S/464.html#L2489'>numa_group</a>       2489 sched/fair.c   static inline void put_numa_group(struct numa_group *grp)</span>
+<span class='curline'><a href='../S/464.html#L2498'>numa_group</a>       2498 sched/fair.c   	struct numa_group *grp, *my_grp;</span>
+<span class='curline'><a href='../S/464.html#L2505'>numa_group</a>       2505 sched/fair.c   		unsigned int size = sizeof(struct numa_group) +</span>
+<span class='curline'><a href='../S/464.html#L2527'>numa_group</a>       2527 sched/fair.c   		rcu_assign_pointer(p-&gt;numa_group, grp);</span>
+<span class='curline'><a href='../S/464.html#L2536'>numa_group</a>       2536 sched/fair.c   	grp = rcu_dereference(tsk-&gt;numa_group);</span>
+<span class='curline'><a href='../S/464.html#L2592'>numa_group</a>       2592 sched/fair.c   	rcu_assign_pointer(p-&gt;numa_group, grp);</span>
+<span class='curline'><a href='../S/464.html#L2612'>numa_group</a>       2612 sched/fair.c   	struct numa_group *grp = rcu_dereference_raw(p-&gt;numa_group);</span>
+<span class='curline'><a href='../S/464.html#L2628'>numa_group</a>       2628 sched/fair.c   		RCU_INIT_POINTER(p-&gt;numa_group, NULL);</span>
+<span class='curline'><a href='../S/464.html#L2651'>numa_group</a>       2651 sched/fair.c   	struct numa_group *ng;</span>
+<span class='curline'><a href='../S/464.html#L2895'>numa_group</a>       2895 sched/fair.c   	RCU_INIT_POINTER(p-&gt;numa_group, NULL);</span>
+<span class='curline'><a href='../S/464.html#L7621'>numa_group</a>       7621 sched/fair.c   	struct numa_group *numa_group = rcu_dereference(p-&gt;numa_group);</span>
+<span class='curline'><a href='../S/464.html#L7654'>numa_group</a>       7654 sched/fair.c   	if (numa_group) {</span>
+<span class='curline'><a href='../S/464.html#L11470'>numa_group</a>       11470 sched/fair.c   	struct numa_group *ng;</span>
+<span class='curline'><a href='../S/464.html#L11473'>numa_group</a>       11473 sched/fair.c   	ng = rcu_dereference(p-&gt;numa_group);</span>
+</pre>
+</body>
+</html>

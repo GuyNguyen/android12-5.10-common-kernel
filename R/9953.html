@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>pi_of</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/451.html#L54'>pi_of</a>              54 sched/deadline.c 	return pi_of(dl_se) != dl_se;</span>
+<span class='curline'><a href='../S/451.html#L766'>pi_of</a>             766 sched/deadline.c 	BUG_ON(pi_of(dl_se)-&gt;dl_runtime &lt;= 0);</span>
+<span class='curline'><a href='../S/451.html#L773'>pi_of</a>             773 sched/deadline.c 		dl_se-&gt;deadline = rq_clock(rq) + pi_of(dl_se)-&gt;dl_deadline;</span>
+<span class='curline'><a href='../S/451.html#L774'>pi_of</a>             774 sched/deadline.c 		dl_se-&gt;runtime = pi_of(dl_se)-&gt;dl_runtime;</span>
+<span class='curline'><a href='../S/451.html#L787'>pi_of</a>             787 sched/deadline.c 		dl_se-&gt;deadline += pi_of(dl_se)-&gt;dl_period;</span>
+<span class='curline'><a href='../S/451.html#L788'>pi_of</a>             788 sched/deadline.c 		dl_se-&gt;runtime += pi_of(dl_se)-&gt;dl_runtime;</span>
+<span class='curline'><a href='../S/451.html#L802'>pi_of</a>             802 sched/deadline.c 		dl_se-&gt;deadline = rq_clock(rq) + pi_of(dl_se)-&gt;dl_deadline;</span>
+<span class='curline'><a href='../S/451.html#L803'>pi_of</a>             803 sched/deadline.c 		dl_se-&gt;runtime = pi_of(dl_se)-&gt;dl_runtime;</span>
+<span class='curline'><a href='../S/451.html#L858'>pi_of</a>             858 sched/deadline.c 	left = (pi_of(dl_se)-&gt;dl_deadline &gt;&gt; DL_SCALE) * (dl_se-&gt;runtime &gt;&gt; DL_SCALE);</span>
+<span class='curline'><a href='../S/451.html#L860'>pi_of</a>             860 sched/deadline.c 		(pi_of(dl_se)-&gt;dl_runtime &gt;&gt; DL_SCALE);</span>
+<span class='curline'><a href='../S/451.html#L960'>pi_of</a>             960 sched/deadline.c 		dl_se-&gt;deadline = rq_clock(rq) + pi_of(dl_se)-&gt;dl_deadline;</span>
+<span class='curline'><a href='../S/451.html#L961'>pi_of</a>             961 sched/deadline.c 		dl_se-&gt;runtime = pi_of(dl_se)-&gt;dl_runtime;</span>
+</pre>
+</body>
+</html>

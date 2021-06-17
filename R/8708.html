@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>kstat_irqs</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/356.html#L252'>kstat_irqs</a>        252 irq/internals.h 	__this_cpu_inc(*desc-&gt;kstat_irqs);</span>
+<span class='curline'><a href='../S/343.html#L126'>kstat_irqs</a>        126 irq/irqdesc.c  		*per_cpu_ptr(desc-&gt;kstat_irqs, cpu) = 0;</span>
+<span class='curline'><a href='../S/343.html#L397'>kstat_irqs</a>        397 irq/irqdesc.c  	desc-&gt;kstat_irqs = alloc_percpu(unsigned int);</span>
+<span class='curline'><a href='../S/343.html#L398'>kstat_irqs</a>        398 irq/irqdesc.c  	if (!desc-&gt;kstat_irqs)</span>
+<span class='curline'><a href='../S/343.html#L416'>kstat_irqs</a>        416 irq/irqdesc.c  	free_percpu(desc-&gt;kstat_irqs);</span>
+<span class='curline'><a href='../S/343.html#L427'>kstat_irqs</a>        427 irq/irqdesc.c  	free_percpu(desc-&gt;kstat_irqs);</span>
+<span class='curline'><a href='../S/343.html#L571'>kstat_irqs</a>        571 irq/irqdesc.c  		desc[i].kstat_irqs = alloc_percpu(unsigned int);</span>
+<span class='curline'><a href='../S/343.html#L969'>kstat_irqs</a>        969 irq/irqdesc.c  	return desc &amp;&amp; desc-&gt;kstat_irqs ?</span>
+<span class='curline'><a href='../S/343.html#L970'>kstat_irqs</a>        970 irq/irqdesc.c  			*per_cpu_ptr(desc-&gt;kstat_irqs, cpu) : 0;</span>
+<span class='curline'><a href='../S/343.html#L993'>kstat_irqs</a>        993 irq/irqdesc.c  	if (!desc || !desc-&gt;kstat_irqs)</span>
+<span class='curline'><a href='../S/343.html#L1001'>kstat_irqs</a>       1001 irq/irqdesc.c  		sum += *per_cpu_ptr(desc-&gt;kstat_irqs, cpu);</span>
+<span class='curline'><a href='../S/343.html#L1019'>kstat_irqs</a>       1019 irq/irqdesc.c  	sum = kstat_irqs(irq);</span>
+<span class='curline'><a href='../S/339.html#L491'>kstat_irqs</a>        491 irq/proc.c     	if (desc-&gt;kstat_irqs)</span>
+<span class='curline'><a href='../S/339.html#L493'>kstat_irqs</a>        493 irq/proc.c     			any_count |= *per_cpu_ptr(desc-&gt;kstat_irqs, j);</span>
+<span class='curline'><a href='../S/339.html#L500'>kstat_irqs</a>        500 irq/proc.c     		seq_printf(p, "%10u ", desc-&gt;kstat_irqs ?</span>
+<span class='curline'><a href='../S/339.html#L501'>kstat_irqs</a>        501 irq/proc.c     					*per_cpu_ptr(desc-&gt;kstat_irqs, j) : 0);</span>
+</pre>
+</body>
+</html>

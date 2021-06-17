@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>ftrace_probe_ops</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/270.html#L1018'>ftrace_probe_ops</a> 1018 trace/ftrace.c 	struct ftrace_probe_ops	*probe_ops;</span>
+<span class='curline'><a href='../S/270.html#L3376'>ftrace_probe_ops</a> 3376 trace/ftrace.c 	struct ftrace_probe_ops *probe_ops;</span>
+<span class='curline'><a href='../S/270.html#L4320'>ftrace_probe_ops</a> 4320 trace/ftrace.c 	struct ftrace_probe_ops *probe_ops;</span>
+<span class='curline'><a href='../S/270.html#L4482'>ftrace_probe_ops</a> 4482 trace/ftrace.c 	struct ftrace_probe_ops *probe_ops;</span>
+<span class='curline'><a href='../S/270.html#L4516'>ftrace_probe_ops</a> 4516 trace/ftrace.c 			       struct ftrace_probe_ops *probe_ops,</span>
+<span class='curline'><a href='../S/270.html#L4659'>ftrace_probe_ops</a> 4659 trace/ftrace.c 				      struct ftrace_probe_ops *probe_ops)</span>
+<span class='curline'><a href='../S/271.html#L7887'>ftrace_probe_ops</a> 7887 trace/trace.c  		struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/271.html#L7895'>ftrace_probe_ops</a> 7895 trace/trace.c  		      struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/271.html#L7917'>ftrace_probe_ops</a> 7917 trace/trace.c  		      struct ftrace_probe_ops *ops, void *data)</span>
+<span class='curline'><a href='../S/271.html#L7938'>ftrace_probe_ops</a> 7938 trace/trace.c  ftrace_snapshot_init(struct ftrace_probe_ops *ops, struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L7954'>ftrace_probe_ops</a> 7954 trace/trace.c  ftrace_snapshot_free(struct ftrace_probe_ops *ops, struct trace_array *tr,</span>
+<span class='curline'><a href='../S/271.html#L7969'>ftrace_probe_ops</a> 7969 trace/trace.c  static struct ftrace_probe_ops snapshot_probe_ops = {</span>
+<span class='curline'><a href='../S/271.html#L7974'>ftrace_probe_ops</a> 7974 trace/trace.c  static struct ftrace_probe_ops snapshot_count_probe_ops = {</span>
+<span class='curline'><a href='../S/271.html#L7985'>ftrace_probe_ops</a> 7985 trace/trace.c  	struct ftrace_probe_ops *ops;</span>
+<span class='curline'><a href='../S/256.html#L1201'>ftrace_probe_ops</a> 1201 trace/trace.h  					struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/256.html#L1203'>ftrace_probe_ops</a> 1203 trace/trace.h  	int			(*init)(struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/256.html#L1207'>ftrace_probe_ops</a> 1207 trace/trace.h  	void			(*free)(struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/256.html#L1212'>ftrace_probe_ops</a> 1212 trace/trace.h  					 struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/256.html#L1231'>ftrace_probe_ops</a> 1231 trace/trace.h  			       struct ftrace_probe_ops *ops, void *data);</span>
+<span class='curline'><a href='../S/256.html#L1234'>ftrace_probe_ops</a> 1234 trace/trace.h  				      struct ftrace_probe_ops *ops);</span>
+<span class='curline'><a href='../S/267.html#L2834'>ftrace_probe_ops</a> 2834 trace/trace_events.c 		   struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/267.html#L2851'>ftrace_probe_ops</a> 2851 trace/trace_events.c 			 struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/267.html#L2879'>ftrace_probe_ops</a> 2879 trace/trace_events.c 		   struct ftrace_probe_ops *ops, void *data)</span>
+<span class='curline'><a href='../S/267.html#L2908'>ftrace_probe_ops</a> 2908 trace/trace_events.c event_enable_init(struct ftrace_probe_ops *ops, struct trace_array *tr,</span>
+<span class='curline'><a href='../S/267.html#L2946'>ftrace_probe_ops</a> 2946 trace/trace_events.c event_enable_free(struct ftrace_probe_ops *ops, struct trace_array *tr,</span>
+<span class='curline'><a href='../S/267.html#L2970'>ftrace_probe_ops</a> 2970 trace/trace_events.c static struct ftrace_probe_ops event_enable_probe_ops = {</span>
+<span class='curline'><a href='../S/267.html#L2977'>ftrace_probe_ops</a> 2977 trace/trace_events.c static struct ftrace_probe_ops event_enable_count_probe_ops = {</span>
+<span class='curline'><a href='../S/267.html#L2984'>ftrace_probe_ops</a> 2984 trace/trace_events.c static struct ftrace_probe_ops event_disable_probe_ops = {</span>
+<span class='curline'><a href='../S/267.html#L2991'>ftrace_probe_ops</a> 2991 trace/trace_events.c static struct ftrace_probe_ops event_disable_count_probe_ops = {</span>
+<span class='curline'><a href='../S/267.html#L3003'>ftrace_probe_ops</a> 3003 trace/trace_events.c 	struct ftrace_probe_ops *ops;</span>
+<span class='curline'><a href='../S/307.html#L287'>ftrace_probe_ops</a>  287 trace/trace_functions.c static void update_traceon_count(struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L350'>ftrace_probe_ops</a>  350 trace/trace_functions.c 		     struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L358'>ftrace_probe_ops</a>  358 trace/trace_functions.c 		      struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L366'>ftrace_probe_ops</a>  366 trace/trace_functions.c 	       struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L377'>ftrace_probe_ops</a>  377 trace/trace_functions.c 		struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L421'>ftrace_probe_ops</a>  421 trace/trace_functions.c 		  struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L429'>ftrace_probe_ops</a>  429 trace/trace_functions.c 			struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L469'>ftrace_probe_ops</a>  469 trace/trace_functions.c static int update_count(struct ftrace_probe_ops *ops, unsigned long ip,</span>
+<span class='curline'><a href='../S/307.html#L489'>ftrace_probe_ops</a>  489 trace/trace_functions.c 		  struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L499'>ftrace_probe_ops</a>  499 trace/trace_functions.c 		     struct trace_array *tr, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L508'>ftrace_probe_ops</a>  508 trace/trace_functions.c 		   unsigned long ip, struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L529'>ftrace_probe_ops</a>  529 trace/trace_functions.c 		     struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L537'>ftrace_probe_ops</a>  537 trace/trace_functions.c 			 struct ftrace_probe_ops *ops, void *data)</span>
+<span class='curline'><a href='../S/307.html#L544'>ftrace_probe_ops</a>  544 trace/trace_functions.c 			struct ftrace_probe_ops *ops, void *data)</span>
+<span class='curline'><a href='../S/307.html#L551'>ftrace_probe_ops</a>  551 trace/trace_functions.c 			struct ftrace_probe_ops *ops, void *data)</span>
+<span class='curline'><a href='../S/307.html#L558'>ftrace_probe_ops</a>  558 trace/trace_functions.c 			struct ftrace_probe_ops *ops, void *data)</span>
+<span class='curline'><a href='../S/307.html#L565'>ftrace_probe_ops</a>  565 trace/trace_functions.c ftrace_count_init(struct ftrace_probe_ops *ops, struct trace_array *tr,</span>
+<span class='curline'><a href='../S/307.html#L581'>ftrace_probe_ops</a>  581 trace/trace_functions.c ftrace_count_free(struct ftrace_probe_ops *ops, struct trace_array *tr,</span>
+<span class='curline'><a href='../S/307.html#L594'>ftrace_probe_ops</a>  594 trace/trace_functions.c static struct ftrace_probe_ops traceon_count_probe_ops = {</span>
+<span class='curline'><a href='../S/307.html#L601'>ftrace_probe_ops</a>  601 trace/trace_functions.c static struct ftrace_probe_ops traceoff_count_probe_ops = {</span>
+<span class='curline'><a href='../S/307.html#L608'>ftrace_probe_ops</a>  608 trace/trace_functions.c static struct ftrace_probe_ops stacktrace_count_probe_ops = {</span>
+<span class='curline'><a href='../S/307.html#L615'>ftrace_probe_ops</a>  615 trace/trace_functions.c static struct ftrace_probe_ops dump_probe_ops = {</span>
+<span class='curline'><a href='../S/307.html#L622'>ftrace_probe_ops</a>  622 trace/trace_functions.c static struct ftrace_probe_ops cpudump_probe_ops = {</span>
+<span class='curline'><a href='../S/307.html#L627'>ftrace_probe_ops</a>  627 trace/trace_functions.c static struct ftrace_probe_ops traceon_probe_ops = {</span>
+<span class='curline'><a href='../S/307.html#L632'>ftrace_probe_ops</a>  632 trace/trace_functions.c static struct ftrace_probe_ops traceoff_probe_ops = {</span>
+<span class='curline'><a href='../S/307.html#L637'>ftrace_probe_ops</a>  637 trace/trace_functions.c static struct ftrace_probe_ops stacktrace_probe_ops = {</span>
+<span class='curline'><a href='../S/307.html#L644'>ftrace_probe_ops</a>  644 trace/trace_functions.c 			    struct ftrace_probe_ops *ops,</span>
+<span class='curline'><a href='../S/307.html#L685'>ftrace_probe_ops</a>  685 trace/trace_functions.c 	struct ftrace_probe_ops *ops;</span>
+<span class='curline'><a href='../S/307.html#L704'>ftrace_probe_ops</a>  704 trace/trace_functions.c 	struct ftrace_probe_ops *ops;</span>
+<span class='curline'><a href='../S/307.html#L719'>ftrace_probe_ops</a>  719 trace/trace_functions.c 	struct ftrace_probe_ops *ops;</span>
+<span class='curline'><a href='../S/307.html#L735'>ftrace_probe_ops</a>  735 trace/trace_functions.c 	struct ftrace_probe_ops *ops;</span>
+</pre>
+</body>
+</html>

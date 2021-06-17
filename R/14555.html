@@ -1,0 +1,420 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>verbose</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/409.html#L107'>verbose</a>           107 bpf/disasm.c   static void print_bpf_end_insn(bpf_insn_print_t verbose,</span>
+<span class='curline'><a href='../S/409.html#L111'>verbose</a>           111 bpf/disasm.c   	verbose(private_data, "(%02x) r%d = %s%d r%d\n",</span>
+<span class='curline'><a href='../S/409.html#L121'>verbose</a>           121 bpf/disasm.c   	const bpf_insn_print_t verbose = cbs-&gt;cb_print;</span>
+<span class='curline'><a href='../S/409.html#L127'>verbose</a>           127 bpf/disasm.c   				verbose(cbs-&gt;private_data, "BUG_alu64_%02x\n", insn-&gt;code);</span>
+<span class='curline'><a href='../S/409.html#L129'>verbose</a>           129 bpf/disasm.c   				print_bpf_end_insn(verbose, cbs-&gt;private_data, insn);</span>
+<span class='curline'><a href='../S/409.html#L131'>verbose</a>           131 bpf/disasm.c   			verbose(cbs-&gt;private_data, "(%02x) %c%d = -%c%d\n",</span>
+<span class='curline'><a href='../S/409.html#L136'>verbose</a>           136 bpf/disasm.c   			verbose(cbs-&gt;private_data, "(%02x) %c%d %s %c%d\n",</span>
+<span class='curline'><a href='../S/409.html#L143'>verbose</a>           143 bpf/disasm.c   			verbose(cbs-&gt;private_data, "(%02x) %c%d %s %d\n",</span>
+<span class='curline'><a href='../S/409.html#L151'>verbose</a>           151 bpf/disasm.c   			verbose(cbs-&gt;private_data, "(%02x) *(%s *)(r%d %+d) = r%d\n",</span>
+<span class='curline'><a href='../S/409.html#L157'>verbose</a>           157 bpf/disasm.c   			verbose(cbs-&gt;private_data, "(%02x) lock *(%s *)(r%d %+d) += r%d\n",</span>
+<span class='curline'><a href='../S/409.html#L163'>verbose</a>           163 bpf/disasm.c   			verbose(cbs-&gt;private_data, "BUG_%02x\n", insn-&gt;code);</span>
+<span class='curline'><a href='../S/409.html#L166'>verbose</a>           166 bpf/disasm.c   			verbose(cbs-&gt;private_data, "BUG_st_%02x\n", insn-&gt;code);</span>
+<span class='curline'><a href='../S/409.html#L169'>verbose</a>           169 bpf/disasm.c   		verbose(cbs-&gt;private_data, "(%02x) *(%s *)(r%d %+d) = %d\n",</span>
+<span class='curline'><a href='../S/409.html#L176'>verbose</a>           176 bpf/disasm.c   			verbose(cbs-&gt;private_data, "BUG_ldx_%02x\n", insn-&gt;code);</span>
+<span class='curline'><a href='../S/409.html#L179'>verbose</a>           179 bpf/disasm.c   		verbose(cbs-&gt;private_data, "(%02x) r%d = *(%s *)(r%d %+d)\n",</span>
+<span class='curline'><a href='../S/409.html#L185'>verbose</a>           185 bpf/disasm.c   			verbose(cbs-&gt;private_data, "(%02x) r0 = *(%s *)skb[%d]\n",</span>
+<span class='curline'><a href='../S/409.html#L190'>verbose</a>           190 bpf/disasm.c   			verbose(cbs-&gt;private_data, "(%02x) r0 = *(%s *)skb[r%d + %d]\n",</span>
+<span class='curline'><a href='../S/409.html#L207'>verbose</a>           207 bpf/disasm.c   			verbose(cbs-&gt;private_data, "(%02x) r%d = %s\n",</span>
+<span class='curline'><a href='../S/409.html#L212'>verbose</a>           212 bpf/disasm.c   			verbose(cbs-&gt;private_data, "BUG_ld_%02x\n", insn-&gt;code);</span>
+<span class='curline'><a href='../S/409.html#L222'>verbose</a>           222 bpf/disasm.c   				verbose(cbs-&gt;private_data, "(%02x) call pc%s\n",</span>
+<span class='curline'><a href='../S/409.html#L228'>verbose</a>           228 bpf/disasm.c   				verbose(cbs-&gt;private_data, "(%02x) call %s#%d\n", insn-&gt;code,</span>
+<span class='curline'><a href='../S/409.html#L234'>verbose</a>           234 bpf/disasm.c   			verbose(cbs-&gt;private_data, "(%02x) goto pc%+d\n",</span>
+<span class='curline'><a href='../S/409.html#L237'>verbose</a>           237 bpf/disasm.c   			verbose(cbs-&gt;private_data, "(%02x) exit\n", insn-&gt;code);</span>
+<span class='curline'><a href='../S/409.html#L239'>verbose</a>           239 bpf/disasm.c   			verbose(cbs-&gt;private_data,</span>
+<span class='curline'><a href='../S/409.html#L247'>verbose</a>           247 bpf/disasm.c   			verbose(cbs-&gt;private_data,</span>
+<span class='curline'><a href='../S/409.html#L255'>verbose</a>           255 bpf/disasm.c   		verbose(cbs-&gt;private_data, "(%02x) %s\n",</span>
+<span class='curline'><a href='../S/401.html#L323'>verbose</a>           323 bpf/verifier.c __printf(2, 3) static void verbose(void *private_data, const char *fmt, ...)</span>
+<span class='curline'><a href='../S/401.html#L378'>verbose</a>           378 bpf/verifier.c 	verbose(env, "%s\n",</span>
+<span class='curline'><a href='../S/401.html#L542'>verbose</a>           542 bpf/verifier.c 	    verbose(env, "_");</span>
+<span class='curline'><a href='../S/401.html#L544'>verbose</a>           544 bpf/verifier.c 		verbose(env, "r");</span>
+<span class='curline'><a href='../S/401.html#L546'>verbose</a>           546 bpf/verifier.c 		verbose(env, "w");</span>
+<span class='curline'><a href='../S/401.html#L548'>verbose</a>           548 bpf/verifier.c 		verbose(env, "D");</span>
+<span class='curline'><a href='../S/401.html#L573'>verbose</a>           573 bpf/verifier.c 		verbose(env, " frame%d:", state-&gt;frameno);</span>
+<span class='curline'><a href='../S/401.html#L579'>verbose</a>           579 bpf/verifier.c 		verbose(env, " R%d", i);</span>
+<span class='curline'><a href='../S/401.html#L581'>verbose</a>           581 bpf/verifier.c 		verbose(env, "=%s", reg_type_str[t]);</span>
+<span class='curline'><a href='../S/401.html#L583'>verbose</a>           583 bpf/verifier.c 			verbose(env, "P");</span>
+<span class='curline'><a href='../S/401.html#L587'>verbose</a>           587 bpf/verifier.c 			verbose(env, "%lld", reg-&gt;var_off.value + reg-&gt;off);</span>
+<span class='curline'><a href='../S/401.html#L592'>verbose</a>           592 bpf/verifier.c 				verbose(env, "%s", kernel_type_name(reg-&gt;btf_id));</span>
+<span class='curline'><a href='../S/401.html#L593'>verbose</a>           593 bpf/verifier.c 			verbose(env, "(id=%d", reg-&gt;id);</span>
+<span class='curline'><a href='../S/401.html#L595'>verbose</a>           595 bpf/verifier.c 				verbose(env, ",ref_obj_id=%d", reg-&gt;ref_obj_id);</span>
+<span class='curline'><a href='../S/401.html#L597'>verbose</a>           597 bpf/verifier.c 				verbose(env, ",off=%d", reg-&gt;off);</span>
+<span class='curline'><a href='../S/401.html#L599'>verbose</a>           599 bpf/verifier.c 				verbose(env, ",r=%d", reg-&gt;range);</span>
+<span class='curline'><a href='../S/401.html#L603'>verbose</a>           603 bpf/verifier.c 				verbose(env, ",ks=%d,vs=%d",</span>
+<span class='curline'><a href='../S/401.html#L611'>verbose</a>           611 bpf/verifier.c 				verbose(env, ",imm=%llx", reg-&gt;var_off.value);</span>
+<span class='curline'><a href='../S/401.html#L615'>verbose</a>           615 bpf/verifier.c 					verbose(env, ",smin_value=%lld",</span>
+<span class='curline'><a href='../S/401.html#L619'>verbose</a>           619 bpf/verifier.c 					verbose(env, ",smax_value=%lld",</span>
+<span class='curline'><a href='../S/401.html#L622'>verbose</a>           622 bpf/verifier.c 					verbose(env, ",umin_value=%llu",</span>
+<span class='curline'><a href='../S/401.html#L625'>verbose</a>           625 bpf/verifier.c 					verbose(env, ",umax_value=%llu",</span>
+<span class='curline'><a href='../S/401.html#L631'>verbose</a>           631 bpf/verifier.c 					verbose(env, ",var_off=%s", tn_buf);</span>
+<span class='curline'><a href='../S/401.html#L635'>verbose</a>           635 bpf/verifier.c 					verbose(env, ",s32_min_value=%d",</span>
+<span class='curline'><a href='../S/401.html#L639'>verbose</a>           639 bpf/verifier.c 					verbose(env, ",s32_max_value=%d",</span>
+<span class='curline'><a href='../S/401.html#L643'>verbose</a>           643 bpf/verifier.c 					verbose(env, ",u32_min_value=%d",</span>
+<span class='curline'><a href='../S/401.html#L647'>verbose</a>           647 bpf/verifier.c 					verbose(env, ",u32_max_value=%d",</span>
+<span class='curline'><a href='../S/401.html#L650'>verbose</a>           650 bpf/verifier.c 			verbose(env, ")");</span>
+<span class='curline'><a href='../S/401.html#L667'>verbose</a>           667 bpf/verifier.c 		verbose(env, " fp%d", (-i - 1) * BPF_REG_SIZE);</span>
+<span class='curline'><a href='../S/401.html#L672'>verbose</a>           672 bpf/verifier.c 			verbose(env, "=%s", reg_type_str[t]);</span>
+<span class='curline'><a href='../S/401.html#L674'>verbose</a>           674 bpf/verifier.c 				verbose(env, "P");</span>
+<span class='curline'><a href='../S/401.html#L676'>verbose</a>           676 bpf/verifier.c 				verbose(env, "%lld", reg-&gt;var_off.value + reg-&gt;off);</span>
+<span class='curline'><a href='../S/401.html#L678'>verbose</a>           678 bpf/verifier.c 			verbose(env, "=%s", types_buf);</span>
+<span class='curline'><a href='../S/401.html#L682'>verbose</a>           682 bpf/verifier.c 		verbose(env, " refs=%d", state-&gt;refs[0].id);</span>
+<span class='curline'><a href='../S/401.html#L685'>verbose</a>           685 bpf/verifier.c 				verbose(env, ",%d", state-&gt;refs[i].id);</span>
+<span class='curline'><a href='../S/401.html#L687'>verbose</a>           687 bpf/verifier.c 	verbose(env, "\n");</span>
+<span class='curline'><a href='../S/401.html#L980'>verbose</a>           980 bpf/verifier.c 		verbose(env, "The sequence of %d jumps is too complex.\n",</span>
+<span class='curline'><a href='../S/401.html#L1066'>verbose</a>          1066 bpf/verifier.c 		verbose(env, "mark_reg_known_zero(regs, %u)\n", regno);</span>
+<span class='curline'><a href='../S/401.html#L1351'>verbose</a>          1351 bpf/verifier.c 		verbose(env, "mark_reg_unknown(regs, %u)\n", regno);</span>
+<span class='curline'><a href='../S/401.html#L1371'>verbose</a>          1371 bpf/verifier.c 		verbose(env, "mark_reg_not_init(regs, %u)\n", regno);</span>
+<span class='curline'><a href='../S/401.html#L1454'>verbose</a>          1454 bpf/verifier.c 		verbose(env, "call to invalid destination\n");</span>
+<span class='curline'><a href='../S/401.html#L1461'>verbose</a>          1461 bpf/verifier.c 		verbose(env, "too many subprograms\n");</span>
+<span class='curline'><a href='../S/401.html#L1489'>verbose</a>          1489 bpf/verifier.c 			verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L1505'>verbose</a>          1505 bpf/verifier.c 			verbose(env, "func#%d @%d\n", i, subprog[i].start);</span>
+<span class='curline'><a href='../S/401.html#L1526'>verbose</a>          1526 bpf/verifier.c 			verbose(env, "jump out of range from insn %d to %d\n", i, off);</span>
+<span class='curline'><a href='../S/401.html#L1537'>verbose</a>          1537 bpf/verifier.c 				verbose(env, "last insn is not an exit or jmp\n");</span>
+<span class='curline'><a href='../S/401.html#L1564'>verbose</a>          1564 bpf/verifier.c 			verbose(env, "verifier BUG type %s var_off %lld off %d\n",</span>
+<span class='curline'><a href='../S/401.html#L1725'>verbose</a>          1725 bpf/verifier.c 		verbose(env, "R%d is invalid\n", regno);</span>
+<span class='curline'><a href='../S/401.html#L1734'>verbose</a>          1734 bpf/verifier.c 			verbose(env, "R%d !read_ok\n", regno);</span>
+<span class='curline'><a href='../S/401.html#L1749'>verbose</a>          1749 bpf/verifier.c 			verbose(env, "frame pointer is read only\n");</span>
+<span class='curline'><a href='../S/401.html#L1803'>verbose</a>          1803 bpf/verifier.c 		.cb_print	= verbose,</span>
+<span class='curline'><a href='../S/401.html#L1817'>verbose</a>          1817 bpf/verifier.c 		verbose(env, "regs=%x stack=%llx before ", *reg_mask, *stack_mask);</span>
+<span class='curline'><a href='../S/401.html#L1818'>verbose</a>          1818 bpf/verifier.c 		verbose(env, "%d: ", idx);</span>
+<span class='curline'><a href='../S/401.html#L1875'>verbose</a>          1875 bpf/verifier.c 			verbose(env, "BUG spi %d\n", spi);</span>
+<span class='curline'><a href='../S/401.html#L1894'>verbose</a>          1894 bpf/verifier.c 			verbose(env, "BUG spi %d\n", spi);</span>
+<span class='curline'><a href='../S/401.html#L1913'>verbose</a>          1913 bpf/verifier.c 				verbose(env, "BUG regs %x\n", *reg_mask);</span>
+<span class='curline'><a href='../S/401.html#L2075'>verbose</a>          2075 bpf/verifier.c 			verbose(env, "last_idx %d first_idx %d\n", last_idx, first_idx);</span>
+<span class='curline'><a href='../S/401.html#L2105'>verbose</a>          2105 bpf/verifier.c 				verbose(env, "BUG backtracking idx %d\n", i);</span>
+<span class='curline'><a href='../S/401.html#L2163'>verbose</a>          2163 bpf/verifier.c 			verbose(env, "parent %s regs=%x stack=%llx marks\n",</span>
+<span class='curline'><a href='../S/401.html#L2293'>verbose</a>          2293 bpf/verifier.c 		verbose(env, "attempt to corrupt spilled pointer on stack\n");</span>
+<span class='curline'><a href='../S/401.html#L2319'>verbose</a>          2319 bpf/verifier.c 			verbose(env, "invalid size of register spill\n");</span>
+<span class='curline'><a href='../S/401.html#L2324'>verbose</a>          2324 bpf/verifier.c 			verbose(env, "cannot spill pointers to stack into stack frame of the caller\n");</span>
+<span class='curline'><a href='../S/401.html#L2355'>verbose</a>          2355 bpf/verifier.c 					verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L2470'>verbose</a>          2470 bpf/verifier.c 			verbose(env, "spilled ptr in range of var-offset stack write; insn %d, ptr off: %d",</span>
+<span class='curline'><a href='../S/401.html#L2493'>verbose</a>          2493 bpf/verifier.c 			verbose(env, "uninit stack in range of var-offset write prohibited for !root; insn %d, off: %d",</span>
+<span class='curline'><a href='../S/401.html#L2585'>verbose</a>          2585 bpf/verifier.c 				verbose(env, "invalid size of register fill\n");</span>
+<span class='curline'><a href='../S/401.html#L2597'>verbose</a>          2597 bpf/verifier.c 				verbose(env, "corrupted spill memory\n");</span>
+<span class='curline'><a href='../S/401.html#L2617'>verbose</a>          2617 bpf/verifier.c 			verbose(env, "leaking pointer from stack off %d\n",</span>
+<span class='curline'><a href='../S/401.html#L2631'>verbose</a>          2631 bpf/verifier.c 			verbose(env, "invalid read from stack off %d+%d size %d\n",</span>
+<span class='curline'><a href='../S/401.html#L2720'>verbose</a>          2720 bpf/verifier.c 		verbose(env, "variable offset stack pointer cannot be passed into helper function; var_off=%s off=%d size=%d\n",</span>
+<span class='curline'><a href='../S/401.html#L2732'>verbose</a>          2732 bpf/verifier.c 		verbose(env, "R%d variable offset stack access prohibited for !root, var_off=%s\n",</span>
+<span class='curline'><a href='../S/401.html#L2794'>verbose</a>          2794 bpf/verifier.c 		verbose(env, "write into map forbidden, value_size=%d off=%d size=%d\n",</span>
+<span class='curline'><a href='../S/401.html#L2800'>verbose</a>          2800 bpf/verifier.c 		verbose(env, "read from map forbidden, value_size=%d off=%d size=%d\n",</span>
+<span class='curline'><a href='../S/401.html#L2822'>verbose</a>          2822 bpf/verifier.c 		verbose(env, "invalid access to map value, value_size=%d off=%d size=%d\n",</span>
+<span class='curline'><a href='../S/401.html#L2828'>verbose</a>          2828 bpf/verifier.c 		verbose(env, "invalid access to packet, off=%d size=%d, R%d(id=%d,off=%d,r=%d)\n",</span>
+<span class='curline'><a href='../S/401.html#L2833'>verbose</a>          2833 bpf/verifier.c 		verbose(env, "invalid access to memory, mem_size=%u off=%d size=%d\n",</span>
+<span class='curline'><a href='../S/401.html#L2867'>verbose</a>          2867 bpf/verifier.c 		verbose(env, "R%d min value is negative, either use unsigned index or do a if (index &gt;=0) check.\n",</span>
+<span class='curline'><a href='../S/401.html#L2874'>verbose</a>          2874 bpf/verifier.c 		verbose(env, "R%d min value is outside of the allowed memory range\n",</span>
+<span class='curline'><a href='../S/401.html#L2884'>verbose</a>          2884 bpf/verifier.c 		verbose(env, "R%d unbounded memory access, make sure to bounds check any such access\n",</span>
+<span class='curline'><a href='../S/401.html#L2891'>verbose</a>          2891 bpf/verifier.c 		verbose(env, "R%d max value is outside of the allowed memory range\n",</span>
+<span class='curline'><a href='../S/401.html#L2924'>verbose</a>          2924 bpf/verifier.c 			verbose(env, "bpf_spin_lock cannot be accessed directly by load/store\n");</span>
+<span class='curline'><a href='../S/401.html#L2996'>verbose</a>          2996 bpf/verifier.c 		verbose(env, "R%d min value is negative, either use unsigned index or do a if (index &gt;=0) check.\n",</span>
+<span class='curline'><a href='../S/401.html#L3003'>verbose</a>          3003 bpf/verifier.c 		verbose(env, "R%d offset is outside of the packet\n", regno);</span>
+<span class='curline'><a href='../S/401.html#L3051'>verbose</a>          3051 bpf/verifier.c 	verbose(env, "invalid bpf_context access off=%d size=%d\n", off, size);</span>
+<span class='curline'><a href='../S/401.html#L3060'>verbose</a>          3060 bpf/verifier.c 		verbose(env, "invalid access to flow keys off=%d size=%d\n",</span>
+<span class='curline'><a href='../S/401.html#L3077'>verbose</a>          3077 bpf/verifier.c 		verbose(env, "R%d min value is negative, either use unsigned index or do a if (index &gt;=0) check.\n",</span>
+<span class='curline'><a href='../S/401.html#L3106'>verbose</a>          3106 bpf/verifier.c 	verbose(env, "R%d invalid %s access off=%d size=%d\n",</span>
+<span class='curline'><a href='../S/401.html#L3172'>verbose</a>          3172 bpf/verifier.c 		verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L3197'>verbose</a>          3197 bpf/verifier.c 		verbose(env, "misaligned %saccess off %s+%d+%d size %d\n",</span>
+<span class='curline'><a href='../S/401.html#L3306'>verbose</a>          3306 bpf/verifier.c 		verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L3316'>verbose</a>          3316 bpf/verifier.c 		verbose(env, "combined stack size of %d calls is %d. Too large\n",</span>
+<span class='curline'><a href='../S/401.html#L3345'>verbose</a>          3345 bpf/verifier.c 			verbose(env, "the call stack of %d frames is too deep !\n",</span>
+<span class='curline'><a href='../S/401.html#L3396'>verbose</a>          3396 bpf/verifier.c 		verbose(env, "dereference of modified ctx ptr R%d off=%d disallowed\n",</span>
+<span class='curline'><a href='../S/401.html#L3405'>verbose</a>          3405 bpf/verifier.c 		verbose(env, "variable ctx access var_off=%s disallowed\n", tn_buf);</span>
+<span class='curline'><a href='../S/401.html#L3418'>verbose</a>          3418 bpf/verifier.c 		verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L3427'>verbose</a>          3427 bpf/verifier.c 		verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L3557'>verbose</a>          3557 bpf/verifier.c 		verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L3566'>verbose</a>          3566 bpf/verifier.c 		verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L3577'>verbose</a>          3577 bpf/verifier.c 			verbose(env, "only read is supported\n");</span>
+<span class='curline'><a href='../S/401.html#L3608'>verbose</a>          3608 bpf/verifier.c 		verbose(env, "map_ptr access not supported without CONFIG_DEBUG_INFO_BTF\n");</span>
+<span class='curline'><a href='../S/401.html#L3613'>verbose</a>          3613 bpf/verifier.c 		verbose(env, "map_ptr access not supported for map type %d\n",</span>
+<span class='curline'><a href='../S/401.html#L3622'>verbose</a>          3622 bpf/verifier.c 		verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L3629'>verbose</a>          3629 bpf/verifier.c 		verbose(env, "R%d is %s invalid negative access: off=%d\n",</span>
+<span class='curline'><a href='../S/401.html#L3635'>verbose</a>          3635 bpf/verifier.c 		verbose(env, "only read from %s is supported\n", tname);</span>
+<span class='curline'><a href='../S/401.html#L3705'>verbose</a>          3705 bpf/verifier.c 			verbose(env, "invalid unbounded variable-offset%s stack R%d\n",</span>
+<span class='curline'><a href='../S/401.html#L3722'>verbose</a>          3722 bpf/verifier.c 			verbose(env, "invalid%s stack R%d off=%d size=%d\n",</span>
+<span class='curline'><a href='../S/401.html#L3728'>verbose</a>          3728 bpf/verifier.c 			verbose(env, "invalid variable-offset%s stack R%d var_off=%s size=%d\n",</span>
+<span class='curline'><a href='../S/401.html#L3765'>verbose</a>          3765 bpf/verifier.c 			verbose(env, "R%d leaks addr into map\n", value_regno);</span>
+<span class='curline'><a href='../S/401.html#L3796'>verbose</a>          3796 bpf/verifier.c 			verbose(env, "R%d leaks addr into mem\n", value_regno);</span>
+<span class='curline'><a href='../S/401.html#L3809'>verbose</a>          3809 bpf/verifier.c 			verbose(env, "R%d leaks addr into ctx\n", value_regno);</span>
+<span class='curline'><a href='../S/401.html#L3864'>verbose</a>          3864 bpf/verifier.c 			verbose(env, "cannot write into packet\n");</span>
+<span class='curline'><a href='../S/401.html#L3869'>verbose</a>          3869 bpf/verifier.c 			verbose(env, "R%d leaks addr into packet\n",</span>
+<span class='curline'><a href='../S/401.html#L3879'>verbose</a>          3879 bpf/verifier.c 			verbose(env, "R%d leaks addr into flow keys\n",</span>
+<span class='curline'><a href='../S/401.html#L3889'>verbose</a>          3889 bpf/verifier.c 			verbose(env, "R%d cannot write into %s\n",</span>
+<span class='curline'><a href='../S/401.html#L3908'>verbose</a>          3908 bpf/verifier.c 			verbose(env, "R%d cannot write into %s\n",</span>
+<span class='curline'><a href='../S/401.html#L3924'>verbose</a>          3924 bpf/verifier.c 		verbose(env, "R%d invalid mem access '%s'\n", regno,</span>
+<span class='curline'><a href='../S/401.html#L3943'>verbose</a>          3943 bpf/verifier.c 		verbose(env, "BPF_XADD uses reserved fields\n");</span>
+<span class='curline'><a href='../S/401.html#L3958'>verbose</a>          3958 bpf/verifier.c 		verbose(env, "R%d leaks addr into mem\n", insn-&gt;src_reg);</span>
+<span class='curline'><a href='../S/401.html#L3966'>verbose</a>          3966 bpf/verifier.c 		verbose(env, "BPF_XADD stores into R%d %s is not allowed\n",</span>
+<span class='curline'><a href='../S/401.html#L4008'>verbose</a>          4008 bpf/verifier.c 		verbose(env, "invalid zero-sized read\n");</span>
+<span class='curline'><a href='../S/401.html#L4040'>verbose</a>          4040 bpf/verifier.c 			verbose(env, "R%d%s variable offset stack access prohibited for !root, var_off=%s\n",</span>
+<span class='curline'><a href='../S/401.html#L4098'>verbose</a>          4098 bpf/verifier.c 			verbose(env, "invalid%s read from stack R%d off %d+%d size %d\n",</span>
+<span class='curline'><a href='../S/401.html#L4104'>verbose</a>          4104 bpf/verifier.c 			verbose(env, "invalid%s read from stack R%d var_off %s+%d size %d\n",</span>
+<span class='curline'><a href='../S/401.html#L4164'>verbose</a>          4164 bpf/verifier.c 		verbose(env, "R%d type=%s expected=%s\n", regno,</span>
+<span class='curline'><a href='../S/401.html#L4200'>verbose</a>          4200 bpf/verifier.c 		verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L4206'>verbose</a>          4206 bpf/verifier.c 		verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L4213'>verbose</a>          4213 bpf/verifier.c 			verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L4217'>verbose</a>          4217 bpf/verifier.c 			verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L4221'>verbose</a>          4221 bpf/verifier.c 			verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L4227'>verbose</a>          4227 bpf/verifier.c 		verbose(env, "off %lld doesn't point to 'struct bpf_spin_lock'\n",</span>
+<span class='curline'><a href='../S/401.html#L4233'>verbose</a>          4233 bpf/verifier.c 			verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L4240'>verbose</a>          4240 bpf/verifier.c 			verbose(env, "bpf_spin_unlock without taking a lock\n");</span>
+<span class='curline'><a href='../S/401.html#L4244'>verbose</a>          4244 bpf/verifier.c 			verbose(env, "bpf_spin_unlock of different lock\n");</span>
+<span class='curline'><a href='../S/401.html#L4292'>verbose</a>          4292 bpf/verifier.c 		verbose(env, "invalid map_ptr to access map-&gt;type\n");</span>
+<span class='curline'><a href='../S/401.html#L4302'>verbose</a>          4302 bpf/verifier.c 			verbose(env, "invalid arg_type for sockmap/sockhash\n");</span>
+<span class='curline'><a href='../S/401.html#L4419'>verbose</a>          4419 bpf/verifier.c 		verbose(env, "verifier internal error: unsupported arg type %d\n", arg_type);</span>
+<span class='curline'><a href='../S/401.html#L4432'>verbose</a>          4432 bpf/verifier.c 	verbose(env, "R%d type=%s expected=", regno, reg_type_str[type]);</span>
+<span class='curline'><a href='../S/401.html#L4434'>verbose</a>          4434 bpf/verifier.c 		verbose(env, "%s, ", reg_type_str[compatible-&gt;types[j]]);</span>
+<span class='curline'><a href='../S/401.html#L4435'>verbose</a>          4435 bpf/verifier.c 	verbose(env, "%s\n", reg_type_str[compatible-&gt;types[j]]);</span>
+<span class='curline'><a href='../S/401.html#L4442'>verbose</a>          4442 bpf/verifier.c 				verbose(env, "verifier internal error: missing arg compatible BTF ID\n");</span>
+<span class='curline'><a href='../S/401.html#L4450'>verbose</a>          4450 bpf/verifier.c 			verbose(env, "R%d is of type %s but %s is expected\n",</span>
+<span class='curline'><a href='../S/401.html#L4457'>verbose</a>          4457 bpf/verifier.c 			verbose(env, "R%d is a pointer to in-kernel struct with non-zero offset\n",</span>
+<span class='curline'><a href='../S/401.html#L4485'>verbose</a>          4485 bpf/verifier.c 			verbose(env, "R%d leaks addr into helper function\n",</span>
+<span class='curline'><a href='../S/401.html#L4494'>verbose</a>          4494 bpf/verifier.c 		verbose(env, "helper access to the packet is not allowed\n");</span>
+<span class='curline'><a href='../S/401.html#L4525'>verbose</a>          4525 bpf/verifier.c 			verbose(env, "verifier internal error: more than one arg with ref_obj_id R%d %u %u\n",</span>
+<span class='curline'><a href='../S/401.html#L4547'>verbose</a>          4547 bpf/verifier.c 			verbose(env, "invalid map_ptr to access map-&gt;key\n");</span>
+<span class='curline'><a href='../S/401.html#L4562'>verbose</a>          4562 bpf/verifier.c 			verbose(env, "invalid map_ptr to access map-&gt;value\n");</span>
+<span class='curline'><a href='../S/401.html#L4571'>verbose</a>          4571 bpf/verifier.c 			verbose(env, "Helper has invalid btf_id in R%d\n", regno);</span>
+<span class='curline'><a href='../S/401.html#L4583'>verbose</a>          4583 bpf/verifier.c 			verbose(env, "verifier internal error\n");</span>
+<span class='curline'><a href='../S/401.html#L4616'>verbose</a>          4616 bpf/verifier.c 			verbose(env, "R%d min value is negative, either use unsigned or 'var &amp;= const'\n",</span>
+<span class='curline'><a href='../S/401.html#L4630'>verbose</a>          4630 bpf/verifier.c 			verbose(env, "R%d unbounded memory access, use 'var &amp;= const' or 'if (var &lt; const)'\n",</span>
+<span class='curline'><a href='../S/401.html#L4641'>verbose</a>          4641 bpf/verifier.c 			verbose(env, "R%d unbounded size, use 'var &amp;= const' or 'if (var &lt; const)'\n",</span>
+<span class='curline'><a href='../S/401.html#L4686'>verbose</a>          4686 bpf/verifier.c 	verbose(env, "cannot update sockmap in this context\n");</span>
+<span class='curline'><a href='../S/401.html#L4811'>verbose</a>          4811 bpf/verifier.c 			verbose(env, "tail_calls are not allowed in non-JITed programs with bpf-to-bpf calls\n");</span>
+<span class='curline'><a href='../S/401.html#L4885'>verbose</a>          4885 bpf/verifier.c 	verbose(env, "cannot pass map_type %d into func %s#%d\n",</span>
+<span class='curline'><a href='../S/401.html#L5080'>verbose</a>          5080 bpf/verifier.c 		verbose(env, "the call stack of %d frames is too deep\n",</span>
+<span class='curline'><a href='../S/401.html#L5088'>verbose</a>          5088 bpf/verifier.c 		verbose(env, "verifier bug. No program starts at insn %d\n",</span>
+<span class='curline'><a href='../S/401.html#L5095'>verbose</a>          5095 bpf/verifier.c 		verbose(env, "verifier bug. Frame %d already allocated\n",</span>
+<span class='curline'><a href='../S/401.html#L5108'>verbose</a>          5108 bpf/verifier.c 			verbose(env, "Caller passes invalid args into func#%d\n",</span>
+<span class='curline'><a href='../S/401.html#L5113'>verbose</a>          5113 bpf/verifier.c 				verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L5162'>verbose</a>          5162 bpf/verifier.c 		verbose(env, "caller:\n");</span>
+<span class='curline'><a href='../S/401.html#L5164'>verbose</a>          5164 bpf/verifier.c 		verbose(env, "callee:\n");</span>
+<span class='curline'><a href='../S/401.html#L5186'>verbose</a>          5186 bpf/verifier.c 		verbose(env, "cannot return stack pointer to the caller\n");</span>
+<span class='curline'><a href='../S/401.html#L5202'>verbose</a>          5202 bpf/verifier.c 		verbose(env, "returning from callee:\n");</span>
+<span class='curline'><a href='../S/401.html#L5204'>verbose</a>          5204 bpf/verifier.c 		verbose(env, "to caller at %d:\n", *insn_idx);</span>
+<span class='curline'><a href='../S/401.html#L5252'>verbose</a>          5252 bpf/verifier.c 		verbose(env, "kernel subsystem misconfigured verifier\n");</span>
+<span class='curline'><a href='../S/401.html#L5265'>verbose</a>          5265 bpf/verifier.c 		verbose(env, "write into map forbidden\n");</span>
+<span class='curline'><a href='../S/401.html#L5292'>verbose</a>          5292 bpf/verifier.c 		verbose(env, "kernel subsystem misconfigured verifier\n");</span>
+<span class='curline'><a href='../S/401.html#L5323'>verbose</a>          5323 bpf/verifier.c 		verbose(env, "Unreleased reference id=%d alloc_insn=%d\n",</span>
+<span class='curline'><a href='../S/401.html#L5339'>verbose</a>          5339 bpf/verifier.c 		verbose(env, "invalid func %s#%d\n", func_id_name(func_id),</span>
+<span class='curline'><a href='../S/401.html#L5347'>verbose</a>          5347 bpf/verifier.c 		verbose(env, "unknown func %s#%d\n", func_id_name(func_id),</span>
+<span class='curline'><a href='../S/401.html#L5354'>verbose</a>          5354 bpf/verifier.c 		verbose(env, "cannot call GPL-restricted function from non-GPL compatible program\n");</span>
+<span class='curline'><a href='../S/401.html#L5359'>verbose</a>          5359 bpf/verifier.c 		verbose(env, "helper call is not allowed in probe\n");</span>
+<span class='curline'><a href='../S/401.html#L5366'>verbose</a>          5366 bpf/verifier.c 		verbose(env, "kernel subsystem misconfigured func %s#%d: r1 != ctx\n",</span>
+<span class='curline'><a href='../S/401.html#L5376'>verbose</a>          5376 bpf/verifier.c 		verbose(env, "kernel subsystem misconfigured func %s#%d\n",</span>
+<span class='curline'><a href='../S/401.html#L5410'>verbose</a>          5410 bpf/verifier.c 			verbose(env, "tail_call would lead to reference leak\n");</span>
+<span class='curline'><a href='../S/401.html#L5416'>verbose</a>          5416 bpf/verifier.c 			verbose(env, "func %s#%d reference has not been acquired before\n",</span>
+<span class='curline'><a href='../S/401.html#L5429'>verbose</a>          5429 bpf/verifier.c 		verbose(env, "get_local_storage() doesn't support non-zero flags\n");</span>
+<span class='curline'><a href='../S/401.html#L5457'>verbose</a>          5457 bpf/verifier.c 			verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L5497'>verbose</a>          5497 bpf/verifier.c 				verbose(env, "unable to resolve the size of type '%s': %ld\n",</span>
+<span class='curline'><a href='../S/401.html#L5518'>verbose</a>          5518 bpf/verifier.c 			verbose(env, "invalid return type %d of func %s#%d\n",</span>
+<span class='curline'><a href='../S/401.html#L5524'>verbose</a>          5524 bpf/verifier.c 		verbose(env, "unknown return type %d of func %s#%d\n",</span>
+<span class='curline'><a href='../S/401.html#L5565'>verbose</a>          5565 bpf/verifier.c 			verbose(env, err_str, func_id_name(func_id), func_id);</span>
+<span class='curline'><a href='../S/401.html#L5629'>verbose</a>          5629 bpf/verifier.c 		verbose(env, "math between %s pointer and %lld is not allowed\n",</span>
+<span class='curline'><a href='../S/401.html#L5635'>verbose</a>          5635 bpf/verifier.c 		verbose(env, "%s pointer offset %d is not allowed\n",</span>
+<span class='curline'><a href='../S/401.html#L5641'>verbose</a>          5641 bpf/verifier.c 		verbose(env, "math between %s pointer and register with unbounded min value is not allowed\n",</span>
+<span class='curline'><a href='../S/401.html#L5647'>verbose</a>          5647 bpf/verifier.c 		verbose(env, "value %lld makes %s pointer be out of bounds\n",</span>
+<span class='curline'><a href='../S/401.html#L5843'>verbose</a>          5843 bpf/verifier.c 		verbose(env, "R%d has unknown scalar with mixed signed bounds, %s\n",</span>
+<span class='curline'><a href='../S/401.html#L5847'>verbose</a>          5847 bpf/verifier.c 		verbose(env, "R%d has pointer with unsupported alu operation, %s\n",</span>
+<span class='curline'><a href='../S/401.html#L5851'>verbose</a>          5851 bpf/verifier.c 		verbose(env, "R%d tried to %s from different maps, paths or scalars, %s\n",</span>
+<span class='curline'><a href='../S/401.html#L5855'>verbose</a>          5855 bpf/verifier.c 		verbose(env, "R%d tried to %s beyond pointer bounds, %s\n",</span>
+<span class='curline'><a href='../S/401.html#L5859'>verbose</a>          5859 bpf/verifier.c 		verbose(env, "R%d could not be pushed for speculative verification, %s\n",</span>
+<span class='curline'><a href='../S/401.html#L5863'>verbose</a>          5863 bpf/verifier.c 		verbose(env, "verifier internal error: unknown reason (%d)\n",</span>
+<span class='curline'><a href='../S/401.html#L5891'>verbose</a>          5891 bpf/verifier.c 		verbose(env, "R%d variable stack access prohibited for !root, var_off=%s off=%d\n",</span>
+<span class='curline'><a href='../S/401.html#L5897'>verbose</a>          5897 bpf/verifier.c 		verbose(env, "R%d stack pointer arithmetic goes out of range, "</span>
+<span class='curline'><a href='../S/401.html#L5925'>verbose</a>          5925 bpf/verifier.c 			verbose(env, "R%d pointer arithmetic of map value goes out of range, "</span>
+<span class='curline'><a href='../S/401.html#L5978'>verbose</a>          5978 bpf/verifier.c 		verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L5986'>verbose</a>          5986 bpf/verifier.c 		verbose(env, "R%d pointer arithmetic on %s prohibited, null-check it first\n",</span>
+<span class='curline'><a href='../S/401.html#L6002'>verbose</a>          6002 bpf/verifier.c 		verbose(env, "R%d pointer arithmetic on %s prohibited\n",</span>
+<span class='curline'><a href='../S/401.html#L6083'>verbose</a>          6083 bpf/verifier.c 			verbose(env, "R%d tried to subtract pointer from scalar\n",</span>
+<span class='curline'><a href='../S/401.html#L6092'>verbose</a>          6092 bpf/verifier.c 			verbose(env, "R%d subtraction from stack pointer prohibited\n",</span>
+<span class='curline'><a href='../S/401.html#L6144'>verbose</a>          6144 bpf/verifier.c 		verbose(env, "R%d bitwise operator %s on pointer prohibited\n",</span>
+<span class='curline'><a href='../S/401.html#L6149'>verbose</a>          6149 bpf/verifier.c 		verbose(env, "R%d pointer arithmetic with %s operator prohibited\n",</span>
+<span class='curline'><a href='../S/401.html#L6939'>verbose</a>          6939 bpf/verifier.c 				verbose(env, "R%d pointer %s pointer prohibited\n",</span>
+<span class='curline'><a href='../S/401.html#L6977'>verbose</a>          6977 bpf/verifier.c 		verbose(env, "verifier internal error: unexpected ptr_reg\n");</span>
+<span class='curline'><a href='../S/401.html#L6982'>verbose</a>          6982 bpf/verifier.c 		verbose(env, "verifier internal error: no src_reg\n");</span>
+<span class='curline'><a href='../S/401.html#L7000'>verbose</a>          7000 bpf/verifier.c 				verbose(env, "BPF_NEG uses reserved fields\n");</span>
+<span class='curline'><a href='../S/401.html#L7007'>verbose</a>          7007 bpf/verifier.c 				verbose(env, "BPF_END uses reserved fields\n");</span>
+<span class='curline'><a href='../S/401.html#L7018'>verbose</a>          7018 bpf/verifier.c 			verbose(env, "R%d pointer arithmetic prohibited\n",</span>
+<span class='curline'><a href='../S/401.html#L7032'>verbose</a>          7032 bpf/verifier.c 				verbose(env, "BPF_MOV uses reserved fields\n");</span>
+<span class='curline'><a href='../S/401.html#L7042'>verbose</a>          7042 bpf/verifier.c 				verbose(env, "BPF_MOV uses reserved fields\n");</span>
+<span class='curline'><a href='../S/401.html#L7072'>verbose</a>          7072 bpf/verifier.c 					verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L7108'>verbose</a>          7108 bpf/verifier.c 		verbose(env, "invalid BPF_ALU opcode %x\n", opcode);</span>
+<span class='curline'><a href='../S/401.html#L7115'>verbose</a>          7115 bpf/verifier.c 				verbose(env, "BPF_ALU uses reserved fields\n");</span>
+<span class='curline'><a href='../S/401.html#L7124'>verbose</a>          7124 bpf/verifier.c 				verbose(env, "BPF_ALU uses reserved fields\n");</span>
+<span class='curline'><a href='../S/401.html#L7136'>verbose</a>          7136 bpf/verifier.c 			verbose(env, "div by zero\n");</span>
+<span class='curline'><a href='../S/401.html#L7145'>verbose</a>          7145 bpf/verifier.c 				verbose(env, "invalid shift %d\n", insn-&gt;imm);</span>
+<span class='curline'><a href='../S/401.html#L7914'>verbose</a>          7914 bpf/verifier.c 		verbose(env, "invalid BPF_JMP/JMP32 opcode %x\n", opcode);</span>
+<span class='curline'><a href='../S/401.html#L7920'>verbose</a>          7920 bpf/verifier.c 			verbose(env, "BPF_JMP/JMP32 uses reserved fields\n");</span>
+<span class='curline'><a href='../S/401.html#L7930'>verbose</a>          7930 bpf/verifier.c 			verbose(env, "R%d pointer comparison prohibited\n",</span>
+<span class='curline'><a href='../S/401.html#L7937'>verbose</a>          7937 bpf/verifier.c 			verbose(env, "BPF_JMP/JMP32 uses reserved fields\n");</span>
+<span class='curline'><a href='../S/401.html#L8064'>verbose</a>          8064 bpf/verifier.c 		verbose(env, "R%d pointer comparison prohibited\n",</span>
+<span class='curline'><a href='../S/401.html#L8083'>verbose</a>          8083 bpf/verifier.c 		verbose(env, "invalid BPF_LD_IMM insn\n");</span>
+<span class='curline'><a href='../S/401.html#L8087'>verbose</a>          8087 bpf/verifier.c 		verbose(env, "BPF_LD_IMM64 uses reserved fields\n");</span>
+<span class='curline'><a href='../S/401.html#L8117'>verbose</a>          8117 bpf/verifier.c 			verbose(env, "bpf verifier is misconfigured\n");</span>
+<span class='curline'><a href='../S/401.html#L8135'>verbose</a>          8135 bpf/verifier.c 		verbose(env, "bpf verifier is misconfigured\n");</span>
+<span class='curline'><a href='../S/401.html#L8177'>verbose</a>          8177 bpf/verifier.c 		verbose(env, "BPF_LD_[ABS|IND] instructions not allowed for this program type\n");</span>
+<span class='curline'><a href='../S/401.html#L8182'>verbose</a>          8182 bpf/verifier.c 		verbose(env, "bpf verifier is misconfigured\n");</span>
+<span class='curline'><a href='../S/401.html#L8189'>verbose</a>          8189 bpf/verifier.c 		verbose(env, "BPF_LD_[ABS|IND] uses reserved fields\n");</span>
+<span class='curline'><a href='../S/401.html#L8204'>verbose</a>          8204 bpf/verifier.c 		verbose(env, "BPF_LD_[ABS|IND] cannot be mixed with socket references\n");</span>
+<span class='curline'><a href='../S/401.html#L8209'>verbose</a>          8209 bpf/verifier.c 		verbose(env, "BPF_LD_[ABS|IND] cannot be used inside bpf_spin_lock-ed region\n");</span>
+<span class='curline'><a href='../S/401.html#L8214'>verbose</a>          8214 bpf/verifier.c 		verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L8274'>verbose</a>          8274 bpf/verifier.c 		verbose(env, "R0 leaks addr as return value\n");</span>
+<span class='curline'><a href='../S/401.html#L8281'>verbose</a>          8281 bpf/verifier.c 			verbose(env, "At subprogram exit the register R0 is not a scalar value (%s)\n",</span>
+<span class='curline'><a href='../S/401.html#L8342'>verbose</a>          8342 bpf/verifier.c 		verbose(env, "At program exit the register R0 is not a known value (%s)\n",</span>
+<span class='curline'><a href='../S/401.html#L8350'>verbose</a>          8350 bpf/verifier.c 		verbose(env, "At program exit the register R0 ");</span>
+<span class='curline'><a href='../S/401.html#L8353'>verbose</a>          8353 bpf/verifier.c 			verbose(env, "has value %s", tn_buf);</span>
+<span class='curline'><a href='../S/401.html#L8355'>verbose</a>          8355 bpf/verifier.c 			verbose(env, "has unknown scalar value");</span>
+<span class='curline'><a href='../S/401.html#L8358'>verbose</a>          8358 bpf/verifier.c 		verbose(env, " should have been in %s\n", tn_buf);</span>
+<span class='curline'><a href='../S/401.html#L8447'>verbose</a>          8447 bpf/verifier.c 		verbose(env, "jump out of range from insn %d to %d\n", t, w);</span>
+<span class='curline'><a href='../S/401.html#L8468'>verbose</a>          8468 bpf/verifier.c 		verbose(env, "back-edge from insn %d to %d\n", t, w);</span>
+<span class='curline'><a href='../S/401.html#L8474'>verbose</a>          8474 bpf/verifier.c 		verbose(env, "insn state internal bug\n");</span>
+<span class='curline'><a href='../S/401.html#L8584'>verbose</a>          8584 bpf/verifier.c 		verbose(env, "pop stack internal bug\n");</span>
+<span class='curline'><a href='../S/401.html#L8593'>verbose</a>          8593 bpf/verifier.c 			verbose(env, "unreachable insn %d\n", i);</span>
+<span class='curline'><a href='../S/401.html#L8613'>verbose</a>          8613 bpf/verifier.c 			verbose(env, "LD_ABS is not allowed in subprogs without BTF\n");</span>
+<span class='curline'><a href='../S/401.html#L8617'>verbose</a>          8617 bpf/verifier.c 			verbose(env, "tail_call is not allowed in subprogs without BTF\n");</span>
+<span class='curline'><a href='../S/401.html#L8652'>verbose</a>          8652 bpf/verifier.c 		verbose(env, "number of funcs in func_info doesn't match number of subprogs\n");</span>
+<span class='curline'><a href='../S/401.html#L8660'>verbose</a>          8660 bpf/verifier.c 		verbose(env, "invalid func info rec size %u\n", urec_size);</span>
+<span class='curline'><a href='../S/401.html#L8681'>verbose</a>          8681 bpf/verifier.c 				verbose(env, "nonzero tailing record in func info");</span>
+<span class='curline'><a href='../S/401.html#L8700'>verbose</a>          8700 bpf/verifier.c 				verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L8706'>verbose</a>          8706 bpf/verifier.c 			verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L8713'>verbose</a>          8713 bpf/verifier.c 			verbose(env, "func_info BTF section doesn't match subprog layout in BPF program\n");</span>
+<span class='curline'><a href='../S/401.html#L8720'>verbose</a>          8720 bpf/verifier.c 			verbose(env, "invalid type id %d in func info",</span>
+<span class='curline'><a href='../S/401.html#L8734'>verbose</a>          8734 bpf/verifier.c 			verbose(env, "LD_ABS is only allowed in functions that return 'int'.\n");</span>
+<span class='curline'><a href='../S/401.html#L8738'>verbose</a>          8738 bpf/verifier.c 			verbose(env, "tail_call is only allowed in functions that return 'int'.\n");</span>
+<span class='curline'><a href='../S/401.html#L8815'>verbose</a>          8815 bpf/verifier.c 				verbose(env, "nonzero tailing record in line_info");</span>
+<span class='curline'><a href='../S/401.html#L8841'>verbose</a>          8841 bpf/verifier.c 			verbose(env, "Invalid line_info[%u].insn_off:%u (prev_offset:%u prog-&gt;len:%u)\n",</span>
+<span class='curline'><a href='../S/401.html#L8849'>verbose</a>          8849 bpf/verifier.c 			verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L8858'>verbose</a>          8858 bpf/verifier.c 			verbose(env, "Invalid line_info[%u].line_off or .file_name_off\n", i);</span>
+<span class='curline'><a href='../S/401.html#L8868'>verbose</a>          8868 bpf/verifier.c 				verbose(env, "missing bpf_line_info for func#%u\n", s);</span>
+<span class='curline'><a href='../S/401.html#L8879'>verbose</a>          8879 bpf/verifier.c 		verbose(env, "missing bpf_line_info for %u funcs starting from func#%u\n",</span>
+<span class='curline'><a href='../S/401.html#L9441'>verbose</a>          9441 bpf/verifier.c 			verbose(env, "propagating r%d\n", i);</span>
+<span class='curline'><a href='../S/401.html#L9455'>verbose</a>          9455 bpf/verifier.c 			verbose(env, "propagating fp%d\n",</span>
+<span class='curline'><a href='../S/401.html#L9523'>verbose</a>          9523 bpf/verifier.c 				verbose(env, "infinite loop detected at insn %d\n", insn_idx);</span>
+<span class='curline'><a href='../S/401.html#L9744'>verbose</a>          9744 bpf/verifier.c 			verbose(env, "invalid insn idx %d insn_cnt %d\n",</span>
+<span class='curline'><a href='../S/401.html#L9753'>verbose</a>          9753 bpf/verifier.c 			verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L9766'>verbose</a>          9766 bpf/verifier.c 					verbose(env, "\nfrom %d to %d%s: safe\n",</span>
+<span class='curline'><a href='../S/401.html#L9771'>verbose</a>          9771 bpf/verifier.c 					verbose(env, "%d: safe\n", env-&gt;insn_idx);</span>
+<span class='curline'><a href='../S/401.html#L9785'>verbose</a>          9785 bpf/verifier.c 				verbose(env, "%d:", env-&gt;insn_idx);</span>
+<span class='curline'><a href='../S/401.html#L9787'>verbose</a>          9787 bpf/verifier.c 				verbose(env, "\nfrom %d to %d%s:",</span>
+<span class='curline'><a href='../S/401.html#L9797'>verbose</a>          9797 bpf/verifier.c 				.cb_print	= verbose,</span>
+<span class='curline'><a href='../S/401.html#L9802'>verbose</a>          9802 bpf/verifier.c 			verbose(env, "%d: ", env-&gt;insn_idx);</span>
+<span class='curline'><a href='../S/401.html#L9864'>verbose</a>          9864 bpf/verifier.c 				verbose(env, "same insn cannot be used with different pointers\n");</span>
+<span class='curline'><a href='../S/401.html#L9902'>verbose</a>          9902 bpf/verifier.c 				verbose(env, "same insn cannot be used with different pointers\n");</span>
+<span class='curline'><a href='../S/401.html#L9909'>verbose</a>          9909 bpf/verifier.c 				verbose(env, "BPF_ST uses reserved fields\n");</span>
+<span class='curline'><a href='../S/401.html#L9918'>verbose</a>          9918 bpf/verifier.c 				verbose(env, "BPF_ST stores into R%d %s is not allowed\n",</span>
+<span class='curline'><a href='../S/401.html#L9942'>verbose</a>          9942 bpf/verifier.c 					verbose(env, "BPF_CALL uses reserved fields\n");</span>
+<span class='curline'><a href='../S/401.html#L9949'>verbose</a>          9949 bpf/verifier.c 					verbose(env, "function calls are not allowed while holding a lock\n");</span>
+<span class='curline'><a href='../S/401.html#L9965'>verbose</a>          9965 bpf/verifier.c 					verbose(env, "BPF_JA uses reserved fields\n");</span>
+<span class='curline'><a href='../S/401.html#L9978'>verbose</a>          9978 bpf/verifier.c 					verbose(env, "BPF_EXIT uses reserved fields\n");</span>
+<span class='curline'><a href='../S/401.html#L9983'>verbose</a>          9983 bpf/verifier.c 					verbose(env, "bpf_spin_unlock is missing\n");</span>
+<span class='curline'><a href='../S/401.html#L10036'>verbose</a>          10036 bpf/verifier.c 				verbose(env, "invalid BPF_LD mode\n");</span>
+<span class='curline'><a href='../S/401.html#L10040'>verbose</a>          10040 bpf/verifier.c 			verbose(env, "unknown insn class %d\n", class);</span>
+<span class='curline'><a href='../S/401.html#L10066'>verbose</a>          10066 bpf/verifier.c 		verbose(env, "kernel is missing BTF, make sure CONFIG_DEBUG_INFO_BTF=y is specified in Kconfig.\n");</span>
+<span class='curline'><a href='../S/401.html#L10071'>verbose</a>          10071 bpf/verifier.c 		verbose(env, "reserved field (insn[1].imm) is used in pseudo_btf_id ldimm64 insn.\n");</span>
+<span class='curline'><a href='../S/401.html#L10077'>verbose</a>          10077 bpf/verifier.c 		verbose(env, "ldimm64 insn specifies invalid btf_id %d.\n", id);</span>
+<span class='curline'><a href='../S/401.html#L10082'>verbose</a>          10082 bpf/verifier.c 		verbose(env, "pseudo btf_id %d in ldimm64 isn't KIND_VAR.\n",</span>
+<span class='curline'><a href='../S/401.html#L10090'>verbose</a>          10090 bpf/verifier.c 		verbose(env, "ldimm64 failed to find the address for kernel symbol '%s'.\n",</span>
+<span class='curline'><a href='../S/401.html#L10124'>verbose</a>          10124 bpf/verifier.c 			verbose(env, "ldimm64 unable to resolve the size of type '%s': %ld\n",</span>
+<span class='curline'><a href='../S/401.html#L10192'>verbose</a>          10192 bpf/verifier.c 			verbose(env, "perf_event programs can only use preallocated hash map\n");</span>
+<span class='curline'><a href='../S/401.html#L10196'>verbose</a>          10196 bpf/verifier.c 			verbose(env, "trace type programs can only use preallocated hash map\n");</span>
+<span class='curline'><a href='../S/401.html#L10200'>verbose</a>          10200 bpf/verifier.c 		verbose(env, "trace type programs with run-time allocated hash maps are unsafe. Switch to preallocated hash maps.\n");</span>
+<span class='curline'><a href='../S/401.html#L10206'>verbose</a>          10206 bpf/verifier.c 		verbose(env, "tracing progs cannot use bpf_spin_lock yet\n");</span>
+<span class='curline'><a href='../S/401.html#L10212'>verbose</a>          10212 bpf/verifier.c 		verbose(env, "offload device mismatch between prog and map\n");</span>
+<span class='curline'><a href='../S/401.html#L10217'>verbose</a>          10217 bpf/verifier.c 		verbose(env, "bpf_struct_ops map cannot be used in prog\n");</span>
+<span class='curline'><a href='../S/401.html#L10227'>verbose</a>          10227 bpf/verifier.c 				verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L10233'>verbose</a>          10233 bpf/verifier.c 			verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L10267'>verbose</a>          10267 bpf/verifier.c 			verbose(env, "BPF_LDX uses reserved fields\n");</span>
+<span class='curline'><a href='../S/401.html#L10274'>verbose</a>          10274 bpf/verifier.c 			verbose(env, "BPF_STX uses reserved fields\n");</span>
+<span class='curline'><a href='../S/401.html#L10287'>verbose</a>          10287 bpf/verifier.c 				verbose(env, "invalid bpf_ld_imm64 insn\n");</span>
+<span class='curline'><a href='../S/401.html#L10310'>verbose</a>          10310 bpf/verifier.c 				verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L10318'>verbose</a>          10318 bpf/verifier.c 				verbose(env, "fd %d is not pointing to valid bpf_map\n",</span>
+<span class='curline'><a href='../S/401.html#L10336'>verbose</a>          10336 bpf/verifier.c 					verbose(env, "direct value offset of %u is not allowed\n", off);</span>
+<span class='curline'><a href='../S/401.html#L10342'>verbose</a>          10342 bpf/verifier.c 					verbose(env, "no direct value access support for this map type\n");</span>
+<span class='curline'><a href='../S/401.html#L10349'>verbose</a>          10349 bpf/verifier.c 					verbose(env, "invalid access to map value pointer, value_size=%u off=%u\n",</span>
+<span class='curline'><a href='../S/401.html#L10388'>verbose</a>          10388 bpf/verifier.c 				verbose(env, "only one cgroup storage of each type is allowed\n");</span>
+<span class='curline'><a href='../S/401.html#L10402'>verbose</a>          10402 bpf/verifier.c 			verbose(env, "unknown opcode %02x\n", insn-&gt;code);</span>
+<span class='curline'><a href='../S/401.html#L10504'>verbose</a>          10504 bpf/verifier.c 			verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L10870'>verbose</a>          10870 bpf/verifier.c 			verbose(env, "bpf verifier is misconfigured\n");</span>
+<span class='curline'><a href='../S/401.html#L10876'>verbose</a>          10876 bpf/verifier.c 			verbose(env, "bpf verifier is misconfigured\n");</span>
+<span class='curline'><a href='../S/401.html#L10959'>verbose</a>          10959 bpf/verifier.c 				verbose(env, "Writes through BTF pointers are not allowed\n");</span>
+<span class='curline'><a href='../S/401.html#L10982'>verbose</a>          10982 bpf/verifier.c 				verbose(env, "bpf verifier narrow ctx access misconfigured\n");</span>
+<span class='curline'><a href='../S/401.html#L11001'>verbose</a>          11001 bpf/verifier.c 			verbose(env, "bpf verifier is misconfigured\n");</span>
+<span class='curline'><a href='../S/401.html#L11122'>verbose</a>          11122 bpf/verifier.c 				verbose(env, "adding tail call poke descriptor failed\n");</span>
+<span class='curline'><a href='../S/401.html#L11131'>verbose</a>          11131 bpf/verifier.c 				verbose(env, "tracking tail call prog failed\n");</span>
+<span class='curline'><a href='../S/401.html#L11208'>verbose</a>          11208 bpf/verifier.c 			verbose(env, "JIT doesn't support bpf-to-bpf calls\n");</span>
+<span class='curline'><a href='../S/401.html#L11290'>verbose</a>          11290 bpf/verifier.c 		verbose(env, "tail_calls are not allowed in non-JITed programs with bpf-to-bpf calls\n");</span>
+<span class='curline'><a href='../S/401.html#L11372'>verbose</a>          11372 bpf/verifier.c 				verbose(env, "bpf verifier is misconfigured\n");</span>
+<span class='curline'><a href='../S/401.html#L11484'>verbose</a>          11484 bpf/verifier.c 					verbose(env, "adding tail call poke descriptor failed\n");</span>
+<span class='curline'><a href='../S/401.html#L11502'>verbose</a>          11502 bpf/verifier.c 				verbose(env, "tail_call abusing map_ptr\n");</span>
+<span class='curline'><a href='../S/401.html#L11548'>verbose</a>          11548 bpf/verifier.c 					verbose(env, "bpf verifier is misconfigured\n");</span>
+<span class='curline'><a href='../S/401.html#L11638'>verbose</a>          11638 bpf/verifier.c 			verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L11652'>verbose</a>          11652 bpf/verifier.c 			verbose(env, "bpf verifier is misconfigured\n");</span>
+<span class='curline'><a href='../S/401.html#L11658'>verbose</a>          11658 bpf/verifier.c 			verbose(env, "tracking tail call prog failed\n");</span>
+<span class='curline'><a href='../S/401.html#L11833'>verbose</a>          11833 bpf/verifier.c 			verbose(env,</span>
+<span class='curline'><a href='../S/401.html#L11858'>verbose</a>          11858 bpf/verifier.c 		verbose(env, "verification time %lld usec\n",</span>
+<span class='curline'><a href='../S/401.html#L11860'>verbose</a>          11860 bpf/verifier.c 		verbose(env, "stack depth ");</span>
+<span class='curline'><a href='../S/401.html#L11864'>verbose</a>          11864 bpf/verifier.c 			verbose(env, "%d", depth);</span>
+<span class='curline'><a href='../S/401.html#L11866'>verbose</a>          11866 bpf/verifier.c 				verbose(env, "+");</span>
+<span class='curline'><a href='../S/401.html#L11868'>verbose</a>          11868 bpf/verifier.c 		verbose(env, "\n");</span>
+<span class='curline'><a href='../S/401.html#L11870'>verbose</a>          11870 bpf/verifier.c 	verbose(env, "processed %d insns (limit %d) max_states_per_insn %d "</span>
+<span class='curline'><a href='../S/401.html#L11887'>verbose</a>          11887 bpf/verifier.c 		verbose(env, "struct ops programs must have a GPL compatible license\n");</span>
+<span class='curline'><a href='../S/401.html#L11894'>verbose</a>          11894 bpf/verifier.c 		verbose(env, "attach_btf_id %u is not a supported struct\n",</span>
+<span class='curline'><a href='../S/401.html#L11902'>verbose</a>          11902 bpf/verifier.c 		verbose(env, "attach to invalid member idx %u of struct %s\n",</span>
+<span class='curline'><a href='../S/401.html#L11912'>verbose</a>          11912 bpf/verifier.c 		verbose(env, "attach to invalid member %s(@idx %u) of struct %s\n",</span>
+<span class='curline'><a href='../S/401.html#L11921'>verbose</a>          11921 bpf/verifier.c 			verbose(env, "attach to unsupported member %s of struct %s\n",</span>
+<span class='curline'><a href='../S/401.html#L12221'>verbose</a>          12221 bpf/verifier.c 		verbose(env, "Only fentry/fexit/fmod_ret and lsm programs can be sleepable\n");</span>
+<span class='curline'><a href='../S/401.html#L12346'>verbose</a>          12346 bpf/verifier.c 		verbose(env, "in-kernel BTF is malformed\n");</span>
+<span class='curline'><a href='../S/146.html#L206'>verbose</a>           206 dma/swiotlb.c  int __init swiotlb_init_with_tbl(char *tlb, unsigned long nslabs, int verbose)</span>
+<span class='curline'><a href='../S/146.html#L241'>verbose</a>           241 dma/swiotlb.c  	if (verbose)</span>
+<span class='curline'><a href='../S/146.html#L253'>verbose</a>           253 dma/swiotlb.c  swiotlb_init(int verbose)</span>
+<span class='curline'><a href='../S/146.html#L268'>verbose</a>           268 dma/swiotlb.c  	if (vstart &amp;&amp; !swiotlb_init_with_tbl(vstart, io_tlb_nslabs, verbose))</span>
+<span class='curline'><a href='../S/35.html#L1305'>verbose</a>          1305 locking/lockdep.c 	if (verbose(class)) {</span>
+<span class='curline'><a href='../S/29.html#L49'>verbose</a>            49 locking/locktorture.c torture_param(int, verbose, 1,</span>
+<span class='curline'><a href='../S/29.html#L776'>verbose</a>           776 locking/locktorture.c 		 verbose, shuffle_interval, stutter, shutdown_secs,</span>
+<span class='curline'><a href='../S/29.html#L851'>verbose</a>           851 locking/locktorture.c 	if (!torture_init_begin(torture_type, verbose))</span>
+<span class='curline'><a href='../S/142.html#L51'>verbose</a>            51 rcu/rcuscale.c 	do { if (verbose) pr_alert("%s" SCALE_FLAG " %s\n", scale_type, s); } while (0)</span>
+<span class='curline'><a href='../S/142.html#L53'>verbose</a>            53 rcu/rcuscale.c 	do { if (verbose) pr_alert("%s" SCALE_FLAG "!!! %s\n", scale_type, s); } while (0)</span>
+<span class='curline'><a href='../S/142.html#L93'>verbose</a>            93 rcu/rcuscale.c torture_param(int, verbose, 1, "Enable verbose debugging printk()s");</span>
+<span class='curline'><a href='../S/142.html#L470'>verbose</a>           470 rcu/rcuscale.c 		 scale_type, tag, nrealreaders, nrealwriters, verbose, shutdown);</span>
+<span class='curline'><a href='../S/142.html#L760'>verbose</a>           760 rcu/rcuscale.c 	if (!torture_init_begin(scale_type, verbose))</span>
+<span class='curline'><a href='../S/141.html#L123'>verbose</a>           123 rcu/rcutorture.c torture_param(int, verbose, 1,</span>
+<span class='curline'><a href='../S/141.html#L1636'>verbose</a>          1636 rcu/rcutorture.c 		 stat_interval, verbose, test_no_idle_hz, shuffle_interval,</span>
+<span class='curline'><a href='../S/141.html#L2634'>verbose</a>          2634 rcu/rcutorture.c 	if (!torture_init_begin(torture_type, verbose))</span>
+<span class='curline'><a href='../S/132.html#L47'>verbose</a>            47 rcu/refscale.c 	do { if (verbose) pr_alert("%s" SCALE_FLAG s, scale_type, ## x); } while (0)</span>
+<span class='curline'><a href='../S/132.html#L50'>verbose</a>            50 rcu/refscale.c 	do { if (verbose) pr_alert("%s" SCALE_FLAG "!!! " s, scale_type, ## x); } while (0)</span>
+<span class='curline'><a href='../S/132.html#L59'>verbose</a>            59 rcu/refscale.c torture_param(int, verbose, 0, "Enable verbose debugging printk()s");</span>
+<span class='curline'><a href='../S/132.html#L591'>verbose</a>           591 rcu/refscale.c 		 verbose, shutdown, holdoff, loops, nreaders, nruns, readdelay);</span>
+<span class='curline'><a href='../S/132.html#L647'>verbose</a>           647 rcu/refscale.c 	if (!torture_init_begin(scale_type, verbose))</span>
+<span class='curline'><a href='../S/73.html#L45'>verbose</a>            45 scftorture.c   	do { if (verbose) pr_alert(SCFTORT_FLAG s, ## x); } while (0)</span>
+<span class='curline'><a href='../S/73.html#L48'>verbose</a>            48 scftorture.c   	do { if (verbose) pr_alert(SCFTORT_FLAG "!!! " s, ## x); } while (0)</span>
+<span class='curline'><a href='../S/73.html#L64'>verbose</a>            64 scftorture.c   torture_param(int, verbose, 0, "Enable verbose debugging printk()s");</span>
+<span class='curline'><a href='../S/73.html#L437'>verbose</a>           437 scftorture.c   		 verbose, holdoff, longwait, nthreads, onoff_holdoff, onoff_interval, shutdown, stat_interval, stutter_cpus, use_cpus_read_lock, weight_single, weight_single_wait, weight_many, weight_many_wait, weight_all, weight_all_wait);</span>
+<span class='curline'><a href='../S/73.html#L485'>verbose</a>           485 scftorture.c   	if (!torture_init_begin(SCFTORT_STRING, verbose))</span>
+<span class='curline'><a href='../S/16.html#L52'>verbose</a>            52 torture.c      static int verbose;</span>
+<span class='curline'><a href='../S/16.html#L101'>verbose</a>           101 torture.c      	if (verbose &gt; 1)</span>
+<span class='curline'><a href='../S/16.html#L115'>verbose</a>           115 torture.c      		if (verbose)</span>
+<span class='curline'><a href='../S/16.html#L120'>verbose</a>           120 torture.c      		if (verbose &gt; 1)</span>
+<span class='curline'><a href='../S/16.html#L159'>verbose</a>           159 torture.c      	if (verbose &gt; 1)</span>
+<span class='curline'><a href='../S/16.html#L173'>verbose</a>           173 torture.c      		if (verbose)</span>
+<span class='curline'><a href='../S/16.html#L178'>verbose</a>           178 torture.c      		if (verbose &gt; 1)</span>
+<span class='curline'><a href='../S/16.html#L220'>verbose</a>           220 torture.c      			if (ret &amp;&amp; verbose) {</span>
+<span class='curline'><a href='../S/16.html#L511'>verbose</a>           511 torture.c      		if (verbose)</span>
+<span class='curline'><a href='../S/16.html#L699'>verbose</a>           699 torture.c      	verbose = v;</span>
+<span class='curline'><a href='../S/279.html#L539'>verbose</a>           539 trace/trace_output.c 	unsigned long verbose = tr-&gt;trace_flags &amp; TRACE_ITER_VERBOSE;</span>
+<span class='curline'><a href='../S/279.html#L550'>verbose</a>           550 trace/trace_output.c 	if (verbose &amp;&amp; in_ns) {</span>
+<span class='curline'><a href='../S/279.html#L562'>verbose</a>           562 trace/trace_output.c 	} else if (verbose &amp;&amp; !in_ns) {</span>
+<span class='curline'><a href='../S/279.html#L567'>verbose</a>           567 trace/trace_output.c 	} else if (!verbose &amp;&amp; in_ns) {</span>
+<span class='curline'><a href='../S/279.html#L623'>verbose</a>           623 trace/trace_output.c 	unsigned long verbose = (tr-&gt;trace_flags &amp; TRACE_ITER_VERBOSE);</span>
+<span class='curline'><a href='../S/279.html#L633'>verbose</a>           633 trace/trace_output.c 	if (verbose) {</span>
+</pre>
+</body>
+</html>

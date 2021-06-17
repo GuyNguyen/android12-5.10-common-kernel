@@ -1,0 +1,463 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>btf</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/416.html#L422'>btf</a>               422 bpf/arraymap.c 	btf_type_seq_show(map-&gt;btf, map-&gt;btf_value_type_id, value, m);</span>
+<span class='curline'><a href='../S/416.html#L442'>btf</a>               442 bpf/arraymap.c 		btf_type_seq_show(map-&gt;btf, map-&gt;btf_value_type_id,</span>
+<span class='curline'><a href='../S/416.html#L452'>btf</a>               452 bpf/arraymap.c 			       const struct btf *btf,</span>
+<span class='curline'><a href='../S/416.html#L842'>btf</a>               842 bpf/arraymap.c 			btf_type_seq_show(map-&gt;btf, map-&gt;btf_value_type_id,</span>
+<span class='curline'><a href='../S/378.html#L586'>btf</a>               586 bpf/bpf_local_storage.c 				    const struct btf *btf,</span>
+<span class='curline'><a href='../S/399.html#L100'>btf</a>               100 bpf/bpf_struct_ops.c void bpf_struct_ops_init(struct btf *btf, struct bpf_verifier_log *log)</span>
+<span class='curline'><a href='../S/399.html#L115'>btf</a>               115 bpf/bpf_struct_ops.c 	module_id = btf_find_by_name_kind(btf, "module", BTF_KIND_STRUCT);</span>
+<span class='curline'><a href='../S/399.html#L120'>btf</a>               120 bpf/bpf_struct_ops.c 	module_type = btf_type_by_id(btf, module_id);</span>
+<span class='curline'><a href='../S/399.html#L133'>btf</a>               133 bpf/bpf_struct_ops.c 		value_id = btf_find_by_name_kind(btf, value_name,</span>
+<span class='curline'><a href='../S/399.html#L141'>btf</a>               141 bpf/bpf_struct_ops.c 		type_id = btf_find_by_name_kind(btf, st_ops-&gt;name,</span>
+<span class='curline'><a href='../S/399.html#L148'>btf</a>               148 bpf/bpf_struct_ops.c 		t = btf_type_by_id(btf, type_id);</span>
+<span class='curline'><a href='../S/399.html#L158'>btf</a>               158 bpf/bpf_struct_ops.c 			mname = btf_name_by_offset(btf, member-&gt;name_off);</span>
+<span class='curline'><a href='../S/399.html#L171'>btf</a>               171 bpf/bpf_struct_ops.c 			func_proto = btf_type_resolve_func_ptr(btf,</span>
+<span class='curline'><a href='../S/399.html#L175'>btf</a>               175 bpf/bpf_struct_ops.c 			    btf_distill_func_proto(log, btf,</span>
+<span class='curline'><a href='../S/399.html#L185'>btf</a>               185 bpf/bpf_struct_ops.c 			if (st_ops-&gt;init(btf)) {</span>
+<span class='curline'><a href='../S/399.html#L192'>btf</a>               192 bpf/bpf_struct_ops.c 				st_ops-&gt;value_type = btf_type_by_id(btf,</span>
+<span class='curline'><a href='../S/399.html#L199'>btf</a>               199 bpf/bpf_struct_ops.c extern struct btf *btf_vmlinux;</span>
+<span class='curline'><a href='../S/411.html#L248'>btf</a>               248 bpf/btf.c      	struct btf *btf;</span>
+<span class='curline'><a href='../S/411.html#L344'>btf</a>               344 bpf/btf.c      	const struct btf *btf;</span>
+<span class='curline'><a href='../S/411.html#L383'>btf</a>               383 bpf/btf.c      	void (*show)(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L453'>btf</a>               453 bpf/btf.c      s32 btf_find_by_name_kind(const struct btf *btf, const char *name, u8 kind)</span>
+<span class='curline'><a href='../S/411.html#L459'>btf</a>               459 bpf/btf.c      	for (i = 1; i &lt;= btf-&gt;nr_types; i++) {</span>
+<span class='curline'><a href='../S/411.html#L460'>btf</a>               460 bpf/btf.c      		t = btf-&gt;types[i];</span>
+<span class='curline'><a href='../S/411.html#L464'>btf</a>               464 bpf/btf.c      		tname = btf_name_by_offset(btf, t-&gt;name_off);</span>
+<span class='curline'><a href='../S/411.html#L472'>btf</a>               472 bpf/btf.c      const struct btf_type *btf_type_skip_modifiers(const struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L475'>btf</a>               475 bpf/btf.c      	const struct btf_type *t = btf_type_by_id(btf, id);</span>
+<span class='curline'><a href='../S/411.html#L479'>btf</a>               479 bpf/btf.c      		t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L488'>btf</a>               488 bpf/btf.c      const struct btf_type *btf_type_resolve_ptr(const struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L493'>btf</a>               493 bpf/btf.c      	t = btf_type_skip_modifiers(btf, id, NULL);</span>
+<span class='curline'><a href='../S/411.html#L497'>btf</a>               497 bpf/btf.c      	return btf_type_skip_modifiers(btf, t-&gt;type, res_id);</span>
+<span class='curline'><a href='../S/411.html#L500'>btf</a>               500 bpf/btf.c      const struct btf_type *btf_type_resolve_func_ptr(const struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L505'>btf</a>               505 bpf/btf.c      	ptype = btf_type_resolve_ptr(btf, id, res_id);</span>
+<span class='curline'><a href='../S/411.html#L601'>btf</a>               601 bpf/btf.c      static bool btf_name_offset_valid(const struct btf *btf, u32 offset)</span>
+<span class='curline'><a href='../S/411.html#L604'>btf</a>               604 bpf/btf.c      		offset &lt; btf-&gt;hdr.str_len;</span>
+<span class='curline'><a href='../S/411.html#L618'>btf</a>               618 bpf/btf.c      static bool __btf_name_valid(const struct btf *btf, u32 offset, bool dot_ok)</span>
+<span class='curline'><a href='../S/411.html#L621'>btf</a>               621 bpf/btf.c      	const char *src = &amp;btf-&gt;strings[offset];</span>
+<span class='curline'><a href='../S/411.html#L642'>btf</a>               642 bpf/btf.c      static bool btf_name_valid_identifier(const struct btf *btf, u32 offset)</span>
+<span class='curline'><a href='../S/411.html#L644'>btf</a>               644 bpf/btf.c      	return __btf_name_valid(btf, offset, false);</span>
+<span class='curline'><a href='../S/411.html#L647'>btf</a>               647 bpf/btf.c      static bool btf_name_valid_section(const struct btf *btf, u32 offset)</span>
+<span class='curline'><a href='../S/411.html#L649'>btf</a>               649 bpf/btf.c      	return __btf_name_valid(btf, offset, true);</span>
+<span class='curline'><a href='../S/411.html#L652'>btf</a>               652 bpf/btf.c      static const char *__btf_name_by_offset(const struct btf *btf, u32 offset)</span>
+<span class='curline'><a href='../S/411.html#L656'>btf</a>               656 bpf/btf.c      	else if (offset &lt; btf-&gt;hdr.str_len)</span>
+<span class='curline'><a href='../S/411.html#L657'>btf</a>               657 bpf/btf.c      		return &amp;btf-&gt;strings[offset];</span>
+<span class='curline'><a href='../S/411.html#L662'>btf</a>               662 bpf/btf.c      const char *btf_name_by_offset(const struct btf *btf, u32 offset)</span>
+<span class='curline'><a href='../S/411.html#L664'>btf</a>               664 bpf/btf.c      	if (offset &lt; btf-&gt;hdr.str_len)</span>
+<span class='curline'><a href='../S/411.html#L665'>btf</a>               665 bpf/btf.c      		return &amp;btf-&gt;strings[offset];</span>
+<span class='curline'><a href='../S/411.html#L670'>btf</a>               670 bpf/btf.c      const struct btf_type *btf_type_by_id(const struct btf *btf, u32 type_id)</span>
+<span class='curline'><a href='../S/411.html#L672'>btf</a>               672 bpf/btf.c      	if (type_id &gt; btf-&gt;nr_types)</span>
+<span class='curline'><a href='../S/411.html#L675'>btf</a>               675 bpf/btf.c      	return btf-&gt;types[type_id];</span>
+<span class='curline'><a href='../S/411.html#L705'>btf</a>               705 bpf/btf.c      bool btf_member_is_reg_int(const struct btf *btf, const struct btf_type *s,</span>
+<span class='curline'><a href='../S/411.html#L714'>btf</a>               714 bpf/btf.c      	t = btf_type_id_size(btf, &amp;id, NULL);</span>
+<span class='curline'><a href='../S/411.html#L743'>btf</a>               743 bpf/btf.c      static const struct btf_type *btf_type_skip_qualifiers(const struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L746'>btf</a>               746 bpf/btf.c      	const struct btf_type *t = btf_type_by_id(btf, id);</span>
+<span class='curline'><a href='../S/411.html#L751'>btf</a>               751 bpf/btf.c      		t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L797'>btf</a>               797 bpf/btf.c      		member = btf_name_by_offset(show-&gt;btf, m-&gt;name_off);</span>
+<span class='curline'><a href='../S/411.html#L809'>btf</a>               809 bpf/btf.c      	t = btf_type_by_id(show-&gt;btf, id);</span>
+<span class='curline'><a href='../S/411.html#L840'>btf</a>               840 bpf/btf.c      				name = btf_name_by_offset(show-&gt;btf,</span>
+<span class='curline'><a href='../S/411.html#L867'>btf</a>               867 bpf/btf.c      		t = btf_type_skip_qualifiers(show-&gt;btf, id);</span>
+<span class='curline'><a href='../S/411.html#L874'>btf</a>               874 bpf/btf.c      		name = btf_name_by_offset(show-&gt;btf, t-&gt;name_off);</span>
+<span class='curline'><a href='../S/411.html#L1062'>btf</a>              1062 bpf/btf.c      	rt = btf_resolve_size(show-&gt;btf, t, &amp;size);</span>
+<span class='curline'><a href='../S/411.html#L1255'>btf</a>              1255 bpf/btf.c      	struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L1271'>btf</a>              1271 bpf/btf.c      			   __btf_name_by_offset(btf, t-&gt;name_off),</span>
+<span class='curline'><a href='../S/411.html#L1299'>btf</a>              1299 bpf/btf.c      	struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L1319'>btf</a>              1319 bpf/btf.c      				   __btf_name_by_offset(btf, member-&gt;name_off),</span>
+<span class='curline'><a href='../S/411.html#L1325'>btf</a>              1325 bpf/btf.c      				   __btf_name_by_offset(btf, member-&gt;name_off),</span>
+<span class='curline'><a href='../S/411.html#L1370'>btf</a>              1370 bpf/btf.c      	const struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L1378'>btf</a>              1378 bpf/btf.c      	hdr = &amp;btf-&gt;hdr;</span>
+<span class='curline'><a href='../S/411.html#L1392'>btf</a>              1392 bpf/btf.c      	struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L1398'>btf</a>              1398 bpf/btf.c      	if (btf-&gt;types_size - btf-&gt;nr_types &lt; 2) {</span>
+<span class='curline'><a href='../S/411.html#L1404'>btf</a>              1404 bpf/btf.c      		if (btf-&gt;types_size == BTF_MAX_TYPE) {</span>
+<span class='curline'><a href='../S/411.html#L1409'>btf</a>              1409 bpf/btf.c      		expand_by = max_t(u32, btf-&gt;types_size &gt;&gt; 2, 16);</span>
+<span class='curline'><a href='../S/411.html#L1411'>btf</a>              1411 bpf/btf.c      				 btf-&gt;types_size + expand_by);</span>
+<span class='curline'><a href='../S/411.html#L1418'>btf</a>              1418 bpf/btf.c      		if (btf-&gt;nr_types == 0)</span>
+<span class='curline'><a href='../S/411.html#L1421'>btf</a>              1421 bpf/btf.c      			memcpy(new_types, btf-&gt;types,</span>
+<span class='curline'><a href='../S/411.html#L1422'>btf</a>              1422 bpf/btf.c      			       sizeof(*btf-&gt;types) * (btf-&gt;nr_types + 1));</span>
+<span class='curline'><a href='../S/411.html#L1424'>btf</a>              1424 bpf/btf.c      		kvfree(btf-&gt;types);</span>
+<span class='curline'><a href='../S/411.html#L1425'>btf</a>              1425 bpf/btf.c      		btf-&gt;types = new_types;</span>
+<span class='curline'><a href='../S/411.html#L1426'>btf</a>              1426 bpf/btf.c      		btf-&gt;types_size = new_size;</span>
+<span class='curline'><a href='../S/411.html#L1429'>btf</a>              1429 bpf/btf.c      	btf-&gt;types[++(btf-&gt;nr_types)] = t;</span>
+<span class='curline'><a href='../S/411.html#L1434'>btf</a>              1434 bpf/btf.c      static int btf_alloc_id(struct btf *btf)</span>
+<span class='curline'><a href='../S/411.html#L1440'>btf</a>              1440 bpf/btf.c      	id = idr_alloc_cyclic(&amp;btf_idr, btf, 1, INT_MAX, GFP_ATOMIC);</span>
+<span class='curline'><a href='../S/411.html#L1442'>btf</a>              1442 bpf/btf.c      		btf-&gt;id = id;</span>
+<span class='curline'><a href='../S/411.html#L1452'>btf</a>              1452 bpf/btf.c      static void btf_free_id(struct btf *btf)</span>
+<span class='curline'><a href='../S/411.html#L1466'>btf</a>              1466 bpf/btf.c      	idr_remove(&amp;btf_idr, btf-&gt;id);</span>
+<span class='curline'><a href='../S/411.html#L1470'>btf</a>              1470 bpf/btf.c      static void btf_free(struct btf *btf)</span>
+<span class='curline'><a href='../S/411.html#L1472'>btf</a>              1472 bpf/btf.c      	kvfree(btf-&gt;types);</span>
+<span class='curline'><a href='../S/411.html#L1473'>btf</a>              1473 bpf/btf.c      	kvfree(btf-&gt;resolved_sizes);</span>
+<span class='curline'><a href='../S/411.html#L1474'>btf</a>              1474 bpf/btf.c      	kvfree(btf-&gt;resolved_ids);</span>
+<span class='curline'><a href='../S/411.html#L1475'>btf</a>              1475 bpf/btf.c      	kvfree(btf-&gt;data);</span>
+<span class='curline'><a href='../S/411.html#L1476'>btf</a>              1476 bpf/btf.c      	kfree(btf);</span>
+<span class='curline'><a href='../S/411.html#L1481'>btf</a>              1481 bpf/btf.c      	struct btf *btf = container_of(rcu, struct btf, rcu);</span>
+<span class='curline'><a href='../S/411.html#L1483'>btf</a>              1483 bpf/btf.c      	btf_free(btf);</span>
+<span class='curline'><a href='../S/411.html#L1486'>btf</a>              1486 bpf/btf.c      void btf_put(struct btf *btf)</span>
+<span class='curline'><a href='../S/411.html#L1488'>btf</a>              1488 bpf/btf.c      	if (btf &amp;&amp; refcount_dec_and_test(&amp;btf-&gt;refcnt)) {</span>
+<span class='curline'><a href='../S/411.html#L1489'>btf</a>              1489 bpf/btf.c      		btf_free_id(btf);</span>
+<span class='curline'><a href='../S/411.html#L1490'>btf</a>              1490 bpf/btf.c      		call_rcu(&amp;btf-&gt;rcu, btf_free_rcu);</span>
+<span class='curline'><a href='../S/411.html#L1496'>btf</a>              1496 bpf/btf.c      	struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L1497'>btf</a>              1497 bpf/btf.c      	u32 nr_types = btf-&gt;nr_types;</span>
+<span class='curline'><a href='../S/411.html#L1518'>btf</a>              1518 bpf/btf.c      	btf-&gt;resolved_sizes = resolved_sizes;</span>
+<span class='curline'><a href='../S/411.html#L1519'>btf</a>              1519 bpf/btf.c      	btf-&gt;resolved_ids = resolved_ids;</span>
+<span class='curline'><a href='../S/411.html#L1607'>btf</a>              1607 bpf/btf.c      	struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L1609'>btf</a>              1609 bpf/btf.c      	btf-&gt;resolved_sizes[type_id] = resolved_size;</span>
+<span class='curline'><a href='../S/411.html#L1610'>btf</a>              1610 bpf/btf.c      	btf-&gt;resolved_ids[type_id] = resolved_type_id;</span>
+<span class='curline'><a href='../S/411.html#L1640'>btf</a>              1640 bpf/btf.c      __btf_resolve_size(const struct btf *btf, const struct btf_type *type,</span>
+<span class='curline'><a href='../S/411.html#L1668'>btf</a>              1668 bpf/btf.c      			type = btf_type_by_id(btf, type-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L1678'>btf</a>              1678 bpf/btf.c      			type = btf_type_by_id(btf, array-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L1707'>btf</a>              1707 bpf/btf.c      btf_resolve_size(const struct btf *btf, const struct btf_type *type,</span>
+<span class='curline'><a href='../S/411.html#L1710'>btf</a>              1710 bpf/btf.c      	return __btf_resolve_size(btf, type, type_size, NULL, NULL, NULL, NULL);</span>
+<span class='curline'><a href='../S/411.html#L1714'>btf</a>              1714 bpf/btf.c      static const struct btf_type *btf_type_id_resolve(const struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L1717'>btf</a>              1717 bpf/btf.c      	*type_id = btf-&gt;resolved_ids[*type_id];</span>
+<span class='curline'><a href='../S/411.html#L1718'>btf</a>              1718 bpf/btf.c      	return btf_type_by_id(btf, *type_id);</span>
+<span class='curline'><a href='../S/411.html#L1721'>btf</a>              1721 bpf/btf.c      const struct btf_type *btf_type_id_size(const struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L1728'>btf</a>              1728 bpf/btf.c      	size_type = btf_type_by_id(btf, size_type_id);</span>
+<span class='curline'><a href='../S/411.html#L1735'>btf</a>              1735 bpf/btf.c      		size = btf-&gt;resolved_sizes[size_type_id];</span>
+<span class='curline'><a href='../S/411.html#L1743'>btf</a>              1743 bpf/btf.c      		size_type_id = btf-&gt;resolved_ids[size_type_id];</span>
+<span class='curline'><a href='../S/411.html#L1744'>btf</a>              1744 bpf/btf.c      		size_type = btf_type_by_id(btf, size_type_id);</span>
+<span class='curline'><a href='../S/411.html#L1750'>btf</a>              1750 bpf/btf.c      			size = btf-&gt;resolved_sizes[size_type_id];</span>
+<span class='curline'><a href='../S/411.html#L1813'>btf</a>              1813 bpf/btf.c      static void btf_df_show(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L2081'>btf</a>              2081 bpf/btf.c      static void btf_int_bits_show(const struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L2100'>btf</a>              2100 bpf/btf.c      static void btf_int_show(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L2116'>btf</a>              2116 bpf/btf.c      		btf_int_bits_show(btf, t, safe_data, bits_offset, show);</span>
+<span class='curline'><a href='../S/411.html#L2163'>btf</a>              2163 bpf/btf.c      		btf_int_bits_show(btf, t, safe_data, bits_offset, show);</span>
+<span class='curline'><a href='../S/411.html#L2187'>btf</a>              2187 bpf/btf.c      	struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L2189'>btf</a>              2189 bpf/btf.c      	resolved_type = btf_type_id_size(btf, &amp;resolved_type_id, NULL);</span>
+<span class='curline'><a href='../S/411.html#L2212'>btf</a>              2212 bpf/btf.c      	struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L2214'>btf</a>              2214 bpf/btf.c      	resolved_type = btf_type_id_size(btf, &amp;resolved_type_id, NULL);</span>
+<span class='curline'><a href='../S/411.html#L2279'>btf</a>              2279 bpf/btf.c      		    !btf_name_valid_identifier(env-&gt;btf, t-&gt;name_off)) {</span>
+<span class='curline'><a href='../S/411.html#L2301'>btf</a>              2301 bpf/btf.c      	struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L2303'>btf</a>              2303 bpf/btf.c      	next_type = btf_type_by_id(btf, next_type_id);</span>
+<span class='curline'><a href='../S/411.html#L2319'>btf</a>              2319 bpf/btf.c      	if (!btf_type_id_size(btf, &amp;next_type_id, NULL)) {</span>
+<span class='curline'><a href='../S/411.html#L2321'>btf</a>              2321 bpf/btf.c      			next_type = btf_type_id_resolve(btf, &amp;next_type_id);</span>
+<span class='curline'><a href='../S/411.html#L2343'>btf</a>              2343 bpf/btf.c      	struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L2345'>btf</a>              2345 bpf/btf.c      	next_type = btf_type_by_id(btf, next_type_id);</span>
+<span class='curline'><a href='../S/411.html#L2360'>btf</a>              2360 bpf/btf.c      		resolved_type = btf_type_id_resolve(btf, &amp;resolved_type_id);</span>
+<span class='curline'><a href='../S/411.html#L2373'>btf</a>              2373 bpf/btf.c      	if (!btf_type_id_size(btf, &amp;next_type_id, NULL)) {</span>
+<span class='curline'><a href='../S/411.html#L2389'>btf</a>              2389 bpf/btf.c      	struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L2391'>btf</a>              2391 bpf/btf.c      	next_type = btf_type_by_id(btf, next_type_id);</span>
+<span class='curline'><a href='../S/411.html#L2414'>btf</a>              2414 bpf/btf.c      		resolved_type = btf_type_id_resolve(btf, &amp;resolved_type_id);</span>
+<span class='curline'><a href='../S/411.html#L2423'>btf</a>              2423 bpf/btf.c      	if (!btf_type_id_size(btf, &amp;next_type_id, NULL)) {</span>
+<span class='curline'><a href='../S/411.html#L2425'>btf</a>              2425 bpf/btf.c      			next_type = btf_type_id_resolve(btf, &amp;next_type_id);</span>
+<span class='curline'><a href='../S/411.html#L2440'>btf</a>              2440 bpf/btf.c      static void btf_modifier_show(const struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L2445'>btf</a>              2445 bpf/btf.c      	if (btf-&gt;resolved_ids)</span>
+<span class='curline'><a href='../S/411.html#L2446'>btf</a>              2446 bpf/btf.c      		t = btf_type_id_resolve(btf, &amp;type_id);</span>
+<span class='curline'><a href='../S/411.html#L2448'>btf</a>              2448 bpf/btf.c      		t = btf_type_skip_modifiers(btf, type_id, NULL);</span>
+<span class='curline'><a href='../S/411.html#L2450'>btf</a>              2450 bpf/btf.c      	btf_type_ops(t)-&gt;show(btf, t, type_id, data, bits_offset, show);</span>
+<span class='curline'><a href='../S/411.html#L2453'>btf</a>              2453 bpf/btf.c      static void btf_var_show(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L2457'>btf</a>              2457 bpf/btf.c      	t = btf_type_id_resolve(btf, &amp;type_id);</span>
+<span class='curline'><a href='../S/411.html#L2459'>btf</a>              2459 bpf/btf.c      	btf_type_ops(t)-&gt;show(btf, t, type_id, data, bits_offset, show);</span>
+<span class='curline'><a href='../S/411.html#L2462'>btf</a>              2462 bpf/btf.c      static void btf_ptr_show(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L2520'>btf</a>              2520 bpf/btf.c      	    !btf_name_valid_identifier(env-&gt;btf, t-&gt;name_off)) {</span>
+<span class='curline'><a href='../S/411.html#L2553'>btf</a>              2553 bpf/btf.c      	struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L2562'>btf</a>              2562 bpf/btf.c      	btf_type_id_size(btf, &amp;array_type_id, &amp;array_size);</span>
+<span class='curline'><a href='../S/411.html#L2633'>btf</a>              2633 bpf/btf.c      	struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L2638'>btf</a>              2638 bpf/btf.c      	index_type = btf_type_by_id(btf, index_type_id);</span>
+<span class='curline'><a href='../S/411.html#L2649'>btf</a>              2649 bpf/btf.c      	index_type = btf_type_id_size(btf, &amp;index_type_id, NULL);</span>
+<span class='curline'><a href='../S/411.html#L2658'>btf</a>              2658 bpf/btf.c      	elem_type = btf_type_by_id(btf, elem_type_id);</span>
+<span class='curline'><a href='../S/411.html#L2670'>btf</a>              2670 bpf/btf.c      	elem_type = btf_type_id_size(btf, &amp;elem_type_id, &amp;elem_size);</span>
+<span class='curline'><a href='../S/411.html#L2701'>btf</a>              2701 bpf/btf.c      static void __btf_array_show(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L2712'>btf</a>              2712 bpf/btf.c      	elem_type = btf_type_skip_modifiers(btf, elem_type_id, NULL);</span>
+<span class='curline'><a href='../S/411.html#L2741'>btf</a>              2741 bpf/btf.c      		elem_ops-&gt;show(btf, elem_type, elem_type_id, data,</span>
+<span class='curline'><a href='../S/411.html#L2754'>btf</a>              2754 bpf/btf.c      static void btf_array_show(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L2770'>btf</a>              2770 bpf/btf.c      		__btf_array_show(btf, t, type_id, data, bits_offset, show);</span>
+<span class='curline'><a href='../S/411.html#L2784'>btf</a>              2784 bpf/btf.c      	__btf_array_show(btf, t, type_id, data, bits_offset, show);</span>
+<span class='curline'><a href='../S/411.html#L2828'>btf</a>              2828 bpf/btf.c      	struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L2843'>btf</a>              2843 bpf/btf.c      	    !btf_name_valid_identifier(env-&gt;btf, t-&gt;name_off)) {</span>
+<span class='curline'><a href='../S/411.html#L2852'>btf</a>              2852 bpf/btf.c      		if (!btf_name_offset_valid(btf, member-&gt;name_off)) {</span>
+<span class='curline'><a href='../S/411.html#L2861'>btf</a>              2861 bpf/btf.c      		    !btf_name_valid_identifier(btf, member-&gt;name_off)) {</span>
+<span class='curline'><a href='../S/411.html#L2924'>btf</a>              2924 bpf/btf.c      		last_member_type = btf_type_by_id(env-&gt;btf,</span>
+<span class='curline'><a href='../S/411.html#L2940'>btf</a>              2940 bpf/btf.c      		const struct btf_type *member_type = btf_type_by_id(env-&gt;btf,</span>
+<span class='curline'><a href='../S/411.html#L2983'>btf</a>              2983 bpf/btf.c      int btf_find_spin_lock(const struct btf *btf, const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L2992'>btf</a>              2992 bpf/btf.c      		const struct btf_type *member_type = btf_type_by_id(btf,</span>
+<span class='curline'><a href='../S/411.html#L2998'>btf</a>              2998 bpf/btf.c      		if (strcmp(__btf_name_by_offset(btf, member_type-&gt;name_off),</span>
+<span class='curline'><a href='../S/411.html#L3016'>btf</a>              3016 bpf/btf.c      static void __btf_struct_show(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L3029'>btf</a>              3029 bpf/btf.c      		const struct btf_type *member_type = btf_type_by_id(btf,</span>
+<span class='curline'><a href='../S/411.html#L3053'>btf</a>              3053 bpf/btf.c      			ops-&gt;show(btf, member_type, member-&gt;type,</span>
+<span class='curline'><a href='../S/411.html#L3063'>btf</a>              3063 bpf/btf.c      static void btf_struct_show(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L3079'>btf</a>              3079 bpf/btf.c      		__btf_struct_show(btf, t, type_id, data, bits_offset, show);</span>
+<span class='curline'><a href='../S/411.html#L3094'>btf</a>              3094 bpf/btf.c      	__btf_struct_show(btf, t, type_id, data, bits_offset, show);</span>
+<span class='curline'><a href='../S/411.html#L3171'>btf</a>              3171 bpf/btf.c      	struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L3197'>btf</a>              3197 bpf/btf.c      	    !btf_name_valid_identifier(env-&gt;btf, t-&gt;name_off)) {</span>
+<span class='curline'><a href='../S/411.html#L3205'>btf</a>              3205 bpf/btf.c      		if (!btf_name_offset_valid(btf, enums[i].name_off)) {</span>
+<span class='curline'><a href='../S/411.html#L3213'>btf</a>              3213 bpf/btf.c      		    !btf_name_valid_identifier(btf, enums[i].name_off)) {</span>
+<span class='curline'><a href='../S/411.html#L3221'>btf</a>              3221 bpf/btf.c      				 __btf_name_by_offset(btf, enums[i].name_off),</span>
+<span class='curline'><a href='../S/411.html#L3234'>btf</a>              3234 bpf/btf.c      static void btf_enum_show(const struct btf *btf, const struct btf_type *t,</span>
+<span class='curline'><a href='../S/411.html#L3254'>btf</a>              3254 bpf/btf.c      				    __btf_name_by_offset(btf,</span>
+<span class='curline'><a href='../S/411.html#L3321'>btf</a>              3321 bpf/btf.c      			 __btf_name_by_offset(env-&gt;btf,</span>
+<span class='curline'><a href='../S/411.html#L3325'>btf</a>              3325 bpf/btf.c      				 __btf_name_by_offset(env-&gt;btf,</span>
+<span class='curline'><a href='../S/411.html#L3333'>btf</a>              3333 bpf/btf.c      					 __btf_name_by_offset(env-&gt;btf,</span>
+<span class='curline'><a href='../S/411.html#L3366'>btf</a>              3366 bpf/btf.c      	    !btf_name_valid_identifier(env-&gt;btf, t-&gt;name_off)) {</span>
+<span class='curline'><a href='../S/411.html#L3420'>btf</a>              3420 bpf/btf.c      	    !__btf_name_valid(env-&gt;btf, t-&gt;name_off, true)) {</span>
+<span class='curline'><a href='../S/411.html#L3491'>btf</a>              3491 bpf/btf.c      	    !btf_name_valid_section(env-&gt;btf, t-&gt;name_off)) {</span>
+<span class='curline'><a href='../S/411.html#L3541'>btf</a>              3541 bpf/btf.c      	struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L3546'>btf</a>              3546 bpf/btf.c      		const struct btf_type *var_type = btf_type_by_id(env-&gt;btf,</span>
+<span class='curline'><a href='../S/411.html#L3561'>btf</a>              3561 bpf/btf.c      		if (!btf_type_id_size(btf, &amp;type_id, &amp;type_size)) {</span>
+<span class='curline'><a href='../S/411.html#L3582'>btf</a>              3582 bpf/btf.c      static void btf_datasec_show(const struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L3595'>btf</a>              3595 bpf/btf.c      			    __btf_name_by_offset(btf, t-&gt;name_off));</span>
+<span class='curline'><a href='../S/411.html#L3597'>btf</a>              3597 bpf/btf.c      		var = btf_type_by_id(btf, vsi-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L3600'>btf</a>              3600 bpf/btf.c      		btf_type_ops(var)-&gt;show(btf, var, vsi-&gt;type,</span>
+<span class='curline'><a href='../S/411.html#L3620'>btf</a>              3620 bpf/btf.c      	const struct btf *btf;</span>
+<span class='curline'><a href='../S/411.html#L3624'>btf</a>              3624 bpf/btf.c      	btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L3632'>btf</a>              3632 bpf/btf.c      		ret_type = btf_type_by_id(btf, ret_type_id);</span>
+<span class='curline'><a href='../S/411.html#L3646'>btf</a>              3646 bpf/btf.c      		if (!btf_type_id_size(btf, &amp;ret_type_id, NULL)) {</span>
+<span class='curline'><a href='../S/411.html#L3671'>btf</a>              3671 bpf/btf.c      		arg_type = btf_type_by_id(btf, arg_type_id);</span>
+<span class='curline'><a href='../S/411.html#L3679'>btf</a>              3679 bpf/btf.c      		    (!btf_name_offset_valid(btf, args[i].name_off) ||</span>
+<span class='curline'><a href='../S/411.html#L3680'>btf</a>              3680 bpf/btf.c      		     !btf_name_valid_identifier(btf, args[i].name_off))) {</span>
+<span class='curline'><a href='../S/411.html#L3694'>btf</a>              3694 bpf/btf.c      		if (!btf_type_id_size(btf, &amp;arg_type_id, NULL)) {</span>
+<span class='curline'><a href='../S/411.html#L3709'>btf</a>              3709 bpf/btf.c      	const struct btf *btf;</span>
+<span class='curline'><a href='../S/411.html#L3712'>btf</a>              3712 bpf/btf.c      	btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L3713'>btf</a>              3713 bpf/btf.c      	proto_type = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L3777'>btf</a>              3777 bpf/btf.c      	if (!btf_name_offset_valid(env-&gt;btf, t-&gt;name_off)) {</span>
+<span class='curline'><a href='../S/411.html#L3794'>btf</a>              3794 bpf/btf.c      	struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L3798'>btf</a>              3798 bpf/btf.c      	hdr = &amp;btf-&gt;hdr;</span>
+<span class='curline'><a href='../S/411.html#L3799'>btf</a>              3799 bpf/btf.c      	cur = btf-&gt;nohdr_data + hdr-&gt;type_off;</span>
+<span class='curline'><a href='../S/411.html#L3823'>btf</a>              3823 bpf/btf.c      	struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L3829'>btf</a>              3829 bpf/btf.c      		return !btf-&gt;resolved_ids[type_id] &amp;&amp;</span>
+<span class='curline'><a href='../S/411.html#L3830'>btf</a>              3830 bpf/btf.c      		       !btf-&gt;resolved_sizes[type_id];</span>
+<span class='curline'><a href='../S/411.html#L3834'>btf</a>              3834 bpf/btf.c      		t = btf_type_id_resolve(btf, &amp;type_id);</span>
+<span class='curline'><a href='../S/411.html#L3847'>btf</a>              3847 bpf/btf.c      		elem_type = btf_type_id_size(btf, &amp;elem_type_id, &amp;elem_size);</span>
+<span class='curline'><a href='../S/411.html#L3850'>btf</a>              3850 bpf/btf.c      			 btf-&gt;resolved_sizes[type_id]);</span>
+<span class='curline'><a href='../S/411.html#L3891'>btf</a>              3891 bpf/btf.c      	struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L3900'>btf</a>              3900 bpf/btf.c      	for (type_id = 1; type_id &lt;= btf-&gt;nr_types; type_id++) {</span>
+<span class='curline'><a href='../S/411.html#L3901'>btf</a>              3901 bpf/btf.c      		const struct btf_type *t = btf_type_by_id(btf, type_id);</span>
+<span class='curline'><a href='../S/411.html#L3929'>btf</a>              3929 bpf/btf.c      	const struct btf_header *hdr = &amp;env-&gt;btf-&gt;hdr;</span>
+<span class='curline'><a href='../S/411.html#L3953'>btf</a>              3953 bpf/btf.c      	struct btf *btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L3956'>btf</a>              3956 bpf/btf.c      	hdr = &amp;btf-&gt;hdr;</span>
+<span class='curline'><a href='../S/411.html#L3957'>btf</a>              3957 bpf/btf.c      	start = btf-&gt;nohdr_data + hdr-&gt;str_off;</span>
+<span class='curline'><a href='../S/411.html#L3960'>btf</a>              3960 bpf/btf.c      	if (end != btf-&gt;data + btf-&gt;data_size) {</span>
+<span class='curline'><a href='../S/411.html#L3971'>btf</a>              3971 bpf/btf.c      	btf-&gt;strings = start;</span>
+<span class='curline'><a href='../S/411.html#L3995'>btf</a>              3995 bpf/btf.c      	const struct btf *btf;</span>
+<span class='curline'><a href='../S/411.html#L3997'>btf</a>              3997 bpf/btf.c      	btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L3998'>btf</a>              3998 bpf/btf.c      	hdr = &amp;btf-&gt;hdr;</span>
+<span class='curline'><a href='../S/411.html#L4046'>btf</a>              4046 bpf/btf.c      	struct btf *btf;</span>
+<span class='curline'><a href='../S/411.html#L4049'>btf</a>              4049 bpf/btf.c      	btf = env-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L4050'>btf</a>              4050 bpf/btf.c      	btf_data_size = btf-&gt;data_size;</span>
+<span class='curline'><a href='../S/411.html#L4058'>btf</a>              4058 bpf/btf.c      	hdr = btf-&gt;data;</span>
+<span class='curline'><a href='../S/411.html#L4066'>btf</a>              4066 bpf/btf.c      	if (hdr_len &gt; sizeof(btf-&gt;hdr)) {</span>
+<span class='curline'><a href='../S/411.html#L4067'>btf</a>              4067 bpf/btf.c      		u8 *expected_zero = btf-&gt;data + sizeof(btf-&gt;hdr);</span>
+<span class='curline'><a href='../S/411.html#L4068'>btf</a>              4068 bpf/btf.c      		u8 *end = btf-&gt;data + hdr_len;</span>
+<span class='curline'><a href='../S/411.html#L4078'>btf</a>              4078 bpf/btf.c      	hdr_copy = min_t(u32, hdr_len, sizeof(btf-&gt;hdr));</span>
+<span class='curline'><a href='../S/411.html#L4079'>btf</a>              4079 bpf/btf.c      	memcpy(&amp;btf-&gt;hdr, btf-&gt;data, hdr_copy);</span>
+<span class='curline'><a href='../S/411.html#L4081'>btf</a>              4081 bpf/btf.c      	hdr = &amp;btf-&gt;hdr;</span>
+<span class='curline'><a href='../S/411.html#L4112'>btf</a>              4112 bpf/btf.c      static struct btf *btf_parse(void __user *btf_data, u32 btf_data_size,</span>
+<span class='curline'><a href='../S/411.html#L4117'>btf</a>              4117 bpf/btf.c      	struct btf *btf = NULL;</span>
+<span class='curline'><a href='../S/411.html#L4145'>btf</a>              4145 bpf/btf.c      	btf = kzalloc(sizeof(*btf), GFP_KERNEL | __GFP_NOWARN);</span>
+<span class='curline'><a href='../S/411.html#L4146'>btf</a>              4146 bpf/btf.c      	if (!btf) {</span>
+<span class='curline'><a href='../S/411.html#L4150'>btf</a>              4150 bpf/btf.c      	env-&gt;btf = btf;</span>
+<span class='curline'><a href='../S/411.html#L4158'>btf</a>              4158 bpf/btf.c      	btf-&gt;data = data;</span>
+<span class='curline'><a href='../S/411.html#L4159'>btf</a>              4159 bpf/btf.c      	btf-&gt;data_size = btf_data_size;</span>
+<span class='curline'><a href='../S/411.html#L4170'>btf</a>              4170 bpf/btf.c      	btf-&gt;nohdr_data = btf-&gt;data + btf-&gt;hdr.hdr_len;</span>
+<span class='curline'><a href='../S/411.html#L4186'>btf</a>              4186 bpf/btf.c      	refcount_set(&amp;btf-&gt;refcnt, 1);</span>
+<span class='curline'><a href='../S/411.html#L4187'>btf</a>              4187 bpf/btf.c      	return btf;</span>
+<span class='curline'><a href='../S/411.html#L4191'>btf</a>              4191 bpf/btf.c      	if (btf)</span>
+<span class='curline'><a href='../S/411.html#L4192'>btf</a>              4192 bpf/btf.c      		btf_free(btf);</span>
+<span class='curline'><a href='../S/411.html#L4198'>btf</a>              4198 bpf/btf.c      extern struct btf *btf_vmlinux;</span>
+<span class='curline'><a href='../S/411.html#L4231'>btf</a>              4231 bpf/btf.c      btf_get_prog_ctx_type(struct bpf_verifier_log *log, struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L4245'>btf</a>              4245 bpf/btf.c      	t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L4247'>btf</a>              4247 bpf/btf.c      		t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L4258'>btf</a>              4258 bpf/btf.c      	tname = btf_name_by_offset(btf, t-&gt;name_off);</span>
+<span class='curline'><a href='../S/411.html#L4301'>btf</a>              4301 bpf/btf.c      static int btf_vmlinux_map_ids_init(const struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L4315'>btf</a>              4315 bpf/btf.c      		btf_id = btf_find_by_name_kind(btf, ops-&gt;map_btf_name,</span>
+<span class='curline'><a href='../S/411.html#L4326'>btf</a>              4326 bpf/btf.c      				     struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L4333'>btf</a>              4333 bpf/btf.c      	prog_ctx_type = btf_get_prog_ctx_type(log, btf, t, prog_type, arg);</span>
+<span class='curline'><a href='../S/411.html#L4343'>btf</a>              4343 bpf/btf.c      struct btf *btf_parse_vmlinux(void)</span>
+<span class='curline'><a href='../S/411.html#L4347'>btf</a>              4347 bpf/btf.c      	struct btf *btf = NULL;</span>
+<span class='curline'><a href='../S/411.html#L4357'>btf</a>              4357 bpf/btf.c      	btf = kzalloc(sizeof(*btf), GFP_KERNEL | __GFP_NOWARN);</span>
+<span class='curline'><a href='../S/411.html#L4358'>btf</a>              4358 bpf/btf.c      	if (!btf) {</span>
+<span class='curline'><a href='../S/411.html#L4362'>btf</a>              4362 bpf/btf.c      	env-&gt;btf = btf;</span>
+<span class='curline'><a href='../S/411.html#L4364'>btf</a>              4364 bpf/btf.c      	btf-&gt;data = __start_BTF;</span>
+<span class='curline'><a href='../S/411.html#L4365'>btf</a>              4365 bpf/btf.c      	btf-&gt;data_size = __stop_BTF - __start_BTF;</span>
+<span class='curline'><a href='../S/411.html#L4371'>btf</a>              4371 bpf/btf.c      	btf-&gt;nohdr_data = btf-&gt;data + btf-&gt;hdr.hdr_len;</span>
+<span class='curline'><a href='../S/411.html#L4382'>btf</a>              4382 bpf/btf.c      	bpf_ctx_convert.t = btf_type_by_id(btf, bpf_ctx_convert_btf_id[0]);</span>
+<span class='curline'><a href='../S/411.html#L4385'>btf</a>              4385 bpf/btf.c      	err = btf_vmlinux_map_ids_init(btf, log);</span>
+<span class='curline'><a href='../S/411.html#L4389'>btf</a>              4389 bpf/btf.c      	bpf_struct_ops_init(btf, log);</span>
+<span class='curline'><a href='../S/411.html#L4392'>btf</a>              4392 bpf/btf.c      	refcount_set(&amp;btf-&gt;refcnt, 1);</span>
+<span class='curline'><a href='../S/411.html#L4393'>btf</a>              4393 bpf/btf.c      	return btf;</span>
+<span class='curline'><a href='../S/411.html#L4397'>btf</a>              4397 bpf/btf.c      	if (btf) {</span>
+<span class='curline'><a href='../S/411.html#L4398'>btf</a>              4398 bpf/btf.c      		kvfree(btf-&gt;types);</span>
+<span class='curline'><a href='../S/411.html#L4399'>btf</a>              4399 bpf/btf.c      		kfree(btf);</span>
+<span class='curline'><a href='../S/411.html#L4404'>btf</a>              4404 bpf/btf.c      struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog)</span>
+<span class='curline'><a href='../S/411.html#L4409'>btf</a>              4409 bpf/btf.c      		return tgt_prog-&gt;aux-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L4415'>btf</a>              4415 bpf/btf.c      static bool is_string_ptr(struct btf *btf, const struct btf_type *t)</span>
+<span class='curline'><a href='../S/411.html#L4418'>btf</a>              4418 bpf/btf.c      	t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L4422'>btf</a>              4422 bpf/btf.c      		t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L4434'>btf</a>              4434 bpf/btf.c      	struct btf *btf = bpf_prog_get_target_btf(prog);</span>
+<span class='curline'><a href='../S/411.html#L4481'>btf</a>              4481 bpf/btf.c      			t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L4490'>btf</a>              4490 bpf/btf.c      			t = btf_type_skip_modifiers(btf, t-&gt;type, NULL);</span>
+<span class='curline'><a href='../S/411.html#L4507'>btf</a>              4507 bpf/btf.c      		t = btf_type_by_id(btf, args[arg].type);</span>
+<span class='curline'><a href='../S/411.html#L4512'>btf</a>              4512 bpf/btf.c      		t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L4520'>btf</a>              4520 bpf/btf.c      			__btf_name_by_offset(btf, t-&gt;name_off),</span>
+<span class='curline'><a href='../S/411.html#L4544'>btf</a>              4544 bpf/btf.c      	if (is_string_ptr(btf, t))</span>
+<span class='curline'><a href='../S/411.html#L4567'>btf</a>              4567 bpf/btf.c      		ret = btf_translate_to_vmlinux(log, btf, t, tgt_type, arg);</span>
+<span class='curline'><a href='../S/411.html#L4577'>btf</a>              4577 bpf/btf.c      	t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L4581'>btf</a>              4581 bpf/btf.c      		t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L4591'>btf</a>              4591 bpf/btf.c      		__btf_name_by_offset(btf, t-&gt;name_off));</span>
+<span class='curline'><a href='../S/411.html#L4900'>btf</a>              4900 bpf/btf.c      static int __get_type_size(struct btf *btf, u32 btf_id,</span>
+<span class='curline'><a href='../S/411.html#L4908'>btf</a>              4908 bpf/btf.c      	t = btf_type_by_id(btf, btf_id);</span>
+<span class='curline'><a href='../S/411.html#L4910'>btf</a>              4910 bpf/btf.c      		t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L4912'>btf</a>              4912 bpf/btf.c      		*bad_type = btf-&gt;types[0];</span>
+<span class='curline'><a href='../S/411.html#L4925'>btf</a>              4925 bpf/btf.c      			   struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L4953'>btf</a>              4953 bpf/btf.c      	ret = __get_type_size(btf, func-&gt;type, &amp;t);</span>
+<span class='curline'><a href='../S/411.html#L4963'>btf</a>              4963 bpf/btf.c      		ret = __get_type_size(btf, args[i].type, &amp;t);</span>
+<span class='curline'><a href='../S/411.html#L4985'>btf</a>              4985 bpf/btf.c      				     struct btf *btf1, const struct btf_type *t1,</span>
+<span class='curline'><a href='../S/411.html#L4986'>btf</a>              4986 bpf/btf.c      				     struct btf *btf2, const struct btf_type *t2)</span>
+<span class='curline'><a href='../S/411.html#L5096'>btf</a>              5096 bpf/btf.c      			 struct btf *btf2, const struct btf_type *t2)</span>
+<span class='curline'><a href='../S/411.html#L5098'>btf</a>              5098 bpf/btf.c      	struct btf *btf1 = prog-&gt;aux-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L5130'>btf</a>              5130 bpf/btf.c      	struct btf *btf = prog-&gt;aux-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L5146'>btf</a>              5146 bpf/btf.c      	t = btf_type_by_id(btf, btf_id);</span>
+<span class='curline'><a href='../S/411.html#L5155'>btf</a>              5155 bpf/btf.c      	tname = btf_name_by_offset(btf, t-&gt;name_off);</span>
+<span class='curline'><a href='../S/411.html#L5157'>btf</a>              5157 bpf/btf.c      	t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L5172'>btf</a>              5172 bpf/btf.c      		t = btf_type_by_id(btf, args[i].type);</span>
+<span class='curline'><a href='../S/411.html#L5174'>btf</a>              5174 bpf/btf.c      			t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L5189'>btf</a>              5189 bpf/btf.c      			if (btf_get_prog_ctx_type(log, btf, t, prog-&gt;type, i)) {</span>
+<span class='curline'><a href='../S/411.html#L5228'>btf</a>              5228 bpf/btf.c      	struct btf *btf = prog-&gt;aux-&gt;btf;</span>
+<span class='curline'><a href='../S/411.html#L5246'>btf</a>              5246 bpf/btf.c      	t = btf_type_by_id(btf, btf_id);</span>
+<span class='curline'><a href='../S/411.html#L5255'>btf</a>              5255 bpf/btf.c      	tname = btf_name_by_offset(btf, t-&gt;name_off);</span>
+<span class='curline'><a href='../S/411.html#L5268'>btf</a>              5268 bpf/btf.c      	t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L5281'>btf</a>              5281 bpf/btf.c      	t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L5283'>btf</a>              5283 bpf/btf.c      		t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L5294'>btf</a>              5294 bpf/btf.c      		t = btf_type_by_id(btf, args[i].type);</span>
+<span class='curline'><a href='../S/411.html#L5296'>btf</a>              5296 bpf/btf.c      			t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/411.html#L5302'>btf</a>              5302 bpf/btf.c      		    btf_get_prog_ctx_type(log, btf, t, prog_type, i)) {</span>
+<span class='curline'><a href='../S/411.html#L5313'>btf</a>              5313 bpf/btf.c      static void btf_type_show(const struct btf *btf, u32 type_id, void *obj,</span>
+<span class='curline'><a href='../S/411.html#L5316'>btf</a>              5316 bpf/btf.c      	const struct btf_type *t = btf_type_by_id(btf, type_id);</span>
+<span class='curline'><a href='../S/411.html#L5318'>btf</a>              5318 bpf/btf.c      	show-&gt;btf = btf;</span>
+<span class='curline'><a href='../S/411.html#L5322'>btf</a>              5322 bpf/btf.c      	btf_type_ops(t)-&gt;show(btf, t, type_id, obj, 0, show);</span>
+<span class='curline'><a href='../S/411.html#L5331'>btf</a>              5331 bpf/btf.c      int btf_type_seq_show_flags(const struct btf *btf, u32 type_id,</span>
+<span class='curline'><a href='../S/411.html#L5340'>btf</a>              5340 bpf/btf.c      	btf_type_show(btf, type_id, obj, &amp;sseq);</span>
+<span class='curline'><a href='../S/411.html#L5345'>btf</a>              5345 bpf/btf.c      void btf_type_seq_show(const struct btf *btf, u32 type_id, void *obj,</span>
+<span class='curline'><a href='../S/411.html#L5348'>btf</a>              5348 bpf/btf.c      	(void) btf_type_seq_show_flags(btf, type_id, obj, m,</span>
+<span class='curline'><a href='../S/411.html#L5381'>btf</a>              5381 bpf/btf.c      int btf_type_snprintf_show(const struct btf *btf, u32 type_id, void *obj,</span>
+<span class='curline'><a href='../S/411.html#L5392'>btf</a>              5392 bpf/btf.c      	btf_type_show(btf, type_id, obj, (struct btf_show *)&amp;ssnprintf);</span>
+<span class='curline'><a href='../S/411.html#L5405'>btf</a>              5405 bpf/btf.c      	const struct btf *btf = filp-&gt;private_data;</span>
+<span class='curline'><a href='../S/411.html#L5407'>btf</a>              5407 bpf/btf.c      	seq_printf(m, "btf_id:\t%u\n", btf-&gt;id);</span>
+<span class='curline'><a href='../S/411.html#L5424'>btf</a>              5424 bpf/btf.c      static int __btf_new_fd(struct btf *btf)</span>
+<span class='curline'><a href='../S/411.html#L5426'>btf</a>              5426 bpf/btf.c      	return anon_inode_getfd("btf", &amp;btf_fops, btf, O_RDONLY | O_CLOEXEC);</span>
+<span class='curline'><a href='../S/411.html#L5431'>btf</a>              5431 bpf/btf.c      	struct btf *btf;</span>
+<span class='curline'><a href='../S/411.html#L5434'>btf</a>              5434 bpf/btf.c      	btf = btf_parse(u64_to_user_ptr(attr-&gt;btf),</span>
+<span class='curline'><a href='../S/411.html#L5438'>btf</a>              5438 bpf/btf.c      	if (IS_ERR(btf))</span>
+<span class='curline'><a href='../S/411.html#L5439'>btf</a>              5439 bpf/btf.c      		return PTR_ERR(btf);</span>
+<span class='curline'><a href='../S/411.html#L5441'>btf</a>              5441 bpf/btf.c      	ret = btf_alloc_id(btf);</span>
+<span class='curline'><a href='../S/411.html#L5443'>btf</a>              5443 bpf/btf.c      		btf_free(btf);</span>
+<span class='curline'><a href='../S/411.html#L5453'>btf</a>              5453 bpf/btf.c      	ret = __btf_new_fd(btf);</span>
+<span class='curline'><a href='../S/411.html#L5455'>btf</a>              5455 bpf/btf.c      		btf_put(btf);</span>
+<span class='curline'><a href='../S/411.html#L5460'>btf</a>              5460 bpf/btf.c      struct btf *btf_get_by_fd(int fd)</span>
+<span class='curline'><a href='../S/411.html#L5462'>btf</a>              5462 bpf/btf.c      	struct btf *btf;</span>
+<span class='curline'><a href='../S/411.html#L5475'>btf</a>              5475 bpf/btf.c      	btf = f.file-&gt;private_data;</span>
+<span class='curline'><a href='../S/411.html#L5476'>btf</a>              5476 bpf/btf.c      	refcount_inc(&amp;btf-&gt;refcnt);</span>
+<span class='curline'><a href='../S/411.html#L5479'>btf</a>              5479 bpf/btf.c      	return btf;</span>
+<span class='curline'><a href='../S/411.html#L5482'>btf</a>              5482 bpf/btf.c      int btf_get_info_by_fd(const struct btf *btf,</span>
+<span class='curline'><a href='../S/411.html#L5500'>btf</a>              5500 bpf/btf.c      	info.id = btf-&gt;id;</span>
+<span class='curline'><a href='../S/411.html#L5501'>btf</a>              5501 bpf/btf.c      	ubtf = u64_to_user_ptr(info.btf);</span>
+<span class='curline'><a href='../S/411.html#L5502'>btf</a>              5502 bpf/btf.c      	btf_copy = min_t(u32, btf-&gt;data_size, info.btf_size);</span>
+<span class='curline'><a href='../S/411.html#L5503'>btf</a>              5503 bpf/btf.c      	if (copy_to_user(ubtf, btf-&gt;data, btf_copy))</span>
+<span class='curline'><a href='../S/411.html#L5505'>btf</a>              5505 bpf/btf.c      	info.btf_size = btf-&gt;data_size;</span>
+<span class='curline'><a href='../S/411.html#L5516'>btf</a>              5516 bpf/btf.c      	struct btf *btf;</span>
+<span class='curline'><a href='../S/411.html#L5520'>btf</a>              5520 bpf/btf.c      	btf = idr_find(&amp;btf_idr, id);</span>
+<span class='curline'><a href='../S/411.html#L5521'>btf</a>              5521 bpf/btf.c      	if (!btf || !refcount_inc_not_zero(&amp;btf-&gt;refcnt))</span>
+<span class='curline'><a href='../S/411.html#L5522'>btf</a>              5522 bpf/btf.c      		btf = ERR_PTR(-ENOENT);</span>
+<span class='curline'><a href='../S/411.html#L5525'>btf</a>              5525 bpf/btf.c      	if (IS_ERR(btf))</span>
+<span class='curline'><a href='../S/411.html#L5526'>btf</a>              5526 bpf/btf.c      		return PTR_ERR(btf);</span>
+<span class='curline'><a href='../S/411.html#L5528'>btf</a>              5528 bpf/btf.c      	fd = __btf_new_fd(btf);</span>
+<span class='curline'><a href='../S/411.html#L5530'>btf</a>              5530 bpf/btf.c      		btf_put(btf);</span>
+<span class='curline'><a href='../S/411.html#L5535'>btf</a>              5535 bpf/btf.c      u32 btf_id(const struct btf *btf)</span>
+<span class='curline'><a href='../S/411.html#L5537'>btf</a>              5537 bpf/btf.c      	return btf-&gt;id;</span>
+<span class='curline'><a href='../S/371.html#L568'>btf</a>               568 bpf/core.c     		type = btf_type_by_id(prog-&gt;aux-&gt;btf,</span>
+<span class='curline'><a href='../S/371.html#L570'>btf</a>               570 bpf/core.c     		func_name = btf_name_by_offset(prog-&gt;aux-&gt;btf, type-&gt;name_off);</span>
+<span class='curline'><a href='../S/383.html#L1357'>btf</a>              1357 bpf/hashtab.c  	btf_type_seq_show(map-&gt;btf, map-&gt;btf_key_type_id, key, m);</span>
+<span class='curline'><a href='../S/383.html#L1359'>btf</a>              1359 bpf/hashtab.c  	btf_type_seq_show(map-&gt;btf, map-&gt;btf_value_type_id, value, m);</span>
+<span class='curline'><a href='../S/383.html#L1955'>btf</a>              1955 bpf/hashtab.c  	btf_type_seq_show(map-&gt;btf, map-&gt;btf_key_type_id, key, m);</span>
+<span class='curline'><a href='../S/383.html#L1960'>btf</a>              1960 bpf/hashtab.c  		btf_type_seq_show(map-&gt;btf, map-&gt;btf_value_type_id,</span>
+<span class='curline'><a href='../S/402.html#L361'>btf</a>               361 bpf/local_storage.c 				    const struct btf *btf,</span>
+<span class='curline'><a href='../S/402.html#L389'>btf</a>               389 bpf/local_storage.c 		if (!btf_member_is_reg_int(btf, key_type, m, 0, size))</span>
+<span class='curline'><a href='../S/402.html#L398'>btf</a>               398 bpf/local_storage.c 		if (!btf_member_is_reg_int(btf, key_type, m, offset, size))</span>
+<span class='curline'><a href='../S/402.html#L432'>btf</a>               432 bpf/local_storage.c 	btf_type_seq_show(map-&gt;btf, map-&gt;btf_key_type_id, key, m);</span>
+<span class='curline'><a href='../S/402.html#L436'>btf</a>               436 bpf/local_storage.c 		btf_type_seq_show(map-&gt;btf, map-&gt;btf_value_type_id,</span>
+<span class='curline'><a href='../S/402.html#L443'>btf</a>               443 bpf/local_storage.c 			btf_type_seq_show(map-&gt;btf, map-&gt;btf_value_type_id,</span>
+<span class='curline'><a href='../S/405.html#L724'>btf</a>               724 bpf/lpm_trie.c 			  const struct btf *btf,</span>
+<span class='curline'><a href='../S/387.html#L47'>btf</a>                47 bpf/preload/iterators/iterators.bpf.c 	struct btf *btf;</span>
+<span class='curline'><a href='../S/387.html#L60'>btf</a>                60 bpf/preload/iterators/iterators.bpf.c static const char *get_name(struct btf *btf, long btf_id, const char *fallback)</span>
+<span class='curline'><a href='../S/387.html#L66'>btf</a>                66 bpf/preload/iterators/iterators.bpf.c 	if (!btf)</span>
+<span class='curline'><a href='../S/387.html#L68'>btf</a>                68 bpf/preload/iterators/iterators.bpf.c 	str = btf-&gt;strings;</span>
+<span class='curline'><a href='../S/387.html#L69'>btf</a>                69 bpf/preload/iterators/iterators.bpf.c 	types = btf-&gt;types;</span>
+<span class='curline'><a href='../S/387.html#L72'>btf</a>                72 bpf/preload/iterators/iterators.bpf.c 	if (name_off &gt;= btf-&gt;hdr.str_len)</span>
+<span class='curline'><a href='../S/387.html#L110'>btf</a>               110 bpf/preload/iterators/iterators.bpf.c 		       get_name(aux-&gt;btf, aux-&gt;func_info[0].type_id, aux-&gt;name),</span>
+<span class='curline'><a href='../S/418.html#L488'>btf</a>               488 bpf/syscall.c  		btf_put(map-&gt;btf);</span>
+<span class='curline'><a href='../S/418.html#L738'>btf</a>               738 bpf/syscall.c  		     const struct btf *btf,</span>
+<span class='curline'><a href='../S/418.html#L745'>btf</a>               745 bpf/syscall.c  static int map_check_btf(struct bpf_map *map, const struct btf *btf,</span>
+<span class='curline'><a href='../S/418.html#L754'>btf</a>               754 bpf/syscall.c  		key_type = btf_type_id_size(btf, &amp;btf_key_id, &amp;key_size);</span>
+<span class='curline'><a href='../S/418.html#L758'>btf</a>               758 bpf/syscall.c  		key_type = btf_type_by_id(btf, 0);</span>
+<span class='curline'><a href='../S/418.html#L763'>btf</a>               763 bpf/syscall.c  	value_type = btf_type_id_size(btf, &amp;btf_value_id, &amp;value_size);</span>
+<span class='curline'><a href='../S/418.html#L767'>btf</a>               767 bpf/syscall.c  	map-&gt;spin_lock_off = btf_find_spin_lock(btf, value_type);</span>
+<span class='curline'><a href='../S/418.html#L788'>btf</a>               788 bpf/syscall.c  		ret = map-&gt;ops-&gt;map_check_btf(map, btf, key_type, value_type);</span>
+<span class='curline'><a href='../S/418.html#L847'>btf</a>               847 bpf/syscall.c  		struct btf *btf;</span>
+<span class='curline'><a href='../S/418.html#L849'>btf</a>               849 bpf/syscall.c  		btf = btf_get_by_fd(attr-&gt;btf_fd);</span>
+<span class='curline'><a href='../S/418.html#L850'>btf</a>               850 bpf/syscall.c  		if (IS_ERR(btf)) {</span>
+<span class='curline'><a href='../S/418.html#L851'>btf</a>               851 bpf/syscall.c  			err = PTR_ERR(btf);</span>
+<span class='curline'><a href='../S/418.html#L854'>btf</a>               854 bpf/syscall.c  		map-&gt;btf = btf;</span>
+<span class='curline'><a href='../S/418.html#L857'>btf</a>               857 bpf/syscall.c  			err = map_check_btf(map, btf, attr-&gt;btf_key_type_id,</span>
+<span class='curline'><a href='../S/418.html#L894'>btf</a>               894 bpf/syscall.c  	btf_put(map-&gt;btf);</span>
+<span class='curline'><a href='../S/418.html#L1733'>btf</a>              1733 bpf/syscall.c  	btf_put(prog-&gt;aux-&gt;btf);</span>
+<span class='curline'><a href='../S/418.html#L3592'>btf</a>              3592 bpf/syscall.c  	if (prog-&gt;aux-&gt;btf)</span>
+<span class='curline'><a href='../S/418.html#L3593'>btf</a>              3593 bpf/syscall.c  		info.btf_id = btf_id(prog-&gt;aux-&gt;btf);</span>
+<span class='curline'><a href='../S/418.html#L3695'>btf</a>              3695 bpf/syscall.c  	if (map-&gt;btf) {</span>
+<span class='curline'><a href='../S/418.html#L3696'>btf</a>              3696 bpf/syscall.c  		info.btf_id = btf_id(map-&gt;btf);</span>
+<span class='curline'><a href='../S/418.html#L3716'>btf</a>              3716 bpf/syscall.c  				  struct btf *btf,</span>
+<span class='curline'><a href='../S/418.html#L3728'>btf</a>              3728 bpf/syscall.c  	return btf_get_info_by_fd(btf, attr, uattr);</span>
+<span class='curline'><a href='../S/401.html#L245'>btf</a>               245 bpf/verifier.c struct btf *btf_vmlinux;</span>
+<span class='curline'><a href='../S/401.html#L379'>btf</a>               379 bpf/verifier.c 		ltrim(btf_name_by_offset(env-&gt;prog-&gt;aux-&gt;btf,</span>
+<span class='curline'><a href='../S/401.html#L4205'>btf</a>              4205 bpf/verifier.c 	if (!map-&gt;btf) {</span>
+<span class='curline'><a href='../S/401.html#L8638'>btf</a>              8638 bpf/verifier.c 	const struct btf *btf;</span>
+<span class='curline'><a href='../S/401.html#L8665'>btf</a>              8665 bpf/verifier.c 	btf = prog-&gt;aux-&gt;btf;</span>
+<span class='curline'><a href='../S/401.html#L8718'>btf</a>              8718 bpf/verifier.c 		type = btf_type_by_id(btf, krecord[i].type_id);</span>
+<span class='curline'><a href='../S/401.html#L8726'>btf</a>              8726 bpf/verifier.c 		func_proto = btf_type_by_id(btf, type-&gt;type);</span>
+<span class='curline'><a href='../S/401.html#L8730'>btf</a>              8730 bpf/verifier.c 		ret_type = btf_type_skip_modifiers(btf, func_proto-&gt;type, NULL);</span>
+<span class='curline'><a href='../S/401.html#L8781'>btf</a>              8781 bpf/verifier.c 	const struct btf *btf;</span>
+<span class='curline'><a href='../S/401.html#L8804'>btf</a>              8804 bpf/verifier.c 	btf = prog-&gt;aux-&gt;btf;</span>
+<span class='curline'><a href='../S/401.html#L8856'>btf</a>              8856 bpf/verifier.c 		if (!btf_name_by_offset(btf, linfo[i].line_off) ||</span>
+<span class='curline'><a href='../S/401.html#L8857'>btf</a>              8857 bpf/verifier.c 		    !btf_name_by_offset(btf, linfo[i].file_name_off)) {</span>
+<span class='curline'><a href='../S/401.html#L8899'>btf</a>              8899 bpf/verifier.c 	struct btf *btf;</span>
+<span class='curline'><a href='../S/401.html#L8908'>btf</a>              8908 bpf/verifier.c 	btf = btf_get_by_fd(attr-&gt;prog_btf_fd);</span>
+<span class='curline'><a href='../S/401.html#L8909'>btf</a>              8909 bpf/verifier.c 	if (IS_ERR(btf))</span>
+<span class='curline'><a href='../S/401.html#L8910'>btf</a>              8910 bpf/verifier.c 		return PTR_ERR(btf);</span>
+<span class='curline'><a href='../S/401.html#L8911'>btf</a>              8911 bpf/verifier.c 	env-&gt;prog-&gt;aux-&gt;btf = btf;</span>
+<span class='curline'><a href='../S/401.html#L11108'>btf</a>              11108 bpf/verifier.c 		func[i]-&gt;aux-&gt;btf = prog-&gt;aux-&gt;btf;</span>
+<span class='curline'><a href='../S/401.html#L11987'>btf</a>              11987 bpf/verifier.c 	struct btf *btf;</span>
+<span class='curline'><a href='../S/401.html#L11994'>btf</a>              11994 bpf/verifier.c 	btf = tgt_prog ? tgt_prog-&gt;aux-&gt;btf : btf_vmlinux;</span>
+<span class='curline'><a href='../S/401.html#L11995'>btf</a>              11995 bpf/verifier.c 	if (!btf) {</span>
+<span class='curline'><a href='../S/401.html#L12000'>btf</a>              12000 bpf/verifier.c 	t = btf_type_by_id(btf, btf_id);</span>
+<span class='curline'><a href='../S/401.html#L12005'>btf</a>              12005 bpf/verifier.c 	tname = btf_name_by_offset(btf, t-&gt;name_off);</span>
+<span class='curline'><a href='../S/401.html#L12094'>btf</a>              12094 bpf/verifier.c 		t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/401.html#L12098'>btf</a>              12098 bpf/verifier.c 		t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/401.html#L12110'>btf</a>              12110 bpf/verifier.c 		t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/401.html#L12113'>btf</a>              12113 bpf/verifier.c 		ret = btf_distill_func_proto(log, btf, t, tname, &amp;tgt_info-&gt;fmodel);</span>
+<span class='curline'><a href='../S/401.html#L12131'>btf</a>              12131 bpf/verifier.c 		    btf_check_type_match(log, prog, btf, t))</span>
+<span class='curline'><a href='../S/401.html#L12133'>btf</a>              12133 bpf/verifier.c 		t = btf_type_by_id(btf, t-&gt;type);</span>
+<span class='curline'><a href='../S/401.html#L12145'>btf</a>              12145 bpf/verifier.c 		ret = btf_distill_func_proto(log, btf, t, tname, &amp;tgt_info-&gt;fmodel);</span>
+<span class='curline'><a href='../S/401.html#L12279'>btf</a>              12279 bpf/verifier.c struct btf *bpf_get_btf_vmlinux(void)</span>
+<span class='curline'><a href='../S/284.html#L75'>btf</a>                75 trace/bpf_trace.c 				  u64 flags, const struct btf **btf,</span>
+<span class='curline'><a href='../S/284.html#L781'>btf</a>               781 trace/bpf_trace.c 	const struct btf *btf;</span>
+<span class='curline'><a href='../S/284.html#L785'>btf</a>               785 trace/bpf_trace.c 	ret = bpf_btf_printf_prepare(ptr, btf_ptr_size, flags, &amp;btf, &amp;btf_id);</span>
+<span class='curline'><a href='../S/284.html#L789'>btf</a>               789 trace/bpf_trace.c 	return btf_type_seq_show_flags(btf, btf_id, ptr-&gt;ptr, m, flags);</span>
+<span class='curline'><a href='../S/284.html#L1182'>btf</a>              1182 trace/bpf_trace.c 				  u64 flags, const struct btf **btf,</span>
+<span class='curline'><a href='../S/284.html#L1193'>btf</a>              1193 trace/bpf_trace.c 	*btf = bpf_get_btf_vmlinux();</span>
+<span class='curline'><a href='../S/284.html#L1195'>btf</a>              1195 trace/bpf_trace.c 	if (IS_ERR_OR_NULL(*btf))</span>
+<span class='curline'><a href='../S/284.html#L1196'>btf</a>              1196 trace/bpf_trace.c 		return IS_ERR(*btf) ? PTR_ERR(*btf) : -EINVAL;</span>
+<span class='curline'><a href='../S/284.html#L1204'>btf</a>              1204 trace/bpf_trace.c 		t = btf_type_by_id(*btf, *btf_id);</span>
+<span class='curline'><a href='../S/284.html#L1214'>btf</a>              1214 trace/bpf_trace.c 	const struct btf *btf;</span>
+<span class='curline'><a href='../S/284.html#L1218'>btf</a>              1218 trace/bpf_trace.c 	ret = bpf_btf_printf_prepare(ptr, btf_ptr_size, flags, &amp;btf, &amp;btf_id);</span>
+<span class='curline'><a href='../S/284.html#L1222'>btf</a>              1222 trace/bpf_trace.c 	return btf_type_snprintf_show(btf, btf_id, ptr-&gt;ptr, str, str_size,</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>NUM_SLOTS</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/482.html#L75'>NUM_SLOTS</a>          75 kcsan/core.c   #define SLOT_IDX(slot, i) (slot + ((i + KCSAN_CHECK_ADJACENT) % NUM_SLOTS))</span>
+<span class='curline'><a href='../S/482.html#L94'>NUM_SLOTS</a>          94 kcsan/core.c   static atomic_long_t watchpoints[CONFIG_KCSAN_NUM_WATCHPOINTS + NUM_SLOTS-1];</span>
+<span class='curline'><a href='../S/482.html#L118'>NUM_SLOTS</a>         118 kcsan/core.c   	BUILD_BUG_ON(CONFIG_KCSAN_NUM_WATCHPOINTS &lt; NUM_SLOTS);</span>
+<span class='curline'><a href='../S/482.html#L120'>NUM_SLOTS</a>         120 kcsan/core.c   	for (i = 0; i &lt; NUM_SLOTS; ++i) {</span>
+<span class='curline'><a href='../S/482.html#L150'>NUM_SLOTS</a>         150 kcsan/core.c   	BUILD_BUG_ON(SLOT_IDX(CONFIG_KCSAN_NUM_WATCHPOINTS-1, KCSAN_CHECK_ADJACENT+1) != ARRAY_SIZE(watchpoints) - NUM_SLOTS);</span>
+<span class='curline'><a href='../S/482.html#L152'>NUM_SLOTS</a>         152 kcsan/core.c   	for (i = 0; i &lt; NUM_SLOTS; ++i) {</span>
+<span class='curline'><a href='../S/485.html#L64'>NUM_SLOTS</a>          64 kcsan/report.c static struct other_info other_infos[CONFIG_KCSAN_NUM_WATCHPOINTS + NUM_SLOTS-1];</span>
+</pre>
+</body>
+</html>

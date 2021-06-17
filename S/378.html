@@ -1,0 +1,648 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>bpf/bpf_local_storage.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/494.html'>bpf</a>/bpf_local_storage.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L18'>[^]</a><a href='#L585'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L18' title='Defined at 18.'>select_bucket</a></li>
+<li><a href='#L24' title='Defined at 24.'>mem_charge</a></li>
+<li><a href='#L34' title='Defined at 34.'>mem_uncharge</a></li>
+<li><a href='#L44' title='Defined at 44.'>owner_storage</a></li>
+<li><a href='#L51' title='Defined at 51.'>selem_linked_to_storage</a></li>
+<li><a href='#L56' title='Defined at 56.'>selem_linked_to_map</a></li>
+<li><a href='#L62' title='Defined at 62.'>bpf_selem_alloc</a></li>
+<li><a href='#L87' title='Defined at 87.'>bpf_selem_unlink_storage_nolock</a></li>
+<li><a href='#L138' title='Defined at 138.'>__bpf_selem_unlink_storage</a></li>
+<li><a href='#L158' title='Defined at 158.'>bpf_selem_link_storage_nolock</a></li>
+<li><a href='#L165' title='Defined at 165.'>bpf_selem_unlink_map</a></li>
+<li><a href='#L182' title='Defined at 182.'>bpf_selem_link_map</a></li>
+<li><a href='#L193' title='Defined at 193.'>bpf_selem_unlink</a></li>
+<li><a href='#L204' title='Defined at 204.'>bpf_local_storage_lookup</a></li>
+<li><a href='#L241' title='Defined at 241.'>check_flags</a></li>
+<li><a href='#L255' title='Defined at 255.'>bpf_local_storage_alloc</a></li>
+<li><a href='#L322' title='Defined at 322.'>bpf_local_storage_update</a></li>
+<li><a href='#L437' title='Defined at 437.'>bpf_local_storage_cache_idx_get</a></li>
+<li><a href='#L461' title='Defined at 461.'>bpf_local_storage_cache_idx_free</a></li>
+<li><a href='#L469' title='Defined at 469.'>bpf_local_storage_map_free</a></li>
+<li><a href='#L522' title='Defined at 522.'>bpf_local_storage_map_alloc_check</a></li>
+<li><a href='#L541' title='Defined at 541.'>bpf_local_storage_map_alloc</a></li>
+<li><a href='#L585' title='Defined at 585.'>bpf_local_storage_map_check_btf</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/* Copyright (c) 2019 Facebook  */</em>
+<a id='L3' name='L3'></a>   3 <em class='sharp'>#include</em> &lt;linux/rculist.h&gt;
+<a id='L4' name='L4'></a>   4 <em class='sharp'>#include</em> &lt;linux/list.h&gt;
+<a id='L5' name='L5'></a>   5 <em class='sharp'>#include</em> &lt;linux/hash.h&gt;
+<a id='L6' name='L6'></a>   6 <em class='sharp'>#include</em> &lt;linux/types.h&gt;
+<a id='L7' name='L7'></a>   7 <em class='sharp'>#include</em> &lt;linux/spinlock.h&gt;
+<a id='L8' name='L8'></a>   8 <em class='sharp'>#include</em> &lt;linux/bpf.h&gt;
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> &lt;linux/btf_ids.h&gt;
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;linux/bpf_local_storage.h&gt;
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;net/sock.h&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;uapi/linux/sock_diag.h&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;uapi/linux/btf.h&gt;
+<a id='L14' name='L14'></a>  14 
+<a id='L15' name='L15'></a>  15 <em class='sharp'>#define</em> <a href='../S/378.html#L524' title='Referred from 524 in bpf/bpf_local_storage.c.'>BPF_LOCAL_STORAGE_CREATE_FLAG_MASK</a> (BPF_F_NO_PREALLOC | BPF_F_CLONE)
+<a id='L16' name='L16'></a>  16 
+<a id='L17' name='L17'></a>  17 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> bpf_local_storage_map_bucket *
+<a id='L18' name='L18'></a>  18 <a href='../R/12196.html' title='Multiple referred from 7 places.'>select_bucket</a>(<strong class='reserved'>struct</strong> bpf_local_storage_map *smap,
+<a id='L19' name='L19'></a>  19               <strong class='reserved'>struct</strong> bpf_local_storage_elem *selem)
+<a id='L20' name='L20'></a>  20 <em class='brace'>{</em>
+<a id='L21' name='L21'></a>  21         <strong class='reserved'>return</strong> &amp;smap-&gt;buckets[hash_ptr(selem, smap-&gt;bucket_log)];
+<a id='L22' name='L22'></a>  22 <em class='brace'>}</em>
+<a id='L23' name='L23'></a>  23 
+<a id='L24' name='L24'></a>  24 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../R/9078.html' title='Multiple referred from 2 places.'>mem_charge</a>(<strong class='reserved'>struct</strong> bpf_local_storage_map *smap, <strong class='reserved'>void</strong> *owner, u32 size)
+<a id='L25' name='L25'></a>  25 <em class='brace'>{</em>
+<a id='L26' name='L26'></a>  26         <strong class='reserved'>struct</strong> <a href='../S/387.html#L16' title='Defined at 16 in bpf/preload/iterators/iterators.bpf.c.'>bpf_map</a> *map = &amp;smap-&gt;map;
+<a id='L27' name='L27'></a>  27 
+<a id='L28' name='L28'></a>  28         <strong class='reserved'>if</strong> (!map-&gt;ops-&gt;map_local_storage_charge)
+<a id='L29' name='L29'></a>  29                 <strong class='reserved'>return</strong> 0;
+<a id='L30' name='L30'></a>  30 
+<a id='L31' name='L31'></a>  31         <strong class='reserved'>return</strong> map-&gt;ops-&gt;map_local_storage_charge(smap, owner, size);
+<a id='L32' name='L32'></a>  32 <em class='brace'>}</em>
+<a id='L33' name='L33'></a>  33 
+<a id='L34' name='L34'></a>  34 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/9082.html' title='Multiple referred from 5 places.'>mem_uncharge</a>(<strong class='reserved'>struct</strong> bpf_local_storage_map *smap, <strong class='reserved'>void</strong> *owner,
+<a id='L35' name='L35'></a>  35                          u32 size)
+<a id='L36' name='L36'></a>  36 <em class='brace'>{</em>
+<a id='L37' name='L37'></a>  37         <strong class='reserved'>struct</strong> <a href='../S/387.html#L16' title='Defined at 16 in bpf/preload/iterators/iterators.bpf.c.'>bpf_map</a> *map = &amp;smap-&gt;map;
+<a id='L38' name='L38'></a>  38 
+<a id='L39' name='L39'></a>  39         <strong class='reserved'>if</strong> (map-&gt;ops-&gt;map_local_storage_uncharge)
+<a id='L40' name='L40'></a>  40                 map-&gt;ops-&gt;map_local_storage_uncharge(smap, owner, size);
+<a id='L41' name='L41'></a>  41 <em class='brace'>}</em>
+<a id='L42' name='L42'></a>  42 
+<a id='L43' name='L43'></a>  43 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> bpf_local_storage __rcu **
+<a id='L44' name='L44'></a>  44 <a href='../R/9462.html' title='Multiple referred from 3 places.'>owner_storage</a>(<strong class='reserved'>struct</strong> bpf_local_storage_map *smap, <strong class='reserved'>void</strong> *owner)
+<a id='L45' name='L45'></a>  45 <em class='brace'>{</em>
+<a id='L46' name='L46'></a>  46         <strong class='reserved'>struct</strong> <a href='../S/387.html#L16' title='Defined at 16 in bpf/preload/iterators/iterators.bpf.c.'>bpf_map</a> *map = &amp;smap-&gt;map;
+<a id='L47' name='L47'></a>  47 
+<a id='L48' name='L48'></a>  48         <strong class='reserved'>return</strong> map-&gt;ops-&gt;map_owner_storage_ptr(owner);
+<a id='L49' name='L49'></a>  49 <em class='brace'>}</em>
+<a id='L50' name='L50'></a>  50 
+<a id='L51' name='L51'></a>  51 <strong class='reserved'>static</strong> bool <a href='../R/12212.html' title='Multiple referred from 4 places.'>selem_linked_to_storage</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> bpf_local_storage_elem *selem)
+<a id='L52' name='L52'></a>  52 <em class='brace'>{</em>
+<a id='L53' name='L53'></a>  53         <strong class='reserved'>return</strong> !hlist_unhashed(&amp;selem-&gt;snode);
+<a id='L54' name='L54'></a>  54 <em class='brace'>}</em>
+<a id='L55' name='L55'></a>  55 
+<a id='L56' name='L56'></a>  56 <strong class='reserved'>static</strong> bool <a href='../R/12211.html' title='Multiple referred from 2 places.'>selem_linked_to_map</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> bpf_local_storage_elem *selem)
+<a id='L57' name='L57'></a>  57 <em class='brace'>{</em>
+<a id='L58' name='L58'></a>  58         <strong class='reserved'>return</strong> !hlist_unhashed(&amp;selem-&gt;map_node);
+<a id='L59' name='L59'></a>  59 <em class='brace'>}</em>
+<a id='L60' name='L60'></a>  60 
+<a id='L61' name='L61'></a>  61 <strong class='reserved'>struct</strong> bpf_local_storage_elem *
+<a id='L62' name='L62'></a>  62 <a href='../R/3896.html' title='Multiple referred from 2 places.'>bpf_selem_alloc</a>(<strong class='reserved'>struct</strong> bpf_local_storage_map *smap, <strong class='reserved'>void</strong> *owner,
+<a id='L63' name='L63'></a>  63                 <strong class='reserved'>void</strong> *value, bool charge_mem)
+<a id='L64' name='L64'></a>  64 <em class='brace'>{</em>
+<a id='L65' name='L65'></a>  65         <strong class='reserved'>struct</strong> bpf_local_storage_elem *selem;
+<a id='L66' name='L66'></a>  66 
+<a id='L67' name='L67'></a>  67         <strong class='reserved'>if</strong> (charge_mem &amp;&amp; <a href='../S/378.html#L24' title='Defined at 24 in bpf/bpf_local_storage.c.'>mem_charge</a>(smap, owner, smap-&gt;elem_size))
+<a id='L68' name='L68'></a>  68                 <strong class='reserved'>return</strong> NULL;
+<a id='L69' name='L69'></a>  69 
+<a id='L70' name='L70'></a>  70         selem = kzalloc(smap-&gt;elem_size, GFP_ATOMIC | __GFP_NOWARN);
+<a id='L71' name='L71'></a>  71         <strong class='reserved'>if</strong> (selem) <em class='brace'>{</em>
+<a id='L72' name='L72'></a>  72                 <strong class='reserved'>if</strong> (value)
+<a id='L73' name='L73'></a>  73                         memcpy(SDATA(selem)-&gt;data, value, smap-&gt;map.value_size);
+<a id='L74' name='L74'></a>  74                 <strong class='reserved'>return</strong> selem;
+<a id='L75' name='L75'></a>  75         <em class='brace'>}</em>
+<a id='L76' name='L76'></a>  76 
+<a id='L77' name='L77'></a>  77         <strong class='reserved'>if</strong> (charge_mem)
+<a id='L78' name='L78'></a>  78                 <a href='../S/378.html#L34' title='Defined at 34 in bpf/bpf_local_storage.c.'>mem_uncharge</a>(smap, owner, smap-&gt;elem_size);
+<a id='L79' name='L79'></a>  79 
+<a id='L80' name='L80'></a>  80         <strong class='reserved'>return</strong> NULL;
+<a id='L81' name='L81'></a>  81 <em class='brace'>}</em>
+<a id='L82' name='L82'></a>  82 
+<a id='L83' name='L83'></a>  83 <em class='comment'>/* local_storage-&gt;lock must be held and selem-&gt;local_storage == local_storage.</em>
+<a id='L84' name='L84'></a>  84 <em class='comment'> * The caller must ensure selem-&gt;smap is still valid to be</em>
+<a id='L85' name='L85'></a>  85 <em class='comment'> * dereferenced for its smap-&gt;elem_size and smap-&gt;cache_idx.</em>
+<a id='L86' name='L86'></a>  86 <em class='comment'> */</em>
+<a id='L87' name='L87'></a>  87 bool <a href='../R/3901.html' title='Multiple referred from 3 places.'>bpf_selem_unlink_storage_nolock</a>(<strong class='reserved'>struct</strong> bpf_local_storage *local_storage,
+<a id='L88' name='L88'></a>  88                                      <strong class='reserved'>struct</strong> bpf_local_storage_elem *selem,
+<a id='L89' name='L89'></a>  89                                      bool uncharge_mem)
+<a id='L90' name='L90'></a>  90 <em class='brace'>{</em>
+<a id='L91' name='L91'></a>  91         <strong class='reserved'>struct</strong> bpf_local_storage_map *smap;
+<a id='L92' name='L92'></a>  92         bool free_local_storage;
+<a id='L93' name='L93'></a>  93         <strong class='reserved'>void</strong> *owner;
+<a id='L94' name='L94'></a>  94 
+<a id='L95' name='L95'></a>  95         smap = rcu_dereference(SDATA(selem)-&gt;smap);
+<a id='L96' name='L96'></a>  96         owner = local_storage-&gt;owner;
+<a id='L97' name='L97'></a>  97 
+<a id='L98' name='L98'></a>  98         <em class='comment'>/* All uncharging on the owner must be done first.</em>
+<a id='L99' name='L99'></a>  99 <em class='comment'>         * The owner may be freed once the last selem is unlinked</em>
+<a id='L100' name='L100'></a> 100 <em class='comment'>         * from local_storage.</em>
+<a id='L101' name='L101'></a> 101 <em class='comment'>         */</em>
+<a id='L102' name='L102'></a> 102         <strong class='reserved'>if</strong> (uncharge_mem)
+<a id='L103' name='L103'></a> 103                 <a href='../S/378.html#L34' title='Defined at 34 in bpf/bpf_local_storage.c.'>mem_uncharge</a>(smap, owner, smap-&gt;elem_size);
+<a id='L104' name='L104'></a> 104 
+<a id='L105' name='L105'></a> 105         free_local_storage = hlist_is_singular_node(&amp;selem-&gt;snode,
+<a id='L106' name='L106'></a> 106                                                     &amp;local_storage-&gt;list);
+<a id='L107' name='L107'></a> 107         <strong class='reserved'>if</strong> (free_local_storage) <em class='brace'>{</em>
+<a id='L108' name='L108'></a> 108                 <a href='../S/378.html#L34' title='Defined at 34 in bpf/bpf_local_storage.c.'>mem_uncharge</a>(smap, owner, <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> bpf_local_storage));
+<a id='L109' name='L109'></a> 109                 local_storage-&gt;owner = NULL;
+<a id='L110' name='L110'></a> 110 
+<a id='L111' name='L111'></a> 111                 <em class='comment'>/* After this RCU_INIT, owner may be freed and cannot be used */</em>
+<a id='L112' name='L112'></a> 112                 RCU_INIT_POINTER(*<a href='../S/378.html#L44' title='Defined at 44 in bpf/bpf_local_storage.c.'>owner_storage</a>(smap, owner), NULL);
+<a id='L113' name='L113'></a> 113 
+<a id='L114' name='L114'></a> 114                 <em class='comment'>/* local_storage is not freed now.  local_storage-&gt;lock is</em>
+<a id='L115' name='L115'></a> 115 <em class='comment'>                 * still held and raw_spin_unlock_bh(&amp;local_storage-&gt;lock)</em>
+<a id='L116' name='L116'></a> 116 <em class='comment'>                 * will be done by the caller.</em>
+<a id='L117' name='L117'></a> 117 <em class='comment'>                 *</em>
+<a id='L118' name='L118'></a> 118 <em class='comment'>                 * Although the unlock will be done under</em>
+<a id='L119' name='L119'></a> 119 <em class='comment'>                 * rcu_read_lock(),  it is more intutivie to</em>
+<a id='L120' name='L120'></a> 120 <em class='comment'>                 * read if kfree_rcu(local_storage, rcu) is done</em>
+<a id='L121' name='L121'></a> 121 <em class='comment'>                 * after the raw_spin_unlock_bh(&amp;local_storage-&gt;lock).</em>
+<a id='L122' name='L122'></a> 122 <em class='comment'>                 *</em>
+<a id='L123' name='L123'></a> 123 <em class='comment'>                 * Hence, a "bool free_local_storage" is returned</em>
+<a id='L124' name='L124'></a> 124 <em class='comment'>                 * to the caller which then calls the kfree_rcu()</em>
+<a id='L125' name='L125'></a> 125 <em class='comment'>                 * after unlock.</em>
+<a id='L126' name='L126'></a> 126 <em class='comment'>                 */</em>
+<a id='L127' name='L127'></a> 127         <em class='brace'>}</em>
+<a id='L128' name='L128'></a> 128         hlist_del_init_rcu(&amp;selem-&gt;snode);
+<a id='L129' name='L129'></a> 129         <strong class='reserved'>if</strong> (rcu_access_pointer(local_storage-&gt;cache[smap-&gt;cache_idx]) ==
+<a id='L130' name='L130'></a> 130             SDATA(selem))
+<a id='L131' name='L131'></a> 131                 RCU_INIT_POINTER(local_storage-&gt;cache[smap-&gt;cache_idx], NULL);
+<a id='L132' name='L132'></a> 132 
+<a id='L133' name='L133'></a> 133         kfree_rcu(selem, rcu);
+<a id='L134' name='L134'></a> 134 
+<a id='L135' name='L135'></a> 135         <strong class='reserved'>return</strong> free_local_storage;
+<a id='L136' name='L136'></a> 136 <em class='brace'>}</em>
+<a id='L137' name='L137'></a> 137 
+<a id='L138' name='L138'></a> 138 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/378.html#L200' title='Referred from 200 in bpf/bpf_local_storage.c.'>__bpf_selem_unlink_storage</a>(<strong class='reserved'>struct</strong> bpf_local_storage_elem *selem)
+<a id='L139' name='L139'></a> 139 <em class='brace'>{</em>
+<a id='L140' name='L140'></a> 140         <strong class='reserved'>struct</strong> bpf_local_storage *local_storage;
+<a id='L141' name='L141'></a> 141         bool free_local_storage = false;
+<a id='L142' name='L142'></a> 142 
+<a id='L143' name='L143'></a> 143         <strong class='reserved'>if</strong> (unlikely(!<a href='../S/378.html#L51' title='Defined at 51 in bpf/bpf_local_storage.c.'>selem_linked_to_storage</a>(selem)))
+<a id='L144' name='L144'></a> 144                 <em class='comment'>/* selem has already been unlinked from sk */</em>
+<a id='L145' name='L145'></a> 145                 <strong class='reserved'>return</strong>;
+<a id='L146' name='L146'></a> 146 
+<a id='L147' name='L147'></a> 147         local_storage = rcu_dereference(selem-&gt;local_storage);
+<a id='L148' name='L148'></a> 148         raw_spin_lock_bh(&amp;local_storage-&gt;lock);
+<a id='L149' name='L149'></a> 149         <strong class='reserved'>if</strong> (likely(<a href='../S/378.html#L51' title='Defined at 51 in bpf/bpf_local_storage.c.'>selem_linked_to_storage</a>(selem)))
+<a id='L150' name='L150'></a> 150                 free_local_storage = <a href='../S/378.html#L87' title='Defined at 87 in bpf/bpf_local_storage.c.'>bpf_selem_unlink_storage_nolock</a>(
+<a id='L151' name='L151'></a> 151                         local_storage, selem, true);
+<a id='L152' name='L152'></a> 152         raw_spin_unlock_bh(&amp;local_storage-&gt;lock);
+<a id='L153' name='L153'></a> 153 
+<a id='L154' name='L154'></a> 154         <strong class='reserved'>if</strong> (free_local_storage)
+<a id='L155' name='L155'></a> 155                 kfree_rcu(local_storage, rcu);
+<a id='L156' name='L156'></a> 156 <em class='brace'>}</em>
+<a id='L157' name='L157'></a> 157 
+<a id='L158' name='L158'></a> 158 <strong class='reserved'>void</strong> <a href='../R/3898.html' title='Multiple referred from 2 places.'>bpf_selem_link_storage_nolock</a>(<strong class='reserved'>struct</strong> bpf_local_storage *local_storage,
+<a id='L159' name='L159'></a> 159                                    <strong class='reserved'>struct</strong> bpf_local_storage_elem *selem)
+<a id='L160' name='L160'></a> 160 <em class='brace'>{</em>
+<a id='L161' name='L161'></a> 161         RCU_INIT_POINTER(selem-&gt;local_storage, local_storage);
+<a id='L162' name='L162'></a> 162         hlist_add_head_rcu(&amp;selem-&gt;snode, &amp;local_storage-&gt;list);
+<a id='L163' name='L163'></a> 163 <em class='brace'>}</em>
+<a id='L164' name='L164'></a> 164 
+<a id='L165' name='L165'></a> 165 <strong class='reserved'>void</strong> <a href='../R/3900.html' title='Multiple referred from 4 places.'>bpf_selem_unlink_map</a>(<strong class='reserved'>struct</strong> bpf_local_storage_elem *selem)
+<a id='L166' name='L166'></a> 166 <em class='brace'>{</em>
+<a id='L167' name='L167'></a> 167         <strong class='reserved'>struct</strong> bpf_local_storage_map *smap;
+<a id='L168' name='L168'></a> 168         <strong class='reserved'>struct</strong> bpf_local_storage_map_bucket *b;
+<a id='L169' name='L169'></a> 169 
+<a id='L170' name='L170'></a> 170         <strong class='reserved'>if</strong> (unlikely(!<a href='../S/378.html#L56' title='Defined at 56 in bpf/bpf_local_storage.c.'>selem_linked_to_map</a>(selem)))
+<a id='L171' name='L171'></a> 171                 <em class='comment'>/* selem has already be unlinked from smap */</em>
+<a id='L172' name='L172'></a> 172                 <strong class='reserved'>return</strong>;
+<a id='L173' name='L173'></a> 173 
+<a id='L174' name='L174'></a> 174         smap = rcu_dereference(SDATA(selem)-&gt;smap);
+<a id='L175' name='L175'></a> 175         b = <a href='../D/12868.html' title='Multiple defined in 2 places.'>select_bucket</a>(smap, selem);
+<a id='L176' name='L176'></a> 176         raw_spin_lock_bh(&amp;b-&gt;lock);
+<a id='L177' name='L177'></a> 177         <strong class='reserved'>if</strong> (likely(<a href='../S/378.html#L56' title='Defined at 56 in bpf/bpf_local_storage.c.'>selem_linked_to_map</a>(selem)))
+<a id='L178' name='L178'></a> 178                 hlist_del_init_rcu(&amp;selem-&gt;map_node);
+<a id='L179' name='L179'></a> 179         raw_spin_unlock_bh(&amp;b-&gt;lock);
+<a id='L180' name='L180'></a> 180 <em class='brace'>}</em>
+<a id='L181' name='L181'></a> 181 
+<a id='L182' name='L182'></a> 182 <strong class='reserved'>void</strong> <a href='../R/3897.html' title='Multiple referred from 2 places.'>bpf_selem_link_map</a>(<strong class='reserved'>struct</strong> bpf_local_storage_map *smap,
+<a id='L183' name='L183'></a> 183                         <strong class='reserved'>struct</strong> bpf_local_storage_elem *selem)
+<a id='L184' name='L184'></a> 184 <em class='brace'>{</em>
+<a id='L185' name='L185'></a> 185         <strong class='reserved'>struct</strong> bpf_local_storage_map_bucket *b = <a href='../D/12868.html' title='Multiple defined in 2 places.'>select_bucket</a>(smap, selem);
+<a id='L186' name='L186'></a> 186 
+<a id='L187' name='L187'></a> 187         raw_spin_lock_bh(&amp;b-&gt;lock);
+<a id='L188' name='L188'></a> 188         RCU_INIT_POINTER(SDATA(selem)-&gt;smap, smap);
+<a id='L189' name='L189'></a> 189         hlist_add_head_rcu(&amp;selem-&gt;map_node, &amp;b-&gt;list);
+<a id='L190' name='L190'></a> 190         raw_spin_unlock_bh(&amp;b-&gt;lock);
+<a id='L191' name='L191'></a> 191 <em class='brace'>}</em>
+<a id='L192' name='L192'></a> 192 
+<a id='L193' name='L193'></a> 193 <strong class='reserved'>void</strong> <a href='../R/3899.html' title='Multiple referred from 2 places.'>bpf_selem_unlink</a>(<strong class='reserved'>struct</strong> bpf_local_storage_elem *selem)
+<a id='L194' name='L194'></a> 194 <em class='brace'>{</em>
+<a id='L195' name='L195'></a> 195         <em class='comment'>/* Always unlink from map before unlinking from local_storage</em>
+<a id='L196' name='L196'></a> 196 <em class='comment'>         * because selem will be freed after successfully unlinked from</em>
+<a id='L197' name='L197'></a> 197 <em class='comment'>         * the local_storage.</em>
+<a id='L198' name='L198'></a> 198 <em class='comment'>         */</em>
+<a id='L199' name='L199'></a> 199         <a href='../S/378.html#L165' title='Defined at 165 in bpf/bpf_local_storage.c.'>bpf_selem_unlink_map</a>(selem);
+<a id='L200' name='L200'></a> 200         <a href='../S/378.html#L138' title='Defined at 138 in bpf/bpf_local_storage.c.'>__bpf_selem_unlink_storage</a>(selem);
+<a id='L201' name='L201'></a> 201 <em class='brace'>}</em>
+<a id='L202' name='L202'></a> 202 
+<a id='L203' name='L203'></a> 203 <strong class='reserved'>struct</strong> bpf_local_storage_data *
+<a id='L204' name='L204'></a> 204 <a href='../R/3635.html' title='Multiple referred from 3 places.'>bpf_local_storage_lookup</a>(<strong class='reserved'>struct</strong> bpf_local_storage *local_storage,
+<a id='L205' name='L205'></a> 205                          <strong class='reserved'>struct</strong> bpf_local_storage_map *smap,
+<a id='L206' name='L206'></a> 206                          bool cacheit_lockit)
+<a id='L207' name='L207'></a> 207 <em class='brace'>{</em>
+<a id='L208' name='L208'></a> 208         <strong class='reserved'>struct</strong> bpf_local_storage_data *sdata;
+<a id='L209' name='L209'></a> 209         <strong class='reserved'>struct</strong> bpf_local_storage_elem *selem;
+<a id='L210' name='L210'></a> 210 
+<a id='L211' name='L211'></a> 211         <em class='comment'>/* Fast path (cache hit) */</em>
+<a id='L212' name='L212'></a> 212         sdata = rcu_dereference(local_storage-&gt;cache[smap-&gt;cache_idx]);
+<a id='L213' name='L213'></a> 213         <strong class='reserved'>if</strong> (sdata &amp;&amp; rcu_access_pointer(sdata-&gt;smap) == smap)
+<a id='L214' name='L214'></a> 214                 <strong class='reserved'>return</strong> sdata;
+<a id='L215' name='L215'></a> 215 
+<a id='L216' name='L216'></a> 216         <em class='comment'>/* Slow path (cache miss) */</em>
+<a id='L217' name='L217'></a> 217         hlist_for_each_entry_rcu(selem, &amp;local_storage-&gt;list, snode)
+<a id='L218' name='L218'></a> 218                 <strong class='reserved'>if</strong> (rcu_access_pointer(SDATA(selem)-&gt;smap) == smap)
+<a id='L219' name='L219'></a> 219                         <strong class='reserved'>break</strong>;
+<a id='L220' name='L220'></a> 220 
+<a id='L221' name='L221'></a> 221         <strong class='reserved'>if</strong> (!selem)
+<a id='L222' name='L222'></a> 222                 <strong class='reserved'>return</strong> NULL;
+<a id='L223' name='L223'></a> 223 
+<a id='L224' name='L224'></a> 224         sdata = SDATA(selem);
+<a id='L225' name='L225'></a> 225         <strong class='reserved'>if</strong> (cacheit_lockit) <em class='brace'>{</em>
+<a id='L226' name='L226'></a> 226                 <em class='comment'>/* spinlock is needed to avoid racing with the</em>
+<a id='L227' name='L227'></a> 227 <em class='comment'>                 * parallel delete.  Otherwise, publishing an already</em>
+<a id='L228' name='L228'></a> 228 <em class='comment'>                 * deleted sdata to the cache will become a use-after-free</em>
+<a id='L229' name='L229'></a> 229 <em class='comment'>                 * problem in the next bpf_local_storage_lookup().</em>
+<a id='L230' name='L230'></a> 230 <em class='comment'>                 */</em>
+<a id='L231' name='L231'></a> 231                 raw_spin_lock_bh(&amp;local_storage-&gt;lock);
+<a id='L232' name='L232'></a> 232                 <strong class='reserved'>if</strong> (<a href='../S/378.html#L51' title='Defined at 51 in bpf/bpf_local_storage.c.'>selem_linked_to_storage</a>(selem))
+<a id='L233' name='L233'></a> 233                         rcu_assign_pointer(local_storage-&gt;cache[smap-&gt;cache_idx],
+<a id='L234' name='L234'></a> 234                                            sdata);
+<a id='L235' name='L235'></a> 235                 raw_spin_unlock_bh(&amp;local_storage-&gt;lock);
+<a id='L236' name='L236'></a> 236         <em class='brace'>}</em>
+<a id='L237' name='L237'></a> 237 
+<a id='L238' name='L238'></a> 238         <strong class='reserved'>return</strong> sdata;
+<a id='L239' name='L239'></a> 239 <em class='brace'>}</em>
+<a id='L240' name='L240'></a> 240 
+<a id='L241' name='L241'></a> 241 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../R/4566.html' title='Multiple referred from 18 places.'>check_flags</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> bpf_local_storage_data *old_sdata,
+<a id='L242' name='L242'></a> 242                        u64 map_flags)
+<a id='L243' name='L243'></a> 243 <em class='brace'>{</em>
+<a id='L244' name='L244'></a> 244         <strong class='reserved'>if</strong> (old_sdata &amp;&amp; (map_flags &amp; ~BPF_F_LOCK) == BPF_NOEXIST)
+<a id='L245' name='L245'></a> 245                 <em class='comment'>/* elem already exists */</em>
+<a id='L246' name='L246'></a> 246                 <strong class='reserved'>return</strong> -EEXIST;
+<a id='L247' name='L247'></a> 247 
+<a id='L248' name='L248'></a> 248         <strong class='reserved'>if</strong> (!old_sdata &amp;&amp; (map_flags &amp; ~BPF_F_LOCK) == BPF_EXIST)
+<a id='L249' name='L249'></a> 249                 <em class='comment'>/* elem doesn't exist, cannot update it */</em>
+<a id='L250' name='L250'></a> 250                 <strong class='reserved'>return</strong> -ENOENT;
+<a id='L251' name='L251'></a> 251 
+<a id='L252' name='L252'></a> 252         <strong class='reserved'>return</strong> 0;
+<a id='L253' name='L253'></a> 253 <em class='brace'>}</em>
+<a id='L254' name='L254'></a> 254 
+<a id='L255' name='L255'></a> 255 <strong class='reserved'>int</strong> <a href='../S/378.html#L348' title='Referred from 348 in bpf/bpf_local_storage.c.'>bpf_local_storage_alloc</a>(<strong class='reserved'>void</strong> *owner,
+<a id='L256' name='L256'></a> 256                             <strong class='reserved'>struct</strong> bpf_local_storage_map *smap,
+<a id='L257' name='L257'></a> 257                             <strong class='reserved'>struct</strong> bpf_local_storage_elem *first_selem)
+<a id='L258' name='L258'></a> 258 <em class='brace'>{</em>
+<a id='L259' name='L259'></a> 259         <strong class='reserved'>struct</strong> bpf_local_storage *prev_storage, *storage;
+<a id='L260' name='L260'></a> 260         <strong class='reserved'>struct</strong> bpf_local_storage **owner_storage_ptr;
+<a id='L261' name='L261'></a> 261         <strong class='reserved'>int</strong> err;
+<a id='L262' name='L262'></a> 262 
+<a id='L263' name='L263'></a> 263         err = <a href='../S/378.html#L24' title='Defined at 24 in bpf/bpf_local_storage.c.'>mem_charge</a>(smap, owner, <strong class='reserved'>sizeof</strong>(*storage));
+<a id='L264' name='L264'></a> 264         <strong class='reserved'>if</strong> (err)
+<a id='L265' name='L265'></a> 265                 <strong class='reserved'>return</strong> err;
+<a id='L266' name='L266'></a> 266 
+<a id='L267' name='L267'></a> 267         storage = kzalloc(<strong class='reserved'>sizeof</strong>(*storage), GFP_ATOMIC | __GFP_NOWARN);
+<a id='L268' name='L268'></a> 268         <strong class='reserved'>if</strong> (!storage) <em class='brace'>{</em>
+<a id='L269' name='L269'></a> 269                 err = -ENOMEM;
+<a id='L270' name='L270'></a> 270                 <strong class='reserved'>goto</strong> uncharge;
+<a id='L271' name='L271'></a> 271         <em class='brace'>}</em>
+<a id='L272' name='L272'></a> 272 
+<a id='L273' name='L273'></a> 273         INIT_HLIST_HEAD(&amp;storage-&gt;list);
+<a id='L274' name='L274'></a> 274         raw_spin_lock_init(&amp;storage-&gt;lock);
+<a id='L275' name='L275'></a> 275         storage-&gt;owner = owner;
+<a id='L276' name='L276'></a> 276 
+<a id='L277' name='L277'></a> 277         <a href='../S/378.html#L158' title='Defined at 158 in bpf/bpf_local_storage.c.'>bpf_selem_link_storage_nolock</a>(storage, first_selem);
+<a id='L278' name='L278'></a> 278         <a href='../S/378.html#L182' title='Defined at 182 in bpf/bpf_local_storage.c.'>bpf_selem_link_map</a>(smap, first_selem);
+<a id='L279' name='L279'></a> 279 
+<a id='L280' name='L280'></a> 280         owner_storage_ptr =
+<a id='L281' name='L281'></a> 281                 (<strong class='reserved'>struct</strong> bpf_local_storage **)<a href='../S/378.html#L44' title='Defined at 44 in bpf/bpf_local_storage.c.'>owner_storage</a>(smap, owner);
+<a id='L282' name='L282'></a> 282         <em class='comment'>/* Publish storage to the owner.</em>
+<a id='L283' name='L283'></a> 283 <em class='comment'>         * Instead of using any lock of the kernel object (i.e. owner),</em>
+<a id='L284' name='L284'></a> 284 <em class='comment'>         * cmpxchg will work with any kernel object regardless what</em>
+<a id='L285' name='L285'></a> 285 <em class='comment'>         * the running context is, bh, irq...etc.</em>
+<a id='L286' name='L286'></a> 286 <em class='comment'>         *</em>
+<a id='L287' name='L287'></a> 287 <em class='comment'>         * From now on, the owner-&gt;storage pointer (e.g. sk-&gt;sk_bpf_storage)</em>
+<a id='L288' name='L288'></a> 288 <em class='comment'>         * is protected by the storage-&gt;lock.  Hence, when freeing</em>
+<a id='L289' name='L289'></a> 289 <em class='comment'>         * the owner-&gt;storage, the storage-&gt;lock must be held before</em>
+<a id='L290' name='L290'></a> 290 <em class='comment'>         * setting owner-&gt;storage ptr to NULL.</em>
+<a id='L291' name='L291'></a> 291 <em class='comment'>         */</em>
+<a id='L292' name='L292'></a> 292         prev_storage = cmpxchg(owner_storage_ptr, NULL, storage);
+<a id='L293' name='L293'></a> 293         <strong class='reserved'>if</strong> (unlikely(prev_storage)) <em class='brace'>{</em>
+<a id='L294' name='L294'></a> 294                 <a href='../S/378.html#L165' title='Defined at 165 in bpf/bpf_local_storage.c.'>bpf_selem_unlink_map</a>(first_selem);
+<a id='L295' name='L295'></a> 295                 err = -EAGAIN;
+<a id='L296' name='L296'></a> 296                 <strong class='reserved'>goto</strong> uncharge;
+<a id='L297' name='L297'></a> 297 
+<a id='L298' name='L298'></a> 298                 <em class='comment'>/* Note that even first_selem was linked to smap's</em>
+<a id='L299' name='L299'></a> 299 <em class='comment'>                 * bucket-&gt;list, first_selem can be freed immediately</em>
+<a id='L300' name='L300'></a> 300 <em class='comment'>                 * (instead of kfree_rcu) because</em>
+<a id='L301' name='L301'></a> 301 <em class='comment'>                 * bpf_local_storage_map_free() does a</em>
+<a id='L302' name='L302'></a> 302 <em class='comment'>                 * synchronize_rcu() before walking the bucket-&gt;list.</em>
+<a id='L303' name='L303'></a> 303 <em class='comment'>                 * Hence, no one is accessing selem from the</em>
+<a id='L304' name='L304'></a> 304 <em class='comment'>                 * bucket-&gt;list under rcu_read_lock().</em>
+<a id='L305' name='L305'></a> 305 <em class='comment'>                 */</em>
+<a id='L306' name='L306'></a> 306         <em class='brace'>}</em>
+<a id='L307' name='L307'></a> 307 
+<a id='L308' name='L308'></a> 308         <strong class='reserved'>return</strong> 0;
+<a id='L309' name='L309'></a> 309 
+<a id='L310' name='L310'></a> 310 uncharge:
+<a id='L311' name='L311'></a> 311         kfree(storage);
+<a id='L312' name='L312'></a> 312         <a href='../S/378.html#L34' title='Defined at 34 in bpf/bpf_local_storage.c.'>mem_uncharge</a>(smap, owner, <strong class='reserved'>sizeof</strong>(*storage));
+<a id='L313' name='L313'></a> 313         <strong class='reserved'>return</strong> err;
+<a id='L314' name='L314'></a> 314 <em class='brace'>}</em>
+<a id='L315' name='L315'></a> 315 
+<a id='L316' name='L316'></a> 316 <em class='comment'>/* sk cannot be going away because it is linking new elem</em>
+<a id='L317' name='L317'></a> 317 <em class='comment'> * to sk-&gt;sk_bpf_storage. (i.e. sk-&gt;sk_refcnt cannot be 0).</em>
+<a id='L318' name='L318'></a> 318 <em class='comment'> * Otherwise, it will become a leak (and other memory issues</em>
+<a id='L319' name='L319'></a> 319 <em class='comment'> * during map destruction).</em>
+<a id='L320' name='L320'></a> 320 <em class='comment'> */</em>
+<a id='L321' name='L321'></a> 321 <strong class='reserved'>struct</strong> bpf_local_storage_data *
+<a id='L322' name='L322'></a> 322 <a href='../R/3640.html' title='Multiple referred from 2 places.'>bpf_local_storage_update</a>(<strong class='reserved'>void</strong> *owner, <strong class='reserved'>struct</strong> bpf_local_storage_map *smap,
+<a id='L323' name='L323'></a> 323                          <strong class='reserved'>void</strong> *value, u64 map_flags)
+<a id='L324' name='L324'></a> 324 <em class='brace'>{</em>
+<a id='L325' name='L325'></a> 325         <strong class='reserved'>struct</strong> bpf_local_storage_data *old_sdata = NULL;
+<a id='L326' name='L326'></a> 326         <strong class='reserved'>struct</strong> bpf_local_storage_elem *selem;
+<a id='L327' name='L327'></a> 327         <strong class='reserved'>struct</strong> bpf_local_storage *local_storage;
+<a id='L328' name='L328'></a> 328         <strong class='reserved'>int</strong> err;
+<a id='L329' name='L329'></a> 329 
+<a id='L330' name='L330'></a> 330         <em class='comment'>/* BPF_EXIST and BPF_NOEXIST cannot be both set */</em>
+<a id='L331' name='L331'></a> 331         <strong class='reserved'>if</strong> (unlikely((map_flags &amp; ~BPF_F_LOCK) &gt; BPF_EXIST) ||
+<a id='L332' name='L332'></a> 332             <em class='comment'>/* BPF_F_LOCK can only be used in a value with spin_lock */</em>
+<a id='L333' name='L333'></a> 333             unlikely((map_flags &amp; BPF_F_LOCK) &amp;&amp;
+<a id='L334' name='L334'></a> 334                      !map_value_has_spin_lock(&amp;smap-&gt;map)))
+<a id='L335' name='L335'></a> 335                 <strong class='reserved'>return</strong> ERR_PTR(-EINVAL);
+<a id='L336' name='L336'></a> 336 
+<a id='L337' name='L337'></a> 337         local_storage = rcu_dereference(*<a href='../S/378.html#L44' title='Defined at 44 in bpf/bpf_local_storage.c.'>owner_storage</a>(smap, owner));
+<a id='L338' name='L338'></a> 338         <strong class='reserved'>if</strong> (!local_storage || hlist_empty(&amp;local_storage-&gt;list)) <em class='brace'>{</em>
+<a id='L339' name='L339'></a> 339                 <em class='comment'>/* Very first elem for the owner */</em>
+<a id='L340' name='L340'></a> 340                 err = <a href='../D/4829.html' title='Multiple defined in 3 places.'>check_flags</a>(NULL, map_flags);
+<a id='L341' name='L341'></a> 341                 <strong class='reserved'>if</strong> (err)
+<a id='L342' name='L342'></a> 342                         <strong class='reserved'>return</strong> ERR_PTR(err);
+<a id='L343' name='L343'></a> 343 
+<a id='L344' name='L344'></a> 344                 selem = <a href='../S/378.html#L62' title='Defined at 62 in bpf/bpf_local_storage.c.'>bpf_selem_alloc</a>(smap, owner, value, true);
+<a id='L345' name='L345'></a> 345                 <strong class='reserved'>if</strong> (!selem)
+<a id='L346' name='L346'></a> 346                         <strong class='reserved'>return</strong> ERR_PTR(-ENOMEM);
+<a id='L347' name='L347'></a> 347 
+<a id='L348' name='L348'></a> 348                 err = <a href='../S/378.html#L255' title='Defined at 255 in bpf/bpf_local_storage.c.'>bpf_local_storage_alloc</a>(owner, smap, selem);
+<a id='L349' name='L349'></a> 349                 <strong class='reserved'>if</strong> (err) <em class='brace'>{</em>
+<a id='L350' name='L350'></a> 350                         kfree(selem);
+<a id='L351' name='L351'></a> 351                         <a href='../S/378.html#L34' title='Defined at 34 in bpf/bpf_local_storage.c.'>mem_uncharge</a>(smap, owner, smap-&gt;elem_size);
+<a id='L352' name='L352'></a> 352                         <strong class='reserved'>return</strong> ERR_PTR(err);
+<a id='L353' name='L353'></a> 353                 <em class='brace'>}</em>
+<a id='L354' name='L354'></a> 354 
+<a id='L355' name='L355'></a> 355                 <strong class='reserved'>return</strong> SDATA(selem);
+<a id='L356' name='L356'></a> 356         <em class='brace'>}</em>
+<a id='L357' name='L357'></a> 357 
+<a id='L358' name='L358'></a> 358         <strong class='reserved'>if</strong> ((map_flags &amp; BPF_F_LOCK) &amp;&amp; !(map_flags &amp; BPF_NOEXIST)) <em class='brace'>{</em>
+<a id='L359' name='L359'></a> 359                 <em class='comment'>/* Hoping to find an old_sdata to do inline update</em>
+<a id='L360' name='L360'></a> 360 <em class='comment'>                 * such that it can avoid taking the local_storage-&gt;lock</em>
+<a id='L361' name='L361'></a> 361 <em class='comment'>                 * and changing the lists.</em>
+<a id='L362' name='L362'></a> 362 <em class='comment'>                 */</em>
+<a id='L363' name='L363'></a> 363                 old_sdata =
+<a id='L364' name='L364'></a> 364                         <a href='../S/378.html#L204' title='Defined at 204 in bpf/bpf_local_storage.c.'>bpf_local_storage_lookup</a>(local_storage, smap, false);
+<a id='L365' name='L365'></a> 365                 err = <a href='../D/4829.html' title='Multiple defined in 3 places.'>check_flags</a>(old_sdata, map_flags);
+<a id='L366' name='L366'></a> 366                 <strong class='reserved'>if</strong> (err)
+<a id='L367' name='L367'></a> 367                         <strong class='reserved'>return</strong> ERR_PTR(err);
+<a id='L368' name='L368'></a> 368                 <strong class='reserved'>if</strong> (old_sdata &amp;&amp; <a href='../S/378.html#L51' title='Defined at 51 in bpf/bpf_local_storage.c.'>selem_linked_to_storage</a>(SELEM(old_sdata))) <em class='brace'>{</em>
+<a id='L369' name='L369'></a> 369                         <a href='../S/375.html#L315' title='Defined at 315 in bpf/helpers.c.'>copy_map_value_locked</a>(&amp;smap-&gt;map, old_sdata-&gt;data,
+<a id='L370' name='L370'></a> 370                                               value, false);
+<a id='L371' name='L371'></a> 371                         <strong class='reserved'>return</strong> old_sdata;
+<a id='L372' name='L372'></a> 372                 <em class='brace'>}</em>
+<a id='L373' name='L373'></a> 373         <em class='brace'>}</em>
+<a id='L374' name='L374'></a> 374 
+<a id='L375' name='L375'></a> 375         raw_spin_lock_bh(&amp;local_storage-&gt;lock);
+<a id='L376' name='L376'></a> 376 
+<a id='L377' name='L377'></a> 377         <em class='comment'>/* Recheck local_storage-&gt;list under local_storage-&gt;lock */</em>
+<a id='L378' name='L378'></a> 378         <strong class='reserved'>if</strong> (unlikely(hlist_empty(&amp;local_storage-&gt;list))) <em class='brace'>{</em>
+<a id='L379' name='L379'></a> 379                 <em class='comment'>/* A parallel del is happening and local_storage is going</em>
+<a id='L380' name='L380'></a> 380 <em class='comment'>                 * away.  It has just been checked before, so very</em>
+<a id='L381' name='L381'></a> 381 <em class='comment'>                 * unlikely.  Return instead of retry to keep things</em>
+<a id='L382' name='L382'></a> 382 <em class='comment'>                 * simple.</em>
+<a id='L383' name='L383'></a> 383 <em class='comment'>                 */</em>
+<a id='L384' name='L384'></a> 384                 err = -EAGAIN;
+<a id='L385' name='L385'></a> 385                 <strong class='reserved'>goto</strong> unlock_err;
+<a id='L386' name='L386'></a> 386         <em class='brace'>}</em>
+<a id='L387' name='L387'></a> 387 
+<a id='L388' name='L388'></a> 388         old_sdata = <a href='../S/378.html#L204' title='Defined at 204 in bpf/bpf_local_storage.c.'>bpf_local_storage_lookup</a>(local_storage, smap, false);
+<a id='L389' name='L389'></a> 389         err = <a href='../D/4829.html' title='Multiple defined in 3 places.'>check_flags</a>(old_sdata, map_flags);
+<a id='L390' name='L390'></a> 390         <strong class='reserved'>if</strong> (err)
+<a id='L391' name='L391'></a> 391                 <strong class='reserved'>goto</strong> unlock_err;
+<a id='L392' name='L392'></a> 392 
+<a id='L393' name='L393'></a> 393         <strong class='reserved'>if</strong> (old_sdata &amp;&amp; (map_flags &amp; BPF_F_LOCK)) <em class='brace'>{</em>
+<a id='L394' name='L394'></a> 394                 <a href='../S/375.html#L315' title='Defined at 315 in bpf/helpers.c.'>copy_map_value_locked</a>(&amp;smap-&gt;map, old_sdata-&gt;data, value,
+<a id='L395' name='L395'></a> 395                                       false);
+<a id='L396' name='L396'></a> 396                 selem = SELEM(old_sdata);
+<a id='L397' name='L397'></a> 397                 <strong class='reserved'>goto</strong> unlock;
+<a id='L398' name='L398'></a> 398         <em class='brace'>}</em>
+<a id='L399' name='L399'></a> 399 
+<a id='L400' name='L400'></a> 400         <em class='comment'>/* local_storage-&gt;lock is held.  Hence, we are sure</em>
+<a id='L401' name='L401'></a> 401 <em class='comment'>         * we can unlink and uncharge the old_sdata successfully</em>
+<a id='L402' name='L402'></a> 402 <em class='comment'>         * later.  Hence, instead of charging the new selem now</em>
+<a id='L403' name='L403'></a> 403 <em class='comment'>         * and then uncharge the old selem later (which may cause</em>
+<a id='L404' name='L404'></a> 404 <em class='comment'>         * a potential but unnecessary charge failure),  avoid taking</em>
+<a id='L405' name='L405'></a> 405 <em class='comment'>         * a charge at all here (the "!old_sdata" check) and the</em>
+<a id='L406' name='L406'></a> 406 <em class='comment'>         * old_sdata will not be uncharged later during</em>
+<a id='L407' name='L407'></a> 407 <em class='comment'>         * bpf_selem_unlink_storage_nolock().</em>
+<a id='L408' name='L408'></a> 408 <em class='comment'>         */</em>
+<a id='L409' name='L409'></a> 409         selem = <a href='../S/378.html#L62' title='Defined at 62 in bpf/bpf_local_storage.c.'>bpf_selem_alloc</a>(smap, owner, value, !old_sdata);
+<a id='L410' name='L410'></a> 410         <strong class='reserved'>if</strong> (!selem) <em class='brace'>{</em>
+<a id='L411' name='L411'></a> 411                 err = -ENOMEM;
+<a id='L412' name='L412'></a> 412                 <strong class='reserved'>goto</strong> unlock_err;
+<a id='L413' name='L413'></a> 413         <em class='brace'>}</em>
+<a id='L414' name='L414'></a> 414 
+<a id='L415' name='L415'></a> 415         <em class='comment'>/* First, link the new selem to the map */</em>
+<a id='L416' name='L416'></a> 416         <a href='../S/378.html#L182' title='Defined at 182 in bpf/bpf_local_storage.c.'>bpf_selem_link_map</a>(smap, selem);
+<a id='L417' name='L417'></a> 417 
+<a id='L418' name='L418'></a> 418         <em class='comment'>/* Second, link (and publish) the new selem to local_storage */</em>
+<a id='L419' name='L419'></a> 419         <a href='../S/378.html#L158' title='Defined at 158 in bpf/bpf_local_storage.c.'>bpf_selem_link_storage_nolock</a>(local_storage, selem);
+<a id='L420' name='L420'></a> 420 
+<a id='L421' name='L421'></a> 421         <em class='comment'>/* Third, remove old selem, SELEM(old_sdata) */</em>
+<a id='L422' name='L422'></a> 422         <strong class='reserved'>if</strong> (old_sdata) <em class='brace'>{</em>
+<a id='L423' name='L423'></a> 423                 <a href='../S/378.html#L165' title='Defined at 165 in bpf/bpf_local_storage.c.'>bpf_selem_unlink_map</a>(SELEM(old_sdata));
+<a id='L424' name='L424'></a> 424                 <a href='../S/378.html#L87' title='Defined at 87 in bpf/bpf_local_storage.c.'>bpf_selem_unlink_storage_nolock</a>(local_storage, SELEM(old_sdata),
+<a id='L425' name='L425'></a> 425                                                 false);
+<a id='L426' name='L426'></a> 426         <em class='brace'>}</em>
+<a id='L427' name='L427'></a> 427 
+<a id='L428' name='L428'></a> 428 unlock:
+<a id='L429' name='L429'></a> 429         raw_spin_unlock_bh(&amp;local_storage-&gt;lock);
+<a id='L430' name='L430'></a> 430         <strong class='reserved'>return</strong> SDATA(selem);
+<a id='L431' name='L431'></a> 431 
+<a id='L432' name='L432'></a> 432 unlock_err:
+<a id='L433' name='L433'></a> 433         raw_spin_unlock_bh(&amp;local_storage-&gt;lock);
+<a id='L434' name='L434'></a> 434         <strong class='reserved'>return</strong> ERR_PTR(err);
+<a id='L435' name='L435'></a> 435 <em class='brace'>}</em>
+<a id='L436' name='L436'></a> 436 
+<a id='L437' name='L437'></a> 437 u16 <a href='../S/382.html#L230' title='Referred from 230 in bpf/bpf_inode_storage.c.'>bpf_local_storage_cache_idx_get</a>(<strong class='reserved'>struct</strong> bpf_local_storage_cache *cache)
+<a id='L438' name='L438'></a> 438 <em class='brace'>{</em>
+<a id='L439' name='L439'></a> 439         u64 min_usage = U64_MAX;
+<a id='L440' name='L440'></a> 440         u16 i, res = 0;
+<a id='L441' name='L441'></a> 441 
+<a id='L442' name='L442'></a> 442         spin_lock(&amp;cache-&gt;idx_lock);
+<a id='L443' name='L443'></a> 443 
+<a id='L444' name='L444'></a> 444         <strong class='reserved'>for</strong> (i = 0; i &lt; BPF_LOCAL_STORAGE_CACHE_SIZE; i++) <em class='brace'>{</em>
+<a id='L445' name='L445'></a> 445                 <strong class='reserved'>if</strong> (cache-&gt;idx_usage_counts[i] &lt; min_usage) <em class='brace'>{</em>
+<a id='L446' name='L446'></a> 446                         min_usage = cache-&gt;idx_usage_counts[i];
+<a id='L447' name='L447'></a> 447                         res = i;
+<a id='L448' name='L448'></a> 448 
+<a id='L449' name='L449'></a> 449                         <em class='comment'>/* Found a free cache_idx */</em>
+<a id='L450' name='L450'></a> 450                         <strong class='reserved'>if</strong> (!min_usage)
+<a id='L451' name='L451'></a> 451                                 <strong class='reserved'>break</strong>;
+<a id='L452' name='L452'></a> 452                 <em class='brace'>}</em>
+<a id='L453' name='L453'></a> 453         <em class='brace'>}</em>
+<a id='L454' name='L454'></a> 454         cache-&gt;idx_usage_counts[res]++;
+<a id='L455' name='L455'></a> 455 
+<a id='L456' name='L456'></a> 456         spin_unlock(&amp;cache-&gt;idx_lock);
+<a id='L457' name='L457'></a> 457 
+<a id='L458' name='L458'></a> 458         <strong class='reserved'>return</strong> res;
+<a id='L459' name='L459'></a> 459 <em class='brace'>}</em>
+<a id='L460' name='L460'></a> 460 
+<a id='L461' name='L461'></a> 461 <strong class='reserved'>void</strong> <a href='../S/382.html#L239' title='Referred from 239 in bpf/bpf_inode_storage.c.'>bpf_local_storage_cache_idx_free</a>(<strong class='reserved'>struct</strong> bpf_local_storage_cache *cache,
+<a id='L462' name='L462'></a> 462                                       u16 idx)
+<a id='L463' name='L463'></a> 463 <em class='brace'>{</em>
+<a id='L464' name='L464'></a> 464         spin_lock(&amp;cache-&gt;idx_lock);
+<a id='L465' name='L465'></a> 465         cache-&gt;idx_usage_counts[idx]--;
+<a id='L466' name='L466'></a> 466         spin_unlock(&amp;cache-&gt;idx_lock);
+<a id='L467' name='L467'></a> 467 <em class='brace'>}</em>
+<a id='L468' name='L468'></a> 468 
+<a id='L469' name='L469'></a> 469 <strong class='reserved'>void</strong> <a href='../S/382.html#L240' title='Referred from 240 in bpf/bpf_inode_storage.c.'>bpf_local_storage_map_free</a>(<strong class='reserved'>struct</strong> bpf_local_storage_map *smap)
+<a id='L470' name='L470'></a> 470 <em class='brace'>{</em>
+<a id='L471' name='L471'></a> 471         <strong class='reserved'>struct</strong> bpf_local_storage_elem *selem;
+<a id='L472' name='L472'></a> 472         <strong class='reserved'>struct</strong> bpf_local_storage_map_bucket *b;
+<a id='L473' name='L473'></a> 473         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> i;
+<a id='L474' name='L474'></a> 474 
+<a id='L475' name='L475'></a> 475         <em class='comment'>/* Note that this map might be concurrently cloned from</em>
+<a id='L476' name='L476'></a> 476 <em class='comment'>         * bpf_sk_storage_clone. Wait for any existing bpf_sk_storage_clone</em>
+<a id='L477' name='L477'></a> 477 <em class='comment'>         * RCU read section to finish before proceeding. New RCU</em>
+<a id='L478' name='L478'></a> 478 <em class='comment'>         * read sections should be prevented via bpf_map_inc_not_zero.</em>
+<a id='L479' name='L479'></a> 479 <em class='comment'>         */</em>
+<a id='L480' name='L480'></a> 480         <a href='../D/13579.html' title='Multiple defined in 2 places.'>synchronize_rcu</a>();
+<a id='L481' name='L481'></a> 481 
+<a id='L482' name='L482'></a> 482         <em class='comment'>/* bpf prog and the userspace can no longer access this map</em>
+<a id='L483' name='L483'></a> 483 <em class='comment'>         * now.  No new selem (of this map) can be added</em>
+<a id='L484' name='L484'></a> 484 <em class='comment'>         * to the owner-&gt;storage or to the map bucket's list.</em>
+<a id='L485' name='L485'></a> 485 <em class='comment'>         *</em>
+<a id='L486' name='L486'></a> 486 <em class='comment'>         * The elem of this map can be cleaned up here</em>
+<a id='L487' name='L487'></a> 487 <em class='comment'>         * or when the storage is freed e.g.</em>
+<a id='L488' name='L488'></a> 488 <em class='comment'>         * by bpf_sk_storage_free() during __sk_destruct().</em>
+<a id='L489' name='L489'></a> 489 <em class='comment'>         */</em>
+<a id='L490' name='L490'></a> 490         <strong class='reserved'>for</strong> (i = 0; i &lt; (1U &lt;&lt; smap-&gt;bucket_log); i++) <em class='brace'>{</em>
+<a id='L491' name='L491'></a> 491                 b = &amp;smap-&gt;buckets[i];
+<a id='L492' name='L492'></a> 492 
+<a id='L493' name='L493'></a> 493                 rcu_read_lock();
+<a id='L494' name='L494'></a> 494                 <em class='comment'>/* No one is adding to b-&gt;list now */</em>
+<a id='L495' name='L495'></a> 495                 <strong class='reserved'>while</strong> ((selem = hlist_entry_safe(
+<a id='L496' name='L496'></a> 496                                 rcu_dereference_raw(hlist_first_rcu(&amp;b-&gt;list)),
+<a id='L497' name='L497'></a> 497                                 <strong class='reserved'>struct</strong> bpf_local_storage_elem, map_node))) <em class='brace'>{</em>
+<a id='L498' name='L498'></a> 498                         <a href='../S/378.html#L193' title='Defined at 193 in bpf/bpf_local_storage.c.'>bpf_selem_unlink</a>(selem);
+<a id='L499' name='L499'></a> 499                         cond_resched_rcu();
+<a id='L500' name='L500'></a> 500                 <em class='brace'>}</em>
+<a id='L501' name='L501'></a> 501                 rcu_read_unlock();
+<a id='L502' name='L502'></a> 502         <em class='brace'>}</em>
+<a id='L503' name='L503'></a> 503 
+<a id='L504' name='L504'></a> 504         <em class='comment'>/* While freeing the storage we may still need to access the map.</em>
+<a id='L505' name='L505'></a> 505 <em class='comment'>         *</em>
+<a id='L506' name='L506'></a> 506 <em class='comment'>         * e.g. when bpf_sk_storage_free() has unlinked selem from the map</em>
+<a id='L507' name='L507'></a> 507 <em class='comment'>         * which then made the above while((selem = ...)) loop</em>
+<a id='L508' name='L508'></a> 508 <em class='comment'>         * exit immediately.</em>
+<a id='L509' name='L509'></a> 509 <em class='comment'>         *</em>
+<a id='L510' name='L510'></a> 510 <em class='comment'>         * However, while freeing the storage one still needs to access the</em>
+<a id='L511' name='L511'></a> 511 <em class='comment'>         * smap-&gt;elem_size to do the uncharging in</em>
+<a id='L512' name='L512'></a> 512 <em class='comment'>         * bpf_selem_unlink_storage_nolock().</em>
+<a id='L513' name='L513'></a> 513 <em class='comment'>         *</em>
+<a id='L514' name='L514'></a> 514 <em class='comment'>         * Hence, wait another rcu grace period for the storage to be freed.</em>
+<a id='L515' name='L515'></a> 515 <em class='comment'>         */</em>
+<a id='L516' name='L516'></a> 516         <a href='../D/13579.html' title='Multiple defined in 2 places.'>synchronize_rcu</a>();
+<a id='L517' name='L517'></a> 517 
+<a id='L518' name='L518'></a> 518         kvfree(smap-&gt;buckets);
+<a id='L519' name='L519'></a> 519         kfree(smap);
+<a id='L520' name='L520'></a> 520 <em class='brace'>}</em>
+<a id='L521' name='L521'></a> 521 
+<a id='L522' name='L522'></a> 522 <strong class='reserved'>int</strong> <a href='../S/382.html#L246' title='Referred from 246 in bpf/bpf_inode_storage.c.'>bpf_local_storage_map_alloc_check</a>(<strong class='reserved'>union</strong> bpf_attr *attr)
+<a id='L523' name='L523'></a> 523 <em class='brace'>{</em>
+<a id='L524' name='L524'></a> 524         <strong class='reserved'>if</strong> (attr-&gt;map_flags &amp; ~<a href='../S/378.html#L15' title='Defined at 15 in bpf/bpf_local_storage.c.'>BPF_LOCAL_STORAGE_CREATE_FLAG_MASK</a> ||
+<a id='L525' name='L525'></a> 525             !(attr-&gt;map_flags &amp; BPF_F_NO_PREALLOC) ||
+<a id='L526' name='L526'></a> 526             attr-&gt;max_entries ||
+<a id='L527' name='L527'></a> 527             attr-&gt;key_size != <strong class='reserved'>sizeof</strong>(<strong class='reserved'>int</strong>) || !attr-&gt;value_size ||
+<a id='L528' name='L528'></a> 528             <em class='comment'>/* Enforce BTF for userspace sk dumping */</em>
+<a id='L529' name='L529'></a> 529             !attr-&gt;btf_key_type_id || !attr-&gt;btf_value_type_id)
+<a id='L530' name='L530'></a> 530                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L531' name='L531'></a> 531 
+<a id='L532' name='L532'></a> 532         <strong class='reserved'>if</strong> (!bpf_capable())
+<a id='L533' name='L533'></a> 533                 <strong class='reserved'>return</strong> -EPERM;
+<a id='L534' name='L534'></a> 534 
+<a id='L535' name='L535'></a> 535         <strong class='reserved'>if</strong> (attr-&gt;value_size &gt; BPF_LOCAL_STORAGE_MAX_VALUE_SIZE)
+<a id='L536' name='L536'></a> 536                 <strong class='reserved'>return</strong> -E2BIG;
+<a id='L537' name='L537'></a> 537 
+<a id='L538' name='L538'></a> 538         <strong class='reserved'>return</strong> 0;
+<a id='L539' name='L539'></a> 539 <em class='brace'>}</em>
+<a id='L540' name='L540'></a> 540 
+<a id='L541' name='L541'></a> 541 <strong class='reserved'>struct</strong> bpf_local_storage_map *<a href='../S/382.html#L226' title='Referred from 226 in bpf/bpf_inode_storage.c.'>bpf_local_storage_map_alloc</a>(<strong class='reserved'>union</strong> bpf_attr *attr)
+<a id='L542' name='L542'></a> 542 <em class='brace'>{</em>
+<a id='L543' name='L543'></a> 543         <strong class='reserved'>struct</strong> bpf_local_storage_map *smap;
+<a id='L544' name='L544'></a> 544         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> i;
+<a id='L545' name='L545'></a> 545         u32 nbuckets;
+<a id='L546' name='L546'></a> 546         u64 cost;
+<a id='L547' name='L547'></a> 547         <strong class='reserved'>int</strong> ret;
+<a id='L548' name='L548'></a> 548 
+<a id='L549' name='L549'></a> 549         smap = kzalloc(<strong class='reserved'>sizeof</strong>(*smap), GFP_USER | __GFP_NOWARN);
+<a id='L550' name='L550'></a> 550         <strong class='reserved'>if</strong> (!smap)
+<a id='L551' name='L551'></a> 551                 <strong class='reserved'>return</strong> ERR_PTR(-ENOMEM);
+<a id='L552' name='L552'></a> 552         <a href='../S/418.html#L334' title='Defined at 334 in bpf/syscall.c.'>bpf_map_init_from_attr</a>(&amp;smap-&gt;map, attr);
+<a id='L553' name='L553'></a> 553 
+<a id='L554' name='L554'></a> 554         nbuckets = roundup_pow_of_two(num_possible_cpus());
+<a id='L555' name='L555'></a> 555         <em class='comment'>/* Use at least 2 buckets, select_bucket() is undefined behavior with 1 bucket */</em>
+<a id='L556' name='L556'></a> 556         nbuckets = max_t(u32, 2, nbuckets);
+<a id='L557' name='L557'></a> 557         smap-&gt;bucket_log = ilog2(nbuckets);
+<a id='L558' name='L558'></a> 558         cost = <strong class='reserved'>sizeof</strong>(*smap-&gt;buckets) * nbuckets + <strong class='reserved'>sizeof</strong>(*smap);
+<a id='L559' name='L559'></a> 559 
+<a id='L560' name='L560'></a> 560         ret = <a href='../S/418.html#L361' title='Defined at 361 in bpf/syscall.c.'>bpf_map_charge_init</a>(&amp;smap-&gt;map.memory, cost);
+<a id='L561' name='L561'></a> 561         <strong class='reserved'>if</strong> (ret &lt; 0) <em class='brace'>{</em>
+<a id='L562' name='L562'></a> 562                 kfree(smap);
+<a id='L563' name='L563'></a> 563                 <strong class='reserved'>return</strong> ERR_PTR(ret);
+<a id='L564' name='L564'></a> 564         <em class='brace'>}</em>
+<a id='L565' name='L565'></a> 565 
+<a id='L566' name='L566'></a> 566         smap-&gt;buckets = kvcalloc(<strong class='reserved'>sizeof</strong>(*smap-&gt;buckets), nbuckets,
+<a id='L567' name='L567'></a> 567                                  GFP_USER | __GFP_NOWARN);
+<a id='L568' name='L568'></a> 568         <strong class='reserved'>if</strong> (!smap-&gt;buckets) <em class='brace'>{</em>
+<a id='L569' name='L569'></a> 569                 <a href='../S/418.html#L383' title='Defined at 383 in bpf/syscall.c.'>bpf_map_charge_finish</a>(&amp;smap-&gt;map.memory);
+<a id='L570' name='L570'></a> 570                 kfree(smap);
+<a id='L571' name='L571'></a> 571                 <strong class='reserved'>return</strong> ERR_PTR(-ENOMEM);
+<a id='L572' name='L572'></a> 572         <em class='brace'>}</em>
+<a id='L573' name='L573'></a> 573 
+<a id='L574' name='L574'></a> 574         <strong class='reserved'>for</strong> (i = 0; i &lt; nbuckets; i++) <em class='brace'>{</em>
+<a id='L575' name='L575'></a> 575                 INIT_HLIST_HEAD(&amp;smap-&gt;buckets[i].list);
+<a id='L576' name='L576'></a> 576                 raw_spin_lock_init(&amp;smap-&gt;buckets[i].lock);
+<a id='L577' name='L577'></a> 577         <em class='brace'>}</em>
+<a id='L578' name='L578'></a> 578 
+<a id='L579' name='L579'></a> 579         smap-&gt;elem_size =
+<a id='L580' name='L580'></a> 580                 <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> bpf_local_storage_elem) + attr-&gt;value_size;
+<a id='L581' name='L581'></a> 581 
+<a id='L582' name='L582'></a> 582         <strong class='reserved'>return</strong> smap;
+<a id='L583' name='L583'></a> 583 <em class='brace'>}</em>
+<a id='L584' name='L584'></a> 584 
+<a id='L585' name='L585'></a> 585 <strong class='reserved'>int</strong> <a href='../S/382.html#L253' title='Referred from 253 in bpf/bpf_inode_storage.c.'>bpf_local_storage_map_check_btf</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> <a href='../S/387.html#L16' title='Defined at 16 in bpf/preload/iterators/iterators.bpf.c.'>bpf_map</a> *map,
+<a id='L586' name='L586'></a> 586                                     <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> <a href='../D/4225.html' title='Multiple defined in 2 places.'>btf</a> *<a href='../D/4225.html' title='Multiple defined in 2 places.'>btf</a>,
+<a id='L587' name='L587'></a> 587                                     <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> <a href='../S/387.html#L27' title='Defined at 27 in bpf/preload/iterators/iterators.bpf.c.'>btf_type</a> *key_type,
+<a id='L588' name='L588'></a> 588                                     <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> <a href='../S/387.html#L27' title='Defined at 27 in bpf/preload/iterators/iterators.bpf.c.'>btf_type</a> *value_type)
+<a id='L589' name='L589'></a> 589 <em class='brace'>{</em>
+<a id='L590' name='L590'></a> 590         u32 int_data;
+<a id='L591' name='L591'></a> 591 
+<a id='L592' name='L592'></a> 592         <strong class='reserved'>if</strong> (BTF_INFO_KIND(key_type-&gt;info) != BTF_KIND_INT)
+<a id='L593' name='L593'></a> 593                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L594' name='L594'></a> 594 
+<a id='L595' name='L595'></a> 595         int_data = *(u32 *)(key_type + 1);
+<a id='L596' name='L596'></a> 596         <strong class='reserved'>if</strong> (BTF_INT_BITS(int_data) != 32 || BTF_INT_OFFSET(int_data))
+<a id='L597' name='L597'></a> 597                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L598' name='L598'></a> 598 
+<a id='L599' name='L599'></a> 599         <strong class='reserved'>return</strong> 0;
+<a id='L600' name='L600'></a> 600 <em class='brace'>}</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L18'>[^]</a><a href='#L585'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>global_rt_runtime</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/441.html#L7472'>global_rt_runtime</a> 7472 sched/core.c   	init_rt_bandwidth(&amp;def_rt_bandwidth, global_rt_period(), global_rt_runtime());</span>
+<span class='curline'><a href='../S/441.html#L7473'>global_rt_runtime</a> 7473 sched/core.c   	init_dl_bandwidth(&amp;def_dl_bandwidth, global_rt_period(), global_rt_runtime());</span>
+<span class='curline'><a href='../S/441.html#L7481'>global_rt_runtime</a> 7481 sched/core.c   			global_rt_period(), global_rt_runtime());</span>
+<span class='curline'><a href='../S/451.html#L411'>global_rt_runtime</a>  411 sched/deadline.c 	if (global_rt_runtime() == RUNTIME_INF)</span>
+<span class='curline'><a href='../S/451.html#L414'>global_rt_runtime</a>  414 sched/deadline.c 		dl_b-&gt;bw = to_ratio(global_rt_period(), global_rt_runtime());</span>
+<span class='curline'><a href='../S/451.html#L2549'>global_rt_runtime</a> 2549 sched/deadline.c 	u64 runtime = global_rt_runtime();</span>
+<span class='curline'><a href='../S/451.html#L2586'>global_rt_runtime</a> 2586 sched/deadline.c 	if (global_rt_runtime() == RUNTIME_INF) {</span>
+<span class='curline'><a href='../S/451.html#L2590'>global_rt_runtime</a> 2590 sched/deadline.c 		dl_rq-&gt;bw_ratio = to_ratio(global_rt_runtime(),</span>
+<span class='curline'><a href='../S/451.html#L2593'>global_rt_runtime</a> 2593 sched/deadline.c 						    global_rt_runtime());</span>
+<span class='curline'><a href='../S/451.html#L2605'>global_rt_runtime</a> 2605 sched/deadline.c 	def_dl_bandwidth.dl_runtime = global_rt_runtime();</span>
+<span class='curline'><a href='../S/451.html#L2607'>global_rt_runtime</a> 2607 sched/deadline.c 	if (global_rt_runtime() != RUNTIME_INF)</span>
+<span class='curline'><a href='../S/451.html#L2608'>global_rt_runtime</a> 2608 sched/deadline.c 		new_bw = to_ratio(global_rt_period(), global_rt_runtime());</span>
+<span class='curline'><a href='../S/450.html#L2627'>global_rt_runtime</a> 2627 sched/rt.c     	if (total &gt; to_ratio(global_rt_period(), global_rt_runtime()))</span>
+<span class='curline'><a href='../S/450.html#L2792'>global_rt_runtime</a> 2792 sched/rt.c     		rt_rq-&gt;rt_runtime = global_rt_runtime();</span>
+<span class='curline'><a href='../S/450.html#L2817'>global_rt_runtime</a> 2817 sched/rt.c     	def_rt_bandwidth.rt_runtime = global_rt_runtime();</span>
+</pre>
+</body>
+</html>

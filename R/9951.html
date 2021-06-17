@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>phys_addr</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/155.html#L40'>phys_addr</a>          40 dma/coherent.c static int dma_init_coherent_memory(phys_addr_t phys_addr,</span>
+<span class='curline'><a href='../S/155.html#L55'>phys_addr</a>          55 dma/coherent.c 	mem_base = memremap(phys_addr, size, MEMREMAP_WC);</span>
+<span class='curline'><a href='../S/155.html#L73'>phys_addr</a>          73 dma/coherent.c 	dma_mem-&gt;pfn_base = PFN_DOWN(phys_addr);</span>
+<span class='curline'><a href='../S/155.html#L127'>phys_addr</a>         127 dma/coherent.c int dma_declare_coherent_memory(struct device *dev, phys_addr_t phys_addr,</span>
+<span class='curline'><a href='../S/155.html#L133'>phys_addr</a>         133 dma/coherent.c 	ret = dma_init_coherent_memory(phys_addr, device_addr, size, &amp;mem);</span>
+<span class='curline'><a href='../S/156.html#L419'>phys_addr</a>         419 dma/debug.c    					 phys_addr(entry), entry-&gt;pfn,</span>
+<span class='curline'><a href='../S/156.html#L786'>phys_addr</a>         786 dma/debug.c    				   phys_addr(entry), entry-&gt;pfn,</span>
+<span class='curline'><a href='../S/156.html#L988'>phys_addr</a>         988 dma/debug.c    		   (phys_addr(ref) != phys_addr(entry))) {</span>
+<span class='curline'><a href='../S/156.html#L995'>phys_addr</a>         995 dma/debug.c    			   phys_addr(entry),</span>
+<span class='curline'><a href='../S/156.html#L996'>phys_addr</a>         996 dma/debug.c    			   phys_addr(ref));</span>
+<span class='curline'><a href='../S/153.html#L217'>phys_addr</a>         217 dma/mapping.c  dma_addr_t dma_map_resource(struct device *dev, phys_addr_t phys_addr,</span>
+<span class='curline'><a href='../S/153.html#L229'>phys_addr</a>         229 dma/mapping.c  	if (WARN_ON_ONCE(pfn_valid(PHYS_PFN(phys_addr))))</span>
+<span class='curline'><a href='../S/153.html#L233'>phys_addr</a>         233 dma/mapping.c  		addr = dma_direct_map_resource(dev, phys_addr, size, dir, attrs);</span>
+<span class='curline'><a href='../S/153.html#L235'>phys_addr</a>         235 dma/mapping.c  		addr = ops-&gt;map_resource(dev, phys_addr, size, dir, attrs);</span>
+<span class='curline'><a href='../S/153.html#L237'>phys_addr</a>         237 dma/mapping.c  	debug_dma_map_resource(dev, phys_addr, size, dir, addr);</span>
+<span class='curline'><a href='../S/331.html#L1894'>phys_addr</a>        1894 events/core.c  		size += sizeof(data-&gt;phys_addr);</span>
+<span class='curline'><a href='../S/331.html#L6982'>phys_addr</a>        6982 events/core.c  		perf_output_put(handle, data-&gt;phys_addr);</span>
+<span class='curline'><a href='../S/331.html#L7011'>phys_addr</a>        7011 events/core.c  	u64 phys_addr = 0;</span>
+<span class='curline'><a href='../S/331.html#L7021'>phys_addr</a>        7021 events/core.c  			phys_addr = (u64)virt_to_phys((void *)(uintptr_t)virt);</span>
+<span class='curline'><a href='../S/331.html#L7033'>phys_addr</a>        7033 events/core.c  				phys_addr = page_to_phys(p) + virt % PAGE_SIZE;</span>
+<span class='curline'><a href='../S/331.html#L7041'>phys_addr</a>        7041 events/core.c  	return phys_addr;</span>
+<span class='curline'><a href='../S/331.html#L7186'>phys_addr</a>        7186 events/core.c  		data-&gt;phys_addr = perf_virt_to_phys(data-&gt;addr);</span>
+</pre>
+</body>
+</html>

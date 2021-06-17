@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>synth_event</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/291.html#L420'>synth_event</a>       420 trace/trace_events_hist.c 	struct synth_event	*synth_event;</span>
+<span class='curline'><a href='../S/291.html#L586'>synth_event</a>       586 trace/trace_events_hist.c static inline void trace_synth(struct synth_event *event, u64 *var_ref_vals,</span>
+<span class='curline'><a href='../S/291.html#L615'>synth_event</a>       615 trace/trace_events_hist.c 	struct synth_event *event = data-&gt;synth_event;</span>
+<span class='curline'><a href='../S/291.html#L2973'>synth_event</a>      2973 trace/trace_events_hist.c 	if (data-&gt;synth_event)</span>
+<span class='curline'><a href='../S/291.html#L2974'>synth_event</a>      2974 trace/trace_events_hist.c 		data-&gt;synth_event-&gt;ref--;</span>
+<span class='curline'><a href='../S/291.html#L3281'>synth_event</a>      3281 trace/trace_events_hist.c static int check_synth_field(struct synth_event *event,</span>
+<span class='curline'><a href='../S/291.html#L3394'>synth_event</a>      3394 trace/trace_events_hist.c 	struct synth_event *event;</span>
+<span class='curline'><a href='../S/291.html#L3486'>synth_event</a>      3486 trace/trace_events_hist.c 	data-&gt;synth_event = event;</span>
+<span class='curline'><a href='../S/291.html#L5593'>synth_event</a>      5593 trace/trace_events_hist.c 	struct synth_event *se;</span>
+<span class='curline'><a href='../S/291.html#L5630'>synth_event</a>      5630 trace/trace_events_hist.c 	struct synth_event *se;</span>
+<span class='curline'><a href='../S/255.html#L85'>synth_event</a>        85 trace/trace_events_synth.c static struct synth_event *to_synth_event(struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/255.html#L87'>synth_event</a>        87 trace/trace_events_synth.c 	return container_of(ev, struct synth_event, devent);</span>
+<span class='curline'><a href='../S/255.html#L92'>synth_event</a>        92 trace/trace_events_synth.c 	struct synth_event *event = to_synth_event(ev);</span>
+<span class='curline'><a href='../S/255.html#L100'>synth_event</a>       100 trace/trace_events_synth.c 	struct synth_event *sev = to_synth_event(ev);</span>
+<span class='curline'><a href='../S/255.html#L115'>synth_event</a>       115 trace/trace_events_synth.c 	struct synth_event *event = call-&gt;data;</span>
+<span class='curline'><a href='../S/255.html#L318'>synth_event</a>       318 trace/trace_events_synth.c 	struct synth_event *se;</span>
+<span class='curline'><a href='../S/255.html#L324'>synth_event</a>       324 trace/trace_events_synth.c 	se = container_of(event, struct synth_event, call.event);</span>
+<span class='curline'><a href='../S/255.html#L395'>synth_event</a>       395 trace/trace_events_synth.c 				 struct synth_event *event,</span>
+<span class='curline'><a href='../S/255.html#L439'>synth_event</a>       439 trace/trace_events_synth.c 	struct synth_event *event;</span>
+<span class='curline'><a href='../S/255.html#L520'>synth_event</a>       520 trace/trace_events_synth.c static int __set_synth_event_print_fmt(struct synth_event *event,</span>
+<span class='curline'><a href='../S/255.html#L557'>synth_event</a>       557 trace/trace_events_synth.c 	struct synth_event *event = call-&gt;data;</span>
+<span class='curline'><a href='../S/255.html#L730'>synth_event</a>       730 trace/trace_events_synth.c struct synth_event *find_synth_event(const char *name)</span>
+<span class='curline'><a href='../S/255.html#L733'>synth_event</a>       733 trace/trace_events_synth.c 	struct synth_event *event;</span>
+<span class='curline'><a href='../S/255.html#L752'>synth_event</a>       752 trace/trace_events_synth.c static int register_synth_event(struct synth_event *event)</span>
+<span class='curline'><a href='../S/255.html#L805'>synth_event</a>       805 trace/trace_events_synth.c static int unregister_synth_event(struct synth_event *event)</span>
+<span class='curline'><a href='../S/255.html#L815'>synth_event</a>       815 trace/trace_events_synth.c static void free_synth_event(struct synth_event *event)</span>
+<span class='curline'><a href='../S/255.html#L834'>synth_event</a>       834 trace/trace_events_synth.c static struct synth_event *alloc_synth_event(const char *name, int n_fields,</span>
+<span class='curline'><a href='../S/255.html#L838'>synth_event</a>       838 trace/trace_events_synth.c 	struct synth_event *event;</span>
+<span class='curline'><a href='../S/255.html#L1197'>synth_event</a>      1197 trace/trace_events_synth.c 	struct synth_event *event = NULL;</span>
+<span class='curline'><a href='../S/255.html#L1327'>synth_event</a>      1327 trace/trace_events_synth.c static int destroy_synth_event(struct synth_event *se)</span>
+<span class='curline'><a href='../S/255.html#L1354'>synth_event</a>      1354 trace/trace_events_synth.c 	struct synth_event *se = NULL;</span>
+<span class='curline'><a href='../S/255.html#L1403'>synth_event</a>      1403 trace/trace_events_synth.c 	struct synth_event *se;</span>
+<span class='curline'><a href='../S/255.html#L1756'>synth_event</a>      1756 trace/trace_events_synth.c 	struct synth_event *event;</span>
+<span class='curline'><a href='../S/255.html#L1963'>synth_event</a>      1963 trace/trace_events_synth.c 	struct synth_event *event = to_synth_event(ev);</span>
+<span class='curline'><a href='../S/255.html#L1978'>synth_event</a>      1978 trace/trace_events_synth.c static int __synth_event_show(struct seq_file *m, struct synth_event *event)</span>
+<span class='curline'><a href='../S/255.html#L2008'>synth_event</a>      2008 trace/trace_events_synth.c 	struct synth_event *event = to_synth_event(ev);</span>
+<span class='curline'><a href='../S/269.html#L38'>synth_event</a>        38 trace/trace_synth.h extern struct synth_event *find_synth_event(const char *name);</span>
+</pre>
+</body>
+</html>

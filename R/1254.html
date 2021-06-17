@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>RWSEM_FLAG_WAITERS</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/27.html#L166'>RWSEM_FLAG_WAITERS</a>  166 locking/rwsem.c #define RWSEM_READ_FAILED_MASK	(RWSEM_WRITER_MASK|RWSEM_FLAG_WAITERS|\</span>
+<span class='curline'><a href='../S/27.html#L510'>RWSEM_FLAG_WAITERS</a>  510 locking/rwsem.c 		adjustment -= RWSEM_FLAG_WAITERS;</span>
+<span class='curline'><a href='../S/27.html#L579'>RWSEM_FLAG_WAITERS</a>  579 locking/rwsem.c 				new &amp;= ~RWSEM_FLAG_WAITERS;</span>
+<span class='curline'><a href='../S/27.html#L1013'>RWSEM_FLAG_WAITERS</a> 1013 locking/rwsem.c 		if ((atomic_long_read(&amp;sem-&gt;count) &amp; RWSEM_FLAG_WAITERS)) {</span>
+<span class='curline'><a href='../S/27.html#L1049'>RWSEM_FLAG_WAITERS</a> 1049 locking/rwsem.c 		adjustment += RWSEM_FLAG_WAITERS;</span>
+<span class='curline'><a href='../S/27.html#L1074'>RWSEM_FLAG_WAITERS</a> 1074 locking/rwsem.c 		    (adjustment &amp; RWSEM_FLAG_WAITERS)))</span>
+<span class='curline'><a href='../S/27.html#L1109'>RWSEM_FLAG_WAITERS</a> 1109 locking/rwsem.c 		atomic_long_andnot(RWSEM_FLAG_WAITERS|RWSEM_FLAG_HANDOFF,</span>
+<span class='curline'><a href='../S/27.html#L1209'>RWSEM_FLAG_WAITERS</a> 1209 locking/rwsem.c 		atomic_long_or(RWSEM_FLAG_WAITERS, &amp;sem-&gt;count);</span>
+<span class='curline'><a href='../S/27.html#L1293'>RWSEM_FLAG_WAITERS</a> 1293 locking/rwsem.c 		atomic_long_andnot(RWSEM_FLAG_WAITERS, &amp;sem-&gt;count);</span>
+<span class='curline'><a href='../S/27.html#L1458'>RWSEM_FLAG_WAITERS</a> 1458 locking/rwsem.c 	if (unlikely((tmp &amp; (RWSEM_LOCK_MASK|RWSEM_FLAG_WAITERS)) ==</span>
+<span class='curline'><a href='../S/27.html#L1459'>RWSEM_FLAG_WAITERS</a> 1459 locking/rwsem.c 		      RWSEM_FLAG_WAITERS)) {</span>
+<span class='curline'><a href='../S/27.html#L1482'>RWSEM_FLAG_WAITERS</a> 1482 locking/rwsem.c 	if (unlikely(tmp &amp; RWSEM_FLAG_WAITERS))</span>
+<span class='curline'><a href='../S/27.html#L1504'>RWSEM_FLAG_WAITERS</a> 1504 locking/rwsem.c 	if (tmp &amp; RWSEM_FLAG_WAITERS)</span>
+</pre>
+</body>
+</html>

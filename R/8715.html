@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>kthread</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/407.html#L63'>kthread</a>            63 bpf/cpumap.c   	struct task_struct *kthread;</span>
+<span class='curline'><a href='../S/407.html#L155'>kthread</a>           155 bpf/cpumap.c   	kthread_stop(rcpu-&gt;kthread);</span>
+<span class='curline'><a href='../S/407.html#L457'>kthread</a>           457 bpf/cpumap.c   	rcpu-&gt;kthread = kthread_create_on_node(cpu_map_kthread_run, rcpu, numa,</span>
+<span class='curline'><a href='../S/407.html#L459'>kthread</a>           459 bpf/cpumap.c   	if (IS_ERR(rcpu-&gt;kthread))</span>
+<span class='curline'><a href='../S/407.html#L466'>kthread</a>           466 bpf/cpumap.c   	kthread_bind(rcpu-&gt;kthread, cpu);</span>
+<span class='curline'><a href='../S/407.html#L467'>kthread</a>           467 bpf/cpumap.c   	wake_up_process(rcpu-&gt;kthread);</span>
+<span class='curline'><a href='../S/407.html#L755'>kthread</a>           755 bpf/cpumap.c   		wake_up_process(bq-&gt;obj-&gt;kthread);</span>
+<span class='curline'><a href='../S/435.html#L71'>kthread</a>            71 kthread.c      static inline void set_kthread_struct(void *kthread)</span>
+<span class='curline'><a href='../S/435.html#L78'>kthread</a>            78 kthread.c      	current-&gt;set_child_tid = (__force void __user *)kthread;</span>
+<span class='curline'><a href='../S/435.html#L81'>kthread</a>            81 kthread.c      static inline struct kthread *to_kthread(struct task_struct *k)</span>
+<span class='curline'><a href='../S/435.html#L89'>kthread</a>            89 kthread.c      	struct kthread *kthread;</span>
+<span class='curline'><a href='../S/435.html#L95'>kthread</a>            95 kthread.c      	kthread = to_kthread(k);</span>
+<span class='curline'><a href='../S/435.html#L97'>kthread</a>            97 kthread.c      	WARN_ON_ONCE(kthread &amp;&amp; kthread-&gt;blkcg_css);</span>
+<span class='curline'><a href='../S/435.html#L99'>kthread</a>            99 kthread.c      	kfree(kthread);</span>
+<span class='curline'><a href='../S/435.html#L202'>kthread</a>           202 kthread.c      	struct kthread *kthread = to_kthread(task);</span>
+<span class='curline'><a href='../S/435.html#L205'>kthread</a>           205 kthread.c      	copy_from_kernel_nofault(&amp;data, &amp;kthread-&gt;data, sizeof(data));</span>
+<span class='curline'><a href='../S/435.html#L209'>kthread</a>           209 kthread.c      static void __kthread_parkme(struct kthread *self)</span>
+<span class='curline'><a href='../S/435.html#L251'>kthread</a>           251 kthread.c      	struct kthread *self;</span>
+<span class='curline'><a href='../S/435.html#L315'>kthread</a>           315 kthread.c      	pid = kernel_thread(kthread, create, CLONE_FS | CLONE_FILES | SIGCHLD);</span>
+<span class='curline'><a href='../S/435.html#L503'>kthread</a>           503 kthread.c      	struct kthread *kthread = to_kthread(k);</span>
+<span class='curline'><a href='../S/435.html#L504'>kthread</a>           504 kthread.c      	if (!kthread)</span>
+<span class='curline'><a href='../S/435.html#L510'>kthread</a>           510 kthread.c      		clear_bit(KTHREAD_IS_PER_CPU, &amp;kthread-&gt;flags);</span>
+<span class='curline'><a href='../S/435.html#L514'>kthread</a>           514 kthread.c      	kthread-&gt;cpu = cpu;</span>
+<span class='curline'><a href='../S/435.html#L515'>kthread</a>           515 kthread.c      	set_bit(KTHREAD_IS_PER_CPU, &amp;kthread-&gt;flags);</span>
+<span class='curline'><a href='../S/435.html#L520'>kthread</a>           520 kthread.c      	struct kthread *kthread = to_kthread(k);</span>
+<span class='curline'><a href='../S/435.html#L521'>kthread</a>           521 kthread.c      	if (!kthread)</span>
+<span class='curline'><a href='../S/435.html#L524'>kthread</a>           524 kthread.c      	return test_bit(KTHREAD_IS_PER_CPU, &amp;kthread-&gt;flags);</span>
+<span class='curline'><a href='../S/435.html#L537'>kthread</a>           537 kthread.c      	struct kthread *kthread = to_kthread(k);</span>
+<span class='curline'><a href='../S/435.html#L543'>kthread</a>           543 kthread.c      	if (test_bit(KTHREAD_IS_PER_CPU, &amp;kthread-&gt;flags))</span>
+<span class='curline'><a href='../S/435.html#L544'>kthread</a>           544 kthread.c      		__kthread_bind(k, kthread-&gt;cpu, TASK_PARKED);</span>
+<span class='curline'><a href='../S/435.html#L546'>kthread</a>           546 kthread.c      	clear_bit(KTHREAD_SHOULD_PARK, &amp;kthread-&gt;flags);</span>
+<span class='curline'><a href='../S/435.html#L568'>kthread</a>           568 kthread.c      	struct kthread *kthread = to_kthread(k);</span>
+<span class='curline'><a href='../S/435.html#L573'>kthread</a>           573 kthread.c      	if (WARN_ON_ONCE(test_bit(KTHREAD_SHOULD_PARK, &amp;kthread-&gt;flags)))</span>
+<span class='curline'><a href='../S/435.html#L576'>kthread</a>           576 kthread.c      	set_bit(KTHREAD_SHOULD_PARK, &amp;kthread-&gt;flags);</span>
+<span class='curline'><a href='../S/435.html#L583'>kthread</a>           583 kthread.c      		wait_for_completion(&amp;kthread-&gt;parked);</span>
+<span class='curline'><a href='../S/435.html#L612'>kthread</a>           612 kthread.c      	struct kthread *kthread;</span>
+<span class='curline'><a href='../S/435.html#L618'>kthread</a>           618 kthread.c      	kthread = to_kthread(k);</span>
+<span class='curline'><a href='../S/435.html#L619'>kthread</a>           619 kthread.c      	set_bit(KTHREAD_SHOULD_STOP, &amp;kthread-&gt;flags);</span>
+<span class='curline'><a href='../S/435.html#L622'>kthread</a>           622 kthread.c      	wait_for_completion(&amp;kthread-&gt;exited);</span>
+<span class='curline'><a href='../S/435.html#L1348'>kthread</a>          1348 kthread.c      	struct kthread *kthread;</span>
+<span class='curline'><a href='../S/435.html#L1352'>kthread</a>          1352 kthread.c      	kthread = to_kthread(current);</span>
+<span class='curline'><a href='../S/435.html#L1353'>kthread</a>          1353 kthread.c      	if (!kthread)</span>
+<span class='curline'><a href='../S/435.html#L1356'>kthread</a>          1356 kthread.c      	if (kthread-&gt;blkcg_css) {</span>
+<span class='curline'><a href='../S/435.html#L1357'>kthread</a>          1357 kthread.c      		css_put(kthread-&gt;blkcg_css);</span>
+<span class='curline'><a href='../S/435.html#L1358'>kthread</a>          1358 kthread.c      		kthread-&gt;blkcg_css = NULL;</span>
+<span class='curline'><a href='../S/435.html#L1362'>kthread</a>          1362 kthread.c      		kthread-&gt;blkcg_css = css;</span>
+<span class='curline'><a href='../S/435.html#L1374'>kthread</a>          1374 kthread.c      	struct kthread *kthread;</span>
+<span class='curline'><a href='../S/435.html#L1377'>kthread</a>          1377 kthread.c      		kthread = to_kthread(current);</span>
+<span class='curline'><a href='../S/435.html#L1378'>kthread</a>          1378 kthread.c      		if (kthread)</span>
+<span class='curline'><a href='../S/435.html#L1379'>kthread</a>          1379 kthread.c      			return kthread-&gt;blkcg_css;</span>
+<span class='curline'><a href='../S/297.html#L368'>kthread</a>           368 trace/trace_hwlat.c 	struct task_struct *kthread;</span>
+<span class='curline'><a href='../S/297.html#L380'>kthread</a>           380 trace/trace_hwlat.c 	kthread = kthread_create(kthread_fn, NULL, "hwlatd");</span>
+<span class='curline'><a href='../S/297.html#L381'>kthread</a>           381 trace/trace_hwlat.c 	if (IS_ERR(kthread)) {</span>
+<span class='curline'><a href='../S/297.html#L388'>kthread</a>           388 trace/trace_hwlat.c 	sched_setaffinity(kthread-&gt;pid, current_mask);</span>
+<span class='curline'><a href='../S/297.html#L390'>kthread</a>           390 trace/trace_hwlat.c 	hwlat_kthread = kthread;</span>
+<span class='curline'><a href='../S/297.html#L391'>kthread</a>           391 trace/trace_hwlat.c 	wake_up_process(kthread);</span>
+</pre>
+</body>
+</html>

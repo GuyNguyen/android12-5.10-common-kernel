@@ -1,0 +1,794 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>parent</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/15.html#L578'>parent</a>            578 acct.c         	for ( ; ns; ns = ns-&gt;parent) {</span>
+<span class='curline'><a href='../S/15.html#L600'>parent</a>            600 acct.c         	for (ns = task_active_pid_ns(current); ns != NULL; ns = ns-&gt;parent) {</span>
+<span class='curline'><a href='../S/181.html#L41'>parent</a>             41 audit_watch.c  	struct audit_parent	*parent; /* associated parent */</span>
+<span class='curline'><a href='../S/181.html#L58'>parent</a>             58 audit_watch.c  static void audit_free_parent(struct audit_parent *parent)</span>
+<span class='curline'><a href='../S/181.html#L60'>parent</a>             60 audit_watch.c  	WARN_ON(!list_empty(&amp;parent-&gt;watches));</span>
+<span class='curline'><a href='../S/181.html#L61'>parent</a>             61 audit_watch.c  	kfree(parent);</span>
+<span class='curline'><a href='../S/181.html#L66'>parent</a>             66 audit_watch.c  	struct audit_parent *parent;</span>
+<span class='curline'><a href='../S/181.html#L68'>parent</a>             68 audit_watch.c  	parent = container_of(entry, struct audit_parent, mark);</span>
+<span class='curline'><a href='../S/181.html#L69'>parent</a>             69 audit_watch.c  	audit_free_parent(parent);</span>
+<span class='curline'><a href='../S/181.html#L72'>parent</a>             72 audit_watch.c  static void audit_get_parent(struct audit_parent *parent)</span>
+<span class='curline'><a href='../S/181.html#L74'>parent</a>             74 audit_watch.c  	if (likely(parent))</span>
+<span class='curline'><a href='../S/181.html#L75'>parent</a>             75 audit_watch.c  		fsnotify_get_mark(&amp;parent-&gt;mark);</span>
+<span class='curline'><a href='../S/181.html#L78'>parent</a>             78 audit_watch.c  static void audit_put_parent(struct audit_parent *parent)</span>
+<span class='curline'><a href='../S/181.html#L80'>parent</a>             80 audit_watch.c  	if (likely(parent))</span>
+<span class='curline'><a href='../S/181.html#L81'>parent</a>             81 audit_watch.c  		fsnotify_put_mark(&amp;parent-&gt;mark);</span>
+<span class='curline'><a href='../S/181.html#L90'>parent</a>             90 audit_watch.c  	struct audit_parent *parent = NULL;</span>
+<span class='curline'><a href='../S/181.html#L95'>parent</a>             95 audit_watch.c  		parent = container_of(entry, struct audit_parent, mark);</span>
+<span class='curline'><a href='../S/181.html#L97'>parent</a>             97 audit_watch.c  	return parent;</span>
+<span class='curline'><a href='../S/181.html#L108'>parent</a>            108 audit_watch.c  		WARN_ON(watch-&gt;parent);</span>
+<span class='curline'><a href='../S/181.html#L118'>parent</a>            118 audit_watch.c  	audit_put_parent(watch-&gt;parent);</span>
+<span class='curline'><a href='../S/181.html#L119'>parent</a>            119 audit_watch.c  	watch-&gt;parent = NULL;</span>
+<span class='curline'><a href='../S/181.html#L139'>parent</a>            139 audit_watch.c  	struct audit_parent *parent;</span>
+<span class='curline'><a href='../S/181.html#L142'>parent</a>            142 audit_watch.c  	parent = kzalloc(sizeof(*parent), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/181.html#L143'>parent</a>            143 audit_watch.c  	if (unlikely(!parent))</span>
+<span class='curline'><a href='../S/181.html#L146'>parent</a>            146 audit_watch.c  	INIT_LIST_HEAD(&amp;parent-&gt;watches);</span>
+<span class='curline'><a href='../S/181.html#L148'>parent</a>            148 audit_watch.c  	fsnotify_init_mark(&amp;parent-&gt;mark, audit_watch_group);</span>
+<span class='curline'><a href='../S/181.html#L149'>parent</a>            149 audit_watch.c  	parent-&gt;mark.mask = AUDIT_FS_WATCH;</span>
+<span class='curline'><a href='../S/181.html#L150'>parent</a>            150 audit_watch.c  	ret = fsnotify_add_inode_mark(&amp;parent-&gt;mark, inode, 0);</span>
+<span class='curline'><a href='../S/181.html#L152'>parent</a>            152 audit_watch.c  		audit_free_parent(parent);</span>
+<span class='curline'><a href='../S/181.html#L156'>parent</a>            156 audit_watch.c  	return parent;</span>
+<span class='curline'><a href='../S/181.html#L219'>parent</a>            219 audit_watch.c  	audit_get_parent(old-&gt;parent);</span>
+<span class='curline'><a href='../S/181.html#L220'>parent</a>            220 audit_watch.c  	new-&gt;parent = old-&gt;parent;</span>
+<span class='curline'><a href='../S/181.html#L244'>parent</a>            244 audit_watch.c  static void audit_update_watch(struct audit_parent *parent,</span>
+<span class='curline'><a href='../S/181.html#L255'>parent</a>            255 audit_watch.c  	list_for_each_entry_safe(owatch, nextw, &amp;parent-&gt;watches, wlist) {</span>
+<span class='curline'><a href='../S/181.html#L315'>parent</a>            315 audit_watch.c  	list_add(&amp;nwatch-&gt;wlist, &amp;parent-&gt;watches);</span>
+<span class='curline'><a href='../S/181.html#L321'>parent</a>            321 audit_watch.c  static void audit_remove_parent_watches(struct audit_parent *parent)</span>
+<span class='curline'><a href='../S/181.html#L328'>parent</a>            328 audit_watch.c  	list_for_each_entry_safe(w, nextw, &amp;parent-&gt;watches, wlist) {</span>
+<span class='curline'><a href='../S/181.html#L343'>parent</a>            343 audit_watch.c  	fsnotify_destroy_mark(&amp;parent-&gt;mark, audit_watch_group);</span>
+<span class='curline'><a href='../S/181.html#L347'>parent</a>            347 audit_watch.c  static int audit_get_nd(struct audit_watch *watch, struct path *parent)</span>
+<span class='curline'><a href='../S/181.html#L349'>parent</a>            349 audit_watch.c  	struct dentry *d = kern_path_locked(watch-&gt;path, parent);</span>
+<span class='curline'><a href='../S/181.html#L357'>parent</a>            357 audit_watch.c  	inode_unlock(d_backing_inode(parent-&gt;dentry));</span>
+<span class='curline'><a href='../S/181.html#L365'>parent</a>            365 audit_watch.c  				struct audit_parent *parent)</span>
+<span class='curline'><a href='../S/181.html#L372'>parent</a>            372 audit_watch.c  	list_for_each_entry(w, &amp;parent-&gt;watches, wlist) {</span>
+<span class='curline'><a href='../S/181.html#L384'>parent</a>            384 audit_watch.c  		audit_put_parent(parent);</span>
+<span class='curline'><a href='../S/181.html#L389'>parent</a>            389 audit_watch.c  		watch-&gt;parent = parent;</span>
+<span class='curline'><a href='../S/181.html#L392'>parent</a>            392 audit_watch.c  		list_add(&amp;watch-&gt;wlist, &amp;parent-&gt;watches);</span>
+<span class='curline'><a href='../S/181.html#L402'>parent</a>            402 audit_watch.c  	struct audit_parent *parent;</span>
+<span class='curline'><a href='../S/181.html#L427'>parent</a>            427 audit_watch.c  	parent = audit_find_parent(d_backing_inode(parent_path.dentry));</span>
+<span class='curline'><a href='../S/181.html#L428'>parent</a>            428 audit_watch.c  	if (!parent) {</span>
+<span class='curline'><a href='../S/181.html#L429'>parent</a>            429 audit_watch.c  		parent = audit_init_parent(&amp;parent_path);</span>
+<span class='curline'><a href='../S/181.html#L430'>parent</a>            430 audit_watch.c  		if (IS_ERR(parent)) {</span>
+<span class='curline'><a href='../S/181.html#L431'>parent</a>            431 audit_watch.c  			ret = PTR_ERR(parent);</span>
+<span class='curline'><a href='../S/181.html#L436'>parent</a>            436 audit_watch.c  	audit_add_to_parent(krule, parent);</span>
+<span class='curline'><a href='../S/181.html#L449'>parent</a>            449 audit_watch.c  	struct audit_parent *parent = watch-&gt;parent;</span>
+<span class='curline'><a href='../S/181.html#L458'>parent</a>            458 audit_watch.c  		audit_get_parent(parent);</span>
+<span class='curline'><a href='../S/181.html#L460'>parent</a>            460 audit_watch.c  		if (list_empty(&amp;parent-&gt;watches))</span>
+<span class='curline'><a href='../S/181.html#L461'>parent</a>            461 audit_watch.c  			fsnotify_destroy_mark(&amp;parent-&gt;mark, audit_watch_group);</span>
+<span class='curline'><a href='../S/181.html#L462'>parent</a>            462 audit_watch.c  		audit_put_parent(parent);</span>
+<span class='curline'><a href='../S/181.html#L471'>parent</a>            471 audit_watch.c  	struct audit_parent *parent;</span>
+<span class='curline'><a href='../S/181.html#L473'>parent</a>            473 audit_watch.c  	parent = container_of(inode_mark, struct audit_parent, mark);</span>
+<span class='curline'><a href='../S/181.html#L480'>parent</a>            480 audit_watch.c  		audit_update_watch(parent, dname, inode-&gt;i_sb-&gt;s_dev, inode-&gt;i_ino, 0);</span>
+<span class='curline'><a href='../S/181.html#L482'>parent</a>            482 audit_watch.c  		audit_update_watch(parent, dname, AUDIT_DEV_UNSET, AUDIT_INO_UNSET, 1);</span>
+<span class='curline'><a href='../S/181.html#L484'>parent</a>            484 audit_watch.c  		audit_remove_parent_watches(parent);</span>
+<span class='curline'><a href='../S/200.html#L1797'>parent</a>           1797 auditsc.c      	const struct dentry *d, *parent;</span>
+<span class='curline'><a href='../S/200.html#L1822'>parent</a>           1822 auditsc.c      		parent = d-&gt;d_parent;</span>
+<span class='curline'><a href='../S/200.html#L1823'>parent</a>           1823 auditsc.c      		if (parent == d)</span>
+<span class='curline'><a href='../S/200.html#L1825'>parent</a>           1825 auditsc.c      		d = parent;</span>
+<span class='curline'><a href='../S/200.html#L1992'>parent</a>           1992 auditsc.c      	bool parent = flags &amp; AUDIT_INODE_PARENT;</span>
+<span class='curline'><a href='../S/200.html#L2025'>parent</a>           2025 auditsc.c      		if (parent) {</span>
+<span class='curline'><a href='../S/200.html#L2050'>parent</a>           2050 auditsc.c      		if (parent) {</span>
+<span class='curline'><a href='../S/200.html#L2071'>parent</a>           2071 auditsc.c      	if (parent) {</span>
+<span class='curline'><a href='../S/200.html#L2103'>parent</a>           2103 auditsc.c      void __audit_inode_child(struct inode *parent,</span>
+<span class='curline'><a href='../S/200.html#L2124'>parent</a>           2124 auditsc.c      			    &amp;&amp; audit_comparator(parent-&gt;i_sb-&gt;s_magic,</span>
+<span class='curline'><a href='../S/200.html#L2144'>parent</a>           2144 auditsc.c      		if (n-&gt;ino == parent-&gt;i_ino &amp;&amp; n-&gt;dev == parent-&gt;i_sb-&gt;s_dev &amp;&amp;</span>
+<span class='curline'><a href='../S/200.html#L2178'>parent</a>           2178 auditsc.c      		audit_copy_inode(n, NULL, parent, 0);</span>
+<span class='curline'><a href='../S/417.html#L1501'>parent</a>           1501 bpf/cgroup.c   	if (dir-&gt;header.parent) {</span>
+<span class='curline'><a href='../S/417.html#L1502'>parent</a>           1502 bpf/cgroup.c   		tmp_ret = sysctl_cpy_dir(dir-&gt;header.parent, bufp, lenp);</span>
+<span class='curline'><a href='../S/417.html#L1538'>parent</a>           1538 bpf/cgroup.c   		tmp_ret = sysctl_cpy_dir(ctx-&gt;head-&gt;parent, &amp;buf, &amp;buf_len);</span>
+<span class='curline'><a href='../S/398.html#L417'>parent</a>            417 bpf/inode.c    static int bpf_iter_link_pin_kernel(struct dentry *parent,</span>
+<span class='curline'><a href='../S/398.html#L424'>parent</a>            424 bpf/inode.c    	inode_lock(parent-&gt;d_inode);</span>
+<span class='curline'><a href='../S/398.html#L425'>parent</a>            425 bpf/inode.c    	dentry = lookup_one_len(name, parent, strlen(name));</span>
+<span class='curline'><a href='../S/398.html#L427'>parent</a>            427 bpf/inode.c    		inode_unlock(parent-&gt;d_inode);</span>
+<span class='curline'><a href='../S/398.html#L433'>parent</a>            433 bpf/inode.c    	inode_unlock(parent-&gt;d_inode);</span>
+<span class='curline'><a href='../S/398.html#L699'>parent</a>            699 bpf/inode.c    static int populate_bpffs(struct dentry *parent)</span>
+<span class='curline'><a href='../S/398.html#L727'>parent</a>            727 bpf/inode.c    			err = bpf_iter_link_pin_kernel(parent,</span>
+<span class='curline'><a href='../S/402.html#L106'>parent</a>            106 bpf/local_storage.c 	struct rb_node **new = &amp;(root-&gt;rb_node), *parent = NULL;</span>
+<span class='curline'><a href='../S/402.html#L113'>parent</a>            113 bpf/local_storage.c 		parent = *new;</span>
+<span class='curline'><a href='../S/402.html#L126'>parent</a>            126 bpf/local_storage.c 	rb_link_node(&amp;storage-&gt;node, parent, new);</span>
+<span class='curline'><a href='../S/405.html#L436'>parent</a>            436 bpf/lpm_trie.c 	struct lpm_trie_node *node, *parent;</span>
+<span class='curline'><a href='../S/405.html#L455'>parent</a>            455 bpf/lpm_trie.c 	parent = NULL;</span>
+<span class='curline'><a href='../S/405.html#L464'>parent</a>            464 bpf/lpm_trie.c 		parent = node;</span>
+<span class='curline'><a href='../S/405.html#L495'>parent</a>            495 bpf/lpm_trie.c 	if (parent &amp;&amp; (parent-&gt;flags &amp; LPM_TREE_NODE_FLAG_IM) &amp;&amp;</span>
+<span class='curline'><a href='../S/405.html#L497'>parent</a>            497 bpf/lpm_trie.c 		if (node == rcu_access_pointer(parent-&gt;child[0]))</span>
+<span class='curline'><a href='../S/405.html#L499'>parent</a>            499 bpf/lpm_trie.c 				*trim2, rcu_access_pointer(parent-&gt;child[1]));</span>
+<span class='curline'><a href='../S/405.html#L502'>parent</a>            502 bpf/lpm_trie.c 				*trim2, rcu_access_pointer(parent-&gt;child[0]));</span>
+<span class='curline'><a href='../S/405.html#L503'>parent</a>            503 bpf/lpm_trie.c 		kfree_rcu(parent, rcu);</span>
+<span class='curline'><a href='../S/405.html#L627'>parent</a>            627 bpf/lpm_trie.c 	struct lpm_trie_node *node, *next_node = NULL, *parent, *search_root;</span>
+<span class='curline'><a href='../S/405.html#L681'>parent</a>            681 bpf/lpm_trie.c 		parent = node_stack[stack_ptr - 1];</span>
+<span class='curline'><a href='../S/405.html#L682'>parent</a>            682 bpf/lpm_trie.c 		if (rcu_dereference(parent-&gt;child[0]) == node) {</span>
+<span class='curline'><a href='../S/405.html#L683'>parent</a>            683 bpf/lpm_trie.c 			search_root = rcu_dereference(parent-&gt;child[1]);</span>
+<span class='curline'><a href='../S/405.html#L687'>parent</a>            687 bpf/lpm_trie.c 		if (!(parent-&gt;flags &amp; LPM_TREE_NODE_FLAG_IM)) {</span>
+<span class='curline'><a href='../S/405.html#L688'>parent</a>            688 bpf/lpm_trie.c 			next_node = parent;</span>
+<span class='curline'><a href='../S/405.html#L692'>parent</a>            692 bpf/lpm_trie.c 		node = parent;</span>
+<span class='curline'><a href='../S/401.html#L893'>parent</a>            893 bpf/verifier.c 	dst_state-&gt;parent = src-&gt;parent;</span>
+<span class='curline'><a href='../S/401.html#L924'>parent</a>            924 bpf/verifier.c 		st = st-&gt;parent;</span>
+<span class='curline'><a href='../S/401.html#L984'>parent</a>            984 bpf/verifier.c 	if (elem-&gt;st.parent) {</span>
+<span class='curline'><a href='../S/401.html#L985'>parent</a>            985 bpf/verifier.c 		++elem-&gt;st.parent-&gt;branches;</span>
+<span class='curline'><a href='../S/401.html#L1403'>parent</a>           1403 bpf/verifier.c 		regs[i].parent = NULL;</span>
+<span class='curline'><a href='../S/401.html#L1554'>parent</a>           1554 bpf/verifier.c 			 struct bpf_reg_state *parent, u8 flag)</span>
+<span class='curline'><a href='../S/401.html#L1556'>parent</a>           1556 bpf/verifier.c 	bool writes = parent == state-&gt;parent; /* Observe write marks */</span>
+<span class='curline'><a href='../S/401.html#L1559'>parent</a>           1559 bpf/verifier.c 	while (parent) {</span>
+<span class='curline'><a href='../S/401.html#L1563'>parent</a>           1563 bpf/verifier.c 		if (parent-&gt;live &amp; REG_LIVE_DONE) {</span>
+<span class='curline'><a href='../S/401.html#L1565'>parent</a>           1565 bpf/verifier.c 				reg_type_str[parent-&gt;type],</span>
+<span class='curline'><a href='../S/401.html#L1566'>parent</a>           1566 bpf/verifier.c 				parent-&gt;var_off.value, parent-&gt;off);</span>
+<span class='curline'><a href='../S/401.html#L1572'>parent</a>           1572 bpf/verifier.c 		if ((parent-&gt;live &amp; REG_LIVE_READ) == flag ||</span>
+<span class='curline'><a href='../S/401.html#L1573'>parent</a>           1573 bpf/verifier.c 		    parent-&gt;live &amp; REG_LIVE_READ64)</span>
+<span class='curline'><a href='../S/401.html#L1585'>parent</a>           1585 bpf/verifier.c 		parent-&gt;live |= flag;</span>
+<span class='curline'><a href='../S/401.html#L1588'>parent</a>           1588 bpf/verifier.c 			parent-&gt;live &amp;= ~REG_LIVE_READ32;</span>
+<span class='curline'><a href='../S/401.html#L1589'>parent</a>           1589 bpf/verifier.c 		state = parent;</span>
+<span class='curline'><a href='../S/401.html#L1590'>parent</a>           1590 bpf/verifier.c 		parent = state-&gt;parent;</span>
+<span class='curline'><a href='../S/401.html#L1744'>parent</a>           1744 bpf/verifier.c 		return mark_reg_read(env, reg, reg-&gt;parent,</span>
+<span class='curline'><a href='../S/401.html#L1997'>parent</a>           1997 bpf/verifier.c 	for (; st; st = st-&gt;parent)</span>
+<span class='curline'><a href='../S/401.html#L2110'>parent</a>           2110 bpf/verifier.c 		st = st-&gt;parent;</span>
+<span class='curline'><a href='../S/401.html#L2592'>parent</a>           2592 bpf/verifier.c 			mark_reg_read(env, reg, reg-&gt;parent, REG_LIVE_READ64);</span>
+<span class='curline'><a href='../S/401.html#L2621'>parent</a>           2621 bpf/verifier.c 		mark_reg_read(env, reg, reg-&gt;parent, REG_LIVE_READ64);</span>
+<span class='curline'><a href='../S/401.html#L2635'>parent</a>           2635 bpf/verifier.c 		mark_reg_read(env, reg, reg-&gt;parent, REG_LIVE_READ64);</span>
+<span class='curline'><a href='../S/401.html#L4113'>parent</a>           4113 bpf/verifier.c 			      state-&gt;stack[spi].spilled_ptr.parent,</span>
+<span class='curline'><a href='../S/401.html#L9080'>parent</a>           9080 bpf/verifier.c 	equal = memcmp(rold, rcur, offsetof(struct bpf_reg_state, parent)) == 0;</span>
+<span class='curline'><a href='../S/401.html#L9385'>parent</a>           9385 bpf/verifier.c 	struct bpf_func_state *state, *parent;</span>
+<span class='curline'><a href='../S/401.html#L9396'>parent</a>           9396 bpf/verifier.c 		parent = vparent-&gt;frame[frame];</span>
+<span class='curline'><a href='../S/401.html#L9398'>parent</a>           9398 bpf/verifier.c 		parent_reg = parent-&gt;regs;</span>
+<span class='curline'><a href='../S/401.html#L9412'>parent</a>           9412 bpf/verifier.c 			    i &lt; parent-&gt;allocated_stack / BPF_REG_SIZE; i++) {</span>
+<span class='curline'><a href='../S/401.html#L9413'>parent</a>           9413 bpf/verifier.c 			parent_reg = &amp;parent-&gt;stack[i].spilled_ptr;</span>
+<span class='curline'><a href='../S/401.html#L9477'>parent</a>           9477 bpf/verifier.c 			   offsetof(struct bpf_reg_state, parent)))</span>
+<span class='curline'><a href='../S/401.html#L9650'>parent</a>           9650 bpf/verifier.c 	cur-&gt;parent = new;</span>
+<span class='curline'><a href='../S/401.html#L9670'>parent</a>           9670 bpf/verifier.c 			cur-&gt;frame[j]-&gt;regs[i].parent = &amp;new-&gt;frame[j]-&gt;regs[i];</span>
+<span class='curline'><a href='../S/401.html#L9682'>parent</a>           9682 bpf/verifier.c 			frame-&gt;stack[i].spilled_ptr.parent =</span>
+<span class='curline'><a href='../S/234.html#L828'>parent</a>            828 cgroup/cgroup-v1.c 	if (kn-&gt;parent != new_parent)</span>
+<span class='curline'><a href='../S/241.html#L416'>parent</a>            416 cgroup/cgroup.c 	struct cgroup *parent = cgroup_parent(cgrp);</span>
+<span class='curline'><a href='../S/241.html#L419'>parent</a>            419 cgroup/cgroup.c 	if (parent) {</span>
+<span class='curline'><a href='../S/241.html#L420'>parent</a>            420 cgroup/cgroup.c 		u16 ss_mask = parent-&gt;subtree_control;</span>
+<span class='curline'><a href='../S/241.html#L437'>parent</a>            437 cgroup/cgroup.c 	struct cgroup *parent = cgroup_parent(cgrp);</span>
+<span class='curline'><a href='../S/241.html#L439'>parent</a>            439 cgroup/cgroup.c 	if (parent) {</span>
+<span class='curline'><a href='../S/241.html#L440'>parent</a>            440 cgroup/cgroup.c 		u16 ss_mask = parent-&gt;subtree_ss_mask;</span>
+<span class='curline'><a href='../S/241.html#L628'>parent</a>            628 cgroup/cgroup.c 	struct cgroup *cgrp = of-&gt;kn-&gt;parent-&gt;priv;</span>
+<span class='curline'><a href='../S/241.html#L1563'>parent</a>           1563 cgroup/cgroup.c 		cgrp = kn-&gt;parent-&gt;priv;</span>
+<span class='curline'><a href='../S/241.html#L1595'>parent</a>           1595 cgroup/cgroup.c 		cgrp = kn-&gt;parent-&gt;priv;</span>
+<span class='curline'><a href='../S/241.html#L3116'>parent</a>           3116 cgroup/cgroup.c 			if (css-&gt;parent &amp;&amp;</span>
+<span class='curline'><a href='../S/241.html#L3331'>parent</a>           3331 cgroup/cgroup.c 	struct cgroup *parent = cgroup_parent(cgrp);</span>
+<span class='curline'><a href='../S/241.html#L3332'>parent</a>           3332 cgroup/cgroup.c 	struct cgroup *dom_cgrp = parent-&gt;dom_cgrp;</span>
+<span class='curline'><a href='../S/241.html#L3370'>parent</a>           3370 cgroup/cgroup.c 		parent-&gt;nr_threaded_children++;</span>
+<span class='curline'><a href='../S/241.html#L3692'>parent</a>           3692 cgroup/cgroup.c 	struct cgroup *cgrp = of-&gt;kn-&gt;parent-&gt;priv;</span>
+<span class='curline'><a href='../S/241.html#L4137'>parent</a>           4137 cgroup/cgroup.c 					   struct cgroup_subsys_state *parent)</span>
+<span class='curline'><a href='../S/241.html#L4164'>parent</a>           4164 cgroup/cgroup.c 		next = list_entry_rcu(parent-&gt;children.next, struct cgroup_subsys_state, sibling);</span>
+<span class='curline'><a href='../S/241.html#L4168'>parent</a>           4168 cgroup/cgroup.c 		list_for_each_entry_rcu(next, &amp;parent-&gt;children, sibling,</span>
+<span class='curline'><a href='../S/241.html#L4178'>parent</a>           4178 cgroup/cgroup.c 	if (&amp;next-&gt;sibling != &amp;parent-&gt;children)</span>
+<span class='curline'><a href='../S/241.html#L4224'>parent</a>           4224 cgroup/cgroup.c 		next = css_next_child(pos, pos-&gt;parent);</span>
+<span class='curline'><a href='../S/241.html#L4227'>parent</a>           4227 cgroup/cgroup.c 		pos = pos-&gt;parent;</span>
+<span class='curline'><a href='../S/241.html#L4317'>parent</a>           4317 cgroup/cgroup.c 	next = css_next_child(pos, pos-&gt;parent);</span>
+<span class='curline'><a href='../S/241.html#L4322'>parent</a>           4322 cgroup/cgroup.c 	return pos-&gt;parent;</span>
+<span class='curline'><a href='../S/241.html#L4954'>parent</a>           4954 cgroup/cgroup.c 		struct cgroup_subsys_state *parent = css-&gt;parent;</span>
+<span class='curline'><a href='../S/241.html#L4961'>parent</a>           4961 cgroup/cgroup.c 		if (parent)</span>
+<span class='curline'><a href='../S/241.html#L4962'>parent</a>           4962 cgroup/cgroup.c 			css_put(parent);</span>
+<span class='curline'><a href='../S/241.html#L5075'>parent</a>           5075 cgroup/cgroup.c 		css-&gt;parent = cgroup_css(cgroup_parent(cgrp), ss);</span>
+<span class='curline'><a href='../S/241.html#L5076'>parent</a>           5076 cgroup/cgroup.c 		css_get(css-&gt;parent);</span>
+<span class='curline'><a href='../S/241.html#L5100'>parent</a>           5100 cgroup/cgroup.c 		if (css-&gt;parent)</span>
+<span class='curline'><a href='../S/241.html#L5101'>parent</a>           5101 cgroup/cgroup.c 			atomic_inc(&amp;css-&gt;parent-&gt;online_cnt);</span>
+<span class='curline'><a href='../S/241.html#L5137'>parent</a>           5137 cgroup/cgroup.c 	struct cgroup *parent = cgroup_parent(cgrp);</span>
+<span class='curline'><a href='../S/241.html#L5138'>parent</a>           5138 cgroup/cgroup.c 	struct cgroup_subsys_state *parent_css = cgroup_css(parent, ss);</span>
+<span class='curline'><a href='../S/241.html#L5170'>parent</a>           5170 cgroup/cgroup.c 	    cgroup_parent(parent)) {</span>
+<span class='curline'><a href='../S/241.html#L5194'>parent</a>           5194 cgroup/cgroup.c static struct cgroup *cgroup_create(struct cgroup *parent, const char *name,</span>
+<span class='curline'><a href='../S/241.html#L5197'>parent</a>           5197 cgroup/cgroup.c 	struct cgroup_root *root = parent-&gt;root;</span>
+<span class='curline'><a href='../S/241.html#L5200'>parent</a>           5200 cgroup/cgroup.c 	int level = parent-&gt;level + 1;</span>
+<span class='curline'><a href='../S/241.html#L5213'>parent</a>           5213 cgroup/cgroup.c 	if (cgroup_on_dfl(parent)) {</span>
+<span class='curline'><a href='../S/241.html#L5220'>parent</a>           5220 cgroup/cgroup.c 	kn = kernfs_create_dir(parent-&gt;kn, name, mode, cgrp);</span>
+<span class='curline'><a href='../S/241.html#L5229'>parent</a>           5229 cgroup/cgroup.c 	cgrp-&gt;self.parent = &amp;parent-&gt;self;</span>
+<span class='curline'><a href='../S/241.html#L5245'>parent</a>           5245 cgroup/cgroup.c 	cgrp-&gt;freezer.e_freeze = parent-&gt;freezer.e_freeze;</span>
+<span class='curline'><a href='../S/241.html#L5275'>parent</a>           5275 cgroup/cgroup.c 	if (notify_on_release(parent))</span>
+<span class='curline'><a href='../S/241.html#L5278'>parent</a>           5278 cgroup/cgroup.c 	if (test_bit(CGRP_CPUSET_CLONE_CHILDREN, &amp;parent-&gt;flags))</span>
+<span class='curline'><a href='../S/241.html#L5286'>parent</a>           5286 cgroup/cgroup.c 	cgroup_get_live(parent);</span>
+<span class='curline'><a href='../S/241.html#L5304'>parent</a>           5304 cgroup/cgroup.c 	if (cgroup_on_dfl(parent))</span>
+<span class='curline'><a href='../S/241.html#L5313'>parent</a>           5313 cgroup/cgroup.c static bool cgroup_check_hierarchy_limits(struct cgroup *parent)</span>
+<span class='curline'><a href='../S/241.html#L5321'>parent</a>           5321 cgroup/cgroup.c 	for (cgroup = parent; cgroup; cgroup = cgroup_parent(cgroup)) {</span>
+<span class='curline'><a href='../S/241.html#L5338'>parent</a>           5338 cgroup/cgroup.c 	struct cgroup *parent, *cgrp;</span>
+<span class='curline'><a href='../S/241.html#L5345'>parent</a>           5345 cgroup/cgroup.c 	parent = cgroup_kn_lock_live(parent_kn, false);</span>
+<span class='curline'><a href='../S/241.html#L5346'>parent</a>           5346 cgroup/cgroup.c 	if (!parent)</span>
+<span class='curline'><a href='../S/241.html#L5349'>parent</a>           5349 cgroup/cgroup.c 	if (!cgroup_check_hierarchy_limits(parent)) {</span>
+<span class='curline'><a href='../S/241.html#L5354'>parent</a>           5354 cgroup/cgroup.c 	cgrp = cgroup_create(parent, name, mode);</span>
+<span class='curline'><a href='../S/241.html#L5409'>parent</a>           5409 cgroup/cgroup.c 		css = css-&gt;parent;</span>
+<span class='curline'><a href='../S/241.html#L5497'>parent</a>           5497 cgroup/cgroup.c 	struct cgroup *tcgrp, *parent = cgroup_parent(cgrp);</span>
+<span class='curline'><a href='../S/241.html#L5540'>parent</a>           5540 cgroup/cgroup.c 	if (parent &amp;&amp; cgroup_is_threaded(cgrp))</span>
+<span class='curline'><a href='../S/241.html#L5541'>parent</a>           5541 cgroup/cgroup.c 		parent-&gt;nr_threaded_children--;</span>
+<span class='curline'><a href='../S/241.html#L5556'>parent</a>           5556 cgroup/cgroup.c 	cgroup1_check_for_release(parent);</span>
+<span class='curline'><a href='../S/238.html#L209'>parent</a>            209 cgroup/cpuset.c 	return css_cs(cs-&gt;css.parent);</span>
+<span class='curline'><a href='../S/238.html#L1105'>parent</a>           1105 cgroup/cpuset.c 				      struct cpuset *cs, struct cpuset *parent)</span>
+<span class='curline'><a href='../S/238.html#L1107'>parent</a>           1107 cgroup/cpuset.c 	if (parent-&gt;nr_subparts_cpus) {</span>
+<span class='curline'><a href='../S/238.html#L1108'>parent</a>           1108 cgroup/cpuset.c 		cpumask_or(new_cpus, parent-&gt;effective_cpus,</span>
+<span class='curline'><a href='../S/238.html#L1109'>parent</a>           1109 cgroup/cpuset.c 			   parent-&gt;subparts_cpus);</span>
+<span class='curline'><a href='../S/238.html#L1172'>parent</a>           1172 cgroup/cpuset.c 	struct cpuset *parent = parent_cs(cpuset);</span>
+<span class='curline'><a href='../S/238.html#L1184'>parent</a>           1184 cgroup/cpuset.c 	if (!is_partition_root(parent) ||</span>
+<span class='curline'><a href='../S/238.html#L1202'>parent</a>           1202 cgroup/cpuset.c 	   (!cpumask_subset(cpuset-&gt;cpus_allowed, parent-&gt;effective_cpus) ||</span>
+<span class='curline'><a href='../S/238.html#L1203'>parent</a>           1203 cgroup/cpuset.c 	     cpumask_equal(cpuset-&gt;cpus_allowed, parent-&gt;effective_cpus)))</span>
+<span class='curline'><a href='../S/238.html#L1215'>parent</a>           1215 cgroup/cpuset.c 				       parent-&gt;subparts_cpus);</span>
+<span class='curline'><a href='../S/238.html#L1226'>parent</a>           1226 cgroup/cpuset.c 				       parent-&gt;subparts_cpus);</span>
+<span class='curline'><a href='../S/238.html#L1228'>parent</a>           1228 cgroup/cpuset.c 		cpumask_and(tmp-&gt;addmask, newmask, parent-&gt;effective_cpus);</span>
+<span class='curline'><a href='../S/238.html#L1230'>parent</a>           1230 cgroup/cpuset.c 					parent-&gt;subparts_cpus);</span>
+<span class='curline'><a href='../S/238.html#L1235'>parent</a>           1235 cgroup/cpuset.c 		    cpumask_equal(parent-&gt;effective_cpus, tmp-&gt;addmask)) {</span>
+<span class='curline'><a href='../S/238.html#L1246'>parent</a>           1246 cgroup/cpuset.c 			cpumask_copy(tmp-&gt;addmask, parent-&gt;effective_cpus);</span>
+<span class='curline'><a href='../S/238.html#L1259'>parent</a>           1259 cgroup/cpuset.c 				     parent-&gt;effective_cpus);</span>
+<span class='curline'><a href='../S/238.html#L1261'>parent</a>           1261 cgroup/cpuset.c 					   parent-&gt;effective_cpus);</span>
+<span class='curline'><a href='../S/238.html#L1296'>parent</a>           1296 cgroup/cpuset.c 				       parent-&gt;subparts_cpus);</span>
+<span class='curline'><a href='../S/238.html#L1309'>parent</a>           1309 cgroup/cpuset.c 		cpumask_or(parent-&gt;subparts_cpus,</span>
+<span class='curline'><a href='../S/238.html#L1310'>parent</a>           1310 cgroup/cpuset.c 			   parent-&gt;subparts_cpus, tmp-&gt;addmask);</span>
+<span class='curline'><a href='../S/238.html#L1311'>parent</a>           1311 cgroup/cpuset.c 		cpumask_andnot(parent-&gt;effective_cpus,</span>
+<span class='curline'><a href='../S/238.html#L1312'>parent</a>           1312 cgroup/cpuset.c 			       parent-&gt;effective_cpus, tmp-&gt;addmask);</span>
+<span class='curline'><a href='../S/238.html#L1315'>parent</a>           1315 cgroup/cpuset.c 		cpumask_andnot(parent-&gt;subparts_cpus,</span>
+<span class='curline'><a href='../S/238.html#L1316'>parent</a>           1316 cgroup/cpuset.c 			       parent-&gt;subparts_cpus, tmp-&gt;delmask);</span>
+<span class='curline'><a href='../S/238.html#L1321'>parent</a>           1321 cgroup/cpuset.c 		cpumask_or(parent-&gt;effective_cpus,</span>
+<span class='curline'><a href='../S/238.html#L1322'>parent</a>           1322 cgroup/cpuset.c 			   parent-&gt;effective_cpus, tmp-&gt;delmask);</span>
+<span class='curline'><a href='../S/238.html#L1325'>parent</a>           1325 cgroup/cpuset.c 	parent-&gt;nr_subparts_cpus = cpumask_weight(parent-&gt;subparts_cpus);</span>
+<span class='curline'><a href='../S/238.html#L1351'>parent</a>           1351 cgroup/cpuset.c 		struct cpuset *parent = parent_cs(cp);</span>
+<span class='curline'><a href='../S/238.html#L1353'>parent</a>           1353 cgroup/cpuset.c 		compute_effective_cpumask(tmp-&gt;new_cpus, cp, parent);</span>
+<span class='curline'><a href='../S/238.html#L1360'>parent</a>           1360 cgroup/cpuset.c 			cpumask_copy(tmp-&gt;new_cpus, parent-&gt;effective_cpus);</span>
+<span class='curline'><a href='../S/238.html#L1363'>parent</a>           1363 cgroup/cpuset.c 				parent-&gt;child_ecpus_count++;</span>
+<span class='curline'><a href='../S/238.html#L1367'>parent</a>           1367 cgroup/cpuset.c 			WARN_ON_ONCE(!parent-&gt;child_ecpus_count);</span>
+<span class='curline'><a href='../S/238.html#L1368'>parent</a>           1368 cgroup/cpuset.c 			parent-&gt;child_ecpus_count--;</span>
+<span class='curline'><a href='../S/238.html#L1388'>parent</a>           1388 cgroup/cpuset.c 			switch (parent-&gt;partition_root_state) {</span>
+<span class='curline'><a href='../S/238.html#L1411'>parent</a>           1411 cgroup/cpuset.c 					update_tasks_cpumask(parent);</span>
+<span class='curline'><a href='../S/238.html#L1496'>parent</a>           1496 cgroup/cpuset.c static void update_sibling_cpumasks(struct cpuset *parent, struct cpuset *cs,</span>
+<span class='curline'><a href='../S/238.html#L1508'>parent</a>           1508 cgroup/cpuset.c 	cpuset_for_each_child(sibling, pos_css, parent) {</span>
+<span class='curline'><a href='../S/238.html#L1598'>parent</a>           1598 cgroup/cpuset.c 		struct cpuset *parent = parent_cs(cs);</span>
+<span class='curline'><a href='../S/238.html#L1604'>parent</a>           1604 cgroup/cpuset.c 		if (parent-&gt;child_ecpus_count)</span>
+<span class='curline'><a href='../S/238.html#L1605'>parent</a>           1605 cgroup/cpuset.c 			update_sibling_cpumasks(parent, cs, &amp;tmp);</span>
+<span class='curline'><a href='../S/238.html#L1766'>parent</a>           1766 cgroup/cpuset.c 		struct cpuset *parent = parent_cs(cp);</span>
+<span class='curline'><a href='../S/238.html#L1768'>parent</a>           1768 cgroup/cpuset.c 		nodes_and(*new_mems, cp-&gt;mems_allowed, parent-&gt;effective_mems);</span>
+<span class='curline'><a href='../S/238.html#L1775'>parent</a>           1775 cgroup/cpuset.c 			*new_mems = parent-&gt;effective_mems;</span>
+<span class='curline'><a href='../S/238.html#L1974'>parent</a>           1974 cgroup/cpuset.c 	struct cpuset *parent = parent_cs(cs);</span>
+<span class='curline'><a href='../S/238.html#L2040'>parent</a>           2040 cgroup/cpuset.c 	if (parent != &amp;top_cpuset)</span>
+<span class='curline'><a href='../S/238.html#L2041'>parent</a>           2041 cgroup/cpuset.c 		update_tasks_cpumask(parent);</span>
+<span class='curline'><a href='../S/238.html#L2043'>parent</a>           2043 cgroup/cpuset.c 	if (parent-&gt;child_ecpus_count)</span>
+<span class='curline'><a href='../S/238.html#L2044'>parent</a>           2044 cgroup/cpuset.c 		update_sibling_cpumasks(parent, cs, &amp;tmp);</span>
+<span class='curline'><a href='../S/238.html#L2776'>parent</a>           2776 cgroup/cpuset.c 	struct cpuset *parent = parent_cs(cs);</span>
+<span class='curline'><a href='../S/238.html#L2780'>parent</a>           2780 cgroup/cpuset.c 	if (!parent)</span>
+<span class='curline'><a href='../S/238.html#L2787'>parent</a>           2787 cgroup/cpuset.c 	if (is_spread_page(parent))</span>
+<span class='curline'><a href='../S/238.html#L2789'>parent</a>           2789 cgroup/cpuset.c 	if (is_spread_slab(parent))</span>
+<span class='curline'><a href='../S/238.html#L2796'>parent</a>           2796 cgroup/cpuset.c 		cpumask_copy(cs-&gt;effective_cpus, parent-&gt;effective_cpus);</span>
+<span class='curline'><a href='../S/238.html#L2797'>parent</a>           2797 cgroup/cpuset.c 		cs-&gt;effective_mems = parent-&gt;effective_mems;</span>
+<span class='curline'><a href='../S/238.html#L2799'>parent</a>           2799 cgroup/cpuset.c 		parent-&gt;child_ecpus_count++;</span>
+<span class='curline'><a href='../S/238.html#L2820'>parent</a>           2820 cgroup/cpuset.c 	cpuset_for_each_child(tmp_cs, pos_css, parent) {</span>
+<span class='curline'><a href='../S/238.html#L2829'>parent</a>           2829 cgroup/cpuset.c 	cs-&gt;mems_allowed = parent-&gt;mems_allowed;</span>
+<span class='curline'><a href='../S/238.html#L2830'>parent</a>           2830 cgroup/cpuset.c 	cs-&gt;effective_mems = parent-&gt;mems_allowed;</span>
+<span class='curline'><a href='../S/238.html#L2831'>parent</a>           2831 cgroup/cpuset.c 	cpumask_copy(cs-&gt;cpus_allowed, parent-&gt;cpus_allowed);</span>
+<span class='curline'><a href='../S/238.html#L2832'>parent</a>           2832 cgroup/cpuset.c 	cpumask_copy(cs-&gt;cpus_requested, parent-&gt;cpus_requested);</span>
+<span class='curline'><a href='../S/238.html#L2833'>parent</a>           2833 cgroup/cpuset.c 	cpumask_copy(cs-&gt;effective_cpus, parent-&gt;cpus_allowed);</span>
+<span class='curline'><a href='../S/238.html#L2867'>parent</a>           2867 cgroup/cpuset.c 		struct cpuset *parent = parent_cs(cs);</span>
+<span class='curline'><a href='../S/238.html#L2870'>parent</a>           2870 cgroup/cpuset.c 		parent-&gt;child_ecpus_count--;</span>
+<span class='curline'><a href='../S/238.html#L2976'>parent</a>           2976 cgroup/cpuset.c 	struct cpuset *parent;</span>
+<span class='curline'><a href='../S/238.html#L2982'>parent</a>           2982 cgroup/cpuset.c 	parent = parent_cs(cs);</span>
+<span class='curline'><a href='../S/238.html#L2983'>parent</a>           2983 cgroup/cpuset.c 	while (cpumask_empty(parent-&gt;cpus_allowed) ||</span>
+<span class='curline'><a href='../S/238.html#L2984'>parent</a>           2984 cgroup/cpuset.c 			nodes_empty(parent-&gt;mems_allowed))</span>
+<span class='curline'><a href='../S/238.html#L2985'>parent</a>           2985 cgroup/cpuset.c 		parent = parent_cs(parent);</span>
+<span class='curline'><a href='../S/238.html#L2987'>parent</a>           2987 cgroup/cpuset.c 	if (cgroup_transfer_tasks(parent-&gt;css.cgroup, cs-&gt;css.cgroup)) {</span>
+<span class='curline'><a href='../S/238.html#L3076'>parent</a>           3076 cgroup/cpuset.c 	struct cpuset *parent;</span>
+<span class='curline'><a href='../S/238.html#L3091'>parent</a>           3091 cgroup/cpuset.c 	parent =  parent_cs(cs);</span>
+<span class='curline'><a href='../S/238.html#L3092'>parent</a>           3092 cgroup/cpuset.c 	compute_effective_cpumask(&amp;new_cpus, cs, parent);</span>
+<span class='curline'><a href='../S/238.html#L3093'>parent</a>           3093 cgroup/cpuset.c 	nodes_and(new_mems, cs-&gt;mems_allowed, parent-&gt;effective_mems);</span>
+<span class='curline'><a href='../S/238.html#L3111'>parent</a>           3111 cgroup/cpuset.c 	   (parent-&gt;partition_root_state == PRS_ERROR))) {</span>
+<span class='curline'><a href='../S/238.html#L3115'>parent</a>           3115 cgroup/cpuset.c 			compute_effective_cpumask(&amp;new_cpus, cs, parent);</span>
+<span class='curline'><a href='../S/238.html#L3124'>parent</a>           3124 cgroup/cpuset.c 		if ((parent-&gt;partition_root_state == PRS_ERROR) ||</span>
+<span class='curline'><a href='../S/238.html#L3138'>parent</a>           3138 cgroup/cpuset.c 	if (is_partition_root(parent) &amp;&amp;</span>
+<span class='curline'><a href='../S/238.html#L3140'>parent</a>           3140 cgroup/cpuset.c 	    !cpumask_intersects(&amp;new_cpus, parent-&gt;subparts_cpus)) &amp;&amp;</span>
+<span class='curline'><a href='../S/240.html#L224'>parent</a>            224 cgroup/debug.c 		if (css-&gt;parent)</span>
+<span class='curline'><a href='../S/240.html#L226'>parent</a>            226 cgroup/debug.c 				 css-&gt;parent-&gt;id);</span>
+<span class='curline'><a href='../S/237.html#L62'>parent</a>             62 cgroup/legacy_freezer.c 	return css_freezer(freezer-&gt;css.parent);</span>
+<span class='curline'><a href='../S/237.html#L108'>parent</a>            108 cgroup/legacy_freezer.c 	struct freezer *parent = parent_freezer(freezer);</span>
+<span class='curline'><a href='../S/237.html#L114'>parent</a>            114 cgroup/legacy_freezer.c 	if (parent &amp;&amp; (parent-&gt;state &amp; CGROUP_FREEZING)) {</span>
+<span class='curline'><a href='../S/237.html#L398'>parent</a>            398 cgroup/legacy_freezer.c 		struct freezer *parent = parent_freezer(pos_f);</span>
+<span class='curline'><a href='../S/237.html#L409'>parent</a>            409 cgroup/legacy_freezer.c 					    parent-&gt;state &amp; CGROUP_FREEZING,</span>
+<span class='curline'><a href='../S/230.html#L65'>parent</a>             65 cgroup/pids.c  	return css_pids(pids-&gt;css.parent);</span>
+<span class='curline'><a href='../S/230.html#L69'>parent</a>             69 cgroup/pids.c  pids_css_alloc(struct cgroup_subsys_state *parent)</span>
+<span class='curline'><a href='../S/231.html#L74'>parent</a>             74 cgroup/rdma.c  	return css_rdmacg(cg-&gt;css.parent);</span>
+<span class='curline'><a href='../S/231.html#L563'>parent</a>            563 cgroup/rdma.c  rdmacg_css_alloc(struct cgroup_subsys_state *parent)</span>
+<span class='curline'><a href='../S/235.html#L28'>parent</a>             28 cgroup/rstat.c 	struct cgroup *parent;</span>
+<span class='curline'><a href='../S/235.html#L49'>parent</a>             49 cgroup/rstat.c 	for (parent = cgroup_parent(cgrp); parent;</span>
+<span class='curline'><a href='../S/235.html#L50'>parent</a>             50 cgroup/rstat.c 	     cgrp = parent, parent = cgroup_parent(cgrp)) {</span>
+<span class='curline'><a href='../S/235.html#L52'>parent</a>             52 cgroup/rstat.c 		struct cgroup_rstat_cpu *prstatc = cgroup_rstat_cpu(parent, cpu);</span>
+<span class='curline'><a href='../S/235.html#L115'>parent</a>            115 cgroup/rstat.c 		struct cgroup *parent = cgroup_parent(pos);</span>
+<span class='curline'><a href='../S/235.html#L116'>parent</a>            116 cgroup/rstat.c 		struct cgroup_rstat_cpu *prstatc = cgroup_rstat_cpu(parent, cpu);</span>
+<span class='curline'><a href='../S/235.html#L126'>parent</a>            126 cgroup/rstat.c 			WARN_ON_ONCE(*nextp == parent);</span>
+<span class='curline'><a href='../S/235.html#L314'>parent</a>            314 cgroup/rstat.c 	struct cgroup *parent = cgroup_parent(cgrp);</span>
+<span class='curline'><a href='../S/235.html#L332'>parent</a>            332 cgroup/rstat.c 	if (parent) {</span>
+<span class='curline'><a href='../S/235.html#L335'>parent</a>            335 cgroup/rstat.c 		cgroup_base_stat_add(&amp;parent-&gt;bstat, &amp;delta);</span>
+<span class='curline'><a href='../S/199.html#L417'>parent</a>            417 cred.c         	for (;subset_ns != &amp;init_user_ns; subset_ns = subset_ns-&gt;parent) {</span>
+<span class='curline'><a href='../S/199.html#L418'>parent</a>            418 cred.c         		if ((set_ns == subset_ns-&gt;parent)  &amp;&amp;</span>
+<span class='curline'><a href='../S/60.html#L2335'>parent</a>           2335 debug/kdb/kdb_main.c 		   (void *)p, p-&gt;pid, p-&gt;parent-&gt;pid,</span>
+<span class='curline'><a href='../S/331.html#L266'>parent</a>            266 events/core.c  	if (!event-&gt;parent) {</span>
+<span class='curline'><a href='../S/331.html#L740'>parent</a>            740 events/core.c  		for (css = &amp;cgrp-&gt;css; css; css = css-&gt;parent) {</span>
+<span class='curline'><a href='../S/331.html#L784'>parent</a>            784 events/core.c  	for (css = &amp;cgrp-&gt;css; css; css = css-&gt;parent) {</span>
+<span class='curline'><a href='../S/331.html#L913'>parent</a>            913 events/core.c  	for (heap_size = 1; css; css = css-&gt;parent)</span>
+<span class='curline'><a href='../S/331.html#L1405'>parent</a>           1405 events/core.c  	if (event-&gt;parent)</span>
+<span class='curline'><a href='../S/331.html#L1406'>parent</a>           1406 events/core.c  		event = event-&gt;parent;</span>
+<span class='curline'><a href='../S/331.html#L1433'>parent</a>           1433 events/core.c  	if (event-&gt;parent)</span>
+<span class='curline'><a href='../S/331.html#L1434'>parent</a>           1434 events/core.c  		id = event-&gt;parent-&gt;id;</span>
+<span class='curline'><a href='../S/331.html#L1653'>parent</a>           1653 events/core.c  	struct rb_node *parent;</span>
+<span class='curline'><a href='../S/331.html#L1659'>parent</a>           1659 events/core.c  	parent = *node;</span>
+<span class='curline'><a href='../S/331.html#L1662'>parent</a>           1662 events/core.c  		parent = *node;</span>
+<span class='curline'><a href='../S/331.html#L1666'>parent</a>           1666 events/core.c  			node = &amp;parent-&gt;rb_left;</span>
+<span class='curline'><a href='../S/331.html#L1668'>parent</a>           1668 events/core.c  			node = &amp;parent-&gt;rb_right;</span>
+<span class='curline'><a href='../S/331.html#L1671'>parent</a>           1671 events/core.c  	rb_link_node(&amp;event-&gt;group_node, parent, node);</span>
+<span class='curline'><a href='../S/331.html#L2216'>parent</a>           2216 events/core.c  	struct perf_event *parent_event = event-&gt;parent;</span>
+<span class='curline'><a href='../S/331.html#L3396'>parent</a>           3396 events/core.c  	struct perf_event_context *parent, *next_parent;</span>
+<span class='curline'><a href='../S/331.html#L3414'>parent</a>           3414 events/core.c  	parent = rcu_dereference(ctx-&gt;parent_ctx);</span>
+<span class='curline'><a href='../S/331.html#L3418'>parent</a>           3418 events/core.c  	if (!parent &amp;&amp; !next_parent)</span>
+<span class='curline'><a href='../S/331.html#L3421'>parent</a>           3421 events/core.c  	if (next_parent == ctx || next_ctx == parent || next_parent == parent) {</span>
+<span class='curline'><a href='../S/331.html#L3677'>parent</a>           3677 events/core.c  	for (; css; css = css-&gt;parent)</span>
+<span class='curline'><a href='../S/331.html#L4658'>parent</a>           4658 events/core.c  	if (event-&gt;parent)</span>
+<span class='curline'><a href='../S/331.html#L4681'>parent</a>           4681 events/core.c  	if (event-&gt;parent)</span>
+<span class='curline'><a href='../S/331.html#L4714'>parent</a>           4714 events/core.c  	if (event-&gt;parent)</span>
+<span class='curline'><a href='../S/331.html#L4876'>parent</a>           4876 events/core.c  	if (!event-&gt;parent) {</span>
+<span class='curline'><a href='../S/331.html#L6312'>parent</a>           6312 events/core.c  	if (event-&gt;parent)</span>
+<span class='curline'><a href='../S/331.html#L6313'>parent</a>           6313 events/core.c  		event = event-&gt;parent;</span>
+<span class='curline'><a href='../S/331.html#L6560'>parent</a>           6560 events/core.c  	rb = ring_buffer_get(sampler-&gt;parent ? sampler-&gt;parent : sampler);</span>
+<span class='curline'><a href='../S/331.html#L6626'>parent</a>           6626 events/core.c  	rb = ring_buffer_get(sampler-&gt;parent ? sampler-&gt;parent : sampler);</span>
+<span class='curline'><a href='../S/331.html#L7463'>parent</a>           7463 events/core.c  	struct perf_event *parent = event-&gt;parent;</span>
+<span class='curline'><a href='../S/331.html#L7473'>parent</a>           7473 events/core.c  	if (!parent)</span>
+<span class='curline'><a href='../S/331.html#L7474'>parent</a>           7474 events/core.c  		parent = event;</span>
+<span class='curline'><a href='../S/331.html#L7486'>parent</a>           7486 events/core.c  	if (rcu_dereference(parent-&gt;rb) == rb)</span>
+<span class='curline'><a href='../S/331.html#L8821'>parent</a>           8821 events/core.c  	if (event-&gt;parent)</span>
+<span class='curline'><a href='../S/331.html#L8822'>parent</a>           8822 events/core.c  		event = event-&gt;parent;</span>
+<span class='curline'><a href='../S/331.html#L9322'>parent</a>           9322 events/core.c  	WARN_ON(event-&gt;parent);</span>
+<span class='curline'><a href='../S/331.html#L9353'>parent</a>           9353 events/core.c  	if (!event-&gt;parent) {</span>
+<span class='curline'><a href='../S/331.html#L9388'>parent</a>           9388 events/core.c  	if (event-&gt;parent)</span>
+<span class='curline'><a href='../S/331.html#L9389'>parent</a>           9389 events/core.c  		event = event-&gt;parent;</span>
+<span class='curline'><a href='../S/331.html#L9920'>parent</a>           9920 events/core.c  	if (event-&gt;parent)</span>
+<span class='curline'><a href='../S/331.html#L10232'>parent</a>           10232 events/core.c  	if (WARN_ON_ONCE(event-&gt;parent))</span>
+<span class='curline'><a href='../S/331.html#L11004'>parent</a>           11004 events/core.c  	if (event-&gt;parent &amp;&amp; event-&gt;parent-&gt;pmu) {</span>
+<span class='curline'><a href='../S/331.html#L11005'>parent</a>           11005 events/core.c  		pmu = event-&gt;parent-&gt;pmu;</span>
+<span class='curline'><a href='../S/331.html#L11077'>parent</a>           11077 events/core.c  	if (event-&gt;parent)</span>
+<span class='curline'><a href='../S/331.html#L11109'>parent</a>           11109 events/core.c  	if (event-&gt;parent)</span>
+<span class='curline'><a href='../S/331.html#L11233'>parent</a>           11233 events/core.c  	event-&gt;parent		= parent_event;</span>
+<span class='curline'><a href='../S/331.html#L11346'>parent</a>           11346 events/core.c  		if (event-&gt;parent) {</span>
+<span class='curline'><a href='../S/331.html#L11351'>parent</a>           11351 events/core.c  			       event-&gt;parent-&gt;addr_filter_ranges,</span>
+<span class='curline'><a href='../S/331.html#L11360'>parent</a>           11360 events/core.c  	if (!event-&gt;parent) {</span>
+<span class='curline'><a href='../S/331.html#L11378'>parent</a>           11378 events/core.c  	if (!event-&gt;parent) {</span>
+<span class='curline'><a href='../S/331.html#L12274'>parent</a>           12274 events/core.c  	struct perf_event *parent_event = child_event-&gt;parent;</span>
+<span class='curline'><a href='../S/331.html#L12299'>parent</a>           12299 events/core.c  	struct perf_event *parent_event = event-&gt;parent;</span>
+<span class='curline'><a href='../S/331.html#L12447'>parent</a>           12447 events/core.c  	struct perf_event *parent = event-&gt;parent;</span>
+<span class='curline'><a href='../S/331.html#L12449'>parent</a>           12449 events/core.c  	if (WARN_ON_ONCE(!parent))</span>
+<span class='curline'><a href='../S/331.html#L12452'>parent</a>           12452 events/core.c  	mutex_lock(&amp;parent-&gt;child_mutex);</span>
+<span class='curline'><a href='../S/331.html#L12454'>parent</a>           12454 events/core.c  	mutex_unlock(&amp;parent-&gt;child_mutex);</span>
+<span class='curline'><a href='../S/331.html#L12456'>parent</a>           12456 events/core.c  	put_event(parent);</span>
+<span class='curline'><a href='../S/331.html#L12568'>parent</a>           12568 events/core.c  	      struct task_struct *parent,</span>
+<span class='curline'><a href='../S/331.html#L12584'>parent</a>           12584 events/core.c  	if (parent_event-&gt;parent)</span>
+<span class='curline'><a href='../S/331.html#L12585'>parent</a>           12585 events/core.c  		parent_event = parent_event-&gt;parent;</span>
+<span class='curline'><a href='../S/331.html#L12683'>parent</a>           12683 events/core.c  	      struct task_struct *parent,</span>
+<span class='curline'><a href='../S/331.html#L12692'>parent</a>           12692 events/core.c  	leader = inherit_event(parent_event, parent, parent_ctx,</span>
+<span class='curline'><a href='../S/331.html#L12702'>parent</a>           12702 events/core.c  		child_ctr = inherit_event(sub, parent, parent_ctx,</span>
+<span class='curline'><a href='../S/331.html#L12726'>parent</a>           12726 events/core.c  inherit_task_group(struct perf_event *event, struct task_struct *parent,</span>
+<span class='curline'><a href='../S/331.html#L12754'>parent</a>           12754 events/core.c  	ret = inherit_group(event, parent, parent_ctx,</span>
+<span class='curline'><a href='../S/331.html#L12771'>parent</a>           12771 events/core.c  	struct task_struct *parent = current;</span>
+<span class='curline'><a href='../S/331.html#L12776'>parent</a>           12776 events/core.c  	if (likely(!parent-&gt;perf_event_ctxp[ctxn]))</span>
+<span class='curline'><a href='../S/331.html#L12783'>parent</a>           12783 events/core.c  	parent_ctx = perf_pin_task_context(parent, ctxn);</span>
+<span class='curline'><a href='../S/331.html#L12805'>parent</a>           12805 events/core.c  		ret = inherit_task_group(event, parent, parent_ctx,</span>
+<span class='curline'><a href='../S/331.html#L12821'>parent</a>           12821 events/core.c  		ret = inherit_task_group(event, parent, parent_ctx,</span>
+<span class='curline'><a href='../S/330.html#L167'>parent</a>            167 events/ring_buffer.c 	if (event-&gt;parent)</span>
+<span class='curline'><a href='../S/330.html#L168'>parent</a>            168 events/ring_buffer.c 		event = event-&gt;parent;</span>
+<span class='curline'><a href='../S/330.html#L369'>parent</a>            369 events/ring_buffer.c 	if (output_event-&gt;parent)</span>
+<span class='curline'><a href='../S/330.html#L370'>parent</a>            370 events/ring_buffer.c 		output_event = output_event-&gt;parent;</span>
+<span class='curline'><a href='../S/334.html#L672'>parent</a>            672 events/uprobes.c 	struct rb_node *parent = NULL;</span>
+<span class='curline'><a href='../S/334.html#L677'>parent</a>            677 events/uprobes.c 		parent = *p;</span>
+<span class='curline'><a href='../S/334.html#L678'>parent</a>            678 events/uprobes.c 		u = rb_entry(parent, struct uprobe, rb_node);</span>
+<span class='curline'><a href='../S/334.html#L684'>parent</a>            684 events/uprobes.c 			p = &amp;parent-&gt;rb_left;</span>
+<span class='curline'><a href='../S/334.html#L686'>parent</a>            686 events/uprobes.c 			p = &amp;parent-&gt;rb_right;</span>
+<span class='curline'><a href='../S/334.html#L691'>parent</a>            691 events/uprobes.c 	rb_link_node(&amp;uprobe-&gt;rb_node, parent, p);</span>
+<span class='curline'><a href='../S/63.html#L318'>parent</a>            318 exit.c         kill_orphaned_pgrp(struct task_struct *tsk, struct task_struct *parent)</span>
+<span class='curline'><a href='../S/63.html#L323'>parent</a>            323 exit.c         	if (!parent)</span>
+<span class='curline'><a href='../S/63.html#L327'>parent</a>            327 exit.c         		parent = tsk-&gt;real_parent;</span>
+<span class='curline'><a href='../S/63.html#L334'>parent</a>            334 exit.c         	if (task_pgrp(parent) != pgrp &amp;&amp;</span>
+<span class='curline'><a href='../S/63.html#L335'>parent</a>            335 exit.c         	    task_session(parent) == task_session(tsk) &amp;&amp;</span>
+<span class='curline'><a href='../S/63.html#L627'>parent</a>            627 exit.c         			BUG_ON((!t-&gt;ptrace) != (rcu_access_pointer(t-&gt;parent) == father));</span>
+<span class='curline'><a href='../S/63.html#L629'>parent</a>            629 exit.c         				t-&gt;parent = t-&gt;real_parent;</span>
+<span class='curline'><a href='../S/63.html#L1418'>parent</a>           1418 exit.c         	if ((wo-&gt;wo_flags &amp; __WNOTHREAD) &amp;&amp; wait-&gt;private != p-&gt;parent)</span>
+<span class='curline'><a href='../S/63.html#L1424'>parent</a>           1424 exit.c         void __wake_up_parent(struct task_struct *p, struct task_struct *parent)</span>
+<span class='curline'><a href='../S/63.html#L1426'>parent</a>           1426 exit.c         	__wake_up_sync_key(&amp;parent-&gt;signal-&gt;wait_chldexit,</span>
+<span class='curline'><a href='../S/48.html#L2786'>parent</a>           2786 fork.c         	struct task_struct *leader, *parent, *child;</span>
+<span class='curline'><a href='../S/48.html#L2792'>parent</a>           2792 fork.c         	for_each_thread(leader, parent) {</span>
+<span class='curline'><a href='../S/48.html#L2793'>parent</a>           2793 fork.c         		list_for_each_entry(child, &amp;parent-&gt;children, sibling) {</span>
+<span class='curline'><a href='../S/48.html#L2808'>parent</a>           2808 fork.c         		parent = child-&gt;real_parent;</span>
+<span class='curline'><a href='../S/48.html#L2809'>parent</a>           2809 fork.c         		leader = parent-&gt;group_leader;</span>
+<span class='curline'><a href='../S/65.html#L55'>parent</a>             55 gcov/fs.c      	struct gcov_node *parent;</span>
+<span class='curline'><a href='../S/65.html#L366'>parent</a>            366 gcov/fs.c      static void add_links(struct gcov_node *node, struct dentry *parent)</span>
+<span class='curline'><a href='../S/65.html#L388'>parent</a>            388 gcov/fs.c      							parent,	target);</span>
+<span class='curline'><a href='../S/65.html#L411'>parent</a>            411 gcov/fs.c      		      const char *name, struct gcov_node *parent)</span>
+<span class='curline'><a href='../S/65.html#L420'>parent</a>            420 gcov/fs.c      	node-&gt;parent = parent;</span>
+<span class='curline'><a href='../S/65.html#L429'>parent</a>            429 gcov/fs.c      static struct gcov_node *new_node(struct gcov_node *parent,</span>
+<span class='curline'><a href='../S/65.html#L443'>parent</a>            443 gcov/fs.c      	init_node(node, info, name, parent);</span>
+<span class='curline'><a href='../S/65.html#L447'>parent</a>            447 gcov/fs.c      					parent-&gt;dentry, node, &amp;gcov_data_fops);</span>
+<span class='curline'><a href='../S/65.html#L449'>parent</a>            449 gcov/fs.c      		node-&gt;dentry = debugfs_create_dir(node-&gt;name, parent-&gt;dentry);</span>
+<span class='curline'><a href='../S/65.html#L451'>parent</a>            451 gcov/fs.c      		add_links(node, parent-&gt;dentry);</span>
+<span class='curline'><a href='../S/65.html#L452'>parent</a>            452 gcov/fs.c      	list_add(&amp;node-&gt;list, &amp;parent-&gt;children);</span>
+<span class='curline'><a href='../S/65.html#L495'>parent</a>            495 gcov/fs.c      	struct gcov_node *parent;</span>
+<span class='curline'><a href='../S/65.html#L498'>parent</a>            498 gcov/fs.c      		parent = node-&gt;parent;</span>
+<span class='curline'><a href='../S/65.html#L500'>parent</a>            500 gcov/fs.c      		node = parent;</span>
+<span class='curline'><a href='../S/65.html#L508'>parent</a>            508 gcov/fs.c      static struct gcov_node *get_child_by_name(struct gcov_node *parent,</span>
+<span class='curline'><a href='../S/65.html#L513'>parent</a>            513 gcov/fs.c      	list_for_each_entry(node, &amp;parent-&gt;children, list) {</span>
+<span class='curline'><a href='../S/65.html#L569'>parent</a>            569 gcov/fs.c      	struct gcov_node *parent;</span>
+<span class='curline'><a href='../S/65.html#L575'>parent</a>            575 gcov/fs.c      	parent = &amp;root_node;</span>
+<span class='curline'><a href='../S/65.html#L584'>parent</a>            584 gcov/fs.c      			if (!parent-&gt;parent)</span>
+<span class='curline'><a href='../S/65.html#L586'>parent</a>            586 gcov/fs.c      			parent = parent-&gt;parent;</span>
+<span class='curline'><a href='../S/65.html#L589'>parent</a>            589 gcov/fs.c      		node = get_child_by_name(parent, curr);</span>
+<span class='curline'><a href='../S/65.html#L591'>parent</a>            591 gcov/fs.c      			node = new_node(parent, NULL, curr);</span>
+<span class='curline'><a href='../S/65.html#L595'>parent</a>            595 gcov/fs.c      		parent = node;</span>
+<span class='curline'><a href='../S/65.html#L598'>parent</a>            598 gcov/fs.c      	node = new_node(parent, info, curr);</span>
+<span class='curline'><a href='../S/65.html#L606'>parent</a>            606 gcov/fs.c      	remove_node(parent);</span>
+<span class='curline'><a href='../S/358.html#L1069'>parent</a>           1069 irq/irqdomain.c struct irq_domain *irq_domain_create_hierarchy(struct irq_domain *parent,</span>
+<span class='curline'><a href='../S/358.html#L1083'>parent</a>           1083 irq/irqdomain.c 		domain-&gt;parent = parent;</span>
+<span class='curline'><a href='../S/358.html#L1249'>parent</a>           1249 irq/irqdomain.c 	struct irq_domain *parent;</span>
+<span class='curline'><a href='../S/358.html#L1257'>parent</a>           1257 irq/irqdomain.c 		for (parent = domain-&gt;parent; parent; parent = parent-&gt;parent) {</span>
+<span class='curline'><a href='../S/358.html#L1258'>parent</a>           1258 irq/irqdomain.c 			irq_data = irq_domain_insert_irq_data(parent, irq_data);</span>
+<span class='curline'><a href='../S/358.html#L1539'>parent</a>           1539 irq/irqdomain.c 	if (domain-&gt;parent != root_irq_data-&gt;domain)</span>
+<span class='curline'><a href='../S/358.html#L1688'>parent</a>           1688 irq/irqdomain.c 	if (!domain-&gt;parent)</span>
+<span class='curline'><a href='../S/358.html#L1691'>parent</a>           1691 irq/irqdomain.c 	return irq_domain_alloc_irqs_hierarchy(domain-&gt;parent, irq_base,</span>
+<span class='curline'><a href='../S/358.html#L1707'>parent</a>           1707 irq/irqdomain.c 	if (!domain-&gt;parent)</span>
+<span class='curline'><a href='../S/358.html#L1710'>parent</a>           1710 irq/irqdomain.c 	irq_domain_free_irqs_hierarchy(domain-&gt;parent, irq_base, nr_irqs);</span>
+<span class='curline'><a href='../S/358.html#L1796'>parent</a>           1796 irq/irqdomain.c 	for (; domain; domain = domain-&gt;parent) {</span>
+<span class='curline'><a href='../S/358.html#L1857'>parent</a>           1857 irq/irqdomain.c 	if (!d-&gt;parent)</span>
+<span class='curline'><a href='../S/358.html#L1859'>parent</a>           1859 irq/irqdomain.c 	seq_printf(m, "%*sparent: %s\n", ind + 1, "", d-&gt;parent-&gt;name);</span>
+<span class='curline'><a href='../S/358.html#L1860'>parent</a>           1860 irq/irqdomain.c 	irq_domain_debug_show_one(m, d-&gt;parent, ind + 4);</span>
+<span class='curline'><a href='../S/337.html#L104'>parent</a>            104 irq/msi.c      	struct irq_data *parent = irq_data-&gt;parent_data;</span>
+<span class='curline'><a href='../S/337.html#L108'>parent</a>            108 irq/msi.c      	ret = parent-&gt;chip-&gt;irq_set_affinity(parent, mask, force);</span>
+<span class='curline'><a href='../S/337.html#L149'>parent</a>            149 irq/msi.c      	if (domain-&gt;parent) {</span>
+<span class='curline'><a href='../S/337.html#L287'>parent</a>            287 irq/msi.c      					 struct irq_domain *parent)</span>
+<span class='curline'><a href='../S/337.html#L295'>parent</a>            295 irq/msi.c      	domain = irq_domain_create_hierarchy(parent, IRQ_DOMAIN_FLAG_MSI, 0,</span>
+<span class='curline'><a href='../S/13.html#L1044'>parent</a>           1044 kexec_core.c   	if ((start == end) &amp;&amp; (crashk_res.parent != NULL))</span>
+<span class='curline'><a href='../S/35.html#L1473'>parent</a>           1473 locking/lockdep.c 				    struct lock_list *parent)</span>
+<span class='curline'><a href='../S/35.html#L1475'>parent</a>           1475 locking/lockdep.c 	lock-&gt;parent = parent;</span>
+<span class='curline'><a href='../S/35.html#L1485'>parent</a>           1485 locking/lockdep.c 	return child-&gt;parent;</span>
+<span class='curline'><a href='../S/35.html#L1491'>parent</a>           1491 locking/lockdep.c 	struct lock_list *parent;</span>
+<span class='curline'><a href='../S/35.html#L1493'>parent</a>           1493 locking/lockdep.c 	while ((parent = get_lock_parent(child))) {</span>
+<span class='curline'><a href='../S/35.html#L1494'>parent</a>           1494 locking/lockdep.c 		child = parent;</span>
+<span class='curline'><a href='../S/35.html#L1603'>parent</a>           1603 locking/lockdep.c 	lock-&gt;parent = NULL;</span>
+<span class='curline'><a href='../S/35.html#L1638'>parent</a>           1638 locking/lockdep.c 	if (!lock || !lock-&gt;parent)</span>
+<span class='curline'><a href='../S/35.html#L1641'>parent</a>           1641 locking/lockdep.c 	return list_next_or_null_rcu(get_dep_list(lock-&gt;parent, offset),</span>
+<span class='curline'><a href='../S/35.html#L1712'>parent</a>           1712 locking/lockdep.c 		if (lock-&gt;parent) { /* Parent exists, check prev dependency */</span>
+<span class='curline'><a href='../S/35.html#L1714'>parent</a>           1714 locking/lockdep.c 			bool prev_only_xr = lock-&gt;parent-&gt;only_xr;</span>
+<span class='curline'><a href='../S/35.html#L1824'>parent</a>           1824 locking/lockdep.c 	struct lock_class *parent = prt-&gt;class;</span>
+<span class='curline'><a href='../S/35.html#L1839'>parent</a>           1839 locking/lockdep.c 	if (parent != source) {</span>
+<span class='curline'><a href='../S/35.html#L1843'>parent</a>           1843 locking/lockdep.c 		__print_lock_name(parent);</span>
+<span class='curline'><a href='../S/35.html#L1856'>parent</a>           1856 locking/lockdep.c 	__print_lock_name(parent);</span>
+<span class='curline'><a href='../S/35.html#L1967'>parent</a>           1967 locking/lockdep.c 	struct lock_list *parent;</span>
+<span class='curline'><a href='../S/35.html#L1982'>parent</a>           1982 locking/lockdep.c 	parent = get_lock_parent(target);</span>
+<span class='curline'><a href='../S/35.html#L1983'>parent</a>           1983 locking/lockdep.c 	first_parent = parent;</span>
+<span class='curline'><a href='../S/35.html#L1985'>parent</a>           1985 locking/lockdep.c 	while (parent) {</span>
+<span class='curline'><a href='../S/35.html#L1986'>parent</a>           1986 locking/lockdep.c 		print_circular_bug_entry(parent, --depth);</span>
+<span class='curline'><a href='../S/35.html#L1987'>parent</a>           1987 locking/lockdep.c 		parent = get_lock_parent(parent);</span>
+<span class='curline'><a href='../S/40.html#L275'>parent</a>            275 locking/rtmutex.c 	struct rb_node *parent = NULL;</span>
+<span class='curline'><a href='../S/40.html#L280'>parent</a>            280 locking/rtmutex.c 		parent = *link;</span>
+<span class='curline'><a href='../S/40.html#L281'>parent</a>            281 locking/rtmutex.c 		entry = rb_entry(parent, struct rt_mutex_waiter, tree_entry);</span>
+<span class='curline'><a href='../S/40.html#L283'>parent</a>            283 locking/rtmutex.c 			link = &amp;parent-&gt;rb_left;</span>
+<span class='curline'><a href='../S/40.html#L285'>parent</a>            285 locking/rtmutex.c 			link = &amp;parent-&gt;rb_right;</span>
+<span class='curline'><a href='../S/40.html#L290'>parent</a>            290 locking/rtmutex.c 	rb_link_node(&amp;waiter-&gt;tree_entry, parent, link);</span>
+<span class='curline'><a href='../S/40.html#L308'>parent</a>            308 locking/rtmutex.c 	struct rb_node *parent = NULL;</span>
+<span class='curline'><a href='../S/40.html#L313'>parent</a>            313 locking/rtmutex.c 		parent = *link;</span>
+<span class='curline'><a href='../S/40.html#L314'>parent</a>            314 locking/rtmutex.c 		entry = rb_entry(parent, struct rt_mutex_waiter, pi_tree_entry);</span>
+<span class='curline'><a href='../S/40.html#L316'>parent</a>            316 locking/rtmutex.c 			link = &amp;parent-&gt;rb_left;</span>
+<span class='curline'><a href='../S/40.html#L318'>parent</a>            318 locking/rtmutex.c 			link = &amp;parent-&gt;rb_right;</span>
+<span class='curline'><a href='../S/40.html#L323'>parent</a>            323 locking/rtmutex.c 	rb_link_node(&amp;waiter-&gt;pi_tree_entry, parent, link);</span>
+<span class='curline'><a href='../S/79.html#L246'>parent</a>            246 pid.c          		tmp = tmp-&gt;parent;</span>
+<span class='curline'><a href='../S/195.html#L107'>parent</a>            107 pid_namespace.c 	ns-&gt;parent = get_pid_ns(parent_pid_ns);</span>
+<span class='curline'><a href='../S/195.html#L161'>parent</a>            161 pid_namespace.c 	struct pid_namespace *parent;</span>
+<span class='curline'><a href='../S/195.html#L164'>parent</a>            164 pid_namespace.c 		parent = ns-&gt;parent;</span>
+<span class='curline'><a href='../S/195.html#L167'>parent</a>            167 pid_namespace.c 		ns = parent;</span>
+<span class='curline'><a href='../S/195.html#L404'>parent</a>            404 pid_namespace.c 		ancestor = ancestor-&gt;parent;</span>
+<span class='curline'><a href='../S/195.html#L419'>parent</a>            419 pid_namespace.c 	pid_ns = p = to_pid_ns(ns)-&gt;parent;</span>
+<span class='curline'><a href='../S/195.html#L425'>parent</a>            425 pid_namespace.c 		p = p-&gt;parent;</span>
+<span class='curline'><a href='../S/167.html#L134'>parent</a>            134 power/suspend_test.c 	if (!device_may_wakeup(candidate-&gt;dev.parent))</span>
+<span class='curline'><a href='../S/165.html#L133'>parent</a>            133 power/swap.c   	struct rb_node *parent = NULL;</span>
+<span class='curline'><a href='../S/165.html#L139'>parent</a>            139 power/swap.c   		parent = *new;</span>
+<span class='curline'><a href='../S/165.html#L166'>parent</a>            166 power/swap.c   	rb_link_node(&amp;ext-&gt;node, parent, new);</span>
+<span class='curline'><a href='../S/172.html#L154'>parent</a>            154 power/wakelock.c 	struct rb_node *parent = *node;</span>
+<span class='curline'><a href='../S/172.html#L160'>parent</a>            160 power/wakelock.c 		parent = *node;</span>
+<span class='curline'><a href='../S/172.html#L199'>parent</a>            199 power/wakelock.c 	rb_link_node(&amp;wl-&gt;node, parent, node);</span>
+<span class='curline'><a href='../S/179.html#L175'>parent</a>            175 power/wakeup_reason.c 	struct wakeup_irq_node *parent;</span>
+<span class='curline'><a href='../S/179.html#L200'>parent</a>            200 power/wakeup_reason.c 	parent = find_node_in_list(&amp;parent_irqs, parent_irq);</span>
+<span class='curline'><a href='../S/179.html#L201'>parent</a>            201 power/wakeup_reason.c 	if (parent != NULL)</span>
+<span class='curline'><a href='../S/179.html#L204'>parent</a>            204 power/wakeup_reason.c 		parent = find_node_in_list(&amp;leaf_irqs, parent_irq);</span>
+<span class='curline'><a href='../S/179.html#L205'>parent</a>            205 power/wakeup_reason.c 		if (parent != NULL) {</span>
+<span class='curline'><a href='../S/179.html#L206'>parent</a>            206 power/wakeup_reason.c 			list_del_init(&amp;parent-&gt;siblings);</span>
+<span class='curline'><a href='../S/179.html#L207'>parent</a>            207 power/wakeup_reason.c 			list_add_tail(&amp;parent-&gt;siblings, &amp;parent_irqs);</span>
+<span class='curline'><a href='../S/251.html#L53'>parent</a>             53 ptrace.c       	    (current != tsk-&gt;parent) ||</span>
+<span class='curline'><a href='../S/251.html#L72'>parent</a>             72 ptrace.c       	child-&gt;parent = new_parent;</span>
+<span class='curline'><a href='../S/251.html#L125'>parent</a>            125 ptrace.c       	child-&gt;parent = child-&gt;real_parent;</span>
+<span class='curline'><a href='../S/251.html#L212'>parent</a>            212 ptrace.c       	WARN_ON(!task-&gt;ptrace || task-&gt;parent != current);</span>
+<span class='curline'><a href='../S/251.html#L257'>parent</a>            257 ptrace.c       	if (child-&gt;ptrace &amp;&amp; child-&gt;parent == current) {</span>
+<span class='curline'><a href='../S/251.html#L490'>parent</a>            490 ptrace.c       		ret = security_ptrace_traceme(current-&gt;parent);</span>
+<span class='curline'><a href='../S/144.html#L1254'>parent</a>           1254 rcu/tree.c     		for (rnp1 = rnp; rnp1; rnp1 = rnp1-&gt;parent)</span>
+<span class='curline'><a href='../S/144.html#L1375'>parent</a>           1375 rcu/tree.c     	for (rnp = rnp_start; 1; rnp = rnp-&gt;parent) {</span>
+<span class='curline'><a href='../S/144.html#L1398'>parent</a>           1398 rcu/tree.c     		if (rnp != rnp_start &amp;&amp; rnp-&gt;parent != NULL)</span>
+<span class='curline'><a href='../S/144.html#L1400'>parent</a>           1400 rcu/tree.c     		if (!rnp-&gt;parent)</span>
+<span class='curline'><a href='../S/144.html#L2186'>parent</a>           2186 rcu/tree.c     		if (rnp-&gt;parent == NULL) {</span>
+<span class='curline'><a href='../S/144.html#L2194'>parent</a>           2194 rcu/tree.c     		rnp = rnp-&gt;parent;</span>
+<span class='curline'><a href='../S/144.html#L2231'>parent</a>           2231 rcu/tree.c     	rnp_p = rnp-&gt;parent;</span>
+<span class='curline'><a href='../S/144.html#L2380'>parent</a>           2380 rcu/tree.c     		rnp = rnp-&gt;parent;</span>
+<span class='curline'><a href='../S/144.html#L2647'>parent</a>           2647 rcu/tree.c     	for (; rnp != NULL; rnp = rnp-&gt;parent) {</span>
+<span class='curline'><a href='../S/144.html#L3934'>parent</a>           3934 rcu/tree.c     		rnp = rnp-&gt;parent;</span>
+<span class='curline'><a href='../S/144.html#L4352'>parent</a>           4352 rcu/tree.c     				rnp-&gt;parent = NULL;</span>
+<span class='curline'><a href='../S/144.html#L4356'>parent</a>           4356 rcu/tree.c     				rnp-&gt;parent = rcu_state.level[i - 1] +</span>
+<span class='curline'><a href='../S/134.html#L84'>parent</a>             84 rcu/tree.h     	struct rcu_node *parent;</span>
+<span class='curline'><a href='../S/131.html#L110'>parent</a>            110 rcu/tree_exp.h 		rnp_up = rnp-&gt;parent;</span>
+<span class='curline'><a href='../S/131.html#L121'>parent</a>            121 rcu/tree_exp.h 			rnp_up = rnp_up-&gt;parent;</span>
+<span class='curline'><a href='../S/131.html#L197'>parent</a>            197 rcu/tree_exp.h 		if (rnp-&gt;parent == NULL) {</span>
+<span class='curline'><a href='../S/131.html#L207'>parent</a>            207 rcu/tree_exp.h 		rnp = rnp-&gt;parent;</span>
+<span class='curline'><a href='../S/131.html#L300'>parent</a>            300 rcu/tree_exp.h 	for (; rnp != NULL; rnp = rnp-&gt;parent) {</span>
+<span class='curline'><a href='../S/126.html#L755'>parent</a>            755 rcu/tree_plugin.h 	for (rnp1 = rnp; rnp1; rnp1 = rnp1-&gt;parent)</span>
+<span class='curline'><a href='../S/215.html#L306'>parent</a>            306 relay.c        						       struct dentry *parent,</span>
+<span class='curline'><a href='../S/215.html#L429'>parent</a>            429 relay.c        	dentry = chan-&gt;cb-&gt;create_buf_file(tmpname, chan-&gt;parent,</span>
+<span class='curline'><a href='../S/215.html#L565'>parent</a>            565 relay.c        			 struct dentry *parent,</span>
+<span class='curline'><a href='../S/215.html#L594'>parent</a>            594 relay.c        	chan-&gt;parent = parent;</span>
+<span class='curline'><a href='../S/215.html#L657'>parent</a>            657 relay.c        			   struct dentry *parent)</span>
+<span class='curline'><a href='../S/215.html#L678'>parent</a>            678 relay.c        	chan-&gt;parent = parent;</span>
+<span class='curline'><a href='../S/426.html#L72'>parent</a>             72 resource.c     	while (!p-&gt;sibling &amp;&amp; p-&gt;parent)</span>
+<span class='curline'><a href='../S/426.html#L73'>parent</a>             73 resource.c     		p = p-&gt;parent;</span>
+<span class='curline'><a href='../S/426.html#L113'>parent</a>            113 resource.c     	for (depth = 0, p = r; depth &lt; MAX_IORES_LEVEL; depth++, p = p-&gt;parent)</span>
+<span class='curline'><a href='../S/426.html#L114'>parent</a>            114 resource.c     		if (p-&gt;parent == root)</span>
+<span class='curline'><a href='../S/426.html#L203'>parent</a>            203 resource.c     			new-&gt;parent = root;</span>
+<span class='curline'><a href='../S/426.html#L217'>parent</a>            217 resource.c     	p = &amp;old-&gt;parent-&gt;child;</span>
+<span class='curline'><a href='../S/426.html#L227'>parent</a>            227 resource.c     					chd-&gt;parent = tmp-&gt;parent;</span>
+<span class='curline'><a href='../S/426.html#L234'>parent</a>            234 resource.c     			old-&gt;parent = NULL;</span>
+<span class='curline'><a href='../S/426.html#L253'>parent</a>            253 resource.c     		tmp-&gt;parent = NULL;</span>
+<span class='curline'><a href='../S/426.html#L390'>parent</a>            390 resource.c     			.parent = p-&gt;parent,</span>
+<span class='curline'><a href='../S/426.html#L743'>parent</a>            743 resource.c     	if ( new-&gt;parent ) {</span>
+<span class='curline'><a href='../S/426.html#L784'>parent</a>            784 resource.c     static struct resource * __insert_resource(struct resource *parent, struct resource *new)</span>
+<span class='curline'><a href='../S/426.html#L788'>parent</a>            788 resource.c     	for (;; parent = first) {</span>
+<span class='curline'><a href='../S/426.html#L789'>parent</a>            789 resource.c     		first = __request_resource(parent, new);</span>
+<span class='curline'><a href='../S/426.html#L793'>parent</a>            793 resource.c     		if (first == parent)</span>
+<span class='curline'><a href='../S/426.html#L814'>parent</a>            814 resource.c     	new-&gt;parent = parent;</span>
+<span class='curline'><a href='../S/426.html#L820'>parent</a>            820 resource.c     		next-&gt;parent = new;</span>
+<span class='curline'><a href='../S/426.html#L822'>parent</a>            822 resource.c     	if (parent-&gt;child == first) {</span>
+<span class='curline'><a href='../S/426.html#L823'>parent</a>            823 resource.c     		parent-&gt;child = new;</span>
+<span class='curline'><a href='../S/426.html#L825'>parent</a>            825 resource.c     		next = parent-&gt;child;</span>
+<span class='curline'><a href='../S/426.html#L849'>parent</a>            849 resource.c     struct resource *insert_resource_conflict(struct resource *parent, struct resource *new)</span>
+<span class='curline'><a href='../S/426.html#L854'>parent</a>            854 resource.c     	conflict = __insert_resource(parent, new);</span>
+<span class='curline'><a href='../S/426.html#L869'>parent</a>            869 resource.c     int insert_resource(struct resource *parent, struct resource *new)</span>
+<span class='curline'><a href='../S/426.html#L873'>parent</a>            873 resource.c     	conflict = insert_resource_conflict(parent, new);</span>
+<span class='curline'><a href='../S/426.html#L888'>parent</a>            888 resource.c     	if (new-&gt;parent)</span>
+<span class='curline'><a href='../S/426.html#L941'>parent</a>            941 resource.c     	struct resource *tmp, *parent = res-&gt;parent;</span>
+<span class='curline'><a href='../S/426.html#L945'>parent</a>            945 resource.c     	if (!parent)</span>
+<span class='curline'><a href='../S/426.html#L948'>parent</a>            948 resource.c     	if ((start &lt; parent-&gt;start) || (end &gt; parent-&gt;end))</span>
+<span class='curline'><a href='../S/426.html#L954'>parent</a>            954 resource.c     	tmp = parent-&gt;child;</span>
+<span class='curline'><a href='../S/426.html#L1001'>parent</a>           1001 resource.c     	struct resource *parent = root;</span>
+<span class='curline'><a href='../S/426.html#L1018'>parent</a>           1018 resource.c     		conflict = __request_resource(parent, res);</span>
+<span class='curline'><a href='../S/426.html#L1126'>parent</a>           1126 resource.c     struct resource * __request_region(struct resource *parent,</span>
+<span class='curline'><a href='../S/426.html#L1132'>parent</a>           1132 resource.c     	struct resource *orig_parent = parent;</span>
+<span class='curline'><a href='../S/426.html#L1146'>parent</a>           1146 resource.c     		res-&gt;flags = resource_type(parent) | resource_ext_type(parent);</span>
+<span class='curline'><a href='../S/426.html#L1148'>parent</a>           1148 resource.c     		res-&gt;desc = parent-&gt;desc;</span>
+<span class='curline'><a href='../S/426.html#L1150'>parent</a>           1150 resource.c     		conflict = __request_resource(parent, res);</span>
+<span class='curline'><a href='../S/426.html#L1162'>parent</a>           1162 resource.c     		if (conflict != parent) {</span>
+<span class='curline'><a href='../S/426.html#L1164'>parent</a>           1164 resource.c     				parent = conflict;</span>
+<span class='curline'><a href='../S/426.html#L1199'>parent</a>           1199 resource.c     void __release_region(struct resource *parent, resource_size_t start,</span>
+<span class='curline'><a href='../S/426.html#L1205'>parent</a>           1205 resource.c     	p = &amp;parent-&gt;child;</span>
+<span class='curline'><a href='../S/426.html#L1262'>parent</a>           1262 resource.c     	struct resource *parent = &amp;iomem_resource;</span>
+<span class='curline'><a href='../S/426.html#L1270'>parent</a>           1270 resource.c     	if (WARN_ON_ONCE((start &lt; parent-&gt;start) || (end &gt; parent-&gt;end)))</span>
+<span class='curline'><a href='../S/426.html#L1283'>parent</a>           1283 resource.c     	p = &amp;parent-&gt;child;</span>
+<span class='curline'><a href='../S/426.html#L1346'>parent</a>           1346 resource.c     			new_res-&gt;parent = res-&gt;parent;</span>
+<span class='curline'><a href='../S/426.html#L1413'>parent</a>           1413 resource.c     	cur = res-&gt;parent-&gt;child;</span>
+<span class='curline'><a href='../S/426.html#L1499'>parent</a>           1499 resource.c     	struct resource *parent;</span>
+<span class='curline'><a href='../S/426.html#L1508'>parent</a>           1508 resource.c     	__release_region(this-&gt;parent, this-&gt;start, this-&gt;n);</span>
+<span class='curline'><a href='../S/426.html#L1515'>parent</a>           1515 resource.c     	return this-&gt;parent == match-&gt;parent &amp;&amp;</span>
+<span class='curline'><a href='../S/426.html#L1520'>parent</a>           1520 resource.c     __devm_request_region(struct device *dev, struct resource *parent,</span>
+<span class='curline'><a href='../S/426.html#L1531'>parent</a>           1531 resource.c     	dr-&gt;parent = parent;</span>
+<span class='curline'><a href='../S/426.html#L1535'>parent</a>           1535 resource.c     	res = __request_region(parent, start, n, name, 0);</span>
+<span class='curline'><a href='../S/426.html#L1545'>parent</a>           1545 resource.c     void __devm_release_region(struct device *dev, struct resource *parent,</span>
+<span class='curline'><a href='../S/426.html#L1548'>parent</a>           1548 resource.c     	struct region_devres match_data = { parent, start, n };</span>
+<span class='curline'><a href='../S/426.html#L1550'>parent</a>           1550 resource.c     	__release_region(parent, start, n);</span>
+<span class='curline'><a href='../S/426.html#L1568'>parent</a>           1568 resource.c     		struct resource *parent;</span>
+<span class='curline'><a href='../S/426.html#L1583'>parent</a>           1583 resource.c     				parent = &amp;ioport_resource;</span>
+<span class='curline'><a href='../S/426.html#L1586'>parent</a>           1586 resource.c     				parent = &amp;iomem_resource;</span>
+<span class='curline'><a href='../S/426.html#L1594'>parent</a>           1594 resource.c     			if (request_resource(parent, res) == 0)</span>
+<span class='curline'><a href='../S/441.html#L849'>parent</a>            849 sched/core.c   	struct task_group *parent, *child;</span>
+<span class='curline'><a href='../S/441.html#L852'>parent</a>            852 sched/core.c   	parent = from;</span>
+<span class='curline'><a href='../S/441.html#L855'>parent</a>            855 sched/core.c   	ret = (*down)(parent, data);</span>
+<span class='curline'><a href='../S/441.html#L858'>parent</a>            858 sched/core.c   	list_for_each_entry_rcu(child, &amp;parent-&gt;children, siblings) {</span>
+<span class='curline'><a href='../S/441.html#L859'>parent</a>            859 sched/core.c   		parent = child;</span>
+<span class='curline'><a href='../S/441.html#L865'>parent</a>            865 sched/core.c   	ret = (*up)(parent, data);</span>
+<span class='curline'><a href='../S/441.html#L866'>parent</a>            866 sched/core.c   	if (ret || parent == from)</span>
+<span class='curline'><a href='../S/441.html#L869'>parent</a>            869 sched/core.c   	child = parent;</span>
+<span class='curline'><a href='../S/441.html#L870'>parent</a>            870 sched/core.c   	parent = parent-&gt;parent;</span>
+<span class='curline'><a href='../S/441.html#L871'>parent</a>            871 sched/core.c   	if (parent)</span>
+<span class='curline'><a href='../S/441.html#L7790'>parent</a>           7790 sched/core.c   					    struct task_group *parent)</span>
+<span class='curline'><a href='../S/441.html#L7798'>parent</a>           7798 sched/core.c   		tg-&gt;uclamp[clamp_id] = parent-&gt;uclamp[clamp_id];</span>
+<span class='curline'><a href='../S/441.html#L7812'>parent</a>           7812 sched/core.c   struct task_group *sched_create_group(struct task_group *parent)</span>
+<span class='curline'><a href='../S/441.html#L7820'>parent</a>           7820 sched/core.c   	if (!alloc_fair_sched_group(tg, parent))</span>
+<span class='curline'><a href='../S/441.html#L7823'>parent</a>           7823 sched/core.c   	if (!alloc_rt_sched_group(tg, parent))</span>
+<span class='curline'><a href='../S/441.html#L7826'>parent</a>           7826 sched/core.c   	alloc_uclamp_sched_group(tg, parent);</span>
+<span class='curline'><a href='../S/441.html#L7835'>parent</a>           7835 sched/core.c   void sched_online_group(struct task_group *tg, struct task_group *parent)</span>
+<span class='curline'><a href='../S/441.html#L7843'>parent</a>           7843 sched/core.c   	WARN_ON(!parent);</span>
+<span class='curline'><a href='../S/441.html#L7845'>parent</a>           7845 sched/core.c   	tg-&gt;parent = parent;</span>
+<span class='curline'><a href='../S/441.html#L7847'>parent</a>           7847 sched/core.c   	list_add_rcu(&amp;tg-&gt;siblings, &amp;parent-&gt;children);</span>
+<span class='curline'><a href='../S/441.html#L7951'>parent</a>           7951 sched/core.c   	struct task_group *parent = css_tg(parent_css);</span>
+<span class='curline'><a href='../S/441.html#L7954'>parent</a>           7954 sched/core.c   	if (!parent) {</span>
+<span class='curline'><a href='../S/441.html#L7959'>parent</a>           7959 sched/core.c   	tg = sched_create_group(parent);</span>
+<span class='curline'><a href='../S/441.html#L7970'>parent</a>           7970 sched/core.c   	struct task_group *parent = css_tg(css-&gt;parent);</span>
+<span class='curline'><a href='../S/441.html#L7972'>parent</a>           7972 sched/core.c   	if (parent)</span>
+<span class='curline'><a href='../S/441.html#L7973'>parent</a>           7973 sched/core.c   		sched_online_group(tg, parent);</span>
+<span class='curline'><a href='../S/441.html#L8074'>parent</a>           8074 sched/core.c   		uc_parent = css_tg(css)-&gt;parent</span>
+<span class='curline'><a href='../S/441.html#L8075'>parent</a>           8075 sched/core.c   			? css_tg(css)-&gt;parent-&gt;uclamp : NULL;</span>
+<span class='curline'><a href='../S/441.html#L8477'>parent</a>           8477 sched/core.c   	if (!tg-&gt;parent) {</span>
+<span class='curline'><a href='../S/441.html#L8480'>parent</a>           8480 sched/core.c   		struct cfs_bandwidth *parent_b = &amp;tg-&gt;parent-&gt;cfs_bandwidth;</span>
+<span class='curline'><a href='../S/445.html#L49'>parent</a>             49 sched/cpuacct.c 	return css_ca(ca-&gt;css.parent);</span>
+<span class='curline'><a href='../S/457.html#L80'>parent</a>             80 sched/cpudeadline.c 		p = parent(idx);</span>
+<span class='curline'><a href='../S/457.html#L97'>parent</a>             97 sched/cpudeadline.c 	if (idx &gt; 0 &amp;&amp; dl_time_before(cp-&gt;elements[parent(idx)].dl,</span>
+<span class='curline'><a href='../S/451.html#L512'>parent</a>            512 sched/deadline.c 	struct rb_node *parent = NULL;</span>
+<span class='curline'><a href='../S/451.html#L519'>parent</a>            519 sched/deadline.c 		parent = *link;</span>
+<span class='curline'><a href='../S/451.html#L520'>parent</a>            520 sched/deadline.c 		entry = rb_entry(parent, struct task_struct,</span>
+<span class='curline'><a href='../S/451.html#L523'>parent</a>            523 sched/deadline.c 			link = &amp;parent-&gt;rb_left;</span>
+<span class='curline'><a href='../S/451.html#L525'>parent</a>            525 sched/deadline.c 			link = &amp;parent-&gt;rb_right;</span>
+<span class='curline'><a href='../S/451.html#L533'>parent</a>            533 sched/deadline.c 	rb_link_node(&amp;p-&gt;pushable_dl_tasks, parent, link);</span>
+<span class='curline'><a href='../S/451.html#L1466'>parent</a>           1466 sched/deadline.c 	struct rb_node *parent = NULL;</span>
+<span class='curline'><a href='../S/451.html#L1473'>parent</a>           1473 sched/deadline.c 		parent = *link;</span>
+<span class='curline'><a href='../S/451.html#L1474'>parent</a>           1474 sched/deadline.c 		entry = rb_entry(parent, struct sched_dl_entity, rb_node);</span>
+<span class='curline'><a href='../S/451.html#L1476'>parent</a>           1476 sched/deadline.c 			link = &amp;parent-&gt;rb_left;</span>
+<span class='curline'><a href='../S/451.html#L1478'>parent</a>           1478 sched/deadline.c 			link = &amp;parent-&gt;rb_right;</span>
+<span class='curline'><a href='../S/451.html#L1483'>parent</a>           1483 sched/deadline.c 	rb_link_node(&amp;dl_se-&gt;rb_node, parent, link);</span>
+<span class='curline'><a href='../S/464.html#L273'>parent</a>            273 sched/fair.c   		for (; se; se = se-&gt;parent)</span>
+<span class='curline'><a href='../S/464.html#L324'>parent</a>            324 sched/fair.c   	if (cfs_rq-&gt;tg-&gt;parent &amp;&amp;</span>
+<span class='curline'><a href='../S/464.html#L325'>parent</a>            325 sched/fair.c   	    cfs_rq-&gt;tg-&gt;parent-&gt;cfs_rq[cpu]-&gt;on_list) {</span>
+<span class='curline'><a href='../S/464.html#L333'>parent</a>            333 sched/fair.c   			&amp;(cfs_rq-&gt;tg-&gt;parent-&gt;cfs_rq[cpu]-&gt;leaf_cfs_rq_list));</span>
+<span class='curline'><a href='../S/464.html#L343'>parent</a>            343 sched/fair.c   	if (!cfs_rq-&gt;tg-&gt;parent) {</span>
+<span class='curline'><a href='../S/464.html#L415'>parent</a>            415 sched/fair.c   	return se-&gt;parent;</span>
+<span class='curline'><a href='../S/464.html#L582'>parent</a>            582 sched/fair.c   	struct rb_node *parent = NULL;</span>
+<span class='curline'><a href='../S/464.html#L591'>parent</a>            591 sched/fair.c   		parent = *link;</span>
+<span class='curline'><a href='../S/464.html#L592'>parent</a>            592 sched/fair.c   		entry = rb_entry(parent, struct sched_entity, run_node);</span>
+<span class='curline'><a href='../S/464.html#L598'>parent</a>            598 sched/fair.c   			link = &amp;parent-&gt;rb_left;</span>
+<span class='curline'><a href='../S/464.html#L600'>parent</a>            600 sched/fair.c   			link = &amp;parent-&gt;rb_right;</span>
+<span class='curline'><a href='../S/464.html#L605'>parent</a>            605 sched/fair.c   	rb_link_node(&amp;se-&gt;run_node, parent, link);</span>
+<span class='curline'><a href='../S/464.html#L5207'>parent</a>           5207 sched/fair.c   	if (!tg-&gt;parent)</span>
+<span class='curline'><a href='../S/464.html#L5211'>parent</a>           5211 sched/fair.c   	pcfs_rq = tg-&gt;parent-&gt;cfs_rq[cpu];</span>
+<span class='curline'><a href='../S/464.html#L6699'>parent</a>           6699 sched/fair.c   		sd = sd-&gt;parent;</span>
+<span class='curline'><a href='../S/464.html#L9156'>parent</a>           9156 sched/fair.c   	if (!env-&gt;sd-&gt;parent) {</span>
+<span class='curline'><a href='../S/464.html#L9727'>parent</a>           9727 sched/fair.c   	struct sched_domain *sd_parent = sd-&gt;parent;</span>
+<span class='curline'><a href='../S/464.html#L11032'>parent</a>           11032 sched/fair.c   	se = se-&gt;parent;</span>
+<span class='curline'><a href='../S/464.html#L11071'>parent</a>           11071 sched/fair.c   	se-&gt;depth = se-&gt;parent ? se-&gt;parent-&gt;depth + 1 : 0;</span>
+<span class='curline'><a href='../S/464.html#L11177'>parent</a>           11177 sched/fair.c   	se-&gt;depth = se-&gt;parent ? se-&gt;parent-&gt;depth + 1 : 0;</span>
+<span class='curline'><a href='../S/464.html#L11222'>parent</a>           11222 sched/fair.c   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)</span>
+<span class='curline'><a href='../S/464.html#L11251'>parent</a>           11251 sched/fair.c   		init_tg_cfs_entry(tg, cfs_rq, se, i, parent-&gt;se[i]);</span>
+<span class='curline'><a href='../S/464.html#L11308'>parent</a>           11308 sched/fair.c   			struct sched_entity *parent)</span>
+<span class='curline'><a href='../S/464.html#L11323'>parent</a>           11323 sched/fair.c   	if (!parent) {</span>
+<span class='curline'><a href='../S/464.html#L11327'>parent</a>           11327 sched/fair.c   		se-&gt;cfs_rq = parent-&gt;my_q;</span>
+<span class='curline'><a href='../S/464.html#L11328'>parent</a>           11328 sched/fair.c   		se-&gt;depth = parent-&gt;depth + 1;</span>
+<span class='curline'><a href='../S/464.html#L11334'>parent</a>           11334 sched/fair.c   	se-&gt;parent = parent;</span>
+<span class='curline'><a href='../S/464.html#L11379'>parent</a>           11379 sched/fair.c   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)</span>
+<span class='curline'><a href='../S/450.html#L162'>parent</a>            162 sched/rt.c     		struct sched_rt_entity *parent)</span>
+<span class='curline'><a href='../S/450.html#L177'>parent</a>            177 sched/rt.c     	if (!parent)</span>
+<span class='curline'><a href='../S/450.html#L180'>parent</a>            180 sched/rt.c     		rt_se-&gt;rt_rq = parent-&gt;my_q;</span>
+<span class='curline'><a href='../S/450.html#L183'>parent</a>            183 sched/rt.c     	rt_se-&gt;parent = parent;</span>
+<span class='curline'><a href='../S/450.html#L187'>parent</a>            187 sched/rt.c     int alloc_rt_sched_group(struct task_group *tg, struct task_group *parent)</span>
+<span class='curline'><a href='../S/450.html#L216'>parent</a>            216 sched/rt.c     		init_tg_rt_entry(tg, rt_rq, rt_se, i, parent-&gt;rt_se[i]);</span>
+<span class='curline'><a href='../S/450.html#L257'>parent</a>            257 sched/rt.c     int alloc_rt_sched_group(struct task_group *tg, struct task_group *parent)</span>
+<span class='curline'><a href='../S/450.html#L519'>parent</a>            519 sched/rt.c     	for (; rt_se; rt_se = rt_se-&gt;parent)</span>
+<span class='curline'><a href='../S/447.html#L417'>parent</a>            417 sched/sched.h  	struct task_group	*parent;</span>
+<span class='curline'><a href='../S/447.html#L480'>parent</a>            480 sched/sched.h  extern int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent);</span>
+<span class='curline'><a href='../S/447.html#L485'>parent</a>            485 sched/sched.h  			struct sched_entity *parent);</span>
+<span class='curline'><a href='../S/447.html#L493'>parent</a>            493 sched/sched.h  extern int alloc_rt_sched_group(struct task_group *tg, struct task_group *parent);</span>
+<span class='curline'><a href='../S/447.html#L496'>parent</a>            496 sched/sched.h  		struct sched_rt_entity *parent);</span>
+<span class='curline'><a href='../S/447.html#L503'>parent</a>            503 sched/sched.h  extern struct task_group *sched_create_group(struct task_group *parent);</span>
+<span class='curline'><a href='../S/447.html#L505'>parent</a>            505 sched/sched.h  			       struct task_group *parent);</span>
+<span class='curline'><a href='../S/447.html#L1446'>parent</a>           1446 sched/sched.h  			__sd; __sd = __sd-&gt;parent)</span>
+<span class='curline'><a href='../S/447.html#L1607'>parent</a>           1607 sched/sched.h  	p-&gt;se.parent = tg-&gt;se[cpu];</span>
+<span class='curline'><a href='../S/447.html#L1612'>parent</a>           1612 sched/sched.h  	p-&gt;rt.parent = tg-&gt;rt_se[cpu];</span>
+<span class='curline'><a href='../S/452.html#L68'>parent</a>             68 sched/topology.c 		if ((meta_flags &amp; SDF_SHARED_PARENT) &amp;&amp; sd-&gt;parent &amp;&amp;</span>
+<span class='curline'><a href='../S/452.html#L69'>parent</a>             69 sched/topology.c 		    !(sd-&gt;parent-&gt;flags &amp; flag))</span>
+<span class='curline'><a href='../S/452.html#L129'>parent</a>            129 sched/topology.c 	if (sd-&gt;parent &amp;&amp;</span>
+<span class='curline'><a href='../S/452.html#L130'>parent</a>            130 sched/topology.c 	    !cpumask_subset(groupmask, sched_domain_span(sd-&gt;parent)))</span>
+<span class='curline'><a href='../S/452.html#L153'>parent</a>            153 sched/topology.c 		sd = sd-&gt;parent;</span>
+<span class='curline'><a href='../S/452.html#L193'>parent</a>            193 sched/topology.c sd_parent_degenerate(struct sched_domain *sd, struct sched_domain *parent)</span>
+<span class='curline'><a href='../S/452.html#L195'>parent</a>            195 sched/topology.c 	unsigned long cflags = sd-&gt;flags, pflags = parent-&gt;flags;</span>
+<span class='curline'><a href='../S/452.html#L197'>parent</a>            197 sched/topology.c 	if (sd_degenerate(parent))</span>
+<span class='curline'><a href='../S/452.html#L200'>parent</a>            200 sched/topology.c 	if (!cpumask_equal(sched_domain_span(sd), sched_domain_span(parent)))</span>
+<span class='curline'><a href='../S/452.html#L204'>parent</a>            204 sched/topology.c 	if (parent-&gt;groups == parent-&gt;groups-&gt;next)</span>
+<span class='curline'><a href='../S/452.html#L602'>parent</a>            602 sched/topology.c 		struct sched_domain *parent = sd-&gt;parent;</span>
+<span class='curline'><a href='../S/452.html#L604'>parent</a>            604 sched/topology.c 		sd = parent;</span>
+<span class='curline'><a href='../S/452.html#L673'>parent</a>            673 sched/topology.c 		struct sched_domain *parent = tmp-&gt;parent;</span>
+<span class='curline'><a href='../S/452.html#L674'>parent</a>            674 sched/topology.c 		if (!parent)</span>
+<span class='curline'><a href='../S/452.html#L677'>parent</a>            677 sched/topology.c 		if (sd_parent_degenerate(tmp, parent)) {</span>
+<span class='curline'><a href='../S/452.html#L678'>parent</a>            678 sched/topology.c 			tmp-&gt;parent = parent-&gt;parent;</span>
+<span class='curline'><a href='../S/452.html#L679'>parent</a>            679 sched/topology.c 			if (parent-&gt;parent)</span>
+<span class='curline'><a href='../S/452.html#L680'>parent</a>            680 sched/topology.c 				parent-&gt;parent-&gt;child = tmp;</span>
+<span class='curline'><a href='../S/452.html#L686'>parent</a>            686 sched/topology.c 			if (parent-&gt;flags &amp; SD_PREFER_SIBLING)</span>
+<span class='curline'><a href='../S/452.html#L688'>parent</a>            688 sched/topology.c 			destroy_sched_domain(parent);</span>
+<span class='curline'><a href='../S/452.html#L690'>parent</a>            690 sched/topology.c 			tmp = tmp-&gt;parent;</span>
+<span class='curline'><a href='../S/452.html#L695'>parent</a>            695 sched/topology.c 		sd = sd-&gt;parent;</span>
+<span class='curline'><a href='../S/452.html#L1854'>parent</a>           1854 sched/topology.c 		child-&gt;parent = sd;</span>
+<span class='curline'><a href='../S/452.html#L2022'>parent</a>           2022 sched/topology.c 		for (sd = *per_cpu_ptr(d.sd, i); sd; sd = sd-&gt;parent) {</span>
+<span class='curline'><a href='../S/452.html#L2039'>parent</a>           2039 sched/topology.c 		for (sd = *per_cpu_ptr(d.sd, i); sd; sd = sd-&gt;parent) {</span>
+<span class='curline'><a href='../S/11.html#L454'>parent</a>            454 seccomp.c      static int is_ancestor(struct seccomp_filter *parent,</span>
+<span class='curline'><a href='../S/11.html#L458'>parent</a>            458 seccomp.c      	if (parent == NULL)</span>
+<span class='curline'><a href='../S/11.html#L461'>parent</a>            461 seccomp.c      		if (child == parent)</span>
+<span class='curline'><a href='../S/246.html#L1943'>parent</a>           1943 signal.c       		if (tsk-&gt;parent_exec_id != READ_ONCE(tsk-&gt;parent-&gt;self_exec_id))</span>
+<span class='curline'><a href='../S/246.html#L1962'>parent</a>           1962 signal.c       	info.si_pid = task_pid_nr_ns(tsk, task_active_pid_ns(tsk-&gt;parent));</span>
+<span class='curline'><a href='../S/246.html#L1963'>parent</a>           1963 signal.c       	info.si_uid = from_kuid_munged(task_cred_xxx(tsk-&gt;parent, user_ns),</span>
+<span class='curline'><a href='../S/246.html#L1981'>parent</a>           1981 signal.c       	psig = tsk-&gt;parent-&gt;sighand;</span>
+<span class='curline'><a href='../S/246.html#L2010'>parent</a>           2010 signal.c       		__send_signal(sig, &amp;info, tsk-&gt;parent, PIDTYPE_TGID, false);</span>
+<span class='curline'><a href='../S/246.html#L2011'>parent</a>           2011 signal.c       	__wake_up_parent(tsk, tsk-&gt;parent);</span>
+<span class='curline'><a href='../S/246.html#L2035'>parent</a>           2035 signal.c       	struct task_struct *parent;</span>
+<span class='curline'><a href='../S/246.html#L2040'>parent</a>           2040 signal.c       		parent = tsk-&gt;parent;</span>
+<span class='curline'><a href='../S/246.html#L2043'>parent</a>           2043 signal.c       		parent = tsk-&gt;real_parent;</span>
+<span class='curline'><a href='../S/246.html#L2053'>parent</a>           2053 signal.c       	info.si_pid = task_pid_nr_ns(tsk, task_active_pid_ns(parent));</span>
+<span class='curline'><a href='../S/246.html#L2054'>parent</a>           2054 signal.c       	info.si_uid = from_kuid_munged(task_cred_xxx(parent, user_ns), task_uid(tsk));</span>
+<span class='curline'><a href='../S/246.html#L2076'>parent</a>           2076 signal.c       	sighand = parent-&gt;sighand;</span>
+<span class='curline'><a href='../S/246.html#L2080'>parent</a>           2080 signal.c       		__group_send_sig_info(SIGCHLD, &amp;info, parent);</span>
+<span class='curline'><a href='../S/246.html#L2084'>parent</a>           2084 signal.c       	__wake_up_parent(tsk, parent);</span>
+<span class='curline'><a href='../S/246.html#L2106'>parent</a>           2106 signal.c       	    unlikely(current-&gt;mm == current-&gt;parent-&gt;mm))</span>
+<span class='curline'><a href='../S/246.html#L2524'>parent</a>           2524 signal.c       		info-&gt;si_pid = task_pid_vnr(current-&gt;parent);</span>
+<span class='curline'><a href='../S/246.html#L2526'>parent</a>           2526 signal.c       						task_uid(current-&gt;parent));</span>
+<span class='curline'><a href='../S/246.html#L3718'>parent</a>           3718 signal.c       		p = p-&gt;parent;</span>
+<span class='curline'><a href='../S/84.html#L97'>parent</a>             97 time/alarmtimer.c 	if (!device_may_wakeup(rtc-&gt;dev.parent))</span>
+<span class='curline'><a href='../S/290.html#L443'>parent</a>            443 trace/blktrace.c 						   struct dentry *parent,</span>
+<span class='curline'><a href='../S/290.html#L448'>parent</a>            448 trace/blktrace.c 	return debugfs_create_file(filename, mode, parent, buf,</span>
+<span class='curline'><a href='../S/270.html#L6111'>parent</a>           6111 trace/ftrace.c 				struct dentry *parent)</span>
+<span class='curline'><a href='../S/270.html#L6114'>parent</a>           6114 trace/ftrace.c 	trace_create_file("set_ftrace_filter", 0644, parent,</span>
+<span class='curline'><a href='../S/270.html#L6117'>parent</a>           6117 trace/ftrace.c 	trace_create_file("set_ftrace_notrace", 0644, parent,</span>
+<span class='curline'><a href='../S/271.html#L8075'>parent</a>           8075 trace/trace.c  trace_create_cpu_file(const char *name, umode_t mode, struct dentry *parent,</span>
+<span class='curline'><a href='../S/271.html#L8078'>parent</a>           8078 trace/trace.c  	struct dentry *ret = trace_create_file(name, mode, parent, data, fops);</span>
+<span class='curline'><a href='../S/271.html#L8279'>parent</a>           8279 trace/trace.c  				 struct dentry *parent,</span>
+<span class='curline'><a href='../S/271.html#L8285'>parent</a>           8285 trace/trace.c  	ret = tracefs_create_file(name, mode, parent, data, fops);</span>
+<span class='curline'><a href='../S/256.html#L757'>parent</a>            757 trace/trace.h  				 struct dentry *parent,</span>
+<span class='curline'><a href='../S/256.html#L1152'>parent</a>           1152 trace/trace.h  				 struct dentry *parent);</span>
+<span class='curline'><a href='../S/256.html#L1173'>parent</a>           1173 trace/trace.h  			     struct dentry *parent)</span>
+<span class='curline'><a href='../S/256.html#L1241'>parent</a>           1241 trace/trace.h  				struct dentry *parent);</span>
+<span class='curline'><a href='../S/256.html#L1267'>parent</a>           1267 trace/trace.h  #define ftrace_create_filter_files(ops, parent) do { } while (0)</span>
+<span class='curline'><a href='../S/256.html#L1685'>parent</a>           1685 trace/trace.h  extern int event_trace_add_tracer(struct dentry *parent, struct trace_array *tr);</span>
+<span class='curline'><a href='../S/305.html#L42'>parent</a>             42 trace/trace_event_perf.c 	if (p_event-&gt;parent)</span>
+<span class='curline'><a href='../S/267.html#L2055'>parent</a>           2055 trace/trace_events.c 		    struct trace_event_file *file, struct dentry *parent)</span>
+<span class='curline'><a href='../S/267.html#L2091'>parent</a>           2091 trace/trace_events.c 	dir-&gt;entry = tracefs_create_dir(name, parent);</span>
+<span class='curline'><a href='../S/267.html#L2166'>parent</a>           2166 trace/trace_events.c event_create_dir(struct dentry *parent, struct trace_event_file *file)</span>
+<span class='curline'><a href='../S/267.html#L2179'>parent</a>           2179 trace/trace_events.c 		d_events = event_subsystem_dir(tr, call-&gt;class-&gt;system, file, parent);</span>
+<span class='curline'><a href='../S/267.html#L2183'>parent</a>           2183 trace/trace_events.c 		d_events = parent;</span>
+<span class='curline'><a href='../S/267.html#L3213'>parent</a>           3213 trace/trace_events.c create_event_toplevel_files(struct dentry *parent, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/267.html#L3218'>parent</a>           3218 trace/trace_events.c 	entry = tracefs_create_file("set_event", 0644, parent,</span>
+<span class='curline'><a href='../S/267.html#L3225'>parent</a>           3225 trace/trace_events.c 	d_events = tracefs_create_dir("events", parent);</span>
+<span class='curline'><a href='../S/267.html#L3240'>parent</a>           3240 trace/trace_events.c 	entry = tracefs_create_file("set_event_pid", 0644, parent,</span>
+<span class='curline'><a href='../S/267.html#L3245'>parent</a>           3245 trace/trace_events.c 	entry = tracefs_create_file("set_event_notrace_pid", 0644, parent,</span>
+<span class='curline'><a href='../S/267.html#L3281'>parent</a>           3281 trace/trace_events.c int event_trace_add_tracer(struct dentry *parent, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/267.html#L3287'>parent</a>           3287 trace/trace_events.c 	ret = create_event_toplevel_files(parent, tr);</span>
+<span class='curline'><a href='../S/267.html#L3308'>parent</a>           3308 trace/trace_events.c early_event_add_tracer(struct dentry *parent, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/267.html#L3314'>parent</a>           3314 trace/trace_events.c 	ret = create_event_toplevel_files(parent, tr);</span>
+<span class='curline'><a href='../S/307.html#L66'>parent</a>             66 trace/trace_functions.c 				 struct dentry *parent)</span>
+<span class='curline'><a href='../S/307.html#L78'>parent</a>             78 trace/trace_functions.c 	ftrace_create_filter_files(tr-&gt;ops, parent);</span>
+<span class='curline'><a href='../S/285.html#L77'>parent</a>             77 trace/trace_stat.c 	struct rb_node **new = &amp;(root-&gt;rb_node), *parent = NULL;</span>
+<span class='curline'><a href='../S/285.html#L96'>parent</a>             96 trace/trace_stat.c 		parent = *new;</span>
+<span class='curline'><a href='../S/285.html#L103'>parent</a>            103 trace/trace_stat.c 	rb_link_node(&amp;data-&gt;node, parent, new);</span>
+<span class='curline'><a href='../S/301.html#L1258'>parent</a>           1258 trace/trace_uprobe.c 			event-&gt;parent || event-&gt;attr.enable_on_exec ||</span>
+<span class='curline'><a href='../S/117.html#L117'>parent</a>            117 user_namespace.c 	ns-&gt;parent = parent_ns;</span>
+<span class='curline'><a href='../S/117.html#L177'>parent</a>            177 user_namespace.c 	struct user_namespace *parent, *ns =</span>
+<span class='curline'><a href='../S/117.html#L182'>parent</a>            182 user_namespace.c 		parent = ns-&gt;parent;</span>
+<span class='curline'><a href='../S/117.html#L200'>parent</a>            200 user_namespace.c 		ns = parent;</span>
+<span class='curline'><a href='../S/117.html#L201'>parent</a>            201 user_namespace.c 	} while (atomic_dec_and_test(&amp;parent-&gt;count));</span>
+<span class='curline'><a href='../S/117.html#L586'>parent</a>            586 user_namespace.c 	if ((lower_ns == ns) &amp;&amp; lower_ns-&gt;parent)</span>
+<span class='curline'><a href='../S/117.html#L587'>parent</a>            587 user_namespace.c 		lower_ns = lower_ns-&gt;parent;</span>
+<span class='curline'><a href='../S/117.html#L607'>parent</a>            607 user_namespace.c 	if ((lower_ns == ns) &amp;&amp; lower_ns-&gt;parent)</span>
+<span class='curline'><a href='../S/117.html#L608'>parent</a>            608 user_namespace.c 		lower_ns = lower_ns-&gt;parent;</span>
+<span class='curline'><a href='../S/117.html#L628'>parent</a>            628 user_namespace.c 	if ((lower_ns == ns) &amp;&amp; lower_ns-&gt;parent)</span>
+<span class='curline'><a href='../S/117.html#L629'>parent</a>            629 user_namespace.c 		lower_ns = lower_ns-&gt;parent;</span>
+<span class='curline'><a href='../S/117.html#L892'>parent</a>            892 user_namespace.c 		if (!file_ns_capable(file, map_ns-&gt;parent, CAP_SETFCAP))</span>
+<span class='curline'><a href='../S/117.html#L1094'>parent</a>           1094 user_namespace.c 	if (!ns-&gt;parent)</span>
+<span class='curline'><a href='../S/117.html#L1097'>parent</a>           1097 user_namespace.c 	if ((seq_ns != ns) &amp;&amp; (seq_ns != ns-&gt;parent))</span>
+<span class='curline'><a href='../S/117.html#L1101'>parent</a>           1101 user_namespace.c 			 &amp;ns-&gt;uid_map, &amp;ns-&gt;parent-&gt;uid_map);</span>
+<span class='curline'><a href='../S/117.html#L1111'>parent</a>           1111 user_namespace.c 	if (!ns-&gt;parent)</span>
+<span class='curline'><a href='../S/117.html#L1114'>parent</a>           1114 user_namespace.c 	if ((seq_ns != ns) &amp;&amp; (seq_ns != ns-&gt;parent))</span>
+<span class='curline'><a href='../S/117.html#L1118'>parent</a>           1118 user_namespace.c 			 &amp;ns-&gt;gid_map, &amp;ns-&gt;parent-&gt;gid_map);</span>
+<span class='curline'><a href='../S/117.html#L1128'>parent</a>           1128 user_namespace.c 	if (!ns-&gt;parent)</span>
+<span class='curline'><a href='../S/117.html#L1131'>parent</a>           1131 user_namespace.c 	if ((seq_ns != ns) &amp;&amp; (seq_ns != ns-&gt;parent))</span>
+<span class='curline'><a href='../S/117.html#L1136'>parent</a>           1136 user_namespace.c 			 &amp;ns-&gt;projid_map, &amp;ns-&gt;parent-&gt;projid_map);</span>
+<span class='curline'><a href='../S/117.html#L1155'>parent</a>           1155 user_namespace.c 			kuid_t uid = make_kuid(ns-&gt;parent, id);</span>
+<span class='curline'><a href='../S/117.html#L1159'>parent</a>           1159 user_namespace.c 			kgid_t gid = make_kgid(ns-&gt;parent, id);</span>
+<span class='curline'><a href='../S/117.html#L1174'>parent</a>           1174 user_namespace.c 	if (ns_capable(ns-&gt;parent, cap_setid) &amp;&amp;</span>
+<span class='curline'><a href='../S/117.html#L1175'>parent</a>           1175 user_namespace.c 	    file_ns_capable(file, ns-&gt;parent, cap_setid))</span>
+<span class='curline'><a href='../S/117.html#L1283'>parent</a>           1283 user_namespace.c 	for (ns = child; ns-&gt;level &gt; ancestor-&gt;level; ns = ns-&gt;parent)</span>
+<span class='curline'><a href='../S/117.html#L1358'>parent</a>           1358 user_namespace.c 		p = p-&gt;parent;</span>
+<span class='curline'><a href='../S/117.html#L1366'>parent</a>           1366 user_namespace.c 	return to_user_ns(ns)-&gt;parent;</span>
+</pre>
+</body>
+</html>

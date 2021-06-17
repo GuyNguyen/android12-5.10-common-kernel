@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rb_list_head</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/258.html#L1138'>rb_list_head</a>     1138 trace/ring_buffer.c 	return rb_list_head(list-&gt;next) != &amp;page-&gt;list;</span>
+<span class='curline'><a href='../S/258.html#L1246'>rb_list_head</a>     1246 trace/ring_buffer.c 	struct list_head *p = rb_list_head((*bpage)-&gt;list.next);</span>
+<span class='curline'><a href='../S/258.html#L1264'>rb_list_head</a>     1264 trace/ring_buffer.c 	if (RB_WARN_ON(cpu_buffer, rb_list_head(list-&gt;prev-&gt;next) != list))</span>
+<span class='curline'><a href='../S/258.html#L1385'>rb_list_head</a>     1385 trace/ring_buffer.c 	if (RB_WARN_ON(cpu_buffer, rb_list_head(list-&gt;prev) != list-&gt;prev))</span>
+<span class='curline'><a href='../S/258.html#L1387'>rb_list_head</a>     1387 trace/ring_buffer.c 	if (RB_WARN_ON(cpu_buffer, rb_list_head(list-&gt;next) != list-&gt;next))</span>
+<span class='curline'><a href='../S/258.html#L1770'>rb_list_head</a>     1770 trace/ring_buffer.c 		tail_page = rb_list_head(tail_page-&gt;next);</span>
+<span class='curline'><a href='../S/258.html#L1774'>rb_list_head</a>     1774 trace/ring_buffer.c 	first_page = list_entry(rb_list_head(to_remove-&gt;next),</span>
+<span class='curline'><a href='../S/258.html#L1778'>rb_list_head</a>     1778 trace/ring_buffer.c 		to_remove = rb_list_head(to_remove)-&gt;next;</span>
+<span class='curline'><a href='../S/258.html#L1782'>rb_list_head</a>     1782 trace/ring_buffer.c 	next_page = rb_list_head(to_remove)-&gt;next;</span>
+<span class='curline'><a href='../S/258.html#L1791'>rb_list_head</a>     1791 trace/ring_buffer.c 	next_page = rb_list_head(next_page);</span>
+<span class='curline'><a href='../S/258.html#L1815'>rb_list_head</a>     1815 trace/ring_buffer.c 	last_page = list_entry(rb_list_head(to_remove), struct buffer_page,</span>
+<span class='curline'><a href='../S/258.html#L4226'>rb_list_head</a>     4226 trace/ring_buffer.c 	cpu_buffer-&gt;reader_page-&gt;list.next = rb_list_head(reader-&gt;list.next);</span>
+<span class='curline'><a href='../S/258.html#L4275'>rb_list_head</a>     4275 trace/ring_buffer.c 	rb_list_head(reader-&gt;list.next)-&gt;prev = &amp;cpu_buffer-&gt;reader_page-&gt;list;</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>debug_alloc_header</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/58.html#L707'>debug_alloc_header</a>  707 debug/kdb/kdb_support.c #define dah_overhead ALIGN(sizeof(struct debug_alloc_header), dah_align)</span>
+<span class='curline'><a href='../S/58.html#L749'>debug_alloc_header</a>  749 debug/kdb/kdb_support.c 	struct debug_alloc_header *best, *bestprev, *prev, *h;</span>
+<span class='curline'><a href='../S/58.html#L755'>debug_alloc_header</a>  755 debug/kdb/kdb_support.c 	h = (struct debug_alloc_header *)(debug_alloc_pool + dah_first);</span>
+<span class='curline'><a href='../S/58.html#L772'>debug_alloc_header</a>  772 debug/kdb/kdb_support.c 		h = (struct debug_alloc_header *)(debug_alloc_pool + h-&gt;next);</span>
+<span class='curline'><a href='../S/58.html#L784'>debug_alloc_header</a>  784 debug/kdb/kdb_support.c 		h = (struct debug_alloc_header *)(debug_alloc_pool + h_offset);</span>
+<span class='curline'><a href='../S/58.html#L806'>debug_alloc_header</a>  806 debug/kdb/kdb_support.c 	struct debug_alloc_header *h;</span>
+<span class='curline'><a href='../S/58.html#L819'>debug_alloc_header</a>  819 debug/kdb/kdb_support.c 	h = (struct debug_alloc_header *)((char *)p - dah_overhead);</span>
+<span class='curline'><a href='../S/58.html#L829'>debug_alloc_header</a>  829 debug/kdb/kdb_support.c 		struct debug_alloc_header *prev;</span>
+<span class='curline'><a href='../S/58.html#L831'>debug_alloc_header</a>  831 debug/kdb/kdb_support.c 		prev = (struct debug_alloc_header *)(debug_alloc_pool +</span>
+<span class='curline'><a href='../S/58.html#L836'>debug_alloc_header</a>  836 debug/kdb/kdb_support.c 			prev = (struct debug_alloc_header *)</span>
+<span class='curline'><a href='../S/58.html#L852'>debug_alloc_header</a>  852 debug/kdb/kdb_support.c 		struct debug_alloc_header *next;</span>
+<span class='curline'><a href='../S/58.html#L853'>debug_alloc_header</a>  853 debug/kdb/kdb_support.c 		next = (struct debug_alloc_header *)</span>
+<span class='curline'><a href='../S/58.html#L865'>debug_alloc_header</a>  865 debug/kdb/kdb_support.c 	struct debug_alloc_header *h_free, *h_used;</span>
+<span class='curline'><a href='../S/58.html#L879'>debug_alloc_header</a>  879 debug/kdb/kdb_support.c 	h_free = (struct debug_alloc_header *)(debug_alloc_pool + dah_first);</span>
+<span class='curline'><a href='../S/58.html#L890'>debug_alloc_header</a>  890 debug/kdb/kdb_support.c 		h_used = (struct debug_alloc_header *)debug_alloc_pool;</span>
+<span class='curline'><a href='../S/58.html#L895'>debug_alloc_header</a>  895 debug/kdb/kdb_support.c 		h_used = (struct debug_alloc_header *)</span>
+<span class='curline'><a href='../S/58.html#L899'>debug_alloc_header</a>  899 debug/kdb/kdb_support.c 		h_free = (struct debug_alloc_header *)</span>
+<span class='curline'><a href='../S/58.html#L902'>debug_alloc_header</a>  902 debug/kdb/kdb_support.c 	h_used = (struct debug_alloc_header *)</span>
+</pre>
+</body>
+</html>

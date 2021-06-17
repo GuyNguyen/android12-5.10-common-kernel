@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>_name</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/399.html#L68'>_name</a>              68 bpf/bpf_struct_ops.c #define BPF_STRUCT_OPS_TYPE(_name)				\</span>
+<span class='curline'><a href='../S/399.html#L69'>_name</a>              69 bpf/bpf_struct_ops.c extern struct bpf_struct_ops bpf_##_name;			\</span>
+<span class='curline'><a href='../S/399.html#L71'>_name</a>              71 bpf/bpf_struct_ops.c struct bpf_struct_ops_##_name {						\</span>
+<span class='curline'><a href='../S/399.html#L73'>_name</a>              73 bpf/bpf_struct_ops.c 	struct _name data ____cacheline_aligned_in_smp;		\</span>
+<span class='curline'><a href='../S/399.html#L86'>_name</a>              86 bpf/bpf_struct_ops.c #define BPF_STRUCT_OPS_TYPE(_name)				\</span>
+<span class='curline'><a href='../S/399.html#L87'>_name</a>              87 bpf/bpf_struct_ops.c 	[BPF_STRUCT_OPS_TYPE_##_name] = &amp;bpf_##_name,</span>
+<span class='curline'><a href='../S/399.html#L111'>_name</a>             111 bpf/bpf_struct_ops.c #define BPF_STRUCT_OPS_TYPE(_name) BTF_TYPE_EMIT(struct bpf_struct_ops_##_name);</span>
+<span class='curline'><a href='../S/411.html#L4201'>_name</a>            4201 bpf/btf.c      #define BPF_LINK_TYPE(_id, _name)</span>
+<span class='curline'><a href='../S/411.html#L4204'>_name</a>            4204 bpf/btf.c      #define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type) \</span>
+<span class='curline'><a href='../S/411.html#L4221'>_name</a>            4221 bpf/btf.c      #define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type) \</span>
+<span class='curline'><a href='../S/411.html#L4291'>_name</a>            4291 bpf/btf.c      #define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type)</span>
+<span class='curline'><a href='../S/411.html#L4292'>_name</a>            4292 bpf/btf.c      #define BPF_LINK_TYPE(_id, _name)</span>
+<span class='curline'><a href='../S/383.html#L21'>_name</a>              21 bpf/hashtab.c  #define BATCH_OPS(_name)			\</span>
+<span class='curline'><a href='../S/383.html#L23'>_name</a>              23 bpf/hashtab.c  	_name##_map_lookup_batch,		\</span>
+<span class='curline'><a href='../S/383.html#L25'>_name</a>              25 bpf/hashtab.c  	_name##_map_lookup_and_delete_batch,	\</span>
+<span class='curline'><a href='../S/418.html#L56'>_name</a>              56 bpf/syscall.c  #define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type)</span>
+<span class='curline'><a href='../S/418.html#L59'>_name</a>              59 bpf/syscall.c  #define BPF_LINK_TYPE(_id, _name)</span>
+<span class='curline'><a href='../S/418.html#L1572'>_name</a>            1572 bpf/syscall.c  #define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type) \</span>
+<span class='curline'><a href='../S/418.html#L1573'>_name</a>            1573 bpf/syscall.c  	[_id] = &amp; _name ## _prog_ops,</span>
+<span class='curline'><a href='../S/418.html#L1575'>_name</a>            1575 bpf/syscall.c  #define BPF_LINK_TYPE(_id, _name)</span>
+<span class='curline'><a href='../S/418.html#L2366'>_name</a>            2366 bpf/syscall.c  #define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type)</span>
+<span class='curline'><a href='../S/418.html#L2368'>_name</a>            2368 bpf/syscall.c  #define BPF_LINK_TYPE(_id, _name) [_id] = #_name,</span>
+<span class='curline'><a href='../S/401.html#L29'>_name</a>              29 bpf/verifier.c #define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type) \</span>
+<span class='curline'><a href='../S/401.html#L30'>_name</a>              30 bpf/verifier.c 	[_id] = &amp; _name ## _verifier_ops,</span>
+<span class='curline'><a href='../S/401.html#L32'>_name</a>              32 bpf/verifier.c #define BPF_LINK_TYPE(_id, _name)</span>
+<span class='curline'><a href='../S/343.html#L143'>_name</a>             143 irq/irqdesc.c  #define IRQ_ATTR_RO(_name) \</span>
+<span class='curline'><a href='../S/343.html#L144'>_name</a>             144 irq/irqdesc.c  static struct kobj_attribute _name##_attr = __ATTR_RO(_name)</span>
+<span class='curline'><a href='../S/428.html#L23'>_name</a>              23 ksysfs.c       #define KERNEL_ATTR_RO(_name) \</span>
+<span class='curline'><a href='../S/428.html#L24'>_name</a>              24 ksysfs.c       static struct kobj_attribute _name##_attr = __ATTR_RO(_name)</span>
+<span class='curline'><a href='../S/428.html#L26'>_name</a>              26 ksysfs.c       #define KERNEL_ATTR_RW(_name) \</span>
+<span class='curline'><a href='../S/428.html#L27'>_name</a>              27 ksysfs.c       static struct kobj_attribute _name##_attr = \</span>
+<span class='curline'><a href='../S/428.html#L28'>_name</a>              28 ksysfs.c       	__ATTR(_name, 0644, _name##_show, _name##_store)</span>
+<span class='curline'><a href='../S/325.html#L913'>_name</a>             913 padata.c       #define PADATA_ATTR_RW(_name, _show_name, _store_name)		\</span>
+<span class='curline'><a href='../S/325.html#L914'>_name</a>             914 padata.c       	static struct padata_sysfs_entry _name##_attr =		\</span>
+<span class='curline'><a href='../S/325.html#L915'>_name</a>             915 padata.c       		__ATTR(_name, 0644, _show_name, _store_name)</span>
+<span class='curline'><a href='../S/325.html#L916'>_name</a>             916 padata.c       #define PADATA_ATTR_RO(_name, _show_name)		\</span>
+<span class='curline'><a href='../S/325.html#L917'>_name</a>             917 padata.c       	static struct padata_sysfs_entry _name##_attr = \</span>
+<span class='curline'><a href='../S/325.html#L918'>_name</a>             918 padata.c       		__ATTR(_name, 0400, _show_name, NULL)</span>
+<span class='curline'><a href='../S/164.html#L310'>_name</a>             310 power/main.c   #define suspend_attr(_name)					\</span>
+<span class='curline'><a href='../S/164.html#L311'>_name</a>             311 power/main.c   static ssize_t _name##_show(struct kobject *kobj,		\</span>
+<span class='curline'><a href='../S/164.html#L314'>_name</a>             314 power/main.c   	return sprintf(buf, "%d\n", suspend_stats._name);	\</span>
+<span class='curline'><a href='../S/164.html#L316'>_name</a>             316 power/main.c   static struct kobj_attribute _name = __ATTR_RO(_name)</span>
+<span class='curline'><a href='../S/174.html#L78'>_name</a>              78 power/power.h  #define power_attr(_name) \</span>
+<span class='curline'><a href='../S/174.html#L79'>_name</a>              79 power/power.h  static struct kobj_attribute _name##_attr = {	\</span>
+<span class='curline'><a href='../S/174.html#L81'>_name</a>              81 power/power.h  		.name = __stringify(_name),	\</span>
+<span class='curline'><a href='../S/174.html#L84'>_name</a>              84 power/power.h  	.show	= _name##_show,			\</span>
+<span class='curline'><a href='../S/174.html#L85'>_name</a>              85 power/power.h  	.store	= _name##_store,		\</span>
+<span class='curline'><a href='../S/174.html#L88'>_name</a>              88 power/power.h  #define power_attr_ro(_name) \</span>
+<span class='curline'><a href='../S/174.html#L89'>_name</a>              89 power/power.h  static struct kobj_attribute _name##_attr = {	\</span>
+<span class='curline'><a href='../S/174.html#L91'>_name</a>              91 power/power.h  		.name = __stringify(_name),	\</span>
+<span class='curline'><a href='../S/174.html#L94'>_name</a>              94 power/power.h  	.show	= _name##_show,			\</span>
+<span class='curline'><a href='../S/452.html#L33'>_name</a>              33 sched/topology.c #define SD_FLAG(_name, mflags) [__##_name] = { .meta_flags = mflags, .name = #_name },</span>
+<span class='curline'><a href='../S/290.html#L1720'>_name</a>            1720 trace/blktrace.c #define BLK_TRACE_DEVICE_ATTR(_name) \</span>
+<span class='curline'><a href='../S/290.html#L1721'>_name</a>            1721 trace/blktrace.c 	DEVICE_ATTR(_name, S_IRUGO | S_IWUSR, \</span>
+<span class='curline'><a href='../S/265.html#L179'>_name</a>             179 trace/trace_probe.h #define __ASSIGN_FETCH_TYPE(_name, ptype, ftype, _size, sign, _fmttype)	\</span>
+<span class='curline'><a href='../S/265.html#L180'>_name</a>             180 trace/trace_probe.h 	{.name = _name,				\</span>
+<span class='curline'><a href='../S/265.html#L187'>_name</a>             187 trace/trace_probe.h #define _ASSIGN_FETCH_TYPE(_name, ptype, ftype, _size, sign, _fmttype)	\</span>
+<span class='curline'><a href='../S/265.html#L188'>_name</a>             188 trace/trace_probe.h 	__ASSIGN_FETCH_TYPE(_name, ptype, ftype, _size, sign, #_fmttype)</span>
+<span class='curline'><a href='../S/264.html#L206'>_name</a>             206 trace/trace_syscalls.c #define SYSCALL_FIELD(_type, _name) {					\</span>
+<span class='curline'><a href='../S/264.html#L207'>_name</a>             207 trace/trace_syscalls.c 	.type = #_type, .name = #_name,					\</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>gcov/gcc_base.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/503.html'>gcov</a>/gcc_base.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L12'>[^]</a><a href='#L82'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L12' title='Defined at 12.'>__gcov_init</a></li>
+<li><a href='#L40' title='Defined at 40.'>__gcov_flush</a></li>
+<li><a href='#L46' title='Defined at 46.'>__gcov_merge_add</a></li>
+<li><a href='#L52' title='Defined at 52.'>__gcov_merge_single</a></li>
+<li><a href='#L58' title='Defined at 58.'>__gcov_merge_delta</a></li>
+<li><a href='#L64' title='Defined at 64.'>__gcov_merge_ior</a></li>
+<li><a href='#L70' title='Defined at 70.'>__gcov_merge_time_profile</a></li>
+<li><a href='#L76' title='Defined at 76.'>__gcov_merge_icall_topn</a></li>
+<li><a href='#L82' title='Defined at 82.'>__gcov_exit</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 
+<a id='L3' name='L3'></a>   3 <em class='sharp'>#include</em> &lt;linux/export.h&gt;
+<a id='L4' name='L4'></a>   4 <em class='sharp'>#include</em> &lt;linux/kernel.h&gt;
+<a id='L5' name='L5'></a>   5 <em class='sharp'>#include</em> &lt;<a href='34.html'>linux/mutex.h</a>&gt;
+<a id='L6' name='L6'></a>   6 <em class='sharp'>#include</em> "<a href='69.html'>gcov.h</a>"
+<a id='L7' name='L7'></a>   7 
+<a id='L8' name='L8'></a>   8 <em class='comment'>/*</em>
+<a id='L9' name='L9'></a>   9 <em class='comment'> * __gcov_init is called by gcc-generated constructor code for each object</em>
+<a id='L10' name='L10'></a>  10 <em class='comment'> * file compiled with -fprofile-arcs.</em>
+<a id='L11' name='L11'></a>  11 <em class='comment'> */</em>
+<a id='L12' name='L12'></a>  12 <strong class='reserved'>void</strong> <a href='../S/68.html#L34' title='Referred from 34 in gcov/gcc_base.c.'>__gcov_init</a>(<strong class='reserved'>struct</strong> <a href='../D/7348.html' title='Multiple defined in 2 places.'>gcov_info</a> *info)
+<a id='L13' name='L13'></a>  13 <em class='brace'>{</em>
+<a id='L14' name='L14'></a>  14         <strong class='reserved'>static</strong> <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> gcov_version;
+<a id='L15' name='L15'></a>  15 
+<a id='L16' name='L16'></a>  16         <a href='../S/25.html#L294' title='Defined at 294 in locking/mutex.c.'>mutex_lock</a>(&amp;gcov_lock);
+<a id='L17' name='L17'></a>  17         <strong class='reserved'>if</strong> (gcov_version == 0) <em class='brace'>{</em>
+<a id='L18' name='L18'></a>  18                 gcov_version = <a href='../D/7358.html' title='Multiple defined in 2 places.'>gcov_info_version</a>(info);
+<a id='L19' name='L19'></a>  19                 <em class='comment'>/*</em>
+<a id='L20' name='L20'></a>  20 <em class='comment'>                 * Printing gcc's version magic may prove useful for debugging</em>
+<a id='L21' name='L21'></a>  21 <em class='comment'>                 * incompatibility reports.</em>
+<a id='L22' name='L22'></a>  22 <em class='comment'>                 */</em>
+<a id='L23' name='L23'></a>  23                 pr_info("version magic: 0x%x\n", gcov_version);
+<a id='L24' name='L24'></a>  24         <em class='brace'>}</em>
+<a id='L25' name='L25'></a>  25         <em class='comment'>/*</em>
+<a id='L26' name='L26'></a>  26 <em class='comment'>         * Add new profiling data structure to list and inform event</em>
+<a id='L27' name='L27'></a>  27 <em class='comment'>         * listener.</em>
+<a id='L28' name='L28'></a>  28 <em class='comment'>         */</em>
+<a id='L29' name='L29'></a>  29         <a href='../D/7354.html' title='Multiple defined in 2 places.'>gcov_info_link</a>(info);
+<a id='L30' name='L30'></a>  30         <strong class='reserved'>if</strong> (gcov_events_enabled)
+<a id='L31' name='L31'></a>  31                 <a href='../S/65.html#L728' title='Defined at 728 in gcov/fs.c.'>gcov_event</a>(<a href='../S/69.html#L54' title='Defined at 54 in gcov/gcov.h.'>GCOV_ADD</a>, info);
+<a id='L32' name='L32'></a>  32         <a href='../S/25.html#L749' title='Defined at 749 in locking/mutex.c.'>mutex_unlock</a>(&amp;gcov_lock);
+<a id='L33' name='L33'></a>  33 <em class='brace'>}</em>
+<a id='L34' name='L34'></a>  34 EXPORT_SYMBOL(<a href='../S/68.html#L12' title='Defined at 12 in gcov/gcc_base.c.'>__gcov_init</a>);
+<a id='L35' name='L35'></a>  35 
+<a id='L36' name='L36'></a>  36 <em class='comment'>/*</em>
+<a id='L37' name='L37'></a>  37 <em class='comment'> * These functions may be referenced by gcc-generated profiling code but serve</em>
+<a id='L38' name='L38'></a>  38 <em class='comment'> * no function for kernel profiling.</em>
+<a id='L39' name='L39'></a>  39 <em class='comment'> */</em>
+<a id='L40' name='L40'></a>  40 <strong class='reserved'>void</strong> <a href='../S/68.html#L44' title='Referred from 44 in gcov/gcc_base.c.'>__gcov_flush</a>(<strong class='reserved'>void</strong>)
+<a id='L41' name='L41'></a>  41 <em class='brace'>{</em>
+<a id='L42' name='L42'></a>  42         <em class='comment'>/* Unused. */</em>
+<a id='L43' name='L43'></a>  43 <em class='brace'>}</em>
+<a id='L44' name='L44'></a>  44 EXPORT_SYMBOL(<a href='../S/68.html#L40' title='Defined at 40 in gcov/gcc_base.c.'>__gcov_flush</a>);
+<a id='L45' name='L45'></a>  45 
+<a id='L46' name='L46'></a>  46 <strong class='reserved'>void</strong> <a href='../S/68.html#L50' title='Referred from 50 in gcov/gcc_base.c.'>__gcov_merge_add</a>(<a href='../D/7379.html' title='Multiple defined in 2 places.'>gcov_type</a> *counters, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> n_counters)
+<a id='L47' name='L47'></a>  47 <em class='brace'>{</em>
+<a id='L48' name='L48'></a>  48         <em class='comment'>/* Unused. */</em>
+<a id='L49' name='L49'></a>  49 <em class='brace'>}</em>
+<a id='L50' name='L50'></a>  50 EXPORT_SYMBOL(<a href='../S/68.html#L46' title='Defined at 46 in gcov/gcc_base.c.'>__gcov_merge_add</a>);
+<a id='L51' name='L51'></a>  51 
+<a id='L52' name='L52'></a>  52 <strong class='reserved'>void</strong> <a href='../S/68.html#L56' title='Referred from 56 in gcov/gcc_base.c.'>__gcov_merge_single</a>(<a href='../D/7379.html' title='Multiple defined in 2 places.'>gcov_type</a> *counters, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> n_counters)
+<a id='L53' name='L53'></a>  53 <em class='brace'>{</em>
+<a id='L54' name='L54'></a>  54         <em class='comment'>/* Unused. */</em>
+<a id='L55' name='L55'></a>  55 <em class='brace'>}</em>
+<a id='L56' name='L56'></a>  56 EXPORT_SYMBOL(<a href='../S/68.html#L52' title='Defined at 52 in gcov/gcc_base.c.'>__gcov_merge_single</a>);
+<a id='L57' name='L57'></a>  57 
+<a id='L58' name='L58'></a>  58 <strong class='reserved'>void</strong> <a href='../S/68.html#L62' title='Referred from 62 in gcov/gcc_base.c.'>__gcov_merge_delta</a>(<a href='../D/7379.html' title='Multiple defined in 2 places.'>gcov_type</a> *counters, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> n_counters)
+<a id='L59' name='L59'></a>  59 <em class='brace'>{</em>
+<a id='L60' name='L60'></a>  60         <em class='comment'>/* Unused. */</em>
+<a id='L61' name='L61'></a>  61 <em class='brace'>}</em>
+<a id='L62' name='L62'></a>  62 EXPORT_SYMBOL(<a href='../S/68.html#L58' title='Defined at 58 in gcov/gcc_base.c.'>__gcov_merge_delta</a>);
+<a id='L63' name='L63'></a>  63 
+<a id='L64' name='L64'></a>  64 <strong class='reserved'>void</strong> <a href='../S/68.html#L68' title='Referred from 68 in gcov/gcc_base.c.'>__gcov_merge_ior</a>(<a href='../D/7379.html' title='Multiple defined in 2 places.'>gcov_type</a> *counters, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> n_counters)
+<a id='L65' name='L65'></a>  65 <em class='brace'>{</em>
+<a id='L66' name='L66'></a>  66         <em class='comment'>/* Unused. */</em>
+<a id='L67' name='L67'></a>  67 <em class='brace'>}</em>
+<a id='L68' name='L68'></a>  68 EXPORT_SYMBOL(<a href='../S/68.html#L64' title='Defined at 64 in gcov/gcc_base.c.'>__gcov_merge_ior</a>);
+<a id='L69' name='L69'></a>  69 
+<a id='L70' name='L70'></a>  70 <strong class='reserved'>void</strong> <a href='../S/68.html#L74' title='Referred from 74 in gcov/gcc_base.c.'>__gcov_merge_time_profile</a>(<a href='../D/7379.html' title='Multiple defined in 2 places.'>gcov_type</a> *counters, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> n_counters)
+<a id='L71' name='L71'></a>  71 <em class='brace'>{</em>
+<a id='L72' name='L72'></a>  72         <em class='comment'>/* Unused. */</em>
+<a id='L73' name='L73'></a>  73 <em class='brace'>}</em>
+<a id='L74' name='L74'></a>  74 EXPORT_SYMBOL(<a href='../S/68.html#L70' title='Defined at 70 in gcov/gcc_base.c.'>__gcov_merge_time_profile</a>);
+<a id='L75' name='L75'></a>  75 
+<a id='L76' name='L76'></a>  76 <strong class='reserved'>void</strong> <a href='../S/68.html#L80' title='Referred from 80 in gcov/gcc_base.c.'>__gcov_merge_icall_topn</a>(<a href='../D/7379.html' title='Multiple defined in 2 places.'>gcov_type</a> *counters, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> n_counters)
+<a id='L77' name='L77'></a>  77 <em class='brace'>{</em>
+<a id='L78' name='L78'></a>  78         <em class='comment'>/* Unused. */</em>
+<a id='L79' name='L79'></a>  79 <em class='brace'>}</em>
+<a id='L80' name='L80'></a>  80 EXPORT_SYMBOL(<a href='../S/68.html#L76' title='Defined at 76 in gcov/gcc_base.c.'>__gcov_merge_icall_topn</a>);
+<a id='L81' name='L81'></a>  81 
+<a id='L82' name='L82'></a>  82 <strong class='reserved'>void</strong> <a href='../S/68.html#L86' title='Referred from 86 in gcov/gcc_base.c.'>__gcov_exit</a>(<strong class='reserved'>void</strong>)
+<a id='L83' name='L83'></a>  83 <em class='brace'>{</em>
+<a id='L84' name='L84'></a>  84         <em class='comment'>/* Unused. */</em>
+<a id='L85' name='L85'></a>  85 <em class='brace'>}</em>
+<a id='L86' name='L86'></a>  86 EXPORT_SYMBOL(<a href='../S/68.html#L82' title='Defined at 82 in gcov/gcc_base.c.'>__gcov_exit</a>);
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L12'>[^]</a><a href='#L82'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

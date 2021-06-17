@@ -1,0 +1,764 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>pid.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/pid.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L105'>[^]</a><a href='#L683'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L105' title='Defined at 105.'>put_pid</a></li>
+<li><a href='#L120' title='Defined at 120.'>delayed_put_pid</a></li>
+<li><a href='#L126' title='Defined at 126.'>free_pid</a></li>
+<li><a href='#L159' title='Defined at 159.'>alloc_pid</a></li>
+<li><a href='#L302' title='Defined at 302.'>disable_pid_allocation</a></li>
+<li><a href='#L309' title='Defined at 309.'>find_pid_ns</a></li>
+<li><a href='#L315' title='Defined at 315.'>find_vpid</a></li>
+<li><a href='#L321' title='Defined at 321.'>task_pid_ptr</a></li>
+<li><a href='#L331' title='Defined at 331.'>attach_pid</a></li>
+<li><a href='#L337' title='Defined at 337.'>__change_pid</a></li>
+<li><a href='#L356' title='Defined at 356.'>detach_pid</a></li>
+<li><a href='#L361' title='Defined at 361.'>change_pid</a></li>
+<li><a href='#L368' title='Defined at 368.'>exchange_tids</a></li>
+<li><a href='#L388' title='Defined at 388.'>transfer_pid</a></li>
+<li><a href='#L396' title='Defined at 396.'>pid_task</a></li>
+<li><a href='#L413' title='Defined at 413.'>find_task_by_pid_ns</a></li>
+<li><a href='#L420' title='Defined at 420.'>find_task_by_vpid</a></li>
+<li><a href='#L426' title='Defined at 426.'>find_get_task_by_vpid</a></li>
+<li><a href='#L439' title='Defined at 439.'>get_task_pid</a></li>
+<li><a href='#L449' title='Defined at 449.'>get_pid_task</a></li>
+<li><a href='#L461' title='Defined at 461.'>find_get_pid</a></li>
+<li><a href='#L473' title='Defined at 473.'>pid_nr_ns</a></li>
+<li><a href='#L487' title='Defined at 487.'>pid_vnr</a></li>
+<li><a href='#L493' title='Defined at 493.'>__task_pid_nr_ns</a></li>
+<li><a href='#L508' title='Defined at 508.'>task_active_pid_ns</a></li>
+<li><a href='#L519' title='Defined at 519.'>find_ge_pid</a></li>
+<li><a href='#L524' title='Defined at 524.'>pidfd_get_pid</a></li>
+<li><a href='#L557' title='Defined at 557.'>pidfd_create</a></li>
+<li><a href='#L585' title='Defined at 585.'>SYSCALL_DEFINE2</a></li>
+<li><a href='#L609' title='Defined at 609.'>pid_idr_init</a></li>
+<li><a href='#L627' title='Defined at 627.'>__pidfd_fget</a></li>
+<li><a href='#L646' title='Defined at 646.'>pidfd_getfd</a></li>
+<li><a href='#L683' title='Defined at 683.'>SYSCALL_DEFINE3</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0-only</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * Generic pidhash and scalable, time-bounded PID allocator</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> *</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> * (C) 2002-2003 Nadia Yvette Chambers, IBM</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> * (C) 2004 Nadia Yvette Chambers, Oracle</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> * (C) 2002-2004 Ingo Molnar, Red Hat</em>
+<a id='L8' name='L8'></a>   8 <em class='comment'> *</em>
+<a id='L9' name='L9'></a>   9 <em class='comment'> * pid-structures are backing objects for tasks sharing a given ID to chain</em>
+<a id='L10' name='L10'></a>  10 <em class='comment'> * against. There is very little to them aside from hashing them and</em>
+<a id='L11' name='L11'></a>  11 <em class='comment'> * parking tasks using given ID's on a list.</em>
+<a id='L12' name='L12'></a>  12 <em class='comment'> *</em>
+<a id='L13' name='L13'></a>  13 <em class='comment'> * The hash is always changed with the tasklist_lock write-acquired,</em>
+<a id='L14' name='L14'></a>  14 <em class='comment'> * and the hash is only accessed with the tasklist_lock at least</em>
+<a id='L15' name='L15'></a>  15 <em class='comment'> * read-acquired, so there's no additional SMP locking needed here.</em>
+<a id='L16' name='L16'></a>  16 <em class='comment'> *</em>
+<a id='L17' name='L17'></a>  17 <em class='comment'> * We have a list of bitmap pages, which bitmaps represent the PID space.</em>
+<a id='L18' name='L18'></a>  18 <em class='comment'> * Allocating and freeing PIDs is completely lockless. The worst-case</em>
+<a id='L19' name='L19'></a>  19 <em class='comment'> * allocation scenario when all but one out of 1 million PIDs possible are</em>
+<a id='L20' name='L20'></a>  20 <em class='comment'> * allocated already: the scanning of 32 list entries and at most PAGE_SIZE</em>
+<a id='L21' name='L21'></a>  21 <em class='comment'> * bytes. The typical fastpath is a single successful setbit. Freeing is O(1).</em>
+<a id='L22' name='L22'></a>  22 <em class='comment'> *</em>
+<a id='L23' name='L23'></a>  23 <em class='comment'> * Pid namespaces:</em>
+<a id='L24' name='L24'></a>  24 <em class='comment'> *    (C) 2007 Pavel Emelyanov &lt;xemul@openvz.org&gt;, OpenVZ, SWsoft Inc.</em>
+<a id='L25' name='L25'></a>  25 <em class='comment'> *    (C) 2007 Sukadev Bhattiprolu &lt;sukadev@us.ibm.com&gt;, IBM</em>
+<a id='L26' name='L26'></a>  26 <em class='comment'> *     Many thanks to Oleg Nesterov for comments and help</em>
+<a id='L27' name='L27'></a>  27 <em class='comment'> *</em>
+<a id='L28' name='L28'></a>  28 <em class='comment'> */</em>
+<a id='L29' name='L29'></a>  29 
+<a id='L30' name='L30'></a>  30 <em class='sharp'>#include</em> &lt;linux/mm.h&gt;
+<a id='L31' name='L31'></a>  31 <em class='sharp'>#include</em> &lt;linux/export.h&gt;
+<a id='L32' name='L32'></a>  32 <em class='sharp'>#include</em> &lt;linux/slab.h&gt;
+<a id='L33' name='L33'></a>  33 <em class='sharp'>#include</em> &lt;linux/init.h&gt;
+<a id='L34' name='L34'></a>  34 <em class='sharp'>#include</em> &lt;linux/rculist.h&gt;
+<a id='L35' name='L35'></a>  35 <em class='sharp'>#include</em> &lt;linux/memblock.h&gt;
+<a id='L36' name='L36'></a>  36 <em class='sharp'>#include</em> &lt;linux/pid_namespace.h&gt;
+<a id='L37' name='L37'></a>  37 <em class='sharp'>#include</em> &lt;linux/init_task.h&gt;
+<a id='L38' name='L38'></a>  38 <em class='sharp'>#include</em> &lt;linux/syscalls.h&gt;
+<a id='L39' name='L39'></a>  39 <em class='sharp'>#include</em> &lt;linux/proc_ns.h&gt;
+<a id='L40' name='L40'></a>  40 <em class='sharp'>#include</em> &lt;linux/refcount.h&gt;
+<a id='L41' name='L41'></a>  41 <em class='sharp'>#include</em> &lt;linux/anon_inodes.h&gt;
+<a id='L42' name='L42'></a>  42 <em class='sharp'>#include</em> &lt;linux/sched/signal.h&gt;
+<a id='L43' name='L43'></a>  43 <em class='sharp'>#include</em> &lt;linux/sched/task.h&gt;
+<a id='L44' name='L44'></a>  44 <em class='sharp'>#include</em> &lt;linux/idr.h&gt;
+<a id='L45' name='L45'></a>  45 <em class='sharp'>#include</em> &lt;net/sock.h&gt;
+<a id='L46' name='L46'></a>  46 <em class='sharp'>#include</em> &lt;uapi/linux/pidfd.h&gt;
+<a id='L47' name='L47'></a>  47 
+<a id='L48' name='L48'></a>  48 <strong class='reserved'>struct</strong> pid init_struct_pid = <em class='brace'>{</em>
+<a id='L49' name='L49'></a>  49         .count          = REFCOUNT_INIT(1),
+<a id='L50' name='L50'></a>  50         .tasks          = <em class='brace'>{</em>
+<a id='L51' name='L51'></a>  51                 <em class='brace'>{</em> .first = NULL <em class='brace'>}</em>,
+<a id='L52' name='L52'></a>  52                 <em class='brace'>{</em> .first = NULL <em class='brace'>}</em>,
+<a id='L53' name='L53'></a>  53                 <em class='brace'>{</em> .first = NULL <em class='brace'>}</em>,
+<a id='L54' name='L54'></a>  54         <em class='brace'>}</em>,
+<a id='L55' name='L55'></a>  55         .level          = 0,
+<a id='L56' name='L56'></a>  56         .numbers        = <em class='brace'>{</em> <em class='brace'>{</em>
+<a id='L57' name='L57'></a>  57                 .nr             = 0,
+<a id='L58' name='L58'></a>  58                 .ns             = &amp;init_pid_ns,
+<a id='L59' name='L59'></a>  59         <em class='brace'>}</em>, <em class='brace'>}</em>
+<a id='L60' name='L60'></a>  60 <em class='brace'>}</em>;
+<a id='L61' name='L61'></a>  61 
+<a id='L62' name='L62'></a>  62 <strong class='reserved'>int</strong> pid_max = PID_MAX_DEFAULT;
+<a id='L63' name='L63'></a>  63 
+<a id='L64' name='L64'></a>  64 <em class='sharp'>#define</em> <a href='../R/1198.html' title='Multiple referred from 3 places.'>RESERVED_PIDS</a>           300
+<a id='L65' name='L65'></a>  65 
+<a id='L66' name='L66'></a>  66 <strong class='reserved'>int</strong> pid_max_min = <a href='../S/79.html#L64' title='Defined at 64 in pid.c.'>RESERVED_PIDS</a> + 1;
+<a id='L67' name='L67'></a>  67 <strong class='reserved'>int</strong> pid_max_max = PID_MAX_LIMIT;
+<a id='L68' name='L68'></a>  68 
+<a id='L69' name='L69'></a>  69 <em class='comment'>/*</em>
+<a id='L70' name='L70'></a>  70 <em class='comment'> * PID-map pages start out as NULL, they get allocated upon</em>
+<a id='L71' name='L71'></a>  71 <em class='comment'> * first use and are never deallocated. This way a low pid_max</em>
+<a id='L72' name='L72'></a>  72 <em class='comment'> * value does not cause lots of bitmaps to be allocated, but</em>
+<a id='L73' name='L73'></a>  73 <em class='comment'> * the scheme scales to up to 4 million PIDs, runtime.</em>
+<a id='L74' name='L74'></a>  74 <em class='comment'> */</em>
+<a id='L75' name='L75'></a>  75 <strong class='reserved'>struct</strong> pid_namespace init_pid_ns = <em class='brace'>{</em>
+<a id='L76' name='L76'></a>  76         .kref = KREF_INIT(2),
+<a id='L77' name='L77'></a>  77         .idr = IDR_INIT(init_pid_ns.idr),
+<a id='L78' name='L78'></a>  78         .pid_allocated = PIDNS_ADDING,
+<a id='L79' name='L79'></a>  79         .level = 0,
+<a id='L80' name='L80'></a>  80         .child_reaper = &amp;init_task,
+<a id='L81' name='L81'></a>  81         .user_ns = &amp;init_user_ns,
+<a id='L82' name='L82'></a>  82         .ns.inum = PROC_PID_INIT_INO,
+<a id='L83' name='L83'></a>  83 <em class='sharp'>#ifdef</em> CONFIG_PID_NS
+<a id='L84' name='L84'></a>  84         .ns.ops = &amp;pidns_operations,
+<a id='L85' name='L85'></a>  85 <em class='sharp'>#endif</em>
+<a id='L86' name='L86'></a>  86 <em class='brace'>}</em>;
+<a id='L87' name='L87'></a>  87 EXPORT_SYMBOL_GPL(init_pid_ns);
+<a id='L88' name='L88'></a>  88 
+<a id='L89' name='L89'></a>  89 <em class='comment'>/*</em>
+<a id='L90' name='L90'></a>  90 <em class='comment'> * Note: disable interrupts while the pidmap_lock is held as an</em>
+<a id='L91' name='L91'></a>  91 <em class='comment'> * interrupt might come in and do read_lock(&amp;tasklist_lock).</em>
+<a id='L92' name='L92'></a>  92 <em class='comment'> *</em>
+<a id='L93' name='L93'></a>  93 <em class='comment'> * If we don't disable interrupts there is a nasty deadlock between</em>
+<a id='L94' name='L94'></a>  94 <em class='comment'> * detach_pid()-&gt;free_pid() and another cpu that does</em>
+<a id='L95' name='L95'></a>  95 <em class='comment'> * spin_lock(&amp;pidmap_lock) followed by an interrupt routine that does</em>
+<a id='L96' name='L96'></a>  96 <em class='comment'> * read_lock(&amp;tasklist_lock);</em>
+<a id='L97' name='L97'></a>  97 <em class='comment'> *</em>
+<a id='L98' name='L98'></a>  98 <em class='comment'> * After we clean up the tasklist_lock and know there are no</em>
+<a id='L99' name='L99'></a>  99 <em class='comment'> * irq handlers that take it we can leave the interrupts enabled.</em>
+<a id='L100' name='L100'></a> 100 <em class='comment'> * For now it is easier to be safe than to prove it can't happen.</em>
+<a id='L101' name='L101'></a> 101 <em class='comment'> */</em>
+<a id='L102' name='L102'></a> 102 
+<a id='L103' name='L103'></a> 103 <strong class='reserved'>static</strong>  __cacheline_aligned_in_smp DEFINE_SPINLOCK(pidmap_lock);
+<a id='L104' name='L104'></a> 104 
+<a id='L105' name='L105'></a> 105 <strong class='reserved'>void</strong> <a href='../R/10623.html' title='Multiple referred from 16 places.'>put_pid</a>(<strong class='reserved'>struct</strong> pid *pid)
+<a id='L106' name='L106'></a> 106 <em class='brace'>{</em>
+<a id='L107' name='L107'></a> 107         <strong class='reserved'>struct</strong> pid_namespace *ns;
+<a id='L108' name='L108'></a> 108 
+<a id='L109' name='L109'></a> 109         <strong class='reserved'>if</strong> (!pid)
+<a id='L110' name='L110'></a> 110                 <strong class='reserved'>return</strong>;
+<a id='L111' name='L111'></a> 111 
+<a id='L112' name='L112'></a> 112         ns = pid-&gt;numbers[pid-&gt;level].ns;
+<a id='L113' name='L113'></a> 113         <strong class='reserved'>if</strong> (refcount_dec_and_test(&amp;pid-&gt;count)) <em class='brace'>{</em>
+<a id='L114' name='L114'></a> 114                 kmem_cache_free(ns-&gt;pid_cachep, pid);
+<a id='L115' name='L115'></a> 115                 <a href='../S/195.html#L159' title='Defined at 159 in pid_namespace.c.'>put_pid_ns</a>(ns);
+<a id='L116' name='L116'></a> 116         <em class='brace'>}</em>
+<a id='L117' name='L117'></a> 117 <em class='brace'>}</em>
+<a id='L118' name='L118'></a> 118 EXPORT_SYMBOL_GPL(<a href='../S/79.html#L105' title='Defined at 105 in pid.c.'>put_pid</a>);
+<a id='L119' name='L119'></a> 119 
+<a id='L120' name='L120'></a> 120 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/79.html#L156' title='Referred from 156 in pid.c.'>delayed_put_pid</a>(<strong class='reserved'>struct</strong> rcu_head *rhp)
+<a id='L121' name='L121'></a> 121 <em class='brace'>{</em>
+<a id='L122' name='L122'></a> 122         <strong class='reserved'>struct</strong> pid *pid = container_of(rhp, <strong class='reserved'>struct</strong> pid, rcu);
+<a id='L123' name='L123'></a> 123         <a href='../S/79.html#L105' title='Defined at 105 in pid.c.'>put_pid</a>(pid);
+<a id='L124' name='L124'></a> 124 <em class='brace'>}</em>
+<a id='L125' name='L125'></a> 125 
+<a id='L126' name='L126'></a> 126 <strong class='reserved'>void</strong> <a href='../R/6541.html' title='Multiple referred from 2 places.'>free_pid</a>(<strong class='reserved'>struct</strong> pid *pid)
+<a id='L127' name='L127'></a> 127 <em class='brace'>{</em>
+<a id='L128' name='L128'></a> 128         <em class='comment'>/* We can be called with write_lock_irq(&amp;tasklist_lock) held */</em>
+<a id='L129' name='L129'></a> 129         <strong class='reserved'>int</strong> i;
+<a id='L130' name='L130'></a> 130         <strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> flags;
+<a id='L131' name='L131'></a> 131 
+<a id='L132' name='L132'></a> 132         spin_lock_irqsave(&amp;pidmap_lock, flags);
+<a id='L133' name='L133'></a> 133         <strong class='reserved'>for</strong> (i = 0; i &lt;= pid-&gt;level; i++) <em class='brace'>{</em>
+<a id='L134' name='L134'></a> 134                 <strong class='reserved'>struct</strong> upid *upid = pid-&gt;numbers + i;
+<a id='L135' name='L135'></a> 135                 <strong class='reserved'>struct</strong> pid_namespace *ns = upid-&gt;ns;
+<a id='L136' name='L136'></a> 136                 <strong class='reserved'>switch</strong> (--ns-&gt;pid_allocated) <em class='brace'>{</em>
+<a id='L137' name='L137'></a> 137                 <strong class='reserved'>case</strong> 2:
+<a id='L138' name='L138'></a> 138                 <strong class='reserved'>case</strong> 1:
+<a id='L139' name='L139'></a> 139                         <em class='comment'>/* When all that is left in the pid namespace</em>
+<a id='L140' name='L140'></a> 140 <em class='comment'>                         * is the reaper wake up the reaper.  The reaper</em>
+<a id='L141' name='L141'></a> 141 <em class='comment'>                         * may be sleeping in zap_pid_ns_processes().</em>
+<a id='L142' name='L142'></a> 142 <em class='comment'>                         */</em>
+<a id='L143' name='L143'></a> 143                         <a href='../S/441.html#L3259' title='Defined at 3259 in sched/core.c.'>wake_up_process</a>(ns-&gt;child_reaper);
+<a id='L144' name='L144'></a> 144                         <strong class='reserved'>break</strong>;
+<a id='L145' name='L145'></a> 145                 <strong class='reserved'>case</strong> PIDNS_ADDING:
+<a id='L146' name='L146'></a> 146                         <em class='comment'>/* Handle a fork failure of the first process */</em>
+<a id='L147' name='L147'></a> 147                         WARN_ON(ns-&gt;child_reaper);
+<a id='L148' name='L148'></a> 148                         ns-&gt;pid_allocated = 0;
+<a id='L149' name='L149'></a> 149                         <strong class='reserved'>break</strong>;
+<a id='L150' name='L150'></a> 150                 <em class='brace'>}</em>
+<a id='L151' name='L151'></a> 151 
+<a id='L152' name='L152'></a> 152                 idr_remove(&amp;ns-&gt;idr, upid-&gt;nr);
+<a id='L153' name='L153'></a> 153         <em class='brace'>}</em>
+<a id='L154' name='L154'></a> 154         spin_unlock_irqrestore(&amp;pidmap_lock, flags);
+<a id='L155' name='L155'></a> 155 
+<a id='L156' name='L156'></a> 156         <a href='../D/4450.html' title='Multiple defined in 2 places.'>call_rcu</a>(&amp;pid-&gt;rcu, <a href='../S/79.html#L120' title='Defined at 120 in pid.c.'>delayed_put_pid</a>);
+<a id='L157' name='L157'></a> 157 <em class='brace'>}</em>
+<a id='L158' name='L158'></a> 158 
+<a id='L159' name='L159'></a> 159 <strong class='reserved'>struct</strong> pid *<a href='../S/48.html#L2158' title='Referred from 2158 in fork.c.'>alloc_pid</a>(<strong class='reserved'>struct</strong> pid_namespace *ns, pid_t *set_tid,
+<a id='L160' name='L160'></a> 160                       size_t set_tid_size)
+<a id='L161' name='L161'></a> 161 <em class='brace'>{</em>
+<a id='L162' name='L162'></a> 162         <strong class='reserved'>struct</strong> pid *pid;
+<a id='L163' name='L163'></a> 163         <strong class='reserved'>enum</strong> pid_type type;
+<a id='L164' name='L164'></a> 164         <strong class='reserved'>int</strong> i, nr;
+<a id='L165' name='L165'></a> 165         <strong class='reserved'>struct</strong> pid_namespace *tmp;
+<a id='L166' name='L166'></a> 166         <strong class='reserved'>struct</strong> upid *upid;
+<a id='L167' name='L167'></a> 167         <strong class='reserved'>int</strong> retval = -ENOMEM;
+<a id='L168' name='L168'></a> 168 
+<a id='L169' name='L169'></a> 169         <em class='comment'>/*</em>
+<a id='L170' name='L170'></a> 170 <em class='comment'>         * set_tid_size contains the size of the set_tid array. Starting at</em>
+<a id='L171' name='L171'></a> 171 <em class='comment'>         * the most nested currently active PID namespace it tells alloc_pid()</em>
+<a id='L172' name='L172'></a> 172 <em class='comment'>         * which PID to set for a process in that most nested PID namespace</em>
+<a id='L173' name='L173'></a> 173 <em class='comment'>         * up to set_tid_size PID namespaces. It does not have to set the PID</em>
+<a id='L174' name='L174'></a> 174 <em class='comment'>         * for a process in all nested PID namespaces but set_tid_size must</em>
+<a id='L175' name='L175'></a> 175 <em class='comment'>         * never be greater than the current ns-&gt;level + 1.</em>
+<a id='L176' name='L176'></a> 176 <em class='comment'>         */</em>
+<a id='L177' name='L177'></a> 177         <strong class='reserved'>if</strong> (set_tid_size &gt; ns-&gt;level + 1)
+<a id='L178' name='L178'></a> 178                 <strong class='reserved'>return</strong> ERR_PTR(-EINVAL);
+<a id='L179' name='L179'></a> 179 
+<a id='L180' name='L180'></a> 180         pid = kmem_cache_alloc(ns-&gt;pid_cachep, GFP_KERNEL);
+<a id='L181' name='L181'></a> 181         <strong class='reserved'>if</strong> (!pid)
+<a id='L182' name='L182'></a> 182                 <strong class='reserved'>return</strong> ERR_PTR(retval);
+<a id='L183' name='L183'></a> 183 
+<a id='L184' name='L184'></a> 184         tmp = ns;
+<a id='L185' name='L185'></a> 185         pid-&gt;level = ns-&gt;level;
+<a id='L186' name='L186'></a> 186 
+<a id='L187' name='L187'></a> 187         <strong class='reserved'>for</strong> (i = ns-&gt;level; i &gt;= 0; i--) <em class='brace'>{</em>
+<a id='L188' name='L188'></a> 188                 <strong class='reserved'>int</strong> tid = 0;
+<a id='L189' name='L189'></a> 189 
+<a id='L190' name='L190'></a> 190                 <strong class='reserved'>if</strong> (set_tid_size) <em class='brace'>{</em>
+<a id='L191' name='L191'></a> 191                         tid = set_tid[ns-&gt;level - i];
+<a id='L192' name='L192'></a> 192 
+<a id='L193' name='L193'></a> 193                         retval = -EINVAL;
+<a id='L194' name='L194'></a> 194                         <strong class='reserved'>if</strong> (tid &lt; 1 || tid &gt;= pid_max)
+<a id='L195' name='L195'></a> 195                                 <strong class='reserved'>goto</strong> out_free;
+<a id='L196' name='L196'></a> 196                         <em class='comment'>/*</em>
+<a id='L197' name='L197'></a> 197 <em class='comment'>                         * Also fail if a PID != 1 is requested and</em>
+<a id='L198' name='L198'></a> 198 <em class='comment'>                         * no PID 1 exists.</em>
+<a id='L199' name='L199'></a> 199 <em class='comment'>                         */</em>
+<a id='L200' name='L200'></a> 200                         <strong class='reserved'>if</strong> (tid != 1 &amp;&amp; !tmp-&gt;child_reaper)
+<a id='L201' name='L201'></a> 201                                 <strong class='reserved'>goto</strong> out_free;
+<a id='L202' name='L202'></a> 202                         retval = -EPERM;
+<a id='L203' name='L203'></a> 203                         <strong class='reserved'>if</strong> (!checkpoint_restore_ns_capable(tmp-&gt;user_ns))
+<a id='L204' name='L204'></a> 204                                 <strong class='reserved'>goto</strong> out_free;
+<a id='L205' name='L205'></a> 205                         set_tid_size--;
+<a id='L206' name='L206'></a> 206                 <em class='brace'>}</em>
+<a id='L207' name='L207'></a> 207 
+<a id='L208' name='L208'></a> 208                 idr_preload(GFP_KERNEL);
+<a id='L209' name='L209'></a> 209                 spin_lock_irq(&amp;pidmap_lock);
+<a id='L210' name='L210'></a> 210 
+<a id='L211' name='L211'></a> 211                 <strong class='reserved'>if</strong> (tid) <em class='brace'>{</em>
+<a id='L212' name='L212'></a> 212                         nr = idr_alloc(&amp;tmp-&gt;idr, NULL, tid,
+<a id='L213' name='L213'></a> 213                                        tid + 1, GFP_ATOMIC);
+<a id='L214' name='L214'></a> 214                         <em class='comment'>/*</em>
+<a id='L215' name='L215'></a> 215 <em class='comment'>                         * If ENOSPC is returned it means that the PID is</em>
+<a id='L216' name='L216'></a> 216 <em class='comment'>                         * alreay in use. Return EEXIST in that case.</em>
+<a id='L217' name='L217'></a> 217 <em class='comment'>                         */</em>
+<a id='L218' name='L218'></a> 218                         <strong class='reserved'>if</strong> (nr == -ENOSPC)
+<a id='L219' name='L219'></a> 219                                 nr = -EEXIST;
+<a id='L220' name='L220'></a> 220                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L221' name='L221'></a> 221                         <strong class='reserved'>int</strong> pid_min = 1;
+<a id='L222' name='L222'></a> 222                         <em class='comment'>/*</em>
+<a id='L223' name='L223'></a> 223 <em class='comment'>                         * init really needs pid 1, but after reaching the</em>
+<a id='L224' name='L224'></a> 224 <em class='comment'>                         * maximum wrap back to RESERVED_PIDS</em>
+<a id='L225' name='L225'></a> 225 <em class='comment'>                         */</em>
+<a id='L226' name='L226'></a> 226                         <strong class='reserved'>if</strong> (idr_get_cursor(&amp;tmp-&gt;idr) &gt; <a href='../S/79.html#L64' title='Defined at 64 in pid.c.'>RESERVED_PIDS</a>)
+<a id='L227' name='L227'></a> 227                                 pid_min = <a href='../S/79.html#L64' title='Defined at 64 in pid.c.'>RESERVED_PIDS</a>;
+<a id='L228' name='L228'></a> 228 
+<a id='L229' name='L229'></a> 229                         <em class='comment'>/*</em>
+<a id='L230' name='L230'></a> 230 <em class='comment'>                         * Store a null pointer so find_pid_ns does not find</em>
+<a id='L231' name='L231'></a> 231 <em class='comment'>                         * a partially initialized PID (see below).</em>
+<a id='L232' name='L232'></a> 232 <em class='comment'>                         */</em>
+<a id='L233' name='L233'></a> 233                         nr = idr_alloc_cyclic(&amp;tmp-&gt;idr, NULL, pid_min,
+<a id='L234' name='L234'></a> 234                                               pid_max, GFP_ATOMIC);
+<a id='L235' name='L235'></a> 235                 <em class='brace'>}</em>
+<a id='L236' name='L236'></a> 236                 spin_unlock_irq(&amp;pidmap_lock);
+<a id='L237' name='L237'></a> 237                 idr_preload_end();
+<a id='L238' name='L238'></a> 238 
+<a id='L239' name='L239'></a> 239                 <strong class='reserved'>if</strong> (nr &lt; 0) <em class='brace'>{</em>
+<a id='L240' name='L240'></a> 240                         retval = (nr == -ENOSPC) ? -EAGAIN : nr;
+<a id='L241' name='L241'></a> 241                         <strong class='reserved'>goto</strong> out_free;
+<a id='L242' name='L242'></a> 242                 <em class='brace'>}</em>
+<a id='L243' name='L243'></a> 243 
+<a id='L244' name='L244'></a> 244                 pid-&gt;numbers[i].nr = nr;
+<a id='L245' name='L245'></a> 245                 pid-&gt;numbers[i].ns = tmp;
+<a id='L246' name='L246'></a> 246                 tmp = tmp-&gt;<a href='../S/457.html#L11' title='Defined at 11 in sched/cpudeadline.c.'>parent</a>;
+<a id='L247' name='L247'></a> 247         <em class='brace'>}</em>
+<a id='L248' name='L248'></a> 248 
+<a id='L249' name='L249'></a> 249         <em class='comment'>/*</em>
+<a id='L250' name='L250'></a> 250 <em class='comment'>         * ENOMEM is not the most obvious choice especially for the case</em>
+<a id='L251' name='L251'></a> 251 <em class='comment'>         * where the child subreaper has already exited and the pid</em>
+<a id='L252' name='L252'></a> 252 <em class='comment'>         * namespace denies the creation of any new processes. But ENOMEM</em>
+<a id='L253' name='L253'></a> 253 <em class='comment'>         * is what we have exposed to userspace for a long time and it is</em>
+<a id='L254' name='L254'></a> 254 <em class='comment'>         * documented behavior for pid namespaces. So we can't easily</em>
+<a id='L255' name='L255'></a> 255 <em class='comment'>         * change it even if there were an error code better suited.</em>
+<a id='L256' name='L256'></a> 256 <em class='comment'>         */</em>
+<a id='L257' name='L257'></a> 257         retval = -ENOMEM;
+<a id='L258' name='L258'></a> 258 
+<a id='L259' name='L259'></a> 259         get_pid_ns(ns);
+<a id='L260' name='L260'></a> 260         refcount_set(&amp;pid-&gt;count, 1);
+<a id='L261' name='L261'></a> 261         spin_lock_init(&amp;pid-&gt;lock);
+<a id='L262' name='L262'></a> 262         <strong class='reserved'>for</strong> (type = 0; type &lt; PIDTYPE_MAX; ++type)
+<a id='L263' name='L263'></a> 263                 INIT_HLIST_HEAD(&amp;pid-&gt;tasks[type]);
+<a id='L264' name='L264'></a> 264 
+<a id='L265' name='L265'></a> 265         init_waitqueue_head(&amp;pid-&gt;wait_pidfd);
+<a id='L266' name='L266'></a> 266         INIT_HLIST_HEAD(&amp;pid-&gt;inodes);
+<a id='L267' name='L267'></a> 267 
+<a id='L268' name='L268'></a> 268         upid = pid-&gt;numbers + ns-&gt;level;
+<a id='L269' name='L269'></a> 269         spin_lock_irq(&amp;pidmap_lock);
+<a id='L270' name='L270'></a> 270         <strong class='reserved'>if</strong> (!(ns-&gt;pid_allocated &amp; PIDNS_ADDING))
+<a id='L271' name='L271'></a> 271                 <strong class='reserved'>goto</strong> out_unlock;
+<a id='L272' name='L272'></a> 272         <strong class='reserved'>for</strong> ( ; upid &gt;= pid-&gt;numbers; --upid) <em class='brace'>{</em>
+<a id='L273' name='L273'></a> 273                 <em class='comment'>/* Make the PID visible to find_pid_ns. */</em>
+<a id='L274' name='L274'></a> 274                 idr_replace(&amp;upid-&gt;ns-&gt;idr, pid, upid-&gt;nr);
+<a id='L275' name='L275'></a> 275                 upid-&gt;ns-&gt;pid_allocated++;
+<a id='L276' name='L276'></a> 276         <em class='brace'>}</em>
+<a id='L277' name='L277'></a> 277         spin_unlock_irq(&amp;pidmap_lock);
+<a id='L278' name='L278'></a> 278 
+<a id='L279' name='L279'></a> 279         <strong class='reserved'>return</strong> pid;
+<a id='L280' name='L280'></a> 280 
+<a id='L281' name='L281'></a> 281 out_unlock:
+<a id='L282' name='L282'></a> 282         spin_unlock_irq(&amp;pidmap_lock);
+<a id='L283' name='L283'></a> 283         <a href='../S/195.html#L159' title='Defined at 159 in pid_namespace.c.'>put_pid_ns</a>(ns);
+<a id='L284' name='L284'></a> 284 
+<a id='L285' name='L285'></a> 285 out_free:
+<a id='L286' name='L286'></a> 286         spin_lock_irq(&amp;pidmap_lock);
+<a id='L287' name='L287'></a> 287         <strong class='reserved'>while</strong> (++i &lt;= ns-&gt;level) <em class='brace'>{</em>
+<a id='L288' name='L288'></a> 288                 upid = pid-&gt;numbers + i;
+<a id='L289' name='L289'></a> 289                 idr_remove(&amp;upid-&gt;ns-&gt;idr, upid-&gt;nr);
+<a id='L290' name='L290'></a> 290         <em class='brace'>}</em>
+<a id='L291' name='L291'></a> 291 
+<a id='L292' name='L292'></a> 292         <em class='comment'>/* On failure to allocate the first pid, reset the state */</em>
+<a id='L293' name='L293'></a> 293         <strong class='reserved'>if</strong> (ns-&gt;pid_allocated == PIDNS_ADDING)
+<a id='L294' name='L294'></a> 294                 idr_set_cursor(&amp;ns-&gt;idr, 0);
+<a id='L295' name='L295'></a> 295 
+<a id='L296' name='L296'></a> 296         spin_unlock_irq(&amp;pidmap_lock);
+<a id='L297' name='L297'></a> 297 
+<a id='L298' name='L298'></a> 298         kmem_cache_free(ns-&gt;pid_cachep, pid);
+<a id='L299' name='L299'></a> 299         <strong class='reserved'>return</strong> ERR_PTR(retval);
+<a id='L300' name='L300'></a> 300 <em class='brace'>}</em>
+<a id='L301' name='L301'></a> 301 
+<a id='L302' name='L302'></a> 302 <strong class='reserved'>void</strong> <a href='../S/195.html#L181' title='Referred from 181 in pid_namespace.c.'>disable_pid_allocation</a>(<strong class='reserved'>struct</strong> pid_namespace *ns)
+<a id='L303' name='L303'></a> 303 <em class='brace'>{</em>
+<a id='L304' name='L304'></a> 304         spin_lock_irq(&amp;pidmap_lock);
+<a id='L305' name='L305'></a> 305         ns-&gt;pid_allocated &amp;= ~PIDNS_ADDING;
+<a id='L306' name='L306'></a> 306         spin_unlock_irq(&amp;pidmap_lock);
+<a id='L307' name='L307'></a> 307 <em class='brace'>}</em>
+<a id='L308' name='L308'></a> 308 
+<a id='L309' name='L309'></a> 309 <strong class='reserved'>struct</strong> pid *<a href='../R/6355.html' title='Multiple referred from 3 places.'>find_pid_ns</a>(<strong class='reserved'>int</strong> nr, <strong class='reserved'>struct</strong> pid_namespace *ns)
+<a id='L310' name='L310'></a> 310 <em class='brace'>{</em>
+<a id='L311' name='L311'></a> 311         <strong class='reserved'>return</strong> idr_find(&amp;ns-&gt;idr, nr);
+<a id='L312' name='L312'></a> 312 <em class='brace'>}</em>
+<a id='L313' name='L313'></a> 313 EXPORT_SYMBOL_GPL(<a href='../S/79.html#L309' title='Defined at 309 in pid.c.'>find_pid_ns</a>);
+<a id='L314' name='L314'></a> 314 
+<a id='L315' name='L315'></a> 315 <strong class='reserved'>struct</strong> pid *<a href='../R/6390.html' title='Multiple referred from 10 places.'>find_vpid</a>(<strong class='reserved'>int</strong> nr)
+<a id='L316' name='L316'></a> 316 <em class='brace'>{</em>
+<a id='L317' name='L317'></a> 317         <strong class='reserved'>return</strong> <a href='../S/79.html#L309' title='Defined at 309 in pid.c.'>find_pid_ns</a>(nr, <a href='../S/79.html#L508' title='Defined at 508 in pid.c.'>task_active_pid_ns</a>(current));
+<a id='L318' name='L318'></a> 318 <em class='brace'>}</em>
+<a id='L319' name='L319'></a> 319 EXPORT_SYMBOL_GPL(<a href='../S/79.html#L315' title='Defined at 315 in pid.c.'>find_vpid</a>);
+<a id='L320' name='L320'></a> 320 
+<a id='L321' name='L321'></a> 321 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> pid **<a href='../R/13069.html' title='Multiple referred from 4 places.'>task_pid_ptr</a>(<strong class='reserved'>struct</strong> task_struct *task, <strong class='reserved'>enum</strong> pid_type type)
+<a id='L322' name='L322'></a> 322 <em class='brace'>{</em>
+<a id='L323' name='L323'></a> 323         <strong class='reserved'>return</strong> (type == PIDTYPE_PID) ?
+<a id='L324' name='L324'></a> 324                 &amp;task-&gt;thread_pid :
+<a id='L325' name='L325'></a> 325                 &amp;task-&gt;signal-&gt;pids[type];
+<a id='L326' name='L326'></a> 326 <em class='brace'>}</em>
+<a id='L327' name='L327'></a> 327 
+<a id='L328' name='L328'></a> 328 <em class='comment'>/*</em>
+<a id='L329' name='L329'></a> 329 <em class='comment'> * attach_pid() must be called with the tasklist_lock write-held.</em>
+<a id='L330' name='L330'></a> 330 <em class='comment'> */</em>
+<a id='L331' name='L331'></a> 331 <strong class='reserved'>void</strong> <a href='../R/3097.html' title='Multiple referred from 5 places.'>attach_pid</a>(<strong class='reserved'>struct</strong> task_struct *task, <strong class='reserved'>enum</strong> pid_type type)
+<a id='L332' name='L332'></a> 332 <em class='brace'>{</em>
+<a id='L333' name='L333'></a> 333         <strong class='reserved'>struct</strong> pid *pid = *<a href='../S/79.html#L321' title='Defined at 321 in pid.c.'>task_pid_ptr</a>(task, type);
+<a id='L334' name='L334'></a> 334         hlist_add_head_rcu(&amp;task-&gt;pid_links[type], &amp;pid-&gt;tasks[type]);
+<a id='L335' name='L335'></a> 335 <em class='brace'>}</em>
+<a id='L336' name='L336'></a> 336 
+<a id='L337' name='L337'></a> 337 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../R/1852.html' title='Multiple referred from 2 places.'>__change_pid</a>(<strong class='reserved'>struct</strong> task_struct *task, <strong class='reserved'>enum</strong> pid_type type,
+<a id='L338' name='L338'></a> 338                         <strong class='reserved'>struct</strong> pid *new)
+<a id='L339' name='L339'></a> 339 <em class='brace'>{</em>
+<a id='L340' name='L340'></a> 340         <strong class='reserved'>struct</strong> pid **pid_ptr = <a href='../S/79.html#L321' title='Defined at 321 in pid.c.'>task_pid_ptr</a>(task, type);
+<a id='L341' name='L341'></a> 341         <strong class='reserved'>struct</strong> pid *pid;
+<a id='L342' name='L342'></a> 342         <strong class='reserved'>int</strong> tmp;
+<a id='L343' name='L343'></a> 343 
+<a id='L344' name='L344'></a> 344         pid = *pid_ptr;
+<a id='L345' name='L345'></a> 345 
+<a id='L346' name='L346'></a> 346         hlist_del_rcu(&amp;task-&gt;pid_links[type]);
+<a id='L347' name='L347'></a> 347         *pid_ptr = new;
+<a id='L348' name='L348'></a> 348 
+<a id='L349' name='L349'></a> 349         <strong class='reserved'>for</strong> (tmp = PIDTYPE_MAX; --tmp &gt;= 0; )
+<a id='L350' name='L350'></a> 350                 <strong class='reserved'>if</strong> (pid_has_task(pid, tmp))
+<a id='L351' name='L351'></a> 351                         <strong class='reserved'>return</strong>;
+<a id='L352' name='L352'></a> 352 
+<a id='L353' name='L353'></a> 353         <a href='../S/79.html#L126' title='Defined at 126 in pid.c.'>free_pid</a>(pid);
+<a id='L354' name='L354'></a> 354 <em class='brace'>}</em>
+<a id='L355' name='L355'></a> 355 
+<a id='L356' name='L356'></a> 356 <strong class='reserved'>void</strong> <a href='../R/5576.html' title='Multiple referred from 4 places.'>detach_pid</a>(<strong class='reserved'>struct</strong> task_struct *task, <strong class='reserved'>enum</strong> pid_type type)
+<a id='L357' name='L357'></a> 357 <em class='brace'>{</em>
+<a id='L358' name='L358'></a> 358         <a href='../S/79.html#L337' title='Defined at 337 in pid.c.'>__change_pid</a>(task, type, NULL);
+<a id='L359' name='L359'></a> 359 <em class='brace'>}</em>
+<a id='L360' name='L360'></a> 360 
+<a id='L361' name='L361'></a> 361 <strong class='reserved'>void</strong> <a href='../R/4528.html' title='Multiple referred from 3 places.'>change_pid</a>(<strong class='reserved'>struct</strong> task_struct *task, <strong class='reserved'>enum</strong> pid_type type,
+<a id='L362' name='L362'></a> 362                 <strong class='reserved'>struct</strong> pid *pid)
+<a id='L363' name='L363'></a> 363 <em class='brace'>{</em>
+<a id='L364' name='L364'></a> 364         <a href='../S/79.html#L337' title='Defined at 337 in pid.c.'>__change_pid</a>(task, type, pid);
+<a id='L365' name='L365'></a> 365         <a href='../S/79.html#L331' title='Defined at 331 in pid.c.'>attach_pid</a>(task, type);
+<a id='L366' name='L366'></a> 366 <em class='brace'>}</em>
+<a id='L367' name='L367'></a> 367 
+<a id='L368' name='L368'></a> 368 <strong class='reserved'>void</strong> exchange_tids(<strong class='reserved'>struct</strong> task_struct *left, <strong class='reserved'>struct</strong> task_struct *right)
+<a id='L369' name='L369'></a> 369 <em class='brace'>{</em>
+<a id='L370' name='L370'></a> 370         <strong class='reserved'>struct</strong> pid *pid1 = left-&gt;thread_pid;
+<a id='L371' name='L371'></a> 371         <strong class='reserved'>struct</strong> pid *pid2 = right-&gt;thread_pid;
+<a id='L372' name='L372'></a> 372         <strong class='reserved'>struct</strong> hlist_head *head1 = &amp;pid1-&gt;tasks[PIDTYPE_PID];
+<a id='L373' name='L373'></a> 373         <strong class='reserved'>struct</strong> hlist_head *head2 = &amp;pid2-&gt;tasks[PIDTYPE_PID];
+<a id='L374' name='L374'></a> 374 
+<a id='L375' name='L375'></a> 375         <em class='comment'>/* Swap the single entry tid lists */</em>
+<a id='L376' name='L376'></a> 376         hlists_swap_heads_rcu(head1, head2);
+<a id='L377' name='L377'></a> 377 
+<a id='L378' name='L378'></a> 378         <em class='comment'>/* Swap the per task_struct pid */</em>
+<a id='L379' name='L379'></a> 379         rcu_assign_pointer(left-&gt;thread_pid, pid2);
+<a id='L380' name='L380'></a> 380         rcu_assign_pointer(right-&gt;thread_pid, pid1);
+<a id='L381' name='L381'></a> 381 
+<a id='L382' name='L382'></a> 382         <em class='comment'>/* Swap the cached value */</em>
+<a id='L383' name='L383'></a> 383         WRITE_ONCE(left-&gt;pid, pid_nr(pid2));
+<a id='L384' name='L384'></a> 384         WRITE_ONCE(right-&gt;pid, pid_nr(pid1));
+<a id='L385' name='L385'></a> 385 <em class='brace'>}</em>
+<a id='L386' name='L386'></a> 386 
+<a id='L387' name='L387'></a> 387 <em class='comment'>/* transfer_pid is an optimization of attach_pid(new), detach_pid(old) */</em>
+<a id='L388' name='L388'></a> 388 <strong class='reserved'>void</strong> transfer_pid(<strong class='reserved'>struct</strong> task_struct *old, <strong class='reserved'>struct</strong> task_struct *new,
+<a id='L389' name='L389'></a> 389                            <strong class='reserved'>enum</strong> pid_type type)
+<a id='L390' name='L390'></a> 390 <em class='brace'>{</em>
+<a id='L391' name='L391'></a> 391         <strong class='reserved'>if</strong> (type == PIDTYPE_PID)
+<a id='L392' name='L392'></a> 392                 new-&gt;thread_pid = old-&gt;thread_pid;
+<a id='L393' name='L393'></a> 393         hlist_replace_rcu(&amp;old-&gt;pid_links[type], &amp;new-&gt;pid_links[type]);
+<a id='L394' name='L394'></a> 394 <em class='brace'>}</em>
+<a id='L395' name='L395'></a> 395 
+<a id='L396' name='L396'></a> 396 <strong class='reserved'>struct</strong> task_struct *<a href='../R/9975.html' title='Multiple referred from 16 places.'>pid_task</a>(<strong class='reserved'>struct</strong> pid *pid, <strong class='reserved'>enum</strong> pid_type type)
+<a id='L397' name='L397'></a> 397 <em class='brace'>{</em>
+<a id='L398' name='L398'></a> 398         <strong class='reserved'>struct</strong> task_struct *result = NULL;
+<a id='L399' name='L399'></a> 399         <strong class='reserved'>if</strong> (pid) <em class='brace'>{</em>
+<a id='L400' name='L400'></a> 400                 <strong class='reserved'>struct</strong> hlist_node *first;
+<a id='L401' name='L401'></a> 401                 first = rcu_dereference_check(hlist_first_rcu(&amp;pid-&gt;tasks[type]),
+<a id='L402' name='L402'></a> 402                                               <a href='../S/48.html#L147' title='Defined at 147 in fork.c.'>lockdep_tasklist_lock_is_held</a>());
+<a id='L403' name='L403'></a> 403                 <strong class='reserved'>if</strong> (first)
+<a id='L404' name='L404'></a> 404                         result = hlist_entry(first, <strong class='reserved'>struct</strong> task_struct, pid_links[(type)]);
+<a id='L405' name='L405'></a> 405         <em class='brace'>}</em>
+<a id='L406' name='L406'></a> 406         <strong class='reserved'>return</strong> result;
+<a id='L407' name='L407'></a> 407 <em class='brace'>}</em>
+<a id='L408' name='L408'></a> 408 EXPORT_SYMBOL(<a href='../S/79.html#L396' title='Defined at 396 in pid.c.'>pid_task</a>);
+<a id='L409' name='L409'></a> 409 
+<a id='L410' name='L410'></a> 410 <em class='comment'>/*</em>
+<a id='L411' name='L411'></a> 411 <em class='comment'> * Must be called under rcu_read_lock().</em>
+<a id='L412' name='L412'></a> 412 <em class='comment'> */</em>
+<a id='L413' name='L413'></a> 413 <strong class='reserved'>struct</strong> task_struct *<a href='../R/6375.html' title='Multiple referred from 5 places.'>find_task_by_pid_ns</a>(pid_t nr, <strong class='reserved'>struct</strong> pid_namespace *ns)
+<a id='L414' name='L414'></a> 414 <em class='brace'>{</em>
+<a id='L415' name='L415'></a> 415         RCU_LOCKDEP_WARN(!<a href='../S/140.html#L303' title='Defined at 303 in rcu/update.c.'>rcu_read_lock_held</a>(),
+<a id='L416' name='L416'></a> 416                          "find_task_by_pid_ns() needs rcu_read_lock() protection");
+<a id='L417' name='L417'></a> 417         <strong class='reserved'>return</strong> <a href='../S/79.html#L396' title='Defined at 396 in pid.c.'>pid_task</a>(<a href='../S/79.html#L309' title='Defined at 309 in pid.c.'>find_pid_ns</a>(nr, ns), PIDTYPE_PID);
+<a id='L418' name='L418'></a> 418 <em class='brace'>}</em>
+<a id='L419' name='L419'></a> 419 
+<a id='L420' name='L420'></a> 420 <strong class='reserved'>struct</strong> task_struct *<a href='../R/6376.html' title='Multiple referred from 19 places.'>find_task_by_vpid</a>(pid_t vnr)
+<a id='L421' name='L421'></a> 421 <em class='brace'>{</em>
+<a id='L422' name='L422'></a> 422         <strong class='reserved'>return</strong> <a href='../S/79.html#L413' title='Defined at 413 in pid.c.'>find_task_by_pid_ns</a>(vnr, <a href='../S/79.html#L508' title='Defined at 508 in pid.c.'>task_active_pid_ns</a>(current));
+<a id='L423' name='L423'></a> 423 <em class='brace'>}</em>
+<a id='L424' name='L424'></a> 424 EXPORT_SYMBOL_GPL(<a href='../S/79.html#L420' title='Defined at 420 in pid.c.'>find_task_by_vpid</a>);
+<a id='L425' name='L425'></a> 425 
+<a id='L426' name='L426'></a> 426 <strong class='reserved'>struct</strong> task_struct *<a href='../R/6322.html' title='Multiple referred from 4 places.'>find_get_task_by_vpid</a>(pid_t nr)
+<a id='L427' name='L427'></a> 427 <em class='brace'>{</em>
+<a id='L428' name='L428'></a> 428         <strong class='reserved'>struct</strong> task_struct *task;
+<a id='L429' name='L429'></a> 429 
+<a id='L430' name='L430'></a> 430         rcu_read_lock();
+<a id='L431' name='L431'></a> 431         task = <a href='../S/79.html#L420' title='Defined at 420 in pid.c.'>find_task_by_vpid</a>(nr);
+<a id='L432' name='L432'></a> 432         <strong class='reserved'>if</strong> (task)
+<a id='L433' name='L433'></a> 433                 get_task_struct(task);
+<a id='L434' name='L434'></a> 434         rcu_read_unlock();
+<a id='L435' name='L435'></a> 435 
+<a id='L436' name='L436'></a> 436         <strong class='reserved'>return</strong> task;
+<a id='L437' name='L437'></a> 437 <em class='brace'>}</em>
+<a id='L438' name='L438'></a> 438 
+<a id='L439' name='L439'></a> 439 <strong class='reserved'>struct</strong> pid *<a href='../R/7140.html' title='Multiple referred from 4 places.'>get_task_pid</a>(<strong class='reserved'>struct</strong> task_struct *task, <strong class='reserved'>enum</strong> pid_type type)
+<a id='L440' name='L440'></a> 440 <em class='brace'>{</em>
+<a id='L441' name='L441'></a> 441         <strong class='reserved'>struct</strong> pid *pid;
+<a id='L442' name='L442'></a> 442         rcu_read_lock();
+<a id='L443' name='L443'></a> 443         pid = get_pid(rcu_dereference(*<a href='../S/79.html#L321' title='Defined at 321 in pid.c.'>task_pid_ptr</a>(task, type)));
+<a id='L444' name='L444'></a> 444         rcu_read_unlock();
+<a id='L445' name='L445'></a> 445         <strong class='reserved'>return</strong> pid;
+<a id='L446' name='L446'></a> 446 <em class='brace'>}</em>
+<a id='L447' name='L447'></a> 447 EXPORT_SYMBOL_GPL(<a href='../S/79.html#L439' title='Defined at 439 in pid.c.'>get_task_pid</a>);
+<a id='L448' name='L448'></a> 448 
+<a id='L449' name='L449'></a> 449 <strong class='reserved'>struct</strong> task_struct *<a href='../R/7111.html' title='Multiple referred from 4 places.'>get_pid_task</a>(<strong class='reserved'>struct</strong> pid *pid, <strong class='reserved'>enum</strong> pid_type type)
+<a id='L450' name='L450'></a> 450 <em class='brace'>{</em>
+<a id='L451' name='L451'></a> 451         <strong class='reserved'>struct</strong> task_struct *result;
+<a id='L452' name='L452'></a> 452         rcu_read_lock();
+<a id='L453' name='L453'></a> 453         result = <a href='../S/79.html#L396' title='Defined at 396 in pid.c.'>pid_task</a>(pid, type);
+<a id='L454' name='L454'></a> 454         <strong class='reserved'>if</strong> (result)
+<a id='L455' name='L455'></a> 455                 get_task_struct(result);
+<a id='L456' name='L456'></a> 456         rcu_read_unlock();
+<a id='L457' name='L457'></a> 457         <strong class='reserved'>return</strong> result;
+<a id='L458' name='L458'></a> 458 <em class='brace'>}</em>
+<a id='L459' name='L459'></a> 459 EXPORT_SYMBOL_GPL(<a href='../S/79.html#L449' title='Defined at 449 in pid.c.'>get_pid_task</a>);
+<a id='L460' name='L460'></a> 460 
+<a id='L461' name='L461'></a> 461 <strong class='reserved'>struct</strong> pid *<a href='../R/6321.html' title='Multiple referred from 8 places.'>find_get_pid</a>(pid_t nr)
+<a id='L462' name='L462'></a> 462 <em class='brace'>{</em>
+<a id='L463' name='L463'></a> 463         <strong class='reserved'>struct</strong> pid *pid;
+<a id='L464' name='L464'></a> 464 
+<a id='L465' name='L465'></a> 465         rcu_read_lock();
+<a id='L466' name='L466'></a> 466         pid = get_pid(<a href='../S/79.html#L315' title='Defined at 315 in pid.c.'>find_vpid</a>(nr));
+<a id='L467' name='L467'></a> 467         rcu_read_unlock();
+<a id='L468' name='L468'></a> 468 
+<a id='L469' name='L469'></a> 469         <strong class='reserved'>return</strong> pid;
+<a id='L470' name='L470'></a> 470 <em class='brace'>}</em>
+<a id='L471' name='L471'></a> 471 EXPORT_SYMBOL_GPL(<a href='../S/79.html#L461' title='Defined at 461 in pid.c.'>find_get_pid</a>);
+<a id='L472' name='L472'></a> 472 
+<a id='L473' name='L473'></a> 473 pid_t <a href='../R/9972.html' title='Multiple referred from 5 places.'>pid_nr_ns</a>(<strong class='reserved'>struct</strong> pid *pid, <strong class='reserved'>struct</strong> pid_namespace *ns)
+<a id='L474' name='L474'></a> 474 <em class='brace'>{</em>
+<a id='L475' name='L475'></a> 475         <strong class='reserved'>struct</strong> upid *upid;
+<a id='L476' name='L476'></a> 476         pid_t nr = 0;
+<a id='L477' name='L477'></a> 477 
+<a id='L478' name='L478'></a> 478         <strong class='reserved'>if</strong> (pid &amp;&amp; ns-&gt;level &lt;= pid-&gt;level) <em class='brace'>{</em>
+<a id='L479' name='L479'></a> 479                 upid = &amp;pid-&gt;numbers[ns-&gt;level];
+<a id='L480' name='L480'></a> 480                 <strong class='reserved'>if</strong> (upid-&gt;ns == ns)
+<a id='L481' name='L481'></a> 481                         nr = upid-&gt;nr;
+<a id='L482' name='L482'></a> 482         <em class='brace'>}</em>
+<a id='L483' name='L483'></a> 483         <strong class='reserved'>return</strong> nr;
+<a id='L484' name='L484'></a> 484 <em class='brace'>}</em>
+<a id='L485' name='L485'></a> 485 EXPORT_SYMBOL_GPL(<a href='../S/79.html#L473' title='Defined at 473 in pid.c.'>pid_nr_ns</a>);
+<a id='L486' name='L486'></a> 486 
+<a id='L487' name='L487'></a> 487 pid_t <a href='../R/9977.html' title='Multiple referred from 10 places.'>pid_vnr</a>(<strong class='reserved'>struct</strong> pid *pid)
+<a id='L488' name='L488'></a> 488 <em class='brace'>{</em>
+<a id='L489' name='L489'></a> 489         <strong class='reserved'>return</strong> <a href='../S/79.html#L473' title='Defined at 473 in pid.c.'>pid_nr_ns</a>(pid, <a href='../S/79.html#L508' title='Defined at 508 in pid.c.'>task_active_pid_ns</a>(current));
+<a id='L490' name='L490'></a> 490 <em class='brace'>}</em>
+<a id='L491' name='L491'></a> 491 EXPORT_SYMBOL_GPL(<a href='../S/79.html#L487' title='Defined at 487 in pid.c.'>pid_vnr</a>);
+<a id='L492' name='L492'></a> 492 
+<a id='L493' name='L493'></a> 493 pid_t <a href='../R/2498.html' title='Multiple referred from 2 places.'>__task_pid_nr_ns</a>(<strong class='reserved'>struct</strong> task_struct *task, <strong class='reserved'>enum</strong> pid_type type,
+<a id='L494' name='L494'></a> 494                         <strong class='reserved'>struct</strong> pid_namespace *ns)
+<a id='L495' name='L495'></a> 495 <em class='brace'>{</em>
+<a id='L496' name='L496'></a> 496         pid_t nr = 0;
+<a id='L497' name='L497'></a> 497 
+<a id='L498' name='L498'></a> 498         rcu_read_lock();
+<a id='L499' name='L499'></a> 499         <strong class='reserved'>if</strong> (!ns)
+<a id='L500' name='L500'></a> 500                 ns = <a href='../S/79.html#L508' title='Defined at 508 in pid.c.'>task_active_pid_ns</a>(current);
+<a id='L501' name='L501'></a> 501         nr = <a href='../S/79.html#L473' title='Defined at 473 in pid.c.'>pid_nr_ns</a>(rcu_dereference(*<a href='../S/79.html#L321' title='Defined at 321 in pid.c.'>task_pid_ptr</a>(task, type)), ns);
+<a id='L502' name='L502'></a> 502         rcu_read_unlock();
+<a id='L503' name='L503'></a> 503 
+<a id='L504' name='L504'></a> 504         <strong class='reserved'>return</strong> nr;
+<a id='L505' name='L505'></a> 505 <em class='brace'>}</em>
+<a id='L506' name='L506'></a> 506 EXPORT_SYMBOL(<a href='../S/79.html#L493' title='Defined at 493 in pid.c.'>__task_pid_nr_ns</a>);
+<a id='L507' name='L507'></a> 507 
+<a id='L508' name='L508'></a> 508 <strong class='reserved'>struct</strong> pid_namespace *<a href='../R/12995.html' title='Multiple referred from 31 places.'>task_active_pid_ns</a>(<strong class='reserved'>struct</strong> task_struct *tsk)
+<a id='L509' name='L509'></a> 509 <em class='brace'>{</em>
+<a id='L510' name='L510'></a> 510         <strong class='reserved'>return</strong> ns_of_pid(task_pid(tsk));
+<a id='L511' name='L511'></a> 511 <em class='brace'>}</em>
+<a id='L512' name='L512'></a> 512 EXPORT_SYMBOL_GPL(<a href='../S/79.html#L508' title='Defined at 508 in pid.c.'>task_active_pid_ns</a>);
+<a id='L513' name='L513'></a> 513 
+<a id='L514' name='L514'></a> 514 <em class='comment'>/*</em>
+<a id='L515' name='L515'></a> 515 <em class='comment'> * Used by proc to find the first pid that is greater than or equal to nr.</em>
+<a id='L516' name='L516'></a> 516 <em class='comment'> *</em>
+<a id='L517' name='L517'></a> 517 <em class='comment'> * If there is a pid at nr this function is exactly the same as find_pid_ns.</em>
+<a id='L518' name='L518'></a> 518 <em class='comment'> */</em>
+<a id='L519' name='L519'></a> 519 <strong class='reserved'>struct</strong> pid *<a href='../S/421.html#L33' title='Referred from 33 in bpf/task_iter.c.'>find_ge_pid</a>(<strong class='reserved'>int</strong> nr, <strong class='reserved'>struct</strong> pid_namespace *ns)
+<a id='L520' name='L520'></a> 520 <em class='brace'>{</em>
+<a id='L521' name='L521'></a> 521         <strong class='reserved'>return</strong> idr_get_next(&amp;ns-&gt;idr, &amp;nr);
+<a id='L522' name='L522'></a> 522 <em class='brace'>}</em>
+<a id='L523' name='L523'></a> 523 
+<a id='L524' name='L524'></a> 524 <strong class='reserved'>struct</strong> pid *<a href='../S/63.html#L1525' title='Referred from 1525 in exit.c.'>pidfd_get_pid</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> fd, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> *flags)
+<a id='L525' name='L525'></a> 525 <em class='brace'>{</em>
+<a id='L526' name='L526'></a> 526         <strong class='reserved'>struct</strong> fd f;
+<a id='L527' name='L527'></a> 527         <strong class='reserved'>struct</strong> pid *pid;
+<a id='L528' name='L528'></a> 528 
+<a id='L529' name='L529'></a> 529         f = fdget(fd);
+<a id='L530' name='L530'></a> 530         <strong class='reserved'>if</strong> (!f.file)
+<a id='L531' name='L531'></a> 531                 <strong class='reserved'>return</strong> ERR_PTR(-EBADF);
+<a id='L532' name='L532'></a> 532 
+<a id='L533' name='L533'></a> 533         pid = <a href='../S/48.html#L1732' title='Defined at 1732 in fork.c.'>pidfd_pid</a>(f.file);
+<a id='L534' name='L534'></a> 534         <strong class='reserved'>if</strong> (!IS_ERR(pid)) <em class='brace'>{</em>
+<a id='L535' name='L535'></a> 535                 get_pid(pid);
+<a id='L536' name='L536'></a> 536                 *flags = f.file-&gt;f_flags;
+<a id='L537' name='L537'></a> 537         <em class='brace'>}</em>
+<a id='L538' name='L538'></a> 538 
+<a id='L539' name='L539'></a> 539         fdput(f);
+<a id='L540' name='L540'></a> 540         <strong class='reserved'>return</strong> pid;
+<a id='L541' name='L541'></a> 541 <em class='brace'>}</em>
+<a id='L542' name='L542'></a> 542 
+<a id='L543' name='L543'></a> 543 <em class='comment'>/**</em>
+<a id='L544' name='L544'></a> 544 <em class='comment'> * pidfd_create() - Create a new pid file descriptor.</em>
+<a id='L545' name='L545'></a> 545 <em class='comment'> *</em>
+<a id='L546' name='L546'></a> 546 <em class='comment'> * @pid:   struct pid that the pidfd will reference</em>
+<a id='L547' name='L547'></a> 547 <em class='comment'> * @flags: flags to pass</em>
+<a id='L548' name='L548'></a> 548 <em class='comment'> *</em>
+<a id='L549' name='L549'></a> 549 <em class='comment'> * This creates a new pid file descriptor with the O_CLOEXEC flag set.</em>
+<a id='L550' name='L550'></a> 550 <em class='comment'> *</em>
+<a id='L551' name='L551'></a> 551 <em class='comment'> * Note, that this function can only be called after the fd table has</em>
+<a id='L552' name='L552'></a> 552 <em class='comment'> * been unshared to avoid leaking the pidfd to the new process.</em>
+<a id='L553' name='L553'></a> 553 <em class='comment'> *</em>
+<a id='L554' name='L554'></a> 554 <em class='comment'> * Return: On success, a cloexec pidfd is returned.</em>
+<a id='L555' name='L555'></a> 555 <em class='comment'> *         On error, a negative errno number will be returned.</em>
+<a id='L556' name='L556'></a> 556 <em class='comment'> */</em>
+<a id='L557' name='L557'></a> 557 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/79.html#L601' title='Referred from 601 in pid.c.'>pidfd_create</a>(<strong class='reserved'>struct</strong> pid *pid, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> flags)
+<a id='L558' name='L558'></a> 558 <em class='brace'>{</em>
+<a id='L559' name='L559'></a> 559         <strong class='reserved'>int</strong> fd;
+<a id='L560' name='L560'></a> 560 
+<a id='L561' name='L561'></a> 561         fd = anon_inode_getfd("[pidfd]", &amp;pidfd_fops, get_pid(pid),
+<a id='L562' name='L562'></a> 562                               flags | O_RDWR | O_CLOEXEC);
+<a id='L563' name='L563'></a> 563         <strong class='reserved'>if</strong> (fd &lt; 0)
+<a id='L564' name='L564'></a> 564                 <a href='../S/79.html#L105' title='Defined at 105 in pid.c.'>put_pid</a>(pid);
+<a id='L565' name='L565'></a> 565 
+<a id='L566' name='L566'></a> 566         <strong class='reserved'>return</strong> fd;
+<a id='L567' name='L567'></a> 567 <em class='brace'>}</em>
+<a id='L568' name='L568'></a> 568 
+<a id='L569' name='L569'></a> 569 <em class='comment'>/**</em>
+<a id='L570' name='L570'></a> 570 <em class='comment'> * pidfd_open() - Open new pid file descriptor.</em>
+<a id='L571' name='L571'></a> 571 <em class='comment'> *</em>
+<a id='L572' name='L572'></a> 572 <em class='comment'> * @pid:   pid for which to retrieve a pidfd</em>
+<a id='L573' name='L573'></a> 573 <em class='comment'> * @flags: flags to pass</em>
+<a id='L574' name='L574'></a> 574 <em class='comment'> *</em>
+<a id='L575' name='L575'></a> 575 <em class='comment'> * This creates a new pid file descriptor with the O_CLOEXEC flag set for</em>
+<a id='L576' name='L576'></a> 576 <em class='comment'> * the process identified by @pid. Currently, the process identified by</em>
+<a id='L577' name='L577'></a> 577 <em class='comment'> * @pid must be a thread-group leader. This restriction currently exists</em>
+<a id='L578' name='L578'></a> 578 <em class='comment'> * for all aspects of pidfds including pidfd creation (CLONE_PIDFD cannot</em>
+<a id='L579' name='L579'></a> 579 <em class='comment'> * be used with CLONE_THREAD) and pidfd polling (only supports thread group</em>
+<a id='L580' name='L580'></a> 580 <em class='comment'> * leaders).</em>
+<a id='L581' name='L581'></a> 581 <em class='comment'> *</em>
+<a id='L582' name='L582'></a> 582 <em class='comment'> * Return: On success, a cloexec pidfd is returned.</em>
+<a id='L583' name='L583'></a> 583 <em class='comment'> *         On error, a negative errno number will be returned.</em>
+<a id='L584' name='L584'></a> 584 <em class='comment'> */</em>
+<a id='L585' name='L585'></a> 585 SYSCALL_DEFINE2(pidfd_open, pid_t, pid, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>, flags)
+<a id='L586' name='L586'></a> 586 <em class='brace'>{</em>
+<a id='L587' name='L587'></a> 587         <strong class='reserved'>int</strong> fd;
+<a id='L588' name='L588'></a> 588         <strong class='reserved'>struct</strong> pid *p;
+<a id='L589' name='L589'></a> 589 
+<a id='L590' name='L590'></a> 590         <strong class='reserved'>if</strong> (flags &amp; ~PIDFD_NONBLOCK)
+<a id='L591' name='L591'></a> 591                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L592' name='L592'></a> 592 
+<a id='L593' name='L593'></a> 593         <strong class='reserved'>if</strong> (pid &lt;= 0)
+<a id='L594' name='L594'></a> 594                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L595' name='L595'></a> 595 
+<a id='L596' name='L596'></a> 596         p = <a href='../S/79.html#L461' title='Defined at 461 in pid.c.'>find_get_pid</a>(pid);
+<a id='L597' name='L597'></a> 597         <strong class='reserved'>if</strong> (!p)
+<a id='L598' name='L598'></a> 598                 <strong class='reserved'>return</strong> -ESRCH;
+<a id='L599' name='L599'></a> 599 
+<a id='L600' name='L600'></a> 600         <strong class='reserved'>if</strong> (pid_has_task(p, PIDTYPE_TGID))
+<a id='L601' name='L601'></a> 601                 fd = <a href='../S/79.html#L557' title='Defined at 557 in pid.c.'>pidfd_create</a>(p, flags);
+<a id='L602' name='L602'></a> 602         <strong class='reserved'>else</strong>
+<a id='L603' name='L603'></a> 603                 fd = -EINVAL;
+<a id='L604' name='L604'></a> 604 
+<a id='L605' name='L605'></a> 605         <a href='../S/79.html#L105' title='Defined at 105 in pid.c.'>put_pid</a>(p);
+<a id='L606' name='L606'></a> 606         <strong class='reserved'>return</strong> fd;
+<a id='L607' name='L607'></a> 607 <em class='brace'>}</em>
+<a id='L608' name='L608'></a> 608 
+<a id='L609' name='L609'></a> 609 <strong class='reserved'>void</strong> __init pid_idr_init(<strong class='reserved'>void</strong>)
+<a id='L610' name='L610'></a> 610 <em class='brace'>{</em>
+<a id='L611' name='L611'></a> 611         <em class='comment'>/* Verify no one has done anything silly: */</em>
+<a id='L612' name='L612'></a> 612         BUILD_BUG_ON(PID_MAX_LIMIT &gt;= PIDNS_ADDING);
+<a id='L613' name='L613'></a> 613 
+<a id='L614' name='L614'></a> 614         <em class='comment'>/* bump default and minimum pid_max based on number of cpus */</em>
+<a id='L615' name='L615'></a> 615         pid_max = min(pid_max_max, max_t(<strong class='reserved'>int</strong>, pid_max,
+<a id='L616' name='L616'></a> 616                                 PIDS_PER_CPU_DEFAULT * num_possible_cpus()));
+<a id='L617' name='L617'></a> 617         pid_max_min = max_t(<strong class='reserved'>int</strong>, pid_max_min,
+<a id='L618' name='L618'></a> 618                                 PIDS_PER_CPU_MIN * num_possible_cpus());
+<a id='L619' name='L619'></a> 619         pr_info("pid_max: default: %u minimum: %u\n", pid_max, pid_max_min);
+<a id='L620' name='L620'></a> 620 
+<a id='L621' name='L621'></a> 621         idr_init(&amp;init_pid_ns.idr);
+<a id='L622' name='L622'></a> 622 
+<a id='L623' name='L623'></a> 623         init_pid_ns.pid_cachep = KMEM_CACHE(pid,
+<a id='L624' name='L624'></a> 624                         SLAB_HWCACHE_ALIGN | SLAB_PANIC | SLAB_ACCOUNT);
+<a id='L625' name='L625'></a> 625 <em class='brace'>}</em>
+<a id='L626' name='L626'></a> 626 
+<a id='L627' name='L627'></a> 627 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> file *<a href='../S/79.html#L656' title='Referred from 656 in pid.c.'>__pidfd_fget</a>(<strong class='reserved'>struct</strong> task_struct *task, <strong class='reserved'>int</strong> fd)
+<a id='L628' name='L628'></a> 628 <em class='brace'>{</em>
+<a id='L629' name='L629'></a> 629         <strong class='reserved'>struct</strong> file *file;
+<a id='L630' name='L630'></a> 630         <strong class='reserved'>int</strong> ret;
+<a id='L631' name='L631'></a> 631 
+<a id='L632' name='L632'></a> 632         ret = <a href='../S/27.html#L1534' title='Defined at 1534 in locking/rwsem.c.'>down_read_killable</a>(&amp;task-&gt;signal-&gt;exec_update_lock);
+<a id='L633' name='L633'></a> 633         <strong class='reserved'>if</strong> (ret)
+<a id='L634' name='L634'></a> 634                 <strong class='reserved'>return</strong> ERR_PTR(ret);
+<a id='L635' name='L635'></a> 635 
+<a id='L636' name='L636'></a> 636         <strong class='reserved'>if</strong> (<a href='../S/251.html#L364' title='Defined at 364 in ptrace.c.'>ptrace_may_access</a>(task, PTRACE_MODE_ATTACH_REALCREDS))
+<a id='L637' name='L637'></a> 637                 file = fget_task(task, fd);
+<a id='L638' name='L638'></a> 638         <strong class='reserved'>else</strong>
+<a id='L639' name='L639'></a> 639                 file = ERR_PTR(-EPERM);
+<a id='L640' name='L640'></a> 640 
+<a id='L641' name='L641'></a> 641         <a href='../S/27.html#L1607' title='Defined at 1607 in locking/rwsem.c.'>up_read</a>(&amp;task-&gt;signal-&gt;exec_update_lock);
+<a id='L642' name='L642'></a> 642 
+<a id='L643' name='L643'></a> 643         <strong class='reserved'>return</strong> file ?: ERR_PTR(-EBADF);
+<a id='L644' name='L644'></a> 644 <em class='brace'>}</em>
+<a id='L645' name='L645'></a> 645 
+<a id='L646' name='L646'></a> 646 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../R/9981.html' title='Multiple referred from 2 places.'>pidfd_getfd</a>(<strong class='reserved'>struct</strong> pid *pid, <strong class='reserved'>int</strong> fd)
+<a id='L647' name='L647'></a> 647 <em class='brace'>{</em>
+<a id='L648' name='L648'></a> 648         <strong class='reserved'>struct</strong> task_struct *task;
+<a id='L649' name='L649'></a> 649         <strong class='reserved'>struct</strong> file *file;
+<a id='L650' name='L650'></a> 650         <strong class='reserved'>int</strong> ret;
+<a id='L651' name='L651'></a> 651 
+<a id='L652' name='L652'></a> 652         task = <a href='../S/79.html#L449' title='Defined at 449 in pid.c.'>get_pid_task</a>(pid, PIDTYPE_PID);
+<a id='L653' name='L653'></a> 653         <strong class='reserved'>if</strong> (!task)
+<a id='L654' name='L654'></a> 654                 <strong class='reserved'>return</strong> -ESRCH;
+<a id='L655' name='L655'></a> 655 
+<a id='L656' name='L656'></a> 656         file = <a href='../S/79.html#L627' title='Defined at 627 in pid.c.'>__pidfd_fget</a>(task, fd);
+<a id='L657' name='L657'></a> 657         put_task_struct(task);
+<a id='L658' name='L658'></a> 658         <strong class='reserved'>if</strong> (IS_ERR(file))
+<a id='L659' name='L659'></a> 659                 <strong class='reserved'>return</strong> PTR_ERR(file);
+<a id='L660' name='L660'></a> 660 
+<a id='L661' name='L661'></a> 661         ret = receive_fd(file, O_CLOEXEC);
+<a id='L662' name='L662'></a> 662         fput(file);
+<a id='L663' name='L663'></a> 663 
+<a id='L664' name='L664'></a> 664         <strong class='reserved'>return</strong> ret;
+<a id='L665' name='L665'></a> 665 <em class='brace'>}</em>
+<a id='L666' name='L666'></a> 666 
+<a id='L667' name='L667'></a> 667 <em class='comment'>/**</em>
+<a id='L668' name='L668'></a> 668 <em class='comment'> * sys_pidfd_getfd() - Get a file descriptor from another process</em>
+<a id='L669' name='L669'></a> 669 <em class='comment'> *</em>
+<a id='L670' name='L670'></a> 670 <em class='comment'> * @pidfd:      the pidfd file descriptor of the process</em>
+<a id='L671' name='L671'></a> 671 <em class='comment'> * @fd:         the file descriptor number to get</em>
+<a id='L672' name='L672'></a> 672 <em class='comment'> * @flags:      flags on how to get the fd (reserved)</em>
+<a id='L673' name='L673'></a> 673 <em class='comment'> *</em>
+<a id='L674' name='L674'></a> 674 <em class='comment'> * This syscall gets a copy of a file descriptor from another process</em>
+<a id='L675' name='L675'></a> 675 <em class='comment'> * based on the pidfd, and file descriptor number. It requires that</em>
+<a id='L676' name='L676'></a> 676 <em class='comment'> * the calling process has the ability to ptrace the process represented</em>
+<a id='L677' name='L677'></a> 677 <em class='comment'> * by the pidfd. The process which is having its file descriptor copied</em>
+<a id='L678' name='L678'></a> 678 <em class='comment'> * is otherwise unaffected.</em>
+<a id='L679' name='L679'></a> 679 <em class='comment'> *</em>
+<a id='L680' name='L680'></a> 680 <em class='comment'> * Return: On success, a cloexec file descriptor is returned.</em>
+<a id='L681' name='L681'></a> 681 <em class='comment'> *         On error, a negative errno number will be returned.</em>
+<a id='L682' name='L682'></a> 682 <em class='comment'> */</em>
+<a id='L683' name='L683'></a> 683 SYSCALL_DEFINE3(<a href='../S/79.html#L646' title='Defined at 646 in pid.c.'>pidfd_getfd</a>, <strong class='reserved'>int</strong>, pidfd, <strong class='reserved'>int</strong>, fd,
+<a id='L684' name='L684'></a> 684                 <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong>, flags)
+<a id='L685' name='L685'></a> 685 <em class='brace'>{</em>
+<a id='L686' name='L686'></a> 686         <strong class='reserved'>struct</strong> pid *pid;
+<a id='L687' name='L687'></a> 687         <strong class='reserved'>struct</strong> fd f;
+<a id='L688' name='L688'></a> 688         <strong class='reserved'>int</strong> ret;
+<a id='L689' name='L689'></a> 689 
+<a id='L690' name='L690'></a> 690         <em class='comment'>/* flags is currently unused - make sure it's unset */</em>
+<a id='L691' name='L691'></a> 691         <strong class='reserved'>if</strong> (flags)
+<a id='L692' name='L692'></a> 692                 <strong class='reserved'>return</strong> -EINVAL;
+<a id='L693' name='L693'></a> 693 
+<a id='L694' name='L694'></a> 694         f = fdget(pidfd);
+<a id='L695' name='L695'></a> 695         <strong class='reserved'>if</strong> (!f.file)
+<a id='L696' name='L696'></a> 696                 <strong class='reserved'>return</strong> -EBADF;
+<a id='L697' name='L697'></a> 697 
+<a id='L698' name='L698'></a> 698         pid = <a href='../S/48.html#L1732' title='Defined at 1732 in fork.c.'>pidfd_pid</a>(f.file);
+<a id='L699' name='L699'></a> 699         <strong class='reserved'>if</strong> (IS_ERR(pid))
+<a id='L700' name='L700'></a> 700                 ret = PTR_ERR(pid);
+<a id='L701' name='L701'></a> 701         <strong class='reserved'>else</strong>
+<a id='L702' name='L702'></a> 702                 ret = <a href='../S/79.html#L646' title='Defined at 646 in pid.c.'>pidfd_getfd</a>(pid, fd);
+<a id='L703' name='L703'></a> 703 
+<a id='L704' name='L704'></a> 704         fdput(f);
+<a id='L705' name='L705'></a> 705         <strong class='reserved'>return</strong> ret;
+<a id='L706' name='L706'></a> 706 <em class='brace'>}</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L105'>[^]</a><a href='#L683'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

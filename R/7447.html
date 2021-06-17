@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>htab_elem</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/383.html#L97'>htab_elem</a>          97 bpf/hashtab.c  	struct htab_elem *__percpu *extra_elems;</span>
+<span class='curline'><a href='../S/383.html#L113'>htab_elem</a>         113 bpf/hashtab.c  				struct htab_elem *batch_flink;</span>
+<span class='curline'><a href='../S/383.html#L184'>htab_elem</a>         184 bpf/hashtab.c  static inline void htab_elem_set_ptr(struct htab_elem *l, u32 key_size,</span>
+<span class='curline'><a href='../S/383.html#L190'>htab_elem</a>         190 bpf/hashtab.c  static inline void __percpu *htab_elem_get_ptr(struct htab_elem *l, u32 key_size)</span>
+<span class='curline'><a href='../S/383.html#L195'>htab_elem</a>         195 bpf/hashtab.c  static void *fd_htab_map_get_ptr(const struct bpf_map *map, struct htab_elem *l)</span>
+<span class='curline'><a href='../S/383.html#L200'>htab_elem</a>         200 bpf/hashtab.c  static struct htab_elem *get_htab_elem(struct bpf_htab *htab, int i)</span>
+<span class='curline'><a href='../S/383.html#L202'>htab_elem</a>         202 bpf/hashtab.c  	return (struct htab_elem *) (htab-&gt;elems + i * htab-&gt;elem_size);</span>
+<span class='curline'><a href='../S/383.html#L235'>htab_elem</a>         235 bpf/hashtab.c  static struct htab_elem *prealloc_lru_pop(struct bpf_htab *htab, void *key,</span>
+<span class='curline'><a href='../S/383.html#L239'>htab_elem</a>         239 bpf/hashtab.c  	struct htab_elem *l;</span>
+<span class='curline'><a href='../S/383.html#L242'>htab_elem</a>         242 bpf/hashtab.c  		l = container_of(node, struct htab_elem, lru_node);</span>
+<span class='curline'><a href='../S/383.html#L282'>htab_elem</a>         282 bpf/hashtab.c  				   offsetof(struct htab_elem, hash) -</span>
+<span class='curline'><a href='../S/383.html#L283'>htab_elem</a>         283 bpf/hashtab.c  				   offsetof(struct htab_elem, lru_node),</span>
+<span class='curline'><a href='../S/383.html#L294'>htab_elem</a>         294 bpf/hashtab.c  				 offsetof(struct htab_elem, lru_node),</span>
+<span class='curline'><a href='../S/383.html#L298'>htab_elem</a>         298 bpf/hashtab.c  				       htab-&gt;elems + offsetof(struct htab_elem, fnode),</span>
+<span class='curline'><a href='../S/383.html#L320'>htab_elem</a>         320 bpf/hashtab.c  	struct htab_elem *__percpu *pptr, *l_new;</span>
+<span class='curline'><a href='../S/383.html#L324'>htab_elem</a>         324 bpf/hashtab.c  	pptr = __alloc_percpu_gfp(sizeof(struct htab_elem *), 8,</span>
+<span class='curline'><a href='../S/383.html#L334'>htab_elem</a>         334 bpf/hashtab.c  		l_new = container_of(l, struct htab_elem, fnode);</span>
+<span class='curline'><a href='../S/383.html#L358'>htab_elem</a>         358 bpf/hashtab.c  	BUILD_BUG_ON(offsetof(struct htab_elem, htab) !=</span>
+<span class='curline'><a href='../S/383.html#L359'>htab_elem</a>         359 bpf/hashtab.c  		     offsetof(struct htab_elem, hash_node.pprev));</span>
+<span class='curline'><a href='../S/383.html#L360'>htab_elem</a>         360 bpf/hashtab.c  	BUILD_BUG_ON(offsetof(struct htab_elem, fnode.next) !=</span>
+<span class='curline'><a href='../S/383.html#L361'>htab_elem</a>         361 bpf/hashtab.c  		     offsetof(struct htab_elem, hash_node.pprev));</span>
+<span class='curline'><a href='../S/383.html#L400'>htab_elem</a>         400 bpf/hashtab.c  	    MAX_BPF_STACK - sizeof(struct htab_elem))</span>
+<span class='curline'><a href='../S/383.html#L449'>htab_elem</a>         449 bpf/hashtab.c  	htab-&gt;elem_size = sizeof(struct htab_elem) +</span>
+<span class='curline'><a href='../S/383.html#L534'>htab_elem</a>         534 bpf/hashtab.c  static struct htab_elem *lookup_elem_raw(struct hlist_nulls_head *head, u32 hash,</span>
+<span class='curline'><a href='../S/383.html#L538'>htab_elem</a>         538 bpf/hashtab.c  	struct htab_elem *l;</span>
+<span class='curline'><a href='../S/383.html#L551'>htab_elem</a>         551 bpf/hashtab.c  static struct htab_elem *lookup_nulls_elem_raw(struct hlist_nulls_head *head,</span>
+<span class='curline'><a href='../S/383.html#L556'>htab_elem</a>         556 bpf/hashtab.c  	struct htab_elem *l;</span>
+<span class='curline'><a href='../S/383.html#L578'>htab_elem</a>         578 bpf/hashtab.c  	struct htab_elem *l;</span>
+<span class='curline'><a href='../S/383.html#L596'>htab_elem</a>         596 bpf/hashtab.c  	struct htab_elem *l = __htab_map_lookup_elem(map, key);</span>
+<span class='curline'><a href='../S/383.html#L625'>htab_elem</a>         625 bpf/hashtab.c  				offsetof(struct htab_elem, key) +</span>
+<span class='curline'><a href='../S/383.html#L633'>htab_elem</a>         633 bpf/hashtab.c  	struct htab_elem *l = __htab_map_lookup_elem(map, key);</span>
+<span class='curline'><a href='../S/383.html#L666'>htab_elem</a>         666 bpf/hashtab.c  			      offsetof(struct htab_elem, lru_node) +</span>
+<span class='curline'><a href='../S/383.html#L670'>htab_elem</a>         670 bpf/hashtab.c  			     offsetof(struct htab_elem, lru_node) +</span>
+<span class='curline'><a href='../S/383.html#L674'>htab_elem</a>         674 bpf/hashtab.c  				offsetof(struct htab_elem, key) +</span>
+<span class='curline'><a href='../S/383.html#L685'>htab_elem</a>         685 bpf/hashtab.c  	struct htab_elem *l = NULL, *tgt_l;</span>
+<span class='curline'><a href='../S/383.html#L691'>htab_elem</a>         691 bpf/hashtab.c  	tgt_l = container_of(node, struct htab_elem, lru_node);</span>
+<span class='curline'><a href='../S/383.html#L713'>htab_elem</a>         713 bpf/hashtab.c  	struct htab_elem *l, *next_l;</span>
+<span class='curline'><a href='../S/383.html#L736'>htab_elem</a>         736 bpf/hashtab.c  				  struct htab_elem, hash_node);</span>
+<span class='curline'><a href='../S/383.html#L755'>htab_elem</a>         755 bpf/hashtab.c  					  struct htab_elem, hash_node);</span>
+<span class='curline'><a href='../S/383.html#L767'>htab_elem</a>         767 bpf/hashtab.c  static void htab_elem_free(struct bpf_htab *htab, struct htab_elem *l)</span>
+<span class='curline'><a href='../S/383.html#L776'>htab_elem</a>         776 bpf/hashtab.c  	struct htab_elem *l = container_of(head, struct htab_elem, rcu);</span>
+<span class='curline'><a href='../S/383.html#L782'>htab_elem</a>         782 bpf/hashtab.c  static void htab_put_fd_value(struct bpf_htab *htab, struct htab_elem *l)</span>
+<span class='curline'><a href='../S/383.html#L793'>htab_elem</a>         793 bpf/hashtab.c  static void free_htab_elem(struct bpf_htab *htab, struct htab_elem *l)</span>
+<span class='curline'><a href='../S/383.html#L856'>htab_elem</a>         856 bpf/hashtab.c  static struct htab_elem *alloc_htab_elem(struct bpf_htab *htab, void *key,</span>
+<span class='curline'><a href='../S/383.html#L859'>htab_elem</a>         859 bpf/hashtab.c  					 struct htab_elem *old_elem)</span>
+<span class='curline'><a href='../S/383.html#L863'>htab_elem</a>         863 bpf/hashtab.c  	struct htab_elem *l_new, **pl_new;</span>
+<span class='curline'><a href='../S/383.html#L881'>htab_elem</a>         881 bpf/hashtab.c  			l_new = container_of(l, struct htab_elem, fnode);</span>
+<span class='curline'><a href='../S/383.html#L940'>htab_elem</a>         940 bpf/hashtab.c  static int check_flags(struct bpf_htab *htab, struct htab_elem *l_old,</span>
+<span class='curline'><a href='../S/383.html#L959'>htab_elem</a>         959 bpf/hashtab.c  	struct htab_elem *l_new = NULL, *l_old;</span>
+<span class='curline'><a href='../S/383.html#L1050'>htab_elem</a>        1050 bpf/hashtab.c  	struct htab_elem *l_new, *l_old = NULL;</span>
+<span class='curline'><a href='../S/383.html#L1114'>htab_elem</a>        1114 bpf/hashtab.c  	struct htab_elem *l_new = NULL, *l_old;</span>
+<span class='curline'><a href='../S/383.html#L1166'>htab_elem</a>        1166 bpf/hashtab.c  	struct htab_elem *l_new = NULL, *l_old;</span>
+<span class='curline'><a href='../S/383.html#L1244'>htab_elem</a>        1244 bpf/hashtab.c  	struct htab_elem *l;</span>
+<span class='curline'><a href='../S/383.html#L1276'>htab_elem</a>        1276 bpf/hashtab.c  	struct htab_elem *l;</span>
+<span class='curline'><a href='../S/383.html#L1311'>htab_elem</a>        1311 bpf/hashtab.c  		struct htab_elem *l;</span>
+<span class='curline'><a href='../S/383.html#L1379'>htab_elem</a>        1379 bpf/hashtab.c  	struct htab_elem *node_to_free = NULL;</span>
+<span class='curline'><a href='../S/383.html#L1385'>htab_elem</a>        1385 bpf/hashtab.c  	struct htab_elem *l;</span>
+<span class='curline'><a href='../S/383.html#L1655'>htab_elem</a>        1655 bpf/hashtab.c  static struct htab_elem *</span>
+<span class='curline'><a href='../S/383.html#L1657'>htab_elem</a>        1657 bpf/hashtab.c  			   struct htab_elem *prev_elem)</span>
+<span class='curline'><a href='../S/383.html#L1664'>htab_elem</a>        1664 bpf/hashtab.c  	struct htab_elem *elem;</span>
+<span class='curline'><a href='../S/383.html#L1677'>htab_elem</a>        1677 bpf/hashtab.c  		elem = hlist_nulls_entry_safe(n, struct htab_elem, hash_node);</span>
+<span class='curline'><a href='../S/383.html#L1714'>htab_elem</a>        1714 bpf/hashtab.c  	struct htab_elem *elem;</span>
+<span class='curline'><a href='../S/383.html#L1734'>htab_elem</a>        1734 bpf/hashtab.c  static int __bpf_hash_map_seq_show(struct seq_file *seq, struct htab_elem *elem)</span>
+<span class='curline'><a href='../S/383.html#L1870'>htab_elem</a>        1870 bpf/hashtab.c  	struct htab_elem *l = __htab_map_lookup_elem(map, key);</span>
+<span class='curline'><a href='../S/383.html#L1880'>htab_elem</a>        1880 bpf/hashtab.c  	struct htab_elem *l = __htab_map_lookup_elem(map, key);</span>
+<span class='curline'><a href='../S/383.html#L1892'>htab_elem</a>        1892 bpf/hashtab.c  	struct htab_elem *l;</span>
+<span class='curline'><a href='../S/383.html#L1943'>htab_elem</a>        1943 bpf/hashtab.c  	struct htab_elem *l;</span>
+<span class='curline'><a href='../S/383.html#L2015'>htab_elem</a>        2015 bpf/hashtab.c  	struct htab_elem *l;</span>
+<span class='curline'><a href='../S/383.html#L2110'>htab_elem</a>        2110 bpf/hashtab.c  				offsetof(struct htab_elem, key) +</span>
+</pre>
+</body>
+</html>

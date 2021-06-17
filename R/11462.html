@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>remote</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/188.html#L64'>remote</a>             64 kcov.c         	bool			remote;</span>
+<span class='curline'><a href='../S/188.html#L104'>remote</a>            104 kcov.c         	struct kcov_remote *remote;</span>
+<span class='curline'><a href='../S/188.html#L106'>remote</a>            106 kcov.c         	hash_for_each_possible(kcov_remote_map, remote, hnode, handle) {</span>
+<span class='curline'><a href='../S/188.html#L107'>remote</a>            107 kcov.c         		if (remote-&gt;handle == handle)</span>
+<span class='curline'><a href='../S/188.html#L108'>remote</a>            108 kcov.c         			return remote;</span>
+<span class='curline'><a href='../S/188.html#L116'>remote</a>            116 kcov.c         	struct kcov_remote *remote;</span>
+<span class='curline'><a href='../S/188.html#L120'>remote</a>            120 kcov.c         	remote = kmalloc(sizeof(*remote), GFP_ATOMIC);</span>
+<span class='curline'><a href='../S/188.html#L121'>remote</a>            121 kcov.c         	if (!remote)</span>
+<span class='curline'><a href='../S/188.html#L123'>remote</a>            123 kcov.c         	remote-&gt;handle = handle;</span>
+<span class='curline'><a href='../S/188.html#L124'>remote</a>            124 kcov.c         	remote-&gt;kcov = kcov;</span>
+<span class='curline'><a href='../S/188.html#L125'>remote</a>            125 kcov.c         	hash_add(kcov_remote_map, &amp;remote-&gt;hnode, handle);</span>
+<span class='curline'><a href='../S/188.html#L126'>remote</a>            126 kcov.c         	return remote;</span>
+<span class='curline'><a href='../S/188.html#L366'>remote</a>            366 kcov.c         	kcov-&gt;remote = false;</span>
+<span class='curline'><a href='../S/188.html#L374'>remote</a>            374 kcov.c         	struct kcov_remote *remote;</span>
+<span class='curline'><a href='../S/188.html#L379'>remote</a>            379 kcov.c         	hash_for_each_safe(kcov_remote_map, bkt, tmp, remote, hnode) {</span>
+<span class='curline'><a href='../S/188.html#L380'>remote</a>            380 kcov.c         		if (remote-&gt;kcov != kcov)</span>
+<span class='curline'><a href='../S/188.html#L382'>remote</a>            382 kcov.c         		hash_del(&amp;remote-&gt;hnode);</span>
+<span class='curline'><a href='../S/188.html#L383'>remote</a>            383 kcov.c         		kfree(remote);</span>
+<span class='curline'><a href='../S/188.html#L393'>remote</a>            393 kcov.c         	if (kcov-&gt;remote)</span>
+<span class='curline'><a href='../S/188.html#L567'>remote</a>            567 kcov.c         	struct kcov_remote *remote;</span>
+<span class='curline'><a href='../S/188.html#L639'>remote</a>            639 kcov.c         		kcov-&gt;remote = true;</span>
+<span class='curline'><a href='../S/188.html#L650'>remote</a>            650 kcov.c         			remote = kcov_remote_add(kcov, remote_arg-&gt;handles[i]);</span>
+<span class='curline'><a href='../S/188.html#L651'>remote</a>            651 kcov.c         			if (IS_ERR(remote)) {</span>
+<span class='curline'><a href='../S/188.html#L655'>remote</a>            655 kcov.c         				return PTR_ERR(remote);</span>
+<span class='curline'><a href='../S/188.html#L666'>remote</a>            666 kcov.c         			remote = kcov_remote_add(kcov,</span>
+<span class='curline'><a href='../S/188.html#L668'>remote</a>            668 kcov.c         			if (IS_ERR(remote)) {</span>
+<span class='curline'><a href='../S/188.html#L672'>remote</a>            672 kcov.c         				return PTR_ERR(remote);</span>
+<span class='curline'><a href='../S/188.html#L814'>remote</a>            814 kcov.c         	struct kcov_remote *remote;</span>
+<span class='curline'><a href='../S/188.html#L849'>remote</a>            849 kcov.c         	remote = kcov_remote_find(handle);</span>
+<span class='curline'><a href='../S/188.html#L850'>remote</a>            850 kcov.c         	if (!remote) {</span>
+<span class='curline'><a href='../S/188.html#L856'>remote</a>            856 kcov.c         	kcov = remote-&gt;kcov;</span>
+<span class='curline'><a href='../S/188.html#L1006'>remote</a>           1006 kcov.c         	if (sequence == kcov-&gt;sequence &amp;&amp; kcov-&gt;remote)</span>
+<span class='curline'><a href='../S/464.html#L2190'>remote</a>           2190 sched/fair.c   	unsigned long remote = p-&gt;numa_faults_locality[0];</span>
+<span class='curline'><a href='../S/464.html#L2217'>remote</a>           2217 sched/fair.c   	lr_ratio = (local * NUMA_PERIOD_SLOTS) / (local + remote);</span>
+<span class='curline'><a href='../S/464.html#L8760'>remote</a>           8760 sched/fair.c   		return remote;</span>
+<span class='curline'><a href='../S/464.html#L8769'>remote</a>           8769 sched/fair.c   		return remote;</span>
+</pre>
+</body>
+</html>

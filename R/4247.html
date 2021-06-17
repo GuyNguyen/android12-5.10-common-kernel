@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>cfs_bandwidth</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/441.html#L7452'>cfs_bandwidth</a>    7452 sched/core.c   		init_cfs_bandwidth(&amp;root_task_group.cfs_bandwidth);</span>
+<span class='curline'><a href='../S/441.html#L8288'>cfs_bandwidth</a>    8288 sched/core.c   	struct cfs_bandwidth *cfs_b = &amp;tg-&gt;cfs_bandwidth;</span>
+<span class='curline'><a href='../S/441.html#L8371'>cfs_bandwidth</a>    8371 sched/core.c   	period = ktime_to_ns(tg-&gt;cfs_bandwidth.period);</span>
+<span class='curline'><a href='../S/441.html#L8386'>cfs_bandwidth</a>    8386 sched/core.c   	if (tg-&gt;cfs_bandwidth.quota == RUNTIME_INF)</span>
+<span class='curline'><a href='../S/441.html#L8389'>cfs_bandwidth</a>    8389 sched/core.c   	quota_us = tg-&gt;cfs_bandwidth.quota;</span>
+<span class='curline'><a href='../S/441.html#L8403'>cfs_bandwidth</a>    8403 sched/core.c   	quota = tg-&gt;cfs_bandwidth.quota;</span>
+<span class='curline'><a href='../S/441.html#L8412'>cfs_bandwidth</a>    8412 sched/core.c   	cfs_period_us = ktime_to_ns(tg-&gt;cfs_bandwidth.period);</span>
+<span class='curline'><a href='../S/441.html#L8474'>cfs_bandwidth</a>    8474 sched/core.c   	struct cfs_bandwidth *cfs_b = &amp;tg-&gt;cfs_bandwidth;</span>
+<span class='curline'><a href='../S/441.html#L8480'>cfs_bandwidth</a>    8480 sched/core.c   		struct cfs_bandwidth *parent_b = &amp;tg-&gt;parent-&gt;cfs_bandwidth;</span>
+<span class='curline'><a href='../S/441.html#L8528'>cfs_bandwidth</a>    8528 sched/core.c   	struct cfs_bandwidth *cfs_b = &amp;tg-&gt;cfs_bandwidth;</span>
+<span class='curline'><a href='../S/441.html#L8640'>cfs_bandwidth</a>    8640 sched/core.c   		struct cfs_bandwidth *cfs_b = &amp;tg-&gt;cfs_bandwidth;</span>
+<span class='curline'><a href='../S/464.html#L4664'>cfs_bandwidth</a>    4664 sched/fair.c   void __refill_cfs_bandwidth_runtime(struct cfs_bandwidth *cfs_b)</span>
+<span class='curline'><a href='../S/464.html#L4670'>cfs_bandwidth</a>    4670 sched/fair.c   static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)</span>
+<span class='curline'><a href='../S/464.html#L4672'>cfs_bandwidth</a>    4672 sched/fair.c   	return &amp;tg-&gt;cfs_bandwidth;</span>
+<span class='curline'><a href='../S/464.html#L4676'>cfs_bandwidth</a>    4676 sched/fair.c   static int __assign_cfs_rq_runtime(struct cfs_bandwidth *cfs_b,</span>
+<span class='curline'><a href='../S/464.html#L4706'>cfs_bandwidth</a>    4706 sched/fair.c   	struct cfs_bandwidth *cfs_b = tg_cfs_bandwidth(cfs_rq-&gt;tg);</span>
+<span class='curline'><a href='../S/464.html#L4807'>cfs_bandwidth</a>    4807 sched/fair.c   	struct cfs_bandwidth *cfs_b = tg_cfs_bandwidth(cfs_rq-&gt;tg);</span>
+<span class='curline'><a href='../S/464.html#L4876'>cfs_bandwidth</a>    4876 sched/fair.c   	struct cfs_bandwidth *cfs_b = tg_cfs_bandwidth(cfs_rq-&gt;tg);</span>
+<span class='curline'><a href='../S/464.html#L4958'>cfs_bandwidth</a>    4958 sched/fair.c   static void distribute_cfs_runtime(struct cfs_bandwidth *cfs_b)</span>
+<span class='curline'><a href='../S/464.html#L5005'>cfs_bandwidth</a>    5005 sched/fair.c   static int do_sched_cfs_period_timer(struct cfs_bandwidth *cfs_b, int overrun, unsigned long flags)</span>
+<span class='curline'><a href='../S/464.html#L5074'>cfs_bandwidth</a>    5074 sched/fair.c   static int runtime_refresh_within(struct cfs_bandwidth *cfs_b, u64 min_expire)</span>
+<span class='curline'><a href='../S/464.html#L5091'>cfs_bandwidth</a>    5091 sched/fair.c   static void start_cfs_slack_bandwidth(struct cfs_bandwidth *cfs_b)</span>
+<span class='curline'><a href='../S/464.html#L5112'>cfs_bandwidth</a>    5112 sched/fair.c   	struct cfs_bandwidth *cfs_b = tg_cfs_bandwidth(cfs_rq-&gt;tg);</span>
+<span class='curline'><a href='../S/464.html#L5148'>cfs_bandwidth</a>    5148 sched/fair.c   static void do_sched_cfs_slack_timer(struct cfs_bandwidth *cfs_b)</span>
+<span class='curline'><a href='../S/464.html#L5238'>cfs_bandwidth</a>    5238 sched/fair.c   	struct cfs_bandwidth *cfs_b =</span>
+<span class='curline'><a href='../S/464.html#L5239'>cfs_bandwidth</a>    5239 sched/fair.c   		container_of(timer, struct cfs_bandwidth, slack_timer);</span>
+<span class='curline'><a href='../S/464.html#L5250'>cfs_bandwidth</a>    5250 sched/fair.c   	struct cfs_bandwidth *cfs_b =</span>
+<span class='curline'><a href='../S/464.html#L5251'>cfs_bandwidth</a>    5251 sched/fair.c   		container_of(timer, struct cfs_bandwidth, period_timer);</span>
+<span class='curline'><a href='../S/464.html#L5302'>cfs_bandwidth</a>    5302 sched/fair.c   void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b)</span>
+<span class='curline'><a href='../S/464.html#L5323'>cfs_bandwidth</a>    5323 sched/fair.c   void start_cfs_bandwidth(struct cfs_bandwidth *cfs_b)</span>
+<span class='curline'><a href='../S/464.html#L5335'>cfs_bandwidth</a>    5335 sched/fair.c   static void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b)</span>
+<span class='curline'><a href='../S/464.html#L5361'>cfs_bandwidth</a>    5361 sched/fair.c   		struct cfs_bandwidth *cfs_b = &amp;tg-&gt;cfs_bandwidth;</span>
+<span class='curline'><a href='../S/464.html#L5431'>cfs_bandwidth</a>    5431 sched/fair.c   void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}</span>
+<span class='curline'><a href='../S/464.html#L5437'>cfs_bandwidth</a>    5437 sched/fair.c   static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)</span>
+<span class='curline'><a href='../S/464.html#L5441'>cfs_bandwidth</a>    5441 sched/fair.c   static inline void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}</span>
+<span class='curline'><a href='../S/447.html#L425'>cfs_bandwidth</a>     425 sched/sched.h  	struct cfs_bandwidth	cfs_bandwidth;</span>
+<span class='curline'><a href='../S/447.html#L486'>cfs_bandwidth</a>     486 sched/sched.h  extern void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b);</span>
+<span class='curline'><a href='../S/447.html#L488'>cfs_bandwidth</a>     488 sched/sched.h  extern void __refill_cfs_bandwidth_runtime(struct cfs_bandwidth *cfs_b);</span>
+<span class='curline'><a href='../S/447.html#L489'>cfs_bandwidth</a>     489 sched/sched.h  extern void start_cfs_bandwidth(struct cfs_bandwidth *cfs_b);</span>
+</pre>
+</body>
+</html>

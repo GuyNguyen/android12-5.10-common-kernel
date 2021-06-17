@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>perf_buffer</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/331.html#L4643'>perf_buffer</a>      4643 events/core.c  			       struct perf_buffer *rb);</span>
+<span class='curline'><a href='../S/331.html#L5328'>perf_buffer</a>      5328 events/core.c  	struct perf_buffer *rb;</span>
+<span class='curline'><a href='../S/331.html#L5570'>perf_buffer</a>      5570 events/core.c  		struct perf_buffer *rb;</span>
+<span class='curline'><a href='../S/331.html#L5706'>perf_buffer</a>      5706 events/core.c  	struct perf_buffer *rb;</span>
+<span class='curline'><a href='../S/331.html#L5738'>perf_buffer</a>      5738 events/core.c  	struct perf_buffer *rb;</span>
+<span class='curline'><a href='../S/331.html#L5789'>perf_buffer</a>      5789 events/core.c  	struct perf_buffer *rb;</span>
+<span class='curline'><a href='../S/331.html#L5822'>perf_buffer</a>      5822 events/core.c  			       struct perf_buffer *rb)</span>
+<span class='curline'><a href='../S/331.html#L5824'>perf_buffer</a>      5824 events/core.c  	struct perf_buffer *old_rb = NULL;</span>
+<span class='curline'><a href='../S/331.html#L5882'>perf_buffer</a>      5882 events/core.c  	struct perf_buffer *rb;</span>
+<span class='curline'><a href='../S/331.html#L5893'>perf_buffer</a>      5893 events/core.c  struct perf_buffer *ring_buffer_get(struct perf_event *event)</span>
+<span class='curline'><a href='../S/331.html#L5895'>perf_buffer</a>      5895 events/core.c  	struct perf_buffer *rb;</span>
+<span class='curline'><a href='../S/331.html#L5908'>perf_buffer</a>      5908 events/core.c  void ring_buffer_put(struct perf_buffer *rb)</span>
+<span class='curline'><a href='../S/331.html#L5945'>perf_buffer</a>      5945 events/core.c  	struct perf_buffer *rb = ring_buffer_get(event);</span>
+<span class='curline'><a href='../S/331.html#L6065'>perf_buffer</a>      6065 events/core.c  	struct perf_buffer *rb = NULL;</span>
+<span class='curline'><a href='../S/331.html#L6547'>perf_buffer</a>      6547 events/core.c  	struct perf_buffer *rb;</span>
+<span class='curline'><a href='../S/331.html#L6580'>perf_buffer</a>      6580 events/core.c  long perf_pmu_snapshot_aux(struct perf_buffer *rb,</span>
+<span class='curline'><a href='../S/331.html#L6619'>perf_buffer</a>      6619 events/core.c  	struct perf_buffer *rb;</span>
+<span class='curline'><a href='../S/331.html#L6998'>perf_buffer</a>      6998 events/core.c  			struct perf_buffer *rb = handle-&gt;rb;</span>
+<span class='curline'><a href='../S/331.html#L7457'>perf_buffer</a>      7457 events/core.c  	struct perf_buffer	*rb;</span>
+<span class='curline'><a href='../S/331.html#L7465'>perf_buffer</a>      7465 events/core.c  	struct perf_buffer *rb = ro-&gt;rb;</span>
+<span class='curline'><a href='../S/331.html#L11521'>perf_buffer</a>      11521 events/core.c  	struct perf_buffer *rb = NULL;</span>
+<span class='curline'><a href='../S/335.html#L61'>perf_buffer</a>        61 events/internal.h extern void rb_free(struct perf_buffer *rb);</span>
+<span class='curline'><a href='../S/335.html#L65'>perf_buffer</a>        65 events/internal.h 	struct perf_buffer *rb;</span>
+<span class='curline'><a href='../S/335.html#L67'>perf_buffer</a>        67 events/internal.h 	rb = container_of(rcu_head, struct perf_buffer, rcu_head);</span>
+<span class='curline'><a href='../S/335.html#L71'>perf_buffer</a>        71 events/internal.h static inline void rb_toggle_paused(struct perf_buffer *rb, bool pause)</span>
+<span class='curline'><a href='../S/335.html#L79'>perf_buffer</a>        79 events/internal.h extern struct perf_buffer *</span>
+<span class='curline'><a href='../S/335.html#L82'>perf_buffer</a>        82 events/internal.h extern int rb_alloc_aux(struct perf_buffer *rb, struct perf_event *event,</span>
+<span class='curline'><a href='../S/335.html#L84'>perf_buffer</a>        84 events/internal.h extern void rb_free_aux(struct perf_buffer *rb);</span>
+<span class='curline'><a href='../S/335.html#L85'>perf_buffer</a>        85 events/internal.h extern struct perf_buffer *ring_buffer_get(struct perf_event *event);</span>
+<span class='curline'><a href='../S/335.html#L86'>perf_buffer</a>        86 events/internal.h extern void ring_buffer_put(struct perf_buffer *rb);</span>
+<span class='curline'><a href='../S/335.html#L88'>perf_buffer</a>        88 events/internal.h static inline bool rb_has_aux(struct perf_buffer *rb)</span>
+<span class='curline'><a href='../S/335.html#L97'>perf_buffer</a>        97 events/internal.h perf_mmap_to_page(struct perf_buffer *rb, unsigned long pgoff);</span>
+<span class='curline'><a href='../S/335.html#L106'>perf_buffer</a>       106 events/internal.h static inline int page_order(struct perf_buffer *rb)</span>
+<span class='curline'><a href='../S/335.html#L113'>perf_buffer</a>       113 events/internal.h static inline int page_order(struct perf_buffer *rb)</span>
+<span class='curline'><a href='../S/335.html#L119'>perf_buffer</a>       119 events/internal.h static inline unsigned long perf_data_size(struct perf_buffer *rb)</span>
+<span class='curline'><a href='../S/335.html#L124'>perf_buffer</a>       124 events/internal.h static inline unsigned long perf_aux_size(struct perf_buffer *rb)</span>
+<span class='curline'><a href='../S/335.html#L144'>perf_buffer</a>       144 events/internal.h 			struct perf_buffer *rb = handle-&gt;rb;	\</span>
+<span class='curline'><a href='../S/330.html#L38'>perf_buffer</a>        38 events/ring_buffer.c 	struct perf_buffer *rb = handle-&gt;rb;</span>
+<span class='curline'><a href='../S/330.html#L52'>perf_buffer</a>        52 events/ring_buffer.c 	struct perf_buffer *rb = handle-&gt;rb;</span>
+<span class='curline'><a href='../S/330.html#L154'>perf_buffer</a>       154 events/ring_buffer.c 	struct perf_buffer *rb;</span>
+<span class='curline'><a href='../S/330.html#L306'>perf_buffer</a>       306 events/ring_buffer.c ring_buffer_init(struct perf_buffer *rb, long watermark, int flags)</span>
+<span class='curline'><a href='../S/330.html#L366'>perf_buffer</a>       366 events/ring_buffer.c 	struct perf_buffer *rb;</span>
+<span class='curline'><a href='../S/330.html#L454'>perf_buffer</a>       454 events/ring_buffer.c static __always_inline bool rb_need_aux_wakeup(struct perf_buffer *rb)</span>
+<span class='curline'><a href='../S/330.html#L480'>perf_buffer</a>       480 events/ring_buffer.c 	struct perf_buffer *rb = handle-&gt;rb;</span>
+<span class='curline'><a href='../S/330.html#L537'>perf_buffer</a>       537 events/ring_buffer.c 	struct perf_buffer *rb = handle-&gt;rb;</span>
+<span class='curline'><a href='../S/330.html#L574'>perf_buffer</a>       574 events/ring_buffer.c 	struct perf_buffer *rb = aux_handle-&gt;rb;</span>
+<span class='curline'><a href='../S/330.html#L631'>perf_buffer</a>       631 events/ring_buffer.c static void rb_free_aux_page(struct perf_buffer *rb, int idx)</span>
+<span class='curline'><a href='../S/330.html#L640'>perf_buffer</a>       640 events/ring_buffer.c static void __rb_free_aux(struct perf_buffer *rb)</span>
+<span class='curline'><a href='../S/330.html#L667'>perf_buffer</a>       667 events/ring_buffer.c int rb_alloc_aux(struct perf_buffer *rb, struct perf_event *event,</span>
+<span class='curline'><a href='../S/330.html#L758'>perf_buffer</a>       758 events/ring_buffer.c void rb_free_aux(struct perf_buffer *rb)</span>
+<span class='curline'><a href='../S/330.html#L771'>perf_buffer</a>       771 events/ring_buffer.c __perf_mmap_to_page(struct perf_buffer *rb, unsigned long pgoff)</span>
+<span class='curline'><a href='../S/330.html#L803'>perf_buffer</a>       803 events/ring_buffer.c struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)</span>
+<span class='curline'><a href='../S/330.html#L805'>perf_buffer</a>       805 events/ring_buffer.c 	struct perf_buffer *rb;</span>
+<span class='curline'><a href='../S/330.html#L809'>perf_buffer</a>       809 events/ring_buffer.c 	size = sizeof(struct perf_buffer);</span>
+<span class='curline'><a href='../S/330.html#L848'>perf_buffer</a>       848 events/ring_buffer.c void rb_free(struct perf_buffer *rb)</span>
+<span class='curline'><a href='../S/330.html#L859'>perf_buffer</a>       859 events/ring_buffer.c static int data_page_nr(struct perf_buffer *rb)</span>
+<span class='curline'><a href='../S/330.html#L865'>perf_buffer</a>       865 events/ring_buffer.c __perf_mmap_to_page(struct perf_buffer *rb, unsigned long pgoff)</span>
+<span class='curline'><a href='../S/330.html#L883'>perf_buffer</a>       883 events/ring_buffer.c 	struct perf_buffer *rb;</span>
+<span class='curline'><a href='../S/330.html#L887'>perf_buffer</a>       887 events/ring_buffer.c 	rb = container_of(work, struct perf_buffer, work);</span>
+<span class='curline'><a href='../S/330.html#L899'>perf_buffer</a>       899 events/ring_buffer.c void rb_free(struct perf_buffer *rb)</span>
+<span class='curline'><a href='../S/330.html#L904'>perf_buffer</a>       904 events/ring_buffer.c struct perf_buffer *rb_alloc(int nr_pages, long watermark, int cpu, int flags)</span>
+<span class='curline'><a href='../S/330.html#L906'>perf_buffer</a>       906 events/ring_buffer.c 	struct perf_buffer *rb;</span>
+<span class='curline'><a href='../S/330.html#L910'>perf_buffer</a>       910 events/ring_buffer.c 	size = sizeof(struct perf_buffer);</span>
+<span class='curline'><a href='../S/330.html#L944'>perf_buffer</a>       944 events/ring_buffer.c perf_mmap_to_page(struct perf_buffer *rb, unsigned long pgoff)</span>
+</pre>
+</body>
+</html>

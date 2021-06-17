@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>schedstat_val</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/441.html#L8539'>schedstat_val</a>    8539 sched/core.c   			ws += schedstat_val(tg-&gt;se[i]-&gt;statistics.wait_sum);</span>
+<span class='curline'><a href='../S/460.html#L434'>schedstat_val</a>     434 sched/debug.c  #define P_SCHEDSTAT(F)	SEQ_printf(m, "  .%-30s: %lld\n",	#F, (long long)schedstat_val(F))</span>
+<span class='curline'><a href='../S/460.html#L436'>schedstat_val</a>     436 sched/debug.c  #define PN_SCHEDSTAT(F)	SEQ_printf(m, "  .%-30s: %lld.%06ld\n", #F, SPLIT_NS((long long)schedstat_val(F)))</span>
+<span class='curline'><a href='../S/460.html#L730'>schedstat_val</a>     730 sched/debug.c  #define P(n) SEQ_printf(m, "  .%-30s: %d\n", #n, schedstat_val(rq-&gt;n));</span>
+<span class='curline'><a href='../S/460.html#L945'>schedstat_val</a>     945 sched/debug.c  #define P_SCHEDSTAT(F)  __PS(#F, schedstat_val(p-&gt;F))</span>
+<span class='curline'><a href='../S/460.html#L946'>schedstat_val</a>     946 sched/debug.c  #define PN_SCHEDSTAT(F) __PSN(#F, schedstat_val(p-&gt;F))</span>
+<span class='curline'><a href='../S/464.html#L909'>schedstat_val</a>     909 sched/fair.c   	prev_wait_start = schedstat_val(se-&gt;statistics.wait_start);</span>
+<span class='curline'><a href='../S/464.html#L927'>schedstat_val</a>     927 sched/fair.c   	delta = rq_clock(rq_of(cfs_rq)) - schedstat_val(se-&gt;statistics.wait_start);</span>
+<span class='curline'><a href='../S/464.html#L944'>schedstat_val</a>     944 sched/fair.c   		      max(schedstat_val(se-&gt;statistics.wait_max), delta));</span>
+<span class='curline'><a href='../S/464.html#L959'>schedstat_val</a>     959 sched/fair.c   	sleep_start = schedstat_val(se-&gt;statistics.sleep_start);</span>
+<span class='curline'><a href='../S/464.html#L960'>schedstat_val</a>     960 sched/fair.c   	block_start = schedstat_val(se-&gt;statistics.block_start);</span>
+<span class='curline'><a href='../S/464.html#L971'>schedstat_val</a>     971 sched/fair.c   		if (unlikely(delta &gt; schedstat_val(se-&gt;statistics.sleep_max)))</span>
+<span class='curline'><a href='../S/464.html#L988'>schedstat_val</a>     988 sched/fair.c   		if (unlikely(delta &gt; schedstat_val(se-&gt;statistics.block_max)))</span>
+<span class='curline'><a href='../S/464.html#L4472'>schedstat_val</a>    4472 sched/fair.c   			max((u64)schedstat_val(se-&gt;statistics.slice_max),</span>
+</pre>
+</body>
+</html>

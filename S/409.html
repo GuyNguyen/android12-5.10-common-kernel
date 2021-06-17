@@ -1,0 +1,288 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>bpf/disasm.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/494.html'>bpf</a>/disasm.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L16'>[^]</a><a href='#L117'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L16' title='Defined at 16.'>__func_get_name</a></li>
+<li><a href='#L36' title='Defined at 36.'>__func_imm_name</a></li>
+<li><a href='#L47' title='Defined at 47.'>func_id_name</a></li>
+<li><a href='#L107' title='Defined at 107.'>print_bpf_end_insn</a></li>
+<li><a href='#L117' title='Defined at 117.'>print_bpf_insn</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0-only</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/* Copyright (c) 2011-2014 PLUMgrid, http://plumgrid.com</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * Copyright (c) 2016 Facebook</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> */</em>
+<a id='L5' name='L5'></a>   5 
+<a id='L6' name='L6'></a>   6 <em class='sharp'>#include</em> &lt;linux/bpf.h&gt;
+<a id='L7' name='L7'></a>   7 
+<a id='L8' name='L8'></a>   8 <em class='sharp'>#include</em> "<a href='374.html'>disasm.h</a>"
+<a id='L9' name='L9'></a>   9 
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#define</em> <a href='../S/409.html#L12' title='Referred from 12 in bpf/disasm.c.'>__BPF_FUNC_STR_FN</a>(x) [BPF_FUNC_ ## x] = __stringify(bpf_ ## x)
+<a id='L11' name='L11'></a>  11 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> * <strong class='reserved'>const</strong> func_id_str[] = <em class='brace'>{</em>
+<a id='L12' name='L12'></a>  12         __BPF_FUNC_MAPPER(<a href='../D/1820.html' title='Multiple defined in 2 places.'>__BPF_FUNC_STR_FN</a>)
+<a id='L13' name='L13'></a>  13 <em class='brace'>}</em>;
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#undef</em> <a href='../S/409.html#L12' title='Referred from 12 in bpf/disasm.c.'>__BPF_FUNC_STR_FN</a>
+<a id='L15' name='L15'></a>  15 
+<a id='L16' name='L16'></a>  16 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *<a href='../R/2028.html' title='Multiple referred from 2 places.'>__func_get_name</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> <a href='../S/374.html#L30' title='Defined at 30 in bpf/disasm.h.'>bpf_insn_cbs</a> *cbs,
+<a id='L17' name='L17'></a>  17                                    <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> bpf_insn *insn,
+<a id='L18' name='L18'></a>  18                                    <strong class='reserved'>char</strong> *buff, size_t len)
+<a id='L19' name='L19'></a>  19 <em class='brace'>{</em>
+<a id='L20' name='L20'></a>  20         BUILD_BUG_ON(ARRAY_SIZE(func_id_str) != __BPF_FUNC_MAX_ID);
+<a id='L21' name='L21'></a>  21 
+<a id='L22' name='L22'></a>  22         <strong class='reserved'>if</strong> (insn-&gt;src_reg != BPF_PSEUDO_CALL &amp;&amp;
+<a id='L23' name='L23'></a>  23             insn-&gt;imm &gt;= 0 &amp;&amp; insn-&gt;imm &lt; __BPF_FUNC_MAX_ID &amp;&amp;
+<a id='L24' name='L24'></a>  24             func_id_str[insn-&gt;imm])
+<a id='L25' name='L25'></a>  25                 <strong class='reserved'>return</strong> func_id_str[insn-&gt;imm];
+<a id='L26' name='L26'></a>  26 
+<a id='L27' name='L27'></a>  27         <strong class='reserved'>if</strong> (cbs &amp;&amp; cbs-&gt;cb_call)
+<a id='L28' name='L28'></a>  28                 <strong class='reserved'>return</strong> cbs-&gt;cb_call(cbs-&gt;private_data, insn);
+<a id='L29' name='L29'></a>  29 
+<a id='L30' name='L30'></a>  30         <strong class='reserved'>if</strong> (insn-&gt;src_reg == BPF_PSEUDO_CALL)
+<a id='L31' name='L31'></a>  31                 snprintf(buff, len, "%+d", insn-&gt;imm);
+<a id='L32' name='L32'></a>  32 
+<a id='L33' name='L33'></a>  33         <strong class='reserved'>return</strong> buff;
+<a id='L34' name='L34'></a>  34 <em class='brace'>}</em>
+<a id='L35' name='L35'></a>  35 
+<a id='L36' name='L36'></a>  36 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *<a href='../S/409.html#L209' title='Referred from 209 in bpf/disasm.c.'>__func_imm_name</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> <a href='../S/374.html#L30' title='Defined at 30 in bpf/disasm.h.'>bpf_insn_cbs</a> *cbs,
+<a id='L37' name='L37'></a>  37                                    <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> bpf_insn *insn,
+<a id='L38' name='L38'></a>  38                                    u64 full_imm, <strong class='reserved'>char</strong> *buff, size_t len)
+<a id='L39' name='L39'></a>  39 <em class='brace'>{</em>
+<a id='L40' name='L40'></a>  40         <strong class='reserved'>if</strong> (cbs &amp;&amp; cbs-&gt;cb_imm)
+<a id='L41' name='L41'></a>  41                 <strong class='reserved'>return</strong> cbs-&gt;cb_imm(cbs-&gt;private_data, insn, full_imm);
+<a id='L42' name='L42'></a>  42 
+<a id='L43' name='L43'></a>  43         snprintf(buff, len, "0x%llx", (<strong class='reserved'>unsigned</strong> <strong class='reserved'>long</strong> <strong class='reserved'>long</strong>)full_imm);
+<a id='L44' name='L44'></a>  44         <strong class='reserved'>return</strong> buff;
+<a id='L45' name='L45'></a>  45 <em class='brace'>}</em>
+<a id='L46' name='L46'></a>  46 
+<a id='L47' name='L47'></a>  47 <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *<a href='../R/6884.html' title='Multiple referred from 11 places.'>func_id_name</a>(<strong class='reserved'>int</strong> id)
+<a id='L48' name='L48'></a>  48 <em class='brace'>{</em>
+<a id='L49' name='L49'></a>  49         <strong class='reserved'>if</strong> (id &gt;= 0 &amp;&amp; id &lt; __BPF_FUNC_MAX_ID &amp;&amp; func_id_str[id])
+<a id='L50' name='L50'></a>  50                 <strong class='reserved'>return</strong> func_id_str[id];
+<a id='L51' name='L51'></a>  51         <strong class='reserved'>else</strong>
+<a id='L52' name='L52'></a>  52                 <strong class='reserved'>return</strong> "unknown";
+<a id='L53' name='L53'></a>  53 <em class='brace'>}</em>
+<a id='L54' name='L54'></a>  54 
+<a id='L55' name='L55'></a>  55 <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *<strong class='reserved'>const</strong> bpf_class_string[8] = <em class='brace'>{</em>
+<a id='L56' name='L56'></a>  56         [BPF_LD]    = "ld",
+<a id='L57' name='L57'></a>  57         [BPF_LDX]   = "ldx",
+<a id='L58' name='L58'></a>  58         [BPF_ST]    = "st",
+<a id='L59' name='L59'></a>  59         [BPF_STX]   = "stx",
+<a id='L60' name='L60'></a>  60         [BPF_ALU]   = "alu",
+<a id='L61' name='L61'></a>  61         [BPF_JMP]   = "jmp",
+<a id='L62' name='L62'></a>  62         [BPF_JMP32] = "jmp32",
+<a id='L63' name='L63'></a>  63         [BPF_ALU64] = "alu64",
+<a id='L64' name='L64'></a>  64 <em class='brace'>}</em>;
+<a id='L65' name='L65'></a>  65 
+<a id='L66' name='L66'></a>  66 <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *<strong class='reserved'>const</strong> bpf_alu_string[16] = <em class='brace'>{</em>
+<a id='L67' name='L67'></a>  67         [BPF_ADD &gt;&gt; 4]  = "+=",
+<a id='L68' name='L68'></a>  68         [BPF_SUB &gt;&gt; 4]  = "-=",
+<a id='L69' name='L69'></a>  69         [BPF_MUL &gt;&gt; 4]  = "*=",
+<a id='L70' name='L70'></a>  70         [BPF_DIV &gt;&gt; 4]  = "/=",
+<a id='L71' name='L71'></a>  71         [BPF_OR  &gt;&gt; 4]  = "|=",
+<a id='L72' name='L72'></a>  72         [BPF_AND &gt;&gt; 4]  = "&amp;=",
+<a id='L73' name='L73'></a>  73         [BPF_LSH &gt;&gt; 4]  = "&lt;&lt;=",
+<a id='L74' name='L74'></a>  74         [BPF_RSH &gt;&gt; 4]  = "&gt;&gt;=",
+<a id='L75' name='L75'></a>  75         [BPF_NEG &gt;&gt; 4]  = "neg",
+<a id='L76' name='L76'></a>  76         [BPF_MOD &gt;&gt; 4]  = "%=",
+<a id='L77' name='L77'></a>  77         [BPF_XOR &gt;&gt; 4]  = "^=",
+<a id='L78' name='L78'></a>  78         [BPF_MOV &gt;&gt; 4]  = "=",
+<a id='L79' name='L79'></a>  79         [BPF_ARSH &gt;&gt; 4] = "s&gt;&gt;=",
+<a id='L80' name='L80'></a>  80         [BPF_END &gt;&gt; 4]  = "endian",
+<a id='L81' name='L81'></a>  81 <em class='brace'>}</em>;
+<a id='L82' name='L82'></a>  82 
+<a id='L83' name='L83'></a>  83 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *<strong class='reserved'>const</strong> bpf_ldst_string[] = <em class='brace'>{</em>
+<a id='L84' name='L84'></a>  84         [BPF_W &gt;&gt; 3]  = "u32",
+<a id='L85' name='L85'></a>  85         [BPF_H &gt;&gt; 3]  = "u16",
+<a id='L86' name='L86'></a>  86         [BPF_B &gt;&gt; 3]  = "u8",
+<a id='L87' name='L87'></a>  87         [BPF_DW &gt;&gt; 3] = "u64",
+<a id='L88' name='L88'></a>  88 <em class='brace'>}</em>;
+<a id='L89' name='L89'></a>  89 
+<a id='L90' name='L90'></a>  90 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>char</strong> *<strong class='reserved'>const</strong> bpf_jmp_string[16] = <em class='brace'>{</em>
+<a id='L91' name='L91'></a>  91         [BPF_JA &gt;&gt; 4]   = "jmp",
+<a id='L92' name='L92'></a>  92         [BPF_JEQ &gt;&gt; 4]  = "==",
+<a id='L93' name='L93'></a>  93         [BPF_JGT &gt;&gt; 4]  = "&gt;",
+<a id='L94' name='L94'></a>  94         [BPF_JLT &gt;&gt; 4]  = "&lt;",
+<a id='L95' name='L95'></a>  95         [BPF_JGE &gt;&gt; 4]  = "&gt;=",
+<a id='L96' name='L96'></a>  96         [BPF_JLE &gt;&gt; 4]  = "&lt;=",
+<a id='L97' name='L97'></a>  97         [BPF_JSET &gt;&gt; 4] = "&amp;",
+<a id='L98' name='L98'></a>  98         [BPF_JNE &gt;&gt; 4]  = "!=",
+<a id='L99' name='L99'></a>  99         [BPF_JSGT &gt;&gt; 4] = "s&gt;",
+<a id='L100' name='L100'></a> 100         [BPF_JSLT &gt;&gt; 4] = "s&lt;",
+<a id='L101' name='L101'></a> 101         [BPF_JSGE &gt;&gt; 4] = "s&gt;=",
+<a id='L102' name='L102'></a> 102         [BPF_JSLE &gt;&gt; 4] = "s&lt;=",
+<a id='L103' name='L103'></a> 103         [BPF_CALL &gt;&gt; 4] = "call",
+<a id='L104' name='L104'></a> 104         [BPF_EXIT &gt;&gt; 4] = "exit",
+<a id='L105' name='L105'></a> 105 <em class='brace'>}</em>;
+<a id='L106' name='L106'></a> 106 
+<a id='L107' name='L107'></a> 107 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/409.html#L129' title='Referred from 129 in bpf/disasm.c.'>print_bpf_end_insn</a>(bpf_insn_print_t <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>,
+<a id='L108' name='L108'></a> 108                                <strong class='reserved'>void</strong> *private_data,
+<a id='L109' name='L109'></a> 109                                <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> bpf_insn *insn)
+<a id='L110' name='L110'></a> 110 <em class='brace'>{</em>
+<a id='L111' name='L111'></a> 111         <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(private_data, "(%02x) r%d = %s%d r%d\n",
+<a id='L112' name='L112'></a> 112                 insn-&gt;code, insn-&gt;dst_reg,
+<a id='L113' name='L113'></a> 113                 BPF_SRC(insn-&gt;code) == BPF_TO_BE ? "be" : "le",
+<a id='L114' name='L114'></a> 114                 insn-&gt;imm, insn-&gt;dst_reg);
+<a id='L115' name='L115'></a> 115 <em class='brace'>}</em>
+<a id='L116' name='L116'></a> 116 
+<a id='L117' name='L117'></a> 117 <strong class='reserved'>void</strong> <a href='../R/10250.html' title='Multiple referred from 3 places.'>print_bpf_insn</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> <a href='../S/374.html#L30' title='Defined at 30 in bpf/disasm.h.'>bpf_insn_cbs</a> *cbs,
+<a id='L118' name='L118'></a> 118                     <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> bpf_insn *insn,
+<a id='L119' name='L119'></a> 119                     bool allow_ptr_leaks)
+<a id='L120' name='L120'></a> 120 <em class='brace'>{</em>
+<a id='L121' name='L121'></a> 121         <strong class='reserved'>const</strong> bpf_insn_print_t <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a> = cbs-&gt;cb_print;
+<a id='L122' name='L122'></a> 122         u8 class = BPF_CLASS(insn-&gt;code);
+<a id='L123' name='L123'></a> 123 
+<a id='L124' name='L124'></a> 124         <strong class='reserved'>if</strong> (class == BPF_ALU || class == BPF_ALU64) <em class='brace'>{</em>
+<a id='L125' name='L125'></a> 125                 <strong class='reserved'>if</strong> (BPF_OP(insn-&gt;code) == BPF_END) <em class='brace'>{</em>
+<a id='L126' name='L126'></a> 126                         <strong class='reserved'>if</strong> (class == BPF_ALU64)
+<a id='L127' name='L127'></a> 127                                 <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "BUG_alu64_%02x\n", insn-&gt;code);
+<a id='L128' name='L128'></a> 128                         <strong class='reserved'>else</strong>
+<a id='L129' name='L129'></a> 129                                 <a href='../S/409.html#L107' title='Defined at 107 in bpf/disasm.c.'>print_bpf_end_insn</a>(<a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>, cbs-&gt;private_data, insn);
+<a id='L130' name='L130'></a> 130                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (BPF_OP(insn-&gt;code) == BPF_NEG) <em class='brace'>{</em>
+<a id='L131' name='L131'></a> 131                         <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "(%02x) %c%d = -%c%d\n",
+<a id='L132' name='L132'></a> 132                                 insn-&gt;code, class == BPF_ALU ? 'w' : 'r',
+<a id='L133' name='L133'></a> 133                                 insn-&gt;dst_reg, class == BPF_ALU ? 'w' : 'r',
+<a id='L134' name='L134'></a> 134                                 insn-&gt;dst_reg);
+<a id='L135' name='L135'></a> 135                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (BPF_SRC(insn-&gt;code) == BPF_X) <em class='brace'>{</em>
+<a id='L136' name='L136'></a> 136                         <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "(%02x) %c%d %s %c%d\n",
+<a id='L137' name='L137'></a> 137                                 insn-&gt;code, class == BPF_ALU ? 'w' : 'r',
+<a id='L138' name='L138'></a> 138                                 insn-&gt;dst_reg,
+<a id='L139' name='L139'></a> 139                                 bpf_alu_string[BPF_OP(insn-&gt;code) &gt;&gt; 4],
+<a id='L140' name='L140'></a> 140                                 class == BPF_ALU ? 'w' : 'r',
+<a id='L141' name='L141'></a> 141                                 insn-&gt;src_reg);
+<a id='L142' name='L142'></a> 142                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L143' name='L143'></a> 143                         <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "(%02x) %c%d %s %d\n",
+<a id='L144' name='L144'></a> 144                                 insn-&gt;code, class == BPF_ALU ? 'w' : 'r',
+<a id='L145' name='L145'></a> 145                                 insn-&gt;dst_reg,
+<a id='L146' name='L146'></a> 146                                 bpf_alu_string[BPF_OP(insn-&gt;code) &gt;&gt; 4],
+<a id='L147' name='L147'></a> 147                                 insn-&gt;imm);
+<a id='L148' name='L148'></a> 148                 <em class='brace'>}</em>
+<a id='L149' name='L149'></a> 149         <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (class == BPF_STX) <em class='brace'>{</em>
+<a id='L150' name='L150'></a> 150                 <strong class='reserved'>if</strong> (BPF_MODE(insn-&gt;code) == BPF_MEM)
+<a id='L151' name='L151'></a> 151                         <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "(%02x) *(%s *)(r%d %+d) = r%d\n",
+<a id='L152' name='L152'></a> 152                                 insn-&gt;code,
+<a id='L153' name='L153'></a> 153                                 bpf_ldst_string[BPF_SIZE(insn-&gt;code) &gt;&gt; 3],
+<a id='L154' name='L154'></a> 154                                 insn-&gt;dst_reg,
+<a id='L155' name='L155'></a> 155                                 insn-&gt;off, insn-&gt;src_reg);
+<a id='L156' name='L156'></a> 156                 <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (BPF_MODE(insn-&gt;code) == BPF_XADD)
+<a id='L157' name='L157'></a> 157                         <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "(%02x) lock *(%s *)(r%d %+d) += r%d\n",
+<a id='L158' name='L158'></a> 158                                 insn-&gt;code,
+<a id='L159' name='L159'></a> 159                                 bpf_ldst_string[BPF_SIZE(insn-&gt;code) &gt;&gt; 3],
+<a id='L160' name='L160'></a> 160                                 insn-&gt;dst_reg, insn-&gt;off,
+<a id='L161' name='L161'></a> 161                                 insn-&gt;src_reg);
+<a id='L162' name='L162'></a> 162                 <strong class='reserved'>else</strong>
+<a id='L163' name='L163'></a> 163                         <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "BUG_%02x\n", insn-&gt;code);
+<a id='L164' name='L164'></a> 164         <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (class == BPF_ST) <em class='brace'>{</em>
+<a id='L165' name='L165'></a> 165                 <strong class='reserved'>if</strong> (BPF_MODE(insn-&gt;code) != BPF_MEM) <em class='brace'>{</em>
+<a id='L166' name='L166'></a> 166                         <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "BUG_st_%02x\n", insn-&gt;code);
+<a id='L167' name='L167'></a> 167                         <strong class='reserved'>return</strong>;
+<a id='L168' name='L168'></a> 168                 <em class='brace'>}</em>
+<a id='L169' name='L169'></a> 169                 <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "(%02x) *(%s *)(r%d %+d) = %d\n",
+<a id='L170' name='L170'></a> 170                         insn-&gt;code,
+<a id='L171' name='L171'></a> 171                         bpf_ldst_string[BPF_SIZE(insn-&gt;code) &gt;&gt; 3],
+<a id='L172' name='L172'></a> 172                         insn-&gt;dst_reg,
+<a id='L173' name='L173'></a> 173                         insn-&gt;off, insn-&gt;imm);
+<a id='L174' name='L174'></a> 174         <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (class == BPF_LDX) <em class='brace'>{</em>
+<a id='L175' name='L175'></a> 175                 <strong class='reserved'>if</strong> (BPF_MODE(insn-&gt;code) != BPF_MEM) <em class='brace'>{</em>
+<a id='L176' name='L176'></a> 176                         <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "BUG_ldx_%02x\n", insn-&gt;code);
+<a id='L177' name='L177'></a> 177                         <strong class='reserved'>return</strong>;
+<a id='L178' name='L178'></a> 178                 <em class='brace'>}</em>
+<a id='L179' name='L179'></a> 179                 <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "(%02x) r%d = *(%s *)(r%d %+d)\n",
+<a id='L180' name='L180'></a> 180                         insn-&gt;code, insn-&gt;dst_reg,
+<a id='L181' name='L181'></a> 181                         bpf_ldst_string[BPF_SIZE(insn-&gt;code) &gt;&gt; 3],
+<a id='L182' name='L182'></a> 182                         insn-&gt;src_reg, insn-&gt;off);
+<a id='L183' name='L183'></a> 183         <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (class == BPF_LD) <em class='brace'>{</em>
+<a id='L184' name='L184'></a> 184                 <strong class='reserved'>if</strong> (BPF_MODE(insn-&gt;code) == BPF_ABS) <em class='brace'>{</em>
+<a id='L185' name='L185'></a> 185                         <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "(%02x) r0 = *(%s *)skb[%d]\n",
+<a id='L186' name='L186'></a> 186                                 insn-&gt;code,
+<a id='L187' name='L187'></a> 187                                 bpf_ldst_string[BPF_SIZE(insn-&gt;code) &gt;&gt; 3],
+<a id='L188' name='L188'></a> 188                                 insn-&gt;imm);
+<a id='L189' name='L189'></a> 189                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (BPF_MODE(insn-&gt;code) == BPF_IND) <em class='brace'>{</em>
+<a id='L190' name='L190'></a> 190                         <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "(%02x) r0 = *(%s *)skb[r%d + %d]\n",
+<a id='L191' name='L191'></a> 191                                 insn-&gt;code,
+<a id='L192' name='L192'></a> 192                                 bpf_ldst_string[BPF_SIZE(insn-&gt;code) &gt;&gt; 3],
+<a id='L193' name='L193'></a> 193                                 insn-&gt;src_reg, insn-&gt;imm);
+<a id='L194' name='L194'></a> 194                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (BPF_MODE(insn-&gt;code) == BPF_IMM &amp;&amp;
+<a id='L195' name='L195'></a> 195                            BPF_SIZE(insn-&gt;code) == BPF_DW) <em class='brace'>{</em>
+<a id='L196' name='L196'></a> 196                         <em class='comment'>/* At this point, we already made sure that the second</em>
+<a id='L197' name='L197'></a> 197 <em class='comment'>                         * part of the ldimm64 insn is accessible.</em>
+<a id='L198' name='L198'></a> 198 <em class='comment'>                         */</em>
+<a id='L199' name='L199'></a> 199                         u64 imm = ((u64)(insn + 1)-&gt;imm &lt;&lt; 32) | (u32)insn-&gt;imm;
+<a id='L200' name='L200'></a> 200                         bool is_ptr = insn-&gt;src_reg == BPF_PSEUDO_MAP_FD ||
+<a id='L201' name='L201'></a> 201                                       insn-&gt;src_reg == BPF_PSEUDO_MAP_VALUE;
+<a id='L202' name='L202'></a> 202                         <strong class='reserved'>char</strong> tmp[64];
+<a id='L203' name='L203'></a> 203 
+<a id='L204' name='L204'></a> 204                         <strong class='reserved'>if</strong> (is_ptr &amp;&amp; !allow_ptr_leaks)
+<a id='L205' name='L205'></a> 205                                 imm = 0;
+<a id='L206' name='L206'></a> 206 
+<a id='L207' name='L207'></a> 207                         <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "(%02x) r%d = %s\n",
+<a id='L208' name='L208'></a> 208                                 insn-&gt;code, insn-&gt;dst_reg,
+<a id='L209' name='L209'></a> 209                                 <a href='../S/409.html#L36' title='Defined at 36 in bpf/disasm.c.'>__func_imm_name</a>(cbs, insn, imm,
+<a id='L210' name='L210'></a> 210                                                 tmp, <strong class='reserved'>sizeof</strong>(tmp)));
+<a id='L211' name='L211'></a> 211                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L212' name='L212'></a> 212                         <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "BUG_ld_%02x\n", insn-&gt;code);
+<a id='L213' name='L213'></a> 213                         <strong class='reserved'>return</strong>;
+<a id='L214' name='L214'></a> 214                 <em class='brace'>}</em>
+<a id='L215' name='L215'></a> 215         <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (class == BPF_JMP32 || class == BPF_JMP) <em class='brace'>{</em>
+<a id='L216' name='L216'></a> 216                 u8 opcode = BPF_OP(insn-&gt;code);
+<a id='L217' name='L217'></a> 217 
+<a id='L218' name='L218'></a> 218                 <strong class='reserved'>if</strong> (opcode == BPF_CALL) <em class='brace'>{</em>
+<a id='L219' name='L219'></a> 219                         <strong class='reserved'>char</strong> tmp[64];
+<a id='L220' name='L220'></a> 220 
+<a id='L221' name='L221'></a> 221                         <strong class='reserved'>if</strong> (insn-&gt;src_reg == BPF_PSEUDO_CALL) <em class='brace'>{</em>
+<a id='L222' name='L222'></a> 222                                 <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "(%02x) call pc%s\n",
+<a id='L223' name='L223'></a> 223                                         insn-&gt;code,
+<a id='L224' name='L224'></a> 224                                         <a href='../S/409.html#L16' title='Defined at 16 in bpf/disasm.c.'>__func_get_name</a>(cbs, insn,
+<a id='L225' name='L225'></a> 225                                                         tmp, <strong class='reserved'>sizeof</strong>(tmp)));
+<a id='L226' name='L226'></a> 226                         <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L227' name='L227'></a> 227                                 strcpy(tmp, "unknown");
+<a id='L228' name='L228'></a> 228                                 <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "(%02x) call %s#%d\n", insn-&gt;code,
+<a id='L229' name='L229'></a> 229                                         <a href='../S/409.html#L16' title='Defined at 16 in bpf/disasm.c.'>__func_get_name</a>(cbs, insn,
+<a id='L230' name='L230'></a> 230                                                         tmp, <strong class='reserved'>sizeof</strong>(tmp)),
+<a id='L231' name='L231'></a> 231                                         insn-&gt;imm);
+<a id='L232' name='L232'></a> 232                         <em class='brace'>}</em>
+<a id='L233' name='L233'></a> 233                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (insn-&gt;code == (BPF_JMP | BPF_JA)) <em class='brace'>{</em>
+<a id='L234' name='L234'></a> 234                         <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "(%02x) goto pc%+d\n",
+<a id='L235' name='L235'></a> 235                                 insn-&gt;code, insn-&gt;off);
+<a id='L236' name='L236'></a> 236                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (insn-&gt;code == (BPF_JMP | BPF_EXIT)) <em class='brace'>{</em>
+<a id='L237' name='L237'></a> 237                         <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "(%02x) exit\n", insn-&gt;code);
+<a id='L238' name='L238'></a> 238                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (BPF_SRC(insn-&gt;code) == BPF_X) <em class='brace'>{</em>
+<a id='L239' name='L239'></a> 239                         <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data,
+<a id='L240' name='L240'></a> 240                                 "(%02x) if %c%d %s %c%d goto pc%+d\n",
+<a id='L241' name='L241'></a> 241                                 insn-&gt;code, class == BPF_JMP32 ? 'w' : 'r',
+<a id='L242' name='L242'></a> 242                                 insn-&gt;dst_reg,
+<a id='L243' name='L243'></a> 243                                 bpf_jmp_string[BPF_OP(insn-&gt;code) &gt;&gt; 4],
+<a id='L244' name='L244'></a> 244                                 class == BPF_JMP32 ? 'w' : 'r',
+<a id='L245' name='L245'></a> 245                                 insn-&gt;src_reg, insn-&gt;off);
+<a id='L246' name='L246'></a> 246                 <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L247' name='L247'></a> 247                         <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data,
+<a id='L248' name='L248'></a> 248                                 "(%02x) if %c%d %s 0x%x goto pc%+d\n",
+<a id='L249' name='L249'></a> 249                                 insn-&gt;code, class == BPF_JMP32 ? 'w' : 'r',
+<a id='L250' name='L250'></a> 250                                 insn-&gt;dst_reg,
+<a id='L251' name='L251'></a> 251                                 bpf_jmp_string[BPF_OP(insn-&gt;code) &gt;&gt; 4],
+<a id='L252' name='L252'></a> 252                                 insn-&gt;imm, insn-&gt;off);
+<a id='L253' name='L253'></a> 253                 <em class='brace'>}</em>
+<a id='L254' name='L254'></a> 254         <em class='brace'>}</em> <strong class='reserved'>else</strong> <em class='brace'>{</em>
+<a id='L255' name='L255'></a> 255                 <a href='../S/35.html#L481' title='Defined at 481 in locking/lockdep.c.'>verbose</a>(cbs-&gt;private_data, "(%02x) %s\n",
+<a id='L256' name='L256'></a> 256                         insn-&gt;code, bpf_class_string[class]);
+<a id='L257' name='L257'></a> 257         <em class='brace'>}</em>
+<a id='L258' name='L258'></a> 258 <em class='brace'>}</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L16'>[^]</a><a href='#L117'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>tp_probes</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/479.html#L64'>tp_probes</a>          64 tracepoint.c   	struct tp_probes *p  = kmalloc(struct_size(p, probes, count),</span>
+<span class='curline'><a href='../S/479.html#L71'>tp_probes</a>          71 tracepoint.c   	kfree(container_of(head, struct tp_probes, rcu));</span>
+<span class='curline'><a href='../S/479.html#L100'>tp_probes</a>         100 tracepoint.c   		struct tp_probes *tp_probes = container_of(old,</span>
+<span class='curline'><a href='../S/479.html#L101'>tp_probes</a>         101 tracepoint.c   			struct tp_probes, probes[0]);</span>
+<span class='curline'><a href='../S/479.html#L108'>tp_probes</a>         108 tracepoint.c   			tp_probes-&gt;rcu.next = early_probes;</span>
+<span class='curline'><a href='../S/479.html#L109'>tp_probes</a>         109 tracepoint.c   			early_probes = &amp;tp_probes-&gt;rcu;</span>
+<span class='curline'><a href='../S/479.html#L119'>tp_probes</a>         119 tracepoint.c   		call_rcu(&amp;tp_probes-&gt;rcu, rcu_free_old_probes);</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>memory_bitmap</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/177.html#L547'>memory_bitmap</a>     547 power/snapshot.c static void memory_bm_position_reset(struct memory_bitmap *bm)</span>
+<span class='curline'><a href='../S/177.html#L557'>memory_bitmap</a>     557 power/snapshot.c static void memory_bm_free(struct memory_bitmap *bm, int clear_nosave_free);</span>
+<span class='curline'><a href='../S/177.html#L642'>memory_bitmap</a>     642 power/snapshot.c static int memory_bm_create(struct memory_bitmap *bm, gfp_t gfp_mask,</span>
+<span class='curline'><a href='../S/177.html#L685'>memory_bitmap</a>     685 power/snapshot.c static void memory_bm_free(struct memory_bitmap *bm, int clear_nosave_free)</span>
+<span class='curline'><a href='../S/177.html#L706'>memory_bitmap</a>     706 power/snapshot.c static int memory_bm_find_bit(struct memory_bitmap *bm, unsigned long pfn,</span>
+<span class='curline'><a href='../S/177.html#L772'>memory_bitmap</a>     772 power/snapshot.c static void memory_bm_set_bit(struct memory_bitmap *bm, unsigned long pfn)</span>
+<span class='curline'><a href='../S/177.html#L783'>memory_bitmap</a>     783 power/snapshot.c static int mem_bm_set_bit_check(struct memory_bitmap *bm, unsigned long pfn)</span>
+<span class='curline'><a href='../S/177.html#L796'>memory_bitmap</a>     796 power/snapshot.c static void memory_bm_clear_bit(struct memory_bitmap *bm, unsigned long pfn)</span>
+<span class='curline'><a href='../S/177.html#L807'>memory_bitmap</a>     807 power/snapshot.c static void memory_bm_clear_current(struct memory_bitmap *bm)</span>
+<span class='curline'><a href='../S/177.html#L815'>memory_bitmap</a>     815 power/snapshot.c static int memory_bm_test_bit(struct memory_bitmap *bm, unsigned long pfn)</span>
+<span class='curline'><a href='../S/177.html#L826'>memory_bitmap</a>     826 power/snapshot.c static bool memory_bm_pfn_present(struct memory_bitmap *bm, unsigned long pfn)</span>
+<span class='curline'><a href='../S/177.html#L844'>memory_bitmap</a>     844 power/snapshot.c static bool rtree_next_node(struct memory_bitmap *bm)</span>
+<span class='curline'><a href='../S/177.html#L881'>memory_bitmap</a>     881 power/snapshot.c static unsigned long memory_bm_next_pfn(struct memory_bitmap *bm)</span>
+<span class='curline'><a href='../S/177.html#L924'>memory_bitmap</a>     924 power/snapshot.c static void memory_bm_recycle(struct memory_bitmap *bm)</span>
+<span class='curline'><a href='../S/177.html#L989'>memory_bitmap</a>     989 power/snapshot.c static struct memory_bitmap *forbidden_pages_map;</span>
+<span class='curline'><a href='../S/177.html#L992'>memory_bitmap</a>     992 power/snapshot.c static struct memory_bitmap *free_pages_map;</span>
+<span class='curline'><a href='../S/177.html#L1042'>memory_bitmap</a>    1042 power/snapshot.c static void mark_nosave_pages(struct memory_bitmap *bm)</span>
+<span class='curline'><a href='../S/177.html#L1080'>memory_bitmap</a>    1080 power/snapshot.c 	struct memory_bitmap *bm1, *bm2;</span>
+<span class='curline'><a href='../S/177.html#L1088'>memory_bitmap</a>    1088 power/snapshot.c 	bm1 = kzalloc(sizeof(struct memory_bitmap), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/177.html#L1096'>memory_bitmap</a>    1096 power/snapshot.c 	bm2 = kzalloc(sizeof(struct memory_bitmap), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/177.html#L1130'>memory_bitmap</a>    1130 power/snapshot.c 	struct memory_bitmap *bm1, *bm2;</span>
+<span class='curline'><a href='../S/177.html#L1157'>memory_bitmap</a>    1157 power/snapshot.c 	struct memory_bitmap *bm = free_pages_map;</span>
+<span class='curline'><a href='../S/177.html#L1417'>memory_bitmap</a>    1417 power/snapshot.c static void copy_data_pages(struct memory_bitmap *copy_bm,</span>
+<span class='curline'><a href='../S/177.html#L1418'>memory_bitmap</a>    1418 power/snapshot.c 			    struct memory_bitmap *orig_bm)</span>
+<span class='curline'><a href='../S/177.html#L1455'>memory_bitmap</a>    1455 power/snapshot.c static struct memory_bitmap orig_bm;</span>
+<span class='curline'><a href='../S/177.html#L1464'>memory_bitmap</a>    1464 power/snapshot.c static struct memory_bitmap copy_bm;</span>
+<span class='curline'><a href='../S/177.html#L1918'>memory_bitmap</a>    1918 power/snapshot.c static inline unsigned int alloc_highmem_pages(struct memory_bitmap *bm,</span>
+<span class='curline'><a href='../S/177.html#L1938'>memory_bitmap</a>    1938 power/snapshot.c static inline unsigned int alloc_highmem_pages(struct memory_bitmap *bm,</span>
+<span class='curline'><a href='../S/177.html#L1953'>memory_bitmap</a>    1953 power/snapshot.c static int swsusp_alloc(struct memory_bitmap *copy_bm,</span>
+<span class='curline'><a href='../S/177.html#L2074'>memory_bitmap</a>    2074 power/snapshot.c static inline void pack_pfns(unsigned long *buf, struct memory_bitmap *bm)</span>
+<span class='curline'><a href='../S/177.html#L2148'>memory_bitmap</a>    2148 power/snapshot.c static void duplicate_memory_bitmap(struct memory_bitmap *dst,</span>
+<span class='curline'><a href='../S/177.html#L2149'>memory_bitmap</a>    2149 power/snapshot.c 				    struct memory_bitmap *src)</span>
+<span class='curline'><a href='../S/177.html#L2167'>memory_bitmap</a>    2167 power/snapshot.c static void mark_unsafe_pages(struct memory_bitmap *bm)</span>
+<span class='curline'><a href='../S/177.html#L2223'>memory_bitmap</a>    2223 power/snapshot.c static int unpack_orig_pfns(unsigned long *buf, struct memory_bitmap *bm)</span>
+<span class='curline'><a href='../S/177.html#L2266'>memory_bitmap</a>    2266 power/snapshot.c static unsigned int count_highmem_image_pages(struct memory_bitmap *bm)</span>
+<span class='curline'><a href='../S/177.html#L2284'>memory_bitmap</a>    2284 power/snapshot.c static struct memory_bitmap *safe_highmem_bm;</span>
+<span class='curline'><a href='../S/177.html#L2299'>memory_bitmap</a>    2299 power/snapshot.c static int prepare_highmem_image(struct memory_bitmap *bm,</span>
+<span class='curline'><a href='../S/177.html#L2432'>memory_bitmap</a>    2432 power/snapshot.c static unsigned int count_highmem_image_pages(struct memory_bitmap *bm) { return 0; }</span>
+<span class='curline'><a href='../S/177.html#L2434'>memory_bitmap</a>    2434 power/snapshot.c static inline int prepare_highmem_image(struct memory_bitmap *bm,</span>
+<span class='curline'><a href='../S/177.html#L2465'>memory_bitmap</a>    2465 power/snapshot.c static int prepare_image(struct memory_bitmap *new_bm, struct memory_bitmap *bm)</span>
+<span class='curline'><a href='../S/177.html#L2541'>memory_bitmap</a>    2541 power/snapshot.c static void *get_buffer(struct memory_bitmap *bm, struct chain_allocator *ca)</span>
+</pre>
+</body>
+</html>

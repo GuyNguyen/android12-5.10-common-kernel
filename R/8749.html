@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>kthread_unpark</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/327.html#L538'>kthread_unpark</a>    538 cpu.c          	kthread_unpark(st-&gt;thread);</span>
+<span class='curline'><a href='../S/327.html#L822'>kthread_unpark</a>    822 cpu.c          	kthread_unpark(this_cpu_read(cpuhp_state.thread));</span>
+<span class='curline'><a href='../S/327.html#L930'>kthread_unpark</a>    930 cpu.c          		kthread_unpark(per_cpu_ptr(&amp;cpuhp_state, cpu)-&gt;thread);</span>
+<span class='curline'><a href='../S/435.html#L552'>kthread_unpark</a>    552 kthread.c      EXPORT_SYMBOL_GPL(kthread_unpark);</span>
+<span class='curline'><a href='../S/435.html#L620'>kthread_unpark</a>    620 kthread.c      	kthread_unpark(k);</span>
+<span class='curline'><a href='../S/249.html#L234'>kthread_unpark</a>    234 smpboot.c      		kthread_unpark(tsk);</span>
+<span class='curline'><a href='../S/202.html#L575'>kthread_unpark</a>    575 stop_machine.c 	kthread_unpark(stopper-&gt;thread);</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>bpf/map_iter.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/494.html'>bpf</a>/map_iter.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L13'>[^]</a><a href='#L183'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L13' title='Defined at 13.'>bpf_map_seq_start</a></li>
+<li><a href='#L27' title='Defined at 27.'>bpf_map_seq_next</a></li>
+<li><a href='#L42' title='Defined at 42.'>DEFINE_BPF_ITER_FUNC</a></li>
+<li><a href='#L61' title='Defined at 61.'>bpf_map_seq_show</a></li>
+<li><a href='#L66' title='Defined at 66.'>bpf_map_seq_stop</a></li>
+<li><a href='#L101' title='Defined at 101.'>bpf_iter_attach_map</a></li>
+<li><a href='#L147' title='Defined at 147.'>bpf_iter_detach_map</a></li>
+<li><a href='#L152' title='Defined at 152.'>bpf_iter_map_show_fdinfo</a></li>
+<li><a href='#L158' title='Defined at 158.'>bpf_iter_map_fill_link_info</a></li>
+<li><a href='#L183' title='Defined at 183.'>bpf_map_iter_init</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0-only</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/* Copyright (c) 2020 Facebook */</em>
+<a id='L3' name='L3'></a>   3 <em class='sharp'>#include</em> &lt;linux/bpf.h&gt;
+<a id='L4' name='L4'></a>   4 <em class='sharp'>#include</em> &lt;linux/fs.h&gt;
+<a id='L5' name='L5'></a>   5 <em class='sharp'>#include</em> &lt;linux/filter.h&gt;
+<a id='L6' name='L6'></a>   6 <em class='sharp'>#include</em> &lt;linux/kernel.h&gt;
+<a id='L7' name='L7'></a>   7 <em class='sharp'>#include</em> &lt;linux/btf_ids.h&gt;
+<a id='L8' name='L8'></a>   8 
+<a id='L9' name='L9'></a>   9 <strong class='reserved'>struct</strong> <a href='../R/3591.html' title='Multiple referred from 3 places.'>bpf_iter_seq_map_info</a> <em class='brace'>{</em>
+<a id='L10' name='L10'></a>  10         u32 map_id;
+<a id='L11' name='L11'></a>  11 <em class='brace'>}</em>;
+<a id='L12' name='L12'></a>  12 
+<a id='L13' name='L13'></a>  13 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> *<a href='../S/400.html#L75' title='Referred from 75 in bpf/map_iter.c.'>bpf_map_seq_start</a>(<strong class='reserved'>struct</strong> seq_file *seq, loff_t *pos)
+<a id='L14' name='L14'></a>  14 <em class='brace'>{</em>
+<a id='L15' name='L15'></a>  15         <strong class='reserved'>struct</strong> <a href='../S/400.html#L9' title='Defined at 9 in bpf/map_iter.c.'>bpf_iter_seq_map_info</a> *info = seq-&gt;private;
+<a id='L16' name='L16'></a>  16         <strong class='reserved'>struct</strong> <a href='../S/387.html#L16' title='Defined at 16 in bpf/preload/iterators/iterators.bpf.c.'>bpf_map</a> *map;
+<a id='L17' name='L17'></a>  17 
+<a id='L18' name='L18'></a>  18         map = <a href='../S/418.html#L3161' title='Defined at 3161 in bpf/syscall.c.'>bpf_map_get_curr_or_next</a>(&amp;info-&gt;map_id);
+<a id='L19' name='L19'></a>  19         <strong class='reserved'>if</strong> (!map)
+<a id='L20' name='L20'></a>  20                 <strong class='reserved'>return</strong> NULL;
+<a id='L21' name='L21'></a>  21 
+<a id='L22' name='L22'></a>  22         <strong class='reserved'>if</strong> (*pos == 0)
+<a id='L23' name='L23'></a>  23                 ++*pos;
+<a id='L24' name='L24'></a>  24         <strong class='reserved'>return</strong> map;
+<a id='L25' name='L25'></a>  25 <em class='brace'>}</em>
+<a id='L26' name='L26'></a>  26 
+<a id='L27' name='L27'></a>  27 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> *<a href='../S/400.html#L76' title='Referred from 76 in bpf/map_iter.c.'>bpf_map_seq_next</a>(<strong class='reserved'>struct</strong> seq_file *seq, <strong class='reserved'>void</strong> *v, loff_t *pos)
+<a id='L28' name='L28'></a>  28 <em class='brace'>{</em>
+<a id='L29' name='L29'></a>  29         <strong class='reserved'>struct</strong> <a href='../S/400.html#L9' title='Defined at 9 in bpf/map_iter.c.'>bpf_iter_seq_map_info</a> *info = seq-&gt;private;
+<a id='L30' name='L30'></a>  30 
+<a id='L31' name='L31'></a>  31         ++*pos;
+<a id='L32' name='L32'></a>  32         ++info-&gt;map_id;
+<a id='L33' name='L33'></a>  33         <a href='../S/418.html#L494' title='Defined at 494 in bpf/syscall.c.'>bpf_map_put</a>((<strong class='reserved'>struct</strong> <a href='../S/387.html#L16' title='Defined at 16 in bpf/preload/iterators/iterators.bpf.c.'>bpf_map</a> *)v);
+<a id='L34' name='L34'></a>  34         <strong class='reserved'>return</strong> <a href='../S/418.html#L3161' title='Defined at 3161 in bpf/syscall.c.'>bpf_map_get_curr_or_next</a>(&amp;info-&gt;map_id);
+<a id='L35' name='L35'></a>  35 <em class='brace'>}</em>
+<a id='L36' name='L36'></a>  36 
+<a id='L37' name='L37'></a>  37 <strong class='reserved'>struct</strong> <a href='../R/3558.html' title='Multiple referred from 3 places.'>bpf_iter__bpf_map</a> <em class='brace'>{</em>
+<a id='L38' name='L38'></a>  38         __bpf_md_ptr(<strong class='reserved'>struct</strong> <a href='../S/387.html#L10' title='Defined at 10 in bpf/preload/iterators/iterators.bpf.c.'>bpf_iter_meta</a> *, meta);
+<a id='L39' name='L39'></a>  39         __bpf_md_ptr(<strong class='reserved'>struct</strong> <a href='../S/387.html#L16' title='Defined at 16 in bpf/preload/iterators/iterators.bpf.c.'>bpf_map</a> *, map);
+<a id='L40' name='L40'></a>  40 <em class='brace'>}</em>;
+<a id='L41' name='L41'></a>  41 
+<a id='L42' name='L42'></a>  42 <a href='../S/400.html#L165' title='Referred from 165 in bpf/map_iter.c.'>DEFINE_BPF_ITER_FUNC</a>(<a href='../S/387.html#L16' title='Defined at 16 in bpf/preload/iterators/iterators.bpf.c.'>bpf_map</a>, <strong class='reserved'>struct</strong> <a href='../S/387.html#L10' title='Defined at 10 in bpf/preload/iterators/iterators.bpf.c.'>bpf_iter_meta</a> *meta, <strong class='reserved'>struct</strong> <a href='../S/387.html#L16' title='Defined at 16 in bpf/preload/iterators/iterators.bpf.c.'>bpf_map</a> *map)
+<a id='L43' name='L43'></a>  43 
+<a id='L44' name='L44'></a>  44 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __bpf_map_seq_show(<strong class='reserved'>struct</strong> seq_file *seq, <strong class='reserved'>void</strong> *v, bool in_stop)
+<a id='L45' name='L45'></a>  45 <em class='brace'>{</em>
+<a id='L46' name='L46'></a>  46         <strong class='reserved'>struct</strong> <a href='../D/3794.html' title='Multiple defined in 2 places.'>bpf_iter__bpf_map</a> ctx;
+<a id='L47' name='L47'></a>  47         <strong class='reserved'>struct</strong> <a href='../S/387.html#L10' title='Defined at 10 in bpf/preload/iterators/iterators.bpf.c.'>bpf_iter_meta</a> meta;
+<a id='L48' name='L48'></a>  48         <strong class='reserved'>struct</strong> <a href='../S/387.html#L50' title='Defined at 50 in bpf/preload/iterators/iterators.bpf.c.'>bpf_prog</a> *prog;
+<a id='L49' name='L49'></a>  49         <strong class='reserved'>int</strong> ret = 0;
+<a id='L50' name='L50'></a>  50 
+<a id='L51' name='L51'></a>  51         ctx.meta = &amp;meta;
+<a id='L52' name='L52'></a>  52         ctx.map = v;
+<a id='L53' name='L53'></a>  53         meta.seq = seq;
+<a id='L54' name='L54'></a>  54         prog = <a href='../S/419.html#L623' title='Defined at 623 in bpf/bpf_iter.c.'>bpf_iter_get_info</a>(&amp;meta, in_stop);
+<a id='L55' name='L55'></a>  55         <strong class='reserved'>if</strong> (prog)
+<a id='L56' name='L56'></a>  56                 ret = <a href='../S/419.html#L646' title='Defined at 646 in bpf/bpf_iter.c.'>bpf_iter_run_prog</a>(prog, &amp;ctx);
+<a id='L57' name='L57'></a>  57 
+<a id='L58' name='L58'></a>  58         <strong class='reserved'>return</strong> ret;
+<a id='L59' name='L59'></a>  59 <em class='brace'>}</em>
+<a id='L60' name='L60'></a>  60 
+<a id='L61' name='L61'></a>  61 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/400.html#L78' title='Referred from 78 in bpf/map_iter.c.'>bpf_map_seq_show</a>(<strong class='reserved'>struct</strong> seq_file *seq, <strong class='reserved'>void</strong> *v)
+<a id='L62' name='L62'></a>  62 <em class='brace'>{</em>
+<a id='L63' name='L63'></a>  63         <strong class='reserved'>return</strong> __bpf_map_seq_show(seq, v, false);
+<a id='L64' name='L64'></a>  64 <em class='brace'>}</em>
+<a id='L65' name='L65'></a>  65 
+<a id='L66' name='L66'></a>  66 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/400.html#L77' title='Referred from 77 in bpf/map_iter.c.'>bpf_map_seq_stop</a>(<strong class='reserved'>struct</strong> seq_file *seq, <strong class='reserved'>void</strong> *v)
+<a id='L67' name='L67'></a>  67 <em class='brace'>{</em>
+<a id='L68' name='L68'></a>  68         <strong class='reserved'>if</strong> (!v)
+<a id='L69' name='L69'></a>  69                 (<strong class='reserved'>void</strong>)__bpf_map_seq_show(seq, v, true);
+<a id='L70' name='L70'></a>  70         <strong class='reserved'>else</strong>
+<a id='L71' name='L71'></a>  71                 <a href='../S/418.html#L494' title='Defined at 494 in bpf/syscall.c.'>bpf_map_put</a>((<strong class='reserved'>struct</strong> <a href='../S/387.html#L16' title='Defined at 16 in bpf/preload/iterators/iterators.bpf.c.'>bpf_map</a> *)v);
+<a id='L72' name='L72'></a>  72 <em class='brace'>}</em>
+<a id='L73' name='L73'></a>  73 
+<a id='L74' name='L74'></a>  74 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> seq_operations bpf_map_seq_ops = <em class='brace'>{</em>
+<a id='L75' name='L75'></a>  75         .start  = <a href='../S/400.html#L13' title='Defined at 13 in bpf/map_iter.c.'>bpf_map_seq_start</a>,
+<a id='L76' name='L76'></a>  76         .next   = <a href='../S/400.html#L27' title='Defined at 27 in bpf/map_iter.c.'>bpf_map_seq_next</a>,
+<a id='L77' name='L77'></a>  77         .stop   = <a href='../S/400.html#L66' title='Defined at 66 in bpf/map_iter.c.'>bpf_map_seq_stop</a>,
+<a id='L78' name='L78'></a>  78         .show   = <a href='../S/400.html#L61' title='Defined at 61 in bpf/map_iter.c.'>bpf_map_seq_show</a>,
+<a id='L79' name='L79'></a>  79 <em class='brace'>}</em>;
+<a id='L80' name='L80'></a>  80 
+<a id='L81' name='L81'></a>  81 <a href='../S/411.html#L4340' title='Defined at 4340 in bpf/btf.c.'>BTF_ID_LIST</a>(btf_bpf_map_id)
+<a id='L82' name='L82'></a>  82 BTF_ID(<strong class='reserved'>struct</strong>, <a href='../S/387.html#L16' title='Defined at 16 in bpf/preload/iterators/iterators.bpf.c.'>bpf_map</a>)
+<a id='L83' name='L83'></a>  83 
+<a id='L84' name='L84'></a>  84 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> bpf_iter_seq_info bpf_map_seq_info = <em class='brace'>{</em>
+<a id='L85' name='L85'></a>  85         .seq_ops                = &amp;bpf_map_seq_ops,
+<a id='L86' name='L86'></a>  86         .init_seq_private       = NULL,
+<a id='L87' name='L87'></a>  87         .fini_seq_private       = NULL,
+<a id='L88' name='L88'></a>  88         .seq_priv_size          = <strong class='reserved'>sizeof</strong>(<strong class='reserved'>struct</strong> <a href='../S/400.html#L9' title='Defined at 9 in bpf/map_iter.c.'>bpf_iter_seq_map_info</a>),
+<a id='L89' name='L89'></a>  89 <em class='brace'>}</em>;
+<a id='L90' name='L90'></a>  90 
+<a id='L91' name='L91'></a>  91 <strong class='reserved'>static</strong> <strong class='reserved'>struct</strong> bpf_iter_reg bpf_map_reg_info = <em class='brace'>{</em>
+<a id='L92' name='L92'></a>  92         .target                 = "bpf_map",
+<a id='L93' name='L93'></a>  93         .ctx_arg_info_size      = 1,
+<a id='L94' name='L94'></a>  94         .ctx_arg_info           = <em class='brace'>{</em>
+<a id='L95' name='L95'></a>  95                 <em class='brace'>{</em> offsetof(<strong class='reserved'>struct</strong> <a href='../D/3794.html' title='Multiple defined in 2 places.'>bpf_iter__bpf_map</a>, map),
+<a id='L96' name='L96'></a>  96                   PTR_TO_BTF_ID_OR_NULL <em class='brace'>}</em>,
+<a id='L97' name='L97'></a>  97         <em class='brace'>}</em>,
+<a id='L98' name='L98'></a>  98         .seq_info               = &amp;bpf_map_seq_info,
+<a id='L99' name='L99'></a>  99 <em class='brace'>}</em>;
+<a id='L100' name='L100'></a> 100 
+<a id='L101' name='L101'></a> 101 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> <a href='../S/400.html#L170' title='Referred from 170 in bpf/map_iter.c.'>bpf_iter_attach_map</a>(<strong class='reserved'>struct</strong> <a href='../S/387.html#L50' title='Defined at 50 in bpf/preload/iterators/iterators.bpf.c.'>bpf_prog</a> *prog,
+<a id='L102' name='L102'></a> 102                                <strong class='reserved'>union</strong> bpf_iter_link_info *linfo,
+<a id='L103' name='L103'></a> 103                                <strong class='reserved'>struct</strong> bpf_iter_aux_info *aux)
+<a id='L104' name='L104'></a> 104 <em class='brace'>{</em>
+<a id='L105' name='L105'></a> 105         u32 key_acc_size, value_acc_size, key_size, value_size;
+<a id='L106' name='L106'></a> 106         <strong class='reserved'>struct</strong> <a href='../S/387.html#L16' title='Defined at 16 in bpf/preload/iterators/iterators.bpf.c.'>bpf_map</a> *map;
+<a id='L107' name='L107'></a> 107         bool is_percpu = false;
+<a id='L108' name='L108'></a> 108         <strong class='reserved'>int</strong> err = -EINVAL;
+<a id='L109' name='L109'></a> 109 
+<a id='L110' name='L110'></a> 110         <strong class='reserved'>if</strong> (!linfo-&gt;map.map_fd)
+<a id='L111' name='L111'></a> 111                 <strong class='reserved'>return</strong> -EBADF;
+<a id='L112' name='L112'></a> 112 
+<a id='L113' name='L113'></a> 113         map = <a href='../S/418.html#L944' title='Defined at 944 in bpf/syscall.c.'>bpf_map_get_with_uref</a>(linfo-&gt;map.map_fd);
+<a id='L114' name='L114'></a> 114         <strong class='reserved'>if</strong> (IS_ERR(map))
+<a id='L115' name='L115'></a> 115                 <strong class='reserved'>return</strong> PTR_ERR(map);
+<a id='L116' name='L116'></a> 116 
+<a id='L117' name='L117'></a> 117         <strong class='reserved'>if</strong> (map-&gt;map_type == BPF_MAP_TYPE_PERCPU_HASH ||
+<a id='L118' name='L118'></a> 118             map-&gt;map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH ||
+<a id='L119' name='L119'></a> 119             map-&gt;map_type == BPF_MAP_TYPE_PERCPU_ARRAY)
+<a id='L120' name='L120'></a> 120                 is_percpu = true;
+<a id='L121' name='L121'></a> 121         <strong class='reserved'>else</strong> <strong class='reserved'>if</strong> (map-&gt;map_type != BPF_MAP_TYPE_HASH &amp;&amp;
+<a id='L122' name='L122'></a> 122                  map-&gt;map_type != BPF_MAP_TYPE_LRU_HASH &amp;&amp;
+<a id='L123' name='L123'></a> 123                  map-&gt;map_type != BPF_MAP_TYPE_ARRAY)
+<a id='L124' name='L124'></a> 124                 <strong class='reserved'>goto</strong> put_map;
+<a id='L125' name='L125'></a> 125 
+<a id='L126' name='L126'></a> 126         key_acc_size = prog-&gt;aux-&gt;max_rdonly_access;
+<a id='L127' name='L127'></a> 127         value_acc_size = prog-&gt;aux-&gt;max_rdwr_access;
+<a id='L128' name='L128'></a> 128         key_size = map-&gt;key_size;
+<a id='L129' name='L129'></a> 129         <strong class='reserved'>if</strong> (!is_percpu)
+<a id='L130' name='L130'></a> 130                 value_size = map-&gt;value_size;
+<a id='L131' name='L131'></a> 131         <strong class='reserved'>else</strong>
+<a id='L132' name='L132'></a> 132                 value_size = round_up(map-&gt;value_size, 8) * num_possible_cpus();
+<a id='L133' name='L133'></a> 133 
+<a id='L134' name='L134'></a> 134         <strong class='reserved'>if</strong> (key_acc_size &gt; key_size || value_acc_size &gt; value_size) <em class='brace'>{</em>
+<a id='L135' name='L135'></a> 135                 err = -EACCES;
+<a id='L136' name='L136'></a> 136                 <strong class='reserved'>goto</strong> put_map;
+<a id='L137' name='L137'></a> 137         <em class='brace'>}</em>
+<a id='L138' name='L138'></a> 138 
+<a id='L139' name='L139'></a> 139         aux-&gt;map = map;
+<a id='L140' name='L140'></a> 140         <strong class='reserved'>return</strong> 0;
+<a id='L141' name='L141'></a> 141 
+<a id='L142' name='L142'></a> 142 put_map:
+<a id='L143' name='L143'></a> 143         <a href='../S/418.html#L500' title='Defined at 500 in bpf/syscall.c.'>bpf_map_put_with_uref</a>(map);
+<a id='L144' name='L144'></a> 144         <strong class='reserved'>return</strong> err;
+<a id='L145' name='L145'></a> 145 <em class='brace'>}</em>
+<a id='L146' name='L146'></a> 146 
+<a id='L147' name='L147'></a> 147 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/400.html#L171' title='Referred from 171 in bpf/map_iter.c.'>bpf_iter_detach_map</a>(<strong class='reserved'>struct</strong> bpf_iter_aux_info *aux)
+<a id='L148' name='L148'></a> 148 <em class='brace'>{</em>
+<a id='L149' name='L149'></a> 149         <a href='../S/418.html#L500' title='Defined at 500 in bpf/syscall.c.'>bpf_map_put_with_uref</a>(aux-&gt;map);
+<a id='L150' name='L150'></a> 150 <em class='brace'>}</em>
+<a id='L151' name='L151'></a> 151 
+<a id='L152' name='L152'></a> 152 <strong class='reserved'>void</strong> <a href='../S/400.html#L172' title='Referred from 172 in bpf/map_iter.c.'>bpf_iter_map_show_fdinfo</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> bpf_iter_aux_info *aux,
+<a id='L153' name='L153'></a> 153                               <strong class='reserved'>struct</strong> seq_file *seq)
+<a id='L154' name='L154'></a> 154 <em class='brace'>{</em>
+<a id='L155' name='L155'></a> 155         seq_printf(seq, "map_id:\t%u\n", aux-&gt;map-&gt;id);
+<a id='L156' name='L156'></a> 156 <em class='brace'>}</em>
+<a id='L157' name='L157'></a> 157 
+<a id='L158' name='L158'></a> 158 <strong class='reserved'>int</strong> <a href='../S/400.html#L173' title='Referred from 173 in bpf/map_iter.c.'>bpf_iter_map_fill_link_info</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> bpf_iter_aux_info *aux,
+<a id='L159' name='L159'></a> 159                                 <strong class='reserved'>struct</strong> bpf_link_info *info)
+<a id='L160' name='L160'></a> 160 <em class='brace'>{</em>
+<a id='L161' name='L161'></a> 161         info-&gt;iter.map.map_id = aux-&gt;map-&gt;id;
+<a id='L162' name='L162'></a> 162         <strong class='reserved'>return</strong> 0;
+<a id='L163' name='L163'></a> 163 <em class='brace'>}</em>
+<a id='L164' name='L164'></a> 164 
+<a id='L165' name='L165'></a> 165 <a href='../D/309.html' title='Multiple defined in 4 places.'>DEFINE_BPF_ITER_FUNC</a>(bpf_map_elem, <strong class='reserved'>struct</strong> <a href='../S/387.html#L10' title='Defined at 10 in bpf/preload/iterators/iterators.bpf.c.'>bpf_iter_meta</a> *meta,
+<a id='L166' name='L166'></a> 166                      <strong class='reserved'>struct</strong> <a href='../S/387.html#L16' title='Defined at 16 in bpf/preload/iterators/iterators.bpf.c.'>bpf_map</a> *map, <strong class='reserved'>void</strong> *key, <strong class='reserved'>void</strong> *value)
+<a id='L167' name='L167'></a> 167 
+<a id='L168' name='L168'></a> 168 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> bpf_iter_reg bpf_map_elem_reg_info = <em class='brace'>{</em>
+<a id='L169' name='L169'></a> 169         .target                 = "bpf_map_elem",
+<a id='L170' name='L170'></a> 170         .attach_target          = <a href='../S/400.html#L101' title='Defined at 101 in bpf/map_iter.c.'>bpf_iter_attach_map</a>,
+<a id='L171' name='L171'></a> 171         .detach_target          = <a href='../S/400.html#L147' title='Defined at 147 in bpf/map_iter.c.'>bpf_iter_detach_map</a>,
+<a id='L172' name='L172'></a> 172         .show_fdinfo            = <a href='../S/400.html#L152' title='Defined at 152 in bpf/map_iter.c.'>bpf_iter_map_show_fdinfo</a>,
+<a id='L173' name='L173'></a> 173         .fill_link_info         = <a href='../S/400.html#L158' title='Defined at 158 in bpf/map_iter.c.'>bpf_iter_map_fill_link_info</a>,
+<a id='L174' name='L174'></a> 174         .ctx_arg_info_size      = 2,
+<a id='L175' name='L175'></a> 175         .ctx_arg_info           = <em class='brace'>{</em>
+<a id='L176' name='L176'></a> 176                 <em class='brace'>{</em> offsetof(<strong class='reserved'>struct</strong> bpf_iter__bpf_map_elem, key),
+<a id='L177' name='L177'></a> 177                   PTR_TO_RDONLY_BUF_OR_NULL <em class='brace'>}</em>,
+<a id='L178' name='L178'></a> 178                 <em class='brace'>{</em> offsetof(<strong class='reserved'>struct</strong> bpf_iter__bpf_map_elem, value),
+<a id='L179' name='L179'></a> 179                   PTR_TO_RDWR_BUF_OR_NULL <em class='brace'>}</em>,
+<a id='L180' name='L180'></a> 180         <em class='brace'>}</em>,
+<a id='L181' name='L181'></a> 181 <em class='brace'>}</em>;
+<a id='L182' name='L182'></a> 182 
+<a id='L183' name='L183'></a> 183 <strong class='reserved'>static</strong> <strong class='reserved'>int</strong> __init <a href='../S/400.html#L195' title='Referred from 195 in bpf/map_iter.c.'>bpf_map_iter_init</a>(<strong class='reserved'>void</strong>)
+<a id='L184' name='L184'></a> 184 <em class='brace'>{</em>
+<a id='L185' name='L185'></a> 185         <strong class='reserved'>int</strong> ret;
+<a id='L186' name='L186'></a> 186 
+<a id='L187' name='L187'></a> 187         bpf_map_reg_info.ctx_arg_info[0].<a href='../S/411.html#L5535' title='Defined at 5535 in bpf/btf.c.'>btf_id</a> = *btf_bpf_map_id;
+<a id='L188' name='L188'></a> 188         ret = <a href='../S/419.html#L272' title='Defined at 272 in bpf/bpf_iter.c.'>bpf_iter_reg_target</a>(&amp;bpf_map_reg_info);
+<a id='L189' name='L189'></a> 189         <strong class='reserved'>if</strong> (ret)
+<a id='L190' name='L190'></a> 190                 <strong class='reserved'>return</strong> ret;
+<a id='L191' name='L191'></a> 191 
+<a id='L192' name='L192'></a> 192         <strong class='reserved'>return</strong> <a href='../S/419.html#L272' title='Defined at 272 in bpf/bpf_iter.c.'>bpf_iter_reg_target</a>(&amp;bpf_map_elem_reg_info);
+<a id='L193' name='L193'></a> 193 <em class='brace'>}</em>
+<a id='L194' name='L194'></a> 194 
+<a id='L195' name='L195'></a> 195 late_initcall(<a href='../S/400.html#L183' title='Defined at 183 in bpf/map_iter.c.'>bpf_map_iter_init</a>);
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L13'>[^]</a><a href='#L183'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

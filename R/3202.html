@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>audit_log_format</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/162.html#L395'>audit_log_format</a>  395 audit.c        	audit_log_format(ab, "op=set %s=%u old=%u ", function_name, new, old);</span>
+<span class='curline'><a href='../S/162.html#L400'>audit_log_format</a>  400 audit.c        	audit_log_format(ab, " res=%d", allow_changes);</span>
+<span class='curline'><a href='../S/162.html#L1070'>audit_log_format</a> 1070 audit.c        	audit_log_format(*ab, "pid=%d uid=%u ", pid, uid);</span>
+<span class='curline'><a href='../S/162.html#L1110'>audit_log_format</a> 1110 audit.c        	audit_log_format(ab, " feature=%s old=%u new=%u old_lock=%u new_lock=%u res=%d",</span>
+<span class='curline'><a href='../S/162.html#L1366'>audit_log_format</a> 1366 audit.c        				audit_log_format(ab, " msg='%.*s'",</span>
+<span class='curline'><a href='../S/162.html#L1370'>audit_log_format</a> 1370 audit.c        				audit_log_format(ab, " data=");</span>
+<span class='curline'><a href='../S/162.html#L1385'>audit_log_format</a> 1385 audit.c        			audit_log_format(ab, " op=%s audit_enabled=%d res=0",</span>
+<span class='curline'><a href='../S/162.html#L1401'>audit_log_format</a> 1401 audit.c        		audit_log_format(ab, " op=trim res=1");</span>
+<span class='curline'><a href='../S/162.html#L1432'>audit_log_format</a> 1432 audit.c        		audit_log_format(ab, " op=make_equiv old=");</span>
+<span class='curline'><a href='../S/162.html#L1434'>audit_log_format</a> 1434 audit.c        		audit_log_format(ab, " new=");</span>
+<span class='curline'><a href='../S/162.html#L1436'>audit_log_format</a> 1436 audit.c        		audit_log_format(ab, " res=%d", !err);</span>
+<span class='curline'><a href='../S/162.html#L1500'>audit_log_format</a> 1500 audit.c        		audit_log_format(ab, " op=tty_set old-enabled=%d new-enabled=%d"</span>
+<span class='curline'><a href='../S/162.html#L1564'>audit_log_format</a> 1564 audit.c        	audit_log_format(ab, "pid=%u uid=%u auid=%u tty=%s ses=%u",</span>
+<span class='curline'><a href='../S/162.html#L1572'>audit_log_format</a> 1572 audit.c        	audit_log_format(ab, " comm=");</span>
+<span class='curline'><a href='../S/162.html#L1575'>audit_log_format</a> 1575 audit.c        	audit_log_format(ab, " nl-mcgrp=%d op=%s res=%d", group, op, !err);</span>
+<span class='curline'><a href='../S/162.html#L1868'>audit_log_format</a> 1868 audit.c        	audit_log_format(ab, "audit(%llu.%03lu:%u): ",</span>
+<span class='curline'><a href='../S/162.html#L2091'>audit_log_format</a> 2091 audit.c        		audit_log_format(ab, "%s", prefix);</span>
+<span class='curline'><a href='../S/162.html#L2096'>audit_log_format</a> 2096 audit.c        		audit_log_format(ab, "\"&lt;no_memory&gt;\"");</span>
+<span class='curline'><a href='../S/162.html#L2102'>audit_log_format</a> 2102 audit.c        		audit_log_format(ab, "\"&lt;too_long&gt;\"");</span>
+<span class='curline'><a href='../S/162.html#L2113'>audit_log_format</a> 2113 audit.c        	audit_log_format(ab, "auid=%u ses=%u", auid, sessionid);</span>
+<span class='curline'><a href='../S/162.html#L2118'>audit_log_format</a> 2118 audit.c        	audit_log_format(ab, " key=");</span>
+<span class='curline'><a href='../S/162.html#L2122'>audit_log_format</a> 2122 audit.c        		audit_log_format(ab, "(null)");</span>
+<span class='curline'><a href='../S/162.html#L2143'>audit_log_format</a> 2143 audit.c        	audit_log_format(ab, " subj=%s", ctx);</span>
+<span class='curline'><a href='../S/162.html#L2169'>audit_log_format</a> 2169 audit.c        	audit_log_format(ab, " exe=(null)");</span>
+<span class='curline'><a href='../S/162.html#L2200'>audit_log_format</a> 2200 audit.c        	audit_log_format(ab,</span>
+<span class='curline'><a href='../S/162.html#L2218'>audit_log_format</a> 2218 audit.c        	audit_log_format(ab, " comm=");</span>
+<span class='curline'><a href='../S/162.html#L2241'>audit_log_format</a> 2241 audit.c        	audit_log_format(ab, "op=%s", operation);</span>
+<span class='curline'><a href='../S/162.html#L2243'>audit_log_format</a> 2243 audit.c        	audit_log_format(ab, " res=0");</span>
+<span class='curline'><a href='../S/162.html#L2288'>audit_log_format</a> 2288 audit.c        	audit_log_format(ab, "pid=%d uid=%u", task_tgid_nr(current), uid);</span>
+<span class='curline'><a href='../S/162.html#L2290'>audit_log_format</a> 2290 audit.c        	audit_log_format(ab, " old-auid=%u auid=%u tty=%s old-ses=%u ses=%u res=%d",</span>
+<span class='curline'><a href='../S/162.html#L2423'>audit_log_format</a> 2423 audit.c        EXPORT_SYMBOL(audit_log_format);</span>
+<span class='curline'><a href='../S/367.html#L125'>audit_log_format</a>  125 audit_fsnotify.c 	audit_log_format(ab, " op=%s path=", op);</span>
+<span class='curline'><a href='../S/367.html#L128'>audit_log_format</a>  128 audit_fsnotify.c 	audit_log_format(ab, " list=%d res=1", rule-&gt;listnr);</span>
+<span class='curline'><a href='../S/72.html#L535'>audit_log_format</a>  535 audit_tree.c   	audit_log_format(ab, "op=remove_rule dir=");</span>
+<span class='curline'><a href='../S/72.html#L538'>audit_log_format</a>  538 audit_tree.c   	audit_log_format(ab, " list=%d res=1", rule-&gt;listnr);</span>
+<span class='curline'><a href='../S/181.html#L236'>audit_log_format</a>  236 audit_watch.c  	audit_log_format(ab, "op=%s path=", op);</span>
+<span class='curline'><a href='../S/181.html#L239'>audit_log_format</a>  239 audit_watch.c  	audit_log_format(ab, " list=%d res=1", r-&gt;listnr);</span>
+<span class='curline'><a href='../S/219.html#L1110'>audit_log_format</a> 1110 auditfilter.c  	audit_log_format(ab, " op=%s", action);</span>
+<span class='curline'><a href='../S/219.html#L1112'>audit_log_format</a> 1112 auditfilter.c  	audit_log_format(ab, " list=%d res=%d", rule-&gt;listnr, res);</span>
+<span class='curline'><a href='../S/200.html#L997'>audit_log_format</a>  997 auditsc.c      	audit_log_format(ab, "opid=%d oauid=%d ouid=%d oses=%d", pid,</span>
+<span class='curline'><a href='../S/200.html#L1002'>audit_log_format</a> 1002 auditsc.c      			audit_log_format(ab, " obj=(none)");</span>
+<span class='curline'><a href='../S/200.html#L1005'>audit_log_format</a> 1005 auditsc.c      			audit_log_format(ab, " obj=%s", ctx);</span>
+<span class='curline'><a href='../S/200.html#L1009'>audit_log_format</a> 1009 auditsc.c      	audit_log_format(ab, " ocomm=");</span>
+<span class='curline'><a href='../S/200.html#L1053'>audit_log_format</a> 1053 auditsc.c      	audit_log_format(*ab, "argc=%d", context-&gt;execve.argc);</span>
+<span class='curline'><a href='../S/200.html#L1152'>audit_log_format</a> 1152 auditsc.c      			audit_log_format(*ab, "%s", abuf);</span>
+<span class='curline'><a href='../S/200.html#L1196'>audit_log_format</a> 1196 auditsc.c      		audit_log_format(ab, " %s=0", prefix);</span>
+<span class='curline'><a href='../S/200.html#L1199'>audit_log_format</a> 1199 auditsc.c      	audit_log_format(ab, " %s=", prefix);</span>
+<span class='curline'><a href='../S/200.html#L1201'>audit_log_format</a> 1201 auditsc.c      		audit_log_format(ab, "%08x", cap-&gt;cap[CAP_LAST_U32 - i]);</span>
+<span class='curline'><a href='../S/200.html#L1207'>audit_log_format</a> 1207 auditsc.c      		audit_log_format(ab, " cap_fe=? cap_fver=? cap_fp=? cap_fi=?");</span>
+<span class='curline'><a href='../S/200.html#L1212'>audit_log_format</a> 1212 auditsc.c      	audit_log_format(ab, " cap_fe=%d cap_fver=%x cap_frootid=%d",</span>
+<span class='curline'><a href='../S/200.html#L1229'>audit_log_format</a> 1229 auditsc.c      		audit_log_format(ab, "nargs=%d", nargs);</span>
+<span class='curline'><a href='../S/200.html#L1231'>audit_log_format</a> 1231 auditsc.c      			audit_log_format(ab, " a%d=%lx", i,</span>
+<span class='curline'><a href='../S/200.html#L1237'>audit_log_format</a> 1237 auditsc.c      		audit_log_format(ab, "ouid=%u ogid=%u mode=%#ho",</span>
+<span class='curline'><a href='../S/200.html#L1245'>audit_log_format</a> 1245 auditsc.c      				audit_log_format(ab, " osid=%u", osid);</span>
+<span class='curline'><a href='../S/200.html#L1248'>audit_log_format</a> 1248 auditsc.c      				audit_log_format(ab, " obj=%s", ctx);</span>
+<span class='curline'><a href='../S/200.html#L1258'>audit_log_format</a> 1258 auditsc.c      			audit_log_format(ab,</span>
+<span class='curline'><a href='../S/200.html#L1267'>audit_log_format</a> 1267 auditsc.c      		audit_log_format(ab,</span>
+<span class='curline'><a href='../S/200.html#L1277'>audit_log_format</a> 1277 auditsc.c      		audit_log_format(ab,</span>
+<span class='curline'><a href='../S/200.html#L1287'>audit_log_format</a> 1287 auditsc.c      		audit_log_format(ab, "mqdes=%d sigev_signo=%d",</span>
+<span class='curline'><a href='../S/200.html#L1293'>audit_log_format</a> 1293 auditsc.c      		audit_log_format(ab,</span>
+<span class='curline'><a href='../S/200.html#L1301'>audit_log_format</a> 1301 auditsc.c      		audit_log_format(ab, "pid=%d", context-&gt;capset.pid);</span>
+<span class='curline'><a href='../S/200.html#L1308'>audit_log_format</a> 1308 auditsc.c      		audit_log_format(ab, "fd=%d flags=0x%x", context-&gt;mmap.fd,</span>
+<span class='curline'><a href='../S/200.html#L1315'>audit_log_format</a> 1315 auditsc.c      		audit_log_format(ab, "name=");</span>
+<span class='curline'><a href='../S/200.html#L1319'>audit_log_format</a> 1319 auditsc.c      			audit_log_format(ab, "(null)");</span>
+<span class='curline'><a href='../S/200.html#L1355'>audit_log_format</a> 1355 auditsc.c      	audit_log_format(ab, "item=%d", record_num);</span>
+<span class='curline'><a href='../S/200.html#L1363'>audit_log_format</a> 1363 auditsc.c      			audit_log_format(ab, " name=");</span>
+<span class='curline'><a href='../S/200.html#L1374'>audit_log_format</a> 1374 auditsc.c      			audit_log_format(ab, " name=");</span>
+<span class='curline'><a href='../S/200.html#L1379'>audit_log_format</a> 1379 auditsc.c      		audit_log_format(ab, " name=(null)");</span>
+<span class='curline'><a href='../S/200.html#L1382'>audit_log_format</a> 1382 auditsc.c      		audit_log_format(ab, " inode=%lu dev=%02x:%02x mode=%#ho ouid=%u ogid=%u rdev=%02x:%02x",</span>
+<span class='curline'><a href='../S/200.html#L1397'>audit_log_format</a> 1397 auditsc.c      			audit_log_format(ab, " osid=%u", n-&gt;osid);</span>
+<span class='curline'><a href='../S/200.html#L1401'>audit_log_format</a> 1401 auditsc.c      			audit_log_format(ab, " obj=%s", ctx);</span>
+<span class='curline'><a href='../S/200.html#L1409'>audit_log_format</a> 1409 auditsc.c      		audit_log_format(ab, " nametype=NORMAL");</span>
+<span class='curline'><a href='../S/200.html#L1412'>audit_log_format</a> 1412 auditsc.c      		audit_log_format(ab, " nametype=PARENT");</span>
+<span class='curline'><a href='../S/200.html#L1415'>audit_log_format</a> 1415 auditsc.c      		audit_log_format(ab, " nametype=DELETE");</span>
+<span class='curline'><a href='../S/200.html#L1418'>audit_log_format</a> 1418 auditsc.c      		audit_log_format(ab, " nametype=CREATE");</span>
+<span class='curline'><a href='../S/200.html#L1421'>audit_log_format</a> 1421 auditsc.c      		audit_log_format(ab, " nametype=UNKNOWN");</span>
+<span class='curline'><a href='../S/200.html#L1445'>audit_log_format</a> 1445 auditsc.c      	audit_log_format(ab, "proctitle=");</span>
+<span class='curline'><a href='../S/200.html#L1486'>audit_log_format</a> 1486 auditsc.c      	audit_log_format(ab, "arch=%x syscall=%d",</span>
+<span class='curline'><a href='../S/200.html#L1489'>audit_log_format</a> 1489 auditsc.c      		audit_log_format(ab, " per=%lx", context-&gt;personality);</span>
+<span class='curline'><a href='../S/200.html#L1491'>audit_log_format</a> 1491 auditsc.c      		audit_log_format(ab, " success=%s exit=%ld",</span>
+<span class='curline'><a href='../S/200.html#L1495'>audit_log_format</a> 1495 auditsc.c      	audit_log_format(ab,</span>
+<span class='curline'><a href='../S/200.html#L1517'>audit_log_format</a> 1517 auditsc.c      			audit_log_format(ab, "fver=%x", axs-&gt;fcap_ver);</span>
+<span class='curline'><a href='../S/200.html#L1520'>audit_log_format</a> 1520 auditsc.c      			audit_log_format(ab, " fe=%d", axs-&gt;fcap.fE);</span>
+<span class='curline'><a href='../S/200.html#L1529'>audit_log_format</a> 1529 auditsc.c      			audit_log_format(ab, " frootid=%d",</span>
+<span class='curline'><a href='../S/200.html#L1544'>audit_log_format</a> 1544 auditsc.c      			audit_log_format(ab, "fd0=%d fd1=%d",</span>
+<span class='curline'><a href='../S/200.html#L1553'>audit_log_format</a> 1553 auditsc.c      			audit_log_format(ab, "saddr=");</span>
+<span class='curline'><a href='../S/200.html#L2599'>audit_log_format</a> 2599 auditsc.c      	audit_log_format(ab, "table=%s family=%u entries=%u op=%s",</span>
+<span class='curline'><a href='../S/200.html#L2602'>audit_log_format</a> 2602 auditsc.c      	audit_log_format(ab, " pid=%u", task_pid_nr(current));</span>
+<span class='curline'><a href='../S/200.html#L2604'>audit_log_format</a> 2604 auditsc.c      	audit_log_format(ab, " comm=");</span>
+<span class='curline'><a href='../S/200.html#L2621'>audit_log_format</a> 2621 auditsc.c      	audit_log_format(ab, "auid=%u uid=%u gid=%u ses=%u",</span>
+<span class='curline'><a href='../S/200.html#L2627'>audit_log_format</a> 2627 auditsc.c      	audit_log_format(ab, " pid=%d comm=", task_tgid_nr(current));</span>
+<span class='curline'><a href='../S/200.html#L2653'>audit_log_format</a> 2653 auditsc.c      	audit_log_format(ab, " sig=%ld res=1", signr);</span>
+<span class='curline'><a href='../S/200.html#L2677'>audit_log_format</a> 2677 auditsc.c      	audit_log_format(ab, " sig=%ld arch=%x syscall=%ld compat=%d ip=0x%lx code=0x%x",</span>
+<span class='curline'><a href='../S/200.html#L2696'>audit_log_format</a> 2696 auditsc.c      	audit_log_format(ab,</span>
+<span class='curline'><a href='../S/418.html#L1626'>audit_log_format</a> 1626 bpf/syscall.c  	audit_log_format(ab, "prog-id=%u op=%s",</span>
+</pre>
+</body>
+</html>

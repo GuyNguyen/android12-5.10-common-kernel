@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>task_rq</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/441.html#L201'>task_rq</a>           201 sched/core.c   		rq = task_rq(p);</span>
+<span class='curline'><a href='../S/441.html#L203'>task_rq</a>           203 sched/core.c   		if (likely(rq == task_rq(p) &amp;&amp; !task_on_rq_migrating(p))) {</span>
+<span class='curline'><a href='../S/441.html#L226'>task_rq</a>           226 sched/core.c   		rq = task_rq(p);</span>
+<span class='curline'><a href='../S/441.html#L245'>task_rq</a>           245 sched/core.c   		if (likely(rq == task_rq(p) &amp;&amp; !task_on_rq_migrating(p))) {</span>
+<span class='curline'><a href='../S/441.html#L1907'>task_rq</a>          1907 sched/core.c   	if (task_rq(p) == rq) {</span>
+<span class='curline'><a href='../S/441.html#L1933'>task_rq</a>          1933 sched/core.c   	struct rq *rq = task_rq(p);</span>
+<span class='curline'><a href='../S/441.html#L2168'>task_rq</a>          2168 sched/core.c   				      lockdep_is_held(&amp;task_rq(p)-&gt;lock)));</span>
+<span class='curline'><a href='../S/441.html#L2197'>task_rq</a>          2197 sched/core.c   		src_rq = task_rq(p);</span>
+<span class='curline'><a href='../S/441.html#L2337'>task_rq</a>          2337 sched/core.c   		rq = task_rq(p);</span>
+<span class='curline'><a href='../S/441.html#L2698'>task_rq</a>          2698 sched/core.c   		atomic_dec(&amp;task_rq(p)-&gt;nr_iowait);</span>
+<span class='curline'><a href='../S/441.html#L3179'>task_rq</a>          3179 sched/core.c   			atomic_dec(&amp;task_rq(p)-&gt;nr_iowait);</span>
+<span class='curline'><a href='../S/441.html#L3230'>task_rq</a>          3230 sched/core.c   		if (task_rq(p) == rq)</span>
+<span class='curline'><a href='../S/441.html#L4157'>task_rq</a>          4157 sched/core.c   	struct sched_entity *curr = (&amp;task_rq(p)-&gt;cfs)-&gt;curr;</span>
+<span class='curline'><a href='../S/441.html#L6186'>task_rq</a>          6186 sched/core.c   		if (!cpumask_subset(task_rq(p)-&gt;rd-&gt;span, new_mask)) {</span>
+<span class='curline'><a href='../S/441.html#L6447'>task_rq</a>          6447 sched/core.c   	p_rq = task_rq(p);</span>
+<span class='curline'><a href='../S/441.html#L6458'>task_rq</a>          6458 sched/core.c   	if (task_rq(p) != p_rq) {</span>
+<span class='curline'><a href='../S/441.html#L6851'>task_rq</a>          6851 sched/core.c   	if (dl_task(p) &amp;&amp; !cpumask_intersects(task_rq(p)-&gt;rd-&gt;span,</span>
+<span class='curline'><a href='../S/441.html#L7045'>task_rq</a>          7045 sched/core.c   		if (task_rq(next) != rq || !task_on_rq_queued(next)) {</span>
+<span class='curline'><a href='../S/451.html#L36'>task_rq</a>            36 sched/deadline.c 	struct rq *rq = task_rq(p);</span>
+<span class='curline'><a href='../S/451.html#L226'>task_rq</a>           226 sched/deadline.c 	rq = task_rq(p);</span>
+<span class='curline'><a href='../S/451.html#L984'>task_rq</a>           984 sched/deadline.c 	struct rq *rq = task_rq(p);</span>
+<span class='curline'><a href='../S/451.html#L1730'>task_rq</a>          1730 sched/deadline.c 	rq = task_rq(p);</span>
+<span class='curline'><a href='../S/451.html#L1972'>task_rq</a>          1972 sched/deadline.c 	if (!cpudl_find(&amp;task_rq(task)-&gt;rd-&gt;cpudl, task, later_mask))</span>
+<span class='curline'><a href='../S/451.html#L2070'>task_rq</a>          2070 sched/deadline.c 			if (unlikely(task_rq(task) != rq ||</span>
+<span class='curline'><a href='../S/451.html#L2317'>task_rq</a>          2317 sched/deadline.c 	rq = task_rq(p);</span>
+<span class='curline'><a href='../S/464.html#L462'>task_rq</a>           462 sched/fair.c   	return &amp;task_rq(p)-&gt;cfs;</span>
+<span class='curline'><a href='../S/464.html#L468'>task_rq</a>           468 sched/fair.c   	struct rq *rq = task_rq(p);</span>
+<span class='curline'><a href='../S/464.html#L1123'>task_rq</a>          1123 sched/fair.c   		(lockdep_is_held(&amp;task_rq(p)-&gt;lock) &amp;&amp; !READ_ONCE(p-&gt;on_cpu)));</span>
+<span class='curline'><a href='../S/464.html#L5457'>task_rq</a>          5457 sched/fair.c   	SCHED_WARN_ON(task_rq(p) != rq);</span>
+<span class='curline'><a href='../S/464.html#L6934'>task_rq</a>          6934 sched/fair.c   		lockdep_assert_held(&amp;task_rq(p)-&gt;lock);</span>
+<span class='curline'><a href='../S/464.html#L7955'>task_rq</a>          7955 sched/fair.c   	BUG_ON(task_rq(p) != rq);</span>
+<span class='curline'><a href='../S/464.html#L10928'>task_rq</a>          10928 sched/fair.c   	update_overutilized_status(task_rq(curr));</span>
+<span class='curline'><a href='../S/450.html#L245'>task_rq</a>           245 sched/rt.c     	return task_rq(p);</span>
+<span class='curline'><a href='../S/450.html#L1798'>task_rq</a>          1798 sched/rt.c     		ret = cpupri_find_fitness(&amp;task_rq(task)-&gt;rd-&gt;cpupri,</span>
+<span class='curline'><a href='../S/450.html#L1803'>task_rq</a>          1803 sched/rt.c     		ret = cpupri_find(&amp;task_rq(task)-&gt;rd-&gt;cpupri,</span>
+<span class='curline'><a href='../S/450.html#L1907'>task_rq</a>          1907 sched/rt.c     			if (unlikely(task_rq(task) != rq ||</span>
+</pre>
+</body>
+</html>

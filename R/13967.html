@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>tracer</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/251.html#L534'>tracer</a>            534 ptrace.c       static bool __ptrace_detach(struct task_struct *tracer, struct task_struct *p)</span>
+<span class='curline'><a href='../S/251.html#L546'>tracer</a>            546 ptrace.c       		if (!same_thread_group(p-&gt;real_parent, tracer))</span>
+<span class='curline'><a href='../S/251.html#L548'>tracer</a>            548 ptrace.c       		else if (ignoring_children(tracer-&gt;sighand)) {</span>
+<span class='curline'><a href='../S/251.html#L549'>tracer</a>            549 ptrace.c       			__wake_up_parent(p, tracer);</span>
+<span class='curline'><a href='../S/251.html#L590'>tracer</a>            590 ptrace.c       void exit_ptrace(struct task_struct *tracer, struct list_head *dead)</span>
+<span class='curline'><a href='../S/251.html#L594'>tracer</a>            594 ptrace.c       	list_for_each_entry_safe(p, n, &amp;tracer-&gt;ptraced, ptrace_entry) {</span>
+<span class='curline'><a href='../S/251.html#L598'>tracer</a>            598 ptrace.c       		if (__ptrace_detach(tracer, p))</span>
+<span class='curline'><a href='../S/290.html#L1624'>tracer</a>           1624 trace/blktrace.c static struct tracer blk_tracer __read_mostly = {</span>
+<span class='curline'><a href='../S/271.html#L818'>tracer</a>            818 trace/trace.c  static struct tracer		*trace_types __read_mostly;</span>
+<span class='curline'><a href='../S/271.html#L1105'>tracer</a>           1105 trace/trace.c  	struct tracer *tracer = tr-&gt;current_trace;</span>
+<span class='curline'><a href='../S/271.html#L1122'>tracer</a>           1122 trace/trace.c  	if (tracer-&gt;use_max_tr) {</span>
+<span class='curline'><a href='../S/271.html#L1901'>tracer</a>           1901 trace/trace.c  	struct tracer			*type;</span>
+<span class='curline'><a href='../S/271.html#L1906'>tracer</a>           1906 trace/trace.c  static int save_selftest(struct tracer *type)</span>
+<span class='curline'><a href='../S/271.html#L1919'>tracer</a>           1919 trace/trace.c  static int run_tracer_selftest(struct tracer *type)</span>
+<span class='curline'><a href='../S/271.html#L1922'>tracer</a>           1922 trace/trace.c  	struct tracer *saved_tracer = tr-&gt;current_trace;</span>
+<span class='curline'><a href='../S/271.html#L1989'>tracer</a>           1989 trace/trace.c  	struct tracer *t, **last;</span>
+<span class='curline'><a href='../S/271.html#L2033'>tracer</a>           2033 trace/trace.c  static inline int run_tracer_selftest(struct tracer *type)</span>
+<span class='curline'><a href='../S/271.html#L2039'>tracer</a>           2039 trace/trace.c  static void add_tracer_options(struct trace_array *tr, struct tracer *t);</span>
+<span class='curline'><a href='../S/271.html#L2049'>tracer</a>           2049 trace/trace.c  int __init register_tracer(struct tracer *type)</span>
+<span class='curline'><a href='../S/271.html#L2051'>tracer</a>           2051 trace/trace.c  	struct tracer *t;</span>
+<span class='curline'><a href='../S/271.html#L3862'>tracer</a>           3862 trace/trace.c  	struct tracer *type = iter-&gt;trace;</span>
+<span class='curline'><a href='../S/271.html#L4551'>tracer</a>           4551 trace/trace.c  trace_ok_for_array(struct tracer *t, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L4557'>tracer</a>           4557 trace/trace.c  static struct tracer *</span>
+<span class='curline'><a href='../S/271.html#L4558'>tracer</a>           4558 trace/trace.c  get_tracer_for_array(struct trace_array *tr, struct tracer *t)</span>
+<span class='curline'><a href='../S/271.html#L4570'>tracer</a>           4570 trace/trace.c  	struct tracer *t = v;</span>
+<span class='curline'><a href='../S/271.html#L4583'>tracer</a>           4583 trace/trace.c  	struct tracer *t;</span>
+<span class='curline'><a href='../S/271.html#L4602'>tracer</a>           4602 trace/trace.c  	struct tracer *t = v;</span>
+<span class='curline'><a href='../S/271.html#L4819'>tracer</a>           4819 trace/trace.c  	struct tracer *trace = tracer_flags-&gt;trace;</span>
+<span class='curline'><a href='../S/271.html#L4836'>tracer</a>           4836 trace/trace.c  	struct tracer *trace = tr-&gt;current_trace;</span>
+<span class='curline'><a href='../S/271.html#L4852'>tracer</a>           4852 trace/trace.c  int trace_keep_overwrite(struct tracer *tracer, u32 mask, int set)</span>
+<span class='curline'><a href='../S/271.html#L4854'>tracer</a>           4854 trace/trace.c  	if (tracer-&gt;enabled &amp;&amp; (mask &amp; TRACE_ITER_OVERWRITE) &amp;&amp; !set)</span>
+<span class='curline'><a href='../S/271.html#L5714'>tracer</a>           5714 trace/trace.c  int tracer_init(struct tracer *t, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/271.html#L5874'>tracer</a>           5874 trace/trace.c  create_trace_option_files(struct trace_array *tr, struct tracer *tracer);</span>
+<span class='curline'><a href='../S/271.html#L5893'>tracer</a>           5893 trace/trace.c  static void add_tracer_options(struct trace_array *tr, struct tracer *t)</span>
+<span class='curline'><a href='../S/271.html#L5904'>tracer</a>           5904 trace/trace.c  	struct tracer *t;</span>
+<span class='curline'><a href='../S/271.html#L8335'>tracer</a>           8335 trace/trace.c  create_trace_option_files(struct trace_array *tr, struct tracer *tracer)</span>
+<span class='curline'><a href='../S/271.html#L8344'>tracer</a>           8344 trace/trace.c  	if (!tracer)</span>
+<span class='curline'><a href='../S/271.html#L8347'>tracer</a>           8347 trace/trace.c  	flags = tracer-&gt;flags;</span>
+<span class='curline'><a href='../S/271.html#L8356'>tracer</a>           8356 trace/trace.c  	if (!trace_ok_for_array(tracer, tr))</span>
+<span class='curline'><a href='../S/271.html#L8361'>tracer</a>           8361 trace/trace.c  		if (WARN_ON_ONCE(tr-&gt;topts[i].tracer-&gt;flags == tracer-&gt;flags))</span>
+<span class='curline'><a href='../S/271.html#L8382'>tracer</a>           8382 trace/trace.c  	tr-&gt;topts[tr-&gt;nr_topts].tracer = tracer;</span>
+<span class='curline'><a href='../S/271.html#L8625'>tracer</a>           8625 trace/trace.c  	struct tracer *t;</span>
+<span class='curline'><a href='../S/256.html#L191'>tracer</a>            191 trace/trace.h  struct tracer;</span>
+<span class='curline'><a href='../S/256.html#L205'>tracer</a>            205 trace/trace.h  	struct tracer			*tracer;</span>
+<span class='curline'><a href='../S/256.html#L344'>tracer</a>            344 trace/trace.h  	struct tracer		*current_trace;</span>
+<span class='curline'><a href='../S/256.html#L483'>tracer</a>            483 trace/trace.h  	struct tracer		*trace;</span>
+<span class='curline'><a href='../S/256.html#L538'>tracer</a>            538 trace/trace.h  	int			(*selftest)(struct tracer *trace,</span>
+<span class='curline'><a href='../S/256.html#L549'>tracer</a>            549 trace/trace.h  	struct tracer		*next;</span>
+<span class='curline'><a href='../S/256.html#L744'>tracer</a>            744 trace/trace.h  int tracer_init(struct tracer *t, struct trace_array *tr);</span>
+<span class='curline'><a href='../S/256.html#L814'>tracer</a>            814 trace/trace.h  int register_tracer(struct tracer *type);</span>
+<span class='curline'><a href='../S/256.html#L901'>tracer</a>            901 trace/trace.h  extern int trace_selftest_startup_function(struct tracer *trace,</span>
+<span class='curline'><a href='../S/256.html#L903'>tracer</a>            903 trace/trace.h  extern int trace_selftest_startup_function_graph(struct tracer *trace,</span>
+<span class='curline'><a href='../S/256.html#L905'>tracer</a>            905 trace/trace.h  extern int trace_selftest_startup_irqsoff(struct tracer *trace,</span>
+<span class='curline'><a href='../S/256.html#L907'>tracer</a>            907 trace/trace.h  extern int trace_selftest_startup_preemptoff(struct tracer *trace,</span>
+<span class='curline'><a href='../S/256.html#L909'>tracer</a>            909 trace/trace.h  extern int trace_selftest_startup_preemptirqsoff(struct tracer *trace,</span>
+<span class='curline'><a href='../S/256.html#L911'>tracer</a>            911 trace/trace.h  extern int trace_selftest_startup_wakeup(struct tracer *trace,</span>
+<span class='curline'><a href='../S/256.html#L913'>tracer</a>            913 trace/trace.h  extern int trace_selftest_startup_nop(struct tracer *trace,</span>
+<span class='curline'><a href='../S/256.html#L915'>tracer</a>            915 trace/trace.h  extern int trace_selftest_startup_branch(struct tracer *trace,</span>
+<span class='curline'><a href='../S/256.html#L1408'>tracer</a>           1408 trace/trace.h  extern struct tracer nop_trace;</span>
+<span class='curline'><a href='../S/256.html#L1996'>tracer</a>           1996 trace/trace.h  int trace_keep_overwrite(struct tracer *tracer, u32 mask, int set);</span>
+<span class='curline'><a href='../S/309.html#L24'>tracer</a>             24 trace/trace_branch.c static struct tracer branch_trace;</span>
+<span class='curline'><a href='../S/309.html#L173'>tracer</a>            173 trace/trace_branch.c static struct tracer branch_trace __read_mostly =</span>
+<span class='curline'><a href='../S/307.html#L239'>tracer</a>            239 trace/trace_functions.c static struct tracer function_trace;</span>
+<span class='curline'><a href='../S/307.html#L272'>tracer</a>            272 trace/trace_functions.c static struct tracer function_trace __tracer_data =</span>
+<span class='curline'><a href='../S/287.html#L1281'>tracer</a>           1281 trace/trace_functions_graph.c static struct tracer graph_trace __tracer_data = {</span>
+<span class='curline'><a href='../S/297.html#L625'>tracer</a>            625 trace/trace_hwlat.c static struct tracer hwlat_tracer __read_mostly =</span>
+<span class='curline'><a href='../S/314.html#L519'>tracer</a>            519 trace/trace_irqsoff.c 	struct tracer *tracer = tr-&gt;current_trace;</span>
+<span class='curline'><a href='../S/314.html#L529'>tracer</a>            529 trace/trace_irqsoff.c 	return trace_keep_overwrite(tracer, mask, set);</span>
+<span class='curline'><a href='../S/314.html#L644'>tracer</a>            644 trace/trace_irqsoff.c static struct tracer irqsoff_tracer __read_mostly =</span>
+<span class='curline'><a href='../S/314.html#L694'>tracer</a>            694 trace/trace_irqsoff.c static struct tracer preemptoff_tracer __read_mostly =</span>
+<span class='curline'><a href='../S/314.html#L729'>tracer</a>            729 trace/trace_irqsoff.c static struct tracer preemptirqsoff_tracer __read_mostly =</span>
+<span class='curline'><a href='../S/286.html#L276'>tracer</a>            276 trace/trace_mmiotrace.c static struct tracer mmio_tracer __read_mostly =</span>
+<span class='curline'><a href='../S/266.html#L88'>tracer</a>             88 trace/trace_nop.c struct tracer nop_trace __read_mostly =</span>
+<span class='curline'><a href='../S/295.html#L316'>tracer</a>            316 trace/trace_sched_wakeup.c 	struct tracer *tracer = tr-&gt;current_trace;</span>
+<span class='curline'><a href='../S/295.html#L326'>tracer</a>            326 trace/trace_sched_wakeup.c 	return trace_keep_overwrite(tracer, mask, set);</span>
+<span class='curline'><a href='../S/295.html#L744'>tracer</a>            744 trace/trace_sched_wakeup.c static struct tracer wakeup_tracer __read_mostly =</span>
+<span class='curline'><a href='../S/295.html#L764'>tracer</a>            764 trace/trace_sched_wakeup.c static struct tracer wakeup_rt_tracer __read_mostly =</span>
+<span class='curline'><a href='../S/295.html#L784'>tracer</a>            784 trace/trace_sched_wakeup.c static struct tracer wakeup_dl_tracer __read_mostly =</span>
+<span class='curline'><a href='../S/319.html#L97'>tracer</a>             97 trace/trace_selftest.c static inline void warn_failed_init_tracer(struct tracer *trace, int init_ret)</span>
+<span class='curline'><a href='../S/319.html#L325'>tracer</a>            325 trace/trace_selftest.c static int trace_selftest_startup_dynamic_tracing(struct tracer *trace,</span>
+<span class='curline'><a href='../S/319.html#L658'>tracer</a>            658 trace/trace_selftest.c trace_selftest_startup_function(struct tracer *trace, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/319.html#L759'>tracer</a>            759 trace/trace_selftest.c trace_selftest_startup_function_graph(struct tracer *trace,</span>
+<span class='curline'><a href='../S/319.html#L826'>tracer</a>            826 trace/trace_selftest.c trace_selftest_startup_irqsoff(struct tracer *trace, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/319.html#L875'>tracer</a>            875 trace/trace_selftest.c trace_selftest_startup_preemptoff(struct tracer *trace, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/319.html#L937'>tracer</a>            937 trace/trace_selftest.c trace_selftest_startup_preemptirqsoff(struct tracer *trace, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/319.html#L1038'>tracer</a>           1038 trace/trace_selftest.c trace_selftest_startup_nop(struct tracer *trace, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/319.html#L1090'>tracer</a>           1090 trace/trace_selftest.c trace_selftest_startup_wakeup(struct tracer *trace, struct trace_array *tr)</span>
+<span class='curline'><a href='../S/319.html#L1168'>tracer</a>           1168 trace/trace_selftest.c trace_selftest_startup_branch(struct tracer *trace, struct trace_array *tr)</span>
+</pre>
+</body>
+</html>

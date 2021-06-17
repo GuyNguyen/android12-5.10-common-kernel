@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>mcs_spinlock</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/42.html#L19'>mcs_spinlock</a>       19 locking/mcs_spinlock.h 	struct mcs_spinlock *next;</span>
+<span class='curline'><a href='../S/42.html#L65'>mcs_spinlock</a>       65 locking/mcs_spinlock.h void mcs_spin_lock(struct mcs_spinlock **lock, struct mcs_spinlock *node)</span>
+<span class='curline'><a href='../S/42.html#L67'>mcs_spinlock</a>       67 locking/mcs_spinlock.h 	struct mcs_spinlock *prev;</span>
+<span class='curline'><a href='../S/42.html#L102'>mcs_spinlock</a>      102 locking/mcs_spinlock.h void mcs_spin_unlock(struct mcs_spinlock **lock, struct mcs_spinlock *node)</span>
+<span class='curline'><a href='../S/42.html#L104'>mcs_spinlock</a>      104 locking/mcs_spinlock.h 	struct mcs_spinlock *next = READ_ONCE(node-&gt;next);</span>
+<span class='curline'><a href='../S/43.html#L82'>mcs_spinlock</a>       82 locking/qspinlock.c 	struct mcs_spinlock mcs;</span>
+<span class='curline'><a href='../S/43.html#L125'>mcs_spinlock</a>      125 locking/qspinlock.c static inline __pure struct mcs_spinlock *decode_tail(u32 tail)</span>
+<span class='curline'><a href='../S/43.html#L134'>mcs_spinlock</a>      134 locking/qspinlock.c struct mcs_spinlock *grab_mcs_node(struct mcs_spinlock *base, int idx)</span>
+<span class='curline'><a href='../S/43.html#L272'>mcs_spinlock</a>      272 locking/qspinlock.c static __always_inline void __pv_init_node(struct mcs_spinlock *node) { }</span>
+<span class='curline'><a href='../S/43.html#L273'>mcs_spinlock</a>      273 locking/qspinlock.c static __always_inline void __pv_wait_node(struct mcs_spinlock *node,</span>
+<span class='curline'><a href='../S/43.html#L274'>mcs_spinlock</a>      274 locking/qspinlock.c 					   struct mcs_spinlock *prev) { }</span>
+<span class='curline'><a href='../S/43.html#L276'>mcs_spinlock</a>      276 locking/qspinlock.c 					   struct mcs_spinlock *node) { }</span>
+<span class='curline'><a href='../S/43.html#L278'>mcs_spinlock</a>      278 locking/qspinlock.c 						   struct mcs_spinlock *node)</span>
+<span class='curline'><a href='../S/43.html#L317'>mcs_spinlock</a>      317 locking/qspinlock.c 	struct mcs_spinlock *prev, *next, *node;</span>
+<span class='curline'><a href='../S/20.html#L51'>mcs_spinlock</a>       51 locking/qspinlock_paravirt.h 	struct mcs_spinlock	mcs;</span>
+<span class='curline'><a href='../S/20.html#L278'>mcs_spinlock</a>      278 locking/qspinlock_paravirt.h static void pv_init_node(struct mcs_spinlock *node)</span>
+<span class='curline'><a href='../S/20.html#L293'>mcs_spinlock</a>      293 locking/qspinlock_paravirt.h static void pv_wait_node(struct mcs_spinlock *node, struct mcs_spinlock *prev)</span>
+<span class='curline'><a href='../S/20.html#L360'>mcs_spinlock</a>      360 locking/qspinlock_paravirt.h static void pv_kick_node(struct qspinlock *lock, struct mcs_spinlock *node)</span>
+<span class='curline'><a href='../S/20.html#L403'>mcs_spinlock</a>      403 locking/qspinlock_paravirt.h pv_wait_head_or_lock(struct qspinlock *lock, struct mcs_spinlock *node)</span>
+</pre>
+</body>
+</html>

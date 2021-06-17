@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rcu_seq_state</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/133.html#L59'>rcu_seq_state</a>      59 rcu/rcu.h      	WARN_ON_ONCE(rcu_seq_state(*sp) != 1);</span>
+<span class='curline'><a href='../S/133.html#L72'>rcu_seq_state</a>      72 rcu/rcu.h      	WARN_ON_ONCE(!rcu_seq_state(*sp));</span>
+<span class='curline'><a href='../S/139.html#L232'>rcu_seq_state</a>     232 rcu/srcutree.c 	if (!rcu_seq_state(smp_load_acquire(&amp;ssp-&gt;srcu_gp_seq_needed))) /*^^^*/</span>
+<span class='curline'><a href='../S/139.html#L235'>rcu_seq_state</a>     235 rcu/srcutree.c 	if (!rcu_seq_state(ssp-&gt;srcu_gp_seq_needed)) {</span>
+<span class='curline'><a href='../S/139.html#L387'>rcu_seq_state</a>     387 rcu/srcutree.c 	if (WARN_ON(rcu_seq_state(READ_ONCE(ssp-&gt;srcu_gp_seq)) != SRCU_STATE_IDLE) ||</span>
+<span class='curline'><a href='../S/139.html#L390'>rcu_seq_state</a>     390 rcu/srcutree.c 			__func__, ssp, rcu_seq_state(READ_ONCE(ssp-&gt;srcu_gp_seq)));</span>
+<span class='curline'><a href='../S/139.html#L453'>rcu_seq_state</a>     453 rcu/srcutree.c 	state = rcu_seq_state(ssp-&gt;srcu_gp_seq);</span>
+<span class='curline'><a href='../S/139.html#L530'>rcu_seq_state</a>     530 rcu/srcutree.c 	idx = rcu_seq_state(ssp-&gt;srcu_gp_seq);</span>
+<span class='curline'><a href='../S/139.html#L581'>rcu_seq_state</a>     581 rcu/srcutree.c 	if (!rcu_seq_state(gpseq) &amp;&amp;</span>
+<span class='curline'><a href='../S/139.html#L681'>rcu_seq_state</a>     681 rcu/srcutree.c 	    rcu_seq_state(ssp-&gt;srcu_gp_seq) == SRCU_STATE_IDLE) {</span>
+<span class='curline'><a href='../S/139.html#L1107'>rcu_seq_state</a>    1107 rcu/srcutree.c 	idx = rcu_seq_state(smp_load_acquire(&amp;ssp-&gt;srcu_gp_seq)); /* ^^^ */</span>
+<span class='curline'><a href='../S/139.html#L1111'>rcu_seq_state</a>    1111 rcu/srcutree.c 			WARN_ON_ONCE(rcu_seq_state(ssp-&gt;srcu_gp_seq));</span>
+<span class='curline'><a href='../S/139.html#L1116'>rcu_seq_state</a>    1116 rcu/srcutree.c 		idx = rcu_seq_state(READ_ONCE(ssp-&gt;srcu_gp_seq));</span>
+<span class='curline'><a href='../S/139.html#L1126'>rcu_seq_state</a>    1126 rcu/srcutree.c 	if (rcu_seq_state(READ_ONCE(ssp-&gt;srcu_gp_seq)) == SRCU_STATE_SCAN1) {</span>
+<span class='curline'><a href='../S/139.html#L1138'>rcu_seq_state</a>    1138 rcu/srcutree.c 	if (rcu_seq_state(READ_ONCE(ssp-&gt;srcu_gp_seq)) == SRCU_STATE_SCAN2) {</span>
+<span class='curline'><a href='../S/139.html#L1217'>rcu_seq_state</a>    1217 rcu/srcutree.c 		if (!WARN_ON_ONCE(rcu_seq_state(ssp-&gt;srcu_gp_seq))) {</span>
+<span class='curline'><a href='../S/139.html#L1221'>rcu_seq_state</a>    1221 rcu/srcutree.c 	} else if (!rcu_seq_state(ssp-&gt;srcu_gp_seq)) {</span>
+<span class='curline'><a href='../S/144.html#L219'>rcu_seq_state</a>     219 rcu/tree.c     	return rcu_seq_state(rcu_seq_current(&amp;rcu_state.gp_seq));</span>
+<span class='curline'><a href='../S/144.html#L1381'>rcu_seq_state</a>    1381 rcu/tree.c     		     rcu_seq_state(rcu_seq_current(&amp;rnp-&gt;gp_seq)))) {</span>
+<span class='curline'><a href='../S/144.html#L1387'>rcu_seq_state</a>    1387 rcu/tree.c     		if (rcu_seq_state(rcu_seq_current(&amp;rnp-&gt;gp_seq))) {</span>
+<span class='curline'><a href='../S/144.html#L1584'>rcu_seq_state</a>    1584 rcu/tree.c     	if (!rcu_seq_state(rcu_seq_current(&amp;rnp-&gt;gp_seq)) ||</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>tracing_map_sort_entry</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/291.html#L4684'>tracing_map_sort_entry</a> 4684 trace/trace_events_hist.c 	struct tracing_map_sort_entry **sort_entries = NULL;</span>
+<span class='curline'><a href='../S/298.html#L837'>tracing_map_sort_entry</a>  837 trace/tracing_map.c static int cmp_entries_dup(const struct tracing_map_sort_entry **a,</span>
+<span class='curline'><a href='../S/298.html#L838'>tracing_map_sort_entry</a>  838 trace/tracing_map.c 			   const struct tracing_map_sort_entry **b)</span>
+<span class='curline'><a href='../S/298.html#L848'>tracing_map_sort_entry</a>  848 trace/tracing_map.c static int cmp_entries_sum(const struct tracing_map_sort_entry **a,</span>
+<span class='curline'><a href='../S/298.html#L849'>tracing_map_sort_entry</a>  849 trace/tracing_map.c 			   const struct tracing_map_sort_entry **b)</span>
+<span class='curline'><a href='../S/298.html#L876'>tracing_map_sort_entry</a>  876 trace/tracing_map.c static int cmp_entries_key(const struct tracing_map_sort_entry **a,</span>
+<span class='curline'><a href='../S/298.html#L877'>tracing_map_sort_entry</a>  877 trace/tracing_map.c 			   const struct tracing_map_sort_entry **b)</span>
+<span class='curline'><a href='../S/298.html#L905'>tracing_map_sort_entry</a>  905 trace/tracing_map.c static void destroy_sort_entry(struct tracing_map_sort_entry *entry)</span>
+<span class='curline'><a href='../S/298.html#L923'>tracing_map_sort_entry</a>  923 trace/tracing_map.c void tracing_map_destroy_sort_entries(struct tracing_map_sort_entry **entries,</span>
+<span class='curline'><a href='../S/298.html#L934'>tracing_map_sort_entry</a>  934 trace/tracing_map.c static struct tracing_map_sort_entry *</span>
+<span class='curline'><a href='../S/298.html#L937'>tracing_map_sort_entry</a>  937 trace/tracing_map.c 	struct tracing_map_sort_entry *sort_entry;</span>
+<span class='curline'><a href='../S/298.html#L949'>tracing_map_sort_entry</a>  949 trace/tracing_map.c static void detect_dups(struct tracing_map_sort_entry **sort_entries,</span>
+<span class='curline'><a href='../S/298.html#L959'>tracing_map_sort_entry</a>  959 trace/tracing_map.c 	sort(sort_entries, n_entries, sizeof(struct tracing_map_sort_entry *),</span>
+<span class='curline'><a href='../S/298.html#L987'>tracing_map_sort_entry</a>  987 trace/tracing_map.c 			   const struct tracing_map_sort_entry **entries,</span>
+<span class='curline'><a href='../S/298.html#L992'>tracing_map_sort_entry</a>  992 trace/tracing_map.c 	int (*primary_fn)(const struct tracing_map_sort_entry **,</span>
+<span class='curline'><a href='../S/298.html#L993'>tracing_map_sort_entry</a>  993 trace/tracing_map.c 			  const struct tracing_map_sort_entry **);</span>
+<span class='curline'><a href='../S/298.html#L994'>tracing_map_sort_entry</a>  994 trace/tracing_map.c 	int (*secondary_fn)(const struct tracing_map_sort_entry **,</span>
+<span class='curline'><a href='../S/298.html#L995'>tracing_map_sort_entry</a>  995 trace/tracing_map.c 			    const struct tracing_map_sort_entry **);</span>
+<span class='curline'><a href='../S/298.html#L1009'>tracing_map_sort_entry</a> 1009 trace/tracing_map.c 		const struct tracing_map_sort_entry **a = &amp;entries[i];</span>
+<span class='curline'><a href='../S/298.html#L1010'>tracing_map_sort_entry</a> 1010 trace/tracing_map.c 		const struct tracing_map_sort_entry **b = &amp;entries[i + 1];</span>
+<span class='curline'><a href='../S/298.html#L1026'>tracing_map_sort_entry</a> 1026 trace/tracing_map.c 		     sizeof(struct tracing_map_sort_entry *),</span>
+<span class='curline'><a href='../S/298.html#L1062'>tracing_map_sort_entry</a> 1062 trace/tracing_map.c 			     struct tracing_map_sort_entry ***sort_entries)</span>
+<span class='curline'><a href='../S/298.html#L1064'>tracing_map_sort_entry</a> 1064 trace/tracing_map.c 	int (*cmp_entries_fn)(const struct tracing_map_sort_entry **,</span>
+<span class='curline'><a href='../S/298.html#L1065'>tracing_map_sort_entry</a> 1065 trace/tracing_map.c 			      const struct tracing_map_sort_entry **);</span>
+<span class='curline'><a href='../S/298.html#L1066'>tracing_map_sort_entry</a> 1066 trace/tracing_map.c 	struct tracing_map_sort_entry *sort_entry, **entries;</span>
+<span class='curline'><a href='../S/298.html#L1108'>tracing_map_sort_entry</a> 1108 trace/tracing_map.c 	sort(entries, n_entries, sizeof(struct tracing_map_sort_entry *),</span>
+<span class='curline'><a href='../S/298.html#L1113'>tracing_map_sort_entry</a> 1113 trace/tracing_map.c 			       (const struct tracing_map_sort_entry **)entries,</span>
+<span class='curline'><a href='../S/293.html#L283'>tracing_map_sort_entry</a>  283 trace/tracing_map.h 			 struct tracing_map_sort_entry ***sort_entries);</span>
+<span class='curline'><a href='../S/293.html#L286'>tracing_map_sort_entry</a>  286 trace/tracing_map.h tracing_map_destroy_sort_entries(struct tracing_map_sort_entry **entries,</span>
+</pre>
+</body>
+</html>

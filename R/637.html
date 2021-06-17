@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>KCSAN_CHECK_ADJACENT</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/482.html#L75'>KCSAN_CHECK_ADJACENT</a>   75 kcsan/core.c   #define SLOT_IDX(slot, i) (slot + ((i + KCSAN_CHECK_ADJACENT) % NUM_SLOTS))</span>
+<span class='curline'><a href='../S/482.html#L147'>KCSAN_CHECK_ADJACENT</a>  147 kcsan/core.c   	BUILD_BUG_ON(SLOT_IDX(0, 0) != KCSAN_CHECK_ADJACENT);</span>
+<span class='curline'><a href='../S/482.html#L148'>KCSAN_CHECK_ADJACENT</a>  148 kcsan/core.c   	BUILD_BUG_ON(SLOT_IDX(0, KCSAN_CHECK_ADJACENT+1) != 0);</span>
+<span class='curline'><a href='../S/482.html#L149'>KCSAN_CHECK_ADJACENT</a>  149 kcsan/core.c   	BUILD_BUG_ON(SLOT_IDX(CONFIG_KCSAN_NUM_WATCHPOINTS-1, KCSAN_CHECK_ADJACENT) != ARRAY_SIZE(watchpoints)-1);</span>
+<span class='curline'><a href='../S/482.html#L150'>KCSAN_CHECK_ADJACENT</a>  150 kcsan/core.c   	BUILD_BUG_ON(SLOT_IDX(CONFIG_KCSAN_NUM_WATCHPOINTS-1, KCSAN_CHECK_ADJACENT+1) != ARRAY_SIZE(watchpoints) - NUM_SLOTS);</span>
+<span class='curline'><a href='../S/487.html#L21'>KCSAN_CHECK_ADJACENT</a>   21 kcsan/encoding.h #define MAX_ENCODABLE_SIZE (SLOT_RANGE * (1 + KCSAN_CHECK_ADJACENT))</span>
+<span class='curline'><a href='../S/488.html#L17'>KCSAN_CHECK_ADJACENT</a>   17 kcsan/kcsan.h  #define NUM_SLOTS (1 + 2*KCSAN_CHECK_ADJACENT)</span>
+</pre>
+</body>
+</html>

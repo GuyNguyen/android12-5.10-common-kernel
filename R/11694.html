@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rq_clock_task</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/441.html#L4314'>rq_clock_task</a>    4314 sched/core.c   		delta = rq_clock_task(rq) - curr-&gt;se.exec_start;</span>
+<span class='curline'><a href='../S/451.html#L1258'>rq_clock_task</a>    1258 sched/deadline.c 	now = rq_clock_task(rq);</span>
+<span class='curline'><a href='../S/451.html#L1829'>rq_clock_task</a>    1829 sched/deadline.c 	p-&gt;se.exec_start = rq_clock_task(rq);</span>
+<span class='curline'><a href='../S/464.html#L863'>rq_clock_task</a>     863 sched/fair.c   	u64 now = rq_clock_task(rq_of(cfs_rq));</span>
+<span class='curline'><a href='../S/464.html#L1074'>rq_clock_task</a>    1074 sched/fair.c   	se-&gt;exec_start = rq_clock_task(rq_of(cfs_rq));</span>
+<span class='curline'><a href='../S/464.html#L4778'>rq_clock_task</a>    4778 sched/fair.c   		cfs_rq-&gt;throttled_clock_task_time += rq_clock_task(rq) -</span>
+<span class='curline'><a href='../S/464.html#L4796'>rq_clock_task</a>    4796 sched/fair.c   		cfs_rq-&gt;throttled_clock_task = rq_clock_task(rq);</span>
+<span class='curline'><a href='../S/464.html#L5214'>rq_clock_task</a>    5214 sched/fair.c   	cfs_rq-&gt;throttled_clock_task = rq_clock_task(cpu_rq(cpu));</span>
+<span class='curline'><a href='../S/464.html#L7608'>rq_clock_task</a>    7608 sched/fair.c   	delta = rq_clock_task(env-&gt;src_rq) - p-&gt;se.exec_start;</span>
+<span class='curline'><a href='../S/468.html#L87'>rq_clock_task</a>      87 sched/pelt.h   		rq-&gt;clock_pelt  = rq_clock_task(rq);</span>
+<span class='curline'><a href='../S/468.html#L139'>rq_clock_task</a>     139 sched/pelt.h   		rq-&gt;lost_idle_time += rq_clock_task(rq) - rq-&gt;clock_pelt;</span>
+<span class='curline'><a href='../S/468.html#L205'>rq_clock_task</a>     205 sched/pelt.h   	return rq_clock_task(rq);</span>
+<span class='curline'><a href='../S/450.html#L1015'>rq_clock_task</a>    1015 sched/rt.c     	now = rq_clock_task(rq);</span>
+<span class='curline'><a href='../S/450.html#L1664'>rq_clock_task</a>    1664 sched/rt.c     	p-&gt;se.exec_start = rq_clock_task(rq);</span>
+<span class='curline'><a href='../S/447.html#L1207'>rq_clock_task</a>    1207 sched/sched.h  	return rq_clock_task(rq) &gt;&gt; sched_thermal_decay_shift;</span>
+<span class='curline'><a href='../S/439.html#L34'>rq_clock_task</a>      34 sched/stop_task.c 	stop-&gt;se.exec_start = rq_clock_task(rq);</span>
+<span class='curline'><a href='../S/439.html#L68'>rq_clock_task</a>      68 sched/stop_task.c 	delta_exec = rq_clock_task(rq) - curr-&gt;se.exec_start;</span>
+<span class='curline'><a href='../S/439.html#L78'>rq_clock_task</a>      78 sched/stop_task.c 	curr-&gt;se.exec_start = rq_clock_task(rq);</span>
+</pre>
+</body>
+</html>

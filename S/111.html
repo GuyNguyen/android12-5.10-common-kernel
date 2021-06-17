@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>time/ntp_internal.h</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/512.html'>time</a>/ntp_internal.h</h2>
+<em class='comment'>/* [&lt;][&gt;][^][v][top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'><a href='../J/340.html' title='Multiple included from 2 places.'>INCLUDED FROM</a></h2>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>/* SPDX-License-Identifier: GPL-2.0 */</em>
+<a id='L2' name='L2'></a>   2 <em class='sharp'>#ifndef</em> <a href='../S/111.html#L3' title='Defined at 3 in time/ntp_internal.h.'>_LINUX_NTP_INTERNAL_H</a>
+<a id='L3' name='L3'></a>   3 <em class='sharp'>#define</em> <a href='../S/111.html#L2' title='Referred from 2 in time/ntp_internal.h.'>_LINUX_NTP_INTERNAL_H</a>
+<a id='L4' name='L4'></a>   4 
+<a id='L5' name='L5'></a>   5 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/86.html#L1044' title='Defined at 1044 in time/ntp.c.'>ntp_init</a>(<strong class='reserved'>void</strong>);
+<a id='L6' name='L6'></a>   6 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/86.html#L351' title='Defined at 351 in time/ntp.c.'>ntp_clear</a>(<strong class='reserved'>void</strong>);
+<a id='L7' name='L7'></a>   7 <em class='comment'>/* Returns how long ticks are at present, in ns / 2^NTP_SCALE_SHIFT. */</em>
+<a id='L8' name='L8'></a>   8 <strong class='reserved'>extern</strong> u64 <a href='../S/86.html#L369' title='Defined at 369 in time/ntp.c.'>ntp_tick_length</a>(<strong class='reserved'>void</strong>);
+<a id='L9' name='L9'></a>   9 <strong class='reserved'>extern</strong> ktime_t <a href='../S/86.html#L380' title='Defined at 380 in time/ntp.c.'>ntp_get_next_leap</a>(<strong class='reserved'>void</strong>);
+<a id='L10' name='L10'></a>  10 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/86.html#L400' title='Defined at 400 in time/ntp.c.'>second_overflow</a>(time64_t secs);
+<a id='L11' name='L11'></a>  11 <strong class='reserved'>extern</strong> <strong class='reserved'>int</strong> <a href='../S/86.html#L714' title='Defined at 714 in time/ntp.c.'>__do_adjtimex</a>(<strong class='reserved'>struct</strong> __kernel_timex *txc,
+<a id='L12' name='L12'></a>  12                          <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> timespec64 *ts,
+<a id='L13' name='L13'></a>  13                          s32 *time_tai, <strong class='reserved'>struct</strong> audit_ntp_data *ad);
+<a id='L14' name='L14'></a>  14 <strong class='reserved'>extern</strong> <strong class='reserved'>void</strong> <a href='../S/86.html#L982' title='Defined at 982 in time/ntp.c.'>__hardpps</a>(<strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> timespec64 *phase_ts, <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> timespec64 *raw_ts);
+<a id='L15' name='L15'></a>  15 <em class='sharp'>#endif</em> <em class='comment'>/* _LINUX_NTP_INTERNAL_H */</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;][^][v]<a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

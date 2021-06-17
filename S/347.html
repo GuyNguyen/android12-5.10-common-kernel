@@ -1,0 +1,262 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>irq/handle.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/504.html'>irq</a>/handle.c</h2>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L31'>[^]</a><a href='#L221'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L31' title='Defined at 31.'>handle_bad_irq</a></li>
+<li><a href='#L44' title='Defined at 44.'>no_action</a></li>
+<li><a href='#L50' title='Defined at 50.'>warn_no_thread</a></li>
+<li><a href='#L59' title='Defined at 59.'>__irq_wake_thread</a></li>
+<li><a href='#L137' title='Defined at 137.'>__handle_irq_event_percpu</a></li>
+<li><a href='#L191' title='Defined at 191.'>handle_irq_event_percpu</a></li>
+<li><a href='#L205' title='Defined at 205.'>handle_irq_event</a></li>
+<li><a href='#L221' title='Defined at 221.'>set_handle_irq</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 <em class='comment'>/*</em>
+<a id='L3' name='L3'></a>   3 <em class='comment'> * Copyright (C) 1992, 1998-2006 Linus Torvalds, Ingo Molnar</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> * Copyright (C) 2005-2006, Thomas Gleixner, Russell King</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> *</em>
+<a id='L6' name='L6'></a>   6 <em class='comment'> * This file contains the core interrupt handling code. Detailed</em>
+<a id='L7' name='L7'></a>   7 <em class='comment'> * information is available in Documentation/core-api/genericirq.rst</em>
+<a id='L8' name='L8'></a>   8 <em class='comment'> *</em>
+<a id='L9' name='L9'></a>   9 <em class='comment'> */</em>
+<a id='L10' name='L10'></a>  10 
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;linux/irq.h&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;linux/random.h&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;<a href='447.html'>linux/sched.h</a>&gt;
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> &lt;linux/interrupt.h&gt;
+<a id='L15' name='L15'></a>  15 <em class='sharp'>#include</em> &lt;linux/kernel_stat.h&gt;
+<a id='L16' name='L16'></a>  16 
+<a id='L17' name='L17'></a>  17 <em class='sharp'>#include</em> &lt;trace/events/irq.h&gt;
+<a id='L18' name='L18'></a>  18 
+<a id='L19' name='L19'></a>  19 <em class='sharp'>#include</em> "<a href='356.html'>internals.h</a>"
+<a id='L20' name='L20'></a>  20 
+<a id='L21' name='L21'></a>  21 <em class='sharp'>#ifdef</em> CONFIG_GENERIC_IRQ_MULTI_HANDLER
+<a id='L22' name='L22'></a>  22 <strong class='reserved'>void</strong> (*handle_arch_irq)(<strong class='reserved'>struct</strong> pt_regs *) __ro_after_init;
+<a id='L23' name='L23'></a>  23 <em class='sharp'>#endif</em>
+<a id='L24' name='L24'></a>  24 
+<a id='L25' name='L25'></a>  25 <em class='comment'>/**</em>
+<a id='L26' name='L26'></a>  26 <em class='comment'> * handle_bad_irq - handle spurious and unhandled irqs</em>
+<a id='L27' name='L27'></a>  27 <em class='comment'> * @desc:      description of the interrupt</em>
+<a id='L28' name='L28'></a>  28 <em class='comment'> *</em>
+<a id='L29' name='L29'></a>  29 <em class='comment'> * Handles spurious and unhandled IRQ's. It also prints a debugmessage.</em>
+<a id='L30' name='L30'></a>  30 <em class='comment'> */</em>
+<a id='L31' name='L31'></a>  31 <strong class='reserved'>void</strong> <a href='../R/7236.html' title='Multiple referred from 6 places.'>handle_bad_irq</a>(<strong class='reserved'>struct</strong> irq_desc *desc)
+<a id='L32' name='L32'></a>  32 <em class='brace'>{</em>
+<a id='L33' name='L33'></a>  33         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq = irq_desc_get_irq(desc);
+<a id='L34' name='L34'></a>  34 
+<a id='L35' name='L35'></a>  35         <a href='../S/348.html#L11' title='Defined at 11 in irq/debug.h.'>print_irq_desc</a>(irq, desc);
+<a id='L36' name='L36'></a>  36         <a href='../S/356.html#L256' title='Defined at 256 in irq/internals.h.'>kstat_incr_irqs_this_cpu</a>(desc);
+<a id='L37' name='L37'></a>  37         ack_bad_irq(irq);
+<a id='L38' name='L38'></a>  38 <em class='brace'>}</em>
+<a id='L39' name='L39'></a>  39 EXPORT_SYMBOL_GPL(<a href='../S/347.html#L31' title='Defined at 31 in irq/handle.c.'>handle_bad_irq</a>);
+<a id='L40' name='L40'></a>  40 
+<a id='L41' name='L41'></a>  41 <em class='comment'>/*</em>
+<a id='L42' name='L42'></a>  42 <em class='comment'> * Special, empty irq handler:</em>
+<a id='L43' name='L43'></a>  43 <em class='comment'> */</em>
+<a id='L44' name='L44'></a>  44 irqreturn_t <a href='../S/347.html#L48' title='Referred from 48 in irq/handle.c.'>no_action</a>(<strong class='reserved'>int</strong> cpl, <strong class='reserved'>void</strong> *dev_id)
+<a id='L45' name='L45'></a>  45 <em class='brace'>{</em>
+<a id='L46' name='L46'></a>  46         <strong class='reserved'>return</strong> IRQ_NONE;
+<a id='L47' name='L47'></a>  47 <em class='brace'>}</em>
+<a id='L48' name='L48'></a>  48 EXPORT_SYMBOL_GPL(<a href='../S/347.html#L44' title='Defined at 44 in irq/handle.c.'>no_action</a>);
+<a id='L49' name='L49'></a>  49 
+<a id='L50' name='L50'></a>  50 <strong class='reserved'>static</strong> <strong class='reserved'>void</strong> <a href='../S/347.html#L170' title='Referred from 170 in irq/handle.c.'>warn_no_thread</a>(<strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq, <strong class='reserved'>struct</strong> irqaction *action)
+<a id='L51' name='L51'></a>  51 <em class='brace'>{</em>
+<a id='L52' name='L52'></a>  52         <strong class='reserved'>if</strong> (test_and_set_bit(<a href='../S/356.html#L35' title='Defined at 35 in irq/internals.h.'>IRQTF_WARNED</a>, &amp;action-&gt;thread_flags))
+<a id='L53' name='L53'></a>  53                 <strong class='reserved'>return</strong>;
+<a id='L54' name='L54'></a>  54 
+<a id='L55' name='L55'></a>  55         <a href='../S/6.html#L2101' title='Defined at 2101 in printk/printk.c.'>printk</a>(KERN_WARNING "IRQ %d device %s returned IRQ_WAKE_THREAD "
+<a id='L56' name='L56'></a>  56                "but no thread function available.", irq, action-&gt;name);
+<a id='L57' name='L57'></a>  57 <em class='brace'>}</em>
+<a id='L58' name='L58'></a>  58 
+<a id='L59' name='L59'></a>  59 <strong class='reserved'>void</strong> <a href='../R/2110.html' title='Multiple referred from 4 places.'>__irq_wake_thread</a>(<strong class='reserved'>struct</strong> irq_desc *desc, <strong class='reserved'>struct</strong> irqaction *action)
+<a id='L60' name='L60'></a>  60 <em class='brace'>{</em>
+<a id='L61' name='L61'></a>  61         <em class='comment'>/*</em>
+<a id='L62' name='L62'></a>  62 <em class='comment'>         * In case the thread crashed and was killed we just pretend that</em>
+<a id='L63' name='L63'></a>  63 <em class='comment'>         * we handled the interrupt. The hardirq handler has disabled the</em>
+<a id='L64' name='L64'></a>  64 <em class='comment'>         * device interrupt, so no irq storm is lurking.</em>
+<a id='L65' name='L65'></a>  65 <em class='comment'>         */</em>
+<a id='L66' name='L66'></a>  66         <strong class='reserved'>if</strong> (action-&gt;thread-&gt;flags &amp; PF_EXITING)
+<a id='L67' name='L67'></a>  67                 <strong class='reserved'>return</strong>;
+<a id='L68' name='L68'></a>  68 
+<a id='L69' name='L69'></a>  69         <em class='comment'>/*</em>
+<a id='L70' name='L70'></a>  70 <em class='comment'>         * Wake up the handler thread for this action. If the</em>
+<a id='L71' name='L71'></a>  71 <em class='comment'>         * RUNTHREAD bit is already set, nothing to do.</em>
+<a id='L72' name='L72'></a>  72 <em class='comment'>         */</em>
+<a id='L73' name='L73'></a>  73         <strong class='reserved'>if</strong> (test_and_set_bit(<a href='../S/356.html#L34' title='Defined at 34 in irq/internals.h.'>IRQTF_RUNTHREAD</a>, &amp;action-&gt;thread_flags))
+<a id='L74' name='L74'></a>  74                 <strong class='reserved'>return</strong>;
+<a id='L75' name='L75'></a>  75 
+<a id='L76' name='L76'></a>  76         <em class='comment'>/*</em>
+<a id='L77' name='L77'></a>  77 <em class='comment'>         * It's safe to OR the mask lockless here. We have only two</em>
+<a id='L78' name='L78'></a>  78 <em class='comment'>         * places which write to threads_oneshot: This code and the</em>
+<a id='L79' name='L79'></a>  79 <em class='comment'>         * irq thread.</em>
+<a id='L80' name='L80'></a>  80 <em class='comment'>         *</em>
+<a id='L81' name='L81'></a>  81 <em class='comment'>         * This code is the hard irq context and can never run on two</em>
+<a id='L82' name='L82'></a>  82 <em class='comment'>         * cpus in parallel. If it ever does we have more serious</em>
+<a id='L83' name='L83'></a>  83 <em class='comment'>         * problems than this bitmask.</em>
+<a id='L84' name='L84'></a>  84 <em class='comment'>         *</em>
+<a id='L85' name='L85'></a>  85 <em class='comment'>         * The irq threads of this irq which clear their "running" bit</em>
+<a id='L86' name='L86'></a>  86 <em class='comment'>         * in threads_oneshot are serialized via desc-&gt;lock against</em>
+<a id='L87' name='L87'></a>  87 <em class='comment'>         * each other and they are serialized against this code by</em>
+<a id='L88' name='L88'></a>  88 <em class='comment'>         * IRQS_INPROGRESS.</em>
+<a id='L89' name='L89'></a>  89 <em class='comment'>         *</em>
+<a id='L90' name='L90'></a>  90 <em class='comment'>         * Hard irq handler:</em>
+<a id='L91' name='L91'></a>  91 <em class='comment'>         *</em>
+<a id='L92' name='L92'></a>  92 <em class='comment'>         *      spin_lock(desc-&gt;lock);</em>
+<a id='L93' name='L93'></a>  93 <em class='comment'>         *      desc-&gt;state |= IRQS_INPROGRESS;</em>
+<a id='L94' name='L94'></a>  94 <em class='comment'>         *      spin_unlock(desc-&gt;lock);</em>
+<a id='L95' name='L95'></a>  95 <em class='comment'>         *      set_bit(IRQTF_RUNTHREAD, &amp;action-&gt;thread_flags);</em>
+<a id='L96' name='L96'></a>  96 <em class='comment'>         *      desc-&gt;threads_oneshot |= mask;</em>
+<a id='L97' name='L97'></a>  97 <em class='comment'>         *      spin_lock(desc-&gt;lock);</em>
+<a id='L98' name='L98'></a>  98 <em class='comment'>         *      desc-&gt;state &amp;= ~IRQS_INPROGRESS;</em>
+<a id='L99' name='L99'></a>  99 <em class='comment'>         *      spin_unlock(desc-&gt;lock);</em>
+<a id='L100' name='L100'></a> 100 <em class='comment'>         *</em>
+<a id='L101' name='L101'></a> 101 <em class='comment'>         * irq thread:</em>
+<a id='L102' name='L102'></a> 102 <em class='comment'>         *</em>
+<a id='L103' name='L103'></a> 103 <em class='comment'>         * again:</em>
+<a id='L104' name='L104'></a> 104 <em class='comment'>         *      spin_lock(desc-&gt;lock);</em>
+<a id='L105' name='L105'></a> 105 <em class='comment'>         *      if (desc-&gt;state &amp; IRQS_INPROGRESS) {</em>
+<a id='L106' name='L106'></a> 106 <em class='comment'>         *              spin_unlock(desc-&gt;lock);</em>
+<a id='L107' name='L107'></a> 107 <em class='comment'>         *              while(desc-&gt;state &amp; IRQS_INPROGRESS)</em>
+<a id='L108' name='L108'></a> 108 <em class='comment'>         *                      cpu_relax();</em>
+<a id='L109' name='L109'></a> 109 <em class='comment'>         *              goto again;</em>
+<a id='L110' name='L110'></a> 110 <em class='comment'>         *      }</em>
+<a id='L111' name='L111'></a> 111 <em class='comment'>         *      if (!test_bit(IRQTF_RUNTHREAD, &amp;action-&gt;thread_flags))</em>
+<a id='L112' name='L112'></a> 112 <em class='comment'>         *              desc-&gt;threads_oneshot &amp;= ~mask;</em>
+<a id='L113' name='L113'></a> 113 <em class='comment'>         *      spin_unlock(desc-&gt;lock);</em>
+<a id='L114' name='L114'></a> 114 <em class='comment'>         *</em>
+<a id='L115' name='L115'></a> 115 <em class='comment'>         * So either the thread waits for us to clear IRQS_INPROGRESS</em>
+<a id='L116' name='L116'></a> 116 <em class='comment'>         * or we are waiting in the flow handler for desc-&gt;lock to be</em>
+<a id='L117' name='L117'></a> 117 <em class='comment'>         * released before we reach this point. The thread also checks</em>
+<a id='L118' name='L118'></a> 118 <em class='comment'>         * IRQTF_RUNTHREAD under desc-&gt;lock. If set it leaves</em>
+<a id='L119' name='L119'></a> 119 <em class='comment'>         * threads_oneshot untouched and runs the thread another time.</em>
+<a id='L120' name='L120'></a> 120 <em class='comment'>         */</em>
+<a id='L121' name='L121'></a> 121         desc-&gt;threads_oneshot |= action-&gt;thread_mask;
+<a id='L122' name='L122'></a> 122 
+<a id='L123' name='L123'></a> 123         <em class='comment'>/*</em>
+<a id='L124' name='L124'></a> 124 <em class='comment'>         * We increment the threads_active counter in case we wake up</em>
+<a id='L125' name='L125'></a> 125 <em class='comment'>         * the irq thread. The irq thread decrements the counter when</em>
+<a id='L126' name='L126'></a> 126 <em class='comment'>         * it returns from the handler or in the exit path and wakes</em>
+<a id='L127' name='L127'></a> 127 <em class='comment'>         * up waiters which are stuck in synchronize_irq() when the</em>
+<a id='L128' name='L128'></a> 128 <em class='comment'>         * active count becomes zero. synchronize_irq() is serialized</em>
+<a id='L129' name='L129'></a> 129 <em class='comment'>         * against this code (hard irq handler) via IRQS_INPROGRESS</em>
+<a id='L130' name='L130'></a> 130 <em class='comment'>         * like the finalize_oneshot() code. See comment above.</em>
+<a id='L131' name='L131'></a> 131 <em class='comment'>         */</em>
+<a id='L132' name='L132'></a> 132         atomic_inc(&amp;desc-&gt;threads_active);
+<a id='L133' name='L133'></a> 133 
+<a id='L134' name='L134'></a> 134         <a href='../S/441.html#L3259' title='Defined at 3259 in sched/core.c.'>wake_up_process</a>(action-&gt;thread);
+<a id='L135' name='L135'></a> 135 <em class='brace'>}</em>
+<a id='L136' name='L136'></a> 136 
+<a id='L137' name='L137'></a> 137 irqreturn_t <a href='../R/2056.html' title='Multiple referred from 3 places.'>__handle_irq_event_percpu</a>(<strong class='reserved'>struct</strong> irq_desc *desc, <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> *flags)
+<a id='L138' name='L138'></a> 138 <em class='brace'>{</em>
+<a id='L139' name='L139'></a> 139         irqreturn_t retval = IRQ_NONE;
+<a id='L140' name='L140'></a> 140         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> irq = desc-&gt;irq_data.irq;
+<a id='L141' name='L141'></a> 141         <strong class='reserved'>struct</strong> irqaction *action;
+<a id='L142' name='L142'></a> 142 
+<a id='L143' name='L143'></a> 143         <a href='../D/11934.html' title='Multiple defined in 2 places.'>record_irq_time</a>(desc);
+<a id='L144' name='L144'></a> 144 
+<a id='L145' name='L145'></a> 145         <a href='../S/356.html#L161' title='Defined at 161 in irq/internals.h.'>for_each_action_of_desc</a>(desc, action) <em class='brace'>{</em>
+<a id='L146' name='L146'></a> 146                 irqreturn_t res;
+<a id='L147' name='L147'></a> 147 
+<a id='L148' name='L148'></a> 148                 <em class='comment'>/*</em>
+<a id='L149' name='L149'></a> 149 <em class='comment'>                 * If this IRQ would be threaded under force_irqthreads, mark it so.</em>
+<a id='L150' name='L150'></a> 150 <em class='comment'>                 */</em>
+<a id='L151' name='L151'></a> 151                 <strong class='reserved'>if</strong> (<a href='../S/340.html#L113' title='Defined at 113 in irq/settings.h.'>irq_settings_can_thread</a>(desc) &amp;&amp;
+<a id='L152' name='L152'></a> 152                     !(action-&gt;flags &amp; (IRQF_NO_THREAD | IRQF_PERCPU | IRQF_ONESHOT)))
+<a id='L153' name='L153'></a> 153                         lockdep_hardirq_threaded();
+<a id='L154' name='L154'></a> 154 
+<a id='L155' name='L155'></a> 155                 trace_irq_handler_entry(irq, action);
+<a id='L156' name='L156'></a> 156                 res = action-&gt;handler(irq, action-&gt;dev_id);
+<a id='L157' name='L157'></a> 157                 trace_irq_handler_exit(irq, action, res);
+<a id='L158' name='L158'></a> 158 
+<a id='L159' name='L159'></a> 159                 <strong class='reserved'>if</strong> (WARN_ONCE(!irqs_disabled(),"irq %u handler %pS enabled interrupts\n",
+<a id='L160' name='L160'></a> 160                               irq, action-&gt;handler))
+<a id='L161' name='L161'></a> 161                         local_irq_disable();
+<a id='L162' name='L162'></a> 162 
+<a id='L163' name='L163'></a> 163                 <strong class='reserved'>switch</strong> (res) <em class='brace'>{</em>
+<a id='L164' name='L164'></a> 164                 <strong class='reserved'>case</strong> IRQ_WAKE_THREAD:
+<a id='L165' name='L165'></a> 165                         <em class='comment'>/*</em>
+<a id='L166' name='L166'></a> 166 <em class='comment'>                         * Catch drivers which return WAKE_THREAD but</em>
+<a id='L167' name='L167'></a> 167 <em class='comment'>                         * did not set up a thread function</em>
+<a id='L168' name='L168'></a> 168 <em class='comment'>                         */</em>
+<a id='L169' name='L169'></a> 169                         <strong class='reserved'>if</strong> (unlikely(!action-&gt;thread_fn)) <em class='brace'>{</em>
+<a id='L170' name='L170'></a> 170                                 <a href='../S/347.html#L50' title='Defined at 50 in irq/handle.c.'>warn_no_thread</a>(irq, action);
+<a id='L171' name='L171'></a> 171                                 <strong class='reserved'>break</strong>;
+<a id='L172' name='L172'></a> 172                         <em class='brace'>}</em>
+<a id='L173' name='L173'></a> 173 
+<a id='L174' name='L174'></a> 174                         <a href='../S/347.html#L59' title='Defined at 59 in irq/handle.c.'>__irq_wake_thread</a>(desc, action);
+<a id='L175' name='L175'></a> 175 
+<a id='L176' name='L176'></a> 176                         fallthrough;    <em class='comment'>/* to add to randomness */</em>
+<a id='L177' name='L177'></a> 177                 <strong class='reserved'>case</strong> IRQ_HANDLED:
+<a id='L178' name='L178'></a> 178                         *flags |= action-&gt;flags;
+<a id='L179' name='L179'></a> 179                         <strong class='reserved'>break</strong>;
+<a id='L180' name='L180'></a> 180 
+<a id='L181' name='L181'></a> 181                 <strong class='reserved'>default</strong>:
+<a id='L182' name='L182'></a> 182                         <strong class='reserved'>break</strong>;
+<a id='L183' name='L183'></a> 183                 <em class='brace'>}</em>
+<a id='L184' name='L184'></a> 184 
+<a id='L185' name='L185'></a> 185                 retval |= res;
+<a id='L186' name='L186'></a> 186         <em class='brace'>}</em>
+<a id='L187' name='L187'></a> 187 
+<a id='L188' name='L188'></a> 188         <strong class='reserved'>return</strong> retval;
+<a id='L189' name='L189'></a> 189 <em class='brace'>}</em>
+<a id='L190' name='L190'></a> 190 
+<a id='L191' name='L191'></a> 191 irqreturn_t <a href='../R/7249.html' title='Multiple referred from 3 places.'>handle_irq_event_percpu</a>(<strong class='reserved'>struct</strong> irq_desc *desc)
+<a id='L192' name='L192'></a> 192 <em class='brace'>{</em>
+<a id='L193' name='L193'></a> 193         irqreturn_t retval;
+<a id='L194' name='L194'></a> 194         <strong class='reserved'>unsigned</strong> <strong class='reserved'>int</strong> flags = 0;
+<a id='L195' name='L195'></a> 195 
+<a id='L196' name='L196'></a> 196         retval = <a href='../S/347.html#L137' title='Defined at 137 in irq/handle.c.'>__handle_irq_event_percpu</a>(desc, &amp;flags);
+<a id='L197' name='L197'></a> 197 
+<a id='L198' name='L198'></a> 198         add_interrupt_randomness(desc-&gt;irq_data.irq, flags);
+<a id='L199' name='L199'></a> 199 
+<a id='L200' name='L200'></a> 200         <strong class='reserved'>if</strong> (!noirqdebug)
+<a id='L201' name='L201'></a> 201                 <a href='../S/344.html#L272' title='Defined at 272 in irq/spurious.c.'>note_interrupt</a>(desc, retval);
+<a id='L202' name='L202'></a> 202         <strong class='reserved'>return</strong> retval;
+<a id='L203' name='L203'></a> 203 <em class='brace'>}</em>
+<a id='L204' name='L204'></a> 204 
+<a id='L205' name='L205'></a> 205 irqreturn_t <a href='../R/7248.html' title='Multiple referred from 9 places.'>handle_irq_event</a>(<strong class='reserved'>struct</strong> irq_desc *desc)
+<a id='L206' name='L206'></a> 206 <em class='brace'>{</em>
+<a id='L207' name='L207'></a> 207         irqreturn_t ret;
+<a id='L208' name='L208'></a> 208 
+<a id='L209' name='L209'></a> 209         desc-&gt;<a href='../S/356.html#L20' title='Defined at 20 in irq/internals.h.'>istate</a> &amp;= ~<a href='../S/356.html#L61' title='Defined at 61 in irq/internals.h.'>IRQS_PENDING</a>;
+<a id='L210' name='L210'></a> 210         <a href='../S/356.html#L228' title='Defined at 228 in irq/internals.h.'>irqd_set</a>(&amp;desc-&gt;irq_data, IRQD_IRQ_INPROGRESS);
+<a id='L211' name='L211'></a> 211         raw_spin_unlock(&amp;desc-&gt;lock);
+<a id='L212' name='L212'></a> 212 
+<a id='L213' name='L213'></a> 213         ret = <a href='../S/347.html#L191' title='Defined at 191 in irq/handle.c.'>handle_irq_event_percpu</a>(desc);
+<a id='L214' name='L214'></a> 214 
+<a id='L215' name='L215'></a> 215         raw_spin_lock(&amp;desc-&gt;lock);
+<a id='L216' name='L216'></a> 216         <a href='../S/356.html#L223' title='Defined at 223 in irq/internals.h.'>irqd_clear</a>(&amp;desc-&gt;irq_data, IRQD_IRQ_INPROGRESS);
+<a id='L217' name='L217'></a> 217         <strong class='reserved'>return</strong> ret;
+<a id='L218' name='L218'></a> 218 <em class='brace'>}</em>
+<a id='L219' name='L219'></a> 219 
+<a id='L220' name='L220'></a> 220 <em class='sharp'>#ifdef</em> CONFIG_GENERIC_IRQ_MULTI_HANDLER
+<a id='L221' name='L221'></a> 221 <strong class='reserved'>int</strong> __init set_handle_irq(<strong class='reserved'>void</strong> (*handle_irq)(<strong class='reserved'>struct</strong> pt_regs *))
+<a id='L222' name='L222'></a> 222 <em class='brace'>{</em>
+<a id='L223' name='L223'></a> 223         <strong class='reserved'>if</strong> (handle_arch_irq)
+<a id='L224' name='L224'></a> 224                 <strong class='reserved'>return</strong> -EBUSY;
+<a id='L225' name='L225'></a> 225 
+<a id='L226' name='L226'></a> 226         handle_arch_irq = handle_irq;
+<a id='L227' name='L227'></a> 227         <strong class='reserved'>return</strong> 0;
+<a id='L228' name='L228'></a> 228 <em class='brace'>}</em>
+<a id='L229' name='L229'></a> 229 <em class='sharp'>#endif</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* [&lt;][&gt;]<a href='#L31'>[^]</a><a href='#L221'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</em>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>group_type</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/464.html#L8224'>group_type</a>       8224 sched/fair.c   	enum group_type group_type;</span>
+<span class='curline'><a href='../S/464.html#L8265'>group_type</a>       8265 sched/fair.c   			.group_type = group_has_spare,</span>
+<span class='curline'><a href='../S/464.html#L8507'>group_type</a>       8507 sched/fair.c   group_type group_classify(unsigned int imbalance_pct,</span>
+<span class='curline'><a href='../S/464.html#L8625'>group_type</a>       8625 sched/fair.c   	sgs-&gt;group_type = group_classify(env-&gt;sd-&gt;imbalance_pct, group, sgs);</span>
+<span class='curline'><a href='../S/464.html#L8628'>group_type</a>       8628 sched/fair.c   	if (sgs-&gt;group_type == group_overloaded)</span>
+<span class='curline'><a href='../S/464.html#L8663'>group_type</a>       8663 sched/fair.c   	if (sgs-&gt;group_type == group_misfit_task &amp;&amp;</span>
+<span class='curline'><a href='../S/464.html#L8665'>group_type</a>       8665 sched/fair.c   	     sds-&gt;local_stat.group_type != group_has_spare))</span>
+<span class='curline'><a href='../S/464.html#L8668'>group_type</a>       8668 sched/fair.c   	if (sgs-&gt;group_type &gt; busiest-&gt;group_type)</span>
+<span class='curline'><a href='../S/464.html#L8671'>group_type</a>       8671 sched/fair.c   	if (sgs-&gt;group_type &lt; busiest-&gt;group_type)</span>
+<span class='curline'><a href='../S/464.html#L8679'>group_type</a>       8679 sched/fair.c   	switch (sgs-&gt;group_type) {</span>
+<span class='curline'><a href='../S/464.html#L8747'>group_type</a>       8747 sched/fair.c   	    (sgs-&gt;group_type &lt;= group_fully_busy) &amp;&amp;</span>
+<span class='curline'><a href='../S/464.html#L8878'>group_type</a>       8878 sched/fair.c   	sgs-&gt;group_type = group_classify(sd-&gt;imbalance_pct, group, sgs);</span>
+<span class='curline'><a href='../S/464.html#L8884'>group_type</a>       8884 sched/fair.c   	if (sgs-&gt;group_type == group_fully_busy ||</span>
+<span class='curline'><a href='../S/464.html#L8885'>group_type</a>       8885 sched/fair.c   		sgs-&gt;group_type == group_overloaded)</span>
+<span class='curline'><a href='../S/464.html#L8895'>group_type</a>       8895 sched/fair.c   	if (sgs-&gt;group_type &lt; idlest_sgs-&gt;group_type)</span>
+<span class='curline'><a href='../S/464.html#L8898'>group_type</a>       8898 sched/fair.c   	if (sgs-&gt;group_type &gt; idlest_sgs-&gt;group_type)</span>
+<span class='curline'><a href='../S/464.html#L8906'>group_type</a>       8906 sched/fair.c   	switch (sgs-&gt;group_type) {</span>
+<span class='curline'><a href='../S/464.html#L8956'>group_type</a>       8956 sched/fair.c   			.group_type = group_overloaded,</span>
+<span class='curline'><a href='../S/464.html#L9002'>group_type</a>       9002 sched/fair.c   	if (local_sgs.group_type &lt; idlest_sgs.group_type)</span>
+<span class='curline'><a href='../S/464.html#L9009'>group_type</a>       9009 sched/fair.c   	if (local_sgs.group_type &gt; idlest_sgs.group_type)</span>
+<span class='curline'><a href='../S/464.html#L9012'>group_type</a>       9012 sched/fair.c   	switch (local_sgs.group_type) {</span>
+<span class='curline'><a href='../S/464.html#L9201'>group_type</a>       9201 sched/fair.c   	if (busiest-&gt;group_type == group_misfit_task) {</span>
+<span class='curline'><a href='../S/464.html#L9208'>group_type</a>       9208 sched/fair.c   	if (busiest-&gt;group_type == group_asym_packing) {</span>
+<span class='curline'><a href='../S/464.html#L9218'>group_type</a>       9218 sched/fair.c   	if (busiest-&gt;group_type == group_imbalanced) {</span>
+<span class='curline'><a href='../S/464.html#L9234'>group_type</a>       9234 sched/fair.c   	if (local-&gt;group_type == group_has_spare) {</span>
+<span class='curline'><a href='../S/464.html#L9235'>group_type</a>       9235 sched/fair.c   		if ((busiest-&gt;group_type &gt; group_fully_busy) &amp;&amp;</span>
+<span class='curline'><a href='../S/464.html#L9296'>group_type</a>       9296 sched/fair.c   	if (local-&gt;group_type &lt; group_overloaded) {</span>
+<span class='curline'><a href='../S/464.html#L9397'>group_type</a>       9397 sched/fair.c   	if (busiest-&gt;group_type == group_misfit_task)</span>
+<span class='curline'><a href='../S/464.html#L9401'>group_type</a>       9401 sched/fair.c   	if (busiest-&gt;group_type == group_asym_packing)</span>
+<span class='curline'><a href='../S/464.html#L9409'>group_type</a>       9409 sched/fair.c   	if (busiest-&gt;group_type == group_imbalanced)</span>
+<span class='curline'><a href='../S/464.html#L9416'>group_type</a>       9416 sched/fair.c   	if (local-&gt;group_type &gt; busiest-&gt;group_type)</span>
+<span class='curline'><a href='../S/464.html#L9423'>group_type</a>       9423 sched/fair.c   	if (local-&gt;group_type == group_overloaded) {</span>
+<span class='curline'><a href='../S/464.html#L9452'>group_type</a>       9452 sched/fair.c   	if (sds.prefer_sibling &amp;&amp; local-&gt;group_type == group_has_spare &amp;&amp;</span>
+<span class='curline'><a href='../S/464.html#L9456'>group_type</a>       9456 sched/fair.c   	if (busiest-&gt;group_type != group_overloaded) {</span>
+</pre>
+</body>
+</html>

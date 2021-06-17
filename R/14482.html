@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>uprobe_cpu_buffer</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/301.html#L853'>uprobe_cpu_buffer</a>  853 trace/trace_uprobe.c static struct uprobe_cpu_buffer __percpu *uprobe_cpu_buffer;</span>
+<span class='curline'><a href='../S/301.html#L860'>uprobe_cpu_buffer</a>  860 trace/trace_uprobe.c 	uprobe_cpu_buffer = alloc_percpu(struct uprobe_cpu_buffer);</span>
+<span class='curline'><a href='../S/301.html#L861'>uprobe_cpu_buffer</a>  861 trace/trace_uprobe.c 	if (uprobe_cpu_buffer == NULL)</span>
+<span class='curline'><a href='../S/301.html#L871'>uprobe_cpu_buffer</a>  871 trace/trace_uprobe.c 		per_cpu_ptr(uprobe_cpu_buffer, cpu)-&gt;buf = page_address(p);</span>
+<span class='curline'><a href='../S/301.html#L872'>uprobe_cpu_buffer</a>  872 trace/trace_uprobe.c 		mutex_init(&amp;per_cpu_ptr(uprobe_cpu_buffer, cpu)-&gt;mutex);</span>
+<span class='curline'><a href='../S/301.html#L881'>uprobe_cpu_buffer</a>  881 trace/trace_uprobe.c 		free_page((unsigned long)per_cpu_ptr(uprobe_cpu_buffer, cpu)-&gt;buf);</span>
+<span class='curline'><a href='../S/301.html#L884'>uprobe_cpu_buffer</a>  884 trace/trace_uprobe.c 	free_percpu(uprobe_cpu_buffer);</span>
+<span class='curline'><a href='../S/301.html#L911'>uprobe_cpu_buffer</a>  911 trace/trace_uprobe.c 			free_page((unsigned long)per_cpu_ptr(uprobe_cpu_buffer,</span>
+<span class='curline'><a href='../S/301.html#L914'>uprobe_cpu_buffer</a>  914 trace/trace_uprobe.c 		free_percpu(uprobe_cpu_buffer);</span>
+<span class='curline'><a href='../S/301.html#L915'>uprobe_cpu_buffer</a>  915 trace/trace_uprobe.c 		uprobe_cpu_buffer = NULL;</span>
+<span class='curline'><a href='../S/301.html#L919'>uprobe_cpu_buffer</a>  919 trace/trace_uprobe.c static struct uprobe_cpu_buffer *uprobe_buffer_get(void)</span>
+<span class='curline'><a href='../S/301.html#L921'>uprobe_cpu_buffer</a>  921 trace/trace_uprobe.c 	struct uprobe_cpu_buffer *ucb;</span>
+<span class='curline'><a href='../S/301.html#L925'>uprobe_cpu_buffer</a>  925 trace/trace_uprobe.c 	ucb = per_cpu_ptr(uprobe_cpu_buffer, cpu);</span>
+<span class='curline'><a href='../S/301.html#L936'>uprobe_cpu_buffer</a>  936 trace/trace_uprobe.c static void uprobe_buffer_put(struct uprobe_cpu_buffer *ucb)</span>
+<span class='curline'><a href='../S/301.html#L943'>uprobe_cpu_buffer</a>  943 trace/trace_uprobe.c 				struct uprobe_cpu_buffer *ucb, int dsize,</span>
+<span class='curline'><a href='../S/301.html#L985'>uprobe_cpu_buffer</a>  985 trace/trace_uprobe.c 			     struct uprobe_cpu_buffer *ucb, int dsize)</span>
+<span class='curline'><a href='../S/301.html#L1002'>uprobe_cpu_buffer</a> 1002 trace/trace_uprobe.c 				 struct uprobe_cpu_buffer *ucb, int dsize)</span>
+<span class='curline'><a href='../S/301.html#L1340'>uprobe_cpu_buffer</a> 1340 trace/trace_uprobe.c 			       struct uprobe_cpu_buffer *ucb, int dsize)</span>
+<span class='curline'><a href='../S/301.html#L1400'>uprobe_cpu_buffer</a> 1400 trace/trace_uprobe.c 			    struct uprobe_cpu_buffer *ucb, int dsize)</span>
+<span class='curline'><a href='../S/301.html#L1412'>uprobe_cpu_buffer</a> 1412 trace/trace_uprobe.c 				struct uprobe_cpu_buffer *ucb, int dsize)</span>
+<span class='curline'><a href='../S/301.html#L1478'>uprobe_cpu_buffer</a> 1478 trace/trace_uprobe.c 	struct uprobe_cpu_buffer *ucb;</span>
+<span class='curline'><a href='../S/301.html#L1491'>uprobe_cpu_buffer</a> 1491 trace/trace_uprobe.c 	if (WARN_ON_ONCE(!uprobe_cpu_buffer))</span>
+<span class='curline'><a href='../S/301.html#L1516'>uprobe_cpu_buffer</a> 1516 trace/trace_uprobe.c 	struct uprobe_cpu_buffer *ucb;</span>
+<span class='curline'><a href='../S/301.html#L1526'>uprobe_cpu_buffer</a> 1526 trace/trace_uprobe.c 	if (WARN_ON_ONCE(!uprobe_cpu_buffer))</span>
+</pre>
+</body>
+</html>

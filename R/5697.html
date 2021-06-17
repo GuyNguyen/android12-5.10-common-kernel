@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>dma_coherent_mem</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/155.html#L23'>dma_coherent_mem</a>   23 dma/coherent.c static struct dma_coherent_mem *dma_coherent_default_memory __ro_after_init;</span>
+<span class='curline'><a href='../S/155.html#L25'>dma_coherent_mem</a>   25 dma/coherent.c static inline struct dma_coherent_mem *dev_get_coherent_memory(struct device *dev)</span>
+<span class='curline'><a href='../S/155.html#L33'>dma_coherent_mem</a>   33 dma/coherent.c 					     struct dma_coherent_mem * mem)</span>
+<span class='curline'><a href='../S/155.html#L42'>dma_coherent_mem</a>   42 dma/coherent.c 		struct dma_coherent_mem **mem)</span>
+<span class='curline'><a href='../S/155.html#L44'>dma_coherent_mem</a>   44 dma/coherent.c 	struct dma_coherent_mem *dma_mem = NULL;</span>
+<span class='curline'><a href='../S/155.html#L60'>dma_coherent_mem</a>   60 dma/coherent.c 	dma_mem = kzalloc(sizeof(struct dma_coherent_mem), GFP_KERNEL);</span>
+<span class='curline'><a href='../S/155.html#L87'>dma_coherent_mem</a>   87 dma/coherent.c static void dma_release_coherent_memory(struct dma_coherent_mem *mem)</span>
+<span class='curline'><a href='../S/155.html#L98'>dma_coherent_mem</a>   98 dma/coherent.c 				      struct dma_coherent_mem *mem)</span>
+<span class='curline'><a href='../S/155.html#L130'>dma_coherent_mem</a>  130 dma/coherent.c 	struct dma_coherent_mem *mem;</span>
+<span class='curline'><a href='../S/155.html#L144'>dma_coherent_mem</a>  144 dma/coherent.c 				       struct dma_coherent_mem *mem,</span>
+<span class='curline'><a href='../S/155.html#L192'>dma_coherent_mem</a>  192 dma/coherent.c 	struct dma_coherent_mem *mem = dev_get_coherent_memory(dev);</span>
+<span class='curline'><a href='../S/155.html#L211'>dma_coherent_mem</a>  211 dma/coherent.c static int __dma_release_from_coherent(struct dma_coherent_mem *mem,</span>
+<span class='curline'><a href='../S/155.html#L241'>dma_coherent_mem</a>  241 dma/coherent.c 	struct dma_coherent_mem *mem = dev_get_coherent_memory(dev);</span>
+<span class='curline'><a href='../S/155.html#L255'>dma_coherent_mem</a>  255 dma/coherent.c static int __dma_mmap_from_coherent(struct dma_coherent_mem *mem,</span>
+<span class='curline'><a href='../S/155.html#L295'>dma_coherent_mem</a>  295 dma/coherent.c 	struct dma_coherent_mem *mem = dev_get_coherent_memory(dev);</span>
+<span class='curline'><a href='../S/155.html#L322'>dma_coherent_mem</a>  322 dma/coherent.c 	struct dma_coherent_mem *mem = rmem-&gt;priv;</span>
+</pre>
+</body>
+</html>

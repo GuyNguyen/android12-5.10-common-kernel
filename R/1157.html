@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>RCU_SEQ_STATE_MASK</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/133.html#L41'>RCU_SEQ_STATE_MASK</a>   41 rcu/rcu.h      	return s &amp; RCU_SEQ_STATE_MASK;</span>
+<span class='curline'><a href='../S/133.html#L50'>RCU_SEQ_STATE_MASK</a>   50 rcu/rcu.h      	WARN_ON_ONCE(newstate &amp; ~RCU_SEQ_STATE_MASK);</span>
+<span class='curline'><a href='../S/133.html#L51'>RCU_SEQ_STATE_MASK</a>   51 rcu/rcu.h      	WRITE_ONCE(*sp, (*sp &amp; ~RCU_SEQ_STATE_MASK) + newstate);</span>
+<span class='curline'><a href='../S/133.html#L65'>RCU_SEQ_STATE_MASK</a>   65 rcu/rcu.h      	return (*sp | RCU_SEQ_STATE_MASK) + 1;</span>
+<span class='curline'><a href='../S/133.html#L91'>RCU_SEQ_STATE_MASK</a>   91 rcu/rcu.h      	s = (READ_ONCE(*sp) + 2 * RCU_SEQ_STATE_MASK + 1) &amp; ~RCU_SEQ_STATE_MASK;</span>
+<span class='curline'><a href='../S/133.html#L108'>RCU_SEQ_STATE_MASK</a>  108 rcu/rcu.h      	return ULONG_CMP_LT((s - 1) &amp; ~RCU_SEQ_STATE_MASK, READ_ONCE(*sp));</span>
+<span class='curline'><a href='../S/133.html#L125'>RCU_SEQ_STATE_MASK</a>  125 rcu/rcu.h      	return ULONG_CMP_LT(old, new &amp; ~RCU_SEQ_STATE_MASK);</span>
+<span class='curline'><a href='../S/133.html#L133'>RCU_SEQ_STATE_MASK</a>  133 rcu/rcu.h      	return ULONG_CMP_LT((old + RCU_SEQ_STATE_MASK) &amp; ~RCU_SEQ_STATE_MASK,</span>
+<span class='curline'><a href='../S/133.html#L151'>RCU_SEQ_STATE_MASK</a>  151 rcu/rcu.h      	rnd_diff = (new &amp; ~RCU_SEQ_STATE_MASK) -</span>
+<span class='curline'><a href='../S/133.html#L152'>RCU_SEQ_STATE_MASK</a>  152 rcu/rcu.h      		   ((old + RCU_SEQ_STATE_MASK) &amp; ~RCU_SEQ_STATE_MASK) +</span>
+<span class='curline'><a href='../S/133.html#L153'>RCU_SEQ_STATE_MASK</a>  153 rcu/rcu.h      		   ((new &amp; RCU_SEQ_STATE_MASK) || (old &amp; RCU_SEQ_STATE_MASK));</span>
+<span class='curline'><a href='../S/133.html#L154'>RCU_SEQ_STATE_MASK</a>  154 rcu/rcu.h      	if (ULONG_CMP_GE(RCU_SEQ_STATE_MASK, rnd_diff))</span>
+<span class='curline'><a href='../S/133.html#L156'>RCU_SEQ_STATE_MASK</a>  156 rcu/rcu.h      	return ((rnd_diff - RCU_SEQ_STATE_MASK - 1) &gt;&gt; RCU_SEQ_CTR_SHIFT) + 2;</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rcu_read_unlock_special</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/48.html#L1716'>rcu_read_unlock_special</a> 1716 fork.c         	p-&gt;rcu_read_unlock_special.s = 0;</span>
+<span class='curline'><a href='../S/131.html#L682'>rcu_read_unlock_special</a>  682 rcu/tree_exp.h 			t-&gt;rcu_read_unlock_special.b.exp_hint = true;</span>
+<span class='curline'><a href='../S/126.html#L89'>rcu_read_unlock_special</a>   89 rcu/tree_plugin.h static void rcu_read_unlock_special(struct task_struct *t);</span>
+<span class='curline'><a href='../S/126.html#L272'>rcu_read_unlock_special</a>  272 rcu/tree_plugin.h 		WRITE_ONCE(current-&gt;rcu_read_unlock_special.b.need_qs, false);</span>
+<span class='curline'><a href='../S/126.html#L299'>rcu_read_unlock_special</a>  299 rcu/tree_plugin.h 	    !t-&gt;rcu_read_unlock_special.b.blocked) {</span>
+<span class='curline'><a href='../S/126.html#L304'>rcu_read_unlock_special</a>  304 rcu/tree_plugin.h 		t-&gt;rcu_read_unlock_special.b.blocked = true;</span>
+<span class='curline'><a href='../S/126.html#L380'>rcu_read_unlock_special</a>  380 rcu/tree_plugin.h 		WRITE_ONCE(current-&gt;rcu_read_unlock_special.b.need_qs, true);</span>
+<span class='curline'><a href='../S/126.html#L398'>rcu_read_unlock_special</a>  398 rcu/tree_plugin.h 		if (unlikely(READ_ONCE(t-&gt;rcu_read_unlock_special.s)))</span>
+<span class='curline'><a href='../S/126.html#L399'>rcu_read_unlock_special</a>  399 rcu/tree_plugin.h 			rcu_read_unlock_special(t);</span>
+<span class='curline'><a href='../S/126.html#L455'>rcu_read_unlock_special</a>  455 rcu/tree_plugin.h 	special = t-&gt;rcu_read_unlock_special;</span>
+<span class='curline'><a href='../S/126.html#L461'>rcu_read_unlock_special</a>  461 rcu/tree_plugin.h 	t-&gt;rcu_read_unlock_special.s = 0;</span>
+<span class='curline'><a href='../S/126.html#L561'>rcu_read_unlock_special</a>  561 rcu/tree_plugin.h 		READ_ONCE(t-&gt;rcu_read_unlock_special.s)) &amp;&amp;</span>
+<span class='curline'><a href='../S/126.html#L707'>rcu_read_unlock_special</a>  707 rcu/tree_plugin.h 	    !t-&gt;rcu_read_unlock_special.b.need_qs &amp;&amp;</span>
+<span class='curline'><a href='../S/126.html#L709'>rcu_read_unlock_special</a>  709 rcu/tree_plugin.h 		t-&gt;rcu_read_unlock_special.b.need_qs = true;</span>
+<span class='curline'><a href='../S/126.html#L727'>rcu_read_unlock_special</a>  727 rcu/tree_plugin.h 		WRITE_ONCE(t-&gt;rcu_read_unlock_special.b.blocked, true);</span>
+<span class='curline'><a href='../S/130.html#L245'>rcu_read_unlock_special</a>  245 rcu/tree_stall.h 	rscrp-&gt;rs = t-&gt;rcu_read_unlock_special;</span>
+</pre>
+</body>
+</html>

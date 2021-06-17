@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>dyn_event</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/257.html#L36'>dyn_event</a>          36 trace/trace_dynevent.c 	struct dyn_event *pos, *n;</span>
+<span class='curline'><a href='../S/257.html#L120'>dyn_event</a>         120 trace/trace_dynevent.c 	struct dyn_event *ev = v;</span>
+<span class='curline'><a href='../S/257.html#L148'>dyn_event</a>         148 trace/trace_dynevent.c 	struct dyn_event *ev, *tmp;</span>
+<span class='curline'><a href='../S/275.html#L16'>dyn_event</a>          16 trace/trace_dynevent.h struct dyn_event;</span>
+<span class='curline'><a href='../S/275.html#L43'>dyn_event</a>          43 trace/trace_dynevent.h 	int (*show)(struct seq_file *m, struct dyn_event *ev);</span>
+<span class='curline'><a href='../S/275.html#L44'>dyn_event</a>          44 trace/trace_dynevent.h 	bool (*is_busy)(struct dyn_event *ev);</span>
+<span class='curline'><a href='../S/275.html#L45'>dyn_event</a>          45 trace/trace_dynevent.h 	int (*free)(struct dyn_event *ev);</span>
+<span class='curline'><a href='../S/275.html#L47'>dyn_event</a>          47 trace/trace_dynevent.h 		      int argc, const char **argv, struct dyn_event *ev);</span>
+<span class='curline'><a href='../S/275.html#L69'>dyn_event</a>          69 trace/trace_dynevent.h int dyn_event_init(struct dyn_event *ev, struct dyn_event_operations *ops)</span>
+<span class='curline'><a href='../S/275.html#L79'>dyn_event</a>          79 trace/trace_dynevent.h static inline int dyn_event_add(struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/275.html#L90'>dyn_event</a>          90 trace/trace_dynevent.h static inline void dyn_event_remove(struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/255.html#L66'>dyn_event</a>          66 trace/trace_events_synth.c static int synth_event_show(struct seq_file *m, struct dyn_event *ev);</span>
+<span class='curline'><a href='../S/255.html#L67'>dyn_event</a>          67 trace/trace_events_synth.c static int synth_event_release(struct dyn_event *ev);</span>
+<span class='curline'><a href='../S/255.html#L68'>dyn_event</a>          68 trace/trace_events_synth.c static bool synth_event_is_busy(struct dyn_event *ev);</span>
+<span class='curline'><a href='../S/255.html#L70'>dyn_event</a>          70 trace/trace_events_synth.c 			int argc, const char **argv, struct dyn_event *ev);</span>
+<span class='curline'><a href='../S/255.html#L80'>dyn_event</a>          80 trace/trace_events_synth.c static bool is_synth_event(struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/255.html#L85'>dyn_event</a>          85 trace/trace_events_synth.c static struct synth_event *to_synth_event(struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/255.html#L90'>dyn_event</a>          90 trace/trace_events_synth.c static bool synth_event_is_busy(struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/255.html#L98'>dyn_event</a>          98 trace/trace_events_synth.c 			int argc, const char **argv, struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/255.html#L732'>dyn_event</a>         732 trace/trace_events_synth.c 	struct dyn_event *pos;</span>
+<span class='curline'><a href='../S/255.html#L1961'>dyn_event</a>        1961 trace/trace_events_synth.c static int synth_event_release(struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/255.html#L2006'>dyn_event</a>        2006 trace/trace_events_synth.c static int synth_event_show(struct seq_file *m, struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/255.html#L2017'>dyn_event</a>        2017 trace/trace_events_synth.c 	struct dyn_event *ev = v;</span>
+<span class='curline'><a href='../S/317.html#L39'>dyn_event</a>          39 trace/trace_kprobe.c static int trace_kprobe_show(struct seq_file *m, struct dyn_event *ev);</span>
+<span class='curline'><a href='../S/317.html#L40'>dyn_event</a>          40 trace/trace_kprobe.c static int trace_kprobe_release(struct dyn_event *ev);</span>
+<span class='curline'><a href='../S/317.html#L41'>dyn_event</a>          41 trace/trace_kprobe.c static bool trace_kprobe_is_busy(struct dyn_event *ev);</span>
+<span class='curline'><a href='../S/317.html#L43'>dyn_event</a>          43 trace/trace_kprobe.c 			int argc, const char **argv, struct dyn_event *ev);</span>
+<span class='curline'><a href='../S/317.html#L57'>dyn_event</a>          57 trace/trace_kprobe.c 	struct dyn_event	devent;</span>
+<span class='curline'><a href='../S/317.html#L64'>dyn_event</a>          64 trace/trace_kprobe.c static bool is_trace_kprobe(struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/317.html#L69'>dyn_event</a>          69 trace/trace_kprobe.c static struct trace_kprobe *to_trace_kprobe(struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/317.html#L135'>dyn_event</a>         135 trace/trace_kprobe.c static bool trace_kprobe_is_busy(struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/317.html#L165'>dyn_event</a>         165 trace/trace_kprobe.c 			int argc, const char **argv, struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/317.html#L308'>dyn_event</a>         308 trace/trace_kprobe.c 	struct dyn_event *pos;</span>
+<span class='curline'><a href='../S/317.html#L676'>dyn_event</a>         676 trace/trace_kprobe.c 	struct dyn_event *pos;</span>
+<span class='curline'><a href='../S/317.html#L1091'>dyn_event</a>        1091 trace/trace_kprobe.c static int trace_kprobe_release(struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/317.html#L1101'>dyn_event</a>        1101 trace/trace_kprobe.c static int trace_kprobe_show(struct seq_file *m, struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/317.html#L1129'>dyn_event</a>        1129 trace/trace_kprobe.c 	struct dyn_event *ev = v;</span>
+<span class='curline'><a href='../S/317.html#L1180'>dyn_event</a>        1180 trace/trace_kprobe.c 	struct dyn_event *ev = v;</span>
+<span class='curline'><a href='../S/317.html#L1867'>dyn_event</a>        1867 trace/trace_kprobe.c 	struct dyn_event *pos;</span>
+<span class='curline'><a href='../S/269.html#L24'>dyn_event</a>          24 trace/trace_synth.h 	struct dyn_event			devent;</span>
+<span class='curline'><a href='../S/301.html#L38'>dyn_event</a>          38 trace/trace_uprobe.c static int trace_uprobe_show(struct seq_file *m, struct dyn_event *ev);</span>
+<span class='curline'><a href='../S/301.html#L39'>dyn_event</a>          39 trace/trace_uprobe.c static int trace_uprobe_release(struct dyn_event *ev);</span>
+<span class='curline'><a href='../S/301.html#L40'>dyn_event</a>          40 trace/trace_uprobe.c static bool trace_uprobe_is_busy(struct dyn_event *ev);</span>
+<span class='curline'><a href='../S/301.html#L42'>dyn_event</a>          42 trace/trace_uprobe.c 			int argc, const char **argv, struct dyn_event *ev);</span>
+<span class='curline'><a href='../S/301.html#L56'>dyn_event</a>          56 trace/trace_uprobe.c 	struct dyn_event		devent;</span>
+<span class='curline'><a href='../S/301.html#L67'>dyn_event</a>          67 trace/trace_uprobe.c static bool is_trace_uprobe(struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/301.html#L72'>dyn_event</a>          72 trace/trace_uprobe.c static struct trace_uprobe *to_trace_uprobe(struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/301.html#L277'>dyn_event</a>         277 trace/trace_uprobe.c static bool trace_uprobe_is_busy(struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/301.html#L313'>dyn_event</a>         313 trace/trace_uprobe.c 			int argc, const char **argv, struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/301.html#L377'>dyn_event</a>         377 trace/trace_uprobe.c 	struct dyn_event *pos;</span>
+<span class='curline'><a href='../S/301.html#L474'>dyn_event</a>         474 trace/trace_uprobe.c 	struct dyn_event *pos;</span>
+<span class='curline'><a href='../S/301.html#L730'>dyn_event</a>         730 trace/trace_uprobe.c static int trace_uprobe_release(struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/301.html#L738'>dyn_event</a>         738 trace/trace_uprobe.c static int trace_uprobe_show(struct seq_file *m, struct dyn_event *ev)</span>
+<span class='curline'><a href='../S/301.html#L760'>dyn_event</a>         760 trace/trace_uprobe.c 	struct dyn_event *ev = v;</span>
+<span class='curline'><a href='../S/301.html#L811'>dyn_event</a>         811 trace/trace_uprobe.c 	struct dyn_event *ev = v;</span>
+</pre>
+</body>
+</html>

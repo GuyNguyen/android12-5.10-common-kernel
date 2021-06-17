@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>rcu_ctrlblk</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<pre>
+<span class='curline'><a href='../S/136.html#L38'>rcu_ctrlblk</a>        38 rcu/tiny.c     static struct rcu_ctrlblk rcu_ctrlblk = {</span>
+<span class='curline'><a href='../S/136.html#L39'>rcu_ctrlblk</a>        39 rcu/tiny.c     	.donetail	= &amp;rcu_ctrlblk.rcucblist,</span>
+<span class='curline'><a href='../S/136.html#L40'>rcu_ctrlblk</a>        40 rcu/tiny.c     	.curtail	= &amp;rcu_ctrlblk.rcucblist,</span>
+<span class='curline'><a href='../S/136.html#L55'>rcu_ctrlblk</a>        55 rcu/tiny.c     	if (rcu_ctrlblk.donetail != rcu_ctrlblk.curtail) {</span>
+<span class='curline'><a href='../S/136.html#L56'>rcu_ctrlblk</a>        56 rcu/tiny.c     		rcu_ctrlblk.donetail = rcu_ctrlblk.curtail;</span>
+<span class='curline'><a href='../S/136.html#L72'>rcu_ctrlblk</a>        72 rcu/tiny.c     	} else if (rcu_ctrlblk.donetail != rcu_ctrlblk.curtail) {</span>
+<span class='curline'><a href='../S/136.html#L111'>rcu_ctrlblk</a>       111 rcu/tiny.c     	if (rcu_ctrlblk.donetail == &amp;rcu_ctrlblk.rcucblist) {</span>
+<span class='curline'><a href='../S/136.html#L116'>rcu_ctrlblk</a>       116 rcu/tiny.c     	list = rcu_ctrlblk.rcucblist;</span>
+<span class='curline'><a href='../S/136.html#L117'>rcu_ctrlblk</a>       117 rcu/tiny.c     	rcu_ctrlblk.rcucblist = *rcu_ctrlblk.donetail;</span>
+<span class='curline'><a href='../S/136.html#L118'>rcu_ctrlblk</a>       118 rcu/tiny.c     	*rcu_ctrlblk.donetail = NULL;</span>
+<span class='curline'><a href='../S/136.html#L119'>rcu_ctrlblk</a>       119 rcu/tiny.c     	if (rcu_ctrlblk.curtail == rcu_ctrlblk.donetail)</span>
+<span class='curline'><a href='../S/136.html#L120'>rcu_ctrlblk</a>       120 rcu/tiny.c     		rcu_ctrlblk.curtail = &amp;rcu_ctrlblk.rcucblist;</span>
+<span class='curline'><a href='../S/136.html#L121'>rcu_ctrlblk</a>       121 rcu/tiny.c     	rcu_ctrlblk.donetail = &amp;rcu_ctrlblk.rcucblist;</span>
+<span class='curline'><a href='../S/136.html#L169'>rcu_ctrlblk</a>       169 rcu/tiny.c     	*rcu_ctrlblk.curtail = head;</span>
+<span class='curline'><a href='../S/136.html#L170'>rcu_ctrlblk</a>       170 rcu/tiny.c     	rcu_ctrlblk.curtail = &amp;head-&gt;next;</span>
+</pre>
+</body>
+</html>
