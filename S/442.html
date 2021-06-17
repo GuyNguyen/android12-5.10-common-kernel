@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>sched/Makefile</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<!-- beginning of fixed guide -->
+<div id='guide'><ul>
+<li><a href='#TOP'><img class='icon' src='../icons/first.png' alt='[^]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/last.png' alt='[v]' /></a></li>
+<li><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a></li>
+<li><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a></li>
+<li><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a></li>
+<li class='standout'><span><a href='../files/512.html'>sched</a>/Makefile</span></li>
+</ul></div>
+<!-- end of fixed guide -->
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/512.html'>sched</a>/Makefile</h2>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><img class='icon' src='../icons/n_first.png' alt='[first]' /><img class='icon' src='../icons/n_last.png' alt='[last]' /><img class='icon' src='../icons/n_top.png' alt='[top]' /><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+1 sched/Makefile'  /> */</em>
+<hr />
+<pre>
+<a id='L1' name='L1'></a># SPDX-License-Identifier: GPL-2.0
+<a id='L2' name='L2'></a>ifdef CONFIG_FUNCTION_TRACER
+<a id='L3' name='L3'></a>CFLAGS_REMOVE_clock.o = $(CC_FLAGS_FTRACE)
+<a id='L4' name='L4'></a>endif
+<a id='L5' name='L5'></a>
+<a id='L6' name='L6'></a># These files are disabled because they produce non-interesting flaky coverage
+<a id='L7' name='L7'></a># that is not a function of syscall inputs. E.g. involuntary context switches.
+<a id='L8' name='L8'></a>KCOV_INSTRUMENT := n
+<a id='L9' name='L9'></a>
+<a id='L10' name='L10'></a># There are numerous data races here, however, most of them are due to plain accesses.
+<a id='L11' name='L11'></a># This would make it even harder for syzbot to find reproducers, because these
+<a id='L12' name='L12'></a># bugs trigger without specific input. Disable by default, but should re-enable
+<a id='L13' name='L13'></a># eventually.
+<a id='L14' name='L14'></a>KCSAN_SANITIZE := n
+<a id='L15' name='L15'></a>
+<a id='L16' name='L16'></a>ifneq ($(CONFIG_SCHED_OMIT_FRAME_POINTER),y)
+<a id='L17' name='L17'></a># According to Alan Modra &lt;alan@linuxcare.com.au&gt;, the -fno-omit-frame-pointer is
+<a id='L18' name='L18'></a># needed for x86 only.  Why this used to be enabled for all architectures is beyond
+<a id='L19' name='L19'></a># me.  I suspect most platforms don't need this, but until we know that for sure
+<a id='L20' name='L20'></a># I turn this off for IA-64 only.  Andreas Schwab says it's also needed on m68k
+<a id='L21' name='L21'></a># to get a correct value for the wait-channel (WCHAN in ps). --davidm
+<a id='L22' name='L22'></a>CFLAGS_core.o := $(PROFILING) -fno-omit-frame-pointer
+<a id='L23' name='L23'></a>endif
+<a id='L24' name='L24'></a>
+<a id='L25' name='L25'></a>obj-y += core.o loadavg.o clock.o cputime.o
+<a id='L26' name='L26'></a>obj-y += idle.o fair.o rt.o deadline.o
+<a id='L27' name='L27'></a>obj-y += wait.o wait_bit.o swait.o completion.o
+<a id='L28' name='L28'></a>
+<a id='L29' name='L29'></a>obj-$(CONFIG_SMP) += cpupri.o cpudeadline.o topology.o stop_task.o pelt.o
+<a id='L30' name='L30'></a>obj-$(CONFIG_SCHED_AUTOGROUP) += autogroup.o
+<a id='L31' name='L31'></a>obj-$(CONFIG_SCHEDSTATS) += stats.o
+<a id='L32' name='L32'></a>obj-$(CONFIG_SCHED_DEBUG) += debug.o
+<a id='L33' name='L33'></a>obj-$(CONFIG_CGROUP_CPUACCT) += cpuacct.o
+<a id='L34' name='L34'></a>obj-$(CONFIG_CPU_FREQ) += cpufreq.o
+<a id='L35' name='L35'></a>obj-$(CONFIG_CPU_FREQ_GOV_SCHEDUTIL) += cpufreq_schedutil.o
+<a id='L36' name='L36'></a>obj-$(CONFIG_MEMBARRIER) += membarrier.o
+<a id='L37' name='L37'></a>obj-$(CONFIG_CPU_ISOLATION) += isolation.o
+<a id='L38' name='L38'></a>obj-$(CONFIG_PSI) += psi.o
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><img class='icon' src='../icons/n_first.png' alt='[first]' /><img class='icon' src='../icons/n_last.png' alt='[last]' /><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><img class='icon' src='../icons/n_bottom.png' alt='[bottom]' /><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+38 sched/Makefile'  /> */</em>
+</body>
+</html>

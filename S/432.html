@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>configs/xen.config</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<!-- beginning of fixed guide -->
+<div id='guide'><ul>
+<li><a href='#TOP'><img class='icon' src='../icons/first.png' alt='[^]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/last.png' alt='[v]' /></a></li>
+<li><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a></li>
+<li><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a></li>
+<li><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a></li>
+<li class='standout'><span><a href='../files/498.html'>configs</a>/xen.config</span></li>
+</ul></div>
+<!-- end of fixed guide -->
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/498.html'>configs</a>/xen.config</h2>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><img class='icon' src='../icons/n_first.png' alt='[first]' /><img class='icon' src='../icons/n_last.png' alt='[last]' /><img class='icon' src='../icons/n_top.png' alt='[top]' /><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+1 configs/xen.config'  /> */</em>
+<hr />
+<pre>
+<a id='L1' name='L1'></a># global stuff - these enable us to allow some
+<a id='L2' name='L2'></a># of the not so generic stuff below for xen
+<a id='L3' name='L3'></a>CONFIG_PARAVIRT=y
+<a id='L4' name='L4'></a>CONFIG_NET=y
+<a id='L5' name='L5'></a>CONFIG_NET_CORE=y
+<a id='L6' name='L6'></a>CONFIG_NETDEVICES=y
+<a id='L7' name='L7'></a>CONFIG_BLOCK=y
+<a id='L8' name='L8'></a>CONFIG_WATCHDOG=y
+<a id='L9' name='L9'></a>CONFIG_TARGET_CORE=y
+<a id='L10' name='L10'></a>CONFIG_SCSI=y
+<a id='L11' name='L11'></a>CONFIG_FB=y
+<a id='L12' name='L12'></a>CONFIG_INPUT_MISC=y
+<a id='L13' name='L13'></a>CONFIG_MEMORY_HOTPLUG=y
+<a id='L14' name='L14'></a>CONFIG_TTY=y
+<a id='L15' name='L15'></a># Technically not required but otherwise produces
+<a id='L16' name='L16'></a># pretty useless systems starting from allnoconfig
+<a id='L17' name='L17'></a># You want TCP/IP and ELF binaries right?
+<a id='L18' name='L18'></a>CONFIG_INET=y
+<a id='L19' name='L19'></a>CONFIG_BINFMT_ELF=y
+<a id='L20' name='L20'></a># generic config
+<a id='L21' name='L21'></a>CONFIG_XEN=y
+<a id='L22' name='L22'></a>CONFIG_XEN_DOM0=y
+<a id='L23' name='L23'></a># backend drivers
+<a id='L24' name='L24'></a>CONFIG_XEN_BACKEND=y
+<a id='L25' name='L25'></a>CONFIG_XEN_BLKDEV_BACKEND=m
+<a id='L26' name='L26'></a>CONFIG_XEN_NETDEV_BACKEND=m
+<a id='L27' name='L27'></a>CONFIG_HVC_XEN=y
+<a id='L28' name='L28'></a>CONFIG_XEN_WDT=m
+<a id='L29' name='L29'></a>CONFIG_XEN_SCSI_BACKEND=m
+<a id='L30' name='L30'></a># frontend drivers
+<a id='L31' name='L31'></a>CONFIG_XEN_FBDEV_FRONTEND=m
+<a id='L32' name='L32'></a>CONFIG_HVC_XEN_FRONTEND=y
+<a id='L33' name='L33'></a>CONFIG_INPUT_XEN_KBDDEV_FRONTEND=m
+<a id='L34' name='L34'></a>CONFIG_XEN_SCSI_FRONTEND=m
+<a id='L35' name='L35'></a># others
+<a id='L36' name='L36'></a>CONFIG_XEN_BALLOON=y
+<a id='L37' name='L37'></a>CONFIG_XEN_SCRUB_PAGES=y
+<a id='L38' name='L38'></a>CONFIG_XEN_DEV_EVTCHN=m
+<a id='L39' name='L39'></a>CONFIG_XEN_BLKDEV_FRONTEND=m
+<a id='L40' name='L40'></a>CONFIG_XEN_NETDEV_FRONTEND=m
+<a id='L41' name='L41'></a>CONFIG_XENFS=m
+<a id='L42' name='L42'></a>CONFIG_XEN_COMPAT_XENFS=y
+<a id='L43' name='L43'></a>CONFIG_XEN_SYS_HYPERVISOR=y
+<a id='L44' name='L44'></a>CONFIG_XEN_XENBUS_FRONTEND=y
+<a id='L45' name='L45'></a>CONFIG_XEN_GNTDEV=m
+<a id='L46' name='L46'></a>CONFIG_XEN_GRANT_DEV_ALLOC=m
+<a id='L47' name='L47'></a>CONFIG_SWIOTLB_XEN=y
+<a id='L48' name='L48'></a>CONFIG_XEN_PRIVCMD=m
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><img class='icon' src='../icons/n_first.png' alt='[first]' /><img class='icon' src='../icons/n_last.png' alt='[last]' /><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><img class='icon' src='../icons/n_bottom.png' alt='[bottom]' /><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+48 configs/xen.config'  /> */</em>
+</body>
+</html>

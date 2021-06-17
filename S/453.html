@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>sched/cpupri.h</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<!-- beginning of fixed guide -->
+<div id='guide'><ul>
+<li><a href='#TOP'><img class='icon' src='../icons/first.png' alt='[^]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/last.png' alt='[v]' /></a></li>
+<li><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a></li>
+<li><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a></li>
+<li><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a></li>
+<li class='standout'><span><a href='../files/512.html'>sched</a>/cpupri.h</span></li>
+</ul></div>
+<!-- end of fixed guide -->
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/512.html'>sched</a>/cpupri.h</h2>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><img class='icon' src='../icons/n_first.png' alt='[first]' /><img class='icon' src='../icons/n_last.png' alt='[last]' /><img class='icon' src='../icons/n_top.png' alt='[top]' /><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+1 sched/cpupri.h'  /> */</em>
+<hr />
+<h2 class='header'><a href='447.html#L78' title='Included from 78 in sched/sched.h.'>INCLUDED FROM</a></h2>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>/* SPDX-License-Identifier: GPL-2.0 */</em>
+<a id='L2' name='L2'></a>   2 
+<a id='L3' name='L3'></a>   3 <em class='sharp'>#define</em> <a href='../cgi-bin/global.cgi?pattern=CPUPRI_NR_PRIORITIES&amp;type=reference' title='Multiple referred from 5 places.'>CPUPRI_NR_PRIORITIES</a>    (<a href='../cgi-bin/global.cgi?pattern=MAX_RT_PRIO&amp;type=symbol' title='Multiple used in 26 places.'>MAX_RT_PRIO</a> + 2)
+<a id='L4' name='L4'></a>   4 
+<a id='L5' name='L5'></a>   5 <em class='sharp'>#define</em> <a href='../cgi-bin/global.cgi?pattern=CPUPRI_INVALID&amp;type=reference' title='Multiple referred from 6 places.'>CPUPRI_INVALID</a>          -1
+<a id='L6' name='L6'></a>   6 <em class='sharp'>#define</em> <a href='../S/449.html#L35' title='Referred from 35 in sched/cpupri.c.'>CPUPRI_IDLE</a>              0
+<a id='L7' name='L7'></a>   7 <em class='sharp'>#define</em> <a href='../cgi-bin/global.cgi?pattern=CPUPRI_NORMAL&amp;type=reference' title='Multiple referred from 2 places.'>CPUPRI_NORMAL</a>            1
+<a id='L8' name='L8'></a>   8 <em class='comment'>/* values 2-101 are RT priorities 0-99 */</em>
+<a id='L9' name='L9'></a>   9 
+<a id='L10' name='L10'></a>  10 <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=cpupri_vec&amp;type=reference' title='Multiple referred from 5 places.'>cpupri_vec</a> <em class='brace'>{</em>
+<a id='L11' name='L11'></a>  11         <a href='../cgi-bin/global.cgi?pattern=atomic_t&amp;type=symbol' title='Multiple used in 138 places.'>atomic_t</a>                <a href='../cgi-bin/global.cgi?pattern=count&amp;type=symbol' title='Multiple used in 1028 places.'>count</a>;
+<a id='L12' name='L12'></a>  12         <a href='../cgi-bin/global.cgi?pattern=cpumask_var_t&amp;type=symbol' title='Multiple used in 102 places.'>cpumask_var_t</a>           <a href='../cgi-bin/global.cgi?pattern=mask&amp;type=symbol' title='Multiple used in 659 places.'>mask</a>;
+<a id='L13' name='L13'></a>  13 <em class='brace'>}</em>;
+<a id='L14' name='L14'></a>  14 
+<a id='L15' name='L15'></a>  15 <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=cpupri&amp;type=reference' title='Multiple referred from 29 places.'>cpupri</a> <em class='brace'>{</em>
+<a id='L16' name='L16'></a>  16         <strong class='reserved'>struct</strong> <a href='../S/453.html#L10' title='Defined at 10 in sched/cpupri.h.'>cpupri_vec</a>       <a href='../cgi-bin/global.cgi?pattern=pri_to_cpu&amp;type=symbol' title='Multiple used in 7 places.'>pri_to_cpu</a>[<a href='../S/453.html#L3' title='Defined at 3 in sched/cpupri.h.'>CPUPRI_NR_PRIORITIES</a>];
+<a id='L17' name='L17'></a>  17         <strong class='reserved'>int</strong>                     *<a href='../cgi-bin/global.cgi?pattern=cpu_to_pri&amp;type=symbol' title='Multiple used in 7 places.'>cpu_to_pri</a>;
+<a id='L18' name='L18'></a>  18 <em class='brace'>}</em>;
+<a id='L19' name='L19'></a>  19 
+<a id='L20' name='L20'></a>  20 <em class='sharp'>#ifdef</em> <a href='../cgi-bin/global.cgi?pattern=CONFIG_SMP&amp;type=symbol' title='Multiple used in 204 places.'>CONFIG_SMP</a>
+<a id='L21' name='L21'></a>  21 <strong class='reserved'>int</strong>  <a href='../S/449.html#L124' title='Defined at 124 in sched/cpupri.c.'>cpupri_find</a>(<strong class='reserved'>struct</strong> <a href='../S/453.html#L15' title='Defined at 15 in sched/cpupri.h.'>cpupri</a> *<a href='../cgi-bin/global.cgi?pattern=cp&amp;type=symbol' title='Multiple used in 335 places.'>cp</a>, <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=task_struct&amp;type=symbol' title='Multiple used in 1729 places.'>task_struct</a> *<a href='../cgi-bin/global.cgi?pattern=p&amp;type=symbol' title='Multiple used in 3890 places.'>p</a>,
+<a id='L22' name='L22'></a>  22                  <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=cpumask&amp;type=symbol' title='Multiple used in 394 places.'>cpumask</a> *<a href='../cgi-bin/global.cgi?pattern=lowest_mask&amp;type=symbol' title='Multiple used in 30 places.'>lowest_mask</a>);
+<a id='L23' name='L23'></a>  23 <strong class='reserved'>int</strong>  <a href='../S/449.html#L147' title='Defined at 147 in sched/cpupri.c.'>cpupri_find_fitness</a>(<strong class='reserved'>struct</strong> <a href='../S/453.html#L15' title='Defined at 15 in sched/cpupri.h.'>cpupri</a> *<a href='../cgi-bin/global.cgi?pattern=cp&amp;type=symbol' title='Multiple used in 335 places.'>cp</a>, <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=task_struct&amp;type=symbol' title='Multiple used in 1729 places.'>task_struct</a> *<a href='../cgi-bin/global.cgi?pattern=p&amp;type=symbol' title='Multiple used in 3890 places.'>p</a>,
+<a id='L24' name='L24'></a>  24                          <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=cpumask&amp;type=symbol' title='Multiple used in 394 places.'>cpumask</a> *<a href='../cgi-bin/global.cgi?pattern=lowest_mask&amp;type=symbol' title='Multiple used in 30 places.'>lowest_mask</a>,
+<a id='L25' name='L25'></a>  25                          <a href='../cgi-bin/global.cgi?pattern=bool&amp;type=symbol' title='Multiple used in 2450 places.'>bool</a> (*<a href='../cgi-bin/global.cgi?pattern=fitness_fn&amp;type=symbol' title='Multiple used in 5 places.'>fitness_fn</a>)(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=task_struct&amp;type=symbol' title='Multiple used in 1729 places.'>task_struct</a> *<a href='../cgi-bin/global.cgi?pattern=p&amp;type=symbol' title='Multiple used in 3890 places.'>p</a>, <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>));
+<a id='L26' name='L26'></a>  26 <strong class='reserved'>void</strong> <a href='../S/449.html#L229' title='Defined at 229 in sched/cpupri.c.'>cpupri_set</a>(<strong class='reserved'>struct</strong> <a href='../S/453.html#L15' title='Defined at 15 in sched/cpupri.h.'>cpupri</a> *<a href='../cgi-bin/global.cgi?pattern=cp&amp;type=symbol' title='Multiple used in 335 places.'>cp</a>, <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=cpu&amp;type=symbol' title='Multiple used in 3543 places.'>cpu</a>, <strong class='reserved'>int</strong> pri);
+<a id='L27' name='L27'></a>  27 <strong class='reserved'>int</strong>  <a href='../S/449.html#L297' title='Defined at 297 in sched/cpupri.c.'>cpupri_init</a>(<strong class='reserved'>struct</strong> <a href='../S/453.html#L15' title='Defined at 15 in sched/cpupri.h.'>cpupri</a> *<a href='../cgi-bin/global.cgi?pattern=cp&amp;type=symbol' title='Multiple used in 335 places.'>cp</a>);
+<a id='L28' name='L28'></a>  28 <strong class='reserved'>void</strong> <a href='../S/449.html#L328' title='Defined at 328 in sched/cpupri.c.'>cpupri_cleanup</a>(<strong class='reserved'>struct</strong> <a href='../S/453.html#L15' title='Defined at 15 in sched/cpupri.h.'>cpupri</a> *<a href='../cgi-bin/global.cgi?pattern=cp&amp;type=symbol' title='Multiple used in 335 places.'>cp</a>);
+<a id='L29' name='L29'></a>  29 <em class='sharp'>#endif</em>
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><img class='icon' src='../icons/n_first.png' alt='[first]' /><img class='icon' src='../icons/n_last.png' alt='[last]' /><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><img class='icon' src='../icons/n_bottom.png' alt='[bottom]' /><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+29 sched/cpupri.h'  /> */</em>
+</body>
+</html>

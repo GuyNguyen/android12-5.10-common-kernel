@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<title>bpf/bpf_lsm.c</title>
+<meta name='robots' content='noindex,nofollow' />
+<meta name='generator' content='GLOBAL-6.6.4' />
+<meta http-equiv='Content-Style-Type' content='text/css' />
+<link rel='stylesheet' type='text/css' href='../style.css' />
+</head>
+<body>
+<!-- beginning of fixed guide -->
+<div id='guide'><ul>
+<li><a href='#L31'><img class='icon' src='../icons/first.png' alt='[^]' /></a></li>
+<li><a href='#L55'><img class='icon' src='../icons/last.png' alt='[v]' /></a></li>
+<li><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a></li>
+<li><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a></li>
+<li><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a></li>
+<li><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a></li>
+<li class='standout'><span><a href='../files/494.html'>bpf</a>/bpf_lsm.c</span></li>
+</ul></div>
+<!-- end of fixed guide -->
+<a id='TOP' name='TOP'></a><h2 class='header'><a href='../mains.html'>root</a>/<a href='../files/494.html'>bpf</a>/bpf_lsm.c</h2>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L31'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L55'><img class='icon' src='../icons/last.png' alt='[last]' /></a><img class='icon' src='../icons/n_top.png' alt='[top]' /><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+1 bpf/bpf_lsm.c'  /> */</em>
+<hr />
+<h2 class='header'>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L31' title='Defined at 31.'>BTF_SET_START</a></li>
+<li><a href='#L55' title='Defined at 55.'>bpf_lsm_func_proto</a></li>
+</ol>
+<hr />
+<pre>
+<a id='L1' name='L1'></a>   1 <em class='comment'>// SPDX-License-Identifier: GPL-2.0</em>
+<a id='L2' name='L2'></a>   2 
+<a id='L3' name='L3'></a>   3 <em class='comment'>/*</em>
+<a id='L4' name='L4'></a>   4 <em class='comment'> * Copyright (C) 2020 Google LLC.</em>
+<a id='L5' name='L5'></a>   5 <em class='comment'> */</em>
+<a id='L6' name='L6'></a>   6 
+<a id='L7' name='L7'></a>   7 <em class='sharp'>#include</em> &lt;linux/filter.h&gt;
+<a id='L8' name='L8'></a>   8 <em class='sharp'>#include</em> &lt;linux/bpf.h&gt;
+<a id='L9' name='L9'></a>   9 <em class='sharp'>#include</em> &lt;linux/btf.h&gt;
+<a id='L10' name='L10'></a>  10 <em class='sharp'>#include</em> &lt;linux/lsm_hooks.h&gt;
+<a id='L11' name='L11'></a>  11 <em class='sharp'>#include</em> &lt;linux/bpf_lsm.h&gt;
+<a id='L12' name='L12'></a>  12 <em class='sharp'>#include</em> &lt;linux/kallsyms.h&gt;
+<a id='L13' name='L13'></a>  13 <em class='sharp'>#include</em> &lt;linux/bpf_verifier.h&gt;
+<a id='L14' name='L14'></a>  14 <em class='sharp'>#include</em> &lt;net/bpf_sk_storage.h&gt;
+<a id='L15' name='L15'></a>  15 <em class='sharp'>#include</em> &lt;linux/bpf_local_storage.h&gt;
+<a id='L16' name='L16'></a>  16 <em class='sharp'>#include</em> &lt;linux/btf_ids.h&gt;
+<a id='L17' name='L17'></a>  17 
+<a id='L18' name='L18'></a>  18 <em class='comment'>/* For every LSM hook that allows attachment of BPF programs, declare a nop</em>
+<a id='L19' name='L19'></a>  19 <em class='comment'> * function where a BPF program can be attached.</em>
+<a id='L20' name='L20'></a>  20 <em class='comment'> */</em>
+<a id='L21' name='L21'></a>  21 <em class='sharp'>#define</em> <a href='../S/420.html#L33' title='Referred from 33 in bpf/bpf_lsm.c.'>LSM_HOOK</a>(<a href='../cgi-bin/global.cgi?pattern=RET&amp;type=symbol' title='Multiple used in 3 places.'>RET</a>, <a href='../cgi-bin/global.cgi?pattern=DEFAULT&amp;type=symbol' title='Multiple used in 3 places.'>DEFAULT</a>, <a href='../cgi-bin/global.cgi?pattern=NAME&amp;type=symbol' title='Multiple used in 9 places.'>NAME</a>, ...)       \
+<a id='L22' name='L22'></a>  22 <a href='../cgi-bin/global.cgi?pattern=noinline&amp;type=symbol' title='Multiple used in 73 places.'>noinline</a> <a href='../cgi-bin/global.cgi?pattern=RET&amp;type=symbol' title='Multiple used in 3 places.'>RET</a> <a href='../cgi-bin/global.cgi?pattern=bpf_lsm_&amp;type=symbol' title='Multiple used in 2 places.'>bpf_lsm_</a>##<a href='../cgi-bin/global.cgi?pattern=NAME&amp;type=symbol' title='Multiple used in 9 places.'>NAME</a>(<a href='../cgi-bin/global.cgi?pattern=__VA_ARGS__&amp;type=symbol' title='Multiple used in 33 places.'>__VA_ARGS__</a>)        \
+<a id='L23' name='L23'></a>  23 <em class='brace'>{</em>                                               \
+<a id='L24' name='L24'></a>  24         <strong class='reserved'>return</strong> <a href='../cgi-bin/global.cgi?pattern=DEFAULT&amp;type=symbol' title='Multiple used in 3 places.'>DEFAULT</a>;                         \
+<a id='L25' name='L25'></a>  25 <em class='brace'>}</em>
+<a id='L26' name='L26'></a>  26 
+<a id='L27' name='L27'></a>  27 <em class='sharp'>#include</em> &lt;linux/lsm_hook_defs.h&gt;
+<a id='L28' name='L28'></a>  28 <em class='sharp'>#undef</em> <a href='../S/420.html#L33' title='Referred from 33 in bpf/bpf_lsm.c.'>LSM_HOOK</a>
+<a id='L29' name='L29'></a>  29 
+<a id='L30' name='L30'></a>  30 <em class='sharp'>#define</em> <a href='../S/420.html#L33' title='Referred from 33 in bpf/bpf_lsm.c.'>LSM_HOOK</a>(<a href='../cgi-bin/global.cgi?pattern=RET&amp;type=symbol' title='Multiple used in 3 places.'>RET</a>, <a href='../cgi-bin/global.cgi?pattern=DEFAULT&amp;type=symbol' title='Multiple used in 3 places.'>DEFAULT</a>, <a href='../cgi-bin/global.cgi?pattern=NAME&amp;type=symbol' title='Multiple used in 9 places.'>NAME</a>, ...) <a href='../cgi-bin/global.cgi?pattern=BTF_ID&amp;type=symbol' title='Multiple used in 19 places.'>BTF_ID</a>(<a href='../S/401.html#L551' title='Defined at 551 in bpf/verifier.c.'>func</a>, <a href='../cgi-bin/global.cgi?pattern=bpf_lsm_&amp;type=symbol' title='Multiple used in 2 places.'>bpf_lsm_</a>##<a href='../cgi-bin/global.cgi?pattern=NAME&amp;type=symbol' title='Multiple used in 9 places.'>NAME</a>)
+<a id='L31' name='L31'></a>  31 BTF_SET_START(<a href='../cgi-bin/global.cgi?pattern=bpf_lsm_hooks&amp;type=symbol' title='Multiple used in 3 places.'>bpf_lsm_hooks</a>)
+     <em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><a href='#L55'><img class='icon' src='../icons/right.png' alt='[next]' /></a><img class='icon' src='../icons/n_first.png' alt='[first]' /><a href='#L55'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+31 bpf/bpf_lsm.c'  /> */</em>
+<a id='L32' name='L32'></a>  32 <em class='sharp'>#include</em> &lt;linux/lsm_hook_defs.h&gt;
+<a id='L33' name='L33'></a>  33 <em class='sharp'>#undef</em> <a href='../cgi-bin/global.cgi?pattern=LSM_HOOK&amp;type=definitions' title='Multiple defined in 3 places.'>LSM_HOOK</a>
+<a id='L34' name='L34'></a>  34 <a href='../cgi-bin/global.cgi?pattern=BTF_SET_END&amp;type=symbol' title='Multiple used in 4 places.'>BTF_SET_END</a>(<a href='../cgi-bin/global.cgi?pattern=bpf_lsm_hooks&amp;type=symbol' title='Multiple used in 3 places.'>bpf_lsm_hooks</a>)
+<a id='L35' name='L35'></a>  35 
+<a id='L36' name='L36'></a>  36 <strong class='reserved'>int</strong> <a href='../cgi-bin/global.cgi?pattern=bpf_lsm_verify_prog&amp;type=symbol' title='Multiple used in 2 places.'>bpf_lsm_verify_prog</a>(<strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=bpf_verifier_log&amp;type=symbol' title='Multiple used in 28 places.'>bpf_verifier_log</a> *<a href='../cgi-bin/global.cgi?pattern=vlog&amp;type=symbol' title='Multiple used in 3 places.'>vlog</a>,
+<a id='L37' name='L37'></a>  37                         <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> <a href='../S/387.html#L50' title='Defined at 50 in bpf/preload/iterators/iterators.bpf.c.'>bpf_prog</a> *<a href='../cgi-bin/global.cgi?pattern=prog&amp;type=symbol' title='Multiple used in 1140 places.'>prog</a>)
+<a id='L38' name='L38'></a>  38 <em class='brace'>{</em>
+<a id='L39' name='L39'></a>  39         <strong class='reserved'>if</strong> (!<a href='../cgi-bin/global.cgi?pattern=prog&amp;type=symbol' title='Multiple used in 1140 places.'>prog</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=gpl_compatible&amp;type=symbol' title='Multiple used in 5 places.'>gpl_compatible</a>) <em class='brace'>{</em>
+<a id='L40' name='L40'></a>  40                 <a href='../cgi-bin/global.cgi?pattern=bpf_log&amp;type=symbol' title='Multiple used in 71 places.'>bpf_log</a>(<a href='../cgi-bin/global.cgi?pattern=vlog&amp;type=symbol' title='Multiple used in 3 places.'>vlog</a>,
+<a id='L41' name='L41'></a>  41                         "LSM programs must have a GPL compatible license\n");
+<a id='L42' name='L42'></a>  42                 <strong class='reserved'>return</strong> -<a href='../cgi-bin/global.cgi?pattern=EINVAL&amp;type=symbol' title='Multiple used in 1964 places.'>EINVAL</a>;
+<a id='L43' name='L43'></a>  43         <em class='brace'>}</em>
+<a id='L44' name='L44'></a>  44 
+<a id='L45' name='L45'></a>  45         <strong class='reserved'>if</strong> (!<a href='../S/411.html#L5547' title='Defined at 5547 in bpf/btf.c.'>btf_id_set_contains</a>(&amp;<a href='../cgi-bin/global.cgi?pattern=bpf_lsm_hooks&amp;type=symbol' title='Multiple used in 3 places.'>bpf_lsm_hooks</a>, <a href='../cgi-bin/global.cgi?pattern=prog&amp;type=symbol' title='Multiple used in 1140 places.'>prog</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=aux&amp;type=symbol' title='Multiple used in 612 places.'>aux</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=attach_btf_id&amp;type=symbol' title='Multiple used in 13 places.'>attach_btf_id</a>)) <em class='brace'>{</em>
+<a id='L46' name='L46'></a>  46                 <a href='../cgi-bin/global.cgi?pattern=bpf_log&amp;type=symbol' title='Multiple used in 71 places.'>bpf_log</a>(<a href='../cgi-bin/global.cgi?pattern=vlog&amp;type=symbol' title='Multiple used in 3 places.'>vlog</a>, "attach_btf_id %u points to wrong type name %s\n",
+<a id='L47' name='L47'></a>  47                         <a href='../cgi-bin/global.cgi?pattern=prog&amp;type=symbol' title='Multiple used in 1140 places.'>prog</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=aux&amp;type=symbol' title='Multiple used in 612 places.'>aux</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=attach_btf_id&amp;type=symbol' title='Multiple used in 13 places.'>attach_btf_id</a>, <a href='../cgi-bin/global.cgi?pattern=prog&amp;type=symbol' title='Multiple used in 1140 places.'>prog</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=aux&amp;type=symbol' title='Multiple used in 612 places.'>aux</a>-&gt;<a href='../cgi-bin/global.cgi?pattern=attach_func_name&amp;type=symbol' title='Multiple used in 8 places.'>attach_func_name</a>);
+<a id='L48' name='L48'></a>  48                 <strong class='reserved'>return</strong> -<a href='../cgi-bin/global.cgi?pattern=EINVAL&amp;type=symbol' title='Multiple used in 1964 places.'>EINVAL</a>;
+<a id='L49' name='L49'></a>  49         <em class='brace'>}</em>
+<a id='L50' name='L50'></a>  50 
+<a id='L51' name='L51'></a>  51         <strong class='reserved'>return</strong> 0;
+<a id='L52' name='L52'></a>  52 <em class='brace'>}</em>
+<a id='L53' name='L53'></a>  53 
+<a id='L54' name='L54'></a>  54 <strong class='reserved'>static</strong> <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=bpf_func_proto&amp;type=symbol' title='Multiple used in 127 places.'>bpf_func_proto</a> *
+<a id='L55' name='L55'></a>  55 <a href='../S/420.html#L75' title='Referred from 75 in bpf/bpf_lsm.c.'>bpf_lsm_func_proto</a>(<strong class='reserved'>enum</strong> <a href='../cgi-bin/global.cgi?pattern=bpf_func_id&amp;type=symbol' title='Multiple used in 16 places.'>bpf_func_id</a> <a href='../cgi-bin/global.cgi?pattern=func_id&amp;type=symbol' title='Multiple used in 160 places.'>func_id</a>, <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> <a href='../S/387.html#L50' title='Defined at 50 in bpf/preload/iterators/iterators.bpf.c.'>bpf_prog</a> *<a href='../cgi-bin/global.cgi?pattern=prog&amp;type=symbol' title='Multiple used in 1140 places.'>prog</a>)
+     <em class='comment'>/* <a href='#L31'><img class='icon' src='../icons/left.png' alt='[previous]' /></a><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L31'><img class='icon' src='../icons/first.png' alt='[first]' /></a><img class='icon' src='../icons/n_last.png' alt='[last]' /><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><a href='#BOTTOM'><img class='icon' src='../icons/bottom.png' alt='[bottom]' /></a><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+55 bpf/bpf_lsm.c'  /> */</em>
+<a id='L56' name='L56'></a>  56 <em class='brace'>{</em>
+<a id='L57' name='L57'></a>  57         <strong class='reserved'>switch</strong> (<a href='../cgi-bin/global.cgi?pattern=func_id&amp;type=symbol' title='Multiple used in 160 places.'>func_id</a>) <em class='brace'>{</em>
+<a id='L58' name='L58'></a>  58         <strong class='reserved'>case</strong> <a href='../cgi-bin/global.cgi?pattern=BPF_FUNC_inode_storage_get&amp;type=symbol' title='Multiple used in 3 places.'>BPF_FUNC_inode_storage_get</a>:
+<a id='L59' name='L59'></a>  59                 <strong class='reserved'>return</strong> &amp;<a href='../cgi-bin/global.cgi?pattern=bpf_inode_storage_get_proto&amp;type=symbol' title='Multiple used in 2 places.'>bpf_inode_storage_get_proto</a>;
+<a id='L60' name='L60'></a>  60         <strong class='reserved'>case</strong> <a href='../cgi-bin/global.cgi?pattern=BPF_FUNC_inode_storage_delete&amp;type=symbol' title='Multiple used in 3 places.'>BPF_FUNC_inode_storage_delete</a>:
+<a id='L61' name='L61'></a>  61                 <strong class='reserved'>return</strong> &amp;<a href='../cgi-bin/global.cgi?pattern=bpf_inode_storage_delete_proto&amp;type=symbol' title='Multiple used in 2 places.'>bpf_inode_storage_delete_proto</a>;
+<a id='L62' name='L62'></a>  62         <strong class='reserved'>case</strong> <a href='../cgi-bin/global.cgi?pattern=BPF_FUNC_sk_storage_get&amp;type=symbol' title='Multiple used in 4 places.'>BPF_FUNC_sk_storage_get</a>:
+<a id='L63' name='L63'></a>  63                 <strong class='reserved'>return</strong> &amp;<a href='../cgi-bin/global.cgi?pattern=bpf_sk_storage_get_proto&amp;type=symbol' title='Multiple used in 2 places.'>bpf_sk_storage_get_proto</a>;
+<a id='L64' name='L64'></a>  64         <strong class='reserved'>case</strong> <a href='../cgi-bin/global.cgi?pattern=BPF_FUNC_sk_storage_delete&amp;type=symbol' title='Multiple used in 4 places.'>BPF_FUNC_sk_storage_delete</a>:
+<a id='L65' name='L65'></a>  65                 <strong class='reserved'>return</strong> &amp;<a href='../cgi-bin/global.cgi?pattern=bpf_sk_storage_delete_proto&amp;type=symbol' title='Multiple used in 2 places.'>bpf_sk_storage_delete_proto</a>;
+<a id='L66' name='L66'></a>  66         <strong class='reserved'>default</strong>:
+<a id='L67' name='L67'></a>  67                 <strong class='reserved'>return</strong> <a href='../S/284.html#L1703' title='Defined at 1703 in trace/bpf_trace.c.'>tracing_prog_func_proto</a>(<a href='../cgi-bin/global.cgi?pattern=func_id&amp;type=symbol' title='Multiple used in 160 places.'>func_id</a>, <a href='../cgi-bin/global.cgi?pattern=prog&amp;type=symbol' title='Multiple used in 1140 places.'>prog</a>);
+<a id='L68' name='L68'></a>  68         <em class='brace'>}</em>
+<a id='L69' name='L69'></a>  69 <em class='brace'>}</em>
+<a id='L70' name='L70'></a>  70 
+<a id='L71' name='L71'></a>  71 <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=bpf_prog_ops&amp;type=symbol' title='Multiple used in 15 places.'>bpf_prog_ops</a> lsm_prog_ops = <em class='brace'>{</em>
+<a id='L72' name='L72'></a>  72 <em class='brace'>}</em>;
+<a id='L73' name='L73'></a>  73 
+<a id='L74' name='L74'></a>  74 <strong class='reserved'>const</strong> <strong class='reserved'>struct</strong> <a href='../cgi-bin/global.cgi?pattern=bpf_verifier_ops&amp;type=symbol' title='Multiple used in 17 places.'>bpf_verifier_ops</a> lsm_verifier_ops = <em class='brace'>{</em>
+<a id='L75' name='L75'></a>  75         .<a href='../cgi-bin/global.cgi?pattern=get_func_proto&amp;type=symbol' title='Multiple used in 13 places.'>get_func_proto</a> = <a href='../S/420.html#L55' title='Defined at 55 in bpf/bpf_lsm.c.'>bpf_lsm_func_proto</a>,
+<a id='L76' name='L76'></a>  76         .<a href='../cgi-bin/global.cgi?pattern=is_valid_access&amp;type=symbol' title='Multiple used in 12 places.'>is_valid_access</a> = <a href='../S/411.html#L4428' title='Defined at 4428 in bpf/btf.c.'>btf_ctx_access</a>,
+<a id='L77' name='L77'></a>  77 <em class='brace'>}</em>;
+</pre>
+<hr />
+<a id='BOTTOM' name='BOTTOM'></a>
+<em class='comment'>/* <img class='icon' src='../icons/n_left.png' alt='[previous]' /><img class='icon' src='../icons/n_right.png' alt='[next]' /><a href='#L31'><img class='icon' src='../icons/first.png' alt='[first]' /></a><a href='#L55'><img class='icon' src='../icons/last.png' alt='[last]' /></a><a href='#TOP'><img class='icon' src='../icons/top.png' alt='[top]' /></a><img class='icon' src='../icons/n_bottom.png' alt='[bottom]' /><a href='../mains.html'><img class='icon' src='../icons/index.png' alt='[index]' /></a><a href='../help.html'><img class='icon' src='../icons/help.png' alt='[help]' /></a>&nbsp;<input type='text' readonly onfocus='this.select();' value='+77 bpf/bpf_lsm.c'  /> */</em>
+</body>
+</html>
